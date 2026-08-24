@@ -3,11 +3,14 @@ on:
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
+  repository_dispatch:
+    types: [mirror-now]
 concurrency:
   group: live-mirror
   cancel-in-progress: true
 permissions:
   contents: write
+  actions: write
 jobs:
   mirror:
     runs-on: ubuntu-latest
@@ -15,11 +18,38 @@ jobs:
       - name: Mirror canonical main onto backup main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: woahwhattheheck/commons-backup
         run: |
           set -euo pipefail
-          git clone --bare --filter=blob:none https://github.com/woahwhattheheck/commons.git src.git
-          cd src.git
-          git fetch --prune https://github.com/woahwhattheheck/commons.git '+refs/heads/*:refs/heads/*' --tags
-          git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" \
-            refs/heads/main:refs/heads/main
-          git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" --tags || true
+          SRC=$(gh api repos/woahwhattheheck/commons/commits/main --jq .sha)
+          DST=$(gh api repos/woahwhattheheck/commons-backup/commits/main --jq .sha)
+          echo "source_main=$SRC"
+          echo "backup_main=$DST"
+          if [ "$SRC" = "$DST" ]; then
+            echo already in sync
+          else
+            git init --bare src.git
+            cd src.git
+            git remote add origin https://github.com/woahwhattheheck/commons.git
+            git fetch --prune origin '+refs/heads/main:refs/heads/src-main'
+            GOT=$(git rev-parse refs/heads/src-main)
+            echo "fetched_main=$GOT"
+            git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" \
+              refs/heads/src-main:refs/heads/main
+            echo "pushed_main=$GOT"
+            git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" --tags || true
+            cd ..
+          fi
+
+      - name: Keep only the live-mirror workflow enabled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: woahwhattheheck/commons-backup
+        run: |
+          set -euo pipefail
+          gh api repos/woahwhattheheck/commons-backup/actions/workflows --jq '.workflows[] | [.id,.name,.state,.path] | @tsv'
+          for id in $(gh api repos/woahwhattheheck/commons-backup/actions/workflows --jq '.workflows[] | select(.name!="live-mirror-commons") | .id');
+          do
+            echo "disable $id"
+            gh api -X PUT "repos/woahwhattheheck/commons-backup/actions/workflows/${id}/disable" >/dev/null || true
+          done
