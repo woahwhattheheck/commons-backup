@@ -1,0 +1,25 @@
+name: live-mirror-commons
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+concurrency:
+  group: live-mirror
+  cancel-in-progress: true
+permissions:
+  contents: write
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror canonical main onto backup main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git clone --bare --filter=blob:none https://github.com/woahwhattheheck/commons.git src.git
+          cd src.git
+          git fetch --prune https://github.com/woahwhattheheck/commons.git '+refs/heads/*:refs/heads/*' --tags
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" \
+            refs/heads/main:refs/heads/main
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" --tags || true
