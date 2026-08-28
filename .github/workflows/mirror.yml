@@ -25,20 +25,41 @@ jobs:
           DST=$(gh api repos/woahwhattheheck/commons-backup/commits/main --jq .sha)
           echo "source_main=$SRC"
           echo "backup_main=$DST"
-          if [ "$SRC" = "$DST" ]; then
+          git init --bare src.git
+          cd src.git
+          git remote add origin https://github.com/woahwhattheheck/commons.git
+          DEST_URL="https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git"
+          git fetch --prune origin '+refs/heads/main:refs/heads/src-main'
+          git fetch --prune "$DEST_URL" '+refs/heads/main:refs/heads/dst-main' '+refs/backup/source-main:refs/backup/source-main' || true
+          GOT=$(git rev-parse refs/heads/src-main)
+          echo "fetched_main=$GOT"
+          MIRRORED=""
+          if git rev-parse --verify --quiet refs/backup/source-main >/dev/null; then
+            MIRRORED=$(git rev-parse refs/backup/source-main)
+          fi
+          echo "mirrored_source=${MIRRORED:-none}"
+          git show src-main:host/live_mirror.py > /tmp/live_mirror.py
+          PLAN_ARGS=(plan --src "$GOT" --dst "$DST")
+          if [ -n "$MIRRORED" ]; then
+            PLAN_ARGS+=(--mirrored "$MIRRORED")
+          fi
+          PLAN=$(python3 /tmp/live_mirror.py "${PLAN_ARGS[@]}")
+          echo "$PLAN"
+          ACTION=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["action"])' "$PLAN")
+          if [ "$ACTION" = "already_in_sync" ]; then
             echo already in sync
           else
-            git init --bare src.git
-            cd src.git
-            git remote add origin https://github.com/woahwhattheheck/commons.git
-            git fetch --prune origin '+refs/heads/main:refs/heads/src-main'
-            GOT=$(git rev-parse refs/heads/src-main)
-            echo "fetched_main=$GOT"
-            git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" \
-              refs/heads/src-main:refs/heads/main
-            echo "pushed_main=$GOT"
-            git push --force "https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git" --tags || true
-            cd ..
+            DST_REF_ARGS=()
+            if git rev-parse --verify --quiet refs/heads/dst-main >/dev/null; then
+              DST_REF_ARGS=(--dst-ref refs/heads/dst-main)
+            fi
+            python3 /tmp/live_mirror.py push \
+              --git-dir . \
+              --src-ref refs/heads/src-main \
+              "${DST_REF_ARGS[@]}" \
+              --dest-url "$DEST_URL"
+            echo "pushed_via_live_mirror"
+            git push --force "$DEST_URL" --tags || true
           fi
 
       - name: Keep only the live-mirror workflow enabled
