@@ -24,7 +24,6 @@ on:
       - "api/mcp.py"
       - "api/owner_context.py"
       - "commons_mcp.py"
-      - "webmcp.html"
       - "vercel.json"
       - ".vercelignore"
       - "stage_spark_mcp_bundle.py"
@@ -39,7 +38,6 @@ on:
       - ".github/workflows/spark-mcp-production.yml"
       - "test_spark_mcp.py"
       - "test_spark_mcp_production_deploy.py"
-      - "test_webmcp_door.py"
   pull_request:
     paths: *mcp_production_paths
   workflow_dispatch:
@@ -61,7 +59,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: adapter surface, discovery 1.4.0, deploy contract
-        run: python -B -W error -m unittest -q test_spark_mcp.py test_spark_mcp_production_deploy.py test_commons_mcp.py test_webmcp_door.py
+        run: python -B -W error -m unittest -q test_spark_mcp.py test_spark_mcp_production_deploy.py test_commons_mcp.py
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
@@ -198,35 +196,9 @@ jobs:
                   names = [row.get("name") for row in ((tools.get("result") or {}).get("tools") or [])]
                   last = {"version": info.get("version"), "name": info.get("name"), "tools": names}
                   print("live", json.dumps({"version": last["version"], "tool_count": len(names), "has_discovery": "discover_commons_capabilities" in names}))
-                  mcp_ok = (
-                      info.get("name") == "commons"
-                      and info.get("version") == want_version
-                      and want_tools.issubset(names)
-                  )
-                  if mcp_ok:
-                      door = urllib.request.Request(
-                          "https://commons-spark-mcp.vercel.app/webmcp",
-                          method="GET",
-                      )
-                      with urllib.request.urlopen(door, timeout=20) as resp:
-                          ctype = resp.headers.get("content-type") or ""
-                          body = resp.read()
-                          html_ok = (
-                              resp.status == 200
-                              and "text/html" in ctype
-                              and b"document.modelContext" in body
-                          )
-                          last["webmcp"] = {
-                              "status": resp.status,
-                              "ctype": ctype,
-                              "bytes": len(body),
-                              "html_ok": html_ok,
-                          }
-                      print("webmcp", json.dumps(last["webmcp"]))
-                      if html_ok:
-                          print("LIVE_SOURCE_PARITY")
-                          print("LIVE_WEBMCP_HTML")
-                          sys.exit(0)
+                  if info.get("name") == "commons" and info.get("version") == want_version and want_tools.issubset(names):
+                      print("LIVE_SOURCE_PARITY")
+                      sys.exit(0)
               except Exception as exc:
                   last = {"error": str(exc)}
                   print("poll error", exc)
