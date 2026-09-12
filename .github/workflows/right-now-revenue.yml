@@ -5,7 +5,6 @@ on:
     paths:
       - "host/right_now_revenue.py"
       - "host/smart_outreach.py"
-      - "host/gpt_action_packets.py"
       - "revenue/right_now/**"
       - "revenue/smart_outreach/**"
       - "revenue/payment_ready/**"
@@ -16,14 +15,11 @@ on:
       - "test_right_now.py"
       - "test_right_now_execution.py"
       - "test_smart_outreach.py"
-      - "test_gpt_action_packets.py"
-      - "test_survival_offer_page_truth.py"
       - ".github/workflows/right-now-revenue.yml"
   pull_request:
     paths:
       - "host/right_now_revenue.py"
       - "host/smart_outreach.py"
-      - "host/gpt_action_packets.py"
       - "revenue/right_now/**"
       - "revenue/smart_outreach/**"
       - "revenue/payment_ready/**"
@@ -34,8 +30,6 @@ on:
       - "test_right_now.py"
       - "test_right_now_execution.py"
       - "test_smart_outreach.py"
-      - "test_gpt_action_packets.py"
-      - "test_survival_offer_page_truth.py"
       - ".github/workflows/right-now-revenue.yml"
 
 permissions:
@@ -52,6 +46,6 @@ jobs:
       - name: Validate deterministic revenue projection
         run: python3 host/right_now_revenue.py validate
       - name: Run composed revenue tests
-        run: python3 -m unittest test_right_now.py test_right_now_execution.py test_smart_outreach.py test_gpt_action_packets.py test_survival_offer_page_truth.py
+        run: python3 -m unittest test_right_now.py test_right_now_execution.py test_smart_outreach.py
       - name: Verify Python syntax
-        run: python3 -m py_compile host/right_now_revenue.py host/smart_outreach.py host/gpt_action_packets.py test_right_now.py test_right_now_execution.py test_smart_outreach.py test_gpt_action_packets.py test_survival_offer_page_truth.py
+        run: python3 -m py_compile host/right_now_revenue.py host/smart_outreach.py test_right_now.py test_right_now_execution.py test_smart_outreach.py

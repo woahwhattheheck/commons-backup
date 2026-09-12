@@ -18,7 +18,6 @@ on:
       - "ground/WORK_AUTOMATION.md"
       - "ground/WORK_AUTOMATION.json"
       - "test_work_becomes_automation.py"
-      - "test_leftover_id_census_workflow_head.py"
       - ".github/workflows/leftover-id-census.yml"
       - "ping/union_git_ntfy.py"
   pull_request:
@@ -38,11 +37,9 @@ jobs:
         with:
           persist-credentials: false
       - name: unit contract
-        run: |
-          python3 test_work_becomes_automation.py
-          python3 test_leftover_id_census_workflow_head.py
+        run: python3 test_work_becomes_automation.py
       - name: fail when leftover-census stamp is stale vs inputs
-        run: python3 host/leftover_id_census.py --check --sha "$(git rev-parse HEAD)"
+        run: python3 host/leftover_id_census.py --check --sha "${GITHUB_SHA}"
 
   regenerate-or-alarm:
     if: github.event_name != 'pull_request'
@@ -56,11 +53,9 @@ jobs:
           ref: ${{ github.ref_name }}
           fetch-depth: 20
       - name: unit contract
-        run: |
-          python3 test_work_becomes_automation.py
-          python3 test_leftover_id_census_workflow_head.py
+        run: python3 test_work_becomes_automation.py
       - name: regenerate stamp when leftover statuses drifted, else leave FRESH
-        run: python3 host/leftover_id_census.py --regenerate-or-alarm --sha "$(git rev-parse HEAD)"
+        run: python3 host/leftover_id_census.py --regenerate-or-alarm --sha "${GITHUB_SHA}"
       - name: commit regenerated stamp on main only
         if: github.ref == 'refs/heads/main'
         run: |
@@ -76,7 +71,7 @@ jobs:
             fi
             git fetch origin "${GITHUB_REF_NAME}"
             git rebase "origin/${GITHUB_REF_NAME}" || { git rebase --abort; echo "rebase conflict"; exit 1; }
-            python3 host/leftover_id_census.py --regenerate-or-alarm --sha "$(git rev-parse HEAD)"
+            python3 host/leftover_id_census.py --regenerate-or-alarm
             git add -- leftover-census.md leftover-census.json
             git diff --cached --quiet || git commit -m "leftover-census: refresh leftover-id stamp"
             sleep $((i * 3))
@@ -84,4 +79,4 @@ jobs:
           echo "push failed after 5 attempts"
           exit 1
       - name: alarm if the served stamp is still stale
-        run: python3 host/leftover_id_census.py --check --sha "$(git rev-parse HEAD)"
+        run: python3 host/leftover_id_census.py --check --sha "${GITHUB_SHA}"

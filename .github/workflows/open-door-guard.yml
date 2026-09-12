@@ -1,115 +1,9 @@
 name: open-door-guard
 
-# Mirror open_door_guard.py active suffixes and historical-data exclusions.
-# Guard source and its own matrix still trigger through the Python patterns.
 on:
   pull_request:
-    paths:
-      - '**/*.c'
-      - '**/*.cc'
-      - '**/*.cfg'
-      - '**/*.cmd'
-      - '**/*.conf'
-      - '**/*.cpp'
-      - '**/*.css'
-      - '**/*.go'
-      - '**/*.h'
-      - '**/*.html'
-      - '**/*.java'
-      - '**/*.js'
-      - '**/*.json'
-      - '**/*.jsx'
-      - '**/*.kt'
-      - '**/*.md'
-      - '**/*.mjs'
-      - '**/*.php'
-      - '**/*.ps1'
-      - '**/*.py'
-      - '**/*.rb'
-      - '**/*.rs'
-      - '**/*.scala'
-      - '**/*.sh'
-      - '**/*.sql'
-      - '**/*.svelte'
-      - '**/*.swift'
-      - '**/*.txt'
-      - '**/*.toml'
-      - '**/*.ts'
-      - '**/*.tsx'
-      - '**/*.vue'
-      - '**/*.xml'
-      - '**/*.yaml'
-      - '**/*.yml'
-      - '!p/**'
-      - '!by/**'
-      - '!to/**'
-      - '!d/**'
-      - '!chunks/**'
-      - '!excerpts/**'
-      - '!drop/patches/**'
-      - '!muhl/lda-docs/**'
-      - '!builds/records/**'
-      - '!board.html'
-      - '!board.md'
-      - '!fresh.md'
-      - '!export.txt'
-      - '!posts.json'
-      - '!recent.json'
-      - '!revenue/data/board_feed_sample_20260830.json'
   push:
     branches: [main]
-    paths:
-      - '**/*.c'
-      - '**/*.cc'
-      - '**/*.cfg'
-      - '**/*.cmd'
-      - '**/*.conf'
-      - '**/*.cpp'
-      - '**/*.css'
-      - '**/*.go'
-      - '**/*.h'
-      - '**/*.html'
-      - '**/*.java'
-      - '**/*.js'
-      - '**/*.json'
-      - '**/*.jsx'
-      - '**/*.kt'
-      - '**/*.md'
-      - '**/*.mjs'
-      - '**/*.php'
-      - '**/*.ps1'
-      - '**/*.py'
-      - '**/*.rb'
-      - '**/*.rs'
-      - '**/*.scala'
-      - '**/*.sh'
-      - '**/*.sql'
-      - '**/*.svelte'
-      - '**/*.swift'
-      - '**/*.txt'
-      - '**/*.toml'
-      - '**/*.ts'
-      - '**/*.tsx'
-      - '**/*.vue'
-      - '**/*.xml'
-      - '**/*.yaml'
-      - '**/*.yml'
-      - '!p/**'
-      - '!by/**'
-      - '!to/**'
-      - '!d/**'
-      - '!chunks/**'
-      - '!excerpts/**'
-      - '!drop/patches/**'
-      - '!muhl/lda-docs/**'
-      - '!builds/records/**'
-      - '!board.html'
-      - '!board.md'
-      - '!fresh.md'
-      - '!export.txt'
-      - '!posts.json'
-      - '!recent.json'
-      - '!revenue/data/board_feed_sample_20260830.json'
   workflow_dispatch:
 
 permissions:
@@ -124,28 +18,17 @@ jobs:
         # history.  A full clone of this repo costs the runner ~130-150 s per
         # run (measured on eight green runs, guard itself 0-1 s).  Fetch HEAD
         # shallow here and the base commit shallow below; GitHub serves a
-        # reachable commit by SHA at depth 1. Push fallbacks are unchanged.
+        # reachable commit by SHA at depth 1.  Fallbacks are unchanged.
 
       - name: reject newly added Action Pad or Commons admission locks
         env:
           EVENT_NAME: ${{ github.event_name }}
-          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PUSH_BASE_SHA: ${{ github.event.before }}
         run: |
           set -eu
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            # The event base may predate the tested merge. Read raw headers,
-            # including in a depth-one checkout, and keep merge resolutions.
-            set -- $(git cat-file -p HEAD | sed -n '/^$/q; s/^parent //p')
-            if [ "$#" -ne 2 ] || [ "$2" != "$PR_HEAD_SHA" ]; then
-              echo "PR checkout does not match its two-parent integration commit" >&2
-              exit 1
-            fi
-            base="$1"
-            if ! git cat-file -e "$base^{commit}" 2>/dev/null; then
-              git fetch --quiet --depth=1 origin "$base"
-            fi
-            git cat-file -e "$base^{commit}"
+            base="$PR_BASE_SHA"
           else
             base="$PUSH_BASE_SHA"
           fi

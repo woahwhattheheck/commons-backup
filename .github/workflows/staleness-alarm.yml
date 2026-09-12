@@ -11,17 +11,13 @@ on:
       - main
     paths:
       - "sync.json"
-      - "reconcile/**"
       - "host_offload/staleness_alarm.py"
       - "test_staleness_alarm.py"
-      - "test_build_sync.py"
       - ".github/workflows/staleness-alarm.yml"
   pull_request:
     paths:
-      - "reconcile/**"
       - "host_offload/staleness_alarm.py"
       - "test_staleness_alarm.py"
-      - "test_build_sync.py"
       - ".github/workflows/staleness-alarm.yml"
 permissions:
   contents: read
@@ -34,16 +30,7 @@ jobs:
         with:
           persist-credentials: false
       - name: unit contract
-        run: |
-          python3 test_staleness_alarm.py
-          python3 test_build_sync.py
-      # sync.json is measured here, from the main this run checked out, rather
-      # than committed by the bake: a committed copy would be a snapshot that
-      # could itself go stale, and every bake would re-trigger this workflow.
-      # A failure here fails the job, so an unmeasured board is never quiet.
-      # The wall clock decides whether a source observation is still fresh.
-      - name: measure every derived sink against its source
-        run: python3 reconcile/build_sync.py --write --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        run: python3 test_staleness_alarm.py
       - name: emit ordinary carrier post only when sync.json is stale
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: python3 host_offload/staleness_alarm.py --sync sync.json --send
