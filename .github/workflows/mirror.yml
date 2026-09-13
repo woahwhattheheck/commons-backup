@@ -19,6 +19,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: woahwhattheheck/commons-backup
+          EXPECTED_LIVE_MIRROR_BLOB: ada8633230a475aa0a74c8e6069b785cb37a24ac
         run: |
           set -euo pipefail
           git init --bare src.git
@@ -51,6 +52,12 @@ jobs:
           fi
           echo "mirrored_source=${MIRRORED:-none}"
           echo "mirrored_dest=${MIRRORED_DEST:-none}"
+          LIVE_MIRROR_BLOB=$(git rev-parse 'refs/heads/src-main:host/live_mirror.py')
+          echo "live_mirror_blob=$LIVE_MIRROR_BLOB"
+          if [ "$LIVE_MIRROR_BLOB" != "$EXPECTED_LIVE_MIRROR_BLOB" ]; then
+            echo "::error::unreviewed host/live_mirror.py blob $LIVE_MIRROR_BLOB; expected $EXPECTED_LIVE_MIRROR_BLOB"
+            exit 1
+          fi
           git show src-main:host/live_mirror.py > /tmp/live_mirror.py
           PLAN_ARGS=(plan --src "$GOT" --dst "$DST")
           if [ -n "$MIRRORED" ] && [ -n "$MIRRORED_DEST" ] && [ "$DST" = "$MIRRORED_DEST" ]; then
