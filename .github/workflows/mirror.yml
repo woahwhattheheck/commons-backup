@@ -21,10 +21,6 @@ jobs:
           GH_REPO: woahwhattheheck/commons-backup
         run: |
           set -euo pipefail
-          SRC=$(gh api repos/woahwhattheheck/commons/commits/main --jq .sha)
-          DST=$(gh api repos/woahwhattheheck/commons-backup/commits/main --jq .sha)
-          echo "source_main=$SRC"
-          echo "backup_main=$DST"
           git init --bare src.git
           cd src.git
           git remote add origin https://github.com/woahwhattheheck/commons.git
@@ -37,35 +33,54 @@ jobs:
           if [ -n "$REMOTE_MIRRORED" ]; then
             git fetch --no-tags "$DEST_URL" '+refs/backup/source-main:refs/backup/source-main'
           fi
+          REMOTE_MIRRORED_DEST=$(git ls-remote "$DEST_URL" refs/backup/dest-main)
+          if [ -n "$REMOTE_MIRRORED_DEST" ]; then
+            git fetch --no-tags "$DEST_URL" '+refs/backup/dest-main:refs/backup/dest-main'
+          fi
           GOT=$(git rev-parse refs/heads/src-main)
-          echo "fetched_main=$GOT"
+          DST=$(git rev-parse refs/heads/dst-main)
+          echo "source_main=$GOT"
+          echo "backup_main=$DST"
           MIRRORED=""
           if git rev-parse --verify --quiet refs/backup/source-main >/dev/null; then
             MIRRORED=$(git rev-parse refs/backup/source-main)
           fi
+          MIRRORED_DEST=""
+          if git rev-parse --verify --quiet refs/backup/dest-main >/dev/null; then
+            MIRRORED_DEST=$(git rev-parse refs/backup/dest-main)
+          fi
           echo "mirrored_source=${MIRRORED:-none}"
+          echo "mirrored_dest=${MIRRORED_DEST:-none}"
           git show src-main:host/live_mirror.py > /tmp/live_mirror.py
           PLAN_ARGS=(plan --src "$GOT" --dst "$DST")
-          if [ -n "$MIRRORED" ]; then
+          if [ -n "$MIRRORED" ] && [ -n "$MIRRORED_DEST" ] && [ "$DST" = "$MIRRORED_DEST" ]; then
             PLAN_ARGS+=(--mirrored "$MIRRORED")
+          elif [ -n "$MIRRORED" ]; then
+            echo "ignoring source receipt because destination receipt is absent or stale"
           fi
           PLAN=$(python3 /tmp/live_mirror.py "${PLAN_ARGS[@]}")
           echo "$PLAN"
           ACTION=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["action"])' "$PLAN")
           if [ "$ACTION" = "already_in_sync" ]; then
             echo already in sync
+            FINAL_DST="$DST"
           else
             DST_REF_ARGS=()
             if git rev-parse --verify --quiet refs/heads/dst-main >/dev/null; then
               DST_REF_ARGS=(--dst-ref refs/heads/dst-main)
             fi
-            python3 /tmp/live_mirror.py push \
+            PUSH_RESULT=$(python3 /tmp/live_mirror.py push \
               --git-dir . \
               --src-ref refs/heads/src-main \
               "${DST_REF_ARGS[@]}" \
-              --dest-url "$DEST_URL"
-            echo "pushed_via_live_mirror"
+              --dest-url "$DEST_URL")
+            echo "$PUSH_RESULT"
+            FINAL_DST=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["pushed_sha"])' "$PUSH_RESULT")
+            echo "pushed_via_live_mirror=$FINAL_DST"
           fi
+          git push --force "$DEST_URL" \
+            "$GOT:refs/backup/source-main" \
+            "$FINAL_DST:refs/backup/dest-main"
           git push --force --prune "$DEST_URL" 'refs/tags/*:refs/tags/*'
 
       - name: Keep only the live-mirror workflow enabled
