@@ -97,7 +97,6 @@ jobs:
         run: |
           set -euo pipefail
           WORKFLOWS_ENDPOINT="repos/woahwhattheheck/commons-backup/actions/workflows"
-          TRUSTED_WORKFLOW_PATH=".github/workflows/mirror.yml"
           gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
             --jq '.workflows[] | [.id,.name,.state,.path] | @tsv'
           for id in $(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
