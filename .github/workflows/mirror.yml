@@ -97,14 +97,18 @@ jobs:
         run: |
           set -euo pipefail
           WORKFLOWS_ENDPOINT="repos/woahwhattheheck/commons-backup/actions/workflows"
+          TRUSTED_WORKFLOW_PATH=".github/workflows/mirror.yml"
           gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
             --jq '.workflows[] | [.id,.name,.state,.path] | @tsv'
           for id in $(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
-            --jq '.workflows[] | select(.name!="live-mirror-commons") | .id');
+            --jq '.workflows[] | select(.path!=".github/workflows/mirror.yml") | .id');
           do
             echo "disable $id"
             gh api -X PUT "repos/woahwhattheheck/commons-backup/actions/workflows/${id}/disable" >/dev/null
           done
+          TRUSTED_ACTIVE=$(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | select(.path==".github/workflows/mirror.yml" and .name=="live-mirror-commons" and .state=="active") | .id' | wc -l)
+          test "$TRUSTED_ACTIVE" -eq 1
           ACTIVE_EXTRAS=$(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
-            --jq '.workflows[] | select(.name!="live-mirror-commons" and .state=="active") | .id' | wc -l)
+            --jq '.workflows[] | select(.path!=".github/workflows/mirror.yml" and .state=="active") | .id' | wc -l)
           test "$ACTIVE_EXTRAS" -eq 0
