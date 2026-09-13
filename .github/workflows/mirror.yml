@@ -30,7 +30,11 @@ jobs:
           git remote add origin https://github.com/woahwhattheheck/commons.git
           DEST_URL="https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git"
           git fetch --prune origin '+refs/heads/main:refs/heads/src-main'
-          git fetch --prune "$DEST_URL" '+refs/heads/main:refs/heads/dst-main' '+refs/backup/source-main:refs/backup/source-main' || true
+          git fetch --prune "$DEST_URL" '+refs/heads/main:refs/heads/dst-main'
+          REMOTE_MIRRORED=$(git ls-remote "$DEST_URL" refs/backup/source-main)
+          if [ -n "$REMOTE_MIRRORED" ]; then
+            git fetch "$DEST_URL" '+refs/backup/source-main:refs/backup/source-main'
+          fi
           GOT=$(git rev-parse refs/heads/src-main)
           echo "fetched_main=$GOT"
           MIRRORED=""
@@ -59,7 +63,7 @@ jobs:
               "${DST_REF_ARGS[@]}" \
               --dest-url "$DEST_URL"
             echo "pushed_via_live_mirror"
-            git push --force "$DEST_URL" --tags || true
+            git push --force "$DEST_URL" --tags
           fi
 
       - name: Keep only the live-mirror workflow enabled
@@ -72,5 +76,7 @@ jobs:
           for id in $(gh api repos/woahwhattheheck/commons-backup/actions/workflows --jq '.workflows[] | select(.name!="live-mirror-commons") | .id');
           do
             echo "disable $id"
-            gh api -X PUT "repos/woahwhattheheck/commons-backup/actions/workflows/${id}/disable" >/dev/null || true
+            gh api -X PUT "repos/woahwhattheheck/commons-backup/actions/workflows/${id}/disable" >/dev/null
           done
+          ACTIVE_EXTRAS=$(gh api repos/woahwhattheheck/commons-backup/actions/workflows --jq '[.workflows[] | select(.name!="live-mirror-commons" and .state=="active")] | length')
+          test "$ACTIVE_EXTRAS" -eq 0
