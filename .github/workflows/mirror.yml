@@ -20,7 +20,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: woahwhattheheck/commons-backup
-          EXPECTED_LIVE_MIRROR_BLOB: bfb3f573a4ae20e3eaf6dbca95fb06a2b80d2093
+          EXPECTED_LIVE_MIRROR_BLOB: e9700d3ce0a4ca17c503ad0076d2f6c41308da0d
         run: |
           set -euo pipefail
           git init --bare src.git
@@ -93,7 +93,8 @@ jobs:
             --dst "$FINAL_DST" \
             --dest-url "$DEST_URL")
           echo "$RECORD"
-          git push --force --prune "$DEST_URL" 'refs/tags/*:refs/tags/*'
+          TAGS=$(python3 /tmp/live_mirror.py push-tags --git-dir . --dest-url "$DEST_URL")
+          echo "$TAGS"
 
       - name: Keep only the live-mirror workflow enabled
         env:
