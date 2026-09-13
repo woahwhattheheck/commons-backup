@@ -29,7 +29,7 @@ jobs:
           cd src.git
           git remote add origin https://github.com/woahwhattheheck/commons.git
           DEST_URL="https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git"
-          git fetch --prune origin '+refs/heads/main:refs/heads/src-main'
+          git fetch --prune origin '+refs/heads/main:refs/heads/src-main' '+refs/tags/*:refs/tags/*'
           git fetch --prune "$DEST_URL" '+refs/heads/main:refs/heads/dst-main'
           REMOTE_MIRRORED=$(git ls-remote "$DEST_URL" refs/backup/source-main)
           if [ -n "$REMOTE_MIRRORED" ]; then
@@ -64,7 +64,7 @@ jobs:
               --dest-url "$DEST_URL"
             echo "pushed_via_live_mirror"
           fi
-          git push --force "$DEST_URL" --tags
+          git push --force --prune "$DEST_URL" 'refs/tags/*:refs/tags/*'
 
       - name: Keep only the live-mirror workflow enabled
         env:
