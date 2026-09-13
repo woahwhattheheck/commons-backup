@@ -20,7 +20,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: woahwhattheheck/commons-backup
-          EXPECTED_LIVE_MIRROR_BLOB: ada8633230a475aa0a74c8e6069b785cb37a24ac
+          EXPECTED_LIVE_MIRROR_BLOB: bfb3f573a4ae20e3eaf6dbca95fb06a2b80d2093
         run: |
           set -euo pipefail
           git init --bare src.git
@@ -43,16 +43,6 @@ jobs:
           DST=$(git rev-parse refs/heads/dst-main)
           echo "source_main=$GOT"
           echo "backup_main=$DST"
-          MIRRORED=""
-          if git rev-parse --verify --quiet refs/backup/source-main >/dev/null; then
-            MIRRORED=$(git rev-parse refs/backup/source-main)
-          fi
-          MIRRORED_DEST=""
-          if git rev-parse --verify --quiet refs/backup/dest-main >/dev/null; then
-            MIRRORED_DEST=$(git rev-parse refs/backup/dest-main)
-          fi
-          echo "mirrored_source=${MIRRORED:-none}"
-          echo "mirrored_dest=${MIRRORED_DEST:-none}"
           LIVE_MIRROR_BLOB=$(git rev-parse 'refs/heads/src-main:host/live_mirror.py')
           echo "live_mirror_blob=$LIVE_MIRROR_BLOB"
           if [ "$LIVE_MIRROR_BLOB" != "$EXPECTED_LIVE_MIRROR_BLOB" ]; then
@@ -60,6 +50,17 @@ jobs:
             exit 1
           fi
           git show src-main:host/live_mirror.py > /tmp/live_mirror.py
+          MIRRORED=""
+          if git rev-parse --verify --quiet refs/backup/source-main >/dev/null; then
+            MIRRORED=$(python3 /tmp/live_mirror.py read-source --git-dir . --ref refs/backup/source-main)
+            MIRRORED=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1]).get("src_sha") or "")' "$MIRRORED")
+          fi
+          MIRRORED_DEST=""
+          if git rev-parse --verify --quiet refs/backup/dest-main >/dev/null; then
+            MIRRORED_DEST=$(git rev-parse refs/backup/dest-main)
+          fi
+          echo "mirrored_source=${MIRRORED:-none}"
+          echo "mirrored_dest=${MIRRORED_DEST:-none}"
           PLAN_ARGS=(plan --src "$GOT" --dst "$DST")
           if [ -n "$MIRRORED" ] && [ -n "$MIRRORED_DEST" ] && [ "$DST" = "$MIRRORED_DEST" ]; then
             PLAN_ARGS+=(--mirrored "$MIRRORED")
@@ -86,9 +87,12 @@ jobs:
             FINAL_DST=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["pushed_sha"])' "$PUSH_RESULT")
             echo "pushed_via_live_mirror=$FINAL_DST"
           fi
-          git push --force "$DEST_URL" \
-            "$GOT:refs/backup/source-main" \
-            "$FINAL_DST:refs/backup/dest-main"
+          RECORD=$(python3 /tmp/live_mirror.py record-receipts \
+            --git-dir . \
+            --src "$GOT" \
+            --dst "$FINAL_DST" \
+            --dest-url "$DEST_URL")
+          echo "$RECORD"
           git push --force --prune "$DEST_URL" 'refs/tags/*:refs/tags/*'
 
       - name: Keep only the live-mirror workflow enabled
