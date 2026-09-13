@@ -96,11 +96,15 @@ jobs:
           GH_REPO: woahwhattheheck/commons-backup
         run: |
           set -euo pipefail
-          gh api repos/woahwhattheheck/commons-backup/actions/workflows --jq '.workflows[] | [.id,.name,.state,.path] | @tsv'
-          for id in $(gh api repos/woahwhattheheck/commons-backup/actions/workflows --jq '.workflows[] | select(.name!="live-mirror-commons") | .id');
+          WORKFLOWS_ENDPOINT="repos/woahwhattheheck/commons-backup/actions/workflows"
+          gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | [.id,.name,.state,.path] | @tsv'
+          for id in $(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | select(.name!="live-mirror-commons") | .id');
           do
             echo "disable $id"
             gh api -X PUT "repos/woahwhattheheck/commons-backup/actions/workflows/${id}/disable" >/dev/null
           done
-          ACTIVE_EXTRAS=$(gh api repos/woahwhattheheck/commons-backup/actions/workflows --jq '[.workflows[] | select(.name!="live-mirror-commons" and .state=="active")] | length')
+          ACTIVE_EXTRAS=$(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | select(.name!="live-mirror-commons" and .state=="active") | .id' | wc -l)
           test "$ACTIVE_EXTRAS" -eq 0
