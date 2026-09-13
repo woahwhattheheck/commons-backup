@@ -106,7 +106,7 @@ jobs:
           gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
             --jq '.workflows[] | [.id,.name,.state,.path] | @tsv'
           for id in $(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
-            --jq '.workflows[] | select(.path!=".github/workflows/mirror.yml") | .id');
+            --jq '.workflows[] | select(.path!=".github/workflows/mirror.yml" and .state=="active") | .id');
           do
             echo "disable $id"
             gh api -X PUT "repos/woahwhattheheck/commons-backup/actions/workflows/${id}/disable" >/dev/null
