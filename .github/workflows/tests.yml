@@ -228,20 +228,15 @@ on:
 permissions:
   contents: read
 concurrency:
-  # New automatic batteries supersede older runs for the same event/ref.
-  # Each manual dispatch has its own group and survives later branch pushes.
-  group: "${{ github.workflow }}-${{ github.event_name }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}"
-  cancel-in-progress: true
+  # Same-head PR synchronize is stale battery work. Unique push/main and
+  # workflow_dispatch keep run_id groups so they cannot cancel each other.
+  group: "${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.head.label || github.run_id }}"
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   battery:
-    # Engine battery is the Commons publisher suite for main.
-    # Frozen titan composition PRs add dedicated path-scoped gates; running
-    # live-pin KEEP/readback tests against that snapshot is a false red.
-    if: ${{ github.event_name != 'pull_request' || github.base_ref == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        id: checkout
         with:
           # Several live-tree contracts classify exact ancestors and inspect
           # historical source objects. A depth-1 checkout turns those lawful
@@ -249,9 +244,54 @@ jobs:
           fetch-depth: 0
 
       - name: the whole battery, one failure fails the run
-        id: battery
         run: |
-          python3 host/ci_battery.py --results "$RUNNER_TEMP/commons-battery-results.nul"
+          set -u
+          fail=0
+          # DISCOVERED, NOT LISTED. This was a hand-maintained list of filenames,
+          # and on 2026-08-20 three tests landed in one evening that the list did
+          # not name -- test_heal_recordless, test_echo_skip's neighbours, and
+          # test_permalink_follows_file -- so CI ran 16, 17, 18 of them while 17,
+          # 18, 19 sat on disk. Each was caught by a window happening to look.
+          # The window that writes a test is the LEAST likely to notice it never
+          # ran: they ran it by hand, it passed, and the list is a separate file
+          # they had no reason to open. A list that must be edited in a second
+          # place is a list that silently drifts, and this file exists precisely
+          # because "a test nobody runs is a comment".
+          # Globbing cannot drift. Adding test_foo.py is now the whole of wiring
+          # it in. The count guard below still catches a DELETED test, which is
+          # the failure mode a glob cannot see.
+          python_tests=()
+          while IFS= read -r -d '' t; do
+            python_tests+=("$t")
+          done < <(
+            {
+              find . -maxdepth 1 -type f -name 'test_*.py' -print0
+              find infra -type f -name 'test_*.py' -print0
+            } | sort -z
+          )
+          if [ "${#python_tests[@]}" -eq 0 ]; then
+            echo "::warning::no python tests matched"
+          fi
+          for t in "${python_tests[@]}"; do
+            # every test runs even after one fails: a single red should not
+            # hide the other seven, or the next window fixes one thing at a time
+            if python3 "$t"; then
+              echo "ok   $t"
+            else
+              echo "::error::$t FAILED"
+              fail=1
+            fi
+          done
+          for t in test_*.js; do
+            [ -f "$t" ] || { echo "::warning::no node tests matched"; continue; }
+            if node "$t"; then
+              echo "ok   $t"
+            else
+              echo "::error::$t FAILED"
+              fail=1
+            fi
+          done
+          exit "$fail"
 
       - name: a test file that vanished is a hole, not a pass
         run: |
@@ -273,31 +313,3 @@ jobs:
               echo "If this was intentional, say so on the board with the id that authorised it."
             } >> "$GITHUB_STEP_SUMMARY"
           fi
-
-      - name: record checkout-linked battery results
-        if: ${{ always() && steps.checkout.outcome == 'success' }}
-        run: >-
-          python3 host/battery_report.py
-          --results "$RUNNER_TEMP/commons-battery-results.nul"
-          --output "$RUNNER_TEMP/commons-battery-report.json"
-          --summary "$GITHUB_STEP_SUMMARY"
-          --outcome "${{ steps.battery.outcome }}"
-
-      - name: upload checkout-linked battery results
-        if: ${{ always() && steps.checkout.outcome == 'success' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: battery-results-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/commons-battery-report.json
-          if-no-files-found: error
-          retention-days: 14
-
-  non-main-base:
-    if: ${{ github.event_name == 'pull_request' && github.base_ref != 'main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: engine battery stays on main
-        run: |
-          echo "Commons engine battery is scoped to main."
-          echo "This PR targets ${{ github.base_ref }}; dedicated path-scoped gates bind this head."
-          echo "Live-pin KEEP/readback tests are not titan composition proof."

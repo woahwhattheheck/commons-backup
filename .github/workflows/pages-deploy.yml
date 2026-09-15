@@ -2,25 +2,8 @@ name: pages-deploy
 
 on:
   workflow_dispatch:
-  # Revenue-critical public bytes should not wait for the ten-minute repair
-  # schedule. Keep this path filter intentionally narrow: a broad push trigger
-  # previously joined ingest storms and was dropped. The managed Pages
-  # workflow_run repair below still re-publishes after a successful Jekyll
-  # clobber, and cancel-in-progress=false serializes rather than cancels this
-  # custom publisher when both paths fire.
-  push:
-    branches:
-      - main
-    paths:
-      - 'pay.html'
-      - 'commerce.html'
-      - 'chargeback-evidence-readiness.html'
-      - 'late-cancel-noshow-fee-leakage.html'
-      - 'hotel-room-turn-evidence.html'
-      - 'land/fixed-diagnostic-payment-links-*.md'
-      - '.github/workflows/pages-deploy.yml'
   schedule:
-    - cron: '7,17,27,37,47,57 * * * *'
+    - cron: '*/10 * * * *'
   # GitHub-managed "pages build and deployment" (dynamic/pages/pages-build-deployment)
   # still Jekyll-publishes main on push even when Pages build_type=workflow.
   # That artifact is the git tree: no generated pages-deploy.json. A success
@@ -28,9 +11,8 @@ on:
   # 33586981030 success at 03:28:02Z, then run 33586937091 success at 03:30:05Z
   # left live pages-deploy.json 404 and head.json source=scheduled-pages-bake).
   # Re-publish the allowlisted _site after a successful Jekyll clobber only.
-  # Do not hook cancelled Jekyll runs — ingest storms cancel those; broad push
-  # publication remains forbidden. Only the revenue-critical path filter above
-  # may publish directly on push.
+  # Do not hook cancelled Jekyll runs — ingest storms cancel those; a push
+  # trigger was dropped for the same reason.
   workflow_run:
     workflows:
       - pages-build-deployment

@@ -21,12 +21,6 @@ on:
 permissions:
   contents: read
 
-# Preserve one current classifier per PR/ref while cancelling superseded pushes
-# to that same lane. Separate PRs continue to receive independent validation.
-concurrency:
-  group: path-manifest-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
 jobs:
   observe:
     runs-on: ubuntu-latest

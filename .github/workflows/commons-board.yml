@@ -25,9 +25,7 @@ concurrency:
   # run both sweep the complete labelled issue queue, so a cancelled pending
   # run owns no unique source bytes. Ordinary issue events keep their distinct
   # groups, and push/schedule/dispatch retain their own recovery groups.
-  # v2 rotates future Slack issue events away from the pre-repair run whose
-  # already-frozen device tail still owns the original slack-batch group.
-  group: "commons-board-ingest-${{ github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector') && 'slack-batch-v2' || github.event_name }}-${{ github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector') && 'queue' || github.event.issue.number || 'poll' }}"
+  group: "commons-board-ingest-${{ github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector') && 'slack-batch' || github.event_name }}-${{ github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector') && 'queue' || github.event.issue.number || 'poll' }}"
   cancel-in-progress: false
 jobs:
   ingest:
@@ -118,76 +116,7 @@ jobs:
           # phase-two commit. Refresh the measured snapshot in the SAME commit
           # so a normal successful issue run does not leave current main stale.
           python3 -c "import board_ingest; board_ingest.refresh_projection_convergence_snapshot()"
-          # recent.json is final at this point, so the delta shards and the seat
-          # census are built from the same bytes in the same commit. Both are
-          # byte-stable on a no-op rebuild, so a quiet cycle adds no diff. Both
-          # fail closed rather than publish an empty feed or an empty colony.
-          # A builder failure aborts this step: never commit a new recent.json
-          # beside an old observability bake and call the mixed snapshot fresh.
-          python3 -m host.feed_delta --write
-          python3 -m host.seat_census --write
-          # Repository state beside the board bakes: what the repo is doing, not
-          # only what was said. Every call is best-effort — a rate limit or an
-          # API hiccup must never take the owner-pin push with it, and the
-          # module reads an absent count as UNKNOWN rather than as zero.
-          REPO="${{ github.repository }}"
-          # Every page, not the newest hundred: "longest open" read from the
-          # oldest row of one newest-first page is wrong once more than a page
-          # is open. JSON Lines, one pull per line; --pulls-complete is passed
-          # only when the paginated read finished, otherwise the module
-          # compares the listing with the open count and says PARTIAL.
-          # Each row keeps its head SHA, GitHub's updated_at and its base, so a
-          # session holding a reviewed or claimed head sees it move from one read.
-          PULLS_COMPLETE=""
-          if gh api --paginate "repos/$REPO/pulls?state=open&per_page=100&sort=created&direction=desc" \
-              --jq '.[]|{number,title,draft,created_at,updated_at,user:{login:.user.login},head:{ref:.head.ref,sha:.head.sha},base:{ref:.base.ref}}' \
-              > /tmp/open_pulls.jsonl 2>/dev/null; then
-            PULLS_COMPLETE="--pulls-complete"
-          else
-            rm -f /tmp/open_pulls.jsonl
-          fi
-          # The newest closures, merged or not, with the head that closed. One
-          # page of the most recently updated closed pulls; the module orders
-          # by closed_at. A failed call removes the file, and the module then
-          # names the closed listing as unread instead of showing no closures.
-          gh api "repos/$REPO/pulls?state=closed&sort=updated&direction=desc&per_page=30" \
-              --jq '.[]|{number,title,created_at,closed_at,merged_at,user:{login:.user.login},head:{ref:.head.ref,sha:.head.sha},base:{ref:.base.ref}}' \
-              > /tmp/closed_pulls.jsonl 2>/dev/null || rm -f /tmp/closed_pulls.jsonl
-          # Open counts from the repository's own totals first. The search
-          # index is a separate road that can lag: on 2026-09-11 a bake read 4
-          # open pull requests from search while its own listing held 100.
-          COUNTS_SOURCE=graphql
-          COUNTS=$(gh api graphql -f owner="${REPO%%/*}" -f name="${REPO#*/}" \
-              -f query='query($owner:String!,$name:String!){repository(owner:$owner,name:$name){pullRequests(states:OPEN){totalCount} issues(states:OPEN){totalCount}}}' \
-              --jq '"\(.data.repository.pullRequests.totalCount) \(.data.repository.issues.totalCount)"' 2>/dev/null || true)
-          OPEN_PRS="${COUNTS%% *}"
-          OPEN_ISSUES="${COUNTS#* }"
-          case "$COUNTS" in *" "*) ;; *) OPEN_ISSUES="" ;; esac
-          case "$OPEN_PRS" in ''|*[!0-9]*) OPEN_PRS="" ;; esac
-          case "$OPEN_ISSUES" in ''|*[!0-9]*) OPEN_ISSUES="" ;; esac
-          if [ -z "$OPEN_PRS" ]; then
-            COUNTS_SOURCE=search
-            OPEN_PRS=$(gh api "search/issues?q=repo:$REPO+is:pr+is:open&per_page=1" --jq .total_count 2>/dev/null || true)
-            OPEN_ISSUES=$(gh api "search/issues?q=repo:$REPO+is:issue+is:open&per_page=1" --jq .total_count 2>/dev/null || true)
-          fi
-          [ -n "$OPEN_PRS" ] || COUNTS_SOURCE=""
-          RUNS_QUEUED=$(gh api "repos/$REPO/actions/runs?per_page=1&status=queued" --jq .total_count 2>/dev/null || true)
-          RUNS_RUNNING=$(gh api "repos/$REPO/actions/runs?per_page=1&status=in_progress" --jq .total_count 2>/dev/null || true)
-          python3 -m host.github_state --write --repository "$REPO" \
-            ${COUNTS_SOURCE:+--counts-source "$COUNTS_SOURCE"} \
-            ${OPEN_PRS:+--open-prs "$OPEN_PRS"} \
-            ${OPEN_ISSUES:+--open-issues "$OPEN_ISSUES"} \
-            ${RUNS_QUEUED:+--runs-queued "$RUNS_QUEUED"} \
-            ${RUNS_RUNNING:+--runs-in-progress "$RUNS_RUNNING"} \
-            --closed /tmp/closed_pulls.jsonl \
-            $([ -f /tmp/open_pulls.jsonl ] && echo --pulls /tmp/open_pulls.jsonl $PULLS_COMPLETE) || true
-          # The module replaces feed/github.json atomically, so a failure above
-          # leaves the previous bytes. Still, never stage a bake that does not
-          # parse: put back the committed copy rather than publish it.
-          python3 -c "import json,sys; json.load(open('feed/github.json', encoding='utf-8'))" \
-            2>/dev/null || git checkout -- feed/github.json 2>/dev/null || true
           git add recent.json ground/MANUAL.md projection_state.json projection/converged
-          git add feed seats.json seats || true
           if git diff --cached --quiet; then
             exit 0
           fi
@@ -383,11 +312,7 @@ jobs:
 
   device:
     needs: ingest
-    # A Slack-batch ingest owns only public record publication.  Letting its
-    # unrelated device tail wait on a second runner keeps the workflow-level
-    # concurrency group occupied and starves the next complete Slack sweep.
-    # Ordinary issue, schedule, and dispatch runs retain device follow-through.
-    if: "${{ always() && needs.ingest.outputs.ingest_complete == 'true' && needs.ingest.outputs.has_pending_device == 'true' && !(github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector')) }}"
+    if: always() && needs.ingest.outputs.ingest_complete == 'true' && needs.ingest.outputs.has_pending_device == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: retain physical-device actions without automatic laptop dispatch

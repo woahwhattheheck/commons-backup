@@ -1,32 +1,9 @@
 name: muhlnickel-spec-guard
 
-# Keep source/import and renamed-entry-point changes eligible, but do not
-# spend a runner on historical board records and generated corpus projections.
-# Python paths remain eligible even below a corpus directory; the guard's
-# content/shebang detection itself is unchanged.
+# No path filter: behavior follows imports and entry points, so moving or
+# renaming executable code cannot route around the boundary.
 on:
   pull_request:
-    paths:
-      - '**'
-      - '!p/**'
-      - '!by/**'
-      - '!to/**'
-      - '!d/**'
-      - '!chunks/**'
-      - '!excerpts/**'
-      - '!drop/patches/**'
-      - '!muhl/lda-docs/**'
-      - '!builds/records/**'
-      - '!board.html'
-      - '!board.md'
-      - '!fresh.md'
-      - '!export.txt'
-      - '!posts.json'
-      - '!recent.json'
-      - '!revenue/data/board_feed_sample_20260830.json'
-      - '**/*.py'
-      - 'ground/muhlnickel-observe-tools.json'
-      - '.github/workflows/muhlnickel-spec-guard.yml'
   workflow_dispatch:
 
 permissions:
