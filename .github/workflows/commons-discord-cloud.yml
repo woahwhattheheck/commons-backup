@@ -2,7 +2,7 @@ name: commons-discord-cloud
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
   push:
     branches:
@@ -20,11 +20,8 @@ permissions:
   issues: write
 
 concurrency:
-  # Scheduled inbound polls may supersede only older scheduled polls. Push
-  # outbound and manual runs are uniquely grouped and cannot be cancelled by
-  # schedule backlog churn.
-  group: ${{ github.workflow }}-${{ github.event_name == 'schedule' && 'schedule' || github.run_id }}
-  cancel-in-progress: ${{ github.event_name == 'schedule' }}
+  group: commons-discord-cloud
+  cancel-in-progress: false
 
 jobs:
   inbound:
@@ -52,56 +49,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
           fetch-depth: 2
           persist-credentials: false
       - name: mirror only newly landed Commons records
         env:
-          BEFORE_SHA: ${{ github.event.before }}
-          EXPECTED_HEAD_SHA: ${{ github.sha }}
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           COMMONS_DISCORD_CHANNEL: ${{ vars.COMMONS_DISCORD_CHANNEL }}
         shell: bash
         run: |
           set -euo pipefail
-          # Validate the complete push range before the first Discord call. A shallow
-          # checkout need not contain the predecessor of a multi-commit push.
-          if [[ ! "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}$ ]] ||
-             [[ "$BEFORE_SHA" == '0000000000000000000000000000000000000000' ]] ||
-             [[ ! "${EXPECTED_HEAD_SHA:-}" =~ ^[0-9a-f]{40}$ ]]; then
-            echo 'Discord mirror: exact nonzero push predecessor and head are required; reconcile an initial push manually.' >&2
-            exit 2
+          python3 commons_discord.py doctor > /tmp/commons-discord-doctor.json
+          python3 infra/discord/assert_ready.py commons_to_discord /tmp/commons-discord-doctor.json
+          before='${{ github.event.before }}'
+          if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            before="${GITHUB_SHA}^"
           fi
-          if [[ "$(git rev-parse --verify HEAD)" != "$EXPECTED_HEAD_SHA" ]]; then
-            echo 'Discord mirror: checkout does not match the event head.' >&2
-            exit 2
-          fi
-          git cat-file -e "${EXPECTED_HEAD_SHA}^{commit}"
-          if ! git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
-            # Commons is public. Fetch only this exact predecessor, not full history,
-            # and do not persist or print any credentials.
-            git fetch --no-tags --depth=1 origin "$BEFORE_SHA"
-          fi
-          git cat-file -e "${BEFORE_SHA}^{commit}"
-          plan=$(mktemp)
-          doctor=$(mktemp)
-          trap 'rm -f "$plan" "$doctor"' EXIT
-          # Do not stream Git into a sender: a late diff error must send nothing.
-          # NUL boundaries preserve spaces, tabs, Unicode and newlines in record names.
-          git diff --no-ext-diff --no-textconv --no-renames --diff-filter=AM \
-            --name-only -z "$BEFORE_SHA" "$EXPECTED_HEAD_SHA" -- 'p/*.md' > "$plan"
-          while IFS= read -r -d '' record; do
-            if [[ ! -f "$record" || -L "$record" ]]; then
-              echo 'Discord mirror: planned record is not a regular, nonsymlink file.' >&2
-              exit 2
-            fi
-          done < "$plan"
-          if [[ ! -s "$plan" ]]; then
-            exit 0
-          fi
-          python3 commons_discord.py doctor > "$doctor"
-          python3 infra/discord/assert_ready.py commons_to_discord "$doctor"
-          while IFS= read -r -d '' record; do
-            python3 commons_discord.py to-discord send "$record"
-          done < "$plan"
+          git diff --diff-filter=AM --name-only "$before" "$GITHUB_SHA" -- 'p/*.md' |
+            while IFS= read -r record; do
+              [ -n "$record" ] || continue
+              python3 commons_discord.py to-discord send "$record"
+            done

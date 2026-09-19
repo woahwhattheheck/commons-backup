@@ -1,0 +1,41 @@
+name: jeffersonville-orchestration
+
+on:
+  push:
+    branches:
+      - main
+    paths: &orchestration_paths
+      - '.github/workflows/jeffersonville-orchestration.yml'
+      - 'test_jeffersonville_orchestration.py'
+      - 'orchestration.html'
+      - 'orchestration/jeffersonville/**'
+      - 'commons_mcp.py'
+      - 'crawler-access.json'
+      - 'sitemap.xml'
+  pull_request:
+    paths: *orchestration_paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: reference-catalog contracts
+        run: python -B -W error -m unittest -q test_jeffersonville_orchestration.py
+      - name: syntax and JSON checks
+        run: |
+          python -B -m py_compile orchestration/jeffersonville/probe.py test_jeffersonville_orchestration.py
+          python -c "import json,pathlib; [json.loads(path.read_text(encoding='utf-8')) for path in pathlib.Path('orchestration/jeffersonville').glob('*.json')]"
+      - name: open-door anti-regression
+        run: git show --format= --no-ext-diff HEAD | python open_door_guard.py --diff-file -
+      - name: whitespace guard
+        run: git diff --check HEAD^

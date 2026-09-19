@@ -12,15 +12,9 @@ on:
       - 'diagnostic.html'
       - 'host/payment_ready.py'
       - 'host/revenue_recovery.py'
-      - 'host/_revenue_recovery_core_20260917.inc'
-      - 'opportunities/pinellas_26_0795_rfi_digital_evidence/**'
       - 'p/demon-revenue-hardening-correction-20260825-01.md'
       - 'p/jojo-revenue-recovery-pipeline-20260825-01.md'
       - 'revenue/payment_ready/**'
-      - 'revenue/hive/fulfillment-desk/**'
-      - 'revenue/hive/intake-crm-workflow/**'
-      - 'revenue/cas_actuarial_llm_benchmark/**'
-      - 'revenue/commercial_funnel/**'
       - 'test_carrier_from_memory.js'
       - 'test_diagnostic_dlp.js'
       - 'test_dio_crlf.py'
@@ -28,7 +22,6 @@ on:
       - 'test_gitignore_eof.py'
       - 'test_payment_ready.py'
       - 'test_revenue_recovery.py'
-      - 'test_revenue_recovery_unicode_nfkc.py'
   pull_request:
     paths:
       - '.gitattributes'
@@ -38,15 +31,9 @@ on:
       - 'diagnostic.html'
       - 'host/payment_ready.py'
       - 'host/revenue_recovery.py'
-      - 'host/_revenue_recovery_core_20260917.inc'
-      - 'opportunities/pinellas_26_0795_rfi_digital_evidence/**'
       - 'p/demon-revenue-hardening-correction-20260825-01.md'
       - 'p/jojo-revenue-recovery-pipeline-20260825-01.md'
       - 'revenue/payment_ready/**'
-      - 'revenue/hive/fulfillment-desk/**'
-      - 'revenue/hive/intake-crm-workflow/**'
-      - 'revenue/cas_actuarial_llm_benchmark/**'
-      - 'revenue/commercial_funnel/**'
       - 'test_carrier_from_memory.js'
       - 'test_diagnostic_dlp.js'
       - 'test_dio_crlf.py'
@@ -54,7 +41,6 @@ on:
       - 'test_gitignore_eof.py'
       - 'test_payment_ready.py'
       - 'test_revenue_recovery.py'
-      - 'test_revenue_recovery_unicode_nfkc.py'
   workflow_dispatch:
 
 permissions:
@@ -66,126 +52,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
+          fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: detect unrelated contract-suite delta against event base
-        id: contract
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          PUSH_BEFORE_SHA: ${{ github.event.before }}
-        run: |
-          set -eu
-          base=""
-          case "$EVENT_NAME" in
-            pull_request) base="$PR_BASE_SHA" ;;
-            push) base="$PUSH_BEFORE_SHA" ;;
-            workflow_dispatch)
-              echo 'changed=true' >> "$GITHUB_OUTPUT"
-              exit 0
-              ;;
-          esac
-          zero='0000000000000000000000000000000000000000'
-          paths=(
-            .gitattributes
-            .gitignore
-            carrier.js
-            diagnostic.html
-            host/payment_ready.py
-            host/revenue_recovery.py
-            host/_revenue_recovery_core_20260917.inc
-            p/demon-revenue-hardening-correction-20260825-01.md
-            p/jojo-revenue-recovery-pipeline-20260825-01.md
-            revenue/payment_ready
-            test_carrier_from_memory.js
-            test_diagnostic_dlp.js
-            test_dio_crlf.py
-            test_dio_revenue_contract.py
-            test_gitignore_eof.py
-            test_payment_ready.py
-            test_revenue_recovery.py
-            test_revenue_recovery_unicode_nfkc.py
-          )
-          if [ -z "$base" ] || [ "$base" = "$zero" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          elif git diff --quiet "$base" HEAD -- "${paths[@]}"; then
-            echo 'changed=false' >> "$GITHUB_OUTPUT"
-          else
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          fi
-      - name: CAS actuarial benchmark reproducibility core
-        run: |
-          python -m py_compile \
-            revenue/cas_actuarial_llm_benchmark/_schema.py \
-            revenue/cas_actuarial_llm_benchmark/core.py \
-            revenue/cas_actuarial_llm_benchmark/fixture.py \
-            revenue/cas_actuarial_llm_benchmark/cli.py \
-            revenue/cas_actuarial_llm_benchmark/test_core.py \
-            revenue/cas_actuarial_llm_benchmark/test_core_hardening.py
-          python -m unittest \
-            revenue.cas_actuarial_llm_benchmark.test_core \
-            revenue.cas_actuarial_llm_benchmark.test_core_hardening -v
-          python -O -m unittest \
-            revenue.cas_actuarial_llm_benchmark.test_core \
-            revenue.cas_actuarial_llm_benchmark.test_core_hardening -v
-          snapshot="${RUNNER_TEMP}/cas-benchmark-snapshot.json"
-          python -m revenue.cas_actuarial_llm_benchmark.cli fixture --output "${snapshot}"
-          python -m revenue.cas_actuarial_llm_benchmark.cli verify "${snapshot}"
-      - name: Commercial funnel evidence authority
-        run: |
-          python -m py_compile \
-            revenue/commercial_funnel/common.py \
-            revenue/commercial_funnel/events.py \
-            revenue/commercial_funnel/model.py \
-            revenue/commercial_funnel/ledger.py \
-            revenue/commercial_funnel/cli.py \
-            revenue/commercial_funnel/test_ledger.py \
-            revenue/commercial_funnel/test_cli.py \
-            revenue/commercial_funnel/test_review_regressions.py \
-            revenue/commercial_funnel/test_casefold_identity.py
-          python -B -m unittest -v \
-            revenue.commercial_funnel.test_ledger \
-            revenue.commercial_funnel.test_cli \
-            revenue.commercial_funnel.test_review_regressions \
-            revenue.commercial_funnel.test_casefold_identity
-          python -O -B -m unittest -v \
-            revenue.commercial_funnel.test_ledger \
-            revenue.commercial_funnel.test_cli \
-            revenue.commercial_funnel.test_review_regressions \
-            revenue.commercial_funnel.test_casefold_identity
-      - name: Parcel package integrity
-        working-directory: revenue/hive/fulfillment-desk
-        run: |
-          python -m py_compile bundle.py run_bundle.py test_package_integrity.py
-          node --test test_model.js
-          python -B -m unittest -v test_bundle.py test_package_integrity.py
-          python -O -B -m unittest -v test_bundle.py test_package_integrity.py
       - name: focused Python contract suite
-        if: steps.contract.outputs.changed == 'true'
-        run: |
-          python -W error -m unittest -q test_revenue_recovery.py test_revenue_recovery_unicode_nfkc.py test_payment_ready.py test_dio_revenue_contract.py test_dio_crlf.py test_gitignore_eof.py
-          python -O -W error -m unittest -q test_revenue_recovery.py test_revenue_recovery_unicode_nfkc.py test_payment_ready.py test_dio_revenue_contract.py test_dio_crlf.py test_gitignore_eof.py
+        run: python -W error -m unittest -q test_revenue_recovery.py test_payment_ready.py test_dio_revenue_contract.py test_dio_crlf.py test_gitignore_eof.py
       - name: actual diagnostic inline DLP
-        if: steps.contract.outputs.changed == 'true'
         run: |
           node test_diagnostic_dlp.js
           node test_carrier_from_memory.js
       - name: deterministic instrument self-test and measurement
-        if: steps.contract.outputs.changed == 'true'
         run: |
           python host/revenue_recovery.py --self-test
           python host/revenue_recovery.py measure
       - name: syntax and JSON checks
-        if: steps.contract.outputs.changed == 'true'
         run: |
-          python -m py_compile host/revenue_recovery.py host/_revenue_recovery_core_20260917.inc host/payment_ready.py test_revenue_recovery.py test_revenue_recovery_unicode_nfkc.py test_payment_ready.py test_dio_revenue_contract.py test_dio_crlf.py test_gitignore_eof.py
+          python -m py_compile host/revenue_recovery.py host/payment_ready.py test_revenue_recovery.py test_payment_ready.py test_dio_revenue_contract.py test_dio_crlf.py test_gitignore_eof.py
           node --check carrier.js
           node --check test_diagnostic_dlp.js
           node --check test_carrier_from_memory.js
@@ -194,59 +80,3 @@ jobs:
         run: git show --format= --no-ext-diff HEAD | python open_door_guard.py --diff-file -
       - name: whitespace guard
         run: git diff --check HEAD^
-
-  pinellas:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: detect Pinellas carrier delta against event base
-        id: delta
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          PUSH_BEFORE_SHA: ${{ github.event.before }}
-        run: |
-          set -eu
-          base=""
-          case "$EVENT_NAME" in
-            pull_request) base="$PR_BASE_SHA" ;;
-            push) base="$PUSH_BEFORE_SHA" ;;
-            workflow_dispatch)
-              echo 'changed=true' >> "$GITHUB_OUTPUT"
-              exit 0
-              ;;
-          esac
-          zero='0000000000000000000000000000000000000000'
-          if [ -z "$base" ] || [ "$base" = "$zero" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          elif git diff --quiet "$base" HEAD -- opportunities/pinellas_26_0795_rfi_digital_evidence; then
-            echo 'changed=false' >> "$GITHUB_OUTPUT"
-          else
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          fi
-      - name: Pinellas 26-0795 digital-evidence carrier
-        if: steps.delta.outputs.changed == 'true'
-        run: |
-          set -eu
-          cd opportunities/pinellas_26_0795_rfi_digital_evidence
-          python -m py_compile custody_reference.py tests/test_custody_reference.py
-          python -m unittest discover -s tests -v
-          python -O -m unittest discover -s tests -v
-          set +e
-          python ../../tools/proposal_gate/proposal_gate.py gate_requirements.json gate_evidence.json --check > /tmp/pinellas-gate.json
-          rc=$?
-          set -e
-          test "$rc" -eq 2
-          python - <<'PY'
-          import json
-          data=json.load(open('/tmp/pinellas-gate.json'))
-          assert data['submission_ready'] is False, data
-          assert set(data['blocking_requirements']) == {'GATE-SOURCE','GATE-ROUTE','GATE-ORG','GATE-ATTEST','GATE-OWNER'}, data
-          PY

@@ -57,7 +57,7 @@ jobs:
       - name: unit contract
         run: python3 test_resources_tab.py
       - name: regenerate stamp when sources drifted, else leave FRESH
-        run: python3 host/resources_tab.py --regenerate-or-alarm
+        run: python3 host/resources_tab.py --regenerate-or-alarm --sha "${GITHUB_SHA}"
       - name: commit regenerated stamp on main only
         if: github.ref == 'refs/heads/main'
         run: |

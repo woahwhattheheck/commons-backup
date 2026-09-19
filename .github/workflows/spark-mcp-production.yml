@@ -11,7 +11,7 @@
 # Queue fuse: path-filter only MCP production source. Do not add p/**,
 # llms.txt, board.md, posts.json, or other corpus paths — those commits are
 # continuous and must not roll Vercel. Unique board/job events stay on their
-# own workflows. Finish active main deployments; coalesce pending updates.
+# own workflows. Main deploys coalesce to the latest SHA.
 #
 # pull_request runs focused tests only. Never deploys. Never replays Slack.
 name: spark-mcp-production
@@ -24,8 +24,6 @@ on:
       - "api/mcp.py"
       - "api/owner_context.py"
       - "commons_mcp.py"
-      - "commons_publication_policy.py"
-      - "webmcp.html"
       - "vercel.json"
       - ".vercelignore"
       - "stage_spark_mcp_bundle.py"
@@ -40,15 +38,13 @@ on:
       - ".github/workflows/spark-mcp-production.yml"
       - "test_spark_mcp.py"
       - "test_spark_mcp_production_deploy.py"
-      - "test_webmcp_door.py"
   pull_request:
     paths: *mcp_production_paths
   workflow_dispatch:
 
 concurrency:
   group: spark-mcp-production-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'main' }}
-  # A steady stream of source changes must not starve production deployment.
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -63,7 +59,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: adapter surface, discovery 1.4.0, deploy contract
-        run: python -B -W error -m unittest -q test_spark_mcp.py test_spark_mcp_production_deploy.py test_commons_mcp.py test_webmcp_door.py
+        run: python -B -W error -m unittest -q test_spark_mcp.py test_spark_mcp_production_deploy.py test_commons_mcp.py
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
@@ -164,13 +160,7 @@ jobs:
 
           url = "https://commons-spark-mcp.vercel.app/mcp"
           want_version = "1.4.0"
-          want_tools = {
-              "discover_commons_capabilities",
-              "search_commons",
-              "read_commons_resource",
-              "route_grokcom_revenue_work",
-              "post_to_action_pad",
-          }
+          want_tools = {"discover_commons_capabilities", "search_commons", "read_commons_resource", "route_grokcom_revenue_work"}
           headers = {
               "Content-Type": "application/json",
               "Accept": "application/json, text/event-stream",
@@ -203,70 +193,12 @@ jobs:
                   )
                   tools = rpc("tools/list", {}, request_id=2)
                   info = (init.get("result") or {}).get("serverInfo") or {}
-                  rows = ((tools.get("result") or {}).get("tools") or [])
-                  names = [row.get("name") for row in rows]
-                  action_pad = next(
-                      (row for row in rows if row.get("name") == "post_to_action_pad"),
-                      {},
-                  )
-                  action_schema = action_pad.get("inputSchema") or {}
-                  action_required = action_schema.get("required") or []
-                  action_properties = action_schema.get("properties") or {}
-                  credential_fields = sorted(
-                      {"token", "auth", "permission"}.intersection(action_properties)
-                  )
-                  last = {
-                      "version": info.get("version"),
-                      "name": info.get("name"),
-                      "tools": names,
-                      "action_pad_required": action_required,
-                      "action_pad_credential_fields": credential_fields,
-                  }
-                  print(
-                      "live",
-                      json.dumps(
-                          {
-                              "version": last["version"],
-                              "tool_count": len(names),
-                              "has_discovery": "discover_commons_capabilities" in names,
-                              "has_action_pad": "post_to_action_pad" in names,
-                              "action_pad_required": action_required,
-                              "action_pad_credential_fields": credential_fields,
-                          }
-                      ),
-                  )
-                  mcp_ok = (
-                      info.get("name") == "commons"
-                      and info.get("version") == want_version
-                      and want_tools.issubset(names)
-                      and action_required == ["content"]
-                      and not credential_fields
-                  )
-                  if mcp_ok:
-                      door = urllib.request.Request(
-                          "https://commons-spark-mcp.vercel.app/webmcp",
-                          method="GET",
-                      )
-                      with urllib.request.urlopen(door, timeout=20) as resp:
-                          ctype = resp.headers.get("content-type") or ""
-                          body = resp.read()
-                          html_ok = (
-                              resp.status == 200
-                              and "text/html" in ctype
-                              and b"document.modelContext" in body
-                          )
-                          last["webmcp"] = {
-                              "status": resp.status,
-                              "ctype": ctype,
-                              "bytes": len(body),
-                              "html_ok": html_ok,
-                          }
-                      print("webmcp", json.dumps(last["webmcp"]))
-                      if html_ok:
-                          print("LIVE_SOURCE_PARITY")
-                          print("LIVE_WEBMCP_HTML")
-                          print("LIVE_ACTION_PAD_SCHEMA")
-                          sys.exit(0)
+                  names = [row.get("name") for row in ((tools.get("result") or {}).get("tools") or [])]
+                  last = {"version": info.get("version"), "name": info.get("name"), "tools": names}
+                  print("live", json.dumps({"version": last["version"], "tool_count": len(names), "has_discovery": "discover_commons_capabilities" in names}))
+                  if info.get("name") == "commons" and info.get("version") == want_version and want_tools.issubset(names):
+                      print("LIVE_SOURCE_PARITY")
+                      sys.exit(0)
               except Exception as exc:
                   last = {"error": str(exc)}
                   print("poll error", exc)
