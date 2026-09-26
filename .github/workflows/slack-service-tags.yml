@@ -17,26 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v4
       - name: Dispatch @service custom-tool jobs
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          # This worker needs five files, not the complete repository history
-          # and worktree. Keep the import/data closure on one exact commit.
-          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/contents"
-          for source in \
-            host/slack_service_tag_worker.py \
-            host/slack_service_drivers.py \
-            host/slack_service_tag.py \
-            commons_publication_policy.py \
-            ground/SLACK_SERVICE_TAGS.json; do
-            mkdir -p "$(dirname "$source")"
-            curl -fsSL \
-              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-              -H "Accept: application/vnd.github.raw" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "${api}/${source}?ref=${GITHUB_SHA}" -o "$source"
-          done
+          python3 -m unittest test_slack_service_tag_worker.py test_slack_service_tags.py
           python3 host/slack_service_tag_worker.py --poll

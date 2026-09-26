@@ -111,7 +111,6 @@ jobs:
               "${api}/$1?ref=${GITHUB_SHA}" -o "/tmp/pulse/$1"
           }
           fetch repo_pulse.py
-          fetch commons_publication_policy.py
           fetch test_repo_pulse.py
           fetch host/sprint_integration.py
           cp /tmp/pulse/host/sprint_integration.py /tmp/pulse/sprint_integration.py
@@ -143,7 +142,7 @@ jobs:
 
   slack_ingest:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 30
     concurrency:
       group: repo-pulse-slack-ingest
       cancel-in-progress: false
@@ -179,7 +178,6 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           COMMONS_SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL_ID || 'C0BRGMDQB6G' }}
           SLACK_INGEST_STATE: .slack-ingest-state.json
-          SLACK_INGEST_BUDGET_SEC: "4500"
         run: |
           set -euo pipefail
           mkdir -p /tmp/slack-ingest
@@ -219,8 +217,8 @@ jobs:
             --posts-json /tmp/slack-ingest/posts.json
           echo "state_ready=true" >> "$GITHUB_OUTPUT"
 
-      - name: Save the Slack event cursor after progress
-        if: always() && github.event_name != 'pull_request' && hashFiles('.slack-ingest-state.json') != ''
+      - name: Save the last fully processed Slack event cursor
+        if: success() && steps.sync.outputs.state_ready == 'true'
         uses: actions/cache/save@v4
         with:
           path: .slack-ingest-state.json

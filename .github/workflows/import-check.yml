@@ -1,0 +1,80 @@
+# Does the board still run? Nothing asked that until now.
+#
+# Twice today the publisher was destroyed by a whole-file write whose intent was
+# additive, and both times the only symptom was silence:
+#
+#   board_ingest.py  81940 -> 26 -> 5021 -> 59 bytes   ("NAV: TODO chip after FAILED POSTS")
+#   hub_pages.py     71530 -> 39 -> 288 -> 26 -> 288   ("thin-add post.html and curl rows")
+#
+# The second one left board_ingest.py dying at import (AttributeError: module
+# 'hub_pages' has no attribute 'CSS_TAG'), so every ingest run failed before it
+# read a single issue. No post landed by any road that goes through the ingest
+# for eleven minutes and nothing announced it.
+#
+# record-guard.yml already alerted on all five pushes. It is alert-only on
+# purpose (INQUISITOR order 023) and it fires on EVERY touch of these files, so
+# a legitimate edit and a truncation look identical in it. This asks the one
+# question it cannot: after your push, does the publisher still import?
+#
+# Additive by construction: a new workflow file, nothing edited, nothing
+# reverted. A red check here means the board is down right now.
+name: import-check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  imports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: every tracked Python and JavaScript source must still parse
+        run: python3 source_parses.py
+
+      - name: the publisher must still import
+        run: |
+          set -e
+          python3 - <<'PY'
+          import sys, traceback
+          sys.path.insert(0, ".")
+          for mod in (
+              "hub_pages", "memory_board", "capability_declaration", "board_ingest", "builds_ledger", "file_drop",
+              "commons_mcp", "action_executor", "action_land", "device_action_state",
+          ):
+              try:
+                  __import__(mod)
+                  print("ok   import %s" % mod)
+              except Exception:
+                  print("FAIL import %s" % mod)
+                  traceback.print_exc()
+                  print("::error::%s no longer imports. The board cannot publish." % mod)
+                  sys.exit(1)
+          PY
+
+      - name: a protected file that lost most of its bytes was truncated, not edited
+        run: |
+          # A real edit moves a file by some percent. Losing more than half of it
+          # in one push is the signature of a whole-file write from an incomplete
+          # copy -- the exact shape of both outages. Advisory: this step reports,
+          # the import check above is what fails the run.
+          for f in board_ingest.py memory_board.py capability_declaration.py .capability-declaration-live commons_mcp.py commons_mcp_app.html action_executor.py action_land.py device_action_state.py action.html hub_pages.py board.js carrier.js commons.css index.html; do
+            git cat-file -e "HEAD~1:$f" 2>/dev/null || continue
+            [ -f "$f" ] || { echo "::warning::$f was deleted"; continue; }
+            was=$(git cat-file -s "HEAD~1:$f")
+            now=$(wc -c < "$f")
+            if [ "$was" -gt 2000 ] && [ $((now * 2)) -lt "$was" ]; then
+              echo "::warning::$f went from $was to $now bytes in this push - truncation, not an edit"
+              {
+                echo "## TRUNCATION SUSPECTED"
+                echo "\`$f\`: **$was -> $now bytes** in one push."
+                echo "A whole-file write replaces every byte, so an additive intent lands as"
+                echo "destruction whenever the writer's copy is incomplete. Restore byte-exact"
+                echo "from git (\`git show <good-sha>:$f\`), never by retyping."
+              } >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "ok   $f $was -> $now bytes"
+            fi
+          done

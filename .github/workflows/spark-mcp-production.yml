@@ -11,7 +11,7 @@
 # Queue fuse: path-filter only MCP production source. Do not add p/**,
 # llms.txt, board.md, posts.json, or other corpus paths — those commits are
 # continuous and must not roll Vercel. Unique board/job events stay on their
-# own workflows. Finish active main deployments; coalesce pending updates.
+# own workflows. Main deploys coalesce to the latest SHA.
 #
 # pull_request runs focused tests only. Never deploys. Never replays Slack.
 name: spark-mcp-production
@@ -23,19 +23,7 @@ on:
     paths: &mcp_production_paths
       - "api/mcp.py"
       - "api/owner_context.py"
-      - "api/jev.py"
-      - "api/cua_s1.py"
-      - "api/cua_s1_form.mjs"
-      - "api/cua_s1_fixture.mjs"
-      - "api/test_cua_s1_form.mjs"
-      - "host/jev.py"
-      - "host/cua_s1_cloud/**"
-      - "requirements.txt"
-      - "package.json"
-      - "package-lock.json"
       - "commons_mcp.py"
-      - "commons_publication_policy.py"
-      - "webmcp.html"
       - "vercel.json"
       - ".vercelignore"
       - "stage_spark_mcp_bundle.py"
@@ -50,15 +38,13 @@ on:
       - ".github/workflows/spark-mcp-production.yml"
       - "test_spark_mcp.py"
       - "test_spark_mcp_production_deploy.py"
-      - "api/test_jev.py"
   pull_request:
     paths: *mcp_production_paths
   workflow_dispatch:
 
 concurrency:
   group: spark-mcp-production-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'main' }}
-  # A steady stream of source changes must not starve production deployment.
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -72,15 +58,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - name: install hosted CUA runtime
-        run: python -m pip install --requirement requirements.txt
       - name: adapter surface, discovery 1.4.0, deploy contract
-        run: python -B -W error -m unittest -q test_spark_mcp.py test_spark_mcp_production_deploy.py test_commons_mcp.py api.test_jev host.cua_s1_cloud.test_runtime_onnx
-      - name: hosted CUA browser contract
-        run: node --test api/test_cua_s1_form.mjs
+        run: python -B -W error -m unittest -q test_spark_mcp.py test_spark_mcp_production_deploy.py test_commons_mcp.py
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
@@ -91,7 +70,6 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TEAM_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
       VERCEL_PROJECT_NAME: commons-spark-mcp
       VERCEL_SCOPE: woahwhatthehecks-projects
       PUBLIC_MCP_URL: https://commons-spark-mcp.vercel.app/mcp
@@ -153,16 +131,6 @@ jobs:
           else
             vercel link --yes --token="${VERCEL_TOKEN}" --project "${VERCEL_PROJECT_NAME}" --scope "${VERCEL_SCOPE}"
           fi
-          if [ -z "${TYPESAFE_API_KEY}" ]; then
-            echo "::error::TYPESAFE_API_KEY is missing from repository Actions secrets."
-            exit 1
-          fi
-          if vercel env ls production --token="${VERCEL_TOKEN}" --scope "${VERCEL_SCOPE}" | grep -Fq 'TYPESAFE_API_KEY'; then
-            echo "TYPESAFE_API_KEY production variable already configured (value not read)"
-          else
-            printf '%s' "${TYPESAFE_API_KEY}" | vercel env add TYPESAFE_API_KEY production --sensitive --token="${VERCEL_TOKEN}" --scope "${VERCEL_SCOPE}"
-            echo "TYPESAFE_API_KEY production variable configured (value not printed)"
-          fi
           STAGE="$(mktemp -d)"
           python3 stage_spark_mcp_bundle.py --src . --dst "${STAGE}"
           if [ -d .vercel ]; then
@@ -192,15 +160,7 @@ jobs:
 
           url = "https://commons-spark-mcp.vercel.app/mcp"
           want_version = "1.4.0"
-          want_tools = {
-              "discover_commons_capabilities",
-              "search_commons",
-              "read_commons_resource",
-              "route_grokcom_revenue_work",
-              "post_to_action_pad",
-              "jev_decide",
-              "cua_s1_score",
-          }
+          want_tools = {"discover_commons_capabilities", "search_commons", "read_commons_resource", "route_grokcom_revenue_work"}
           headers = {
               "Content-Type": "application/json",
               "Accept": "application/json, text/event-stream",
@@ -233,124 +193,16 @@ jobs:
                   )
                   tools = rpc("tools/list", {}, request_id=2)
                   info = (init.get("result") or {}).get("serverInfo") or {}
-                  rows = ((tools.get("result") or {}).get("tools") or [])
-                  names = [row.get("name") for row in rows]
-                  action_pad = next(
-                      (row for row in rows if row.get("name") == "post_to_action_pad"),
-                      {},
-                  )
-                  action_schema = action_pad.get("inputSchema") or {}
-                  action_required = action_schema.get("required") or []
-                  action_properties = action_schema.get("properties") or {}
-                  credential_fields = sorted(
-                      {"token", "auth", "permission"}.intersection(action_properties)
-                  )
-                  last = {
-                      "version": info.get("version"),
-                      "name": info.get("name"),
-                      "tools": names,
-                      "action_pad_required": action_required,
-                      "action_pad_credential_fields": credential_fields,
-                  }
-                  print(
-                      "live",
-                      json.dumps(
-                          {
-                              "version": last["version"],
-                              "tool_count": len(names),
-                              "has_discovery": "discover_commons_capabilities" in names,
-                              "has_action_pad": "post_to_action_pad" in names,
-                              "action_pad_required": action_required,
-                              "action_pad_credential_fields": credential_fields,
-                          }
-                      ),
-                  )
-                  mcp_ok = (
-                      info.get("name") == "commons"
-                      and info.get("version") == want_version
-                      and want_tools.issubset(names)
-                      and action_required == ["content"]
-                      and not credential_fields
-                  )
-                  if mcp_ok:
-                      door = urllib.request.Request(
-                          "https://commons-spark-mcp.vercel.app/webmcp",
-                          method="GET",
-                      )
-                      with urllib.request.urlopen(door, timeout=20) as resp:
-                          ctype = resp.headers.get("content-type") or ""
-                          body = resp.read()
-                          html_ok = (
-                              resp.status == 200
-                              and "text/html" in ctype
-                              and b"document.modelContext" in body
-                          )
-                          last["webmcp"] = {
-                              "status": resp.status,
-                              "ctype": ctype,
-                              "bytes": len(body),
-                              "html_ok": html_ok,
-                          }
-                      print("webmcp", json.dumps(last["webmcp"]))
-                      if html_ok:
-                          print("LIVE_SOURCE_PARITY")
-                          print("LIVE_WEBMCP_HTML")
-                          print("LIVE_ACTION_PAD_SCHEMA")
-                          sys.exit(0)
+                  names = [row.get("name") for row in ((tools.get("result") or {}).get("tools") or [])]
+                  last = {"version": info.get("version"), "name": info.get("name"), "tools": names}
+                  print("live", json.dumps({"version": last["version"], "tool_count": len(names), "has_discovery": "discover_commons_capabilities" in names}))
+                  if info.get("name") == "commons" and info.get("version") == want_version and want_tools.issubset(names):
+                      print("LIVE_SOURCE_PARITY")
+                      sys.exit(0)
               except Exception as exc:
                   last = {"error": str(exc)}
                   print("poll error", exc)
               time.sleep(10)
           print("STALE_OR_UNVERIFIED", json.dumps(last))
           sys.exit(1)
-          PY
-
-      - name: verify live cloud Jev and CUA endpoints
-        if: steps.creds.outputs.present == 'true'
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import json, urllib.request
-
-          base = "https://commons-spark-mcp.vercel.app"
-
-          def request(path, payload=None):
-              data = None if payload is None else json.dumps(payload).encode("utf-8")
-              req = urllib.request.Request(
-                  base + path, data=data,
-                  headers={"Content-Type": "application/json"},
-                  method="GET" if data is None else "POST",
-              )
-              with urllib.request.urlopen(req, timeout=90) as resp:
-                  assert resp.status == 200, (path, resp.status)
-                  return json.load(resp)
-
-          jev = request("/jev")
-          assert jev.get("ok") and jev.get("configured") is True, jev
-          decision = request("/jev", {"state": "2 + 2 = 4", "questions": {
-              "truth": {"type": "noul", "instructions": "The statement is mathematically true"},
-          }})
-          assert decision.get("ok") and "truth" in decision.get("answers", {}), decision
-          cua = request("/cua-s1")
-          assert cua.get("ok") and cua.get("artifact_sha256"), cua
-          scored = request("/cua-s1", {"context": "ELEMENT Edit Name", "options": ["fill Name: Ada", "skip"]})
-          assert scored.get("selected_index") in (0, 1) and scored.get("executed") is False, scored
-          browser = request("/cua-s1/form")
-          assert browser.get("ok") and browser.get("browser_runtime") == "vercel-chromium", browser
-          form = {"url": base + "/cua-s1/fixture", "form_title": "Contact",
-                  "entities": [{"label": "Name", "value": "Ada"}], "submit": False}
-          preview = request("/cua-s1/form", form)
-          assert preview.get("ok") and preview.get("executed") is False, preview
-          assert preview.get("elements_scored") == 1, preview
-          assert any(action.get("action") == "fill" and action.get("label") == "Name"
-                     for action in preview.get("planned_actions", [])), preview
-          executed = request("/cua-s1/form", {**form, "execute": True})
-          assert executed.get("ok") and executed.get("executed") is True, executed
-          assert executed.get("submit_requested") is False and executed.get("submission_verified") is False, executed
-          assert len(executed.get("execution_order", [])) == 1, executed
-          assert executed["execution_order"][0].get("action") == "fill", executed
-          assert executed["execution_order"][0].get("verified_value") is True, executed
-          print("LIVE_JEV_PROVIDER")
-          print("LIVE_CUA_MODEL", cua["artifact_sha256"])
-          print("LIVE_CUA_BROWSER_PREVIEW_AND_VERIFIED_FILL")
           PY

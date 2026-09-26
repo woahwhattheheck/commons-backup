@@ -1,0 +1,101 @@
+name: Commons Android APK
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "lda/app/src/main/AndroidManifest.xml"
+      - "lda/app/src/main/java/com/local/deviceagent/CommonsActivity.kt"
+      - "lda/app/src/main/java/com/local/deviceagent/CommonsClient.kt"
+      - "lda/app/src/main/java/com/local/deviceagent/TitanHandsLanProtocol.kt"
+      - "lda/app/src/main/java/com/local/deviceagent/TitanHandsLanService.kt"
+      - "lda/app/src/test/java/com/local/deviceagent/CommonsClientTest.kt"
+      - "lda/app/src/test/java/com/local/deviceagent/TitanHandsLanProtocolTest.kt"
+      - ".github/workflows/commons-android-apk.yml"
+  push:
+    branches: [main]
+    paths:
+      - "lda/app/src/main/AndroidManifest.xml"
+      - "lda/app/src/main/java/com/local/deviceagent/CommonsActivity.kt"
+      - "lda/app/src/main/java/com/local/deviceagent/CommonsClient.kt"
+      - "lda/app/src/main/java/com/local/deviceagent/TitanHandsLanProtocol.kt"
+      - "lda/app/src/main/java/com/local/deviceagent/TitanHandsLanService.kt"
+      - "lda/app/src/test/java/com/local/deviceagent/CommonsClientTest.kt"
+      - "lda/app/src/test/java/com/local/deviceagent/TitanHandsLanProtocolTest.kt"
+      - ".github/workflows/commons-android-apk.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: commons-android-apk-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: lda
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Create ephemeral CI debug signing key
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -f app/debug.keystore ]]; then
+            keytool -genkeypair -noprompt \
+              -keystore app/debug.keystore \
+              -storepass android \
+              -alias androiddebugkey \
+              -keypass android \
+              -dname "CN=Commons Android CI,O=Commons,C=US" \
+              -keyalg RSA -keysize 2048 -validity 3650
+          fi
+          echo "CI signing truth: ephemeral debug key; this artifact is sideloadable but not a stable update signature."
+
+      - name: JVM tests and APK assembly
+        run: gradle :app:testDebugUnitTest :app:assembleDebug --build-cache --stacktrace
+
+      - name: Verify tests, merged manifest, APK, signature, and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -c 'import glob,xml.etree.ElementTree as E; fs=glob.glob("app/build/test-results/testDebugUnitTest/*.xml"); assert fs, "no JUnit XML"; roots=[E.parse(f).getroot() for f in fs]; t=sum(int(r.attrib.get("tests",0)) for r in roots); f=sum(int(r.attrib.get("failures",0))+int(r.attrib.get("errors",0)) for r in roots); s=sum(int(r.attrib.get("skipped",0)) for r in roots); print(f"JVM_TESTS total={t} failed={f} skipped={s}"); assert f==0'
+          merged="$(find app/build/intermediates -path '*merged_manifests*debug*AndroidManifest.xml' -type f | head -n 1)"
+          test -n "$merged"
+          grep -q 'com.local.deviceagent.CommonsActivity' "$merged"
+          grep -q 'com.local.deviceagent.TitanHandsLanService' "$merged"
+          grep -q 'android:foregroundServiceType="specialUse"' "$merged"
+          apk="app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$apk"
+          unzip -t "$apk"
+          apksigner="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -n 1)"
+          test -x "$apksigner"
+          "$apksigner" verify --verbose "$apk"
+          apk_dir="$(dirname "$apk")"
+          apk_name="$(basename "$apk")"
+          (cd "$apk_dir" && sha256sum "$apk_name" | tee "${apk_name}.sha256")
+          (cd "$apk_dir" && sha256sum --check "${apk_name}.sha256")
+
+      - name: Upload sideloadable APK and SHA-256 sidecar
+        uses: actions/upload-artifact@v4
+        with:
+          name: commons-android-apk-${{ github.sha }}
+          path: |
+            lda/app/build/outputs/apk/debug/app-debug.apk
+            lda/app/build/outputs/apk/debug/app-debug.apk.sha256
+          if-no-files-found: error
+          retention-days: 30

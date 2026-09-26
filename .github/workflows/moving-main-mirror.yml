@@ -15,7 +15,6 @@ on:
         type: boolean
         default: true
   push:
-    branches: [main]
     paths:
       - "host/moving_main_mirror.py"
       - "host/repo_backup.py"
@@ -50,9 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Keep complete ancestry; load file contents only when needed.
           fetch-depth: 0
-          filter: blob:none
           persist-credentials: false
 
       - name: restore last cursor (monotonic)
