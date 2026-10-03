@@ -17,14 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /.gitattributes
-            /mail.json
-            /wake.json
-            /ping/decide.py
-            /ping/last.json
       - name: decide from mail.json
         id: decide
         run: python3 ping/decide.py

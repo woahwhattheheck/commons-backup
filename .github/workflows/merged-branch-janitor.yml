@@ -1,0 +1,28 @@
+name: merged-branch-janitor
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: merged-branch-janitor-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  delete-merged-branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      # This event can mutate refs, so execute only the trusted base revision.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          sparse-checkout: merged_branch_janitor.py
+          sparse-checkout-cone-mode: false
+      - name: delete merged same-repository branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 merged_branch_janitor.py
