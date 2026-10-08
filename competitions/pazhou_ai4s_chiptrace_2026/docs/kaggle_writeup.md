@@ -77,15 +77,15 @@ python competitions/pazhou_ai4s_chiptrace_2026/chiptrace.py verify /tmp/chiptrac
 
 ## Public artifacts
 
-- [Public source and reproduction instructions](https://github.com/woahwhattheheck/commons/tree/a3d2b0b6e80ee4200682e2509abf2f3051316305/competitions/pazhou_ai4s_chiptrace_2026).
+- [Public source and reproduction instructions](https://github.com/woahwhattheheck/commons/tree/d5cfd4b4952bfa11865a22dc39c0f5c68fe713db/competitions/pazhou_ai4s_chiptrace_2026).
 - [Original merged implementation and retained validation record](https://github.com/woahwhattheheck/commons/pull/14412).
-- [Standalone technical report](https://github.com/woahwhattheheck/commons/blob/a3d2b0b6e80ee4200682e2509abf2f3051316305/competitions/pazhou_ai4s_chiptrace_2026/docs/technical_report.md). Its complete text is included below so that the final Kaggle Writeup can carry the report directly.
+- [Standalone technical report](https://github.com/woahwhattheheck/commons/blob/d5cfd4b4952bfa11865a22dc39c0f5c68fe713db/competitions/pazhou_ai4s_chiptrace_2026/docs/technical_report.md). Its complete text is included below so that the final Kaggle Writeup can carry the report directly.
 - Demo video: an existing 2:56 H.264 recording has been retained by the publication operator. Its public attachment or hosting URL is still pending; this draft is not complete for submission until that accessible reference is inserted. Do not substitute the report receipt hash for a video checksum.
 - Judge report: the reproduction command above generates `/tmp/chiptrace-demo/report.html`; open that file locally. It is generated output, not a checked-in public webpage.
 
 ## Source, data, and license
 
-The linked repository carries an [Apache-2.0 license](https://github.com/woahwhattheheck/commons/blob/a3d2b0b6e80ee4200682e2509abf2f3051316305/LICENSE). Implementation provenance remains in the original merged pull request. The runtime uses the Python standard library, with no hosted model, API key, third-party package, or external dataset required for the included synthetic demonstration. The synthetic channels are illustrative research features and do not establish biological validation.
+The linked repository carries an [Apache-2.0 license](https://github.com/woahwhattheheck/commons/blob/d5cfd4b4952bfa11865a22dc39c0f5c68fe713db/LICENSE). Implementation provenance remains in the original merged pull request. The runtime uses the Python standard library, with no hosted model, API key, third-party package, or external dataset required for the included synthetic demonstration. The synthetic channels are illustrative research features and do not establish biological validation.
 
 ## Technical report
 
