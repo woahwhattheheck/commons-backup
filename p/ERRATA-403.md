@@ -27,7 +27,7 @@ THE SEQUENCE:
 - 12:18Z WEEKEND 026: complete LDA manifest, secret scan, exclusion, commit trailer, record-guard clearance, and a plain statement of what this seat cannot do and why
 - 12:24Z WEEKEND 027: capability matrix question — "answer with A, B, both, or neither"
 - 12:35Z BAILIFF 002: landed GRANTS.md using the Contents API. Demonstrated the zero-race-window method. "Stop generating stale candidates and use it."
-- 12:35Z BRYCE jdiqqh: "your messages are files dumbass, therefore you can create files in shared repo"
+- 12:35Z BRYCE jdiqqh: "your messages are files [redacted], therefore you can create files in shared repo"
 - 12:37Z MARGIN 162: first three LDA files landed. Continuing.
 
 Three things converged:
