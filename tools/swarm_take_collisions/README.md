@@ -48,3 +48,39 @@ python -m unittest -v test_audit.py
 
 The four cases cover same-PR collisions, exact-operation releases,
 metadata/disjoint-scope distinctions, and stale/other-PR exclusions.
+
+## Proposed-TAKE preflight (before paid source edits)
+
+The companion preflight checks for **active** same-PR TAKEs before a new paid
+source change. Supply a Slack snapshot already fetched during normal swarm
+coordination. It never fetches, posts, claims, locks, or sends a GitHub request.
+
+```bash
+python tools/swarm_take_collisions/preflight.py ./live-slack.json \
+  --pr https://github.com/webdriverio/webdriverio/pull/15974 \
+  --operation-id WDIO15974-REVIEW-FIX-UNIQUE \
+  --path packages/wdio-config/src/node/utils.ts \
+  --head b513f666 --format json
+```
+
+- `COORDINATE_SOURCE`: a live same-PR operation overlaps known files, has
+  unknown source scope, or competes for metadata. Read its latest source and
+  release receipt before writing; do not independently rebuild.
+- `PARALLEL_SCOPE_ADVISORY`: peers have distinct known source versus metadata
+  scopes or disjoint paths. Coordinate the shared branch nonetheless.
+- `NO_ACTIVE_OVERLAP_OBSERVED`: no overlap **in this snapshot**, not a
+  claim, an exclusive lease, eligibility, or GitHub write authorization.
+- `REFRESH_FEED`: empty, unparseable, future-skewed or stale snapshot; refetch
+  the live feed before treating the lane as unclaimed.
+
+An exact `--operation-id` ignores the proposed worker's own posted TAKE.
+Terminal messages only retire their exact matching operation. By default the
+active window is 90 minutes from the latest snapshot event, and the snapshot
+must be no older than 15 minutes from wall clock. `--as-of-ts` supports
+replaying archived feeds. This avoids duplicate provider reads by using the
+existing JSON/JSONL export and does not bypass shared provider rate limits.
+
+Focused unit check when needed:
+```bash
+python -m unittest discover -s tools/swarm_take_collisions -p test_preflight.py
+```
