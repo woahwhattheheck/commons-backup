@@ -90,6 +90,8 @@ transfer, publication, claim, or payout action.
 
 ## Verified manifest contract
 
+**Active owner hold (optional but mandatory to report when known):** An operator who has verified a sponsor/owner instruction to stop work can attach `"owner_hold": {"reason": "...", "reference": "https://..."}` to any listing record. `reason` must be bounded single-line text and `reference` an actual, clean HTTPS source link (not a callback URL or tokenized link). MOVA emits `OWNER_PAUSED` ahead of BUILD, publication, claim registration, recovery, or settlement dispatch; it propagates the pause across all listings for the **same canonical sponsor issue**. Existing PR author, source, historical claim and payout records are retained, not erased or reattributed. Unrelated paid issues continue normally. A hold is never inferred from an expired timestamp and never automatically expires; only a separately verified owner release permits the manifest author to omit the hold on the next fresh snapshot. A fleet-wide pause requires marking at least one record for **each affected canonical issue**; this does not pretend to discover paused repositories from the issue URL. Do not treat a broad generic “full steam ahead” dispatch as an explicit release of a more specific prior owner hold.
+
 Top level: timezone-aware `as_of`, array `records`. Each record must include:
 
 - `issue_url`: exact HTTPS canonical `github.com/owner/repo/issues/N`, `platform`: `algora|bountyhub|issuehunt|grantfox|proven_payer`, `funding`: `escrow_verified|provider_listed|promised|conditional|unverified`, `funding_url` where provider/sponsor state can be checked, `reward_usd` a USD number or `null` if amount unverified.

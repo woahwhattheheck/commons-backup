@@ -195,6 +195,46 @@ class OwnerCollisionRegression(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "requires a sponsor pr_url"):
             actions(invalid)
 
+    def test_explicit_owner_hold_propagates_across_listings_and_outlives_stale_evidence(self):
+        hold = {
+            "reason": "Existing owner compensation hold; no source or claim work",
+            "reference": "https://tokenjunkielabs.slack.com/archives/coordination/p1791408000000000",
+        }
+        paused = record("grantfox")
+        paused["owner_hold"] = hold
+        second = record("bountyhub", source="published")
+        second.update(
+            pr_url="https://github.com/example/rewarded-sdk/pull/21",
+            pr_author="woahwhattheheck",
+            claim_state="paid",
+        )
+        batch = actions(paused, second)
+        self.assertEqual(batch["build_slots_admitted"], 0)
+        self.assertEqual([x["action"] for x in batch["work_orders"]],
+                         ["OWNER_PAUSED", "OWNER_PAUSED"])
+        self.assertEqual(len({x["operation_id"] for x in batch["work_orders"]}), 2)
+        self.assertTrue(all(x["owner_hold"] == hold for x in batch["work_orders"]))
+        self.assertIn("owner_hold_reference=" + hold["reference"], render_slack(batch))
+        self.assertEqual(next(x for x in batch["work_orders"] if x["platform"] == "bountyhub")["claim_state"], "paid")
+
+        # A later stale record cannot transform the real owner hold into
+        # a refresh, BUILD or a stale-lease recovery dispatch.
+        paused["checked_at"] = (datetime.now(timezone.utc) - timedelta(hours=9)).isoformat()
+        self.assertEqual(actions(paused)["work_orders"][0]["action"], "OWNER_PAUSED")
+
+        # Unrelated payable work is NOT blocked by this issue-specific hold.
+        unrelated = record("algora")
+        unrelated["issue_url"] = "https://github.com/example/other-sdk/issues/7"
+        other_batch = actions(paused, unrelated)
+        self.assertEqual({x["issue_key"]: x["action"] for x in other_batch["work_orders"]}[
+            "example/other-sdk#7"], "BUILD")
+        self.assertEqual(other_batch["build_slots_admitted"], 1)
+
+        malformed = record("grantfox")
+        malformed["owner_hold"] = {"reason": "paused", "reference": "https://pay.example.test/?token=secret"}
+        with self.assertRaisesRegex(ValueError, "clean HTTPS evidence"):
+            actions(malformed)
+
     def test_paid_claim_never_overrides_foreign_attribution(self):
         foreign_upstream = record("algora", source="published")
         foreign_upstream.update(

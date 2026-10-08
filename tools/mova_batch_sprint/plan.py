@@ -165,6 +165,26 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
     if occupied is not None and (not isinstance(occupied, str) or not occupied.strip()):
         raise ValueError("active_owner must be nonempty text or null")
 
+    # An explicit, evidenced owner hold is independent of bounty status.
+    # Never infer a release merely from fresh funding, a later PR or a stale TAKE.
+    owner_hold = record.get("owner_hold")
+    if owner_hold is not None:
+        if not isinstance(owner_hold, dict):
+            raise ValueError("owner_hold must contain reason and reference")
+        reason = owner_hold.get("reason")
+        reference = owner_hold.get("reference")
+        if (not isinstance(reason, str) or not reason.strip() or len(reason) > 240
+                or any(ch in reason for ch in ("\r", "\n"))):
+            raise ValueError("owner_hold.reason must be bounded single-line text")
+        if not isinstance(reference, str):
+            raise ValueError("owner_hold.reference must be a clean HTTPS evidence URL")
+        hold_url = urlsplit(reference)
+        if (hold_url.scheme != "https" or not hold_url.hostname
+                or hold_url.username or hold_url.password or hold_url.query or hold_url.fragment
+                or any(ord(ch) < 32 for ch in reference)):
+            raise ValueError("owner_hold.reference must be a clean HTTPS evidence URL")
+        owner_hold = {"reason": reason.strip(), "reference": reference}
+
     # Optional one-shot provider evidence for a stale source lease. The planner
     # never performs the live read: the recovery/collision/publication boundary
     # supplies the exact branch head and exhaustive expected..observed paths.
@@ -250,7 +270,7 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         "pr_author": author.lower() if author else None,
         "source_pr_url": source_pr,
         "source_pr_author": source_author.lower() if source_author else None,
-        "active_owner": occupied, "fresh": fresh,
+        "active_owner": occupied, "owner_hold": owner_hold, "fresh": fresh,
         "take_paths": take_paths, "take_head": take_head,
         "take_kind": take_kind, "take_operation_id": take_operation_id,
         "lease_recovery": lease_recovery,
@@ -350,6 +370,8 @@ def apply_head_reconciliation(item: dict) -> dict | None:
 
 def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
     """Returns a non-mutating action and a precise reason; never awards payout."""
+    if item["owner_hold"] is not None:
+        return "OWNER_PAUSED", "Explicit owner hold: " + item["owner_hold"]["reason"]
     if not item["fresh"]:
         return "REFRESH_CANONICAL", "Issue/funding/PR evidence is stale or future-dated"
     # Source attribution precedes any settlement action. A provider's paid
@@ -435,6 +457,16 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
                       "AWAIT_ACCEPTANCE", "VERIFY_SETTLEMENT", "REVIEW_REJECTION",
                       "CLOSED_UNMERGED_REVIEW"}
     for group in keyed.values():
+        # One evidenced owner hold propagates to every platform listing of the
+        # same canonical issue. Otherwise a second "green" listing can
+        # accidentally re-dispatch held code or re-submit a paused claim.
+        hold = next((x["owner_hold"] for x in group if x["owner_hold"] is not None), None)
+        if hold is not None:
+            for item in group:
+                item["owner_hold"] = hold
+                item["action"] = "OWNER_PAUSED"
+                item["reason"] = "Explicit owner hold: " + hold["reason"]
+            continue
         if len(group) == 1:
             continue
         # Do not build from a second funding listing while any original
@@ -486,7 +518,7 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
         kind = item["action"]
         operation_id = "MOVA-%s-%s-%s" % (
             item["repo"].replace("/", "-"), item["number"], kind)
-        if kind in portal_actions | {"CLAIM_SOURCE_HOLD", "DUPLICATE_LISTING_HOLD",
+        if kind in portal_actions | {"OWNER_PAUSED", "CLAIM_SOURCE_HOLD", "DUPLICATE_LISTING_HOLD",
                                     "RECONCILE_SHARED_PR", "RECONCILE_SHARED_SOURCE"}:
             # Claim actions are per listing, not just per issue; a stable URL
             # digest keeps IDs distinct even on two listings of one platform.
@@ -499,7 +531,8 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
     # before BUILD capacity is allocated. This consumes caller-supplied provider
     # evidence and performs no live GitHub/Slack requests.
     for item in items:
-        apply_head_reconciliation(item)
+        if item["action"] != "OWNER_PAUSED":
+            apply_head_reconciliation(item)
 
     # High-value ready engineering first, but bounded to protect shared API
     # quota and prevent all workers stampeding one sponsor at once.
@@ -570,6 +603,8 @@ def render_slack(batch: dict) -> str:
         refs = ["issue_url=%s" % item["issue_url"],
                 "checked_at=%s" % item["checked_at"],
                 "active_owner=%s" % owner]
+        if item["owner_hold"] is not None:
+            refs.append("owner_hold_reference=%s" % item["owner_hold"]["reference"])
         for name in (
                 "funding_url", "pr_url", "pr_author", "pr_state", "pr_mergeability",
                 "pr_base_sha", "pr_head_sha", "pr_merge_base_sha",
