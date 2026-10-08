@@ -19,17 +19,30 @@ jobs:
       - name: Mirror canonical main onto backup main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMONS_READ_TOKEN: ${{ secrets.COMMONS_READ_TOKEN }}
           GH_REPO: woahwhattheheck/commons-backup
           EXPECTED_LIVE_MIRROR_BLOB: 2d8308965a032c2bcae237842d17a8ff0f14702a
         run: |
           set -euo pipefail
+          export GIT_TERMINAL_PROMPT=0
           git init --bare src.git
           cd src.git
-          git remote add origin https://github.com/woahwhattheheck/commons.git
+          if [ -n "${COMMONS_READ_TOKEN:-}" ]; then
+            SRC_URL="https://x-access-token:${COMMONS_READ_TOKEN}@github.com/woahwhattheheck/commons.git"
+            echo "source_auth=COMMONS_READ_TOKEN"
+          else
+            SRC_URL="https://github.com/woahwhattheheck/commons.git"
+            echo "source_auth=anonymous"
+            echo "::warning::no COMMONS_READ_TOKEN; anonymous fetch only works while woahwhattheheck/commons is public"
+          fi
+          git remote add origin "$SRC_URL"
           DEST_URL="https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git"
-          git fetch --prune --force origin \
+          if ! git fetch --prune --force origin \
             '+refs/heads/main:refs/heads/src-main' \
-            '+refs/tags/*:refs/tags/*'
+            '+refs/tags/*:refs/tags/*'; then
+            echo "::error::canonical fetch failed. woahwhattheheck/commons is private, and this repo's GITHUB_TOKEN cannot read it. Add Actions secret COMMONS_READ_TOKEN (contents:read on woahwhattheheck/commons) or make canonical public again. Measured failure: could not read Username for https://github.com (exit 128) on runs 37837301381 and 37794138233."
+            exit 1
+          fi
           git fetch --prune --no-tags "$DEST_URL" '+refs/heads/main:refs/heads/dst-main'
           REMOTE_MIRRORED=$(git ls-remote "$DEST_URL" refs/backup/source-main)
           if [ -n "$REMOTE_MIRRORED" ]; then
