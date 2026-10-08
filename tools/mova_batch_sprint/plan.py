@@ -194,6 +194,8 @@ def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
     if item["source_state"] == "ready":
         if item["active_owner"]:
             return "OWNER_CONTINUES", "Ready-source publication is already owned; do not assign a second publisher"
+        if not item["source_pr_url"]:
+            return "SOURCE_REFERENCE_HOLD", "Ready source has no verified fork PR; identify the original-author source carrier before publication"
         if item["competition"] != "none":
             return "COMPETITION_REVIEW", "Existing or unverified sponsor PR must be reconciled before publishing ready source"
         return "PUBLISH_EXISTING", "Already-built original-owner source should be submitted, not rebuilt"

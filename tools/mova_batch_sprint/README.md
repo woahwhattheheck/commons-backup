@@ -84,6 +84,16 @@ cannot dispatch `BUILD`. It receives `RECONCILE_SHARED_SOURCE` or
 `RECONCILE_SHARED_PR` until the owner/source/current sponsor PR are checked.
 This is a duplicate-work fence, not a new permission or credential gate.
 
+**Ready-source locator gate:** a released `source_state: ready` record must
+include a verifiable `source_pr_url` and matching `source_pr_author` before
+a `PUBLISH_EXISTING` order can be generated. A bare 'ready' assertion without
+a fork PR/branch locator now produces `SOURCE_REFERENCE_HOLD` rather than
+instructing the next publisher to guess the original source branch or open a
+duplicate paid PR. An active owner still takes precedence as `OWNER_CONTINUES`;
+a submitted portal claim without a verified upstream PR still takes precedence
+as `CLAIM_SOURCE_HOLD`. This does not revoke a legitimate ready branch: link
+its original-author fork PR and re-run the current-source census.
+
 **Ready-source sponsor-PR fence:** after a publication owner releases a ready
 source, `PUBLISH_EXISTING` requires fresh `competition: none`. If the sponsor
 PR state is `ours`, `other_pr`, or `unknown`, dispatch `COMPETITION_REVIEW`
