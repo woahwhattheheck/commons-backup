@@ -158,6 +158,28 @@ a non-empty `receiving_rail` and supporting `evidence_sha256`). This is an
 evidence-reduction convention; the audit cannot authenticate such evidence
 itself, and must not be used as the source of financial settlement truth.
 
+### BountyHub multiple listing IDs for one GitHub issue
+
+BountyHub can independently fund the same canonical GitHub issue under two
+different listing UUIDs. A GitHub PR or claim present on one listing is **not**
+registration, acceptance or payment on the other listing. For each distinct
+BountyHub listing being reconciled, supply the optional
+`submissions[].portal_source_url` as an exact validated first-party API
+detail URL or public page URL. The auditor normalizes both forms to the same
+listing UUID, then matches only `portal_snapshots[]` from that UUID.
+The same original-author PR may therefore produce two separate provider
+registration outcomes and stable, different operation IDs.
+
+For legacy submissions without `portal_source_url`, one unambiguous listing
+continues to behave as before. If evidence contains multiple distinct listing
+UUIDs for the same provider and GitHub issue, legacy unscoped input returns
+`UNKNOWN` with
+`multiple_provider_listings_require_source_binding` and **no action**.
+A bound source that is missing from the supplied evidence likewise remains
+`UNKNOWN`. This prevents a newer but unrelated listing from masquerading as
+a complete inventory for the submitted PR. It does not authenticate funding
+or award status and does not submit any claim.
+
 ### Freshness, BountyHub authority and cross-repository submissions
 
 Use **current first-party evidence**, never a marketplace title or historical

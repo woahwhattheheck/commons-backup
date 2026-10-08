@@ -112,6 +112,15 @@ def _source_url(value: Any, provider: str, repo: str, issue: int, where: str) ->
     return value
 
 
+def _listing_id(provider: str, source_url: str) -> str:
+    """Canonical provider listing identity; page/API URLs can name one bounty."""
+    if provider == "issuehunt":
+        return source_url.casefold()
+    # _source_url already validated the host, path shape and UUID.
+    parts = urlsplit(source_url).path.strip("/").split("/")
+    return next(part.casefold() for part in parts if BOUNTY_ID.fullmatch(part))
+
+
 def _instant(value: Any, where: str) -> tuple[datetime, str]:
     if type(value) is not str or len(value) > 40:
         raise ContractError(f"{where} must be an offset-aware ISO-8601 datetime")
@@ -147,13 +156,18 @@ def audit(payload: dict[str, Any]) -> dict[str, Any]:
     submissions: dict[str, dict[str, Any]] = {}
     for i, raw in enumerate(root["submissions"]):
         w = f"submissions[{i}]"
-        s = _fields(raw, {"provider", "repository", "issue", "claimant", "pr_url", "head_sha", "github_state"}, {"settlement", "submission_repository", "github_checked_at", "github_submitted_at"}, w)
+        s = _fields(raw, {"provider", "repository", "issue", "claimant", "pr_url", "head_sha", "github_state"}, {"settlement", "submission_repository", "github_checked_at", "github_submitted_at", "portal_source_url"}, w)
         provider = _provider(s["provider"])
         repo = _repo(s["repository"], f"{w}.repository")
         issue = _issue(s["issue"], f"{w}.issue")
         claimant = _actor(s["claimant"], f"{w}.claimant")
         pr_repo = _repo(s.get("submission_repository", repo), f"{w}.submission_repository")
         pr = _pr_url(s["pr_url"], pr_repo, f"{w}.pr_url")
+        portal_source = s.get("portal_source_url")
+        listing_id = None
+        if portal_source is not None:
+            portal_source = _source_url(portal_source, provider, repo, issue, f"{w}.portal_source_url")
+            listing_id = _listing_id(provider, portal_source)
         checked = submitted = None
         if "github_checked_at" in s:
             checked, _ = _instant(s["github_checked_at"], f"{w}.github_checked_at")
@@ -172,12 +186,16 @@ def audit(payload: dict[str, Any]) -> dict[str, Any]:
                 raise ContractError(f"{w}.settlement evidence SHA invalid")
             if settlement["status"] != "settled" or type(settlement["receiving_rail"]) is not str or not settlement["receiving_rail"].strip():
                 raise ContractError(f"{w}.settlement requires verified settled receiving rail evidence")
-        key = _key(provider, repo, issue, claimant, pr)
+        claim_key = _key(provider, repo, issue, claimant, pr)
+        # A PR may legitimately be registered on two independently funded
+        # BountyHub listings attached to the same sponsor issue.
+        key = claim_key + "|listing:" + listing_id if listing_id is not None else claim_key
         normalized = {"provider": provider, "repository": repo, "issue": issue,
                       "claimant": claimant, "pr_url": pr, "head_sha": s["head_sha"],
                       "github_state": s["github_state"], "settlement": settlement,
                       "github_checked_at": checked, "github_submitted_at": submitted,
-                      "submission_repository": pr_repo}
+                      "submission_repository": pr_repo, "claim_key": claim_key,
+                      "listing_id": listing_id, "portal_source_url": portal_source}
         if key in submissions and submissions[key] != normalized:
             raise ContractError(f"conflicting GitHub evidence for {key}")
         submissions[key] = normalized
@@ -218,6 +236,7 @@ def audit(payload: dict[str, Any]) -> dict[str, Any]:
         snapshots.setdefault((provider, repo, issue), []).append({
             "source_url": src, "observed_at": when, "observed_at_iso": iso,
             "complete": s["complete"], "claims": claims, "source_bound": source_bound,
+            "listing_id": _listing_id(provider, src),
         })
 
     results: list[dict[str, Any]] = []
@@ -225,15 +244,29 @@ def audit(payload: dict[str, Any]) -> dict[str, Any]:
     for key in sorted(submissions):
         sub = submissions[key]
         ckey = (sub["provider"], sub["repository"], sub["issue"])
-        snap_rows = snapshots.get(ckey, [])
+        candidates = snapshots.get(ckey, [])
+        listing_ids = {s["listing_id"] for s in candidates}
         reason = "no_first_party_snapshot"
+        if sub["listing_id"] is not None:
+            # Explicitly route this claim only through its matching provider
+            # listing, never the latest unrelated bounty for the same issue.
+            snap_rows = [s for s in candidates if s["listing_id"] == sub["listing_id"]]
+            if candidates and not snap_rows:
+                reason = "exact_provider_listing_not_observed"
+        elif len(listing_ids) > 1:
+            # Legacy unscoped input must fail closed rather than report a
+            # missing claim based on whichever independent bounty was newest.
+            snap_rows = []
+            reason = "multiple_provider_listings_require_source_binding"
+        else:
+            snap_rows = candidates
         status = "UNKNOWN"
         snapshot = None
         if snap_rows:
             newest = max(s["observed_at"] for s in snap_rows)
             current = [s for s in snap_rows if s["observed_at"] == newest]
             signatures = {hashlib.sha256(canonical_bytes({
-                "source_url": s["source_url"], "complete": s["complete"],
+                "listing_id": s["listing_id"], "complete": s["complete"],
                 "source_bound": s["source_bound"], "claims": s["claims"],
             })).hexdigest() for s in current}
             if len(signatures) != 1:
@@ -255,7 +288,7 @@ def audit(payload: dict[str, Any]) -> dict[str, Any]:
                 elif not snapshot["source_bound"]:
                     reason = "bountyhub_listing_missing_exact_issue_binding"
                 else:
-                    claim = snapshot["claims"].get(key)
+                    claim = snapshot["claims"].get(sub["claim_key"])
                     same_pr_other_claimant = any(k.endswith("|" + sub["pr_url"]) for k in snapshot["claims"])
                     if claim is not None:
                         if not snapshot["complete"]:
@@ -281,6 +314,8 @@ def audit(payload: dict[str, Any]) -> dict[str, Any]:
                   "github_state": sub["github_state"], "snapshot_source_url": snapshot["source_url"] if snapshot else None,
                   "snapshot_observed_at": snapshot["observed_at_iso"] if snapshot else None,
                   "cash_settlement_verified": status == "PAID"}
+        if sub["listing_id"] is not None:
+            result["portal_listing_id"] = sub["listing_id"]
         results.append(result)
         if status == "GITHUB_SUBMITTED_PORTAL_NOT_REGISTERED":
             actions[operation_id] = {"operation_id": operation_id, "action": "VERIFY_AND_REGISTER_EXACT_PR_WITH_PROVIDER",
