@@ -74,6 +74,20 @@ class BrokerTests(unittest.TestCase):
         self.assertEqual("CACHED", first.read("repo.get", PARAMS, unexpected_provider)["state"])
         self.assertEqual("CACHED", second.read("repo.get", PARAMS, unexpected_provider)["state"])
 
+    def test_pull_head_login_alias_reuses_same_pr_list_cache(self):
+        mixed = {**PARAMS, "head": "WoahWhatTheHeck:Feat/MixedCase"}
+        lowercase = {**PARAMS, "head": "woahwhattheheck:Feat/MixedCase"}
+        other_branch = {**PARAMS, "head": "woahwhattheheck:feat/MixedCase"}
+        self.assertEqual(normalize("pulls.list", mixed), normalize("pulls.list", lowercase))
+        self.assertEqual("woahwhattheheck:Feat/MixedCase",
+                         normalize("pulls.list", mixed)["head"])
+        self.assertNotEqual(normalize("pulls.list", mixed), normalize("pulls.list", other_branch))
+        self.assertEqual("Feat/MixedCase",
+                         normalize("pulls.list", {**PARAMS, "head": "Feat/MixedCase"})["head"])
+        self.assertEqual("FETCHED", self.broker.read("pulls.list", mixed, self.good)["state"])
+        self.assertEqual("CACHED", self.broker.read("pulls.list", lowercase, self.good)["state"])
+        self.assertEqual(1, self.calls)
+
     def test_secondary_403_blocks_all_buckets_and_persists(self):
         result = self.broker.read("repo.get", PARAMS, lambda *_: Upstream(403, retry_after="120", secondary_limited=True))
         self.assertEqual(("COOLDOWN", 120), (result["state"], result["retry_after_seconds"]))

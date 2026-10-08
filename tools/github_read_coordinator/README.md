@@ -112,6 +112,8 @@ Parameters are strictly normalized. Repository paths cannot traverse; dynamic UR
 
 `pulls.list` uses the existing `core` read quota and singleflight/cache/ETag/cooldown policy. Its `head` filter permits a qualified contributor branch such as `woahwhattheheck:sol56/branch`; branch filters reject control characters and malformed path components. The new route is GET-only and neither publishes nor modifies a pull request.
 
+For qualified `head=LOGIN:branch` values, normalization lowercases only the GitHub login (case-insensitive) while preserving the complete branch spelling (Git ref names remain case-sensitive). A login capitalization alias shares its cache key and in-flight lease; `Feat/X` and `feat/X` stay distinct. An unqualified `head=branch` retains its original value. This reduces redundant GitHub reads without changing any credential, URL origin, provider quota, or branch selection.
+
 ## Test
 
 From this directory:

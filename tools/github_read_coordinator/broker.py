@@ -130,6 +130,9 @@ def normalize(route: str, params: dict) -> dict:
                 owner, branch = value.split(":", 1)
                 if OWNER_RE.fullmatch(owner) is None:
                     raise ValueError("invalid pull head owner")
+                # GitHub login names are case-insensitive. Keep the branch
+                # component untouched: Git ref names remain case-sensitive.
+                value = f"{owner.lower()}:{branch}"
             if not re.fullmatch(r"[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*", branch):
                 raise ValueError("invalid pull branch")
             if any(part in {".", ".."} or part.endswith((".lock", ".")) for part in branch.split("/")) or ".." in branch:
