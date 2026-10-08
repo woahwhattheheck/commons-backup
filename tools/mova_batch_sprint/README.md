@@ -24,6 +24,19 @@ Top level: timezone-aware `as_of`, array `records`. Each record must include:
 
 **Important distinctions:** advertised/listed/promise/conditional are **not awards or payments**. `claim_state=paid` is still a **verify-settlement** task until a separate real receiving-rail receipt is checked; there is no inferred earned-total.
 
+**Source owner lease and cross-provider fence:** `active_owner` represents a
+currently held claim, not just a contributor name. Even if source is `ready`,
+the planner emits `OWNER_CONTINUES` while that claim is active and does not
+dispatch a second publisher. Clear `active_owner` only after an explicit
+release; then the same source can enter `PUBLISH_EXISTING`. If one provider
+listing has building/ready source, a named owner, or a known upstream PR
+(even when its canonical timestamp is stale), another listing for that issue
+cannot dispatch `BUILD`. It receives `RECONCILE_SHARED_SOURCE` or
+`RECONCILE_SHARED_PR` until the owner/source/current sponsor PR are checked.
+This is a duplicate-work fence, not a new permission or credential gate.
+The isolated regression is `python tools/mova_batch_sprint/test_owner_handoff.py`;
+it uses no provider calls and does not invoke the repository test suite.
+
 **One issue, multiple providers:** the sponsor issue remains the unique BUILD/PUBLISH engineering key, but Algora/BountyHub/IssueHunt listings with a verified original-owner PR retain **independent** `SUBMIT_EXISTING_CLAIM`, `VERIFY_CLAIM`, `AWAIT_ACCEPTANCE`, and `VERIFY_SETTLEMENT` work orders. Each portal operation ID includes the platform and a stable digest of that listing URL, so a second platform cannot silently hide the first one's unpaid claim. Identical repeated listing/action rows are held for reconciliation; a ready source or published PR on one listing blocks fresh duplicate BUILD/PUBLISH on another until the common carrier is verified. A `submitted`, `accepted`, or `rejected` claim without a verified **sponsor** PR is a `CLAIM_SOURCE_HOLD`, **never** permission to start a new build. Fork review PRs are source evidence, not sponsor PRs or claim receipts. These are internal routing decisions, not evidence of registration or award. Conditional GrantFox tickets with no verified USD floor are not blindly scored as $15+ guaranteed, but already-built original-author source still routes to `PUBLISH_EXISTING`. Human-led BountyHub terms must be cleared by an actual eligible contributor before claim submission.
 
 ## Operator protocol (repeat for each batch)

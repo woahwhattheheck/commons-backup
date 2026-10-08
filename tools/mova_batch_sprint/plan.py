@@ -158,6 +158,8 @@ def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
     if item["eligibility"] != "eligible":
         return "ELIGIBILITY_HOLD", "Assignment, human-contribution, or program eligibility gate"
     if item["source_state"] == "ready":
+        if item["active_owner"]:
+            return "OWNER_CONTINUES", "Ready-source publication is already owned; do not assign a second publisher"
         return "PUBLISH_EXISTING", "Already-built original-owner source should be submitted, not rebuilt"
     if item["competition"] in {"ours", "other_pr", "unknown"}:
         return "COMPETITION_REVIEW", "Current competing work must be resolved before any new build"
@@ -200,8 +202,14 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
     for group in keyed.values():
         if len(group) == 1:
             continue
-        has_published_pr = any(x["fresh"] and x["source_state"] == "published" for x in group)
-        has_ready_source = any(x["action"] == "PUBLISH_EXISTING" for x in group)
+        # Do not build from a second funding listing while any original
+        # source, publication lease, or sponsor PR exists elsewhere. Even a
+        # stale claim/PR snapshot must be reconciled before a fresh BUILD.
+        has_published_pr = any(x["source_state"] == "published" for x in group)
+        has_active_source = any(
+            x["source_state"] in {"building", "ready"} or x["active_owner"]
+            for x in group
+        )
         build_taken = False
         publication_taken = False
         seen_portal_actions: set[tuple] = set()
@@ -213,9 +221,9 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
                 if has_published_pr:
                     item["action"] = "RECONCILE_SHARED_PR"
                     item["reason"] = "Another listing has a published PR; confirm applicability before a new build"
-                elif has_ready_source:
+                elif has_active_source:
                     item["action"] = "RECONCILE_SHARED_SOURCE"
-                    item["reason"] = "Another listing already has source ready; reconcile the source owner"
+                    item["reason"] = "Another listing has source or an active owner; reconcile before new engineering"
                 elif build_taken:
                     item["action"] = "DUPLICATE_ISSUE_HOLD"
                     item["reason"] = "Only one engineering build per canonical sponsor issue"
