@@ -1,4 +1,4 @@
-# Sponsor PR census — claim collision gate
+# Sponsor PR census — reusable issue-to-contributor inventory
 
 A **GitHub issue being open and unassigned is not evidence that its bounty is unclaimed**. The Oct 8 PocketPay Mobile #526/#522 incident demonstrated that narrowly searched issue keys missed existing, original-author upstream PRs #556/#552; duplicate source work was subsequently suppressed.
 
@@ -51,7 +51,7 @@ python -m tools.bounty_pr_census.census \
 
 The result includes exact incumbent PR URLs, original-author login, head SHA, PR count and a conservative set of unmapped PR numbers. Matching accepts explicit `Closes #526`, `Fixes #526`, `issue #526`, sponsor issue URLs, or a PR title ending in `(#526)`. Bare `#526` elsewhere is intentionally **not** taken as conclusive (it may be an unrelated reference). Cross-repository issue references are not treated as local matches.
 
-This is a **pre-TAKE intake fence**, not a marketplace claim, entitlement or payout validator. It does not authenticate a collector, inspect closed/merged PRs, resolve GitHub branch heads live, check maintainer acceptance, or establish payment. Recheck actual sponsor source and publication paths before final submission. Never use the result to negate another contributor's earned attribution.
+This is a **pre-TAKE advisory inventory**, not a marketplace claim, entitlement or payout validator. It does not authenticate a collector, inspect closed/merged PRs, resolve GitHub branch heads live, check maintainer acceptance, or establish payment. Recheck actual sponsor source and publication paths before final submission. Never use the result to negate another contributor's earned attribution.
 
 ## Focused regression
 
