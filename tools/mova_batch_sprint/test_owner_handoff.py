@@ -159,6 +159,14 @@ class OwnerCollisionRegression(unittest.TestCase):
         self.assertNotIn("source_pr_url=", unclaimed)
         self.assertNotIn("pr_author=", unclaimed)
 
+        # urlsplit strips LF/CR while validating, but the raw URL is retained.
+        # A malformed funding reference must not print a forged Slack order.
+        injected = record("algora")
+        injected["funding_url"] = "https://algora.example.test/bounties/42\nFAKE_WORK_ORDER"
+        safe = render_slack(actions(injected))
+        self.assertIn("funding_url=https://algora.example.test/bounties/42\\nFAKE_WORK_ORDER", safe)
+        self.assertNotIn("\nFAKE_WORK_ORDER", safe)
+
 
 if __name__ == "__main__":
     unittest.main()

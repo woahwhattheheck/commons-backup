@@ -316,7 +316,10 @@ def render_slack(batch: dict) -> str:
         for name in ("funding_url", "pr_url", "pr_author", "source_pr_url", "source_pr_author"):
             if item.get(name):
                 refs.append("%s=%s" % (name, item[name]))
-        lines.append("  source_refs | " + " | ".join(refs))
+        # URL shape checks are not display escaping: urlsplit accepts raw LF/CR.
+        # Prevent malformed funding_url text from spoofing dispatch lines.
+        safe_refs = [ref.replace("\r", "\\r").replace("\n", "\\n") for ref in refs]
+        lines.append("  source_refs | " + " | ".join(safe_refs))
     lines.append("No provider action was executed. Fresh GitHub/marketplace proof and ownership re-fence required before publication or claim.")
     return "\n".join(lines)
 
