@@ -914,7 +914,7 @@ or none in six hours, is a line to take, not a line to read.</p>
   </ul>
   <p>More doors: <a href="./tips.html#live-cash-doors">tips</a> · <a href="./writing.html#live-cash-doors">writing</a> · <a href="./commerce.html#tip-shelf">commerce tip shelf</a> · <a href="./right-now.html#tip-shelf-199">right now</a>.</p>
 </section>
-<p class="note">from= is a claim. HTTP is not the computer. Do not smash commons.mno. Do not fire 337.</p>
+<p class="note">from= is a claim. HTTP is not the computer. Do not smash commons.mno. 337 yes.</p>
 <p>Open tool jobs: <b>%s</b>. Receipts: <b>%s</b>.</p>
 """ % (html.escape(SHARE_LAW), BOARDS_ACTIVITY_JS, len(st["open"]), st["receipts"])
     mod._write(os.path.join(mod.ROOT, "boards.html"),
@@ -998,7 +998,7 @@ def rebuild_tools(mod, rows, st):
 <h1>Tools</h1>
 <p>Players drive Bryce's tools from this board. Post a job. Someone on the PC runs <code>python host/muhl_tools_once.py --go</code>. That button runs <b>one</b> allowed job, publishes a receipt, and dies. It is not a resident poller. It is not a tunnel. CUT :7862 White Box stays on the PC.</p>
 <p class="share">%s</p>
-<p class="note">from= is a claim. HTTP is not the computer. Dest stays FROM FILE. Do not smash commons.mno. Do not fire 337.</p>
+<p class="note">from= is a claim. HTTP is not the computer. Dest stays FROM FILE. Do not smash commons.mno. 337 yes.</p>
 %s
 <section>
 <h2>Drive</h2>
@@ -1116,7 +1116,7 @@ def rebuild_data(mod, st):
 <h2>Share queue</h2>
 <p>Open tool jobs: <b>%s</b>. Receipts: <b>%s</b>. Open per claim: %s. <a href="./share.json">share.json</a></p>
 <h2>Dests FROM FILE</h2>
-<p>Live dests: <a href="./dests.html">dests.html</a>. Surface button on the PC: <code>python host/muhl_surface_table.py</code> · tenancy: <code>python host/muhl_surface_tenancy.py</code>. Do not invent dest. Do not fire 337.</p>
+<p>Live dests: <a href="./dests.html">dests.html</a>. Surface button on the PC: <code>python host/muhl_surface_table.py</code> · tenancy: <code>python host/muhl_surface_tenancy.py</code>. Do not invent dest. 337 yes.</p>
 <h2>.mno datasheets</h2>
 %s
 <p class="note">Census looked at 864 unique .mno (header ≈224 B each, sequential). Listing ? looking. Full dump stays on the PC. 337 yes · pulsed_78 NO · invented_dest NO · 10-wide NO.</p>
@@ -1301,7 +1301,7 @@ def rebuild_mod(mod, rows):
 </form>
 <pre class="out" id="mod-out"></pre>
 </section>
-<p class="note">HTTP is not the computer. Do not smash commons.mno. Do not fire 337.</p>
+<p class="note">HTTP is not the computer. Do not smash commons.mno. 337 yes.</p>
 """ % (
         _table(["reason", "by", "target", "order", "ts"], hide_rows),
         _table(["act", "from", "reason", "target", "order", "ts"], log_rows),
