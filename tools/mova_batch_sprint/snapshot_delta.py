@@ -170,6 +170,19 @@ def diff_snapshots(previous: dict, current: dict) -> dict:
     }
 
 
+def _slack_listing_url(value: object) -> str | None:
+    """Render only an intact, unambiguous HTTPS link from snapshot evidence."""
+    if not isinstance(value, str) or not value or len(value) > 500:
+        return None
+    if any(ord(ch) <= 32 or ord(ch) == 127 for ch in value):
+        return None
+    parsed = urlsplit(value)
+    if (parsed.scheme != "https" or not parsed.hostname or parsed.username
+            or parsed.password or parsed.fragment):
+        return None
+    return value
+
+
 def render_slack(delta: dict, limit: int = 25) -> str:
     """Bounded human-readable report; no network/send side effects."""
     if type(limit) is not int or limit < 1:
@@ -188,6 +201,14 @@ def render_slack(delta: dict, limit: int = 25) -> str:
             event["previous_action"] or "-", event["action"] or "-",
             changes, event["operation_id"],
         ))
+        # Keep the independent funded listing visible: identical sponsor
+        # issues can have different providers/UUIDs and acceptance terms.
+        listing = event.get("funding_url")
+        if listing is not None:
+            safe_listing = _slack_listing_url(listing)
+            lines.append("  Snapshot listing URL: %s" % (
+                safe_listing or "INVALID/AMBIGUOUS; inspect source JSON",
+            ))
         if event["planner_operation_id"]:
             lines.append("  Planner dispatch ID: %s" % event["planner_operation_id"])
         if "operation_id" in event["changed_fields"]:
@@ -199,6 +220,8 @@ def render_slack(delta: dict, limit: int = 25) -> str:
             lines.append("  AUDIT HOLD: reconcile original records; never infer claim withdrawal or payment.")
         if event["pr_url"]:
             lines.append("  Existing sponsor PR: %s" % event["pr_url"])
+        if event["source_pr_url"]:
+            lines.append("  Existing fork source: %s" % event["source_pr_url"])
     if len(events) > limit:
         lines.append("%d further events in JSON; no silent discard." %
                      (len(events) - limit))

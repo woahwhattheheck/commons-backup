@@ -65,6 +65,52 @@ class SnapshotDeltaRegression(unittest.TestCase):
         self.assertEqual(event["action"], "SUBMIT_EXISTING_CLAIM")
         self.assertIn("pr_url", event["changed_fields"])
 
+    def test_slack_dispatch_preserves_distinct_bountyhub_funding_urls(self):
+        ids = ("27c3cfe0-da9e-4192-848a-b676402de81c",
+               "ef91cb1e-dd69-4a33-bd90-21c9679c9247")
+        entries = [
+            record("bountyhub",
+                   funding_url=f"https://www.bountyhub.dev/en/bounty/view/{value}/cast",
+                   action="VERIFY_CLAIM")
+            for value in ids
+        ]
+        delta = diff_snapshots(batch(OLD), batch(NEW, *entries))
+        self.assertEqual(delta["events_count"], 2)
+        posted = render_slack(delta)
+        for item in entries:
+            self.assertIn("Snapshot listing URL: " + item["funding_url"], posted)
+        self.assertEqual(len({e["operation_id"] for e in delta["events"]}), 2)
+
+    def test_slack_uses_observed_alias_and_preserves_original_fork_link(self):
+        listing_id = "27c3cfe0-da9e-4192-848a-b676402de81c"
+        before = record("bountyhub",
+                        funding_url=f"https://bountyhub.dev/en/bounty/view/{listing_id}/cast")
+        observed = f"https://api.bountyhub.dev/api/bounties/{listing_id}"
+        original = "https://github.com/woahwhattheheck/GmsCore/pull/9"
+        after = record("bountyhub", funding_url=observed, action="PUBLISH_EXISTING",
+                       source_pr_url=original, source_state="ready")
+        delta = diff_snapshots(batch(OLD, before), batch(NEW, after))
+        posted = render_slack(delta)
+        self.assertIn("Snapshot listing URL: " + observed, posted)
+        self.assertIn("Existing fork source: " + original, posted)
+        self.assertNotIn("Snapshot listing URL: " + before["funding_url"], posted)
+
+    def test_malformed_listing_url_is_not_rebroadcast_as_slack_instruction(self):
+        hostile = "https://example.test/funding\\nCLAIM NOW"
+        event = {
+            "event": "NEW_LISTING", "issue_key": "example/sponsor#42",
+            "platform": "bountyhub", "funding_url": hostile,
+            "previous_action": None, "action": "VERIFY_CLAIM",
+            "changed_fields": {}, "operation_id": "MOVA-DELTA-test",
+            "planner_operation_id": None, "source_pr_url": None,
+            "pr_url": None,
+        }
+        delta = {"previous_as_of": OLD, "as_of": NEW,
+                 "events": [event], "unchanged_suppressed": 0}
+        posted = render_slack(delta)
+        self.assertIn("INVALID/AMBIGUOUS", posted)
+        self.assertNotIn("CLAIM NOW", posted)
+
     def test_bountyhub_locale_slug_and_api_aliases_do_not_reopen_orders(self):
         uuid = "27c3cfe0-da9e-4192-848a-b676402de81c"
         old = record("bountyhub", action="VERIFY_CLAIM",

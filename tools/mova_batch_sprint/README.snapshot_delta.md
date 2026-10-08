@@ -36,6 +36,13 @@ provider registration, award, or payment.
 
 Each material change has an idempotent MOVA-DELTA receipt ID, before/after
 action, originating issue, sponsor/fork PR URLs and changed fields.
+The Slack rendering also includes the **specific observed funded-listing URL**
+and existing fork-source PR, when supplied. Operators working on one sponsor
+issue with multiple BountyHub listing UUIDs can therefore distinguish payout
+and creator-specific acceptance obligations without spending another GitHub
+read. The URL is labeled snapshot evidence, **not** confirmation that a portal
+claim, creator approval, or payment exists. Malformed/unsafe links are replaced
+by an inspection warning rather than pasted unescaped into Slack.
 Same input facts produce the same receipt. Planner `operation_id` is a
 **material field**: when the dispatch key changes on the same listing (for
 example, after fixing two funded listings that once shared an issue/action
