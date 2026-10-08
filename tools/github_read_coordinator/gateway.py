@@ -50,6 +50,13 @@ def build_url(route: str, params: dict) -> str:
         path = base + "/contents/" + "/".join(_quote(piece) for piece in params["path"].split("/"))
         if "ref" in params:
             query["ref"] = params["ref"]
+    elif route == "issue.get":
+        path = base + f"/issues/{params['number']}"
+    elif route == "issue.comments":
+        # Issue discussion also carries PR assignment and bounty claim replies;
+        # inline review comments remain the separate pull.comments route.
+        path = base + f"/issues/{params['number']}/comments"
+        query = {k: params[k] for k in ("page", "per_page")}
     elif route == "pull.get":
         path = base + f"/pulls/{params['number']}"
     elif route in {"pull.files", "pull.reviews", "pull.comments", "pull.commits"}:
@@ -322,3 +329,4 @@ def main(argv=None):
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

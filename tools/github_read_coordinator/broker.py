@@ -25,6 +25,8 @@ BURST_INTERVAL = 0.5
 ROUTES = {
     "repo.get": {"owner", "repo"},
     "contents.get": {"owner", "repo", "path", "ref"},
+    "issue.get": {"owner", "repo", "number"},
+    "issue.comments": {"owner", "repo", "number", "page", "per_page"},
     "pull.get": {"owner", "repo", "number"},
     "pull.files": {"owner", "repo", "number", "page", "per_page"},
     "pull.reviews": {"owner", "repo", "number", "page", "per_page"},
@@ -103,7 +105,7 @@ def normalize(route: str, params: dict) -> dict:
         raise ValueError("unsupported parameters")
     out = dict(params)
 
-    if route.startswith(("repo.", "contents.", "pull.", "pulls.", "commit.", "issues.", "actions.")):
+    if route.startswith(("repo.", "contents.", "issue.", "pull.", "pulls.", "commit.", "issues.", "actions.")):
         if not {"owner", "repo"} <= out.keys():
             raise ValueError("owner and repo are required")
     if "owner" in out:
@@ -118,8 +120,8 @@ def normalize(route: str, params: dict) -> dict:
         if "path" not in out:
             raise ValueError("path is required")
         out["path"] = _safe_path(out["path"])
-    if route.startswith("pull.") and "number" not in out:
-        raise ValueError("pull number is required")
+    if route.startswith(("pull.", "issue.")) and "number" not in out:
+        raise ValueError("issue or pull number is required")
     if route == "pulls.list":
         for key in ("head", "base"):
             if key not in out:
@@ -150,7 +152,7 @@ def normalize(route: str, params: dict) -> dict:
         if type(value) is not int:
             raise ValueError("integer parameter required")
         if key == "number" and not 1 <= value <= 2_147_483_647:
-            raise ValueError("invalid pull number")
+            raise ValueError("invalid issue or pull number")
         if key == "page" and not 1 <= value <= 1000:
             raise ValueError("invalid page")
         if key == "per_page" and not 1 <= value <= 100:
@@ -180,7 +182,7 @@ def normalize(route: str, params: dict) -> dict:
         if out["sort"] not in allowed:
             raise ValueError("invalid sort")
 
-    if route in {"pull.files", "pull.reviews", "pull.comments", "pull.commits", "pulls.list", "issues.list", "actions.runs", "search.issues", "search.code"}:
+    if route in {"issue.comments", "pull.files", "pull.reviews", "pull.comments", "pull.commits", "pulls.list", "issues.list", "actions.runs", "search.issues", "search.code"}:
         out.setdefault("per_page", 30)
         out.setdefault("page", 1)
     if route == "pulls.list":
@@ -548,4 +550,5 @@ class Broker:
         except Exception:
             result = Upstream(502)
         return self.finish(decision, result)
+
 

@@ -98,6 +98,8 @@ For an in-flight duplicate, `BUSY` advises a one-second local cache recheck. The
 
 - `repo.get`
 - `contents.get`
+- `issue.get` (GET `/repos/{owner}/{repo}/issues/{number}`)
+- `issue.comments` (GET `/repos/{owner}/{repo}/issues/{number}/comments`; issue and PR discussion replies)
 - `pull.get`
 - `pull.files`
 - `pull.reviews` (GET `/repos/{owner}/{repo}/pulls/{number}/reviews`)
@@ -118,17 +120,31 @@ Parameters are strictly normalized. Repository paths cannot traverse; dynamic UR
 
 For qualified `head=LOGIN:branch` values, normalization lowercases only the GitHub login (case-insensitive) while preserving the complete branch spelling (Git ref names remain case-sensitive). A login capitalization alias shares its cache key and in-flight lease; `Feat/X` and `feat/X` stay distinct. An unqualified `head=branch` retains its original value. This reduces redundant GitHub reads without changing any credential, URL origin, provider quota, or branch selection.
 
-## Test
+## Bounty issue and discussion intake
 
-From this directory:
+Use `issue.get` for exact issue state, labels, assignees and the issue body. Use
+`issue.comments` for the discussion containing maintainer assignment decisions,
+claim acknowledgments and ordinary PR replies. `pull.comments` remains the
+separate inline code-review discussion; it cannot substitute for these replies.
 
-```bash
-python -m unittest -v test_broker.py test_gateway.py test_kestrel_cooldowns.py
-python -O -m unittest -v test_broker.py test_gateway.py test_kestrel_cooldowns.py
-python -m py_compile broker.py gateway.py test_broker.py test_gateway.py test_kestrel_cooldowns.py
+```json
+{"route":"issue.get","params":{"owner":"woahwhattheheck","repo":"commons","number":32423},"max_age_seconds":30}
+{"route":"issue.comments","params":{"owner":"woahwhattheheck","repo":"commons","number":32423,"page":1,"per_page":100},"max_age_seconds":30}
 ```
 
-The suite includes real eight-process singleflight, secondary-limit persistence across broker instances, primary bucket isolation, late/stale lease rejection, token-rotation behavior, payload/JSON bounds, path/header injection rejection, fixed-origin/no-redirect checks, and proof that the provider issues `GET` only.
+Both routes reuse the current core quota, cache, singleflight, conditional refresh,
+response bound and cooldown handling. Comment pages default to page 1 and 30
+items; request further pages explicitly as needed. One page is not evidence that
+an issue has no more replies. Omitted and explicit default pagination share a
+request key. Repeated reads can reuse the retained response while it is fresh;
+use `max_age_seconds=0` when the operation actually needs a fresh provider read.
+Update broker.py and gateway.py together before using these routes.
 
-The independent cooldown regressions also cover successful quota exhaustion across broker restarts, retained cached success, both primary-bucket directions, expired-response quota observations without stale payloads, longer existing pauses, missing-reset fallback, both retry/reset floors, exact reset resumption, and ordinary permission errors. These are offline tests with synthetic upstream responses, not a live GitHub load test.
+## Focused execution
+
+Run only the changed behavior with real inputs when needed. Existing regression
+sources remain available; do not invoke broad or repeated suites as the default
+intake or publication step. Reuse accepted execution evidence until relevant
+source or behavior changes.
+
 
