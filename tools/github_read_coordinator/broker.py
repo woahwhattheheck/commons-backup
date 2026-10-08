@@ -160,6 +160,15 @@ def normalize(route: str, params: dict) -> dict:
         if key in out:
             out[key] = _safe_text(out[key], maximum=1024 if key == "q" else 255)
 
+    if route == "issues.list" and "labels" in out:
+        # GitHub matches issue labels conjunctively, irrespective of order.
+        # Deduplicate equivalent filter sets before hashing/cache admission.
+        # Preserve each label's exact spelling and internal whitespace.
+        labels = out["labels"].split(",")
+        if any(not label for label in labels):
+            raise ValueError("empty issue label filter")
+        out["labels"] = ",".join(sorted(set(labels)))
+
     if "state" in out and out["state"] not in {"open", "closed", "all"}:
         raise ValueError("invalid state")
     if "direction" in out and out["direction"] not in {"asc", "desc"}:
