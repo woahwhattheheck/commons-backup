@@ -171,6 +171,10 @@ def normalize(route: str, params: dict) -> dict:
     if route in {"pull.files", "pull.reviews", "pull.comments", "pull.commits", "pulls.list", "issues.list", "actions.runs", "search.issues", "search.code"}:
         out.setdefault("per_page", 30)
         out.setdefault("page", 1)
+    if route == "pulls.list":
+        # GitHub defaults to open PRs. Keep omitted and explicit defaults on
+        # one request key, cached response, and in-flight provider lease.
+        out.setdefault("state", "open")
     if route == "issues.list":
         out.setdefault("state", "open")
         out.setdefault("sort", "created")

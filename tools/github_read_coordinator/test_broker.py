@@ -152,6 +152,19 @@ class BrokerTests(unittest.TestCase):
 
 
 class ValidationTests(unittest.TestCase):
+    def test_pull_list_default_open_deduplicates_requests(self):
+        # Omitting state and explicitly sending GitHub's default must share
+        # the broker's normalized cache/singleflight key, not spend two GETs.
+        request = {"owner": "WoahWhatTheHeck", "repo": "Sanctifier"}
+        implicit = normalize("pulls.list", request)
+        explicit = normalize("pulls.list", {**request, "state": "open"})
+        self.assertEqual("open", implicit["state"])
+        self.assertEqual(implicit, explicit)
+        for other_state in ("closed", "all"):
+            self.assertNotEqual(implicit, normalize("pulls.list", {
+                **request, "state": other_state,
+            }))
+
     def test_write_and_unknown_routes_rejected(self):
         for route in ("repo.update", "pull.merge", "git.ref.create", "", [], None):
             with self.assertRaises(ValueError):
