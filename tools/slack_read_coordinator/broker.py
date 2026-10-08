@@ -81,6 +81,17 @@ def normalize(method: str, params: dict, page_limit: int = 15) -> dict:
         # Slack ignores inclusive without time bounds; false is its default.
         if not {"oldest", "latest"} & out.keys() or out.get("inclusive") is False:
             out.pop("inclusive", None)
+    # Slack documents these booleans as false when omitted. Canonicalize
+    # explicit false only after type validation so equivalent reads share
+    # the same cache and in-flight request; true remains a distinct view.
+    default_false = {
+        "conversations.history": ("include_all_metadata",),
+        "conversations.info": ("include_locale", "include_num_members"),
+        "search.messages": ("highlight",),
+    }
+    for flag in default_false.get(method, ()):
+        if out.get(flag) is False:
+            out.pop(flag)
     if "sort" in out and out["sort"] not in {"score", "timestamp"}:
         raise ValueError("invalid sort")
     if "sort_dir" in out and out["sort_dir"] not in {"asc", "desc"}:

@@ -66,6 +66,28 @@ class BrokerTests(unittest.TestCase):
         self.assertEqual(1, self.calls)
         self.assertIs(False, first["outbound_clearance"])
 
+    def test_documented_false_defaults_share_cached_reads(self):
+        cases = (
+            ("conversations.history", {"channel": "C123"}, ("include_all_metadata",)),
+            ("conversations.info", {"channel": "C123"}, ("include_locale", "include_num_members")),
+            ("search.messages", {"query": "paid bounty"}, ("highlight",)),
+        )
+        for method, params, flags in cases:
+            with self.subTest(method=method):
+                baseline = self.broker.read(method, params, self.good)
+                duplicate = self.broker.read(
+                    method, {**params, **{flag: False for flag in flags}}, self.good)
+                self.assertEqual(("FETCHED", "CACHED"), (baseline["state"], duplicate["state"]))
+                self.assertEqual(baseline["data"], duplicate["data"])
+                self.assertEqual(
+                    normalize(method, params),
+                    normalize(method, {**params, **{flag: False for flag in flags}}),
+                )
+                # True options remain separate response views, never cache aliases.
+                for flag in flags:
+                    self.assertTrue(normalize(method, {**params, flag: True})[flag])
+        self.assertEqual(len(cases), self.calls)
+
     def test_fresh_only_cannot_bypass_rate_interval(self):
         self.broker.read(HISTORY, PARAMS, self.good)
         result = self.broker.read(HISTORY, PARAMS, self.good, 0)

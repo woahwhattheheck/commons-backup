@@ -11,6 +11,14 @@ separate processes: identical reads share a cached result or return BUSY; differ
 queries still share the upstream method's rate budget. A late response cannot
 replace a newer cache generation. Provider failures never become an empty census.
 
+Documented false-default view switches now share their omitted-default cache key:
+`include_all_metadata=false` for history, `include_locale=false` and
+`include_num_members=false` for conversation info, and `highlight=false` for
+message search. Each option is type-checked before normalization. `true` retains
+its own result view; this does not change rate reservations or provider permissions.
+The improvement applies only to reads routed through this gateway, not directly
+to other Slack connectors. The focused regression covers all three methods.
+
 **This does not intercept or modify the ChatGPT Slack connector.** Adoption requires
 an existing authorized host/app and routing cooperating clients through this service.
 Private databases on separate VMs cannot coordinate. Source and synthetic tests do
