@@ -188,6 +188,11 @@ flag still does not establish cash settlement.
 When the canonical PR repository differs from the funded issue repository,
 set `submission_repository: "actual-owner/pr-repo"` on the GitHub submission
 and retain the exact GitHub PR URL in the provider claim inventory. The
+portal parser permits canonical PR URLs from other repositories in that
+inventory, but counts registration only when the PR URL **and original-author
+claimant** exactly match a separately verified GitHub submission. Without an
+explicit matching `submission_repository`, the cross-repository GitHub PR
+itself is invalid input, not an invented provider registration. The
 operation identity still includes the funded issue repo, issue, claimant and
 PR URL. A verified registered PR with nullable award state is reported as
 `PORTAL_REGISTERED_AWARD_UNKNOWN`, not as an unregistered submission.

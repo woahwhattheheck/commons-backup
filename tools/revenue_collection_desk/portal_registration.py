@@ -199,7 +199,10 @@ def audit(payload: dict[str, Any]) -> dict[str, Any]:
         for j, rawclaim in enumerate(s["claims"]):
             cw = f"{w}.claims[{j}]"
             claim = _fields(rawclaim, {"pr_url", "claimant", "awarded", "is_paid"}, set(), cw)
-            cp = _pr_url(claim["pr_url"], repo, f"{cw}.pr_url")
+            # Provider inventories may contain PRs in other repositories. Match an
+            # exact canonical PR URL against the separately verified GitHub
+            # submission_repository, rather than requiring the funded issue repo.
+            cp = _pr_url(claim["pr_url"], None, f"{cw}.pr_url")
             ca = _actor(claim["claimant"], f"{cw}.claimant")
             if claim["awarded"] is not None and type(claim["awarded"]) is not bool:
                 raise ContractError(f"{cw}: awarded must be true, false or null")
