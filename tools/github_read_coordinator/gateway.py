@@ -149,6 +149,7 @@ class GitHubProvider:
                 # Retry-After on a 403/429 is provider throttling evidence even
                 # if an intermediary or malformed body prevents message parsing.
                 secondary = error.code in {403, 429} and retry is not None
+                primary = False
                 # A Retry-After header already settles throttling; do not wait
                 # for an error body that cannot change that classification.
                 if error.code in {403, 429} and not secondary:
@@ -157,11 +158,17 @@ class GitHubProvider:
                     # for successful responses, retaining the smaller error cap.
                     payload = self._read_response(error, deadline, maximum=min(32768, MAX_RESPONSE)).payload
                     message = payload.get("message") if isinstance(payload, dict) else None
-                    body_secondary = isinstance(message, str) and "secondary rate limit" in message.lower()
-                    secondary = secondary or body_secondary
+                    if isinstance(message, str):
+                        lowered = message.lower()
+                        secondary = "secondary rate limit" in lowered
+                        # GitHub sometimes omits quota headers on a core primary
+                        # 403. Preserve a typed observation, not an invented
+                        # remaining/reset header or a leaked provider body.
+                        primary = not secondary and "api rate limit exceeded" in lowered
                 return Upstream(error.code, None, retry, remaining, reset, secondary,
                                 etag=usable_etag(error.headers.get("ETag")),
-                                validated_etag=etag if error.code == 304 else None)
+                                validated_etag=etag if error.code == 304 else None,
+                                primary_limited=primary)
             finally:
                 error.close()
         except (OSError, ValueError, RecursionError):

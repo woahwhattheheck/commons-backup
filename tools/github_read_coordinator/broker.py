@@ -247,6 +247,9 @@ class Upstream:
     secondary_limited: bool = False
     etag: str | None = None
     validated_etag: str | None = None
+    # Error-body evidence for primary quota rejection without headers.
+    # Append to preserve existing positional Upstream caller compatibility.
+    primary_limited: bool = False
 
 
 class Broker:
@@ -411,7 +414,8 @@ class Broker:
         secondary = type(result.secondary_limited) is bool and result.secondary_limited
         retry = retry_after_seconds(result.retry_after, now)
         remaining_zero = str(result.rate_remaining).strip() == "0"
-        primary_limited = result.status in {403, 429} and remaining_zero
+        primary_limited = (result.status in {403, 429}
+                           and (remaining_zero or result.primary_limited is True))
         generic_429 = result.status == 429 and not secondary
         limited = secondary or primary_limited or generic_429
         if secondary:
@@ -478,7 +482,7 @@ class Broker:
             # reset floor independently so a shorter Retry-After cannot reopen
             # that quota bucket early. Successful final requests keep their
             # payload, and expired leases still carry quota observations.
-            if remaining_zero and result.status in {200, 304, 403, 429}:
+            if (remaining_zero or primary_limited) and result.status in {200, 304, 403, 429}:
                 primary_delay = max(retry or 0, reset_delay(result.rate_reset, now) or 0) or 60
                 self._extend(db, lease.bucket, now + primary_delay)
             if result.status == 401:

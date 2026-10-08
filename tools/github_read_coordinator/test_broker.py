@@ -114,6 +114,25 @@ class BrokerTests(unittest.TestCase):
         search = self.broker.read("search.issues", {"q": "repo:octo-org/demo bug"}, self.good)
         self.assertEqual("FETCHED", search["state"])
 
+    def test_headerless_primary_403_pauses_quota_bucket_without_pretending_secondary(self):
+        result = self.broker.read(
+            "repo.get", PARAMS,
+            lambda *_: Upstream(403, primary_limited=True),
+        )
+        self.assertEqual(("COOLDOWN", 60), (result["state"], result["retry_after_seconds"]))
+        self.clock.advance(1)
+        # Core quota failures must stop another core-route read from retrying
+        # immediately; search has its separately metered GitHub budget.
+        other = self.broker.read(
+            "pull.get", {**PARAMS, "number": 3}, self.good
+        )
+        self.assertEqual(("COOLDOWN", 59), (other["state"], other["retry_after_seconds"]))
+        search = self.broker.read(
+            "search.issues", {"q": "repo:octo-org/demo bug"}, self.good
+        )
+        self.assertEqual("FETCHED", search["state"])
+        self.assertEqual(1, self.calls)
+
     def test_429_without_headers_is_principal_wide_60_seconds(self):
         result = self.broker.read("repo.get", PARAMS, lambda *_: Upstream(429))
         self.assertEqual(("COOLDOWN", 60), (result["state"], result["retry_after_seconds"]))

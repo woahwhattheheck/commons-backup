@@ -130,6 +130,36 @@ class ProviderTests(unittest.TestCase):
         result = provider("repo.get", {"owner": "o", "repo": "r"})
         self.assertEqual(("0", "2000", False), (result.rate_remaining, result.rate_reset, result.secondary_limited))
 
+    def test_headerless_primary_quota_is_distinct_from_secondary_and_permissions(self):
+        provider = GitHubProvider("synthetic-token-never-real")
+        opener = mock.Mock()
+        provider._opener = opener
+
+        # No quota headers: retain GitHub primary body evidence while hiding
+        # provider text from the public response and not inventing reset data.
+        primary = urllib.error.HTTPError(
+            API_ROOT + "/repos/o/r", 403, "Forbidden", {},
+            io.BytesIO(b'{"message":"API rate limit exceeded for user ID 293286387."}')
+        )
+        opener.open.side_effect = primary
+        result = provider("repo.get", {"owner": "o", "repo": "r"})
+        self.assertEqual(403, result.status)
+        self.assertTrue(result.primary_limited)
+        self.assertFalse(result.secondary_limited)
+        self.assertIsNone(result.rate_remaining)
+        self.assertIsNone(result.rate_reset)
+        self.assertIsNone(result.payload)
+
+        # Integration-scoped 403 is an access error, not a quota observation.
+        denied = urllib.error.HTTPError(
+            API_ROOT + "/repos/o/r", 403, "Forbidden", {},
+            io.BytesIO(b'{"message":"Resource not accessible by integration"}')
+        )
+        opener.open.side_effect = denied
+        result = provider("repo.get", {"owner": "o", "repo": "r"})
+        self.assertFalse(result.primary_limited)
+        self.assertFalse(result.secondary_limited)
+
     def test_authentication_checks_expected_login(self):
         provider = GitHubProvider("synthetic-token-never-real")
         with mock.patch.object(provider, "_request", return_value=Upstream(200, {"login": "woahwhattheheck"})):
