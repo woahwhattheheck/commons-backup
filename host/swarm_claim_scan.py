@@ -92,6 +92,11 @@ ADJACENT_SYMBOL = re.compile(
 GITHUB_WORK_REFERENCE = re.compile(
     r"https://github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/(issues|pull)/"
     r"([1-9][0-9]*)(?=[/?#\s<>|)\].,;:]|$)", re.I)
+GITHUB_ISSUE_SHORTHAND = re.compile(
+    r"(?<![A-Za-z0-9_./:-])([A-Za-z0-9][A-Za-z0-9-]{0,38})/"
+    r"([A-Za-z0-9_.-]{1,100})[ \t]*#([1-9][0-9]{0,19})"
+    r"(?=$|[^A-Za-z0-9_])", re.I)
+
 AVAILABLE_WORK = re.compile(
     r"^(?:available(?:[ \t]+(?:next|implementation|product|work)){0,3}[ \t]+"
     r"(?:scope|follow-on)|next[ \t]+usable[ \t]+work)\b", re.I)
@@ -458,6 +463,44 @@ def _work_urls(text):
                    for match in GITHUB_WORK_REFERENCE.finditer(text)})
 
 
+def _issue_targets(text):
+    """Extract explicit GitHub *issue* identities; do not guess from bare #N."""
+    targets = {
+        f"{match[1].lower()}/{match[2].lower()}#{match[4]}"
+        for match in GITHUB_WORK_REFERENCE.finditer(text)
+        if match[3].lower() == "issues"
+    }
+    for match in GITHUB_ISSUE_SHORTHAND.finditer(text):
+        targets.add(f"{match[1].lower()}/{match[2].lower()}#{match[3]}")
+    return sorted(targets)
+
+
+def _issue_target_overlaps(messages, operations):
+    """Advisory collision signal across distinct TAKE IDs citing one issue."""
+    by_message = {(row["channel_id"], row["message_ts"]): row for row in messages}
+    by_issue = defaultdict(list)
+    for operation_id, operation in sorted(operations.items()):
+        if operation["state"] != "declaration_observed":
+            continue
+        for declaration in operation["declarations"]:
+            message = by_message[(declaration["channel_id"], declaration["message_ts"])]
+            for issue in _issue_targets(message["text"]):
+                by_issue[issue].append({"operation_id": operation_id, **declaration})
+    overlaps = []
+    for issue, observations in sorted(by_issue.items()):
+        operation_ids = sorted({row["operation_id"] for row in observations})
+        if len(operation_ids) > 1:
+            overlaps.append({
+                "issue_target": issue,
+                "operation_ids": operation_ids,
+                "declaration_observations": observations,
+                "status": "possible_same_issue_overlap",
+                "basis": "Distinct active TAKE IDs explicitly reference one GitHub issue; "
+                         "the text alone cannot prove their source scopes conflict.",
+            })
+    return overlaps
+
+
 def _availability_hints(messages, operations):
     """Join availability wording and declaration references, without claiming work."""
     declarations_by_message = defaultdict(list)
@@ -645,6 +688,7 @@ def scan(messages, pages, *, workspace_url=None):
     availability_hints = _availability_hints(ordered, operations)
     repeated_declarations = _repeated_declarations(ordered, operations)
     basename_observations, basename_hints = _basename_hints(ordered, operations, by_path)
+    issue_target_overlaps = _issue_target_overlaps(ordered, operations)
     return {"schema": SCHEMA, "advisory_only": True,
         "scope": "Supplied Slack observations only. Declarations do not establish ownership; shared files can contain compatible work. Refresh the linked sources and existing ledger before acting.",
         "counts": {"messages_supplied": len(messages), "distinct_message_ids": len(identities),
@@ -655,7 +699,8 @@ def scan(messages, pages, *, workspace_url=None):
                    "availability_hints": len(availability_hints),
                    "repeated_operation_declarations": len(repeated_declarations),
                    "basename_observations": len(basename_observations),
-                   "possible_basename_overlaps": len(basename_hints)},
+                   "possible_basename_overlaps": len(basename_hints),
+                   "possible_issue_target_overlaps": len(issue_target_overlaps)},
         "coverage": {"provider_history_complete": False,
                      "basis": "Caller-supplied pages; terminal pages alone do not prove the history or all claims were supplied.",
                      "pages": pages, "pages_with_continuation": sum(page["terminal_page"] is False for page in pages),
@@ -671,6 +716,7 @@ def scan(messages, pages, *, workspace_url=None):
         "repeated_operation_declarations": repeated_declarations,
         "basename_observations": basename_observations,
         "possible_basename_overlaps": basename_hints,
+        "possible_issue_target_overlaps": issue_target_overlaps,
         "unmatched_terminal_observations": [row for row in terminals
             if row.get("resolved_operation_id", row["operation_id"]) not in operations]}
 
