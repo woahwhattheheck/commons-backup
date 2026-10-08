@@ -5,6 +5,7 @@ No provider calls, GitHub writes, identity switching, secrets, or payout mutatio
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -116,6 +117,8 @@ def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
         return "REFRESH_CANONICAL", "Issue/funding/PR evidence is stale or future-dated"
     if item["claim_state"] == "paid":
         return "VERIFY_SETTLEMENT", "Claim says paid; independently verify receiving-rail receipt"
+    if item["source_state"] != "published" and item["claim_state"] in {"submitted", "accepted", "rejected"}:
+        return "CLAIM_SOURCE_HOLD", "Portal claim exists but its upstream PR is not verified; reconcile before building or publishing"
     if item["source_state"] == "published":
         if item["pr_author"] != actor.lower():
             return "PRESERVE_FOREIGN_PR", "Existing PR belongs to another author; do not replace their claim"
@@ -167,27 +170,69 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
     if len(manifest["records"]) > 5000:
         raise ValueError("manifest exceeds 5000 records")
     items = [normalize(r, now, max_age_hours) for r in manifest["records"]]
-    # Sponsor issue is the canonical *engineering* collision key; multiple
-    # marketplace listings can still require independent payment reconciliation.
+    # One sponsor issue has one engineering carrier, but independent funded
+    # listings for that issue still need their own claim/settlement outcomes.
+    for item in items:
+        item["action"], item["reason"] = action(item, min_usd, actor)
     keyed: dict[str, list[dict]] = defaultdict(list)
     for item in items:
         keyed[item["issue_key"]].append(item)
+    portal_actions = {"SUBMIT_EXISTING_CLAIM", "VERIFY_CLAIM",
+                      "AWAIT_ACCEPTANCE", "VERIFY_SETTLEMENT", "REVIEW_REJECTION"}
     for group in keyed.values():
-        if len(group) > 1:
-            # Never pick a second BUILD for duplicated issue. Prefer an existing
-            # submitted original PR; retain each listing in the output ledger.
-            group.sort(key=lambda x: (x["pr_author"] != actor.lower(), x["pr_url"] is None,
-                                      x["source_state"] != "ready", -(x["reward_usd"] or 0)))
-            for duplicate in group[1:]:
-                duplicate["duplicate"] = True
+        if len(group) == 1:
+            continue
+        has_published_pr = any(x["fresh"] and x["source_state"] == "published" for x in group)
+        has_ready_source = any(x["action"] == "PUBLISH_EXISTING" for x in group)
+        build_taken = False
+        publication_taken = False
+        seen_portal_actions: set[tuple] = set()
+        for item in sorted(group, key=lambda x: (-(x["reward_usd"] or 0),
+                                                  x["platform"], x["funding_url"] or "",
+                                                  x["pr_url"] or "")):
+            kind = item["action"]
+            if kind == "BUILD":
+                if has_published_pr:
+                    item["action"] = "RECONCILE_SHARED_PR"
+                    item["reason"] = "Another listing has a published PR; confirm applicability before a new build"
+                elif has_ready_source:
+                    item["action"] = "RECONCILE_SHARED_SOURCE"
+                    item["reason"] = "Another listing already has source ready; reconcile the source owner"
+                elif build_taken:
+                    item["action"] = "DUPLICATE_ISSUE_HOLD"
+                    item["reason"] = "Only one engineering build per canonical sponsor issue"
+                else:
+                    build_taken = True
+            elif kind == "PUBLISH_EXISTING":
+                if has_published_pr:
+                    item["action"] = "RECONCILE_SHARED_PR"
+                    item["reason"] = "An upstream PR already exists for this issue; do not republish source"
+                elif publication_taken:
+                    item["action"] = "SOURCE_COLLISION_HOLD"
+                    item["reason"] = "Multiple ready source carriers for one issue; resolve ownership before publishing"
+                else:
+                    publication_taken = True
+            elif kind in portal_actions:
+                # Identical listing/action pairs must not generate duplicate
+                # submissions; different providers remain separately actionable.
+                listing_action = (item["platform"], item["funding_url"], kind)
+                if listing_action in seen_portal_actions:
+                    item["action"] = "DUPLICATE_LISTING_HOLD"
+                    item["reason"] = "Duplicate provider listing/action; reconcile the original claim"
+                else:
+                    seen_portal_actions.add(listing_action)
     for item in items:
-        if item.get("duplicate"):
-            kind, reason = "DUPLICATE_ISSUE_HOLD", "Same canonical issue already has a primary sprint carrier; reconcile each listing separately"
-        else:
-            kind, reason = action(item, min_usd, actor)
-        item["action"] = kind
-        item["reason"] = reason
-        item["operation_id"] = "MOVA-%s-%s-%s" % (item["repo"].replace("/", "-"), item["number"], kind)
+        kind = item["action"]
+        operation_id = "MOVA-%s-%s-%s" % (
+            item["repo"].replace("/", "-"), item["number"], kind)
+        if kind in portal_actions | {"CLAIM_SOURCE_HOLD", "DUPLICATE_LISTING_HOLD",
+                                    "RECONCILE_SHARED_PR", "RECONCILE_SHARED_SOURCE"}:
+            # Claim actions are per listing, not just per issue; a stable URL
+            # digest keeps IDs distinct even on two listings of one platform.
+            receipt_key = item["funding_url"] or item["issue_url"]
+            receipt_hash = hashlib.sha256(receipt_key.encode("utf-8")).hexdigest()[:10]
+            operation_id += "-%s-%s" % (item["platform"], receipt_hash)
+        item["operation_id"] = operation_id
     # High-value ready engineering first, but bounded to protect shared API
     # quota and prevent all workers stampeding one sponsor at once.
     builds = sorted((x for x in items if x["action"] == "BUILD"),
