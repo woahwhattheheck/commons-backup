@@ -7,9 +7,13 @@ onto backup `main`. GitHub Apps (including Actions GITHUB_TOKEN) cannot
 create or update `.github/workflows/*` without the `workflows` permission.
 
 This is not a Commons lock and not a reason to add a PAT. Exact SHA push
-is attempted first. On the measured GitHub App workflows rejection, dest
-`.github/workflows` is grafted onto the source tree so the rest of the
-corpus still moves. Source SHA is recorded at refs/backup/source-main.
+is attempted first when backup main is already contained in source main.
+On the measured GitHub App workflows rejection - and whenever backup main
+has moved off the recorded tip, via an earlier graft or a direct commit -
+dest `.github/workflows` is grafted onto the source tree and that previous
+backup tip is kept as the graft commit's second parent, so backup main
+stays append-only and no pushed commit is orphaned. Source SHA is
+recorded at refs/backup/source-main.
 When that ref itself is rejected because the source commit introduces a
 workflow file, a workflow-free receipt commit stores the SHA instead.
 Tag namespace updates use the same classifier: tags GitHub refuses for
@@ -229,8 +233,10 @@ def commit_graft(
     src_commit: str,
     grafted_tree: str,
     message: str | None = None,
+    extra_parents: list[str] | None = None,
 ) -> str:
     src_commit = _run(["rev-parse", src_commit], git_dir=git_dir).stdout.decode("ascii").strip()
+    parents = [src_commit] + list(extra_parents or [])
     body = message or (
         f"live-mirror: commons {src_commit} with dest workflow files preserved\n"
         "\n"
@@ -238,8 +244,17 @@ def commit_graft(
         "permission. Non-workflow paths stay on the source tree. Source SHA is "
         f"recorded at {SOURCE_REF}.\n"
     )
+    if len(parents) > 1:
+        body += (
+            "\n"
+            f"Previous backup main {parents[1]} is kept as a second parent so "
+            "earlier grafts and direct commits stay reachable in history.\n"
+        )
+    args = ["commit-tree", grafted_tree]
+    for parent in parents:
+        args.extend(["-p", parent])
     sha = _run(
-        ["commit-tree", grafted_tree, "-p", src_commit, "-m", body],
+        [*args, "-m", body],
         git_dir=git_dir,
         env=_bot_env(),
     ).stdout.decode("ascii").strip()
@@ -256,6 +271,19 @@ def _force_refspec(refspec: str) -> str:
 def _push(git_dir: str, dest_url: str, refspec: str) -> subprocess.CompletedProcess[bytes]:
     # Same contract as the measured live-mirror job: `git push --force`.
     return _run(["push", dest_url, _force_refspec(refspec)], git_dir=git_dir, check=False)
+
+
+def _push_main(git_dir: str, dest_url: str, refspec: str, expected: str | None) -> subprocess.CompletedProcess[bytes]:
+    # Lease on the fetched backup main: a remote update that lands mid-run
+    # fails this push instead of being silently overwritten; the next run
+    # then keeps the newer tip as a graft parent. Zero sha means "must not
+    # exist yet".
+    lease = f"--force-with-lease=refs/heads/main:{expected or '0' * 40}"
+    return _run(["push", lease, dest_url, refspec.lstrip("+")], git_dir=git_dir, check=False)
+
+
+def _is_ancestor(git_dir: str, old: str, new: str) -> bool:
+    return _run(["merge-base", "--is-ancestor", old, new], git_dir=git_dir, check=False).returncode == 0
 
 
 def _last_error_line(stderr: str) -> str:
@@ -402,32 +430,43 @@ def push_mirror(
         if completed.returncode == 0:
             dst_sha = completed.stdout.decode("ascii").strip()
 
-    exact = _push(git_dir, dest_url, f"{src_sha}:refs/heads/main")
-    if exact.returncode == 0:
-        receipts = record_receipts(git_dir, dest_url, src_sha, src_sha)
-        return {
-            "schema_version": SCHEMA_VERSION,
-            "state": "EXACT",
-            "src_sha": src_sha,
-            "pushed_sha": src_sha,
-            "workflows_frozen": False,
-            "source_ref_state": receipts["source_ref_state"],
-            "source_ref_sha": receipts["source_ref_sha"],
-        }
+    # A backup tip that source history does not yet contain (an earlier graft
+    # or a direct commit) must stay reachable: graft it in as a second parent
+    # instead of force-pushing over it.
+    preserve_dst = bool(dst_sha) and not _is_ancestor(git_dir, dst_sha, src_sha)
+    stderr = ""
+    if not preserve_dst:
+        exact = _push_main(git_dir, dest_url, f"{src_sha}:refs/heads/main", dst_sha)
+        if exact.returncode == 0:
+            receipts = record_receipts(git_dir, dest_url, src_sha, src_sha)
+            return {
+                "schema_version": SCHEMA_VERSION,
+                "state": "EXACT",
+                "src_sha": src_sha,
+                "pushed_sha": src_sha,
+                "workflows_frozen": False,
+                "source_ref_state": receipts["source_ref_state"],
+                "source_ref_sha": receipts["source_ref_sha"],
+            }
 
-    stderr = (exact.stderr or exact.stdout).decode("utf-8", "replace")
-    kind = classify_push_error(stderr)
-    if kind != "WORKFLOWS_PERMISSION":
-        raise MirrorError(f"exact push failed: {stderr.strip()}")
+        stderr = (exact.stderr or exact.stdout).decode("utf-8", "replace")
+        kind = classify_push_error(stderr)
+        if kind != "WORKFLOWS_PERMISSION":
+            raise MirrorError(f"exact push failed: {stderr.strip()}")
 
     graft = graft_dest_workflows(git_dir, src_sha, dst_sha)
-    if graft["grafted_tree"] == graft["src_tree"]:
+    if graft["grafted_tree"] == graft["src_tree"] and not preserve_dst:
         raise MirrorError(
             "workflows permission rejected an exact push but grafted tree equals source tree: "
             + stderr.strip()
         )
-    grafted_commit = commit_graft(git_dir, src_sha, graft["grafted_tree"])
-    grafted = _push(git_dir, dest_url, f"{grafted_commit}:refs/heads/main")
+    grafted_commit = commit_graft(
+        git_dir,
+        src_sha,
+        graft["grafted_tree"],
+        extra_parents=[dst_sha] if preserve_dst else None,
+    )
+    grafted = _push_main(git_dir, dest_url, f"{grafted_commit}:refs/heads/main", dst_sha)
     if grafted.returncode:
         detail = (grafted.stderr or grafted.stdout).decode("utf-8", "replace").strip()
         raise MirrorError(f"grafted push failed: {detail}")
@@ -439,7 +478,8 @@ def push_mirror(
         "pushed_sha": grafted_commit,
         "grafted_tree": graft["grafted_tree"],
         "workflows_frozen": True,
-        "first_error": _last_error_line(stderr),
+        "preserved_dst": dst_sha if preserve_dst else None,
+        "first_error": _last_error_line(stderr) if stderr else None,
         "source_ref_state": receipts["source_ref_state"],
         "source_ref_sha": receipts["source_ref_sha"],
     }
