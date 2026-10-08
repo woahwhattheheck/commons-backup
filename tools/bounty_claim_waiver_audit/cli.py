@@ -7,7 +7,7 @@ import os
 import re
 import sys
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 from urllib.request import Request, urlopen
 
 SCHEMA = "commons.bounty_claim_waiver_audit/v1"
@@ -42,6 +42,9 @@ def record_from_api(kind: str, item: dict, issue: int) -> dict:
         author = {}
     url = item.get("html_url")
     body = item.get("body")
+    # GitHub permits PRs with no description; that is an empty, fully read body.
+    if kind == "pull_request" and body is None:
+        body = ""
     if not isinstance(url, str) or not isinstance(body, str):
         raise ScanError("provider record missing URL or text body")
     login = author.get("login")
@@ -89,6 +92,13 @@ def online_sources(repo: str, issues: list[int], prs: list[int], state: dict, to
                 raise ScanError("issue comments response was not an array")
             for item in data:
                 yield record_from_api("issue_comment", item, number)
+            if next_url:
+                page = urlsplit(next_url)
+                # A provider Link must not escape the selected issue comment endpoint
+                # while carrying an owner token and consuming the scan budget.
+                expected_path = urlsplit(f"{root}/issues/{number}/comments").path
+                if (page.scheme, page.netloc, page.path, page.fragment) != ("https", "api.github.com", expected_path, "") or not page.query:
+                    raise ScanError("pagination left the requested issue comments endpoint")
             if state["low_quota"] and next_url:
                 raise ScanError("GitHub read quota nearly exhausted; pagination incomplete")
             url = next_url
@@ -125,31 +135,35 @@ def scan(rows, *, owner: str, repo: str) -> dict:
     checked = 0
     ignored = 0
     seen = set()
-    for row in rows:
-        url = row["url"].split("?", 1)[0].rstrip("/")
-        match = ISSUE_URL.fullmatch(url)
-        if not match or f"{match[1]}/{match[2]}".casefold() != repo.casefold():
-            raise ScanError("record URL does not belong to requested GitHub repository")
-        if (row["kind"] == "pull_request" and match[3] != "pull") or (row["kind"] == "issue_comment" and (match[3] != "issues" or not match[5])):
-            raise ScanError("record kind and URL disagree")
-        if int(match[4]) != row["issue_or_pr"]:
-            raise ScanError("record issue/PR number and URL disagree")
-        key = (row["kind"], url)
-        if key in seen:
-            raise ScanError("duplicate provider record URL")
-        seen.add(key)
-        if row["author"].casefold() != owner.casefold():
-            ignored += 1
-            continue
-        checked += 1
-        hits = []
-        for kind, pattern in PATTERNS:
-            for found in pattern.finditer(row["body"]):
-                excerpt = row["body"][max(0, found.start() - 55):min(len(row["body"]), found.end() + 55)].replace("\n", " ")
-                hits.append({"reason": kind, "matched_text": found.group(0), "excerpt": excerpt})
-        if hits:
-            findings.append({"kind": row["kind"], "url": url, "issue_or_pr": row["issue_or_pr"], "author": row["author"], "action": "REVIEW_AND_EDIT_EXISTING_ORIGINAL", "matches": hits})
-    return {"checked_owned": checked, "skipped_other_authors": ignored, "findings": findings}
+    try:
+        for row in rows:
+            url = row["url"].split("?", 1)[0].rstrip("/")
+            match = ISSUE_URL.fullmatch(url)
+            if not match or f"{match[1]}/{match[2]}".casefold() != repo.casefold():
+                raise ScanError("record URL does not belong to requested GitHub repository")
+            if (row["kind"] == "pull_request" and match[3] != "pull") or (row["kind"] == "issue_comment" and (match[3] != "issues" or not match[5])):
+                raise ScanError("record kind and URL disagree")
+            if int(match[4]) != row["issue_or_pr"]:
+                raise ScanError("record issue/PR number and URL disagree")
+            key = (row["kind"], url)
+            if key in seen:
+                raise ScanError("duplicate provider record URL")
+            seen.add(key)
+            if row["author"].casefold() != owner.casefold():
+                ignored += 1
+                continue
+            checked += 1
+            hits = []
+            for kind, pattern in PATTERNS:
+                for found in pattern.finditer(row["body"]):
+                    excerpt = row["body"][max(0, found.start() - 55):min(len(row["body"]), found.end() + 55)].replace("\n", " ")
+                    hits.append({"reason": kind, "matched_text": found.group(0), "excerpt": excerpt})
+            if hits:
+                findings.append({"kind": row["kind"], "url": url, "issue_or_pr": row["issue_or_pr"], "author": row["author"], "action": "REVIEW_AND_EDIT_EXISTING_ORIGINAL", "matches": hits})
+    except ScanError as exc:
+        # Preserve verified earlier-page findings, but keep total coverage INCOMPLETE.
+        return {"checked_owned": checked, "skipped_other_authors": ignored, "findings": findings}, str(exc)
+    return {"checked_owned": checked, "skipped_other_authors": ignored, "findings": findings}, None
 
 
 def markdown(report: dict) -> str:
@@ -185,9 +199,12 @@ def main(argv=None) -> int:
     report = {"schema": SCHEMA, "repository": args.repo, "owner": args.owner, "coverage": "INCOMPLETE", "requests_used": 0, "checked_owned": 0, "skipped_other_authors": 0, "findings": [], "error": None, "payment_status": "NOT_VERIFIED_IN_THIS_RUN"}
     try:
         rows = snapshot_sources(args.snapshot, args.repo) if args.snapshot else online_sources(args.repo, args.issue, args.pr, state, os.getenv("GITHUB_TOKEN"))
-        values = scan(rows, owner=args.owner, repo=args.repo)
+        values, partial_error = scan(rows, owner=args.owner, repo=args.repo)
         report.update(values)
-        report["coverage"] = "COMPLETE"
+        if partial_error is None:
+            report["coverage"] = "COMPLETE"
+        else:
+            report["error"] = partial_error
     except ScanError as exc:
         report["error"] = str(exc)
     report["requests_used"] = state["requests"]

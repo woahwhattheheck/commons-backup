@@ -8,7 +8,7 @@ Find published *claim-forfeiting language* in an owner's existing bounty PR bodi
 python -m tools.bounty_claim_waiver_audit.cli --repo Movalabs-crew/mova-store --owner woahwhattheheck --issue 75 --issue 25 --pr 361 --max-requests 6 --format markdown
 ```
 
-`--issue` fetches every page of that GitHub issue's comments; `--pr` fetches that PR's body. Only the named author's text is flagged, never the original competing contributors' text. `GITHUB_TOKEN` is optional for higher API quotas and is never echoed. By default the tool makes **at most 12 GETs total**; 403, 429, unexpected pagination, source inconsistency, quota exhaustion, and transport errors downgrade coverage to `INCOMPLETE` (exit `2`) rather than claiming no waiver was found.
+`--issue` fetches every page of that GitHub issue's comments; `--pr` fetches that PR's body. Only the named author's text is flagged, never the original competing contributors' text. `GITHUB_TOKEN` is optional for higher API quotas and is never echoed. By default the tool makes **at most 12 GETs total**; 403, 429, unexpected pagination, source inconsistency, quota exhaustion, and transport errors downgrade coverage to `INCOMPLETE` (exit `2`) rather than claiming no waiver was found. **Verified earlier-page findings survive incomplete later reads**, so a rate limit does not erase discovered waiver references. Pagination cannot escape the selected issue-comment endpoint; GitHub PRs with `body: null` count as an explicitly empty description.
 
 **Offline snapshot** (for already gathered first-party provider responses, with no network calls):
 
