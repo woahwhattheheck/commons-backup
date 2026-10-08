@@ -50,6 +50,10 @@ def classify(status: int | None, message: str = "", *, pre_provider: bool = Fals
     msg = message.lower()
     if status == 401 or "bad credentials" in msg:
         return "AUTH_DENIED"
+    # Primary quota exhaustion is different from the abuse/secondary throttle.
+    # GitHub commonly reports it as HTTP 403 "API rate limit exceeded for user ID".
+    if status == 403 and ("api rate limit exceeded" in msg or "primary rate limit" in msg):
+        return "PRIMARY_LIMIT"
     if status == 429 or (status == 403 and any(x in msg for x in
             ("secondary rate limit", "abuse detection", "rate limit exceeded", "rate limiting"))):
         return "SECONDARY_LIMIT"
@@ -101,10 +105,13 @@ def acquire(db, account: str, bucket: str, resource: str, operation_id: str,
 
 def observe(db, account: str, bucket: str, resource: str, event_id: str,
             now: int, status: int | None, message: str, pre_provider=False,
-            retry_after: int = 0, operation_id: str | None = None):
+            retry_after: int = 0, operation_id: str | None = None,
+            reset_epoch: int | None = None):
     """Record a provider result once; do not infer write outcome from HTTP alone."""
     if not all((account,bucket,resource,event_id)) or retry_after < 0:
         raise ValueError("nonempty IDs and nonnegative Retry-After required")
+    if reset_epoch is not None and (type(reset_epoch) is not int or reset_epoch <= 0):
+        raise ValueError("reset_epoch must be a positive Unix epoch integer")
     kind = classify(status,message,pre_provider=pre_provider)
     db.execute("BEGIN IMMEDIATE")
     try:
@@ -113,16 +120,24 @@ def observe(db, account: str, bucket: str, resource: str, event_id: str,
             result = {"classification":original[0],"duplicate_event":True,"gate_updated":False}
         else:
             db.execute("INSERT INTO observations VALUES (?,?,?,?,?,?,?)", (event_id,account,bucket,resource,kind,now,operation_id))
-            target = "*" if kind in ("SECONDARY_LIMIT", "AUTH_DENIED") else resource
-            updated = kind in ("SECONDARY_LIMIT","AUTH_DENIED","APP_PERMISSION","UNCLASSIFIED_403")
+            target = "*" if kind in ("PRIMARY_LIMIT", "SECONDARY_LIMIT", "AUTH_DENIED") else resource
+            updated = kind in ("PRIMARY_LIMIT","SECONDARY_LIMIT","AUTH_DENIED","APP_PERMISSION","UNCLASSIFIED_403")
             until = None
             if updated:
                 old = db.execute("SELECT until_epoch,strikes FROM gates WHERE account=? AND bucket=? AND resource=?",(account,bucket,target)).fetchone()
                 active_strikes = old[1] if old and (old[0] is None or old[0]>now) else 0
-                strikes = active_strikes+1 if kind=="SECONDARY_LIMIT" else 1
-                if kind=="SECONDARY_LIMIT":
-                    hold = max(retry_after, min(300*(2**min(strikes-1,4)), 3600))
-                    until = max(now+hold, old[0] if old and old[0] is not None else 0)
+                strikes = active_strikes+1 if kind in ("PRIMARY_LIMIT", "SECONDARY_LIMIT") else 1
+                if kind in ("PRIMARY_LIMIT", "SECONDARY_LIMIT"):
+                    # Prefer the real primary reset header, if supplied. If missing
+                    # or already past, back off conservatively instead of pretending
+                    # quota is replenished. A later observation never shortens a hold.
+                    wait = max(retry_after, min(300*(2**min(strikes-1,4)), 3600))
+                    if kind == "PRIMARY_LIMIT" and reset_epoch is not None and reset_epoch > now:
+                        until = max(reset_epoch, now + retry_after)
+                    else:
+                        until = now + wait
+                    if old and old[0] is not None:
+                        until = max(until, old[0])
                 db.execute("INSERT INTO gates VALUES (?,?,?,?,?,?,?) ON CONFLICT(account,bucket,resource) DO UPDATE SET kind=excluded.kind,until_epoch=excluded.until_epoch,strikes=excluded.strikes,event_id=excluded.event_id", (account,bucket,target,kind,until,strikes,event_id))
             result={"classification":kind,"duplicate_event":False,"gate_updated":updated,"scope":target if updated else None,"until_epoch":until}
         db.commit()
@@ -201,6 +216,7 @@ def main(argv=None):
     o.add_argument("--message",default="")
     o.add_argument("--pre-provider",action="store_true")
     o.add_argument("--retry-after",type=int,default=0)
+    o.add_argument("--reset-epoch",type=int,help="Actual GitHub X-RateLimit-Reset Unix seconds; never estimate")
     o.add_argument("--operation")
     o.add_argument("--now",type=int)
     s=cmd.add_parser("settle",help="After provider readback: confirmed, definitive no-effect, or unknown")
@@ -221,7 +237,7 @@ def main(argv=None):
         if args.command=="acquire":
             r=acquire(db,args.account,args.bucket,args.resource,args.operation,now,args.lease_seconds,args.max_inflight)
         elif args.command=="observe":
-            r=observe(db,args.account,args.bucket,args.resource,args.event,now,args.http_status,args.message,args.pre_provider,args.retry_after,args.operation)
+            r=observe(db,args.account,args.bucket,args.resource,args.event,now,args.http_status,args.message,args.pre_provider,args.retry_after,args.operation,args.reset_epoch)
         elif args.command=="settle":
             r=settle(db,args.operation,args.outcome)
         elif args.command=="status":
