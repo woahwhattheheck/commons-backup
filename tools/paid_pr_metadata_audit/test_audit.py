@@ -65,5 +65,50 @@ class AuditFocused(unittest.TestCase):
             audit(bad, now=NOW)
 
 
+
+    def test_nonclosing_sponsor_references_are_accepted(self):
+        for reference in (
+            "Refs #42",
+            "References exampleorg/examplerepo#42",
+            "Related to #42",
+            "for #42",
+            "https://github.com/EXAMPLEORG/ExampleRepo/issues/42",
+        ):
+            with self.subTest(reference=reference):
+                snapshot = case()
+                snapshot["records"][0]["pr_body"] = (
+                    reference + "\nI request conditional GrantFox compensation for this work."
+                )
+                row = audit(snapshot, now=NOW)["records"][0]
+                self.assertNotIn("SPONSOR_ISSUE_LINK_NOT_FOUND", row["findings"])
+                self.assertEqual("NO_METADATA_GAP_DETECTED", row["decision"])
+
+    def test_unrelated_repository_and_issue_number_are_rejected(self):
+        for reference in (
+            "Fixes OtherOrg/OtherRepo#42",
+            "Refs OtherOrg/OtherRepo#42",
+            "https://github.com/OtherOrg/OtherRepo/issues/42",
+            "Refs #420",
+        ):
+            with self.subTest(reference=reference):
+                snapshot = case()
+                snapshot["records"][0]["pr_body"] = (
+                    reference + "\nI request conditional GrantFox compensation for this work."
+                )
+                row = audit(snapshot, now=NOW)["records"][0]
+                self.assertIn("SPONSOR_ISSUE_LINK_NOT_FOUND", row["findings"])
+
+    def test_quoted_or_fenced_references_are_not_sponsor_links(self):
+        snapshot = case()
+        snapshot["records"][0]["pr_body"] = (
+            "> Refs #42\n"
+            "~~~markdown\n"
+            "https://github.com/ExampleOrg/ExampleRepo/issues/42\n"
+            "~~~\n"
+            "I request conditional GrantFox compensation for this work."
+        )
+        row = audit(snapshot, now=NOW)["records"][0]
+        self.assertIn("SPONSOR_ISSUE_LINK_NOT_FOUND", row["findings"])
+
 if __name__ == "__main__":
     unittest.main()

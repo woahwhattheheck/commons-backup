@@ -20,7 +20,7 @@ Top level: `schema: "commons.paid_pr_metadata_audit.v1"`, `actor` (the original 
 - Complete `pr_body`, original issue `issue_labels`, issue comments as `{ "author": "...", "body": "..." }`, and whether `comments_complete` was established from *all* available pages.
 - `checked_at`: actual canonical-source collection timestamp (UTC or with offset). The entire snapshot expires after 6 hours by default. Do not invent missing comments or timestamps.
 
-`pr_body` is treated as untrusted free text. Quote blocks and fenced code are ignored in the lexical check; issue-side `/claim #N` must belong to the **same** actor and issue number. This is a conservative detection aid: it may flag valid but unusually worded requests for manual review. It cannot determine eligibility, payout, funds, ownership authenticity, or whether a marketplace accepted a claim.
+`pr_body` is treated as untrusted free text. Quote blocks and fenced code are ignored in the lexical check; issue-side `/claim #N` must belong to the **same** actor and issue number. Explicit non-closing sponsor references (`Refs #N`, `Related to #N`, `for #N`, or a full sponsor `issues/N` URL) count as issue linkage without claiming the PR will close the issue. Qualified `other/repo#N` links or URLs to a different repository **never** substitute for the funded sponsor issue just because the numbers match. This is a conservative detection aid: it may flag valid but unusually worded requests for manual review. It cannot determine eligibility, payout, funds, ownership authenticity, or whether a marketplace accepted a claim.
 
 ## Decisions
 

@@ -15,6 +15,17 @@ SCHEMA = "commons.paid_pr_metadata_audit.v1"
 REPORT_SCHEMA = "commons.paid_pr_metadata_report.v1"
 ISSUE_PATH = re.compile(r"^/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/issues/([1-9]\d*)/?$")
 PR_PATH = re.compile(r"^/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/pull/([1-9]\d*)/?$")
+ISSUE_MENTION = re.compile(
+    r"\b(?:closes?|closed|fix(?:es|ed)?|resolves?|refs?|references?|related(?:\s+to)?|issue|for)"
+    r"\s*(?:issue\s*)?:?\s*"
+    r"(?:(?P<repo>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+))?"
+    r"#(?P<number>[1-9]\d*)\b",
+    re.I,
+)
+ISSUE_URL_MENTION = re.compile(
+    r"https://github\.com/(?P<owner>[A-Za-z0-9_.-]+)/(?P<repo>[A-Za-z0-9_.-]+)/issues/(?P<number>[1-9]\d*)\b",
+    re.I,
+)
 LOGIN = re.compile(r"^[A-Za-z\d](?:[A-Za-z\d-]{0,37}[A-Za-z\d])?$")
 SHA = re.compile(r"^[a-fA-F\d]{40}$")
 PLATFORMS = {"grantfox", "algora", "bountyhub", "issuehunt", "proven_payer"}
@@ -71,6 +82,25 @@ def prose(body: str) -> str:
         if not fenced and not line.lstrip().startswith(">"):
             kept.append(line)
     return "\n".join(kept)
+
+
+def sponsor_issue_link(body: str, owner: str, repo: str, number: int) -> bool:
+    """Find explicit, same-repository issue refs without requiring auto-close.
+
+    A different-repository #number is not proof of this sponsor's issue.
+    """
+    repository = f"{owner}/{repo}".lower()
+    for match in ISSUE_MENTION.finditer(body):
+        qualifier = match.group("repo")
+        if int(match.group("number")) == number and (
+            qualifier is None or qualifier.lower() == repository
+        ):
+            return True
+    for match in ISSUE_URL_MENTION.finditer(body):
+        if (int(match.group("number")) == number and
+            f"{match.group('owner')}/{match.group('repo')}".lower() == repository):
+            return True
+    return False
 
 
 def claim_in_comments(comments: list[dict], actor: str, number: int) -> bool:
@@ -138,7 +168,7 @@ def audit(data: dict, *, now: datetime, ttl_hours: float = 6) -> dict:
         issue_claim = claim_in_comments(comments, actor, issue_no) if complete else None
         affirmative = any(pattern.search(context) for pattern in AFFIRMATIVE)
         waiver = any(pattern.search(context) for pattern in WAIVER)
-        issue_link = re.search(r"\b(?:closes|fixes|resolves)\s+(?:[\w.-]+/[\w.-]+)?#" + str(issue_no) + r"\b", context, re.I) is not None
+        issue_link = sponsor_issue_link(context, owner, repo, issue_no)
         campaign = (provider != "grantfox" or
                     {"grantfox oss", "maybe rewarded"}.issubset({v.lower() for v in labels}))
         findings = []
