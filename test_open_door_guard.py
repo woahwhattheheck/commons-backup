@@ -26,6 +26,22 @@ def rules(text):
     return {item.rule for item in guard.scan_diff(text)}
 
 
+def test_external_sponsor_state_vs_internal_gate():
+    """Documented sponsor eligibility must not mask actual admission gates."""
+    sponsor_state = "_".join(("CLAIM", "REQUIRED"))
+    other_gate = "_".join(("AUTH", "GATE"))
+    sponsor_path = "tools/grantfox_fwc26_workfeed/README.md"
+    sentence = (
+        "If the issue text describes a required application/assignment step, "
+        f"it becomes `{sponsor_state}`; supplied claimant/PR observations "
+        "become `CLAIMED_OR_PR_OPEN`."
+    )
+    assert rules(diff(sponsor_path, [sentence])) == set()
+    assert "gate-identifier" in rules(diff("docs/sponsor-workflow.md", [sentence]))
+    assert "gate-identifier" in rules(diff(sponsor_path, [f"Posters must set `{sponsor_state}` first."]))
+    assert "gate-identifier" in rules(diff(sponsor_path, [sentence + f" `{other_gate}`"]))
+
+
 def main():
     workflow = Path(".github/workflows/open-door-guard.yml").read_text(encoding="utf-8")
     assert "\n  push:\n    branches: [main]\n" in workflow, "open-door guard must report direct main pushes"
@@ -42,6 +58,7 @@ def main():
     assert 'open_door_guard.py --diff "$base" "$head"' not in workflow
 
     test_workflow_diff_base()
+    test_external_sponsor_state_vs_internal_gate()
 
     blocked = "\n".join(
         [

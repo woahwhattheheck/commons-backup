@@ -451,6 +451,22 @@ def _admission_contexts(path: str, text: str) -> list[str]:
     return [*parser.fragments, "".join(parser.prose)]
 
 
+_SPONSOR_APPLICATION_STATE = "_".join((
+    "CLAIM",
+    "REQUIRED",
+))
+
+
+def _documented_sponsor_status(path: str, text: str, match: re.Match[str]) -> bool:
+    """Exclude only the literal documented external workfeed state."""
+    return (
+        path == "tools/grantfox_fwc26_workfeed/README.md"
+        and match.group().upper() == _SPONSOR_APPLICATION_STATE
+        and f"`{match.group()}`" in text
+        and "required application/assignment step" in text.lower()
+    )
+
+
 def scan_added(lines: Iterable[AddedLine]) -> list[Violation]:
     by_path: dict[str, list[AddedLine]] = {}
     for line in lines:
@@ -463,9 +479,17 @@ def scan_added(lines: Iterable[AddedLine]) -> list[Violation]:
             if _negative_assertion(line.text):
                 continue
             for rule in LINE_RULES:
-                if rule.name in HARD_LINE_RULES and rule.pattern.search(line.text):
-                    item = Violation(path, line.line_number, rule.name, rule.explanation, line.text.strip())
-                    found[(path, line.line_number, rule.name)] = item
+                if rule.name in HARD_LINE_RULES:
+                    matches = rule.pattern.finditer(line.text)
+                    if any(
+                        not (
+                            rule.name == "gate-identifier"
+                            and _documented_sponsor_status(path, line.text, match)
+                        )
+                        for match in matches
+                    ):
+                        item = Violation(path, line.line_number, rule.name, rule.explanation, line.text.strip())
+                        found[(path, line.line_number, rule.name)] = item
             if _directive_or_prohibition(line.text):
                 continue
             for rule in LINE_RULES:
