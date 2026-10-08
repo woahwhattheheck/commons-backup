@@ -487,7 +487,7 @@ def compile_plan(packet: Any) -> dict[str, Any]:
     runnable.sort(key=lambda row: (-row["priority_score"], row["surface_id"]))
     budget = normalized["request_budget"]
     allocated = 0
-    budget_degraded = budget == 0 or len(runnable) > budget
+    budget_degraded = len(runnable) > budget
     for row in runnable:
         if allocated < budget:
             row["decision"] = "POLL_NOW"
