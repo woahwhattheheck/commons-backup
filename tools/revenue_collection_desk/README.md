@@ -117,3 +117,54 @@ This package performs no network calls and grants no authority to send email/Sla
 submit claims, create invoices, move money, mutate wallets/banks/providers, or
 recognize unsettled cash. `AUTHORITY` is hard-false. Customer/public artifacts
 should not expose this internal control surface.
+
+
+## Exact provider registration audit
+
+`portal-audit` reconciles **already-retrieved** GitHub PRs and first-party
+IssueHunt or BountyHub claim inventories. It is a read-only companion to the
+collection compiler, not a payout or award authority:
+
+```bash
+python -m tools.revenue_collection_desk portal-audit portal-evidence.json --pretty
+```
+
+Input schema: `commons.portal_registration_audit/v1`, with two arrays:
+
+- `submissions`: `provider` (`issuehunt` or `bountyhub`),
+  `repository` (`owner/repo`), numeric `issue`, GitHub `claimant`,
+  canonical GitHub `pr_url`, 40-character `head_sha` and
+  `github_state` (`open`, `merged`, `closed`).
+- `portal_snapshots`: same provider/repository/issue, canonical HTTPS
+  `source_url` pointing at the first-party listing, offset-aware
+  `observed_at`, Boolean `complete`, and `claims` containing exact
+  `pr_url`, `claimant`, and nullable `awarded` / `is_paid` flags.
+  `complete` means the operator actually inspected the entire applicable
+  provider inventory, not a cropped search result or partial page.
+  Unknown award or payout facts must be `null`, not fabricated `false`.
+
+The audit matches **provider + repository + issue + GitHub author + PR URL**
+rather than treating another author's older PR as registration for a later
+contribution. It chooses the latest complete, consistent first-party snapshot
+for each issue. Missing, partial and conflicting records are `UNKNOWN`.
+With a full snapshot, a missing exact PR yields
+`GITHUB_SUBMITTED_PORTAL_NOT_REGISTERED` and a stable `portal-reg:`
+operation ID. A registered but unawarded claim yields
+`PORTAL_REGISTERED_UNAWARDED` only with explicit false award evidence;
+positive portal award/paid evidence yields `AWARDED`, **not cash settled**.
+`PAID` requires both a portal paid flag and separately supplied
+receiving-rail settled evidence (`settlement` object with `status=settled`,
+a non-empty `receiving_rail` and supporting `evidence_sha256`). This is an
+evidence-reduction convention; the audit cannot authenticate such evidence
+itself, and must not be used as the source of financial settlement truth.
+
+Exit `0`: no confirmed registration gaps; `1`: at least one actionable
+registration gap; `2`: invalid input or file I/O error. The JSON output has
+deterministic `rows`, deduplicated `actionable_registration_gaps` and
+`audit_digest`. A GitHub PR alone is not IssueHunt or BountyHub
+registration, a pledged creator amount is not a contributor award, and a
+BountyHub creator's payment status is not `claims[].isPaid`. Registration
+and payout must still be performed and confirmed under the existing
+original-author provider account. Re-fetch both GitHub and the relevant
+provider inventory before performing any follow-up; this audit never
+submits claims, sends contact, or moves funds.
