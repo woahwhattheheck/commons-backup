@@ -163,6 +163,11 @@ def project_rail_health(routes, state):
         domain = route["quota_domain"]
         row = domains.setdefault(domain, {"quota_domain": domain, "route_ids": []})
         row["route_ids"].append(route["id"])
+    pending_by_domain = dict.fromkeys(domains, 0)
+    for operation in state.get("operations", {}).values():
+        domain = (operation.get("pending") or {}).get("quota_domain")
+        if isinstance(domain, str) and domain in pending_by_domain:
+            pending_by_domain[domain] += 1
     for domain, row in domains.items():
         limits = state.get("quota_domains", {}).get(domain, {})
         raw = limits.get("last_response", {})
@@ -211,9 +216,7 @@ def project_rail_health(routes, state):
                      ("cooldown_until", "client_cooldown_until")]
         row["cooldown_active"] = any(value and value > now for value in deadlines)
         row["cooldown_observation_known"] = bool(row["last_response_known"] or any(deadlines))
-        row["pending_dispatches"] = sum(
-            (operation.get("pending") or {}).get("quota_domain") == domain
-            for operation in state.get("operations", {}).values())
+        row["pending_dispatches"] = pending_by_domain[domain]
     return {"decision": "RAIL_HEALTH", "observed_at": _iso(now),
             "provider_calls": 0, "rails": list(domains.values()),
             "identity_basis": "Configured quota-domain and route IDs only; no actor inference.",
@@ -708,3 +711,4 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

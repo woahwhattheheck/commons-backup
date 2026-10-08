@@ -140,6 +140,8 @@ outcomes and budget provenance until an actual response records them. Balances
 are observations, not current allowance promises; inspect their reset and
 observation times. The output excludes operation arguments and provider results.
 No routing, retry, schedule or provider invocation occurs.
+Pending counts use one pass over the operation journal for all configured
+quota domains, rather than rescanning that journal for each rail.
 
 ## Recovery and quota feedback
 
@@ -259,3 +261,4 @@ The timing loop used `perf_counter_ns` and `process_time_ns`, excluding imports,
 input preparation and result serialization. This measures local journal handling,
 with synthetic records and warm caches; it does not measure physical-disk latency,
 Windows locking, provider throughput or deployment to another carrier.
+

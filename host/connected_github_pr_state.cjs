@@ -78,7 +78,11 @@ function refView(ref) {
 }
 
 /** Project one retained connected response. No provider call or source mutation. */
-function projectGitHubPullRequest(response) {
+function projectGitHubPullRequest(response, options = {}) {
+  if (!object(options) || Object.keys(options).some(key => key !== "include_body") ||
+      (own(options, "include_body") && typeof options.include_body !== "boolean")) {
+    throw new TypeError("projection options supports only boolean include_body");
+  }
   const payload = decodePullRequest(response);
   if (typeof payload.title !== "string" || typeof payload.state !== "string") {
     throw new TypeError("pull request title and state must be strings");
@@ -97,6 +101,7 @@ function projectGitHubPullRequest(response) {
     updated_at: nullableField(payload, "updated_at", "string"),
     head: refView(payload.head),
     base: refView(payload.base),
+    ...(options.include_body === true ? { body: nullableField(payload, "body", "string") } : {}),
   };
 }
 
@@ -114,8 +119,10 @@ async function readGitHubPullRequest(tools, input, options = {}) {
   if (!Number.isSafeInteger(number) || number < 1) {
     throw new TypeError("pr_number must be a positive safe integer");
   }
-  if (!object(options) || Object.keys(options).some(key => key !== "transport")) {
-    throw new TypeError("options supports only transport");
+  if (!object(options) || Object.keys(options).some(key =>
+    key !== "transport" && key !== "include_body") ||
+      (own(options, "include_body") && typeof options.include_body !== "boolean")) {
+    throw new TypeError("options supports transport and boolean include_body");
   }
   const transport = options.transport ?? "native";
   if (transport !== "native" && transport !== "token") {
@@ -151,7 +158,9 @@ async function readGitHubPullRequest(tools, input, options = {}) {
   }
   if (result.status !== "TOOL_ERROR") {
     try {
-      const pr = projectGitHubPullRequest(result.response);
+      const pr = projectGitHubPullRequest(result.response, {
+        include_body: options.include_body === true,
+      });
       const actualUrl = pr.url.replace(/\/$/, "").toLowerCase();
       const expectedUrl = ("https://github.com/" + repository + "/pull/" + number).toLowerCase();
       if (pr.number !== number || actualUrl !== expectedUrl) {

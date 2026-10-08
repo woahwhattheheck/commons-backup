@@ -95,8 +95,42 @@ value is distinct from a present `null`. The same descriptors preserve
 
 `state`, `title`, `number`, the canonical URL, and both branch refs, SHAs and
 repository names are included. A deleted head repository remains `null`.
-Reviewers, status checks, labels, body and other provider fields stay in the
-original `response`; this is a compact view, not their absence from GitHub.
+Reviewers, status checks, labels and other provider fields stay in the original
+`response`; this is a compact view, not their absence from GitHub. Body text is
+omitted by default and can be selected explicitly as described below.
+
+### Read exact body text for claim and description changes
+
+For a claim or description update, request the body from this same canonical
+PR response instead of using the indexed body returned by `github_search_prs`:
+
+~~~javascript
+const current = await box.exports.readGitHubPullRequest(tools, {
+  repository_full_name: "amithmandassociates-oss/hash-report-tool",
+  pr_number: 56
+}, { include_body: true });
+if (current.status !== "READ" || !current.pr.body.present) {
+  throw new Error("The current PR body was not retrieved");
+}
+const originalBody = current.pr.body.value;
+store("current-description", { head: current.pr.head, body: originalBody });
+~~~
+
+`include_body: true` adds `body: {present, value}` to the projection. The value
+is the exact string, a present `null`, or an absent field distinguished by
+`present: false`. It comes from the same GET as the branch head and update time;
+there is no extra hydration request, search, retry or mutation. The compact
+default remains unchanged. The retained-response projector supports the same
+option: `projectGitHubPullRequest(response, {include_body: true})`.
+
+The body contains provider-visible text, so retain it privately and print only
+what the current work needs. A captured body does not prevent later concurrent
+edits; the caller still rereads and composes current text before writing.
+
+During the Hash Report PR #56 payment follow-through, native
+`github_search_prs` omitted an existing `/claim #2`, while the exact REST PR
+body already contained it. Indexed search supplied the lead; the canonical
+body preserved the existing claim rather than duplicating it.
 
 These are observed fields, not a claim that the work is ready, authorized,
 accepted, or paid. In particular, `merge_commit_sha` can identify a temporary
