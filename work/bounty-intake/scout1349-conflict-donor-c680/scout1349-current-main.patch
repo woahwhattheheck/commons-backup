@@ -1,0 +1,57 @@
+--- a/contracts/verification/src/lib.rs
++++ b/contracts/verification/src/lib.rs
+@@ -1573,6 +1573,9 @@
+             }
+         }
+ 
++        // Execution order is intentional: auth -> format -> state -> write.
++        // Reject malformed evidence before paying for persistent validator storage,
++        // then reuse the loaded Validator throughout the shared commit path.
+         validate_cid(&evidence_hash).map_err(|_| VerificationError::InvalidInput)?;
+ 
+         // Verify the caller is an active validator
+@@ -1605,6 +1608,7 @@
+         Self::commit_approved_milestone(
+             &env,
+             &validator_wallet,
++            &validator,
+             player_id,
+             description,
+             evidence_hash,
+@@ -1791,6 +1795,7 @@
+             let index = Self::commit_approved_milestone(
+                 &env,
+                 &validator_wallet,
++                &validator,
+                 player_id,
+                 claim.description.clone(),
+                 evidence_hash.clone(),
+@@ -2156,6 +2161,7 @@
+         let index = Self::commit_approved_milestone(
+             &env,
+             &validator_wallet,
++            &validator,
+             attestation.player_id,
+             attestation.description.clone(),
+             attestation.evidence_hash.clone(),
+@@ -4735,6 +4741,7 @@
+     fn commit_approved_milestone(
+         env: &Env,
+         validator_wallet: &Address,
++        validator: &Validator,
+         player_id: u64,
+         description: String,
+         evidence_hash: String,
+@@ -4899,12 +4906,6 @@
+ 
+         // Diversity check uses the primary validator (the one whose vote
+         // crossed the threshold) — this preserves the existing behaviour.
+-        let validator: Validator = env
+-            .storage()
+-            .persistent()
+-            .get(&DataKey::Validator(validator_wallet.clone()))
+-            .unwrap();
+-
+         let mut player_affiliations: Vec<String> = env
+             .storage()
+             .persistent()
