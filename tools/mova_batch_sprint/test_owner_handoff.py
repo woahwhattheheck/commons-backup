@@ -46,6 +46,31 @@ class OwnerCollisionRegression(unittest.TestCase):
         released = actions(record("algora", source="ready"))
         self.assertEqual(released["work_orders"][0]["action"], "PUBLISH_EXISTING")
 
+    def test_ready_source_requires_confirmed_no_sponsor_pr(self):
+        for competition in ("ours", "other_pr", "unknown"):
+            with self.subTest(competition=competition):
+                source = record("algora", source="ready")
+                source["competition"] = competition
+                batch = actions(source)
+                self.assertEqual(batch["work_orders"][0]["action"], "COMPETITION_REVIEW")
+                self.assertEqual(batch["build_slots_admitted"], 0)
+
+        # An existing owner must still hold the publication lease, even if
+        # the sponsor-PR scan remains unresolved.
+        owned = record("grantfox", source="ready", owner="publisher-1")
+        owned["competition"] = "unknown"
+        self.assertEqual(actions(owned)["work_orders"][0]["action"], "OWNER_CONTINUES")
+
+        # A different funded listing must not reopen engineering while a
+        # ready fork carrier has unresolved sponsor PR competition.
+        ready = record("algora", source="ready")
+        ready["competition"] = "other_pr"
+        batch = actions(ready, record("bountyhub"))
+        decisions = {x["platform"]: x["action"] for x in batch["work_orders"]}
+        self.assertEqual(decisions["algora"], "COMPETITION_REVIEW")
+        self.assertEqual(decisions["bountyhub"], "RECONCILE_SHARED_SOURCE")
+        self.assertEqual(batch["build_slots_admitted"], 0)
+
     def test_shared_issue_with_active_builder_cannot_rebuild(self):
         for state in ("building", "ready", "none"):
             with self.subTest(source_state=state):

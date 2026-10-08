@@ -36,6 +36,17 @@ listing has building/ready source, a named owner, or a known upstream PR
 cannot dispatch `BUILD`. It receives `RECONCILE_SHARED_SOURCE` or
 `RECONCILE_SHARED_PR` until the owner/source/current sponsor PR are checked.
 This is a duplicate-work fence, not a new permission or credential gate.
+
+**Ready-source sponsor-PR fence:** after a publication owner releases a ready
+source, `PUBLISH_EXISTING` requires fresh `competition: none`. If the sponsor
+PR state is `ours`, `other_pr`, or `unknown`, dispatch `COMPETITION_REVIEW`
+instead of opening an upstream PR from the fork carrier. Reconcile the
+existing PR and original authorship first; never duplicate the submission or
+forfeit its conditional compensation request. An active owner still takes
+priority as `OWNER_CONTINUES`, including during an incomplete competition
+scan. A ready carrier on one provider still prevents fresh BUILD through
+another provider listing of the same canonical issue.
+
 The isolated regression is `python tools/mova_batch_sprint/test_owner_handoff.py`;
 it uses no provider calls and does not invoke the repository test suite.
 
