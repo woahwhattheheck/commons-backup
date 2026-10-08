@@ -71,6 +71,21 @@ def describe(order: dict) -> str:
                f" | Claim: {clean(order.get('claim_state'), 30)}"]
     if order.get("reason"):
         details.append(f"  Next: {clean(order['reason'], 220)}")
+    recovery = order.get("head_reconciliation")
+    if recovery is not None:
+        if not isinstance(recovery, dict):
+            raise ValueError("head_reconciliation must be an object")
+        details.append(
+            "  Head reconciliation: %s | expected=%s | observed=%s | source lease retired=%s" % (
+                clean(recovery.get("status"), 40),
+                clean(recovery.get("expected_head"), 40),
+                clean(recovery.get("observed_head"), 40),
+                clean(recovery.get("retire_source_lease"), 8),
+            )
+        )
+        details.append(
+            "  Provider readback: %s" % clean(recovery.get("provider_readback"), 180)
+        )
     return "\n".join(details)
 
 

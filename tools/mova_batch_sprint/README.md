@@ -59,6 +59,35 @@ original author, conditional payout, and existing MOVA claim actions are
 unchanged. Don't treat a Slack snapshot as a replacement for a fresh GitHub head
 check. The focused offline checks are in `test_take_advisory.py`.
 
+## Head-first stale-lease adoption
+
+MOVA can consume the canonical offline source-lease reconciler at recovery,
+collision, and publication boundaries without adding GitHub polling. A record
+may carry one already-fetched `lease_recovery` receipt containing the tracked
+`branch`, exact 40-character `expected_head` and `observed_head`, an
+exhaustive `touched_paths` list, `comparison_complete`, `stale`, and the
+provider readback reference. The existing `take_paths` remain the claimed
+source scope, and `active_owner` remains the recorded source owner.
+
+Before BUILD capacity is allocated, the planner delegates that evidence to
+`tools/swarm_take_collisions/head_reconcile.py`:
+
+- `COLLISION_RECONCILIATION` blocks duplicate dispatch when the branch moved
+  through claimed scope without verified completion proof.
+- `VERIFIED_COMPLETION` becomes `SOURCE_LEASE_RETIRED`; only the source
+  lease is retired. Publication ownership and bounty/claim custody remain
+  unchanged.
+- `ORTHOGONAL_ADVANCE` preserves the existing work action but replaces
+  `take_head` with the provider-observed head for the next CAS-guarded write.
+- `UNCHANGED_STALE` becomes `STALE_RECOVERY`; it is explicitly recoverable
+  work rather than a new BUILD.
+- incomplete comparison/head evidence becomes `HEAD_EVIDENCE_HOLD`.
+
+Optional `completion_proof` is passed through to the canonical reconciler and
+must contain explicit verified evidence before an overlapping delta can retire
+a source lease. The planner itself performs no provider reads, ownership
+transfer, publication, claim, or payout action.
+
 ## Verified manifest contract
 
 Top level: timezone-aware `as_of`, array `records`. Each record must include:

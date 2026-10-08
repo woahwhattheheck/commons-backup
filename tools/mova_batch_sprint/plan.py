@@ -164,6 +164,74 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
     occupied = record.get("active_owner")
     if occupied is not None and (not isinstance(occupied, str) or not occupied.strip()):
         raise ValueError("active_owner must be nonempty text or null")
+
+    # Optional one-shot provider evidence for a stale source lease. The planner
+    # never performs the live read: the recovery/collision/publication boundary
+    # supplies the exact branch head and exhaustive expected..observed paths.
+    lease_recovery = record.get("lease_recovery")
+    if lease_recovery is not None:
+        if not isinstance(lease_recovery, dict):
+            raise ValueError("lease_recovery must be an object or null")
+        if not occupied:
+            raise ValueError("lease_recovery requires the recorded active_owner")
+        branch = lease_recovery.get("branch")
+        if (not isinstance(branch, str) or not branch.strip() or len(branch) > 255
+                or any(ch in branch for ch in (chr(10), chr(13)))):
+            raise ValueError("lease_recovery.branch must be bounded nonempty text")
+        expected_head = lease_recovery.get("expected_head")
+        observed_head = lease_recovery.get("observed_head")
+        for name, value in (("expected_head", expected_head), ("observed_head", observed_head)):
+            if not isinstance(value, str) or not re.fullmatch(r"[a-fA-F0-9]{40}", value):
+                raise ValueError("lease_recovery.%s must be an exact 40-hex SHA" % name)
+        touched_paths = lease_recovery.get("touched_paths", [])
+        if (not isinstance(touched_paths, list) or len(touched_paths) > 64
+                or any(not isinstance(p, str) or not p.strip()
+                       or p.startswith(("/", chr(92)))
+                       or any(ch in p for ch in (chr(10), chr(13)))
+                       for p in touched_paths)):
+            raise ValueError("lease_recovery.touched_paths must be bounded relative paths")
+        for field in ("comparison_complete", "stale"):
+            if not isinstance(lease_recovery.get(field, False), bool):
+                raise ValueError("lease_recovery.%s must be boolean" % field)
+        provider_readback = lease_recovery.get("provider_readback", "")
+        origin = lease_recovery.get("origin", "")
+        source_ref = lease_recovery.get("source", "")
+        for field, value in (
+            ("provider_readback", provider_readback),
+            ("origin", origin),
+            ("source", source_ref),
+        ):
+            if (not isinstance(value, str) or len(value) > 300
+                    or any(ch in value for ch in (chr(10), chr(13)))):
+                raise ValueError("lease_recovery.%s must be bounded single-line text" % field)
+        completion_proof = lease_recovery.get("completion_proof")
+        if completion_proof is not None:
+            if not isinstance(completion_proof, dict):
+                raise ValueError("lease_recovery.completion_proof must be an object or null")
+            verified_completion = completion_proof.get("verified", False)
+            reference = completion_proof.get("reference")
+            if not isinstance(verified_completion, bool):
+                raise ValueError("lease_recovery.completion_proof.verified must be boolean")
+            if reference is not None and (
+                    not isinstance(reference, str) or len(reference) > 300
+                    or any(ch in reference for ch in (chr(10), chr(13)))):
+                raise ValueError("lease_recovery.completion_proof.reference must be bounded single-line text")
+            completion_proof = {
+                "verified": verified_completion,
+                "reference": reference,
+            }
+        lease_recovery = {
+            "branch": branch.strip(),
+            "expected_head": expected_head.lower(),
+            "observed_head": observed_head.lower(),
+            "touched_paths": touched_paths,
+            "comparison_complete": lease_recovery.get("comparison_complete", False),
+            "stale": lease_recovery.get("stale", False),
+            "provider_readback": provider_readback.strip(),
+            "origin": origin.strip(),
+            "source": source_ref.strip(),
+            "completion_proof": completion_proof,
+        }
     return {
         "issue_url": "https://github.com/%s/%s/issues/%s" % (owner, repo, number),
         "issue_key": "%s/%s#%s" % (owner, repo, number),
@@ -185,6 +253,7 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         "active_owner": occupied, "fresh": fresh,
         "take_paths": take_paths, "take_head": take_head,
         "take_kind": take_kind, "take_operation_id": take_operation_id,
+        "lease_recovery": lease_recovery,
         "checked_at": verified.isoformat(),
         "note": str(record.get("note") or "")[:300],
     }
@@ -226,6 +295,57 @@ def mergeability_advisory(item: dict) -> dict | None:
             "and review the actual divergence before any merge or source rewrite."
         ),
     }
+
+
+
+def apply_head_reconciliation(item: dict) -> dict | None:
+    """Adopt the canonical one-shot source-lease reconciliation into MOVA."""
+    evidence = item.get("lease_recovery")
+    if evidence is None:
+        return None
+
+    tool_dir = str(Path(__file__).resolve().parents[1] / "swarm_take_collisions")
+    if tool_dir not in sys.path:
+        sys.path.insert(0, tool_dir)
+    from head_reconcile import reconcile
+
+    record = {
+        "operation_id": item["take_operation_id"] or item["operation_id"],
+        "repo": item["repo"],
+        "branch": evidence["branch"],
+        "owner": item["active_owner"],
+        "origin": evidence["origin"],
+        "lease_kind": "source",
+        "expected_head": evidence["expected_head"],
+        "observed_head": evidence["observed_head"],
+        "claimed_paths": item["take_paths"],
+        "touched_paths": evidence["touched_paths"],
+        "comparison_complete": evidence["comparison_complete"],
+        "stale": evidence["stale"],
+        "provider_readback": evidence["provider_readback"],
+    }
+    if evidence["completion_proof"] is not None:
+        record["completion_proof"] = evidence["completion_proof"]
+
+    receipt = reconcile(record)
+    receipt["source"] = evidence["source"] or item["source_pr_url"] or item["pr_url"] or item["issue_url"]
+    item["head_reconciliation"] = receipt
+
+    if receipt["status"] == "VERIFIED_COMPLETION":
+        item["action"] = "SOURCE_LEASE_RETIRED"
+        item["reason"] = receipt["guidance"]
+    elif receipt["status"] == "COLLISION_RECONCILIATION":
+        item["action"] = "COLLISION_RECONCILIATION"
+        item["reason"] = receipt["guidance"]
+    elif receipt["status"] == "ORTHOGONAL_ADVANCE":
+        item["take_head"] = receipt["next_expected_head"] or item["take_head"]
+    elif receipt["status"] == "UNCHANGED_STALE":
+        item["action"] = "STALE_RECOVERY"
+        item["reason"] = receipt["guidance"]
+    elif receipt["status"] in {"INCOMPLETE_EVIDENCE", "SEPARATE_CUSTODY"}:
+        item["action"] = "HEAD_EVIDENCE_HOLD"
+        item["reason"] = receipt["guidance"]
+    return receipt
 
 
 def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
@@ -374,6 +494,13 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
             receipt_hash = hashlib.sha256(receipt_key.encode("utf-8")).hexdigest()[:10]
             operation_id += "-%s-%s" % (item["platform"], receipt_hash)
         item["operation_id"] = operation_id
+
+    # Reconcile stale source leases only after stable operation IDs exist and
+    # before BUILD capacity is allocated. This consumes caller-supplied provider
+    # evidence and performs no live GitHub/Slack requests.
+    for item in items:
+        apply_head_reconciliation(item)
+
     # High-value ready engineering first, but bounded to protect shared API
     # quota and prevent all workers stampeding one sponsor at once.
     builds = sorted((x for x in items if x["action"] == "BUILD"),
@@ -457,6 +584,15 @@ def render_slack(batch: dict) -> str:
             advisory = item["mergeability_advisory"]
             lines.append("  mergeability_advisory | status=%s | guidance=%s" % (
                 advisory["status"], advisory["guidance"]))
+        if "head_reconciliation" in item:
+            recovery = item["head_reconciliation"]
+            lines.append(
+                "  head_reconciliation | status=%s | expected=%s | observed=%s | touched=%s | source_lease_retired=%s" % (
+                    recovery["status"], recovery["expected_head"], recovery["observed_head"],
+                    ",".join(recovery["touched_paths"]) or "NONE", recovery["retire_source_lease"]))
+            lines.append(
+                "    provider_readback=%s | source=%s" % (
+                    recovery["provider_readback"], recovery.get("source") or "UNKNOWN"))
         if "take_advisory" in item:
             advisory = item["take_advisory"]
             # The Slack feed is untrusted text; never allow an active peer's
