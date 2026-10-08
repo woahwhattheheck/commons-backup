@@ -17,12 +17,22 @@ the later snapshot cannot precede it. Both must name the same original account.
 The tool does not collect live data, authorize a source actor, acquire a lease,
 run GitHub commands, claim an award, send Slack, or move payment.
 
-Identity is canonical sponsor issue key + marketplace platform + funding URL.
-This keeps different funded listings and separate payout obligations intact
-even when they refer to the same source implementation. A row changes only
-when its action, owner, original-author PR source, claim state, competition,
-eligibility, funding or advertised amount changes. Fresh timestamps and
-formatting alone do not generate new work.
+Identity is canonical sponsor issue key + marketplace platform + the
+funded listing's stable identity. For recognized first-party BountyHub detail
+URLs (/en|de|fr/bounty/view/UUID[/slug]) and API URLs
+(api.bountyhub.dev/api/bounties/UUID), the listing key is the UUID, not a
+mutable slug, locale or page/API URL. The report still shows the real observed
+funding URL rather than inventing an endpoint. Unknown layouts retain literal
+URL identities instead of being guessed as the same bounty. Two **different**
+BountyHub UUIDs attached to one issue remain separate claim obligations; two
+aliases for the same UUID in one snapshot cause CONFLICTING_LISTINGS audit hold.
+Other provider URLs retain their existing exact-match behavior.
+
+A row changes only when its action, owner, original-author PR source, claim
+state, competition, eligibility, funding or advertised amount changes. Fresh
+timestamps, BountyHub page aliases and formatting alone do not dispatch new
+work. Alias normalization is a local identity comparison, **not** evidence of
+provider registration, award, or payment.
 
 Each material change has an idempotent MOVA-DELTA receipt ID, before/after
 action, originating issue, sponsor/fork PR URLs and changed fields.

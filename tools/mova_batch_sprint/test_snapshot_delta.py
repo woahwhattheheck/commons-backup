@@ -45,6 +45,57 @@ class SnapshotDeltaRegression(unittest.TestCase):
         self.assertEqual(event["action"], "SUBMIT_EXISTING_CLAIM")
         self.assertIn("pr_url", event["changed_fields"])
 
+    def test_bountyhub_locale_slug_and_api_aliases_do_not_reopen_orders(self):
+        uuid = "27c3cfe0-da9e-4192-848a-b676402de81c"
+        old = record("bountyhub", action="VERIFY_CLAIM",
+                     funding_url=f"https://www.bountyhub.dev/en/bounty/view/{uuid}/cast-one")
+        new = record("bountyhub", action="VERIFY_CLAIM", checked_at=NEW,
+                     funding_url=f"https://api.bountyhub.dev/api/bounties/{uuid.upper()}")
+        result = diff_snapshots(batch(OLD, old), batch(NEW, new))
+        self.assertEqual(result["events"], [])
+        self.assertEqual(result["unchanged_suppressed"], 1)
+
+    def test_bountyhub_alias_changes_keep_material_receipt_identity(self):
+        uuid = "27c3cfe0-da9e-4192-848a-b676402de81c"
+        first = f"https://www.bountyhub.dev/en/bounty/view/{uuid}/cast-one"
+        alias = f"https://bountyhub.dev/de/bounty/view/{uuid}/cast-two"
+        old = record("bountyhub", action="VERIFY_CLAIM", funding_url=first)
+        after = record("bountyhub", action="VERIFY_SETTLEMENT", claim_state="paid")
+        a = diff_snapshots(batch(OLD, old),
+                           batch(NEW, dict(after, funding_url=first)))["events"][0]
+        b = diff_snapshots(batch(OLD, old),
+                           batch(NEW, dict(after, funding_url=alias)))["events"][0]
+        self.assertEqual(a["event"], "MATERIAL_CHANGE")
+        self.assertEqual(a["operation_id"], b["operation_id"])
+        self.assertEqual(alias, b["funding_url"])
+        self.assertIsNone(diff_snapshots(batch(OLD, old),
+                        batch(NEW, dict(after, funding_url=alias)))["earned_usd"])
+
+    def test_distinct_bountyhub_ids_and_unknown_urls_never_merge(self):
+        first = "27c3cfe0-da9e-4192-848a-b676402de81c"
+        second = "ef91cb1e-dd69-4a33-bd90-21c9679c9247"
+        old = record("bountyhub", funding_url=f"https://bountyhub.dev/en/bounty/view/{first}/cast")
+        new = record("bountyhub", funding_url=f"https://api.bountyhub.dev/api/bounties/{second}")
+        result = diff_snapshots(batch(OLD, old), batch(NEW, new))
+        self.assertEqual({x["event"] for x in result["events"]},
+                         {"MISSING_FROM_SNAPSHOT", "NEW_LISTING"})
+        # An unrecognized lookalike route is NOT allowed to masquerade as a
+        # canonical first-party UUID or collapse an actual bounty obligation.
+        unknown = record("bountyhub", funding_url=f"https://bountyhub.dev/anything/{first}")
+        self.assertEqual(2, diff_snapshots(batch(OLD, old),
+                                          batch(NEW, unknown))["events_count"])
+
+    def test_duplicate_aliases_in_one_snapshot_are_an_audit_hold(self):
+        uuid = "27c3cfe0-da9e-4192-848a-b676402de81c"
+        old = record("bountyhub",
+                     funding_url=f"https://bountyhub.dev/en/bounty/view/{uuid}/cast")
+        alias = record("bountyhub",
+                       funding_url=f"https://api.bountyhub.dev/api/bounties/{uuid}")
+        result = diff_snapshots(batch(OLD),
+                                batch(NEW, old, alias))
+        self.assertEqual("CONFLICTING_LISTINGS", result["events"][0]["event"])
+        self.assertEqual(2, result["events"][0]["changed_fields"]["current_rows"])
+
     def test_multiple_providers_remain_separate_claim_obligations(self):
         before = batch(OLD, record("algora", action="VERIFY_CLAIM"),
                        record("bountyhub", action="VERIFY_CLAIM"))
