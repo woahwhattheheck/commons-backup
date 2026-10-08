@@ -98,7 +98,7 @@ python -m unittest \
   competitions.pazhou_ai4s_chiptrace_2026.tests.test_chiptrace -v
 ```
 
-The competition-scoped GitHub Actions workflow runs the same compile, hostile tests, deterministic demo, receipt verification, and independent twin-demo byte comparison on Python 3.11–3.13.
+The historical multi-Python path-scoped workflow is not present on current main. Current execution evidence is the focused merged-byte CPython 3.13.5 benchmark and test receipt below; no broader hosted matrix is claimed.
 
 
 ## Frozen benchmark and evidence-bound triage

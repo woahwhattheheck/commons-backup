@@ -109,7 +109,7 @@ The current deterministic output returns overall `REVIEW`, max quality-risk scor
 
 The test suite covers deterministic fixture generation, repeat analysis equality, receipt tamper detection, HTML scope disclosure, strict unknown-column rejection, duplicate-key rejection, unit mismatch rejection, insufficient-evidence behavior, non-finite-value rejection, cadence-gap observability, and JSON round-trip receipt verification.
 
-A path-scoped CI workflow repeats compile, all tests, demo generation, receipt verification, and byte-for-byte comparison between two independently regenerated demo artifact sets on Python 3.11, 3.12, and 3.13.
+The historical multi-Python path-scoped workflow is not present on current main. Current execution evidence is the focused merged-byte CPython 3.13.5 benchmark and test receipt below; no broader hosted matrix is claimed.
 
 ## 9. Frozen synthetic benchmark evidence
 
