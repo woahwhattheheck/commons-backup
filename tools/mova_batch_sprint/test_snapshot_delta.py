@@ -32,6 +32,26 @@ class SnapshotDeltaRegression(unittest.TestCase):
         self.assertEqual(result["events"], [])
         self.assertEqual(result["unchanged_suppressed"], 1)
 
+    def test_planner_operation_id_change_reissues_only_affected_listing(self):
+        old = record(operation_id="MOVA-example-sponsor-42-VERIFY_CLAIM-old")
+        new = record(operation_id="MOVA-example-sponsor-42-VERIFY_CLAIM-new")
+        first = diff_snapshots(batch(OLD, old), batch(NEW, new))
+        again = diff_snapshots(batch(OLD, old), batch(NEW, new))
+        self.assertEqual(first["events"], again["events"])
+        self.assertEqual(first["events_count"], 1)
+        event = first["events"][0]
+        self.assertEqual(event["event"], "MATERIAL_CHANGE")
+        self.assertEqual(event["changed_fields"]["operation_id"], {
+            "from": old["operation_id"], "to": new["operation_id"]
+        })
+        self.assertEqual(event["planner_operation_id"], new["operation_id"])
+        self.assertIn("REISSUED WORK KEY", render_slack(first))
+        self.assertIn(new["operation_id"], render_slack(first))
+        self.assertEqual(first["provider_queries_executed"], 0)
+        self.assertEqual(diff_snapshots(batch(OLD, old), batch(NEW, old))["events"], [])
+        with self.assertRaisesRegex(ValueError, "invalid work-order operation_id"):
+            diff_snapshots(batch(OLD, old), batch(NEW, record(operation_id="bad\\nspoof")))
+
     def test_ready_to_published_original_claim_transition_idempotent(self):
         old = record(action="PUBLISH_EXISTING", source_state="ready")
         new = record(action="SUBMIT_EXISTING_CLAIM", source_state="published",

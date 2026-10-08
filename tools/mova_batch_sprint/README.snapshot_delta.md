@@ -36,7 +36,16 @@ provider registration, award, or payment.
 
 Each material change has an idempotent MOVA-DELTA receipt ID, before/after
 action, originating issue, sponsor/fork PR URLs and changed fields.
-Same input facts produce the same receipt. To avoid Slack 5000-character
+Same input facts produce the same receipt. Planner `operation_id` is a
+**material field**: when the dispatch key changes on the same listing (for
+example, after fixing two funded listings that once shared an issue/action
+ID), a `MATERIAL_CHANGE` reissues the new planner key rather than suppressing
+it as another timestamp-only refresh. The JSON shows both previous and new
+planner IDs; the Slack rendering labels the **planner dispatch ID** separately
+from the `MOVA-DELTA` event receipt. Agents must recheck ownership before
+actioning a reissued key; it never gives permission for a second claim.
+Malformed planner keys (such as newline-bearing pseudo-commands) are rejected
+before text dispatch. Old snapshots without these optional IDs remain readable. To avoid Slack 5000-character
 message limits, text output is size-bounded; JSON carries all transitions.
 
 **Retention and payment guarantees:**

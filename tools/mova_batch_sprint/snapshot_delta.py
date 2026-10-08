@@ -16,9 +16,10 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 ISSUE_KEY = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[1-9][0-9]*$")
+DISPATCH_KEY = re.compile(r"^[A-Za-z0-9_.-]{1,256}$")
 BOUNTY_UUID = re.compile(r"^[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$")
 MATERIAL_FIELDS = (
-    "action", "active_owner", "pr_url", "pr_author", "source_pr_url",
+    "operation_id", "action", "active_owner", "pr_url", "pr_author", "source_pr_url",
     "source_pr_author", "source_state", "claim_state", "competition",
     "issue_state", "eligibility", "funding", "reward_usd", "fresh",
 )
@@ -85,6 +86,11 @@ def _rows(batch: dict) -> dict[tuple[str, str, str], list[dict]]:
             raise ValueError("funding_url must be HTTPS or null")
         if not isinstance(item.get("action"), str) or not item["action"]:
             raise ValueError("work-order action missing")
+        dispatch_id = item.get("operation_id")
+        if dispatch_id is not None and (
+            not isinstance(dispatch_id, str) or not DISPATCH_KEY.fullmatch(dispatch_id)
+        ):
+            raise ValueError("invalid work-order operation_id")
         found[(issue.lower(), platform.lower(), _listing_key(platform, funding_url))].append(item)
     return found
 
@@ -107,6 +113,8 @@ def _event(kind: str, key: tuple[str, str, str], old: dict | None,
         "platform": platform, "funding_url": item.get("funding_url"),
         "previous_action": old.get("action") if old else None,
         "action": new.get("action") if new else None,
+        "previous_planner_operation_id": old.get("operation_id") if old else None,
+        "planner_operation_id": new.get("operation_id") if new else None,
         "active_owner": item.get("active_owner"),
         "pr_url": item.get("pr_url"), "source_pr_url": item.get("source_pr_url"),
         "changed_fields": delta,
@@ -180,6 +188,13 @@ def render_slack(delta: dict, limit: int = 25) -> str:
             event["previous_action"] or "-", event["action"] or "-",
             changes, event["operation_id"],
         ))
+        if event["planner_operation_id"]:
+            lines.append("  Planner dispatch ID: %s" % event["planner_operation_id"])
+        if "operation_id" in event["changed_fields"]:
+            lines.append("  REISSUED WORK KEY: %s -> %s; recheck active owner before delivery." % (
+                event["previous_planner_operation_id"] or "-",
+                event["planner_operation_id"] or "-",
+            ))
         if event["event"] in {"MISSING_FROM_SNAPSHOT", "CONFLICTING_LISTINGS"}:
             lines.append("  AUDIT HOLD: reconcile original records; never infer claim withdrawal or payment.")
         if event["pr_url"]:
