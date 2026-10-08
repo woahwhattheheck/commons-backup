@@ -210,6 +210,38 @@ def _assignees(record: dict[str, Any]) -> tuple[str, ...]:
     return tuple(result)
 
 
+# Only official GrantFox bot posts can establish a campaign assignment. A
+# GitHub search result with assignees=[] is not sufficient evidence of vacancy.
+BOT_ASSIGNMENT_RE = re.compile(
+    r"@([A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?)\s+has been assigned to this issue\b",
+    re.IGNORECASE,
+)
+
+
+def _campaign_bot_assignees(record: dict[str, Any]) -> tuple[str, ...]:
+    # Raw GitHub issue comments, oldest to newest when possible. This does not
+    # treat ordinary contributor interest or pasted bot text as an assignment.
+    raw = record.get("issue_comments") or []
+    if not isinstance(raw, list):
+        raise WorkfeedError("issue_comments must be a list")
+    result: list[str] = []
+    for comment in raw:
+        if not isinstance(comment, dict):
+            raise WorkfeedError("issue_comments entries must be GitHub comment objects")
+        user = comment.get("user")
+        if isinstance(user, dict):
+            user = user.get("login")
+        if not isinstance(user, str) or user.lower() != "grantfox-oss[bot]":
+            continue
+        body = comment.get("body")
+        if not isinstance(body, str):
+            continue
+        match = BOT_ASSIGNMENT_RE.search(body)
+        if match and match.group(1).lower() not in {name.lower() for name in result}:
+            result.append(match.group(1))
+    return tuple(result)
+
+
 def _observed_claimants(record: dict[str, Any]) -> tuple[str, ...]:
     raw = record.get("claimant_comments") or record.get("claim_comments") or []
     if not isinstance(raw, list):
@@ -299,7 +331,8 @@ def classify(record: dict[str, Any], *, fresh_after: str | None = None) -> Candi
     state = str(record.get("state") or "open").lower()
     body = str(record.get("body") or "")
     labels = _labels(record)
-    assignees = _assignees(record)
+    # Preserve native assignees and official FWC26 bot-assignment receipts.
+    assignees = tuple(dict.fromkeys((*_assignees(record), *_campaign_bot_assignees(record))))
     observed_claimants = _observed_claimants(record)
     open_pull_requests = _open_pull_requests(record)
     coordination_owners = _coordination_owners(record)

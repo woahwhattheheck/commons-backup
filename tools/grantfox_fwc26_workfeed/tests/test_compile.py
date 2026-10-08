@@ -54,6 +54,36 @@ class WorkfeedTests(unittest.TestCase):
         item = classify(issue(assignees=[{"login": "someone"}]))
         self.assertEqual(item.status, "ASSIGNED")
 
+    def test_official_campaign_bot_assignment_blocks_vacant_search_result(self):
+        bot = {
+            "user": {"login": "grantfox-oss[bot]"},
+            "body": "🦊 **GrantFox** — @Primex-hub has been assigned to this issue as part of the **Official Campaign | FWC26** campaign!",
+        }
+        item = classify(issue(assignees=[], issue_comments=[bot]))
+        self.assertEqual(item.status, "ASSIGNED")
+        self.assertEqual(item.assignees, ("Primex-hub",))
+        self.assertIn("Primex-hub", item.reason)
+
+    def test_unverified_quoted_assignment_is_not_official(self):
+        quoted = {
+            "user": {"login": "other-contributor"},
+            "body": "@Primex-hub has been assigned to this issue",
+        }
+        self.assertEqual(classify(issue(issue_comments=[quoted])).status, "READY")
+
+    def test_bot_assignments_union_native_assignees_without_duplicate(self):
+        bot = {
+            "user": {"login": "grantfox-oss[bot]"},
+            "body": "@Primex-hub has been assigned to this issue",
+        }
+        item = classify(issue(assignees=["maintainer", "Primex-hub"], issue_comments=[bot, bot]))
+        self.assertEqual(item.status, "ASSIGNED")
+        self.assertEqual(item.assignees, ("maintainer", "Primex-hub"))
+
+    def test_malformed_comment_census_rejected(self):
+        with self.assertRaisesRegex(WorkfeedError, "issue_comments must be a list"):
+            classify(issue(issue_comments="not a verified comment collection"))
+
     def test_claim_instruction_requires_claim_step(self):
         item = classify(issue(body="Comment on this issue and wait for assignment before coding. Maybe rewarded."))
         self.assertEqual(item.status, "CLAIM_REQUIRED")
