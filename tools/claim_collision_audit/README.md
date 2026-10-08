@@ -23,7 +23,7 @@ Each line is one object with stable unique operation_id, timezone-aware ISO-8601
 - RELEASE: frees only a live lease held by the same session; foreign releases are flagged.
 - HEAD_CHECK: record actual head_sha (40 hex) plus either pr_url (sponsor PR **or** original-author fork PR) or branch_url (a GitHub /owner/repo/tree/branch URL). A branch URL is a *source ref*, not a sponsor PR.
 - WRITE: expected_head_sha and new_head_sha, with the same pr_url or branch_url as HEAD_CHECK. Requires a live matching owner and a fresh unconsumed HEAD_CHECK (default at most 300 seconds old). Every accepted write consumes that check, so every subsequent write requires another exact-head read. Different known heads or reused checks are flagged as UNFENCED_WRITE.
-- PUBLISH: requires a **canonical sponsor-repository** pr_url, a live owner lease, and an actual provider-confirmed PR. Publishing a fork PR as if upstream is refused. A second distinct sponsor PR for the same issue is DUPLICATE_SPONSOR_PR. Provider claims and reward receipts are **not** inferred.
+- PUBLISH: requires a **canonical sponsor-repository** pr_url, a live owner lease, and an actual provider-confirmed PR. Publishing a fork PR as if upstream is refused. The **first** PUBLISH records one actual publication; later receipts that verify the **same** sponsor PR increment `publication_rechecks`, not `publishes_confirmed`. A different sponsor PR for the same issue is DUPLICATE_SPONSOR_PR. Rechecking a PR never creates a new bounty claim or payable contribution. Provider claims and reward receipts are **not** inferred.
 
 Example successful upstream publication record:
 

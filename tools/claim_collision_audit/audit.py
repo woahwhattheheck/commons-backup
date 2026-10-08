@@ -219,6 +219,10 @@ def audit(rows: list[dict], errors: list[dict], now: datetime,
                 counters["collisions"] += 1
                 warn(row, "DUPLICATE_SPONSOR_PR",
                      f"existing {entry['published_pr']} vs new {pr}")
+            elif entry["published_pr"] == pr:
+                # A repeated readback of one existing sponsor PR is not
+                # another successful upstream publication.
+                counters["publication_rechecks"] += 1
             else:
                 entry["published_pr"] = pr
                 counters["publishes_confirmed"] += 1
@@ -231,6 +235,7 @@ def audit(rows: list[dict], errors: list[dict], now: datetime,
             "issues": len(set(stats) | set(state)),
             "events": sum(v["events"] for v in stats.values()),
             "collisions": sum(v["collisions"] for v in stats.values()),
+            "publication_rechecks": sum(v["publication_rechecks"] for v in stats.values()),
             "blocked_writes": sum(v["blocked_writes"] for v in stats.values()),
             "anomalies": len(anomalies),
         },
@@ -253,6 +258,7 @@ def slack_report(result: dict) -> str:
         f"CLAIM COLLISION AUDIT | {result['as_of']}",
         f"Issues {s['issues']} | Events {s['events']} | Collisions {s['collisions']} "
         f"| Unfenced writes {s['blocked_writes']} | Anomalies {s['anomalies']}",
+        f"Existing sponsor PR rechecks suppressed: {s['publication_rechecks']}",
     ]
     for key, info in result["issues"].items():
         if info.get("collisions", 0) or info.get("blocked_writes", 0):
