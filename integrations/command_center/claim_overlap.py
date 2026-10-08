@@ -427,6 +427,10 @@ def _overlaps(claims: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for index, left in enumerate(active):
         for right in active[index + 1:]:
             lr, rr = left["repositories"], right["repositories"]
+            shared_explicit_repository = bool(
+                {_repository_key(repo) for repo in lr}
+                & {_repository_key(repo) for repo in rr}
+            )
             issue_matches = []
             for li in left["issue_targets"]:
                 for ri in right["issue_targets"]:
@@ -438,10 +442,7 @@ def _overlaps(claims: list[dict[str, Any]]) -> list[dict[str, Any]]:
                             "right_source": ri["source"],
                         })
             # Coordination repository context can differ from the sponsor.
-            if (lr and rr and
-                    {_repository_key(repo) for repo in lr}.isdisjoint(
-                        _repository_key(repo) for repo in rr)
-                    and not issue_matches):
+            if lr and rr and not shared_explicit_repository and not issue_matches:
                 continue
             matches: list[dict[str, Any]] = []
             for ls in left["scopes"]:
@@ -464,7 +465,11 @@ def _overlaps(claims: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "right_operation_id": right["operation_id"],
                     "left_claim_key": left["claim_key"],
                     "right_claim_key": right["claim_key"],
-                    "repository_relation": "matching_explicit_repository" if lr and rr else "not_established",
+                    "repository_relation": (
+                        "matching_explicit_repository" if shared_explicit_repository
+                        else "disjoint_explicit_repositories" if lr and rr
+                        else "not_established"
+                    ),
                     "matches": matches, "issue_matches": issue_matches,
                     "interpretation": "Advisory overlap of explicit issue target or source scope; "
                                       "source text does not establish semantic conflict, incompatibility, or worker liveness.",
