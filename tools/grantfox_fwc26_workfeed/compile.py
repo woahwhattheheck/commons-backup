@@ -7,6 +7,7 @@ from datetime import datetime
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
+from urllib.parse import urlsplit
 
 REQUIRED_LABELS = {
     "grantfox oss",
@@ -148,11 +149,35 @@ def _read_records(path: Path) -> list[dict[str, Any]]:
 def _repo_number(record: dict[str, Any]) -> tuple[str, int]:
     repo = record.get("repository") or record.get("repo")
     number = record.get("number", record.get("issue_number"))
-    if not isinstance(repo, str) or "/" not in repo:
+    if not isinstance(repo, str) or not re.fullmatch(
+        r"[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+", repo
+    ):
         raise WorkfeedError("each issue requires repository='owner/name'")
     if isinstance(number, bool) or not isinstance(number, int) or number <= 0:
         raise WorkfeedError(f"{repo}: issue number must be a positive integer")
     return repo, number
+
+
+def _issue_url(value: Any, repo: str, number: int) -> str:
+    key = f"{repo}#{number}"
+    if not isinstance(value, str) or any(ch.isspace() for ch in value):
+        raise WorkfeedError(f"{key}: canonical GitHub issue URL is required")
+    try:
+        parsed = urlsplit(value)
+    except ValueError as exc:
+        raise WorkfeedError(f"{key}: canonical GitHub issue URL is required") from exc
+    match = re.fullmatch(r"/([^/]+/[^/]+)/issues/([1-9][0-9]*)/?", parsed.path)
+    if (
+        parsed.scheme not in {"https", "http"}
+        or parsed.netloc.lower() != "github.com"
+        or match is None
+        or match[1].lower() != repo.lower()
+        or match[2] != str(number)
+    ):
+        raise WorkfeedError(f"{key}: GitHub issue URL must match repository and number")
+    # Retain display spelling while removing fragments/query strings and
+    # normalizing HTTP/trailing slash variants to the issue's canonical URL.
+    return f"https://github.com/{repo}/issues/{number}"
 
 
 def _labels(record: dict[str, Any]) -> tuple[str, ...]:
@@ -294,8 +319,7 @@ def classify(record: dict[str, Any], *, fresh_after: str | None = None) -> Candi
 
     if not isinstance(title, str) or not title.strip():
         raise WorkfeedError(f"{key}: title is required")
-    if not isinstance(url, str) or not url.startswith(("https://github.com/", "http://github.com/")):
-        raise WorkfeedError(f"{key}: canonical GitHub issue URL is required")
+    url = _issue_url(url, repo, number)
 
     normalized_labels = {_norm_label(x) for x in labels}
     missing = REQUIRED_LABELS - normalized_labels
@@ -376,9 +400,10 @@ def compile_records(records: Iterable[dict[str, Any]], *, fresh_after: str | Non
     candidates: list[Candidate] = []
     for record in records:
         candidate = classify(record, fresh_after=fresh_after)
-        if candidate.key in seen:
+        issue_identity = candidate.key.lower()
+        if issue_identity in seen:
             raise WorkfeedError(f"duplicate issue key: {candidate.key}")
-        seen.add(candidate.key)
+        seen.add(issue_identity)
         candidates.append(candidate)
 
     rank = {
@@ -485,3 +510,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
