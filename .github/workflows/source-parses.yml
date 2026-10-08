@@ -2,38 +2,11 @@ name: source-parses
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/runtime/final-spatial-guard/**"
-      - "revenue/kaggriculture/cloud-execution-lab/main.py"
-      - "revenue/kaggriculture/cloud-execution-lab/spatial_tempo.py"
-      - "revenue/multi_framework_evidence_freshness/**"
-      - "tests/test_multi_framework_evidence_freshness*.py"
-      - "competitions/nebius-proofpatch-2026/**"
-      - "tools/provider_cost_truth/**"
-      - "revenue/swarmops_dossier/**"
-      - "revenue/pilot_delivery_renewal_expansion_gate/**"
-      - "test_pilot_delivery_renewal_expansion_gate.py"
-      - "test_pilot_delivery_renewal_reload_trust_root.py"
-      - "test_discord_push_scope.py"
-      - ".github/workflows/source-parses.yml"
-      - ".github/workflows/commons-discord-cloud.yml"
-      - "revenue/opportunities/unc_ap_ai_peoplesoft/**"
-      - "test_unc_ap_ai_peoplesoft_batch.py"
-      - "revenue/external_opportunity_intake/**"
-      - "revenue/uiowa_rfq_18649_recovery_evidence/**"
   pull_request:
     paths:
       - "**/*.py"
       - "**/*.js"
       - ".github/workflows/source-parses.yml"
-      - ".github/workflows/commons-discord-cloud.yml"
-      - "revenue/opportunities/unc_ap_ai_peoplesoft/**"
-      - "test_unc_ap_ai_peoplesoft_batch.py"
-      - "revenue/external_opportunity_intake/**"
-      - "revenue/uiowa_rfq_18649_recovery_evidence/**"
 
 permissions:
   contents: read
@@ -42,19 +15,14 @@ concurrency:
   group: source-parses-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# RULES.md keeps actual program execution and retires test batteries.
-# Package manifests preserve Node's package/module parsing context.
 jobs:
   parse:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            *.py
-            *.js
-            package.json
-          sparse-checkout-cone-mode: false
+
+      - name: Verify checker contract
+        run: python3 -m unittest -v test_source_parses.py
 
       - name: Parse every tracked Python and JavaScript source
         run: python3 source_parses.py

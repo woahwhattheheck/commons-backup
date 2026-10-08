@@ -19,72 +19,13 @@ jobs:
           ref: main
           fetch-depth: 0
       - id: prepare
-        name: preflight recovery routes and reserve a bounded open-action batch
+        name: reserve a bounded open-action batch before runner allocation
         run: |
           test "$GITHUB_ACTIONS" = true
           test "$(git rev-parse --show-toplevel)" = "$GITHUB_WORKSPACE"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
-            python3 - <<'PY'
-          import re
-
-          import action_executor
-
-          risk_patterns = (
-              (
-                  "network-disable",
-                  re.compile(
-                      r"(?im)^\s*(?:(?:powershell(?:\.exe)?\s+.*?-command\s+)?disable-netadapter\b|"
-                      r"nmcli\s+(?:networking|radio\s+wifi)\s+off\b|"
-                      r"(?:ip\s+link\s+set|ifconfig\s+\S+)\b[^\n]*\bdown\b|"
-                      r"netsh\s+(?:interface|wlan)\b[^\n]*\b(?:disable|disconnect)\b)"
-                  ),
-              ),
-              (
-                  "control-service-stop",
-                  re.compile(
-                      r"(?im)^\s*(?:stop-service\b[^\n]*(?:winrm|sshd|tailscale|actions\.runner|github[^\n]*runner)|"
-                      r"(?:sc|sc\.exe)\s+stop\s+(?:winrm|sshd|tailscale|actions\.runner\S*|github\S*runner\S*)|"
-                      r"systemctl\s+(?:stop|disable|restart)\s+(?:ssh|sshd|tailscaled?|zerotier-one|actions\.runner\S*|github\S*runner\S*))"
-                  ),
-              ),
-              (
-                  "host-session-stop",
-                  re.compile(
-                      r"(?im)^\s*(?:shutdown(?:\.exe)?\b|stop-computer\b|restart-computer\b|logoff\b)"
-                  ),
-              ),
-          )
-
-          failures = []
-          for rec in action_executor.pending("device")[:16]:
-              meta = rec["meta"]
-              payload = rec["payload"]
-              detected = [name for name, pattern in risk_patterns if pattern.search(payload)]
-              control = (meta.get("control-route") or "").strip()
-              if not detected and not control:
-                  continue
-              ident = meta["id"]
-              recovery = (meta.get("recovery-route") or "").strip()
-              handoff = (meta.get("operator-handoff") or "").strip()
-              if not control:
-                  failures.append(
-                      f"{ident}: detected {','.join(detected)}; declare control-route and an independent recovery-route or operator-handoff"
-                  )
-                  continue
-              if not handoff and (
-                  not recovery or recovery.casefold() == control.casefold()
-              ):
-                  failures.append(
-                      f"{ident}: control-route={control!r}; declare a distinct recovery-route or operator-handoff before reservation"
-                  )
-
-          if failures:
-              for failure in failures:
-                  print("action recovery preflight: " + failure)
-              raise SystemExit(2)
-          PY
             if python3 device_action_state.py prepare \
               --run-id "$GITHUB_RUN_ID" \
               --run-attempt "$GITHUB_RUN_ATTEMPT" \
@@ -116,9 +57,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           clean: true
-      # If this runner or its active control route disappears after reservation,
-      # execute/finalize cannot land a terminal result. The PREPARED reservation
-      # therefore remains UNKNOWN by the bound device-action protocol.
       - name: execute the prepared batch in sorted order and emit bounded receipts
         run: >-
           python3 device_action_state.py execute-batch

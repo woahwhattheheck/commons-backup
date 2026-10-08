@@ -10,21 +10,10 @@ on:
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
-    inputs:
-      jhipster_174_validation:
-        description: Run exact-head JHipster issue 174 backend validation
-        required: false
-        type: boolean
-        default: false
-      jev_full_history:
-        description: Continue full-body JEV review from verified private history bundles
-        required: false
-        type: boolean
-        default: false
   repository_dispatch:
     types: [commons-board]
   issues:
-    types: [opened, closed, reopened]
+    types: [opened]
 permissions:
   contents: write
   issues: write
@@ -32,14 +21,11 @@ concurrency:
   # Connector bursts used to allocate one full rebuild + carrier poll per
   # Slack event.  Hundreds of distinct issue-number groups then raced the same
   # main ref, while an observer mistook normal queue time for a dead publisher.
-  # Coalesce only opened slack-connector issue runs. Running and newest pending
+  # Coalesce only slack-connector issue runs.  The running and newest pending
   # run both sweep the complete labelled issue queue, so a cancelled pending
   # run owns no unique source bytes. Ordinary issue events keep their distinct
   # groups, and push/schedule/dispatch retain their own recovery groups.
-  # v2 rotates future Slack issue events away from the pre-repair run whose
-  # already-frozen device tail still owns the original slack-batch group.
-  # Close/reopen events stay issue-scoped so intake cannot displace invalidation.
-  group: "commons-board-ingest-${{ github.event_name == 'issues' && github.event.action == 'opened' && contains(github.event.issue.body, 'carrier: slack-connector') && 'slack-batch-v2' || github.event_name }}-${{ github.event_name == 'issues' && github.event.action == 'opened' && contains(github.event.issue.body, 'carrier: slack-connector') && 'queue' || github.event.issue.number || 'poll' }}"
+  group: "commons-board-ingest-${{ github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector') && 'slack-batch' || github.event_name }}-${{ github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector') && 'queue' || github.event.issue.number || 'poll' }}"
   cancel-in-progress: false
 jobs:
   ingest:
@@ -70,7 +56,7 @@ jobs:
         # Quote the complete scalar: the literal contains `: `, which YAML
         # otherwise parses as an unexpected mapping separator before Actions
         # can evaluate the expression.
-        if: "${{ github.event_name == 'issues' && github.event.action == 'opened' && !contains(github.event.issue.body, 'carrier: slack-connector') }}"
+        if: "${{ github.event_name == 'issues' && !contains(github.event.issue.body, 'carrier: slack-connector') }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 -m host.ntfy_issue_poll
@@ -79,11 +65,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           EVENT: ${{ github.event_name }}
-          ACTION: ${{ github.event.action }}
         run: |
-          if [ "$EVENT" != "issues" ] || [ "$ACTION" = "opened" ]; then
-            python3 ntfy_relays.py || true
-          fi
+          python3 ntfy_relays.py || true
           set -u
           # BRYCE-1787164338883-1zu94b: github tried charging the card.
           # Schedule used to POLL 255s (ingest every 20s) every 5 min.
@@ -133,81 +116,7 @@ jobs:
           # phase-two commit. Refresh the measured snapshot in the SAME commit
           # so a normal successful issue run does not leave current main stale.
           python3 -c "import board_ingest; board_ingest.refresh_projection_convergence_snapshot()"
-          # recent.json is final at this point, so the delta shards and the seat
-          # census are built from the same bytes in the same commit. Both are
-          # byte-stable on a no-op rebuild, so a quiet cycle adds no diff. Both
-          # fail closed rather than publish an empty feed or an empty colony.
-          # A builder failure aborts this step: never commit a new recent.json
-          # beside an old observability bake and call the mixed snapshot fresh.
-          python3 -m host.feed_delta --write
-          python3 -m host.seat_census --write
-          # Repository state beside the board bakes: what the repo is doing, not
-          # only what was said. Every call is best-effort — a rate limit or an
-          # API hiccup must never take the owner-pin push with it, and the
-          # module reads an absent count as UNKNOWN rather than as zero.
-          REPO="${{ github.repository }}"
-          # Every page, not the newest hundred: "longest open" read from the
-          # oldest row of one newest-first page is wrong once more than a page
-          # is open. JSON Lines, one pull per line; --pulls-complete is passed
-          # only when the paginated read finished, otherwise the module
-          # compares the listing with the open count and says PARTIAL.
-          # Each row keeps its head SHA, GitHub's updated_at and its base, so a
-          # session holding a reviewed or claimed head sees it move from one read.
-          PULLS_COMPLETE=""
-          if gh api --paginate "repos/$REPO/pulls?state=open&per_page=100&sort=created&direction=desc" \
-              --jq '.[]|{number,title,draft,created_at,updated_at,user:{login:.user.login},head:{ref:.head.ref,sha:.head.sha},base:{ref:.base.ref,sha:.base.sha}}' \
-              > /tmp/open_pulls.jsonl 2>/dev/null; then
-            date -u +'%Y-%m-%dT%H:%M:%SZ' > /tmp/open_pulls.observed_at
-            PULLS_COMPLETE="--pulls-complete"
-          else
-            rm -f /tmp/open_pulls.jsonl /tmp/open_pulls.observed_at
-          fi
-          # The newest closures, merged or not, with the head that closed. One
-          # page of the most recently updated closed pulls; the module orders
-          # by closed_at. A failed call removes the file, and the module then
-          # names the closed listing as unread instead of showing no closures.
-          if gh api "repos/$REPO/pulls?state=closed&sort=updated&direction=desc&per_page=30" \
-              --jq '.[]|{number,title,created_at,closed_at,updated_at,merged_at,merge_commit_sha,user:{login:.user.login},head:{ref:.head.ref,sha:.head.sha},base:{ref:.base.ref,sha:.base.sha}}' \
-              > /tmp/closed_pulls.jsonl 2>/dev/null; then
-            date -u +'%Y-%m-%dT%H:%M:%SZ' > /tmp/closed_pulls.observed_at
-          else
-            rm -f /tmp/closed_pulls.jsonl /tmp/closed_pulls.observed_at
-          fi
-          # Open counts from the repository's own totals first. The search
-          # index is a separate road that can lag: on 2026-09-11 a bake read 4
-          # open pull requests from search while its own listing held 100.
-          COUNTS_SOURCE=graphql
-          COUNTS=$(gh api graphql -f owner="${REPO%%/*}" -f name="${REPO#*/}" \
-              -f query='query($owner:String!,$name:String!){repository(owner:$owner,name:$name){pullRequests(states:OPEN){totalCount} issues(states:OPEN){totalCount}}}' \
-              --jq '"\(.data.repository.pullRequests.totalCount) \(.data.repository.issues.totalCount)"' 2>/dev/null || true)
-          OPEN_PRS="${COUNTS%% *}"
-          OPEN_ISSUES="${COUNTS#* }"
-          case "$COUNTS" in *" "*) ;; *) OPEN_ISSUES="" ;; esac
-          case "$OPEN_PRS" in ''|*[!0-9]*) OPEN_PRS="" ;; esac
-          case "$OPEN_ISSUES" in ''|*[!0-9]*) OPEN_ISSUES="" ;; esac
-          if [ -z "$OPEN_PRS" ]; then
-            COUNTS_SOURCE=search
-            OPEN_PRS=$(gh api "search/issues?q=repo:$REPO+is:pr+is:open&per_page=1" --jq .total_count 2>/dev/null || true)
-            OPEN_ISSUES=$(gh api "search/issues?q=repo:$REPO+is:issue+is:open&per_page=1" --jq .total_count 2>/dev/null || true)
-          fi
-          [ -n "$OPEN_PRS" ] || COUNTS_SOURCE=""
-          RUNS_QUEUED=$(gh api "repos/$REPO/actions/runs?per_page=1&status=queued" --jq .total_count 2>/dev/null || true)
-          RUNS_RUNNING=$(gh api "repos/$REPO/actions/runs?per_page=1&status=in_progress" --jq .total_count 2>/dev/null || true)
-          python3 -m host.github_state --write --repository "$REPO" \
-            ${COUNTS_SOURCE:+--counts-source "$COUNTS_SOURCE"} \
-            ${OPEN_PRS:+--open-prs "$OPEN_PRS"} \
-            ${OPEN_ISSUES:+--open-issues "$OPEN_ISSUES"} \
-            ${RUNS_QUEUED:+--runs-queued "$RUNS_QUEUED"} \
-            ${RUNS_RUNNING:+--runs-in-progress "$RUNS_RUNNING"} \
-            --closed /tmp/closed_pulls.jsonl \
-            $([ -f /tmp/open_pulls.jsonl ] && echo --pulls /tmp/open_pulls.jsonl $PULLS_COMPLETE) || true
-          # The module replaces feed/github.json atomically, so a failure above
-          # leaves the previous bytes. Still, never stage a bake that does not
-          # parse: put back the committed copy rather than publish it.
-          python3 -c "import json,sys; json.load(open('feed/github.json', encoding='utf-8'))" \
-            2>/dev/null || git checkout -- feed/github.json 2>/dev/null || true
           git add recent.json ground/MANUAL.md projection_state.json projection/converged
-          git add feed seats.json seats || true
           if git diff --cached --quiet; then
             exit 0
           fi
@@ -230,38 +139,6 @@ jobs:
           done
           echo "owner-pin push lost the race; both files are derived, next run rebuilds them"
           exit 0
-      - name: reconcile canonical tasks from existing bakes
-        if: success()
-        continue-on-error: true
-        timeout-minutes: 3
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          COMMONS_SWARM_URL: ""
-        run: |
-          # Reuse this ingest's feed, seats and GitHub snapshot. The existing
-          # claims writer bounds ref-contention retries; do not add a poll loop.
-          # Capture times belong to successful provider reads, not to a bake's
-          # unchanged_since or file mtime. /tmp survives a no-change bake exit.
-          python3 - "$RUNNER_TEMP/swarm-read-facts.json" <<'PY'
-          import json, os, pathlib, sys
-          from host.swarm_runtime.sources import github_listing_files
-          facts = github_listing_files(os.environ["GITHUB_REPOSITORY"], "/tmp")
-          pathlib.Path(sys.argv[1]).write_text(json.dumps(facts, sort_keys=True), encoding="utf-8")
-          PY
-          status=0
-          python3 host/swarmctl.py --output "$RUNNER_TEMP/swarm-sync.json" sync --cached --max-calls 0 \
-            --facts "$RUNNER_TEMP/swarm-read-facts.json" || status=$?
-          python3 - "$RUNNER_TEMP/swarm-sync.json" "$status" <<'PY'
-          import json, pathlib, sys
-          try:
-              result = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
-          except (OSError, ValueError):
-              result = {}
-          if int(sys.argv[2]) or result.get("ok") is not True or result.get("published") is not True:
-              print(json.dumps({key: result[key] for key in ("error", "retry_after", "tip") if key in result}))
-              print("::warning::Canonical task sync deferred. Board intake remains durable; the next existing ingest run retries.")
-              raise SystemExit(1)
-          PY
       - name: request one repair run when the source landed but the bake deferred
         id: projection_retry
         if: success() && github.event_name == 'issues' && steps.publish.outputs.projection_pending == '1'
@@ -284,7 +161,7 @@ jobs:
               core.setOutput("state", "SCHEDULE_FALLBACK");
             }
       - name: exact success or rejection receipt on issue
-        if: success() && github.event_name == 'issues' && github.event.action == 'opened'
+        if: success() && github.event_name == 'issues'
         uses: actions/github-script@v7
         with:
           script: |
@@ -357,7 +234,7 @@ jobs:
               body: [headline, ...lines, "Duplicate id stays the original."].join("\n")
             });
       - name: durable failure receipt on issue
-        if: failure() && github.event_name == 'issues' && github.event.action == 'opened'
+        if: failure() && github.event_name == 'issues'
         uses: actions/github-script@v7
         with:
           script: |
@@ -435,122 +312,10 @@ jobs:
 
   device:
     needs: ingest
-    # A Slack-batch ingest owns only public record publication.  Letting its
-    # unrelated device tail wait on a second runner keeps the workflow-level
-    # concurrency group occupied and starves the next complete Slack sweep.
-    # Ordinary issue, schedule, and dispatch runs retain device follow-through.
-    if: "${{ always() && needs.ingest.outputs.ingest_complete == 'true' && needs.ingest.outputs.has_pending_device == 'true' && !(github.event_name == 'issues' && contains(github.event.issue.body, 'carrier: slack-connector')) }}"
+    if: always() && needs.ingest.outputs.ingest_complete == 'true' && needs.ingest.outputs.has_pending_device == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: retain physical-device actions without automatic laptop dispatch
         run: >-
           echo "Pending DEVICE actions remain durable and unexecuted; ordinary board ingest
           does not allocate the owner's self-hosted laptop runner."
-
-  shipping-monitor:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push')
-    permissions:
-      contents: read
-    concurrency:
-      group: commons-shipping-monitor
-      cancel-in-progress: false
-    runs-on: ubuntu-latest
-    timeout-minutes: 4
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          filter: blob:none
-          sparse-checkout: |
-            host/paid_shipping
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Scan and persist private state
-        working-directory: host/paid_shipping
-        env:
-          COMMONS_GITHUB_TOKEN: ${{ secrets.COMMONS_GITHUB_TOKEN }}
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
-          NODE_OPTIONS: --experimental-sqlite
-        run: node runner.mjs
-
-  github-history:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-    permissions:
-      contents: read
-    concurrency:
-      group: commons-github-history
-      cancel-in-progress: false
-    runs-on: ubuntu-latest
-    timeout-minutes: 4
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          filter: blob:none
-          sparse-checkout: |
-            host/history
-      - name: Continue private GitHub history intake
-        working-directory: host/history
-        env:
-          COMMONS_GITHUB_TOKEN: ${{ secrets.COMMONS_GITHUB_TOKEN }}
-          GH_TOKEN_PRIMARY: ${{ secrets.COMMONS_GITHUB_TOKEN }}
-          GH_TOKEN_SECONDARY: ${{ secrets.GH_TOKEN_SECONDARY }}
-        run: python3 github_cloud.py
-
-  jev-full-history:
-    if: github.event_name == 'workflow_dispatch' && inputs.jev_full_history
-    permissions:
-      contents: read
-    concurrency:
-      group: commons-jev-full-history
-      cancel-in-progress: false
-    runs-on: ubuntu-latest
-    timeout-minutes: 360
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          filter: blob:none
-          sparse-checkout: |
-            host/history
-      - uses: actions/checkout@v4
-        with:
-          repository: woahwhattheheck/commons-ship-enforcer
-          token: ${{ secrets.COMMONS_GITHUB_TOKEN }}
-          persist-credentials: false
-          filter: blob:none
-          sparse-checkout: |
-            history-review/2026-09-20/private-bundles
-          path: private-history
-      - name: Review complete archived bodies and retain private receipts
-        env:
-          COMMONS_GITHUB_TOKEN: ${{ secrets.COMMONS_GITHUB_TOKEN }}
-          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
-          PRIVATE_HISTORY_CHECKOUT: ${{ github.workspace }}/private-history
-        run: python3 host/history/jev_hosted.py
-
-  jhipster-174-validation:
-    if: github.event_name == 'workflow_dispatch' && inputs.jhipster_174_validation
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: woahwhattheheck/jhipster-control-center
-          ref: cc81c944e6bd412f64f490134c5cfb9d1b2c8ef9
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Verify exact sponsor PR head
-        run: test "$(git rev-parse HEAD)" = cc81c944e6bd412f64f490134c5cfb9d1b2c8ef9
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '11'
-      - name: Run issue 174 regressions
-        run: mvn -ntp -P-webapp test -Dtest=OidcMetadataMtlsAliasesTest,ClientRegistrationsMtlsAliasesTest -DfailIfNoTests=true --batch-mode
-      - name: Run full backend verification
-        run: mvn -ntp -P-webapp verify --batch-mode
