@@ -27,6 +27,9 @@ ROUTES = {
     "contents.get": {"owner", "repo", "path", "ref"},
     "pull.get": {"owner", "repo", "number"},
     "pull.files": {"owner", "repo", "number", "page", "per_page"},
+    "pull.reviews": {"owner", "repo", "number", "page", "per_page"},
+    "pull.comments": {"owner", "repo", "number", "page", "per_page"},
+    "pull.commits": {"owner", "repo", "number", "page", "per_page"},
     "pulls.list": {"owner", "repo", "head", "base", "state", "page", "per_page"},
     "commit.get": {"owner", "repo", "ref"},
     "issues.list": {"owner", "repo", "state", "labels", "sort", "direction", "page", "per_page"},
@@ -165,7 +168,7 @@ def normalize(route: str, params: dict) -> dict:
         if out["sort"] not in allowed:
             raise ValueError("invalid sort")
 
-    if route in {"pull.files", "pulls.list", "issues.list", "actions.runs", "search.issues", "search.code"}:
+    if route in {"pull.files", "pull.reviews", "pull.comments", "pull.commits", "pulls.list", "issues.list", "actions.runs", "search.issues", "search.code"}:
         out.setdefault("per_page", 30)
         out.setdefault("page", 1)
     if route == "issues.list":

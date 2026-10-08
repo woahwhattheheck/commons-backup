@@ -52,6 +52,30 @@ class URLTests(unittest.TestCase):
             with self.subTest(bad=bad), self.assertRaises(ValueError):
                 build_url("pulls.list", {"owner": "o", "repo": "r", **bad})
 
+    def test_pr_review_and_commit_routes_are_bounded_gets(self):
+        # Each route is a fixed GET URL with the existing core read quota.
+        for route, suffix in (
+            ("pull.reviews", "reviews"),
+            ("pull.comments", "comments"),
+            ("pull.commits", "commits"),
+        ):
+            with self.subTest(route=route):
+                self.assertEqual(
+                    API_ROOT + f"/repos/o/r/pulls/42/{suffix}?page=1&per_page=30",
+                    build_url(route, {"owner": "O", "repo": "R", "number": 42}),
+                )
+                self.assertEqual(
+                    API_ROOT + f"/repos/o/r/pulls/42/{suffix}?page=2&per_page=25",
+                    build_url(route, {"owner": "o", "repo": "r", "number": 42, "page": 2, "per_page": 25}),
+                )
+                for bad in (
+                    {"number": True}, {"number": 0}, {"page": 0},
+                    {"page": "2"}, {"per_page": 101},
+                    {"url": "https://elsewhere.invalid"}, {"method": "POST"},
+                ):
+                    with self.subTest(route=route, bad=bad), self.assertRaises(ValueError):
+                        build_url(route, {"owner": "o", "repo": "r", "number": 42, **bad})
+
     def test_traversal_and_header_injection_rejected(self):
         for route, params in [
             ("contents.get", {"owner": "o", "repo": "r", "path": "../x"}),

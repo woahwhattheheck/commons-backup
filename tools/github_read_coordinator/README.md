@@ -96,6 +96,9 @@ For an in-flight duplicate, `BUSY` advises a one-second local cache recheck. The
 - `contents.get`
 - `pull.get`
 - `pull.files`
+- `pull.reviews` (GET `/repos/{owner}/{repo}/pulls/{number}/reviews`)
+- `pull.comments` (GET `/repos/{owner}/{repo}/pulls/{number}/comments`; inline review comments, **not** issue discussion comments)
+- `pull.commits` (GET `/repos/{owner}/{repo}/pulls/{number}/commits`)
 - `pulls.list` (GET `/repos/{owner}/{repo}/pulls`; optional `head`, `base`, `state=open|closed|all`, `page=1`, `per_page=30`)
 - `commit.get`
 - `issues.list`
@@ -104,6 +107,8 @@ For an in-flight duplicate, `BUSY` advises a one-second local cache recheck. The
 - `search.code`
 
 Parameters are strictly normalized. Repository paths cannot traverse; dynamic URL segments are percent-encoded; query values are generated with `urlencode`; token and arbitrary-URL overrides are impossible by schema.
+
+`pull.reviews`, `pull.comments`, and `pull.commits` use the same `core` bucket, conditional cache, request-key singleflight, secondary/primary cooldowns and bounded `page`/`per_page` defaults as `pull.files` (`1`/`30`, maximum `100` per page). Their PR number must be a positive integer; the provider dispatches a fixed-origin `GET` URL only. `pull.comments` yields review-line comments, not general issue comments. This adds no new GitHub write or external URL authority.
 
 `pulls.list` uses the existing `core` read quota and singleflight/cache/ETag/cooldown policy. Its `head` filter permits a qualified contributor branch such as `woahwhattheheck:sol56/branch`; branch filters reject control characters and malformed path components. The new route is GET-only and neither publishes nor modifies a pull request.
 

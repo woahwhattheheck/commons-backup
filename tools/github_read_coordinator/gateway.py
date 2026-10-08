@@ -52,8 +52,15 @@ def build_url(route: str, params: dict) -> str:
             query["ref"] = params["ref"]
     elif route == "pull.get":
         path = base + f"/pulls/{params['number']}"
-    elif route == "pull.files":
-        path = base + f"/pulls/{params['number']}/files"
+    elif route in {"pull.files", "pull.reviews", "pull.comments", "pull.commits"}:
+        # Fixed GET-only suffixes: no caller-defined endpoint or method.
+        suffix = {
+            "pull.files": "files",
+            "pull.reviews": "reviews",
+            "pull.comments": "comments",
+            "pull.commits": "commits",
+        }[route]
+        path = base + f"/pulls/{params['number']}/{suffix}"
         query = {k: params[k] for k in ("page", "per_page")}
     elif route == "pulls.list":
         path = base + "/pulls"
