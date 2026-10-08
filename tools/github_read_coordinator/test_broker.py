@@ -54,6 +54,26 @@ class BrokerTests(unittest.TestCase):
         self.clock.advance(0.5)
         self.assertEqual("FETCHED", self.broker.read("pull.get", {**PARAMS, "number": 1}, self.good)["state"])
 
+    def test_different_principals_have_independent_flight_and_cache_capacity(self):
+        # Two independent GitHub credentials deliberately share the DB, but
+        # each configures a one-entry in-flight/cache budget.
+        first = Broker(self.path, PRINCIPAL, clock=self.clock, max_entries=1,
+                       burst_interval=0.001)
+        second = Broker(self.path, "b" * 64, clock=self.clock, max_entries=1,
+                        burst_interval=0.001)
+        first_lease = first.acquire("repo.get", PARAMS)
+        self.assertIsInstance(first_lease, Lease)
+        # The first active request must not consume the second token's slot.
+        second_lease = second.acquire("repo.get", PARAMS)
+        self.assertIsInstance(second_lease, Lease)
+        self.assertEqual("FETCHED", first.finish(first_lease, Upstream(200, {"token": "a"}))["state"])
+        self.assertEqual("FETCHED", second.finish(second_lease, Upstream(200, {"token": "b"}))["state"])
+        # Filling the second namespace must not evict the first's cache.
+        def unexpected_provider(*_):
+            self.fail("cache eviction leaked across independent token namespaces")
+        self.assertEqual("CACHED", first.read("repo.get", PARAMS, unexpected_provider)["state"])
+        self.assertEqual("CACHED", second.read("repo.get", PARAMS, unexpected_provider)["state"])
+
     def test_secondary_403_blocks_all_buckets_and_persists(self):
         result = self.broker.read("repo.get", PARAMS, lambda *_: Upstream(403, retry_after="120", secondary_limited=True))
         self.assertEqual(("COOLDOWN", 120), (result["state"], result["retry_after_seconds"]))

@@ -356,7 +356,7 @@ class Broker:
             cooldown = self._cooldown(db, bucket, now)
             if cooldown is not None:
                 return self.envelope("COOLDOWN", retry_after_seconds=cooldown)
-            if db.execute("SELECT count(*) FROM flight").fetchone()[0] >= self.max_entries:
+            if db.execute("SELECT count(*) FROM flight WHERE namespace=?", (self.namespace,)).fetchone()[0] >= self.max_entries:
                 return self.envelope("BUSY", retry_after_seconds=1)
             nonce = secrets.token_hex(24)
             expires = now + self.lease_seconds
@@ -503,9 +503,12 @@ class Broker:
                            (self.namespace, lease.key, now, etag, digest))
             else:
                 db.execute("DELETE FROM validators WHERE namespace=? AND key=?", (self.namespace, lease.key))
+            # Each credential namespace owns its cache budget. A busy token
+            # must not evict another token's successful reads from a shared DB.
             db.execute(
-                "DELETE FROM cache WHERE rowid IN (SELECT rowid FROM cache ORDER BY fetched DESC,namespace,key LIMIT -1 OFFSET ?)",
-                (self.max_entries,),
+                "DELETE FROM cache WHERE rowid IN (SELECT rowid FROM cache "
+                "WHERE namespace=? ORDER BY fetched DESC,key LIMIT -1 OFFSET ?)",
+                (self.namespace, self.max_entries),
             )
             self._prune_validators(db)
             # Persist the completed response before decoding its return value,
