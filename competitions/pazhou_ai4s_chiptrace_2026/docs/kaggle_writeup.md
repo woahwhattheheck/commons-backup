@@ -46,6 +46,12 @@ The report receipt is:
 
 That receipt verifies the complete canonical report, which includes SHA-256 hashes of the exact baseline and candidate inputs.
 
+## Frozen benchmark evidence
+
+The merged benchmark layer evaluates five frozen synthetic QC scenarios and repeats each scenario three times (15 internal scenario executions, not 15 independent experiments). On the accepted CPython 3.13.5 exact-byte run, 14/14 focused tests passed; QC and triage precision/recall/F1 were 1.0/1.0/1.0; false-flag rate was 0; sparse-case abstention accuracy and citation validity were 1.0; and decision churn was 0. The retained run measured 3.196900 ms median and 4.178909 ms P95/max, with deterministic receipt `bfbfbe949b15fa02e45dd5a6694d84709a3924d1e1cd5f9c6cc46e2c39cdb862`.
+
+These are reproducible synthetic software-QC measurements, not independent biological experiments, wet-lab validation, an organizer score, or a prize claim.
+
 ## Technical novelty
 
 ChipTrace's novelty is not a single exotic detector. It is the **evidence contract around multimodal experiment intelligence**:
@@ -192,7 +198,7 @@ The current deterministic output returns overall `REVIEW`, max quality-risk scor
 
 The test suite covers deterministic fixture generation, repeat analysis equality, receipt tamper detection, HTML scope disclosure, strict unknown-column rejection, duplicate-key rejection, unit mismatch rejection, insufficient-evidence behavior, non-finite-value rejection, cadence-gap observability, and JSON round-trip receipt verification.
 
-A path-scoped CI workflow repeats compile, all tests, demo generation, receipt verification, and byte-for-byte comparison between two independently regenerated demo artifact sets on Python 3.11, 3.12, and 3.13.
+The historical multi-Python path-scoped workflow is not present on current main. Current execution evidence is the focused merged-byte CPython 3.13.5 benchmark and test receipt above; no broader hosted matrix is claimed.
 
 ### 9. Scientific value and next experimental steps
 

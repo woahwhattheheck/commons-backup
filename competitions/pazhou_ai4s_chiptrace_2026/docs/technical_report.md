@@ -111,13 +111,19 @@ The test suite covers deterministic fixture generation, repeat analysis equality
 
 A path-scoped CI workflow repeats compile, all tests, demo generation, receipt verification, and byte-for-byte comparison between two independently regenerated demo artifact sets on Python 3.11, 3.12, and 3.13.
 
-## 9. Scientific value and next experimental steps
+## 9. Frozen synthetic benchmark evidence
+
+The merged benchmark layer evaluates five deterministic synthetic QC scenarios—clean, level shift, cadence gap, replicate divergence, and sparse evidence—and wraps ChipTrace outputs in evidence-bound triage decisions with JSON-pointer citations. The accepted exact-byte execution used three repeats per scenario (15 internal scenario executions, not 15 independent experiments) on CPython 3.13.5. It passed 14/14 focused tests; QC and triage precision/recall/F1 were 1.0/1.0/1.0; false-flag rate was 0; sparse-case abstention accuracy and citation validity were 1.0; and decision churn was 0. The retained run measured 3.196900 ms median and 4.178909 ms P95/max, with deterministic receipt `bfbfbe949b15fa02e45dd5a6694d84709a3924d1e1cd5f9c6cc46e2c39cdb862`.
+
+This is a bounded synthetic software-QC benchmark floor. It is not biological validation, a wet-lab result, an organizer score, or evidence of competition acceptance.
+
+## 10. Scientific value and next experimental steps
 
 ChipTrace's practical role is upstream of biological interpretation. A lab could use it as a reproducible gate before more specialized models: first establish that an experiment is sufficiently comparable and internally coherent, then pass the run to phenotype, toxicity, dose-response, or mechanistic models appropriate to the assay.
 
 The most valuable next work would use legitimately licensed OoC data to calibrate thresholds and compare ChipTrace against known device/sampling failure annotations. A second extension would replace the fixed weighted score with a training-only calibration learned from labelled QC outcomes while retaining the same interpretable component evidence. A third would add image/video feature extractors behind the same contract, keeping raw images outside the core evidence engine.
 
-## 10. Limitations
+## 11. Limitations
 
 - Fixed thresholds are prototype policy and are not universal lab standards.
 - Pearson structural checks measure association, not causality.
@@ -126,7 +132,7 @@ The most valuable next work would use legitimately licensed OoC data to calibrat
 - The tool does not model assay-specific mechanisms.
 - The tool must not be used for clinical diagnosis, treatment, or patient-specific decisions.
 
-## 11. Reproduction
+## 12. Reproduction
 
 ```bash
 python competitions/pazhou_ai4s_chiptrace_2026/chiptrace.py demo --directory /tmp/chiptrace-demo

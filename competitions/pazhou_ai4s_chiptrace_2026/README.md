@@ -107,6 +107,8 @@ The competition-scoped GitHub Actions workflow runs the same compile, hostile te
 
 The benchmark reports precision, recall, F1, false-flag rate, sparse-case abstention accuracy, citation validity, repeat decision churn, and median/P95 execution latency. Its deterministic receipt excludes wall-clock timing so runner load does not change the evidence hash.
 
+Accepted execution evidence on the merged exact bytes used CPython 3.13.5 and five frozen scenarios repeated three times (15 internal scenario executions, not 15 independent experiments): 14/14 focused tests passed; QC and triage precision/recall/F1 were 1.0/1.0/1.0; false-flag rate was 0; sparse abstention accuracy and citation validity were 1.0; decision churn was 0. The retained run measured 3.196900 ms median and 4.178909 ms P95/max, with deterministic receipt `bfbfbe949b15fa02e45dd5a6694d84709a3924d1e1cd5f9c6cc46e2c39cdb862`. These timings are runner-specific software measurements, not wet-lab, biological, or organizer scoring evidence.
+
 This is a synthetic research-software QC benchmark floor, not biological or competition validation.
 
 ## Competition status and authority boundary
