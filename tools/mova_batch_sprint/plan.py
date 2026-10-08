@@ -117,6 +117,25 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
                 or parsed_funding.username is not None or parsed_funding.password is not None
                 or parsed_funding.fragment):
             raise ValueError("funding_url must have an HTTPS hostname and no credentials or fragment")
+    # Optional proposed edit scope for the already-merged Slack TAKE preflight.
+    # This is an advisory for a known sponsor PR, not an exclusive lane.
+    take_paths = record.get("take_paths", [])
+    if (not isinstance(take_paths, list) or len(take_paths) > 32
+            or any(not isinstance(p, str) or not p.strip()
+                   or p.startswith(("/", chr(92)))
+                   or any(c in p for c in (chr(10), chr(13)))
+                   for p in take_paths)):
+        raise ValueError("take_paths must be a bounded list of relative source paths")
+    take_head = record.get("take_head", "")
+    if not isinstance(take_head, str) or (take_head and not re.fullmatch(r"[a-fA-F0-9]{8,40}", take_head)):
+        raise ValueError("take_head must be an 8-40 digit source SHA or empty")
+    take_kind = record.get("take_kind", "source")
+    if take_kind not in ("source", "metadata"):
+        raise ValueError("take_kind must be source or metadata")
+    take_operation_id = record.get("take_operation_id", "")
+    if (not isinstance(take_operation_id, str) or len(take_operation_id) > 128
+            or any(c in take_operation_id for c in (chr(10), chr(13)))):
+        raise ValueError("invalid take_operation_id")
     occupied = record.get("active_owner")
     if occupied is not None and (not isinstance(occupied, str) or not occupied.strip()):
         raise ValueError("active_owner must be nonempty text or null")
@@ -132,6 +151,8 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         "source_pr_url": source_pr,
         "source_pr_author": source_author.lower() if source_author else None,
         "active_owner": occupied, "fresh": fresh,
+        "take_paths": take_paths, "take_head": take_head,
+        "take_kind": take_kind, "take_operation_id": take_operation_id,
         "checked_at": verified.isoformat(),
         "note": str(record.get("note") or "")[:300],
     }
@@ -299,6 +320,36 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
             "actions": counts, "work_orders": items}
 
 
+def annotate_take_advisories(batch: dict, snapshot_rows: list[dict], *,
+                            as_of_ts: float | None = None) -> dict:
+    """Attach pre-existing Slack TAKE preflight to exact sponsor PRs, offline.
+
+    Reuse the canonical swarm_take_collisions implementation. The batch's
+    payout/engineering actions remain unchanged; a preflight is never an owner
+    lease, a reward check, or authorization to write. Unknown/stale feeds emit
+    REFRESH_FEED rather than claiming a PR is uncontested.
+    """
+    tool_dir = str(Path(__file__).resolve().parents[1] / "swarm_take_collisions")
+    if tool_dir not in sys.path:
+        sys.path.insert(0, tool_dir)
+    from preflight import assess_take  # already merged in Commons PR #32416
+
+    for item in batch["work_orders"]:
+        if not item["pr_url"]:
+            continue  # no verified sponsor PR; never substitute a fork/issue URL
+        report = assess_take(
+            snapshot_rows,
+            pr=item["pr_url"],
+            paths=item["take_paths"],
+            kind=item["take_kind"],
+            head=item["take_head"],
+            operation_id=item["take_operation_id"] or item["operation_id"],
+            as_of_ts=as_of_ts,
+        )
+        item["take_advisory"] = report
+    return batch
+
+
 def render_slack(batch: dict) -> str:
     lines = ["MOVA REPEATABLE BOUNTY SPRINT | %s" % batch["as_of"],
              "Advertised inventory $%.2f across %d entries; NOT awarded/paid. Source/build slots: %d." %
@@ -320,6 +371,26 @@ def render_slack(batch: dict) -> str:
         # Prevent malformed funding_url text from spoofing dispatch lines.
         safe_refs = [ref.replace("\r", "\\r").replace("\n", "\\n") for ref in refs]
         lines.append("  source_refs | " + " | ".join(safe_refs))
+        if "take_advisory" in item:
+            advisory = item["take_advisory"]
+            # The Slack feed is untrusted text; never allow an active peer's
+            # operation/path to introduce another synthetic work-order line.
+            def printable(value: object) -> str:
+                return str(value).replace(chr(13), " ").replace(chr(10), " ")[:300]
+
+            lines.append("  take_preflight | status=%s | sponsor_pr=%s | active=%d | proposed_head=%s | proposed_scope=%s" % (
+                advisory["status"], printable(item["pr_url"]),
+                len(advisory["peers"]), printable(item["take_head"] or "UNKNOWN"),
+                printable(",".join(item["take_paths"]) or "UNKNOWN")))
+            for peer in advisory["peers"][:4]:
+                lines.append("    active_take=%s | relation=%s | head=%s | scope=%s | same_head=%s" % (
+                    printable(peer["operation"]), peer["relation"],
+                    printable(peer["head"] or "UNKNOWN"),
+                    printable(",".join(peer["paths"]) or "UNKNOWN"),
+                    peer["same_head"]))
+            if len(advisory["peers"]) > 4:
+                lines.append("    additional_active_takes=%d (see JSON output)" % (len(advisory["peers"]) - 4))
+            lines.append("    guidance=%s" % printable(advisory["guidance"]))
     lines.append("No provider action was executed. Fresh GitHub/marketplace proof and ownership re-fence required before publication or claim.")
     return "\n".join(lines)
 
@@ -333,12 +404,20 @@ def main(argv: list[str] | None = None) -> int:
     cli.add_argument("--per-repo-builds", type=int, default=2)
     cli.add_argument("--max-age-hours", type=int, default=6)
     cli.add_argument("--actor", default="woahwhattheheck")
+    cli.add_argument("--slack-snapshot", type=Path,
+                     help="Optional already-captured CURRENT Slack JSON/JSONL; offline TAKE advisory")
     args = cli.parse_args(argv)
     try:
         batch = plan(json.loads(args.manifest.read_text(encoding="utf-8")),
                      min_usd=args.min_usd, max_builds=args.max_builds,
                      per_repo_builds=args.per_repo_builds, max_age_hours=args.max_age_hours,
                      actor=args.actor)
+        if args.slack_snapshot is not None:
+            tool_dir = str(Path(__file__).resolve().parents[1] / "swarm_take_collisions")
+            if tool_dir not in sys.path:
+                sys.path.insert(0, tool_dir)
+            from preflight import load_entries
+            annotate_take_advisories(batch, load_entries(args.slack_snapshot))
     except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
         print("INPUT_HOLD: %s" % error, file=sys.stderr)
         return 2

@@ -15,6 +15,50 @@ An October 7 example is distributed separately in the full sprint-planner artifa
 
 Each `--format slack` work-order line is followed by a `source_refs` evidence line drawn **only from the normalized, preverified manifest**: canonical `issue_url`, `checked_at` timestamp, and `active_owner` (or `UNASSIGNED`); when supplied it also shows `funding_url`, sponsor `pr_url`/`pr_author`, and source-carrier `source_pr_url`/`source_pr_author`. This preserves the original provider and PR link for the receiving engineer and avoids repeating sponsor searches. These fields are input evidence, **not** live lookups, accepted claims, earned amounts, verified payouts, or authorization to submit. Re-fence source ownership and freshness before any write.
 
+## Optional paid-PR collision preflight (reuses existing Slack evidence)
+
+Before a worker edits an **existing sponsor PR**, the planner can attach a
+read-only TAKE advisory using an already-captured current Slack JSON/JSONL export:
+
+```bash
+python tools/mova_batch_sprint/plan.py /path/to/current-verified-manifest.json \
+  --slack-snapshot /path/to/recent-slack-messages.json --format slack
+```
+
+The optional `--slack-snapshot` argument is **offline** and delegates to the
+canonical `tools/swarm_take_collisions/preflight.py`, already merged in Commons
+PR #32416. No live Slack/GitHub read, new registration, claim, lease, polling,
+or additional provider request is performed. With no snapshot argument, existing
+MOVA outputs and decision priorities are unchanged.
+
+For an entry with a verified sponsor `pr_url`, manifest authors may provide
+`take_paths` (array of prospective relative source paths, up to 32),
+`take_head` (8–40 hexadecimal characters of the source SHA), `take_kind`
+(`source` or `metadata`) and `take_operation_id` (if their already-advertised
+operation ID differs from MOVA's generated ID). All are optional; a missing
+path/head remains unknown, **not** proof of disjoint work.
+
+When enabled, each sponsor-PR work order contains a `take_preflight` line
+followed by detected current active TAKE operations, their source head,
+overlapping paths and relation. Its statuses are:
+
+- `COORDINATE_SOURCE`: same PR, overlapping/unknown source scope or competing
+  metadata; reconcile current source and the other operation's latest release.
+- `PARALLEL_SCOPE_ADVISORY`: known disjoint paths or separated metadata;
+  proceed with shared-head coordination, **not** an exclusive ownership gate.
+- `NO_ACTIVE_OVERLAP_OBSERVED`: no peer in *this* fresh snapshot, not
+  permission to publish or proof the lane is free.
+- `REFRESH_FEED`: missing/stale/future-skewed snapshot; refresh normal
+  coordination evidence before assuming no collision.
+
+The JSON output retains the full advisory and all peer operations; Slack format
+displays up to four peers inline, identifying additional peers if present. A
+candidate with only a fork `source_pr_url` or an issue URL is **not** mapped to
+a sponsor PR and receives no fabricated sponsor-PR advisory. Source selection,
+original author, conditional payout, and existing MOVA claim actions are
+unchanged. Don't treat a Slack snapshot as a replacement for a fresh GitHub head
+check. The focused offline checks are in `test_take_advisory.py`.
+
 ## Verified manifest contract
 
 Top level: timezone-aware `as_of`, array `records`. Each record must include:
