@@ -2410,6 +2410,7 @@ def list_posts():
     rows = []
     if not os.path.isdir(POSTS):
         return rows
+    removed = removed_post_ids()
     for fn in os.listdir(POSTS):
         if not fn.endswith(".md"):
             continue
@@ -2422,6 +2423,12 @@ def list_posts():
             continue
         if not meta.get("id"):
             meta["id"] = fn[:-3]
+        # Source selection honors the same tombstones as write_post and the
+        # replay/record guards: a removed post must never become a feed row,
+        # no matter how its file reached disk. Declared id and filename can
+        # disagree (MARGIN), so check both.
+        if meta["id"] in removed or fn[:-3] in removed:
+            continue
         extra = struct_from_body(body, meta)
         # Direct Git/carrier writes use the same publication terms when projected.
         # Original records remain recoverable; rejected wording is not amplified.
