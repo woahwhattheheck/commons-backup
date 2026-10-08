@@ -1964,6 +1964,21 @@ def _stage_board(env, extra_paths=None, add_all=False):
 REPLAY_SOURCE_DIRS = ("p", "conflicts", "builds/records", "land", "artifacts")
 
 
+
+def _removed_post_paths():
+    """Canonical p/{id}.md and p/{id}.html paths withdrawn by the owner.
+
+    removed_posts.json names post ids; the record layout keeps each post at
+    p/{id}.*, the same mapping purge_removed_posts uses. These paths must stay
+    absent: neither replay restore nor record staging may resurrect them.
+    """
+    return {
+        "p/%s%s" % (mid, suffix)
+        for mid in removed_post_ids()
+        for suffix in (".md", ".html")
+    }
+
+
 def _unstage_record_deletes(env):
     """Bake must not delete the record.
 
@@ -1982,11 +1997,7 @@ def _unstage_record_deletes(env):
     names = [n.replace("\\", "/") for n in (staged.stdout or "").splitlines() if n.strip()]
     if not names:
         return []
-    tombstone_paths = {
-        "p/%s%s" % (mid, suffix)
-        for mid in removed_post_ids()
-        for suffix in (".md", ".html")
-    }
+    tombstone_paths = _removed_post_paths()
     deliberate = [name for name in names if name in tombstone_paths]
     names = [name for name in names if name not in tombstone_paths]
     if deliberate:
@@ -2028,7 +2039,13 @@ def _resolve_rebase(env, extra_paths=None):
     changed = _git(["diff", "--name-only", "-z", "origin/main", head, "--"]
                    + list(REPLAY_SOURCE_DIRS), env)
     restored = 0
+    tombstone_paths = _removed_post_paths()
     for name in filter(None, (changed.stdout or "").split("\0")):
+        # Owner tombstones are the one set of files origin deliberately does
+        # not have; missing on origin is the purge working, not a reason to
+        # resurrect the removed post from the losing head.
+        if name in tombstone_paths:
+            continue
         # new p/{id}.html rides with a new p/{id}.md — both are new paths, and a
         # receipt that names p/{id}.html must not point at a 404 until the
         # next bake. Permalinks whose companion md is already on origin are
@@ -2206,8 +2223,11 @@ def _record_paths(env):
         if name and ("?" in code or "A" in code):
             new_files.append(name)
     new_set = set(new_files)
+    tombstone_paths = _removed_post_paths()
     paths = []
     for name in new_files:
+        if name in tombstone_paths:
+            continue  # a removed post reappearing in the tree is not a record
         md_name = _companion_md_for_permalink(name)
         if md_name is not None and md_name not in new_set:
             continue
