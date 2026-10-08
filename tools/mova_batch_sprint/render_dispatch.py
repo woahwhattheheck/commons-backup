@@ -31,8 +31,13 @@ def link(value: object, label: str) -> str:
     """Render only a genuine HTTPS URL as clickable Slack evidence."""
     if not isinstance(value, str) or not value:
         return "unverified"
-    parsed = urlsplit(value)
-    if parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password:
+    try:
+        parsed = urlsplit(value)
+        _ = parsed.port
+    except ValueError:
+        return "unverified"
+    if (parsed.scheme != "https" or not parsed.netloc or parsed.username
+            or parsed.password or parsed.query or parsed.fragment):
         return "unverified"
     if any(c.isspace() for c in value):
         return "unverified"
@@ -84,6 +89,7 @@ def dispatch_messages(batch: dict, max_chars: int = 4200) -> list[str]:
               "Re-fence current sponsor and provider states before writes.")
     chunks: list[list[str]] = []
     current: list[str] = []
+    used = 0
     capacity = max_chars - len(header) - 28
     if capacity <= 0:
         raise ValueError("max_chars too small for dispatch header")
@@ -91,10 +97,14 @@ def dispatch_messages(batch: dict, max_chars: int = 4200) -> list[str]:
         message = describe(order)
         if len(message) + 2 > capacity:
             raise ValueError("one work order exceeds requested Slack message limit")
-        if current and sum(len(x) + 2 for x in current) + len(message) + 2 > capacity:
+        size = len(message) + (2 if current else 0)
+        if current and used + size > capacity:
             chunks.append(current)
             current = []
+            used = 0
+            size = len(message)
         current.append(message)
+        used += size
     if current:
         chunks.append(current)
     result = [header + f"\n*Part {i}/{len(chunks)}*\n\n" + "\n\n".join(items)
