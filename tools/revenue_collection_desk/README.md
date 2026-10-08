@@ -158,6 +158,41 @@ a non-empty `receiving_rail` and supporting `evidence_sha256`). This is an
 evidence-reduction convention; the audit cannot authenticate such evidence
 itself, and must not be used as the source of financial settlement truth.
 
+### Freshness, BountyHub authority and cross-repository submissions
+
+Use **current first-party evidence**, never a marketplace title or historical
+catalog, before asking the original claimant to register an already-submitted PR.
+Set top-level `evaluated_at` to the evaluation clock (offset-aware ISO-8601).
+Each `submissions[]` must include the retained first-party GitHub
+`github_submitted_at` and `github_checked_at`. The GitHub read must be no
+earlier than submission. Each `portal_snapshots[]` carries its own provider
+`observed_at`; its inventory must be marked `complete: true` only after
+inspecting all relevant provider pages. Both last-check timestamps must be
+within the default 7,200-second age limit of `evaluated_at`, not in the
+future; `max_evidence_age_seconds` is optional and bounded 60–604800.
+Missing clocks, stale/future snapshots, provider reads predating the PR,
+and closed-unmerged PRs produce `UNKNOWN` and **no registration action**.
+The evaluator is offline and deterministic, so it cannot authenticate the
+operator-supplied timestamps or refresh the data itself.
+
+IssueHunt URLs intrinsically identify `/r/owner/repo/issues/N`. BountyHub
+supports the canonical `https://api.bountyhub.dev/api/bounties/UUID` detail
+or an exact `bountyhub.dev/{en/}bounty/view/UUID/slug` listing.
+Because that URL alone does **not** identify the GitHub issue, BountyHub
+snapshots additionally require `source_issue_url` copied from the **same**
+first-party provider detail, equal to the current GitHub issue; without that
+binding the result stays `UNKNOWN`. Do not copy an unrelated GitHub issue
+link into a snapshot to force registration. A provider's paid or awarded
+flag still does not establish cash settlement.
+
+When the canonical PR repository differs from the funded issue repository,
+set `submission_repository: "actual-owner/pr-repo"` on the GitHub submission
+and retain the exact GitHub PR URL in the provider claim inventory. The
+operation identity still includes the funded issue repo, issue, claimant and
+PR URL. A verified registered PR with nullable award state is reported as
+`PORTAL_REGISTERED_AWARD_UNKNOWN`, not as an unregistered submission.
+Review the `reason` and `snapshot_observed_at` before taking any action.
+
 Exit `0`: no confirmed registration gaps; `1`: at least one actionable
 registration gap; `2`: invalid input or file I/O error. The JSON output has
 deterministic `rows`, deduplicated `actionable_registration_gaps` and
