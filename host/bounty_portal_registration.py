@@ -222,9 +222,10 @@ def reconcile(data, now, max_age):
         }
         results.append(result)
         if status == "GITHUB_SUBMITTED_PORTAL_NOT_REGISTERED":
-            action = "SUBMIT_CLAIM_AFTER_MERGE" if (
-                provider == "bountyhub" and candidate["github_state"] != "merged"
-            ) else "VERIFY_AND_REGISTER_EXACT_PR"
+            action = (
+                "SUBMIT_CLAIM_FOR_PUBLISHED_PR" if provider == "bountyhub"
+                else "VERIFY_AND_REGISTER_EXACT_PR"
+            )
             actions.append({
                 "operation_id": key, "action": action,
                 "provider": provider, "issue_url": candidate["issue_url"],
