@@ -307,6 +307,16 @@ def render_slack(batch: dict) -> str:
         amount = "UNPRICED" if item["reward_usd"] is None else "$%.2f" % item["reward_usd"]
         lines.append("%s | %s | %s | %s | %s | %s" %
                      (item["action"], item["issue_key"], amount, item["platform"], item["operation_id"], item["reason"]))
+        # Include existing, already-verified source references so a publisher
+        # can reconcile this order without blindly reopening sponsor searches.
+        owner = " ".join(item["active_owner"].split()) if item["active_owner"] else "UNASSIGNED"
+        refs = ["issue_url=%s" % item["issue_url"],
+                "checked_at=%s" % item["checked_at"],
+                "active_owner=%s" % owner]
+        for name in ("funding_url", "pr_url", "pr_author", "source_pr_url", "source_pr_author"):
+            if item.get(name):
+                refs.append("%s=%s" % (name, item[name]))
+        lines.append("  source_refs | " + " | ".join(refs))
     lines.append("No provider action was executed. Fresh GitHub/marketplace proof and ownership re-fence required before publication or claim.")
     return "\n".join(lines)
 

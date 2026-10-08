@@ -13,6 +13,8 @@ python tools/mova_batch_sprint/plan.py /path/to/current-verified-manifest.json -
 
 An October 7 example is distributed separately in the full sprint-planner artifact. It is **not committed to this GitHub branch**. That historical fixture deliberately fails with `INPUT_HOLD` after the configured 6-hour horizon. Supply an independently verified current manifest with fresh `as_of` and `checked_at` fields; never advance timestamps without fetching new provider and sponsor facts. `--format json` is suitable for ingesting as dispatch data. `--format slack` is copy-ready to an internal coordination thread, not an automated post.
 
+Each `--format slack` work-order line is followed by a `source_refs` evidence line drawn **only from the normalized, preverified manifest**: canonical `issue_url`, `checked_at` timestamp, and `active_owner` (or `UNASSIGNED`); when supplied it also shows `funding_url`, sponsor `pr_url`/`pr_author`, and source-carrier `source_pr_url`/`source_pr_author`. This preserves the original provider and PR link for the receiving engineer and avoids repeating sponsor searches. These fields are input evidence, **not** live lookups, accepted claims, earned amounts, verified payouts, or authorization to submit. Re-fence source ownership and freshness before any write.
+
 ## Verified manifest contract
 
 Top level: timezone-aware `as_of`, array `records`. Each record must include:

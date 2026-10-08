@@ -6,7 +6,7 @@ No GitHub, Slack or provider API calls.
 from datetime import datetime, timedelta, timezone
 import unittest
 
-from plan import plan
+from plan import plan, render_slack
 
 
 ISSUE = "https://github.com/example/rewarded-sdk/issues/42"
@@ -134,6 +134,30 @@ class OwnerCollisionRegression(unittest.TestCase):
         )
         verified = actions(ours)
         self.assertEqual(verified["work_orders"][0]["action"], "VERIFY_SETTLEMENT")
+
+
+    def test_slack_orders_carry_source_urls_and_owner_evidence(self):
+        existing = record("grantfox", source="published", owner="publisher-1")
+        existing.update(
+            pr_url="https://github.com/example/rewarded-sdk/pull/12",
+            pr_author="woahwhattheheck",
+            source_pr_url="https://github.com/woahwhattheheck/rewarded-sdk/pull/4",
+            source_pr_author="woahwhattheheck",
+        )
+        output = render_slack(actions(existing))
+        self.assertIn("source_refs | issue_url=" + ISSUE, output)
+        self.assertIn("checked_at=", output)
+        self.assertIn("active_owner=publisher-1", output)
+        self.assertIn("funding_url=https://grantfox.example.test/bounties/42", output)
+        self.assertIn("pr_url=https://github.com/example/rewarded-sdk/pull/12", output)
+        self.assertIn("pr_author=woahwhattheheck", output)
+        self.assertIn("source_pr_url=https://github.com/woahwhattheheck/rewarded-sdk/pull/4", output)
+        self.assertIn("source_pr_author=woahwhattheheck", output)
+
+        unclaimed = render_slack(actions(record("algora")))
+        self.assertIn("active_owner=UNASSIGNED", unclaimed)
+        self.assertNotIn("source_pr_url=", unclaimed)
+        self.assertNotIn("pr_author=", unclaimed)
 
 
 if __name__ == "__main__":
