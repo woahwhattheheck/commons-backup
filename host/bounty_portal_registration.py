@@ -22,6 +22,7 @@ SCHEMA = "commons-bounty-portal-audit/v1"
 PR_PATH = re.compile(r"^/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/pull/([1-9][0-9]*)$")
 ISSUE_PATH = re.compile(r"^/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/issues/([1-9][0-9]*)$")
 SHA = re.compile(r"^[0-9a-f]{40}$")
+BOUNTY_UUID = re.compile(r"^[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$")
 PROVIDERS = {"issuehunt": "oss.issuehunt.io", "bountyhub": "api.bountyhub.dev"}
 
 
@@ -70,8 +71,12 @@ def _official(source, provider):
             not parsed.fragment and not parsed.query)
 
 
-def _key(provider, repo, issue, claimant, pr_repo, pr_number):
+def _key(provider, repo, issue, claimant, pr_repo, pr_number, listing_id=None):
     raw = f"{provider}|{repo}|{issue}|{claimant}|{pr_repo}|{pr_number}"
+    # Keep legacy IssueHunt IDs stable, but never reuse a BountyHub action
+    # identifier when an issue is re-listed as a different bounty.
+    if listing_id:
+        raw += f"|{listing_id}"
     return "portal-reg-" + hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
 
 
@@ -81,6 +86,14 @@ def _candidate(row):
     provider = _provider(row.get("provider"))
     repo, issue = _github(row.get("issue_url"), ISSUE_PATH, "issue_url")
     pr_repo, pr_number = _github(row.get("pr_url"), PR_PATH, "pr_url")
+    listing_id = row.get("bounty_listing_id")
+    if provider == "bountyhub":
+        if listing_id is not None:
+            if not isinstance(listing_id, str) or not BOUNTY_UUID.fullmatch(listing_id):
+                raise AuditError("bounty_listing_id must be a canonical BountyHub UUID")
+            listing_id = listing_id.lower()
+    elif listing_id is not None:
+        raise AuditError("bounty_listing_id is only valid for BountyHub")
     submission_repo = row.get("submission_repo", repo)
     if not isinstance(submission_repo, str) or submission_repo.lower() != pr_repo:
         raise AuditError("cross-repository PR requires an exact canonical submission_repo")
@@ -101,12 +114,12 @@ def _candidate(row):
     identity = (provider, repo, issue)
     return {
         "identity": identity, "claimant": claimant.lower(), "pr_repo": pr_repo,
-        "pr_number": pr_number,
+        "pr_number": pr_number, "bounty_listing_id": listing_id,
         "pr_url": f"https://github.com/{pr_repo}/pull/{pr_number}",
         "issue_url": f"https://github.com/{repo}/issues/{issue}",
         "head_sha": head, "github_state": state,
         "submitted_at": submitted, "checked_at": checked,
-        "operation_id": _key(provider, repo, issue, claimant.lower(), pr_repo, pr_number),
+        "operation_id": _key(provider, repo, issue, claimant.lower(), pr_repo, pr_number, listing_id),
     }
 
 
@@ -125,16 +138,20 @@ def _snapshot(row):
     if not isinstance(submissions, list):
         raise AuditError("provider submissions must be an array, even when empty")
     parsed = urlsplit(source)
+    listing_id = None
     if provider == "issuehunt":
         expected = f"/r/{repo}/issues/{issue}"
         if parsed.path.lower().rstrip("/") != expected:
             raise AuditError("IssueHunt source URL must identify the same funded issue")
-    elif not re.fullmatch(r"/api/bounties/[0-9a-fA-F-]{36}", parsed.path):
-        raise AuditError("BountyHub source URL must be an exact public bounty detail")
+    else:
+        match = re.fullmatch(r"/api/bounties/([0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12})", parsed.path)
+        if not match:
+            raise AuditError("BountyHub source URL must identify one canonical listing UUID")
+        listing_id = match[1].lower()
     return {
         "identity": (provider, repo, issue), "source_url": source,
         "observed": observed, "complete": row["complete"],
-        "submissions": submissions,
+        "bounty_listing_id": listing_id, "submissions": submissions,
     }
 
 
@@ -198,6 +215,10 @@ def reconcile(data, now, max_age):
             reason = "GitHub PR closed without merge"
         elif not fresh_github:
             reason = "GitHub head/state read is stale or in the future"
+        elif snapshot is not None and provider == "bountyhub" and (
+                candidate["bounty_listing_id"] is None or
+                candidate["bounty_listing_id"] != snapshot["bounty_listing_id"]):
+            reason = "BountyHub listing UUID absent or mismatched; registration unverified"
         elif snapshot is not None:
             fresh_platform = timedelta(0) <= now - snapshot["observed"] <= max_age
             if not snapshot["complete"] or not fresh_platform:
@@ -216,6 +237,7 @@ def reconcile(data, now, max_age):
             "operation_id": key, "provider": provider, "issue_url": candidate["issue_url"],
             "pr_url": candidate["pr_url"], "head_sha": candidate["head_sha"],
             "claimant": candidate["claimant"], "github_state": candidate["github_state"],
+            "bounty_listing_id": candidate["bounty_listing_id"],
             "status": status, "reason": reason,
             "provider_source_url": snapshot["source_url"] if snapshot else None,
             "provider_observed_at": snapshot["observed"].isoformat() if snapshot else None,
