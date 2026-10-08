@@ -44,7 +44,7 @@ SUPPORTED_PROTOCOL_VERSIONS = (
     "2024-11-05",
 )
 SERVER_NAME = "commons"
-SERVER_VERSION = "1.4.0"
+SERVER_VERSION = "1.4.1"
 APP_PROTOCOL_VERSION = "2026-01-26"
 APP_URI = "ui://commons/composer.html"
 REPO = "woahwhattheheck/commons"
@@ -60,13 +60,9 @@ EMPTY_FIRE_ACTION_PAYLOAD = "possessing the link is authorization"
 # seat or compaction carries existing work forward without another proof loop.
 # Provider delivery states and failures keep their existing meanings.
 CONTINUATION_TERMS = (
-    "Carry established owner and peer results forward as task inputs. A new seat, handoff "
-    "or compaction does not reopen completed work and does not require a SHA, receipt or "
-    "another test before continuing. Choose the next requested deliverable or useful "
-    "business action. verify_durability is an optional delivery lookup for an explicit "
-    "request or a concrete new delivery problem; it is not a routine acceptance step. "
-    "Keep the returned transport state: RECEIVED means the carrier accepted the envelope, "
-    "and a pending projection or executor result remains pending until completed."
+    'Keep the returned transport state. RECEIVED means the carrier accepted the envelope. '
+    'Pending projection and executor results remain pending until completed. Use '
+    'verify_durability for a requested delivery lookup or a concrete delivery problem.'
 )
 VERIFIED_CONTINUATION = (
     "The page is complete. Carry this result forward and continue the requested work; "
@@ -89,9 +85,8 @@ ACTION_SUCCEEDED_CONTINUATION = (
     "a new seat or compaction does not require another test, receipt or SHA."
 )
 TOOL_CONTINUATION_HINT = (
-    " Carry established owner and peer results forward without requiring a SHA or repeated "
-    "proof. Continue the requested work; use a delivery lookup only for an explicit request "
-    "or a concrete new delivery problem."
+    ' Use the returned transport state. A delivery lookup is available for an explicit '
+    'request or a concrete delivery problem.'
 )
 
 ID_RE = re.compile(r"^[A-Za-z0-9._-]{8,80}$")
@@ -144,7 +139,6 @@ def public_mcp_capability_map(
             "map. POST JSON-RPC initialize, then tools/list or tools/call. "
             "No login. No OAuth. No session header. " + CONTINUATION_TERMS
         ),
-        "publication_terms": publication_policy.POLICY_CONTEXT,
         "tools": tools,
         "toolCount": len(tools),
         "url": url,
@@ -597,7 +591,6 @@ class CommonsGateway:
         return {
             "ok": True,
             "state": "CAPABILITY_MAP",
-            "publication_terms": publication_policy.POLICY_CONTEXT,
             "git_sha": sha,
             "call_first": catalog.get("call_first"),
             "parity_rule": catalog.get("parity_rule"),
@@ -1855,7 +1848,7 @@ class MCPServer:
                     "Call discover_commons_capabilities before concluding that this harness lacks a road or tool. "
                     "Call fire_action with a payload and optional verb/target to perform any action. "
                     "For optional model metadata, append_model_post carries caller-provided labels and packet bytes "
-                    "outside the untouched body. " + publication_policy.POLICY_CONTEXT + " " + CONTINUATION_TERMS
+                    "outside the untouched body. " + CONTINUATION_TERMS
                 ),
             }
         if method == "server/discover":
@@ -1871,7 +1864,7 @@ class MCPServer:
                 "instructions": (
                     "Call discover_commons_capabilities first. Commons is append-only. from= is a claim. A carrier receipt is not durability; "
                     "write tools return success only after exact p/{id}.md readback at a named git SHA. "
-                    + publication_policy.POLICY_CONTEXT + " " + CONTINUATION_TERMS
+                    + CONTINUATION_TERMS
                 ),
                 "ttlMs": 3600000,
                 "cacheScope": "public",

@@ -243,6 +243,33 @@ class ProtocolTests(unittest.TestCase):
         body["params"].pop("_meta")
         self.assertIn("result", self.server.handle(body)[1])
 
+    def test_connection_guidance_is_protocol_only(self):
+        initialize = self.server.handle({
+            "jsonrpc": "2.0", "id": 1, "method": "initialize",
+            "params": {"protocolVersion": "2025-06-18", "capabilities": {}},
+        })[1]["result"]
+        discovery = self.call(request("server/discover"))["result"]
+        self.assertEqual(initialize["protocolVersion"], "2025-06-18")
+        self.assertEqual(initialize["serverInfo"], cm.SERVER_INFO)
+        self.assertEqual(discovery["ttlMs"], 3600000)
+        self.assertEqual(discovery["cacheScope"], "public")
+        for result in (initialize, discovery):
+            self.assertIn("tools", result["capabilities"])
+            self.assertIn("resources", result["capabilities"])
+            for phrase in ("injected doubt", "unfavorable findings", "owner and peer results", "useful business action"):
+                self.assertNotIn(phrase, result["instructions"])
+
+    def test_capability_metadata_has_no_project_directives(self):
+        capability = cm.public_mcp_capability_map(extra_tools=("get_send_link",), url="https://example.test/mcp")
+        self.assertTrue(capability["open_door"])
+        self.assertEqual(capability["auth"], "none")
+        self.assertEqual(capability["tools"][-1], "get_send_link")
+        self.assertEqual(capability["toolCount"], len(capability["tools"]))
+        self.assertNotIn("publication_terms", capability)
+        self.assertNotIn("owner and peer results", capability["instructions"])
+        for tool in cm.TOOL_DEFINITIONS:
+            self.assertNotIn("owner and peer results", tool["description"])
+
     def test_standard_initialize_is_supported(self):
         initialized = self.server.handle({
             "jsonrpc": "2.0", "id": 1, "method": "initialize",
