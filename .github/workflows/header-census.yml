@@ -1,0 +1,50 @@
+# Host offload. The muhlnickel is the computer.
+# Standard public runner only. Larger runners bill even on public repos.
+name: header-census
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "muhl/containers/MUHL_READERS/**.layout.json"
+      - "host_offload/**"
+      - ".github/workflows/header-census.yml"
+      - ".cirrus.yml"
+      - ".gitlab-ci.yml"
+      - ".woodpecker.yml"
+      - "ci/**"
+  pull_request:
+    paths:
+      - "muhl/containers/MUHL_READERS/**.layout.json"
+      - "host_offload/**"
+      - ".github/workflows/header-census.yml"
+      - ".cirrus.yml"
+      - ".gitlab-ci.yml"
+      - ".woodpecker.yml"
+      - "ci/**"
+permissions:
+  contents: read
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: header-walk MUHL_READERS layouts
+        run: python3 host_offload/header_census.py --out "$RUNNER_TEMP/header-census.json"
+      - name: unit
+        run: python3 test_header_census.py
+      - name: record census provenance
+        run: |
+          sha256sum "$RUNNER_TEMP/header-census.json" > "$RUNNER_TEMP/header-census.sha256"
+          printf '%s\n' "$GITHUB_SHA" > "$RUNNER_TEMP/source-sha.txt"
+      - name: upload census artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: header-census-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/header-census.json
+            ${{ runner.temp }}/header-census.sha256
+            ${{ runner.temp }}/source-sha.txt
+          if-no-files-found: error
+          retention-days: 30

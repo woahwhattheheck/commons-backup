@@ -1,0 +1,75 @@
+# Cheap always-on canary in front of trust-cache v1.
+#
+# Proof is cached. Build unless the bytes moved.
+#
+# tests.yml still runs the battery when host/** or test_*.py move. This
+# workflow is the live skip layer: hash actual input bytes, restore the
+# append-only receipt ledger, skip TRUSTED pairs, count WASTE. Full
+# unittest fires only for UNVERIFIED or STALE.
+name: trust-cache
+on:
+  push:
+    paths:
+      - 'host/trust_cache.py'
+      - 'host/trust_cache_canary.py'
+      - 'test_trust_cache.py'
+      - 'test_trust_cache_honest.py'
+      - 'trust_cache/**'
+      - 'ground/TRUST.md'
+      - '.github/workflows/trust-cache.yml'
+  pull_request:
+    paths:
+      - 'host/trust_cache.py'
+      - 'host/trust_cache_canary.py'
+      - 'test_trust_cache.py'
+      - 'test_trust_cache_honest.py'
+      - 'trust_cache/**'
+      - 'ground/TRUST.md'
+      - '.github/workflows/trust-cache.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  canary-then-maybe-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: restore append-only receipt ledger
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/trust-cache-receipts.jsonl
+          key: commons-trust-cache-v1-receipts
+
+      - name: cheap always-on canary
+        env:
+          LEDGER: ${{ runner.temp }}/trust-cache-receipts.jsonl
+        run: |
+          set -euo pipefail
+          python3 host/trust_cache_canary.py --ledger "$LEDGER" canary \
+            --input host/trust_cache.py \
+            --input test_trust_cache.py \
+            --check-id trust-cache-unit
+          python3 host/trust_cache_canary.py --ledger "$LEDGER" canary \
+            --input host/trust_cache.py \
+            --input host/trust_cache_canary.py \
+            --input test_trust_cache_honest.py \
+            --check-id trust-cache-honest
+
+      - name: full checks only if UNVERIFIED or STALE
+        env:
+          LEDGER: ${{ runner.temp }}/trust-cache-receipts.jsonl
+        run: |
+          set -euo pipefail
+          python3 host/trust_cache_canary.py --ledger "$LEDGER" run \
+            --input host/trust_cache.py \
+            --input test_trust_cache.py \
+            --check-id trust-cache-unit \
+            -- python3 test_trust_cache.py
+          python3 host/trust_cache_canary.py --ledger "$LEDGER" run \
+            --input host/trust_cache.py \
+            --input host/trust_cache_canary.py \
+            --input test_trust_cache_honest.py \
+            --check-id trust-cache-honest \
+            -- python3 test_trust_cache_honest.py
+          python3 host/trust_cache.py --ledger "$LEDGER" waste-count

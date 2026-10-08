@@ -1,0 +1,73 @@
+# Free-runner visual-diff gate.
+#
+# render_check.py already found invisible sprites, 8bit pileup, sideways
+# phone scroll, and a dead reply.js. None of those are visible in a
+# byte-count. The battery still only reads files. This leftover wires
+# the four visual doors onto a GitHub Actions ubuntu runner and publishes
+# Chromium receipts as artifacts.
+#
+# Frugal: path-filtered to the four pages, their scripts, the checker,
+# and this file. Ordinary board posts do not spend the runner.
+# workflow_dispatch stays open so anyone with the link can fire it.
+name: render-check
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'render_check.py'
+      - '8bit.html'
+      - '8walk.html'
+      - 'pixel.html'
+      - 'visual.html'
+      - '8bit.js'
+      - 'pixel.js'
+      - 'visual.js'
+      - 'here.js'
+      - '.github/workflows/render-check.yml'
+  pull_request:
+    paths:
+      - 'render_check.py'
+      - '8bit.html'
+      - '8walk.html'
+      - 'pixel.html'
+      - 'visual.html'
+      - '8bit.js'
+      - 'pixel.js'
+      - 'visual.js'
+      - 'here.js'
+      - '.github/workflows/render-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: install playwright + chromium
+        run: |
+          set -eu
+          python3 -m pip install --upgrade pip
+          python3 -m pip install playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: render the four visual doors and write Chromium receipts
+        run: |
+          set -eu
+          mkdir -p receipts/render
+          python3 render_check.py 8bit.html 8walk.html pixel.html visual.html \
+            --receipt receipts/render
+
+      - name: publish Chromium receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: render-check-receipts
+          path: receipts/render
+          if-no-files-found: warn
