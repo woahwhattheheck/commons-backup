@@ -44,6 +44,15 @@ class WorkfeedTests(unittest.TestCase):
         self.assertEqual(item.reward_class, "DISCRETIONARY_CAMPAIGN_REWARD")
         self.assertEqual(item.commands, ("npm run lint", "npm test", "npm run build"))
 
+    def test_campaign_activity_filters_only_on_explicit_evidence_or_strict_mode(self):
+        self.assertEqual(classify(issue(campaign_active=True), require_active_campaign=True).status, "READY")
+        self.assertEqual(classify(issue(campaign_active=False)).status, "CAMPAIGN_INACTIVE")
+        self.assertEqual(classify(issue(), require_active_campaign=True).status, "CAMPAIGN_UNVERIFIED")
+        self.assertEqual(classify(issue()).status, "READY")
+        self.assertIsNone(classify(issue(campaign_active=None)).campaign_active)
+        with self.assertRaisesRegex(WorkfeedError, "campaign_active must be a boolean or null"):
+            classify(issue(campaign_active=1))
+
     def test_explicit_amount_is_evidence_not_guarantee(self):
         item = classify(issue(body="Campaign text says 400 USDC pool and this task may be rewarded."))
         self.assertEqual(item.reward_class, "EXPLICIT_AMOUNT_MENTIONED")

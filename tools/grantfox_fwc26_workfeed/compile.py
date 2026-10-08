@@ -85,6 +85,7 @@ class Candidate:
     coordination_owners: tuple[str, ...]
     observed_at: str | None
     repository_archived: bool | None
+    campaign_active: bool | None
     status: str
     reward_class: str
     explicit_reward_mentions: tuple[str, ...]
@@ -108,6 +109,7 @@ class Candidate:
             "coordination_owners": list(self.coordination_owners),
             "observed_at": self.observed_at,
             "repository_archived": self.repository_archived,
+            "campaign_active": self.campaign_active,
             "status": self.status,
             "reward_class": self.reward_class,
             "explicit_reward_mentions": list(self.explicit_reward_mentions),
@@ -323,7 +325,9 @@ def _commands(body: str) -> tuple[str, ...]:
     return tuple(found)
 
 
-def classify(record: dict[str, Any], *, fresh_after: str | None = None) -> Candidate:
+def classify(
+    record: dict[str, Any], *, fresh_after: str | None = None, require_active_campaign: bool = False
+) -> Candidate:
     repo, number = _repo_number(record)
     key = f"{repo}#{number}"
     title = record.get("title")
@@ -343,6 +347,9 @@ def classify(record: dict[str, Any], *, fresh_after: str | None = None) -> Candi
     if len(archive_fields) == 2 and record["repository_archived"] is not record["repo_archived"]:
         raise WorkfeedError(f"{key}: conflicting repository archive evidence")
     repository_archived = record[archive_fields[0]] if archive_fields else None
+    campaign_active = record.get("campaign_active")
+    if campaign_active is not None and type(campaign_active) is not bool:
+        raise WorkfeedError(f"{key}: campaign_active must be a boolean or null")
     observed_at_value = record.get("observed_at", record.get("snapshot_observed_at"))
     observed_at_dt = _parse_iso8601(observed_at_value, f"{key}: observed_at")
     fresh_after_dt = _parse_iso8601(fresh_after, "fresh_after") if fresh_after else None
@@ -397,6 +404,12 @@ def classify(record: dict[str, Any], *, fresh_after: str | None = None) -> Candi
     elif coordination_owners:
         status = "SWARM_TAKEN"
         reason = "active swarm coordination owner(s): " + ", ".join(coordination_owners)
+    elif campaign_active is False:
+        status = "CAMPAIGN_INACTIVE"
+        reason = "provided campaign activity evidence says the sponsor campaign is inactive"
+    elif require_active_campaign and campaign_active is not True:
+        status = "CAMPAIGN_UNVERIFIED"
+        reason = "active sponsor campaign evidence is required, but campaign_active is unknown"
     elif claim_required:
         status = "CLAIM_REQUIRED"
         reason = "issue text describes an application/assignment step"
@@ -418,6 +431,7 @@ def classify(record: dict[str, Any], *, fresh_after: str | None = None) -> Candi
         coordination_owners=coordination_owners,
         observed_at=str(observed_at_value) if observed_at_value not in (None, "") else None,
         repository_archived=repository_archived,
+        campaign_active=campaign_active,
         status=status,
         reward_class=reward_class,
         explicit_reward_mentions=explicit_mentions,
@@ -428,11 +442,14 @@ def classify(record: dict[str, Any], *, fresh_after: str | None = None) -> Candi
     )
 
 
-def compile_records(records: Iterable[dict[str, Any]], *, fresh_after: str | None = None) -> list[Candidate]:
+def compile_records(
+    records: Iterable[dict[str, Any]], *, fresh_after: str | None = None,
+    require_active_campaign: bool = False,
+) -> list[Candidate]:
     seen: set[str] = set()
     candidates: list[Candidate] = []
     for record in records:
-        candidate = classify(record, fresh_after=fresh_after)
+        candidate = classify(record, fresh_after=fresh_after, require_active_campaign=require_active_campaign)
         issue_identity = candidate.key.lower()
         if issue_identity in seen:
             raise WorkfeedError(f"duplicate issue key: {candidate.key}")
@@ -447,7 +464,9 @@ def compile_records(records: Iterable[dict[str, Any]], *, fresh_after: str | Non
         "ASSIGNED": 4,
         "STALE_EVIDENCE": 5,
         "REPOSITORY_ARCHIVED": 6,
-        "INELIGIBLE": 7,
+        "CAMPAIGN_UNVERIFIED": 7,
+        "CAMPAIGN_INACTIVE": 8,
+        "INELIGIBLE": 9,
     }
     candidates.sort(
         key=lambda c: (
@@ -481,12 +500,14 @@ def render_markdown(candidates: Iterable[Candidate]) -> str:
         f"- ASSIGNED: {counts.get('ASSIGNED', 0)}",
         f"- STALE_EVIDENCE: {counts.get('STALE_EVIDENCE', 0)}",
         f"- REPOSITORY_ARCHIVED: {counts.get('REPOSITORY_ARCHIVED', 0)}",
+        f"- CAMPAIGN_UNVERIFIED: {counts.get('CAMPAIGN_UNVERIFIED', 0)}",
+        f"- CAMPAIGN_INACTIVE: {counts.get('CAMPAIGN_INACTIVE', 0)}",
         f"- INELIGIBLE: {counts.get('INELIGIBLE', 0)}",
         "",
         "## Queue",
         "",
-        "| Status | Issue | Reward evidence | Security-sensitive | Commands |",
-        "|---|---|---|---:|---|",
+        "| Status | Issue | Campaign | Reward evidence | Security-sensitive | Commands |",
+        "|---|---|---|---|---:|---|",
     ]
     for c in rows:
         reward = c.reward_class
@@ -494,18 +515,23 @@ def render_markdown(candidates: Iterable[Candidate]) -> str:
             reward += " (" + ", ".join(c.explicit_reward_mentions) + ")"
         commands = "<br>".join(f"`{cmd}`" for cmd in c.commands) or "—"
         issue = f"[{c.key}]({c.url}) — {c.title}"
+        campaign = "active" if c.campaign_active is True else "inactive" if c.campaign_active is False else "unknown"
         lines.append(
-            f"| {c.status} | {issue} | {reward} | {'yes' if c.security_sensitive else 'no'} | {commands} |"
+            f"| {c.status} | {issue} | {campaign} | {reward} | {'yes' if c.security_sensitive else 'no'} | {commands} |"
         )
         lines.append(f"\n> **{c.key}:** {c.reason}\n")
     return "\n".join(lines).rstrip() + "\n"
 
 
-def write_outputs(candidates: list[Candidate], out_dir: Path, *, fresh_after: str | None = None) -> None:
+def write_outputs(
+    candidates: list[Candidate], out_dir: Path, *, fresh_after: str | None = None,
+    require_active_campaign: bool = False,
+) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     payload = {
         "schema_version": 1,
         "evidence_fresh_after": fresh_after,
+        "require_active_campaign": require_active_campaign,
         "authority": {
             "claims_issues": False,
             "assigns_issues": False,
@@ -531,13 +557,23 @@ def main(argv: list[str] | None = None) -> int:
         "--fresh-after",
         help="optional ISO-8601 freshness floor; older or missing observed_at snapshots become STALE_EVIDENCE",
     )
+    parser.add_argument(
+        "--require-active-campaign", action="store_true",
+        help="do not route unassigned issues without explicit campaign_active=true evidence",
+    )
     args = parser.parse_args(argv)
 
     if args.out_dir.exists():
         raise WorkfeedError(f"output directory already exists: {args.out_dir}")
 
-    candidates = compile_records(_read_records(args.input), fresh_after=args.fresh_after)
-    write_outputs(candidates, args.out_dir, fresh_after=args.fresh_after)
+    candidates = compile_records(
+        _read_records(args.input), fresh_after=args.fresh_after,
+        require_active_campaign=args.require_active_campaign,
+    )
+    write_outputs(
+        candidates, args.out_dir, fresh_after=args.fresh_after,
+        require_active_campaign=args.require_active_campaign,
+    )
     return 0
 
 

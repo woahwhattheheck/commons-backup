@@ -49,14 +49,31 @@ Each issue URL must identify the supplied `repository` and issue `number`; a dif
 
 Supply `repository_archived` (alias `repo_archived`) from a current canonical GitHub **repository** read. It accepts only a boolean or `null`; conflicting aliases and numeric/string stand-ins are errors. Explicit `true` blocks `READY` with `REPOSITORY_ARCHIVED` and appears in both outputs; explicit `false` means the observed repository was not archived. Missing/`null` means **archive state not checked**, not an active-repository guarantee. Intake publishers should include fresh repository evidence before dispatch. The compiler makes no additional network calls.
 
+Optional `campaign_active` must be a real JSON boolean (`true` or `false`) or
+`null`. It is **external sponsor campaign evidence**, not inferred from the issue's
+`Official Campaign | FWC26` label; label presence does not prove a campaign is
+currently taking/rewarding new work. Supply the flag only from a recent
+canonical campaign-status observation and use the existing `observed_at` +
+`--fresh-after` evidence floor to avoid stale snapshots. Explicit
+`false` suppresses READY for otherwise dispatchable issues; missing/`null`
+is **unknown**, never an implied `true`. Add `--require-active-campaign` to
+suppress READY/CLAIM_REQUIRED for unknown activity; without that opt-in,
+legacy input behavior remains unchanged. Assigned, archived, stale, externally
+claimed and internally owned issues retain their existing precedence.
+Neither campaign activity nor an explicit cash amount guarantees payment.
+
 ## Run
 
 ```bash
 python -m tools.grantfox_fwc26_workfeed.compile issues.json --out-dir /tmp/gfox-feed
 
 # Optional hard freshness floor: missing/older observed_at snapshots are not routable.
-python -m tools.grantfox_fwc26_workfeed.compile issues.json --out-dir /tmp/gfox-feed-fresh \\
+python -m tools.grantfox_fwc26_workfeed.compile issues.json --out-dir /tmp/gfox-feed-fresh \
   --fresh-after 2026-09-19T17:30:00-04:00
+
+# Campaign-confirmed dispatch: suppress inactive and unverified campaigns.
+python -m tools.grantfox_fwc26_workfeed.compile issues.json --out-dir /tmp/gfox-feed-live \
+  --require-active-campaign --fresh-after 2026-10-07T00:00:00-04:00
 ```
 
 Outputs:
