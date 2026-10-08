@@ -124,21 +124,31 @@ def observe(db, account: str, bucket: str, resource: str, event_id: str,
             updated = kind in ("PRIMARY_LIMIT","SECONDARY_LIMIT","AUTH_DENIED","APP_PERMISSION","UNCLASSIFIED_403")
             until = None
             if updated:
-                old = db.execute("SELECT until_epoch,strikes FROM gates WHERE account=? AND bucket=? AND resource=?",(account,bucket,target)).fetchone()
+                old = db.execute("SELECT until_epoch,strikes,kind FROM gates WHERE account=? AND bucket=? AND resource=?",(account,bucket,target)).fetchone()
                 active_strikes = old[1] if old and (old[0] is None or old[0]>now) else 0
                 strikes = active_strikes+1 if kind in ("PRIMARY_LIMIT", "SECONDARY_LIMIT") else 1
                 if kind in ("PRIMARY_LIMIT", "SECONDARY_LIMIT"):
-                    # Prefer the real primary reset header, if supplied. If missing
-                    # or already past, back off conservatively instead of pretending
-                    # quota is replenished. A later observation never shortens a hold.
-                    wait = max(retry_after, min(300*(2**min(strikes-1,4)), 3600))
-                    if kind == "PRIMARY_LIMIT" and reset_epoch is not None and reset_epoch > now:
-                        until = max(reset_epoch, now + retry_after)
+                    # Primary quota exhaustion without a *future* provider reset
+                    # has no safe inferred recovery time. Keep admission closed until
+                    # a confirmed provider recovery is explicitly reconciled.
+                    # A Retry-After is not proof of primary quota replenishment.
+                    if kind == "PRIMARY_LIMIT":
+                        until = (max(reset_epoch, now + retry_after)
+                                 if reset_epoch is not None and reset_epoch > now else None)
                     else:
+                        wait = max(retry_after, min(300*(2**min(strikes-1,4)), 3600))
                         until = now + wait
-                    if old and old[0] is not None:
-                        until = max(until, old[0])
-                db.execute("INSERT INTO gates VALUES (?,?,?,?,?,?,?) ON CONFLICT(account,bucket,resource) DO UPDATE SET kind=excluded.kind,until_epoch=excluded.until_epoch,strikes=excluded.strikes,event_id=excluded.event_id", (account,bucket,target,kind,until,strikes,event_id))
+                    # Never shorten an existing hold, including an indefinite
+                    # prior primary/permission gate.
+                    if old:
+                        if old[0] is None:
+                            until = None
+                        elif until is not None:
+                            until = max(until, old[0])
+                # Keep the original reason visible for an indefinite gate:
+                # a later secondary throttle does not cure primary exhaustion.
+                gate_kind = old[2] if old and old[0] is None else kind
+                db.execute("INSERT INTO gates VALUES (?,?,?,?,?,?,?) ON CONFLICT(account,bucket,resource) DO UPDATE SET kind=excluded.kind,until_epoch=excluded.until_epoch,strikes=excluded.strikes,event_id=excluded.event_id", (account,bucket,target,gate_kind,until,strikes,event_id))
             result={"classification":kind,"duplicate_event":False,"gate_updated":updated,"scope":target if updated else None,"until_epoch":until}
         db.commit()
         return result
