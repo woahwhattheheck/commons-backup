@@ -1,5 +1,7 @@
 'use strict';
 
+const {reconcileBeforePullCreate} = require('./connected_github_pr_preflight.cjs');
+
 // Caller supplies the already-discovered native bindings and authorized change.
 // No filesystem, network client, credential lookup, forced ref update, or write retry.
 const ACTIONS = ['fetch', 'fetch_file', 'fetch_blob', 'create_blob', 'create_tree', 'create_commit',
@@ -1005,6 +1007,22 @@ async function publishGitHubChange(tools, change, options = {}) {
     }
     progress.branch_created = true;
     await announce();
+    progress.stage = 'reconcile_before_pr_create';
+    progress.pr_create_reconciliation = await reconcileBeforePullCreate({
+      fetchJSON, repository: repository_full_name, baseBranch: spec.base_branch,
+      branchName: spec.branch_name, expectedHead: progress.commit_sha,
+      initialBaseHead: progress.base_commit_sha,
+      files: progress.files.map(file => ({path: file.path, blob_sha: file.blob_sha}))
+    });
+    await announce();
+    if (progress.pr_create_reconciliation) {
+      progress.publication_status = progress.pr_create_reconciliation.status;
+      progress.status = progress.pr_create_reconciliation.status === 'EXISTING_BRANCH_CONFLICT'
+        ? 'reconciliation_hold' : 'reconciled';
+      progress.stage = 'complete';
+      await announce();
+      return progress;
+    }
     progress.stage = 'create_pull_request';
     const pr = await call('create_pull_request', {repository_full_name, head: spec.branch_name,
       base: spec.base_branch, title: spec.title, body: spec.body});
@@ -2027,6 +2045,22 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
     progress.aggregate_paths_verified = true;
     await requireBranchHead(progress.commit_sha);
     await announce();
+    progress.stage = 'reconcile_before_pr_create';
+    progress.pr_create_reconciliation = await reconcileBeforePullCreate({
+      fetchJSON, repository: repository_full_name, baseBranch: spec.base_branch,
+      branchName: spec.branch_name, expectedHead: progress.commit_sha,
+      initialBaseHead: progress.base_commit_sha,
+      files: progress.files.map(file => ({path: file.path, blob_sha: file.blob_sha}))
+    });
+    await announce();
+    if (progress.pr_create_reconciliation) {
+      progress.publication_status = progress.pr_create_reconciliation.status;
+      progress.status = progress.pr_create_reconciliation.status === 'EXISTING_BRANCH_CONFLICT'
+        ? 'reconciliation_hold' : 'reconciled';
+      progress.stage = 'complete';
+      await announce();
+      return progress;
+    }
     progress.stage = 'create_pull_request';
     const pr = await write('create_pull_request', {repository_full_name,
       head: spec.branch_name, base: spec.base_branch, title: spec.title, body: spec.body},
