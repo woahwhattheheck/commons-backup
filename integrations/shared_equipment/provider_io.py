@@ -378,8 +378,17 @@ class GitHubSlackEquipment:
             result = self.gh_runner(command, input=json.dumps(payload) if payload is not None else None,
                 text=True, encoding="utf-8", capture_output=True, timeout=90,
                 creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-        except (OSError, subprocess.TimeoutExpired) as exc:
-            raise EquipmentError("existing gh transport unavailable; retain the operation ID before another write",
+        except FileNotFoundError:
+            raise EquipmentError("configured gh executable was not found; restore the existing gh path before retrying",
+                                 code="github_transport_failed", uncertain=False, delivered=False) from None
+        except PermissionError:
+            raise EquipmentError("configured gh executable could not be started due to local permissions",
+                                 code="github_transport_failed", uncertain=False, delivered=False) from None
+        except subprocess.TimeoutExpired:
+            raise EquipmentError("existing gh request timed out; reconcile the operation ID before another write",
+                                 code="github_transport_failed", uncertain=method != "GET") from None
+        except OSError:
+            raise EquipmentError("existing gh transport failed; retain the operation ID before another write",
                                  code="github_transport_failed", uncertain=method != "GET") from None
         try:
             body, status, headers = _github_headers(result.stdout)
