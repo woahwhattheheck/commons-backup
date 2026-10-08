@@ -54,10 +54,15 @@ listing IDs and conflicting GitHub snapshots are schema failures.
 - PRUNE: board no longer open, canonical GitHub issue closed/inaccessible,
   or repo archived.
 
-Each issue gets one decision. The report lists each advertised listing
-amount and uses only the maximum displayed amount for sorting; values are
-never summed to imply collectible escrow or cash. reward_awarded and
-payment_received are always UNKNOWN. Even merged PRs are not payouts.
+Each issue gets one decision. Every historical listing stays in the audit
+record, including `board_state` and `board_claims`, while `open_listing_ids`
+identifies exactly the currently actionable listings. Historical CLOSED rows
+cannot veto an independent OPEN bounty for the same GitHub issue, and their
+previous claims or larger amounts cannot inflate the open opportunity.
+`advertised_max_usd` is the maximum **OPEN** listed amount (0.00 when all
+listings are closed); emitted work orders include only active listing IDs.
+Amounts are never summed to imply collectible escrow or cash.
+reward_awarded and payment_received are always UNKNOWN. Even merged PRs are not payouts.
 
 To act on candidates: reserve one ownership TAKE in Slack, refresh both
 first-party provider and GitHub issue/PR evidence, preserve original

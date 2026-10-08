@@ -170,17 +170,20 @@ def reconcile(
     work_orders = []
     for issue in sorted(groups):
         rows = sorted(groups[issue], key=lambda row: row["listing_id"])
+        open_rows = [row for row in rows if row["board_state"] == "open"]
         proof = evidence.get(issue)
         reasons = []
-        if not all(row["board_state"] == "open" for row in rows):
+        if not open_rows:
             reasons.append("BOARD_NOT_OPEN")
         if not provider_fresh:
             reasons.append("PROVIDER_SNAPSHOT_STALE")
-        if all(row["advertised_usd"] < minimum_usd for row in rows):
+        # Historical CLOSED listings remain visible in the audit ledger but
+        # never decide eligibility, claims or price for an OPEN listing.
+        if open_rows and all(row["advertised_usd"] < minimum_usd for row in open_rows):
             reasons.append("BELOW_MINIMUM_USD")
-        if any(row["board_claims"] is None for row in rows):
+        if any(row["board_claims"] is None for row in open_rows):
             reasons.append("BOARD_CLAIMS_UNKNOWN")
-        if any((row["board_claims"] or 0) > 0 for row in rows):
+        if any((row["board_claims"] or 0) > 0 for row in open_rows):
             reasons.append("BOARD_CLAIM_PRESENT")
 
         if proof is None:
@@ -210,16 +213,21 @@ def reconcile(
         else:
             decision = "HOLD"
 
-        maximum = max(row["advertised_usd"] for row in rows)
+        # Zero active amount when every listing is CLOSED. Historical prices
+        # remain individually recorded, never masquerading as live payouts.
+        maximum = max((row["advertised_usd"] for row in open_rows), default=Decimal("0"))
         record = {
             "issue_url": issue,
             "decision": decision,
             "reasons": sorted(reasons),
             "listing_ids": [row["listing_id"] for row in rows],
+            "open_listing_ids": [row["listing_id"] for row in open_rows],
             # No summation: rows can duplicate one sponsored opportunity.
             "advertised_max_usd": f"{maximum:.2f}",
             "advertised_listings": [
                 {"listing_id": row["listing_id"],
+                 "board_state": row["board_state"],
+                 "board_claims": row["board_claims"],
                  "advertised_usd": f"{row['advertised_usd']:.2f}"}
                 for row in rows
             ],
@@ -233,7 +241,7 @@ def reconcile(
                 "operation_id": "ALGORA:" + issue.removeprefix("https://github.com/"),
                 "issue_url": issue,
                 "provider_source": source,
-                "listing_ids": record["listing_ids"],
+                "listing_ids": record["open_listing_ids"],
                 "advertised_max_usd": record["advertised_max_usd"],
                 "reward_awarded": "UNKNOWN",
                 "payment_received": "UNKNOWN",
