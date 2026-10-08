@@ -73,14 +73,30 @@ def github_url(value: object, kind: str) -> tuple[str, str, int, str]:
 
 
 def prose(body: str) -> str:
-    """Ignore quoted examples and fenced code when looking for claim language."""
-    kept, fenced = [], False
+    """Ignore quoted and indented examples plus correctly matched Markdown fences."""
+    kept: list[str] = []
+    fence_kind: str | None = None
+    fence_length = 0
     for line in body.splitlines():
-        if line.lstrip().startswith("```") or line.lstrip().startswith("~~~"):
-            fenced = not fenced
+        stripped = line.lstrip(" ")
+        indent = len(line) - len(stripped)
+        marker = re.match(r"^(`{3,}|~{3,})", stripped) if indent <= 3 else None
+        if fence_kind is not None:
+            # A different marker or a shorter fence cannot close this block.
+            if (marker is not None and marker.group(1)[0] == fence_kind
+                    and len(marker.group(1)) >= fence_length
+                    and not stripped[marker.end():].strip()):
+                fence_kind = None
+                fence_length = 0
             continue
-        if not fenced and not line.lstrip().startswith(">"):
-            kept.append(line)
+        if marker is not None:
+            fence_kind = marker.group(1)[0]
+            fence_length = len(marker.group(1))
+            continue
+        # Markdown indented code is an example, not a claim or PR request.
+        if line.startswith(("    ", "\t")) or stripped.startswith(">"):
+            continue
+        kept.append(line)
     return "\n".join(kept)
 
 

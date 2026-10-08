@@ -110,5 +110,36 @@ class AuditFocused(unittest.TestCase):
         row = audit(snapshot, now=NOW)["records"][0]
         self.assertIn("SPONSOR_ISSUE_LINK_NOT_FOUND", row["findings"])
 
+
+    def test_indented_markdown_examples_do_not_count_as_claims_or_requests(self):
+        snapshot = case()
+        row = snapshot["records"][0]
+        row["issue_comments"] = [{
+            "author": "ExampleContributor",
+            "body": "How to claim a bounty:\n\n    /claim #42",
+        }]
+        row["pr_body"] += (
+            "\n\n"
+            "    I request conditional compensation for sample work.\n"
+            "    I am not claiming any reward.\n"
+        )
+        result = audit(snapshot, now=NOW)["records"][0]
+        self.assertFalse(result["existing_issue_claim_by_actor"])
+        self.assertFalse(result["affirmative_request_detected"])
+        self.assertFalse(result["waiver_language_detected"])
+        self.assertIn("ISSUE_CLAIM_NOT_FOUND", result["findings"])
+        self.assertIn("PR_COMPENSATION_REQUEST_NOT_FOUND", result["findings"])
+        self.assertNotIn("PR_WAIVER_LANGUAGE_REVIEW", result["findings"])
+
+    def test_fences_require_matching_style_and_length_before_claim_is_real(self):
+        snapshot = case()
+        comment = snapshot["records"][0]["issue_comments"][0]
+        comment["body"] = "````text\n/claim #42\n~~~\n/claim #42\n````"
+        result = audit(snapshot, now=NOW)["records"][0]
+        self.assertFalse(result["existing_issue_claim_by_actor"])
+        comment["body"] += "\n/claim #42"
+        result = audit(snapshot, now=NOW)["records"][0]
+        self.assertTrue(result["existing_issue_claim_by_actor"])
+
 if __name__ == "__main__":
     unittest.main()
