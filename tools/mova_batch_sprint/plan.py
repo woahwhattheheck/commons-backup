@@ -81,6 +81,10 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
     author = record.get("pr_author")
     if author is not None and (not isinstance(author, str) or not re.fullmatch(r"[A-Za-z0-9-]{1,39}", author)):
         raise ValueError("invalid PR author")
+    if author is not None and pr is None:
+        # Orphan author evidence must not be discarded and silently become a
+        # fresh BUILD opportunity; require the matching sponsor PR reference.
+        raise ValueError("pr_author requires a sponsor pr_url; reconcile PR ownership before BUILD")
     source_pr = record.get("source_pr_url")
     source_author = record.get("source_pr_author")
     if source_pr is not None:
@@ -105,8 +109,14 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
     age = now - verified
     fresh = timedelta(0) <= age <= timedelta(hours=max_age_hours)
     funding_url = record.get("funding_url")
-    if funding_url is not None and (not isinstance(funding_url, str) or not funding_url.startswith("https://")):
-        raise ValueError("funding_url must be HTTPS")
+    if funding_url is not None:
+        if not isinstance(funding_url, str):
+            raise ValueError("funding_url must be a verifiable HTTPS URL or null")
+        parsed_funding = urlsplit(funding_url)
+        if (parsed_funding.scheme != "https" or not parsed_funding.hostname
+                or parsed_funding.username is not None or parsed_funding.password is not None
+                or parsed_funding.fragment):
+            raise ValueError("funding_url must have an HTTPS hostname and no credentials or fragment")
     occupied = record.get("active_owner")
     if occupied is not None and (not isinstance(occupied, str) or not occupied.strip()):
         raise ValueError("active_owner must be nonempty text or null")
