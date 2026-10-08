@@ -130,9 +130,11 @@ def classify(observation: Mapping[str, Any]) -> dict[str, Any]:
         # hide a committed write. Elapsed time is not a reconciliation receipt.
         kind, effect, decision = "indeterminate", "uncertain", "reconcile_write_before_retry"
 
-    if kind == "pre_provider_block" and reached is True:
-        # Contradictory observation: do not turn a possibly-sent write into a
-        # definitive not-sent result just because the text mentions a blocker.
+    if kind == "pre_provider_block" and (reached is True or status is not None):
+        # A report cannot prove no provider I/O while simultaneously carrying
+        # an HTTP outcome or explicitly saying the provider was reached.
+        # The HTTP status may be provider-originated or host-synthesized; in
+        # either case a caller must reconcile writes, never assume NOT_SENT.
         kind, effect, decision = "indeterminate", "uncertain", "reconcile_write_before_retry"
 
     result: dict[str, Any] = {
