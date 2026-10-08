@@ -395,15 +395,23 @@ class _HTMLAdmissionContexts(HTMLParser):
 
 
 def _prose_admission_context(path: str, text: str) -> str:
-    """Disambiguate two block nouns without suppressing admission language.
+    """Disambiguate mathematical nouns without suppressing admission language.
 
-    Only Markdown/plain-text prose is eligible. Explicit enforcement or actor
-    context keeps the original line; hard rules and structural scans always
-    receive the original source independently. Mask only the noun token, using
-    equal-width spaces so other token distances and matches do not change.
+    Only Markdown/plain-text prose is eligible. Hard rules and structural scans
+    always receive the original source independently. Mask only the noun token,
+    using equal-width spaces so other token distances and matches do not change.
     """
     if not path.lower().endswith((".md", ".txt")):
         return text
+    # This capped-valuation sentence describes a mathematical conclusion.
+    # Mask only its noun; every surrounding token remains available to scan.
+    text = re.sub(
+        r"(\bAt the cap,\s+`next_remainder`\s+is null because no further valuation\s+)"
+        r"claim(?=\s+is required\.)",
+        lambda match: match.group(1) + " " * len("claim"),
+        text,
+        flags=re.IGNORECASE,
+    )
     if re.search(
         r"\b(?:commons|action[-_ ]pad|admission|auth(?:entication|orization)?|"
         r"permission|approval|actor(?:_id)?|sender|claim|seat|memory|capability|"
