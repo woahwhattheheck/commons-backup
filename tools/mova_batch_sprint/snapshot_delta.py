@@ -19,7 +19,7 @@ ISSUE_KEY = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[1-9][0-9]*$")
 DISPATCH_KEY = re.compile(r"^[A-Za-z0-9_.-]{1,256}$")
 BOUNTY_UUID = re.compile(r"^[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$")
 MATERIAL_FIELDS = (
-    "operation_id", "action", "active_owner", "pr_url", "pr_author", "source_pr_url",
+    "operation_id", "action", "active_owner", "pr_url", "pr_author", "pr_state", "source_pr_url",
     "source_pr_author", "source_state", "claim_state", "competition",
     "issue_state", "eligibility", "funding", "reward_usd", "fresh",
 )

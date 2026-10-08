@@ -98,6 +98,61 @@ class OwnerCollisionRegression(unittest.TestCase):
         self.assertEqual(batch["build_slots_admitted"], 0)
 
 
+    def test_closed_unmerged_sponsor_pr_preserves_claim_and_holds_new_dispatch(self):
+        for claim in ("not_submitted", "submitted", "accepted", "paid"):
+            with self.subTest(claim=claim):
+                original = record("issuehunt", source="published")
+                original.update(
+                    pr_url="https://github.com/example/rewarded-sdk/pull/21",
+                    pr_author="woahwhattheheck",
+                    pr_state="closed",
+                    claim_state=claim,
+                )
+                batch = actions(original)
+                item = batch["work_orders"][0]
+                self.assertEqual(item["action"], "CLOSED_UNMERGED_REVIEW")
+                self.assertEqual(item["pr_state"], "closed")
+                self.assertEqual(item["claim_state"], claim)
+                self.assertEqual(item["pr_author"], "woahwhattheheck")
+                self.assertEqual(batch["build_slots_admitted"], 0)
+                self.assertIn("pr_state=closed", render_slack(batch))
+
+        # Different funded listings remain distinct claim-review obligations,
+        # but neither creates a new sponsor PR or duplicate engineering task.
+        a = record("issuehunt", source="published")
+        a.update(pr_url="https://github.com/example/rewarded-sdk/pull/21",
+                 pr_author="woahwhattheheck", pr_state="closed")
+        b = record("algora", source="published")
+        b.update(pr_url=a["pr_url"], pr_author=a["pr_author"], pr_state="closed")
+        batch = actions(a, b)
+        self.assertEqual([x["action"] for x in batch["work_orders"]],
+                         ["CLOSED_UNMERGED_REVIEW", "CLOSED_UNMERGED_REVIEW"])
+        self.assertEqual(len({x["operation_id"] for x in batch["work_orders"]}), 2)
+        self.assertEqual(batch["build_slots_admitted"], 0)
+
+    def test_live_sponsor_pr_states_preserve_prior_claim_flow(self):
+        for pr_state in (None, "open", "merged", "unknown"):
+            with self.subTest(pr_state=pr_state):
+                existing = record("grantfox", source="published")
+                existing.update(
+                    pr_url="https://github.com/example/rewarded-sdk/pull/13",
+                    pr_author="woahwhattheheck",
+                )
+                if pr_state is not None:
+                    existing["pr_state"] = pr_state
+                item = actions(existing)["work_orders"][0]
+                self.assertEqual(item["action"], "SUBMIT_EXISTING_CLAIM")
+
+        foreign = record("grantfox", source="published")
+        foreign.update(pr_url="https://github.com/example/rewarded-sdk/pull/14",
+                       pr_author="different-author", pr_state="closed")
+        self.assertEqual(actions(foreign)["work_orders"][0]["action"],
+                         "PRESERVE_FOREIGN_PR")
+        invalid = record("grantfox")
+        invalid["pr_state"] = "closed"
+        with self.assertRaisesRegex(ValueError, "requires a sponsor pr_url"):
+            actions(invalid)
+
     def test_paid_claim_never_overrides_foreign_attribution(self):
         foreign_upstream = record("algora", source="published")
         foreign_upstream.update(

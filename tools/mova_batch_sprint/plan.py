@@ -21,6 +21,7 @@ FUNDING = {"escrow_verified", "provider_listed", "promised", "conditional", "unv
 ELIGIBILITY = {"eligible", "human_required", "assignment_required", "unknown", "ineligible"}
 STATES = {"open", "closed", "unknown"}
 SOURCES = {"none", "building", "ready", "published"}
+PR_STATES = {"open", "merged", "closed", "unknown"}
 CLAIMS = {"unknown", "not_submitted", "submitted", "accepted", "rejected", "paid"}
 COMPETITION = {"none", "other_pr", "ours", "unknown"}
 
@@ -74,6 +75,11 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
     if isinstance(amount, float) and (amount != amount or amount == float("inf")):
         raise ValueError("reward_usd must be finite")
     pr = record.get("pr_url")
+    pr_state = record.get("pr_state")
+    if pr_state is not None and (type(pr_state) is not str or pr_state not in PR_STATES):
+        raise ValueError("pr_state must be open, merged, closed, or unknown")
+    if pr_state is not None and not pr:
+        raise ValueError("pr_state requires a sponsor pr_url")
     if pr is not None:
         pr_owner, pr_repo, _ = github_identity(pr, "pr")
         if (pr_owner, pr_repo) != (owner, repo):
@@ -147,6 +153,7 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         "funding_url": funding_url, "eligibility": eligibility,
         "issue_state": state, "source_state": source, "competition": competition,
         "claim_state": claim, "reward_usd": amount, "pr_url": pr,
+        "pr_state": pr_state,
         "pr_author": author.lower() if author else None,
         "source_pr_url": source_pr,
         "source_pr_author": source_author.lower() if source_author else None,
@@ -166,6 +173,9 @@ def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
     # flag is not proof that its sponsor PR belongs to this original author.
     if item["source_state"] == "published" and item["pr_author"] != actor.lower():
         return "PRESERVE_FOREIGN_PR", "Existing PR belongs to another author; do not replace their claim"
+    if item["source_state"] == "published" and item.get("pr_state") == "closed":
+        return ("CLOSED_UNMERGED_REVIEW",
+                "Sponsor PR was closed without merge; preserve contributor claim, check maintainer/portal acceptance, and do not resubmit automatically")
     if item["source_state"] != "published":
         if item["source_pr_url"] and item["source_pr_author"] != actor.lower():
             return "PRESERVE_FOREIGN_PR", "Fork source carrier belongs to another author; keep their attribution and submission path"
@@ -236,7 +246,8 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
     for item in items:
         keyed[item["issue_key"]].append(item)
     portal_actions = {"SUBMIT_EXISTING_CLAIM", "VERIFY_CLAIM",
-                      "AWAIT_ACCEPTANCE", "VERIFY_SETTLEMENT", "REVIEW_REJECTION"}
+                      "AWAIT_ACCEPTANCE", "VERIFY_SETTLEMENT", "REVIEW_REJECTION",
+                      "CLOSED_UNMERGED_REVIEW"}
     for group in keyed.values():
         if len(group) == 1:
             continue
@@ -366,7 +377,7 @@ def render_slack(batch: dict) -> str:
         refs = ["issue_url=%s" % item["issue_url"],
                 "checked_at=%s" % item["checked_at"],
                 "active_owner=%s" % owner]
-        for name in ("funding_url", "pr_url", "pr_author", "source_pr_url", "source_pr_author"):
+        for name in ("funding_url", "pr_url", "pr_author", "pr_state", "source_pr_url", "source_pr_author"):
             if item.get(name):
                 refs.append("%s=%s" % (name, item[name]))
         # URL shape checks are not display escaping: urlsplit accepts raw LF/CR.
