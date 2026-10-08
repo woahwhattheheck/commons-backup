@@ -24,12 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /.gitattributes
-            /owner_net.py
-            /owner.json
 
       - name: persist two-slot digests from owner-net bus
         run: python3 owner_net.py

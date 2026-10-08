@@ -1,8 +1,8 @@
 # repo-pulse — lossless 5-minute change index for main, posted to Slack.
 #
-# The engines live in repo_pulse.py and slack_ingest.py. This workflow fetches
-# them and their runtime dependencies over the API without cloning the tree.
-# Cursor state is a cache, not a commit: committing evidence onto main
+# The engine lives in repo_pulse.py (imported by test_repo_pulse.py). This
+# workflow fetches those two files over the API so it never clones the ~1GB
+# tree. Cursor state is a cache, not a commit: committing evidence onto main
 # would make the pulse appear in its own next pulse.
 #
 # LOOP SAFETY — do not remove the COMMONS_SLACK_MIRROR header the engine
@@ -30,13 +30,27 @@ on:
         description: "Render to the job log instead of posting to Slack"
         type: boolean
         default: false
+  pull_request:
+    paths:
+      - "slack_ingest.py"
+      - "test_slack_ingest.py"
+      - "exact_body_redact.py"
+      - "repo_pulse.py"
+      - "test_repo_pulse.py"
+      - "host/sprint_integration.py"
+      - "test_sprint_integration.py"
+      - "ground/SPRINT_INTEGRATION.json"
+      - ".github/workflows/repo-pulse.yml"
   push:
     branches: [main]
     paths:
       - "slack_ingest.py"
+      - "test_slack_ingest.py"
       - "exact_body_redact.py"
       - "repo_pulse.py"
+      - "test_repo_pulse.py"
       - "host/sprint_integration.py"
+      - "test_sprint_integration.py"
       - "ground/SPRINT_INTEGRATION.json"
       - ".github/workflows/repo-pulse.yml"
 
@@ -67,7 +81,7 @@ jobs:
           restore-keys: |
             repo-pulse-cursor-
 
-      - name: Fetch engine and post digest
+      - name: Fetch engine, run fixtures, post digest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -97,9 +111,14 @@ jobs:
               "${api}/$1?ref=${GITHUB_SHA}" -o "/tmp/pulse/$1"
           }
           fetch repo_pulse.py
-          fetch commons_publication_policy.py
+          fetch test_repo_pulse.py
           fetch host/sprint_integration.py
           cp /tmp/pulse/host/sprint_integration.py /tmp/pulse/sprint_integration.py
+          python3 /tmp/pulse/test_repo_pulse.py
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "PR dry-run: fixtures passed; skipping live digest so a preview cannot move the cursor."
+            exit 0
+          fi
           python3 /tmp/pulse/repo_pulse.py
           if [ -f repo-pulse/latest.json ]; then
             python3 -c "import json,sys; json.load(open('repo-pulse/latest.json')); print('evidence ok')"
@@ -123,7 +142,7 @@ jobs:
 
   slack_ingest:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 30
     concurrency:
       group: repo-pulse-slack-ingest
       cancel-in-progress: false
@@ -149,7 +168,7 @@ jobs:
           fi
           echo "run=${run}" >> "$GITHUB_OUTPUT"
 
-      - name: Fetch exact engine bytes and sync Slack
+      - name: Fetch exact engine bytes, run fixtures, and sync Slack
         id: sync
         if: steps.cadence.outputs.run == 'true'
         env:
@@ -159,7 +178,6 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           COMMONS_SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL_ID || 'C0BRGMDQB6G' }}
           SLACK_INGEST_STATE: .slack-ingest-state.json
-          SLACK_INGEST_BUDGET_SEC: "4500"
         run: |
           set -euo pipefail
           mkdir -p /tmp/slack-ingest
@@ -174,6 +192,16 @@ jobs:
           }
           fetch exact_body_redact.py
           fetch slack_ingest.py
+          fetch test_slack_ingest.py
+          (
+            cd /tmp/slack-ingest
+            python3 -m unittest -v test_slack_ingest.py
+          )
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "PR dry-run: Slack ingest fixtures passed; no live cursor or issue write."
+            echo "state_ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if [ -z "${SLACK_BOT_TOKEN}" ]; then
             echo "Slack ingest idle: SLACK_BOT_TOKEN is not configured."
             echo "state_ready=false" >> "$GITHUB_OUTPUT"
@@ -189,8 +217,8 @@ jobs:
             --posts-json /tmp/slack-ingest/posts.json
           echo "state_ready=true" >> "$GITHUB_OUTPUT"
 
-      - name: Save the Slack event cursor after progress
-        if: always() && github.event_name != 'pull_request' && hashFiles('.slack-ingest-state.json') != ''
+      - name: Save the last fully processed Slack event cursor
+        if: success() && steps.sync.outputs.state_ready == 'true'
         uses: actions/cache/save@v4
         with:
           path: .slack-ingest-state.json

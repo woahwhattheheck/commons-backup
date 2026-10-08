@@ -1,0 +1,33 @@
+name: experience-compiler
+
+on:
+  push:
+    paths:
+      - "experience/**"
+      - "host/experience_compiler.py"
+      - "test_experience_compiler.py"
+      - ".agents/skills/experience-compiler/**"
+      - ".github/workflows/experience-compiler.yml"
+  pull_request:
+    paths:
+      - "experience/**"
+      - "host/experience_compiler.py"
+      - "test_experience_compiler.py"
+      - ".agents/skills/experience-compiler/**"
+      - ".github/workflows/experience-compiler.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 host/experience_compiler.py validate
+      - run: python3 host/experience_compiler.py check
+      - run: python3 -m unittest -v test_experience_compiler.py

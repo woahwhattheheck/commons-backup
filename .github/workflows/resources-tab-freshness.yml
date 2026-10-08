@@ -38,18 +38,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            host/resources_tab.py
-            resources.html
-            ground/RESOURCE_LEDGER.json
-            ground/RESOURCE_LEDGER.md
-            ci/provider_quotas.json
-            revenue/outcome_commerce/manifest.json
-            revenue/outcome_commerce/catalog.json
-            orchestration/jeffersonville/frameworks.json
-            orchestration/jeffersonville/topology.json
-            inventory/resources/records/
+      - name: unit contract
+        run: python3 test_resources_tab.py
       - name: fail when resources.html is stale vs inputs
         run: python3 host/resources_tab.py --check
 
@@ -64,20 +54,10 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 20
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            host/resources_tab.py
-            resources.html
-            ground/RESOURCE_LEDGER.json
-            ground/RESOURCE_LEDGER.md
-            ci/provider_quotas.json
-            revenue/outcome_commerce/manifest.json
-            revenue/outcome_commerce/catalog.json
-            orchestration/jeffersonville/frameworks.json
-            orchestration/jeffersonville/topology.json
-            inventory/resources/records/
+      - name: unit contract
+        run: python3 test_resources_tab.py
       - name: regenerate stamp when sources drifted, else leave FRESH
-        run: python3 host/resources_tab.py --regenerate-or-alarm
+        run: python3 host/resources_tab.py --regenerate-or-alarm --sha "${GITHUB_SHA}"
       - name: commit regenerated stamp on main only
         if: github.ref == 'refs/heads/main'
         run: |

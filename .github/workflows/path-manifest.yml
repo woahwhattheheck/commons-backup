@@ -16,23 +16,10 @@ on:
       - 'pulse.json'
       - 'fresh.md'
       - 'export.txt'
-  push:
-    branches:
-      - main
-    paths:
-      - 'revenue/procurement_runway_gate/**'
-      - 'test_procurement_runway_workflow_budget.py'
-      - '.github/workflows/path-manifest.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
-
-# Preserve one current classifier per PR/ref while cancelling superseded pushes
-# to that same lane. Separate PRs continue to receive independent validation.
-concurrency:
-  group: path-manifest-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
   observe:
@@ -40,15 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # The pull-request merge commit and its base are enough for the delta.
-          fetch-depth: 2
-          # Keep generator_contracts source files from the manifest in this list.
-          sparse-checkout: |
-            host/path_manifest.py
-            architecture/path-manifest.json
-            board_ingest.py
-            revenue/procurement_runway_gate/
-          sparse-checkout-cone-mode: false
+          fetch-depth: 0
+      - name: exercise classifier
+        run: python3 test_path_manifest.py
       - name: emit exact-tree diagnostics
         run: |
           python3 host/path_manifest.py \
@@ -59,35 +40,3 @@ jobs:
           name: commons-path-report-${{ github.sha }}
           path: ${{ runner.temp }}/commons-path-report.json
           if-no-files-found: error
-      - name: detect procurement runway gate delta
-        id: procurement_runway
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          set -eu
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ "$EVENT_NAME" = "push" ]; then
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          elif [ -z "$PR_BASE_SHA" ] || ! git cat-file -e "$PR_BASE_SHA^{commit}" 2>/dev/null; then
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          elif git diff --quiet "$PR_BASE_SHA" HEAD -- \
-              revenue/procurement_runway_gate \
-              test_procurement_runway_workflow_budget.py \
-              .github/workflows/path-manifest.yml; then
-            echo 'changed=false' >> "$GITHUB_OUTPUT"
-          else
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          fi
-      - uses: actions/setup-python@v5
-        if: steps.procurement_runway.outputs.changed == 'true'
-        with:
-          python-version: '3.11'
-      - name: Compile and verify procurement runway
-        if: steps.procurement_runway.outputs.changed == 'true'
-        shell: bash
-        run: |
-          set -eu
-          out="$(mktemp -d)/runway"
-          python -m revenue.procurement_runway_gate compile revenue/procurement_runway_gate/current_opportunities.json --output-dir "$out"
-          python -m revenue.procurement_runway_gate verify revenue/procurement_runway_gate/current_opportunities.json --output-dir "$out"

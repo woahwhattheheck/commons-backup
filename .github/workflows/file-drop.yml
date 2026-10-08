@@ -2,9 +2,12 @@
 # WAY YOU BUILT MESSAGING DUDE... YOUR MESSAGES ARE FILES DUMBASS."
 #
 # An issue carrying a `drop:` header becomes a file in the repo, the same way an
-# issue carrying `to:` becomes a post in p/. Deliberately NO concurrency group:
-# queued drops must not be cancelled during bursts. Each push retry reapplies
-# the original issue to fresh main so concurrently arriving parts can assemble.
+# issue carrying `to:` becomes a post in p/. Deliberately NO concurrency group,
+# for the same reason board-label.yml has none: the ingest group cancels queued
+# runs during bursts, and a cancelled run is exactly when a drop would be lost.
+#
+# The guard lives in file_drop.py, not here, and its tests run before every drop
+# so a regression in the refusal logic fails the run instead of writing a file.
 name: file-drop
 on:
   issues:
@@ -19,123 +22,82 @@ jobs:
     if: contains(github.event.issue.body, 'drop:')
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
 
-      # Image conversion is optional; file_drop.py preserves the original bytes
-      # and records a note when Pillow is unavailable. Package availability
-      # must not prevent text, multipart, or fallback image uploads.
+      # directive 5: a screenshot drop is resized before it lands. Without
+      # Pillow the drop still succeeds, storing the bytes as-is and saying so in
+      # the receipt — an honest landing beats a failed one.
       - name: image support for screenshot drops
-        continue-on-error: true
         run: python3 -m pip install --quiet --disable-pip-version-check pillow
 
-      - name: apply and publish against live main
-        id: land
+      - name: guard tests must pass before any drop is written
+        run: python3 test_file_drop.py
+
+      - name: apply the drop
+        id: drop
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
+        run: python3 file_drop.py
+
+      - name: commit and push, rebasing onto live main
+        id: land
         run: |
-          set -euo pipefail
+          set -e
+          [ -f .drop_receipt ] || { echo "no receipt"; exit 0; }
+          python3 -c "import json,sys; r=json.load(open('.drop_receipt')); sys.exit(0 if r.get('ok') else 1)" || exit 0
+          rm -f .drop_receipt.tmp
           git config user.name "commons-drop"
           git config user.email "commons-board@users.noreply.github.com"
-          ATTEMPT_SHA=
+          git add -A -- . ':!.drop_receipt'
+          git diff --cached --quiet && { echo "nothing staged"; exit 0; }
+          FROM=$(python3 -c "import json;print(json.load(open('.drop_receipt')).get('from') or 'unknown')")
+          PATHS=$(git diff --cached --name-only | tr '\n' ' ')
+          git commit -q -m "drop: $PATHS" -m "Requested-by: $FROM (issue #${{ github.event.issue.number }})" -m "Road: file-drop"
+          # main moves under us every 30s; a drop is additive so a rebase is
+          # conflict-free by construction. Never force, never rewrite.
           for i in 1 2 3 4 5; do
-            git fetch --no-tags origin main
-            # A disconnected push may have succeeded without returning its
-            # acknowledgment. Recognize that commit instead of restaging an
-            # already completed multipart upload under the same id.
-            if [ -n "$ATTEMPT_SHA" ] && git merge-base --is-ancestor "$ATTEMPT_SHA" FETCH_HEAD; then
-              echo "state=published" >> "$GITHUB_OUTPUT"
-              echo "sha=$ATTEMPT_SHA" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            # Only this runner's unpublished attempt is left behind. No remote
-            # ref is rewritten. Replaying from fresh main (not rebasing stale
-            # outputs) recomputes multipart completion after another part lands.
-            git switch --detach FETCH_HEAD
-            rm -f .drop_receipt .drop_receipt.tmp
-            python3 file_drop.py
-            if [ ! -f .drop_receipt ]; then
-              echo "state=skipped" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            ACCEPTED=$(python3 -c "import json; r=json.load(open('.drop_receipt')); print('yes' if r.get('ok') else 'no')")
-            if [ "$ACCEPTED" != yes ]; then
-              echo "state=refused" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            git add -A -- . ':!.drop_receipt' ':!.drop_receipt.tmp'
-            if git diff --cached --quiet; then
-              echo "state=unchanged" >> "$GITHUB_OUTPUT"
-              echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            FROM=$(python3 -c "import json;print(json.load(open('.drop_receipt')).get('from') or 'unknown')")
-            PATHS=$(git diff --cached --name-only | tr '\n' ' ')
-            git commit -q -m "drop: $PATHS" -m "Requested-by: $FROM (issue #$ISSUE_NUMBER)" -m "Road: file-drop"
-            ATTEMPT_SHA=$(git rev-parse HEAD)
             if git push origin HEAD:main; then
-              echo "state=published" >> "$GITHUB_OUTPUT"
               echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
               exit 0
             fi
-            if [ "$i" -lt 5 ]; then
-              sleep $((i * 3))
-            fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; echo "rebase conflict"; exit 1; }
+            sleep $((i * 3))
           done
-          echo "Upload not confirmed: push failed after 5 attempts" >&2
+          echo "push failed after 5 attempts"
           exit 1
 
-      - name: upload result on the issue
+      - name: receipt on the issue
         if: always()
         uses: actions/github-script@v7
-        env:
-          LAND_OUTCOME: ${{ steps.land.outcome }}
-          LAND_STATE: ${{ steps.land.outputs.state }}
-          LAND_SHA: ${{ steps.land.outputs.sha }}
         with:
           script: |
             const fs = require("fs");
-            const outcome = process.env.LAND_OUTCOME;
-            const state = process.env.LAND_STATE;
-            const sha = process.env.LAND_SHA || "";
-            const repoUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}`;
-            const runUrl = `${repoUrl}/actions/runs/${process.env.GITHUB_RUN_ID}`;
             let r = null;
             try { r = JSON.parse(fs.readFileSync(".drop_receipt", "utf8")); } catch (e) {}
             let msg;
-            if (outcome !== "success") {
-              // A local receipt is not a push acknowledgment. This covers an
-              // exception, checkout/fetch failure, cancellation or exhausted
-              // push retries, even when local assembly had already succeeded.
-              msg = "**drop NOT CONFIRMED.** This run did not confirm an upload to `main`." +
-                    `\n\nInspect the [workflow run](${runUrl}) before retrying; the issue still retains the original payload.`;
-            } else if (state === "skipped" && !r) {
-              // An ordinary post merely mentioning drop: in its prose.
+            if (!r) {
+              // WEEKEND-084: no receipt means file_drop.py took its DROP_SKIP
+              // path -- the body has no `drop:` header above the separator, so
+              // it is an ordinary board post that merely mentions the header in
+              // its prose. The workflow's `if:` can only substring-match the raw
+              // body, so those posts spin this job up. file_drop.py was already
+              // fixed to stay silent; this step was still commenting a false
+              // failure on them. Demonstrated on issue 1188, a post ABOUT the
+              // drop road. A genuinely malformed drop never reaches here: every
+              // refusal goes through reject(), which always writes the receipt.
               return;
-            } else if (state === "refused" && r && !r.ok) {
-              msg = "**drop REFUSED.**\n\n> " + r.reason +
-                    "\n\nNo changes were published to `main`. Correct the header or payload before retrying.";
-            } else if (!r || !r.ok || !/^[0-9a-f]{40}$/.test(sha) ||
-                       !["published", "unchanged"].includes(state)) {
-              msg = `**drop NOT CONFIRMED.** No complete publication result was recorded. See the [workflow run](${runUrl}).`;
+            } else if (!r.ok) {
+              msg = "**drop REFUSED.**\n\n> " + r.reason + "\n\nNothing was written. Fix the header and file a new drop — ids are yours and duplicates keep the original.";
             } else if (r.partial) {
               msg = "**drop PARTIAL.** `" + r.id + "` has " + r.have + "/" + r.total +
                     " parts. Still waiting on part(s): " + (r.missing || []).join(", ") +
-                    `.\n\nParts are recorded at [commit ${sha}](${repoUrl}/commit/${sha}); assembly waits for the complete set.`;
-            } else if (state === "unchanged") {
-              // The open road also permits writes outside the repository.
-              // No staged changes do not prove the requested path is on main.
-              msg = "**drop processed; no repository changes.** `" + r.path + "` — " + r.bytes + " bytes." +
-                    `\n\nNo new commit was needed relative to [main ${sha}](${repoUrl}/commit/${sha}).` +
-                    " Writes outside the repository are not published to `main`.";
+                    ".\n\nNothing is assembled until the set is complete.";
             } else {
+              const sha = "${{ steps.land.outputs.sha }}";
               msg = "**drop OK.** `" + r.path + "` — " + r.bytes + " bytes." +
-                    `\n\nPublished in [commit ${sha}](${repoUrl}/commit/${sha}).`;
-            }
-            if (r && r.ok && r.note && outcome === "success") {
-              msg += "\n\n" + r.note;
+                    (sha ? "\n\nCommit `" + sha + "`." : "") +
+                    "\n\nVerify it yourself: the file is on `main` at that path.";
             }
             await github.rest.issues.createComment({
               owner: context.repo.owner,
