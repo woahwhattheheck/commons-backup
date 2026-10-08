@@ -1,11 +1,13 @@
 'use strict';
 
 const {reconcileBeforePullCreate} = require('./connected_github_pr_preflight.cjs');
+const {preparePublicationClaim, mutatePublicationClaims} = require('./connected_github_publication_claim.cjs');
 
 // Caller supplies the already-discovered native bindings and authorized change.
-// No filesystem, network client, credential lookup, forced ref update, or write retry.
+// No filesystem, network client, credential lookup, or forced ref update. Source/publication
+// writes are not replayed; optional publication-claim CAS conflicts re-read the claim file.
 const ACTIONS = ['fetch', 'fetch_file', 'fetch_blob', 'create_blob', 'create_tree', 'create_commit',
-  'create_branch', 'create_pull_request', 'merge_pull_request'];
+  'create_branch', 'create_pull_request', 'merge_pull_request', 'create_file', 'update_file'];
 const SHA = /^[0-9a-f]{40}$/;
 const EMPTY_BLOB_SHA = 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391';
 
@@ -815,8 +817,15 @@ async function publishGitHubChange(tools, change, options = {}) {
   const progress = {status: 'incomplete', stage: 'validate', calls: {}, files: [], progress_callback_errors: []};
   let lastResponse;
   let announce = async () => {};
+  let publicationClaimConfig = null;
+  let publicationClaimActive = false;
+  let releasePublicationClaim = async () => {};
   try {
     const spec = validate(change);
+    publicationClaimConfig = preparePublicationClaim(options.publication_claims, spec);
+    if (publicationClaimConfig) progress.publication_claim = {status: 'prepared',
+      holder: publicationClaimConfig.holder, ledger_repository_full_name: publicationClaimConfig.ledger_repository_full_name,
+      paths: publicationClaimConfig.paths};
     if (options.inline_pinned_utf8 !== undefined && typeof options.inline_pinned_utf8 !== 'boolean') {
       throw new TypeError('inline_pinned_utf8 must be boolean');
     }
@@ -844,6 +853,7 @@ async function publishGitHubChange(tools, change, options = {}) {
       options.bindings?.[action] ?? `mcp__codex_apps__github_${action}`]));
     const required = ACTIONS.filter(action => action !== 'fetch_blob'
       && (action !== 'merge_pull_request' || spec.merge)
+      && (!['create_file', 'update_file'].includes(action) || publicationClaimConfig)
       && (action !== 'create_blob' || spec.files.some(file =>
         file.encoding === 'base64'
           || (file.expected_new_blob_sha !== undefined && !inlinePinnedPaths.has(file.path)))));
@@ -875,6 +885,35 @@ async function publishGitHubChange(tools, change, options = {}) {
       catch (error) {
         if (isMissingFileResponse(lastResponse)) return {absent: true};
         throw error;
+      }
+    };
+    const takePublicationClaim = async () => {
+      if (!publicationClaimConfig) return null;
+      progress.stage = 'take_publication_claims';
+      const result = await mutatePublicationClaims({fetchJSON, readFile: readPreimage, call,
+        config: publicationClaimConfig, action: 'take'});
+      progress.publication_claim = result;
+      publicationClaimActive = result.status === 'ACQUIRED';
+      await announce();
+      return result;
+    };
+    releasePublicationClaim = async reason => {
+      if (!publicationClaimConfig || !publicationClaimActive) return null;
+      const previousStage = progress.stage;
+      try {
+        progress.stage = 'release_publication_claims';
+        const result = await mutatePublicationClaims({fetchJSON, readFile: readPreimage, call,
+          config: publicationClaimConfig, action: 'release'});
+        progress.publication_claim_release = {...result, reason};
+        if (result.status === 'RELEASED' || result.status === 'ALREADY_RELEASED') publicationClaimActive = false;
+        return result;
+      } catch (claimError) {
+        progress.publication_claim_release = {status: 'RELEASE_FAILED', reason,
+          error: String(claimError?.message ?? claimError)};
+        return null;
+      } finally {
+        progress.stage = previousStage;
+        await announce();
       }
     };
     const api = `https://api.github.com/repos/${repository_full_name}`;
@@ -997,6 +1036,13 @@ async function publishGitHubChange(tools, change, options = {}) {
       tree_sha: progress.tree_sha, message: spec.commit_message});
     progress.commit_sha = sha(commit.sha, 'Created commit');
     await announce();
+    const claim = await takePublicationClaim();
+    if (claim && claim.status !== 'ACQUIRED') {
+      progress.status = claim.status === 'HELD_BY_PEER' ? 'publication_claim_held' : 'publication_claim_retry_required';
+      progress.stage = 'complete';
+      await announce();
+      return progress;
+    }
     progress.stage = 'create_branch';
     const createdBranch = await call('create_branch', {repository_full_name, branch_name: spec.branch_name, sha: progress.commit_sha});
     if (createdBranch.branch !== spec.branch_name && createdBranch.ref !== `refs/heads/${spec.branch_name}`) {
@@ -1019,6 +1065,7 @@ async function publishGitHubChange(tools, change, options = {}) {
       progress.publication_status = progress.pr_create_reconciliation.status;
       progress.status = progress.pr_create_reconciliation.status === 'EXISTING_BRANCH_CONFLICT'
         ? 'reconciliation_hold' : 'reconciled';
+      await releasePublicationClaim('preflight_reconciled');
       progress.stage = 'complete';
       await announce();
       return progress;
@@ -1031,6 +1078,7 @@ async function publishGitHubChange(tools, change, options = {}) {
       throw new Error('The returned pull request does not identify the created commit');
     }
     progress.publication_status = 'pull_request_open';
+    await releasePublicationClaim('pull_request_open');
     await announce();
     if (spec.merge) {
       progress.stage = 'check_current_base';
@@ -1091,6 +1139,17 @@ async function publishGitHubChange(tools, change, options = {}) {
     return progress;
   } catch (error) {
     if (error.tool_error) progress.tool_error = error.tool_error;
+    const explicitProviderRejection = Number.isInteger(error.tool_error?.http_status)
+      && error.tool_error.http_status >= 400 && error.tool_error.http_status < 500
+      && error.tool_error.error_code !== 'transport_closed';
+    const knownNoUncertainCreate = progress.stage !== 'create_pull_request'
+      || progress.pull_request !== undefined || explicitProviderRejection;
+    if (publicationClaimActive && knownNoUncertainCreate) {
+      await releasePublicationClaim('known_failure');
+    } else if (publicationClaimActive) {
+      progress.publication_claim_release = {status: 'RETAINED_FOR_RECONCILIATION',
+        reason: 'uncertain_create_pull_request'};
+    }
     await announce();
     const failure = new GitHubPublishError(String(error.message ?? error), progress, error);
     if (error.tool_error) failure.tool_error = error.tool_error;
@@ -1798,8 +1857,15 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
     whole_tree_verification: 'not_performed', pending_write: null};
   let lastResponse;
   let announce = async () => {};
+  let publicationClaimConfig = null;
+  let publicationClaimActive = false;
+  let releasePublicationClaim = async () => {};
   try {
     const spec = validate(change, true);
+    publicationClaimConfig = preparePublicationClaim(options.publication_claims, spec);
+    if (publicationClaimConfig) progress.publication_claim = {status: 'prepared',
+      holder: publicationClaimConfig.holder, ledger_repository_full_name: publicationClaimConfig.ledger_repository_full_name,
+      paths: publicationClaimConfig.paths};
     if (spec.files.length > 300) throw new TypeError('Contents publication supports at most 300 file paths');
     if (spec.files.some(file => file.delete !== true && (file.encoding !== 'utf-8' || file.mode !== undefined))) {
       throw new TypeError('Contents publication accepts UTF-8 content or explicit deletion, without caller-selected Git modes');
@@ -1840,8 +1906,10 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
     const required = actions.filter(action => action !== 'fetch_blob'
       && (action !== 'create_branch' || saved === undefined)
       && (action !== 'merge_pull_request' || spec.merge)
-      && (action !== 'create_file' || spec.files.some(file => file.delete !== true && file.expected_blob_sha === null))
-      && (action !== 'update_file' || spec.files.some(file => file.delete !== true && file.expected_blob_sha !== null))
+      && (action !== 'create_file' || publicationClaimConfig
+        || spec.files.some(file => file.delete !== true && file.expected_blob_sha === null))
+      && (action !== 'update_file' || publicationClaimConfig
+        || spec.files.some(file => file.delete !== true && file.expected_blob_sha !== null))
       && (action !== 'delete_file' || spec.files.some(file => file.delete === true)));
     for (const action of required) {
       if (typeof tools?.[bindings[action]] !== 'function') {
@@ -1875,6 +1943,42 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
     const fetchJSON = async url => {
       const payload = await call('fetch', {url});
       return typeof payload.content === 'string' ? object(JSON.parse(payload.content), 'GitHub resource') : payload;
+    };
+    const readClaimFile = async args => {
+      try { return {data: await call('fetch_file', args)}; }
+      catch (error) {
+        if (isMissingFileResponse(error.native_response ?? lastResponse)) return {absent: true};
+        throw error;
+      }
+    };
+    const takePublicationClaim = async () => {
+      if (!publicationClaimConfig) return null;
+      progress.stage = 'take_publication_claims';
+      const result = await mutatePublicationClaims({fetchJSON, readFile: readClaimFile, call,
+        config: publicationClaimConfig, action: 'take'});
+      progress.publication_claim = result;
+      publicationClaimActive = result.status === 'ACQUIRED';
+      await announce();
+      return result;
+    };
+    releasePublicationClaim = async reason => {
+      if (!publicationClaimConfig || !publicationClaimActive) return null;
+      const previousStage = progress.stage;
+      try {
+        progress.stage = 'release_publication_claims';
+        const result = await mutatePublicationClaims({fetchJSON, readFile: readClaimFile, call,
+          config: publicationClaimConfig, action: 'release'});
+        progress.publication_claim_release = {...result, reason};
+        if (result.status === 'RELEASED' || result.status === 'ALREADY_RELEASED') publicationClaimActive = false;
+        return result;
+      } catch (claimError) {
+        progress.publication_claim_release = {status: 'RELEASE_FAILED', reason,
+          error: String(claimError?.message ?? claimError)};
+        return null;
+      } finally {
+        progress.stage = previousStage;
+        await announce();
+      }
     };
     const readBlob = typeof tools?.[bindings.fetch_blob] === 'function'
       ? blob_sha => call('fetch_blob', {repository_full_name, blob_sha}) : undefined;
@@ -1941,6 +2045,13 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
       await announce(); return progress;
     }
     const sourceByPath = new Map(spec.files.map(file => [file.path, file]));
+    const claim = await takePublicationClaim();
+    if (claim && claim.status !== 'ACQUIRED') {
+      progress.status = claim.status === 'HELD_BY_PEER' ? 'publication_claim_held' : 'publication_claim_retry_required';
+      progress.stage = 'complete';
+      await announce();
+      return progress;
+    }
     progress.stage = 'create_branch';
     if (saved === undefined) {
       const created = await write('create_branch', {repository_full_name,
@@ -2057,6 +2168,7 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
       progress.publication_status = progress.pr_create_reconciliation.status;
       progress.status = progress.pr_create_reconciliation.status === 'EXISTING_BRANCH_CONFLICT'
         ? 'reconciliation_hold' : 'reconciled';
+      await releasePublicationClaim('preflight_reconciled');
       progress.stage = 'complete';
       await announce();
       return progress;
@@ -2071,6 +2183,7 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
     }
     progress.pending_write = null;
     progress.publication_status = 'pull_request_open';
+    await releasePublicationClaim('pull_request_open');
     await announce();
     if (spec.merge) {
       progress.stage = 'check_current_base';
@@ -2135,6 +2248,18 @@ async function publishGitHubContentsChange(tools, change, options = {}) {
   } catch (error) {
     if (error.tool_error) progress.tool_error = error.tool_error;
     progress.reconciliation_required = progress.branch_created === true || progress.pending_write !== null;
+    const explicitProviderRejection = Number.isInteger(error.tool_error?.http_status)
+      && error.tool_error.http_status >= 400 && error.tool_error.http_status < 500
+      && error.tool_error.error_code !== 'transport_closed';
+    const uncertainCreate = progress.pending_write?.action === 'create_pull_request'
+      && progress.pending_write?.state === 'calling' && progress.pull_request === undefined
+      && !explicitProviderRejection;
+    if (publicationClaimActive && !uncertainCreate) {
+      await releasePublicationClaim('known_failure');
+    } else if (publicationClaimActive) {
+      progress.publication_claim_release = {status: 'RETAINED_FOR_RECONCILIATION',
+        reason: 'uncertain_create_pull_request'};
+    }
     await announce();
     const failure = new GitHubPublishError(String(error.message ?? error), progress, error);
     if (error.tool_error) failure.tool_error = error.tool_error;

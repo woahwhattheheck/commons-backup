@@ -37,6 +37,38 @@ called once for an observed nonempty text blob whose file response omitted the
 body. Binary files, ordinary text responses, actual empty files, and failed
 file-reader calls do not use this continuation.
 
+### Optional cross-seat publication claims
+
+For swarm work where multiple publisher processes can reach the same source
+branch, set \`options.publication_claims: true\`. The Git Trees and Contents
+publishers then use the existing Commons \`state/claims\` branch as a shared
+coordination rail before either route creates the prepared branch. The default
+ledger is \`woahwhattheheck/commons\`; an object may instead supply
+\`ledger_repository_full_name\`, a stable \`holder\` for explicit recovery,
+\`ttl_s\` from 30 through 7200 seconds, and an informational \`issue_key\`.
+
+One deterministic claim record is keyed by target repository, base branch and
+source branch. It contains bounded live leases with each holder's exact path
+set. An overlapping live path held by another seat returns
+\`status: publication_claim_held\` before source-branch publication and performs
+no claim write. Disjoint path sets on the same branch may coexist. Expired
+leases are pruned on the next successful claim mutation.
+
+A take or release does one exact-preimage Contents write to that claim record
+(\`create_file\` for the first lease, otherwise \`update_file\`). A 409/422
+same-record race is re-read and recomposed up to three times; source writes and
+pull-request creation are never replayed by this claim layer. Successful
+pre-create reconciliation and a confirmed pull request release the lease.
+Known failures release it best-effort. If pull-request creation has an uncertain
+outcome, the lease is retained for reconciliation/TTL expiry rather than letting
+another seat immediately repeat the publication.
+
+This option additionally requires the discovered \`create_file\` and
+\`update_file\` bindings and write access to the selected ledger repository.
+Omitting the option preserves the previous publisher call graph. The claim is
+coordination evidence, not permission to edit a repository or entitlement to a
+bounty.
+
 From a Node host that already has those native tool bindings:
 
 ```javascript
