@@ -55,6 +55,9 @@ def build_url(route: str, params: dict) -> str:
     elif route == "pull.files":
         path = base + f"/pulls/{params['number']}/files"
         query = {k: params[k] for k in ("page", "per_page")}
+    elif route == "pulls.list":
+        path = base + "/pulls"
+        query = {k: v for k, v in params.items() if k not in {"owner", "repo"}}
     elif route == "commit.get":
         path = base + "/commits/" + _quote(params["ref"])
     elif route == "issues.list":

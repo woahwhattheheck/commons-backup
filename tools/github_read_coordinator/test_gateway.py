@@ -28,6 +28,30 @@ class URLTests(unittest.TestCase):
         url = build_url("search.issues", {"q": "repo:o/r is:issue bug", "page": 2, "per_page": 50})
         self.assertTrue(url.startswith(API_ROOT + "/search/issues?"))
         self.assertIn("q=repo%3Ao%2Fr+is%3Aissue+bug", url)
+    def test_pull_list_url_and_strict_filters(self):
+        url = build_url("pulls.list", {
+            "owner": "WoahWhatTheHeck", "repo": "Commons",
+            "head": "woahwhattheheck:sol56/branch", "base": "main",
+            "state": "all", "page": 2, "per_page": 25,
+        })
+        self.assertEqual(
+            API_ROOT + "/repos/woahwhattheheck/commons/pulls?"
+            "head=woahwhattheheck%3Asol56%2Fbranch&base=main&state=all&page=2&per_page=25", url,
+        )
+        self.assertEqual(
+            API_ROOT + "/repos/o/r/pulls?page=1&per_page=30",
+            build_url("pulls.list", {"owner": "o", "repo": "r"}),
+        )
+        for bad in (
+            {"head": "woahwhattheheck:foo\r\nX-Test: yes"},
+            {"base": "main\r\nX-Test: yes"},
+            {"head": "woahwhattheheck:../bad"},
+            {"base": "feature//bad"},
+            {"state": "merged"}, {"page": 0}, {"per_page": 101},
+        ):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                build_url("pulls.list", {"owner": "o", "repo": "r", **bad})
+
     def test_traversal_and_header_injection_rejected(self):
         for route, params in [
             ("contents.get", {"owner": "o", "repo": "r", "path": "../x"}),

@@ -27,6 +27,7 @@ ROUTES = {
     "contents.get": {"owner", "repo", "path", "ref"},
     "pull.get": {"owner", "repo", "number"},
     "pull.files": {"owner", "repo", "number", "page", "per_page"},
+    "pulls.list": {"owner", "repo", "head", "base", "state", "page", "per_page"},
     "commit.get": {"owner", "repo", "ref"},
     "issues.list": {"owner", "repo", "state", "labels", "sort", "direction", "page", "per_page"},
     "actions.runs": {"owner", "repo", "branch", "event", "status", "head_sha", "page", "per_page"},
@@ -99,7 +100,7 @@ def normalize(route: str, params: dict) -> dict:
         raise ValueError("unsupported parameters")
     out = dict(params)
 
-    if route.startswith(("repo.", "contents.", "pull.", "commit.", "issues.", "actions.")):
+    if route.startswith(("repo.", "contents.", "pull.", "pulls.", "commit.", "issues.", "actions.")):
         if not {"owner", "repo"} <= out.keys():
             raise ValueError("owner and repo are required")
     if "owner" in out:
@@ -116,6 +117,21 @@ def normalize(route: str, params: dict) -> dict:
         out["path"] = _safe_path(out["path"])
     if route.startswith("pull.") and "number" not in out:
         raise ValueError("pull number is required")
+    if route == "pulls.list":
+        for key in ("head", "base"):
+            if key not in out:
+                continue
+            value = _safe_text(out[key], maximum=255)
+            branch = value
+            if key == "head" and ":" in value:
+                owner, branch = value.split(":", 1)
+                if OWNER_RE.fullmatch(owner) is None:
+                    raise ValueError("invalid pull head owner")
+            if not re.fullmatch(r"[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*", branch):
+                raise ValueError("invalid pull branch")
+            if any(part in {".", ".."} or part.endswith((".lock", ".")) for part in branch.split("/")) or ".." in branch:
+                raise ValueError("invalid pull branch")
+            out[key] = value
     if route == "commit.get" and "ref" not in out:
         raise ValueError("ref is required")
     if route.startswith("search.") and "q" not in out:
@@ -149,7 +165,7 @@ def normalize(route: str, params: dict) -> dict:
         if out["sort"] not in allowed:
             raise ValueError("invalid sort")
 
-    if route in {"pull.files", "issues.list", "actions.runs", "search.issues", "search.code"}:
+    if route in {"pull.files", "pulls.list", "issues.list", "actions.runs", "search.issues", "search.code"}:
         out.setdefault("per_page", 30)
         out.setdefault("page", 1)
     if route == "issues.list":

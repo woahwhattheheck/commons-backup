@@ -96,6 +96,7 @@ For an in-flight duplicate, `BUSY` advises a one-second local cache recheck. The
 - `contents.get`
 - `pull.get`
 - `pull.files`
+- `pulls.list` (GET `/repos/{owner}/{repo}/pulls`; optional `head`, `base`, `state=open|closed|all`, `page=1`, `per_page=30`)
 - `commit.get`
 - `issues.list`
 - `actions.runs`
@@ -103,6 +104,8 @@ For an in-flight duplicate, `BUSY` advises a one-second local cache recheck. The
 - `search.code`
 
 Parameters are strictly normalized. Repository paths cannot traverse; dynamic URL segments are percent-encoded; query values are generated with `urlencode`; token and arbitrary-URL overrides are impossible by schema.
+
+`pulls.list` uses the existing `core` read quota and singleflight/cache/ETag/cooldown policy. Its `head` filter permits a qualified contributor branch such as `woahwhattheheck:sol56/branch`; branch filters reject control characters and malformed path components. The new route is GET-only and neither publishes nor modifies a pull request.
 
 ## Test
 
