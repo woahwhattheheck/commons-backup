@@ -25,7 +25,7 @@ SCHEMA = "commons-claim-overlap/v1"
 _OP = r"[A-Za-z0-9][A-Za-z0-9_.]*(?:[-:][A-Za-z0-9_.]+)+"
 # Slack receipts use "TAKE · OP" and "TAKE BUILD/SHIP · OP".
 # A bounded role needs a bullet; arbitrary prose never becomes a claim.
-_CLAIM_BULLET_PREFIX = r"(?:[A-Za-z]+(?:[/ -][A-Za-z]+){0,2}\s*)?[·•]\s*"
+_CLAIM_BULLET_PREFIX = r"(?:[A-Za-z]+(?:\s*[/ -]\s*[A-Za-z]+){0,2}\s*)?[·•]\s*"
 _DECLARATION = re.compile(
     rf"^\s*(?:CLAIM|TAKE|Taking|I claim|I(?: am|'m|’m) taking)\s+"
     rf"(?:{_CLAIM_BULLET_PREFIX})?({_OP})(?=\s|[.,:;—·•]|$)",
@@ -40,6 +40,14 @@ _TS = re.compile(r"\d+\.\d+\Z")
 _SCOPE = re.compile(r"^(?:exact\s+)?(?:scope|owned(?:\s+paths?)?)\s*(?::|is\b|[—-])\s*", re.I)
 _OWN = re.compile(r"^I\s+(?:own|retain only|am keeping|will own)\s+", re.I)
 _URL = re.compile(r"https?://[^\s<>]+")
+# An explicitly named sponsored issue is an independent ownership identity.
+_ISSUE_URL = re.compile(
+    r"https://github\.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/issues/([1-9][0-9]*)"
+    r"(?=$|[^A-Za-z0-9/])", re.I,
+)
+_ISSUE_SHORT = re.compile(
+    r"(?<![A-Za-z0-9_./])([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)\s*#([1-9][0-9]*)\b"
+)
 _REFERENCE_START = re.compile(r"^(?:For\b|Please\b|Existing\b|Other\b|No\b|Your\b|The (?:later|earlier)\b|>)", re.I)
 
 
@@ -241,6 +249,27 @@ def _scope_clauses(body: str, remainder: str | None = None) -> list[str]:
     return list(dict.fromkeys(clauses))
 
 
+def _issue_targets(body: str) -> list[dict[str, Any]]:
+    """Extract exact sponsor issue names from the claim's opening paragraph.
+
+    Bare issue numbers could be PRs; later reference paragraphs may name
+    competing work. Neither should silently become an ownership declaration.
+    """
+    opening = re.split(r"\n\s*\n", body, maxsplit=1)[0][:1800]
+    targets: dict[tuple[str, int], dict[str, Any]] = {}
+    for pattern in (_ISSUE_URL, _ISSUE_SHORT):
+        for match in pattern.finditer(opening):
+            repo = f"{match[1]}/{match[2]}".casefold()
+            issue = int(match[3])
+            targets.setdefault((repo, issue), {
+                "repository": repo,
+                "issue": issue,
+                "issue_url": f"https://github.com/{repo}/issues/{issue}",
+                "literal": match[0],
+            })
+    return list(targets.values())
+
+
 def _event(kind: str, operation: str, body: str, record: dict[str, Any], clauses: list[str] | None = None) -> dict[str, Any]:
     return {"kind": kind, "operation_id": operation.rstrip("."), "text": body,
             "source": record["source"], "repository": record["repository"],
@@ -331,10 +360,16 @@ def _reduce(operation: str, events: list[dict[str, Any]], unresolved: list[dict[
         by_time[str(event["source"].get("message_ts"))].add(event["kind"])
     uncertain_order = (not timed and len({event["kind"] for event in events}) > 1) or any(len(kinds) > 1 for kinds in by_time.values())
     scopes: list[dict[str, Any]] = []
+    issue_targets: dict[tuple[str, int], dict[str, Any]] = {}
     state = "unknown_active"
     evidence: list[dict[str, Any]] = []
     repositories = sorted({str(event["repository"]) for event in events if event.get("repository")})
     for event in events:
+        if event["kind"] == "claim":
+            for target in _issue_targets(event["text"]):
+                issue_targets.setdefault((target["repository"], target["issue"]), {
+                    **target, "source": event["source"],
+                })
         evidence.append({"kind": event["kind"], "source": event["source"], "text": event["text"],
                          "scope_clauses": event["scope_clauses"], "operation_alias": event.get("operation_alias"),
                          "alias_resolution": event.get("alias_resolution")})
@@ -371,7 +406,8 @@ def _reduce(operation: str, events: list[dict[str, Any]], unresolved: list[dict[
         unique[(scope["path"], tuple(scope["symbols"]), scope["scope_text"])] = scope
     repository = repositories[0] if len({_repository_key(repo) for repo in repositories}) == 1 else None
     return {"operation_id": operation, "claim_key": [repository, operation], "state": state, "repositories": repositories,
-            "scopes": list(unique.values()), "evidence": evidence,
+            "scopes": list(unique.values()), "issue_targets": list(issue_targets.values()),
+            "evidence": evidence,
             "claim_urls": list(dict.fromkeys(event["source"]["permalink"] for event in events if event["kind"] == "claim" and event["source"].get("permalink")))}
 
 
@@ -391,7 +427,21 @@ def _overlaps(claims: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for index, left in enumerate(active):
         for right in active[index + 1:]:
             lr, rr = left["repositories"], right["repositories"]
-            if lr and rr and {_repository_key(repo) for repo in lr}.isdisjoint(_repository_key(repo) for repo in rr):
+            issue_matches = []
+            for li in left["issue_targets"]:
+                for ri in right["issue_targets"]:
+                    if (li["repository"], li["issue"]) == (ri["repository"], ri["issue"]):
+                        issue_matches.append({
+                            "issue_url": li["issue_url"],
+                            "relation": "same_explicit_issue_target",
+                            "left_source": li["source"],
+                            "right_source": ri["source"],
+                        })
+            # Coordination repository context can differ from the sponsor.
+            if (lr and rr and
+                    {_repository_key(repo) for repo in lr}.isdisjoint(
+                        _repository_key(repo) for repo in rr)
+                    and not issue_matches):
                 continue
             matches: list[dict[str, Any]] = []
             for ls in left["scopes"]:
@@ -406,14 +456,19 @@ def _overlaps(claims: list[dict[str, Any]]) -> list[dict[str, Any]]:
                             member_relation = "shared_explicit_symbol"
                         elif ls["explicit_symbols_only"] and rs["explicit_symbols_only"]:
                             member_relation = "different_explicit_symbols"
-                    matches.append({"left_scope": ls, "right_scope": rs, "path_relation": relation,
-                                    "symbol_relation": member_relation})
-            if matches:
-                pairs.append({"left_operation_id": left["operation_id"], "right_operation_id": right["operation_id"],
-                    "left_claim_key": left["claim_key"], "right_claim_key": right["claim_key"],
+                    matches.append({"left_scope": ls, "right_scope": rs,
+                                    "path_relation": relation, "symbol_relation": member_relation})
+            if issue_matches or matches:
+                pairs.append({
+                    "left_operation_id": left["operation_id"],
+                    "right_operation_id": right["operation_id"],
+                    "left_claim_key": left["claim_key"],
+                    "right_claim_key": right["claim_key"],
                     "repository_relation": "matching_explicit_repository" if lr and rr else "not_established",
-                    "matches": matches,
-                    "interpretation": "Advisory scope overlap; source text does not establish semantic conflict, incompatibility, or worker liveness."})
+                    "matches": matches, "issue_matches": issue_matches,
+                    "interpretation": "Advisory overlap of explicit issue target or source scope; "
+                                      "source text does not establish semantic conflict, incompatibility, or worker liveness.",
+                })
     return pairs
 
 
@@ -564,6 +619,7 @@ def _as_text(result: dict[str, Any]) -> str:
             for scope in claim["scopes"]
         )
         lines.extend(f"    scope: {scope}" for scope in scopes)
+        lines.extend(f"    sponsor issue: {target['issue_url']}" for target in claim["issue_targets"])
         if not scopes:
             lines.append("    scope: unresolved in the supplied statements")
         references = dict.fromkeys(
@@ -574,6 +630,11 @@ def _as_text(result: dict[str, Any]) -> str:
         lines.extend(f"    {kind}: {reference}" for kind, reference in references)
     for pair in result["overlaps"]:
         lines.extend(["", f"{pair['left_operation_id']} / {pair['right_operation_id']}"])
+        for match in pair["issue_matches"]:
+            lines.append(f"  sponsor issue: {match['issue_url']} ({match['relation']})")
+            for key in ("left_source", "right_source"):
+                source = match[key]
+                lines.append(f"    {source['permalink'] or str(source['snapshot']) + ':' + str(source['position'])}")
         for match in pair["matches"]:
             left, right = match["left_scope"], match["right_scope"]
             lines.append(f"  {left['literal']} / {right['literal']}: {match['path_relation']}; {match['symbol_relation']}")

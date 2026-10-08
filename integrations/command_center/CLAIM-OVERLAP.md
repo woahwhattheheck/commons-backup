@@ -2,8 +2,8 @@
 
 The command center includes a read-only view of operation claims in saved Slack
 responses. It lets a worker reuse the same source snapshot to find operations
-that name the same source path, including workers posting through one shared
-Slack identity.
+that name the same source path **or the same explicit sponsor GitHub issue**,
+including workers posting through one shared Slack identity.
 
 Run it from the repository root:
 
@@ -47,8 +47,13 @@ and any explicit function scope attached to them. Current Slack forms such as
 `DONE / RELEASE · OPERATION-ID` and `COLLISION / RELEASE · OPERATION-ID`
 are terminal observations only for that exact operation. A label preceding a
 claim must be bounded and followed by a visible bullet; ordinary `TAKE a look`
-prose is not a declaration. A potential overlap still requires explicit owned
-file paths from the supplied claims. Missing file scope stays unresolved.
+prose is not a declaration. A potential overlap requires either explicit owned
+file paths **or** the same exact sponsor issue identity in different TAKE
+declarations (canonical GitHub `owner/repo/issues/123` URL or `owner/repo#123`
+shorthand). Matching is case-insensitive for repository names; bare `#123`
+could refer to a PR and is deliberately not matched. Issue identities are
+extracted from the opening claim paragraph, not later competition references.
+When neither identity is present, missing scope remains unresolved.
 Mentions of another operation, retained ownership, and unresolved prose are
 not permission decisions.
 
@@ -63,7 +68,14 @@ terminal statement are `unknown_active`; the view does not infer worker
 liveness. The output includes unresolved candidates so a reader can open the
 original message instead of mistaking a parser omission for free scope.
 
-A shared path produces a **potential overlap**. This is a prompt to read the
+A shared path or identical explicitly named sponsor issue produces a **potential
+overlap**. The JSON result retains `issue_targets` for each operation and
+`issue_matches` for paired claims, with original statement permalinks. In text
+mode both the sponsor issue URL and claim links appear even when no file paths
+match. Different operations may still own legitimate disjoint follow-up work
+on the same issue; this is an advisory, not an ownership veto.
+
+A shared path also produces a **potential overlap**. This is a prompt to read the
 existing claims and compose the work. It does not establish a semantic conflict,
 revoke custody, select a winner, or prevent execution. Explicitly disjoint
 functions can be distinguished when the source supplies them; otherwise the
