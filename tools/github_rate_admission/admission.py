@@ -67,10 +67,14 @@ def classify(status: int | None, message: str = "", *, pre_provider: bool = Fals
 
 
 def acquire(db, account: str, bucket: str, resource: str, operation_id: str,
-            now: int, lease_seconds: int = 180, max_inflight: int = 4):
+            now: int, lease_seconds: int = 180, max_inflight: int = 4,
+            min_interval_seconds: int = 0):
     """Atomic reservation. Reuse of an operation ID is always rejected, including after settlement."""
-    if not all((account, bucket, resource, operation_id)) or lease_seconds < 1 or max_inflight < 1:
-        raise ValueError("nonempty IDs, positive lease and capacity required")
+    if (not all((account, bucket, resource, operation_id)) or lease_seconds < 1
+            or max_inflight < 1 or min_interval_seconds < 0):
+        raise ValueError(
+            "nonempty IDs, positive lease/capacity and nonnegative minimum interval required"
+        )
     db.execute("BEGIN IMMEDIATE")
     try:
         # An expired reservation might have dispatched a provider write: do not replay it.
@@ -84,6 +88,10 @@ def acquire(db, account: str, bucket: str, resource: str, operation_id: str,
             unknown = db.execute("SELECT operation_id FROM leases WHERE account=? AND bucket=? AND resource=? AND state='unknown' LIMIT 1", (account,bucket,resource)).fetchone()
             active_same = db.execute("SELECT operation_id FROM leases WHERE account=? AND bucket=? AND resource=? AND state='reserved' AND lease_until>? LIMIT 1", (account,bucket,resource,now)).fetchone()
             capacity = db.execute("SELECT count(*) FROM leases WHERE account=? AND bucket=? AND state='reserved' AND lease_until>?",(account,bucket,now)).fetchone()[0]
+            last_admit = db.execute(
+                "SELECT max(created_epoch) FROM leases WHERE account=? AND bucket=?",
+                (account, bucket),
+            ).fetchone()[0]
             if blocked:
                 result = {"admitted":False,"reason":"gate_blocked","gates":blocked}
             elif unknown:
@@ -92,6 +100,15 @@ def acquire(db, account: str, bucket: str, resource: str, operation_id: str,
                 result = {"admitted":False,"reason":"resource_reserved","operation_id":active_same[0]}
             elif capacity >= max_inflight:
                 result = {"admitted":False,"reason":"account_capacity","inflight":capacity,"max_inflight":max_inflight}
+            elif (min_interval_seconds and last_admit is not None
+                  and last_admit + min_interval_seconds > now):
+                result = {
+                    "admitted": False,
+                    "reason": "provider_pacing",
+                    "last_admit_epoch": last_admit,
+                    "retry_at_epoch": last_admit + min_interval_seconds,
+                    "min_interval_seconds": min_interval_seconds,
+                }
             else:
                 expires = now+lease_seconds
                 db.execute("INSERT INTO leases VALUES (?,?,?,?,?,?,?,NULL)", (operation_id,account,bucket,resource,now,expires,"reserved"))
@@ -239,6 +256,10 @@ def main(argv=None):
             x.add_argument("--"+key,required=True)
     a.add_argument("--lease-seconds",type=int,default=180)
     a.add_argument("--max-inflight",type=int,default=4)
+    a.add_argument(
+        "--min-interval-seconds", type=int, default=0,
+        help="Optional minimum spacing between admissions for this account+bucket",
+    )
     a.add_argument("--now",type=int)
     o=cmd.add_parser("observe",help="Classify provider outcome, log and apply quota/permission fences")
     for key in ("account","bucket","resource","event"):
@@ -266,7 +287,10 @@ def main(argv=None):
     db=connect(args.db)
     try:
         if args.command=="acquire":
-            r=acquire(db,args.account,args.bucket,args.resource,args.operation,now,args.lease_seconds,args.max_inflight)
+            r=acquire(
+                db, args.account, args.bucket, args.resource, args.operation, now,
+                args.lease_seconds, args.max_inflight, args.min_interval_seconds,
+            )
         elif args.command=="observe":
             r=observe(db,args.account,args.bucket,args.resource,args.event,now,args.http_status,args.message,args.pre_provider,args.retry_after,args.operation,args.reset_epoch)
         elif args.command=="settle":
