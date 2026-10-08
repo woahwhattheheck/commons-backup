@@ -445,8 +445,11 @@ def compile_plan(packet: Any) -> dict[str, Any]:
             )
             throttle_until = surface["_last_throttle_epoch"] + wait
         next_safe = max(min_until, throttle_until)
+        # A covered snapshot is redundant only while the source evidence is fresh.
+        # Once its TTL expires, the ordinary poll/backoff gates must run again.
         redundant = (
-            surface["covered_by_generation"] is not None
+            not is_stale_evidence
+            and surface["covered_by_generation"] is not None
             and surface["covered_by_generation"] == surface["snapshot_generation"]
         )
         needed = _needs_poll(surface, age_success)
