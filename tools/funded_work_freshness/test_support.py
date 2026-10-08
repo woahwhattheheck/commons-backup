@@ -73,9 +73,11 @@ def open_issue(
     }
 
 
-def evidence_routes(owner, repo, number, issue, comments=None, timeline=None):
+def evidence_routes(owner, repo, number, issue, comments=None, timeline=None, *, archived=False):
     base = api(owner, repo, number)
+    repository_url = f"https://api.github.com/repos/{owner}/{repo}"
     return {
+        repository_url: response(repository_url, {"archived": archived}),
         base: response(base, issue),
         f"{base}/comments?per_page=100": response(
             f"{base}/comments?per_page=100", comments or []

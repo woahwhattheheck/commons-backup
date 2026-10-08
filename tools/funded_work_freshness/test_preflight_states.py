@@ -59,6 +59,32 @@ class PreflightStateTests(unittest.TestCase):
         self.assertTrue(receipt["checks"]["advertised_amount_supported_by_canonical_evidence"])
         self.assertRegex(receipt["receipt_sha256"], r"^[0-9a-f]{64}$")
 
+    def test_archived_repo_is_stale_without_a_delivery_route(self):
+        gh = "https://github.com/acme/widget/issues/12"
+        repo_api = "https://api.github.com/repos/acme/widget"
+        routes = evidence_routes("acme", "widget", 12, open_issue(gh), archived=True)
+        transport = FakeTransport(routes)
+        receipt = preflight(candidate(gh, canonical_url=gh), transport, observed_at=NOW)
+        self.assertEqual(receipt["freshness_status"], "stale")
+        self.assertEqual(receipt["route"], "reject")
+        self.assertEqual(receipt["reasons"], ["canonical_repository_archived"])
+        self.assertTrue(receipt["canonical"]["repository_archived"])
+        self.assertEqual(transport.calls[-1][0], repo_api)
+
+    def test_unknown_repo_archive_flag_fails_closed(self):
+        gh = "https://github.com/acme/widget/issues/12"
+        repo_api = "https://api.github.com/repos/acme/widget"
+        routes = evidence_routes("acme", "widget", 12, open_issue(gh))
+        routes[repo_api] = response(repo_api, {"name": "widget"})
+        receipt = preflight(
+            candidate(gh, canonical_url=gh), FakeTransport(routes), observed_at=NOW
+        )
+        self.assertEqual(receipt["freshness_status"], "ambiguous")
+        self.assertEqual(receipt["route"], "reject")
+        self.assertEqual(
+            receipt["reasons"], ["canonical_repository_archived_state_missing"]
+        )
+
     def test_unknown_board_requires_canonical_url_before_any_fetch(self):
         page = "https://board.example/reward/1"
         transport = FakeTransport({})

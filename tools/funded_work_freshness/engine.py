@@ -235,9 +235,32 @@ def preflight(
             status = "ambiguous"
             reasons.append("acceptance_criteria_not_reachable")
         else:
-            status = "actionable"
-            route = "qualified_for_human_claim_decision"
-            reasons.append("canonical_evidence_fresh_open_unoccupied_and_funded")
+            # Defer the extra repo API call until all cheaper funded-work
+            # qualification gates pass. An open issue in an archived repo
+            # cannot accept the pull request required for reward delivery.
+            repository_url = f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}"
+            repository_response = transport.fetch(
+                repository_url, accept="application/vnd.github+json"
+            )
+            if repository_response.status < 200 or repository_response.status >= 300:
+                raise classify_http_failure(repository_response, "canonical_repository")
+            repository_metadata = repository_response.json()
+            if not isinstance(repository_metadata, Mapping) or not isinstance(
+                repository_metadata.get("archived"), bool
+            ):
+                raise EvidenceError(
+                    "canonical_repository_archived_state_missing",
+                    "canonical repository metadata did not provide a boolean archived state",
+                )
+            repository_archived = repository_metadata["archived"]
+            receipt["canonical"]["repository_archived"] = repository_archived
+            if repository_archived:
+                status = "stale"
+                reasons.append("canonical_repository_archived")
+            else:
+                status = "actionable"
+                route = "qualified_for_human_claim_decision"
+                reasons.append("canonical_evidence_fresh_open_unoccupied_and_funded")
 
         receipt["freshness_status"] = status
         receipt["route"] = route

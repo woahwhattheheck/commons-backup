@@ -12,13 +12,24 @@ classifies the candidate as:
   active cross-referenced PR, and still exposes matching sponsor/amount and
   acceptance evidence;
 - `occupied`: assignment, visible claim, or active competing PR exists;
-- `stale`: canonical item is closed, deleted/missing, or older than the configured
-  freshness window;
+- `stale`: canonical item is closed, deleted/missing, archived at the repository
+  level, or older than the configured freshness window;
 - `ambiguous`: evidence is incomplete, rate-limited, contradictory, unfunded,
   underspecified, or security-sensitive.
 
 Security-sensitive candidates are routed to `research_only`; they are never
 qualified directly for implementation by this gate.
+
+A candidate that passes the cheaper freshness, assignment, visible-claim, competing
+PR, sponsor, amount and acceptance gates receives one final GitHub repository
+metadata read. This is intentionally deferred so occupied, stale and ambiguous
+items do not consume an extra API call. A repository whose `archived` flag is
+`true` is rejected as `stale` with `canonical_repository_archived`. Missing or
+unavailable repository metadata fails closed as `ambiguous` rather than treating
+a still-open issue in a read-only repository as a publishable bounty. The
+canonical receipt records `repository_archived` for successfully checked
+candidates. An advertised funded issue alone is not proof that PRs are enabled.
+
 
 ## Usage
 
