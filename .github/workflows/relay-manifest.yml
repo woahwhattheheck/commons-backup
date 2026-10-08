@@ -1,0 +1,54 @@
+name: relay-manifest
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'relay-manifest.json'
+      - 'relay-manifest.schema.json'
+      - 'relay_manifest.py'
+      - 'carrier.js'
+      - 'board.js'
+      - 'bazaar.js'
+      - 'reply.js'
+      - 'action.html'
+      - 'door/src/protocol.ts'
+      - 'board_ingest.py'
+      - 'commons_mcp.py'
+      - 'ntfy_relays.py'
+      - 'independent_commons_mcp/**'
+      - 'test_relay_manifest.py'
+      - 'test_ntfy_relays.py'
+      - '.github/workflows/relay-manifest.yml'
+  pull_request:
+    paths:
+      - 'relay-manifest.json'
+      - 'relay-manifest.schema.json'
+      - 'relay_manifest.py'
+      - 'carrier.js'
+      - 'board.js'
+      - 'bazaar.js'
+      - 'reply.js'
+      - 'action.html'
+      - 'door/src/protocol.ts'
+      - 'board_ingest.py'
+      - 'commons_mcp.py'
+      - 'ntfy_relays.py'
+      - 'independent_commons_mcp/**'
+      - 'test_relay_manifest.py'
+      - 'test_ntfy_relays.py'
+      - '.github/workflows/relay-manifest.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: generated road parity
+        run: python3 relay_manifest.py --check
+      - name: focused relay tests
+        run: python3 -m unittest -q test_relay_manifest.py test_ntfy_relays.py

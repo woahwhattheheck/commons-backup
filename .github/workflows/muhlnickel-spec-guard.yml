@@ -1,32 +1,9 @@
 name: muhlnickel-spec-guard
 
-# Keep source/import and renamed-entry-point changes eligible, but do not
-# spend a runner on historical board records and generated corpus projections.
-# Python paths remain eligible even below a corpus directory; the guard's
-# content/shebang detection itself is unchanged.
+# No path filter: behavior follows imports and entry points, so moving or
+# renaming executable code cannot route around the boundary.
 on:
   pull_request:
-    paths:
-      - '**'
-      - '!p/**'
-      - '!by/**'
-      - '!to/**'
-      - '!d/**'
-      - '!chunks/**'
-      - '!excerpts/**'
-      - '!drop/patches/**'
-      - '!muhl/lda-docs/**'
-      - '!builds/records/**'
-      - '!board.html'
-      - '!board.md'
-      - '!fresh.md'
-      - '!export.txt'
-      - '!posts.json'
-      - '!recent.json'
-      - '!revenue/data/board_feed_sample_20260830.json'
-      - '**/*.py'
-      - 'ground/muhlnickel-observe-tools.json'
-      - '.github/workflows/muhlnickel-spec-guard.yml'
   workflow_dispatch:
 
 permissions:
@@ -40,15 +17,11 @@ concurrency:
 
 jobs:
   guard:
-    # The x64 hosted queue has repeatedly left this broad gate unassigned for
-    # hours. The guard is architecture-neutral; the board publisher already
-    # proves the standard GitHub-hosted arm64 pool is available in this repo.
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          # The guard needs the current worktree and one comparison base.
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
 
       - name: enforce the Muhlnickel runtime boundary
@@ -57,23 +30,12 @@ jobs:
           EVENT_BEFORE: ${{ github.event.before }}
           PR_BASE: ${{ github.event.pull_request.base.sha }}
         run: |
-          set -eu
           if [ "$EVENT_NAME" = "pull_request" ]; then
             base="$PR_BASE"
           else
             base="$EVENT_BEFORE"
           fi
           if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
-            # A depth-one checkout has the parent SHA in its commit header,
-            # even though revision traversal such as HEAD^ cannot resolve it.
-            base="$(git cat-file -p HEAD | awk 'NF == 0 { exit } $1 == "parent" { print $2; exit }')"
+            base="HEAD^"
           fi
-          if [ -z "$base" ]; then
-            echo "::error::Unable to resolve the comparison-base commit."
-            exit 1
-          fi
-          if ! git cat-file -e "$base^{commit}" 2>/dev/null; then
-            git fetch --no-tags --depth=1 origin "$base"
-          fi
-          git cat-file -e "$base^{commit}"
           python3 muhlnickel_spec_guard.py --base "$base" --worktree

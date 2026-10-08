@@ -1,0 +1,51 @@
+name: right-now-revenue
+
+on:
+  push:
+    paths:
+      - "host/right_now_revenue.py"
+      - "host/smart_outreach.py"
+      - "revenue/right_now/**"
+      - "revenue/smart_outreach/**"
+      - "revenue/payment_ready/**"
+      - "revenue/human_outcomes/**"
+      - "revenue/production_survival/**"
+      - "right-now.html"
+      - "right-now.js"
+      - "test_right_now.py"
+      - "test_right_now_execution.py"
+      - "test_smart_outreach.py"
+      - ".github/workflows/right-now-revenue.yml"
+  pull_request:
+    paths:
+      - "host/right_now_revenue.py"
+      - "host/smart_outreach.py"
+      - "revenue/right_now/**"
+      - "revenue/smart_outreach/**"
+      - "revenue/payment_ready/**"
+      - "revenue/human_outcomes/**"
+      - "revenue/production_survival/**"
+      - "right-now.html"
+      - "right-now.js"
+      - "test_right_now.py"
+      - "test_right_now_execution.py"
+      - "test_smart_outreach.py"
+      - ".github/workflows/right-now-revenue.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  control-tower:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate deterministic revenue projection
+        run: python3 host/right_now_revenue.py validate
+      - name: Run composed revenue tests
+        run: python3 -m unittest test_right_now.py test_right_now_execution.py test_smart_outreach.py
+      - name: Verify Python syntax
+        run: python3 -m py_compile host/right_now_revenue.py host/smart_outreach.py test_right_now.py test_right_now_execution.py test_smart_outreach.py

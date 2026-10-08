@@ -15,10 +15,10 @@ on:
         type: boolean
         default: true
   push:
-    branches: [main]
     paths:
       - "host/moving_main_mirror.py"
       - "host/repo_backup.py"
+      - "test_moving_main_mirror.py"
       - "ground/MOVING_MAIN_MIRROR.md"
       - "mirrors.json"
       - "mirrors.html"
@@ -28,6 +28,7 @@ on:
     paths:
       - "host/moving_main_mirror.py"
       - "host/repo_backup.py"
+      - "test_moving_main_mirror.py"
       - "ground/MOVING_MAIN_MIRROR.md"
       - "mirrors.json"
       - "mirrors.html"
@@ -48,22 +49,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Keep complete ancestry; load file contents only when needed.
           fetch-depth: 0
           persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /.gitattributes
-            /host/__init__.py
-            /host/moving_main_mirror.py
-            /host/repo_backup.py
-            /fresh.md
-            /mirrors.json
-            /ground/HEAD.md
-            /ground/BACKUP_OPEN_REPO.md
-            /ground/MOVING_MAIN_MIRROR.md
-            /START.md
-            /ENTRY.md
 
       - name: restore last cursor (monotonic)
         uses: actions/cache/restore@v4
@@ -72,6 +59,9 @@ jobs:
           key: moving-main-cursor-${{ github.run_id }}
           restore-keys: |
             moving-main-cursor-
+
+      - name: contract and restore drill
+        run: python3 test_moving_main_mirror.py
 
       - name: snapshot current HEAD
         run: python3 host/moving_main_mirror.py snapshot --source .
