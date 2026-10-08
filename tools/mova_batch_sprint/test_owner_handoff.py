@@ -73,5 +73,43 @@ class OwnerCollisionRegression(unittest.TestCase):
         self.assertEqual(batch["build_slots_admitted"], 0)
 
 
+    def test_paid_claim_never_overrides_foreign_attribution(self):
+        foreign_upstream = record("algora", source="published")
+        foreign_upstream.update(
+            pr_url="https://github.com/example/rewarded-sdk/pull/12",
+            pr_author="another-contributor",
+            claim_state="paid",
+        )
+        upstream = actions(foreign_upstream)
+        self.assertEqual(upstream["work_orders"][0]["action"], "PRESERVE_FOREIGN_PR")
+
+        foreign_fork = record("grantfox", source="ready")
+        foreign_fork.update(
+            source_pr_url="https://github.com/another-contributor/rewarded-sdk/pull/3",
+            source_pr_author="another-contributor",
+            claim_state="paid",
+        )
+        fork = actions(foreign_fork)
+        self.assertEqual(fork["work_orders"][0]["action"], "PRESERVE_FOREIGN_PR")
+
+    def test_paid_or_pending_claim_needs_our_published_sponsor_pr(self):
+        for claim in ("submitted", "accepted", "rejected", "paid"):
+            for source in ("none", "ready"):
+                with self.subTest(claim=claim, source=source):
+                    candidate = record("algora", source=source)
+                    candidate["claim_state"] = claim
+                    held = actions(candidate)
+                    self.assertEqual(held["work_orders"][0]["action"], "CLAIM_SOURCE_HOLD")
+
+        ours = record("algora", source="published")
+        ours.update(
+            pr_url="https://github.com/example/rewarded-sdk/pull/13",
+            pr_author="woahwhattheheck",
+            claim_state="paid",
+        )
+        verified = actions(ours)
+        self.assertEqual(verified["work_orders"][0]["action"], "VERIFY_SETTLEMENT")
+
+
 if __name__ == "__main__":
     unittest.main()

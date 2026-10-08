@@ -131,13 +131,18 @@ def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
     """Returns a non-mutating action and a precise reason; never awards payout."""
     if not item["fresh"]:
         return "REFRESH_CANONICAL", "Issue/funding/PR evidence is stale or future-dated"
+    # Source attribution precedes any settlement action. A provider's paid
+    # flag is not proof that its sponsor PR belongs to this original author.
+    if item["source_state"] == "published" and item["pr_author"] != actor.lower():
+        return "PRESERVE_FOREIGN_PR", "Existing PR belongs to another author; do not replace their claim"
+    if item["source_state"] != "published":
+        if item["source_pr_url"] and item["source_pr_author"] != actor.lower():
+            return "PRESERVE_FOREIGN_PR", "Fork source carrier belongs to another author; keep their attribution and submission path"
+        if item["claim_state"] in {"submitted", "accepted", "rejected", "paid"}:
+            return "CLAIM_SOURCE_HOLD", "Portal claim exists but its upstream PR is not verified; reconcile before payout or publication"
     if item["claim_state"] == "paid":
-        return "VERIFY_SETTLEMENT", "Claim says paid; independently verify receiving-rail receipt"
-    if item["source_state"] != "published" and item["claim_state"] in {"submitted", "accepted", "rejected"}:
-        return "CLAIM_SOURCE_HOLD", "Portal claim exists but its upstream PR is not verified; reconcile before building or publishing"
+        return "VERIFY_SETTLEMENT", "Our upstream PR is verified and claim says paid; independently verify receiving-rail receipt"
     if item["source_state"] == "published":
-        if item["pr_author"] != actor.lower():
-            return "PRESERVE_FOREIGN_PR", "Existing PR belongs to another author; do not replace their claim"
         if item["eligibility"] != "eligible":
             return "ELIGIBILITY_HOLD", "Contribution eligibility requires independent confirmation"
         if item["claim_state"] == "not_submitted":
@@ -149,8 +154,6 @@ def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
         if item["claim_state"] == "accepted":
             return "VERIFY_SETTLEMENT", "Accepted claim requires independent payout/receipt evidence"
         return "REVIEW_REJECTION", "Inspect provider rejection/appeal terms on original PR"
-    if item["source_pr_url"] and item["source_pr_author"] != actor.lower():
-        return "PRESERVE_FOREIGN_PR", "Fork source carrier belongs to another author; keep their attribution and submission path"
     if item["issue_state"] != "open":
         return "ISSUE_STATE_HOLD", "No confirmed open sponsor issue for fresh engineering"
     if item["funding"] == "unverified" or not item["funding_url"]:

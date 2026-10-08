@@ -24,6 +24,8 @@ Top level: timezone-aware `as_of`, array `records`. Each record must include:
 
 **Important distinctions:** advertised/listed/promise/conditional are **not awards or payments**. `claim_state=paid` is still a **verify-settlement** task until a separate real receiving-rail receipt is checked; there is no inferred earned-total.
 
+**Payout-attribution precedence:** A foreign author on a published sponsor PR always yields `PRESERVE_FOREIGN_PR`, even when a portal marks a claim `paid`. A foreign fork source carrier is preserved the same way. When `claim_state` is `submitted`, `accepted`, `rejected`, or `paid` but there is **no verified upstream sponsor PR**, the action is `CLAIM_SOURCE_HOLD` regardless of a fork-only source or provider state. Only a verified sponsor PR belonging to the planner actor may produce `VERIFY_SETTLEMENT` for a paid claim; even then the actual receiving-rail receipt must be independently checked. This guards original authorship, rather than allowing a paid flag to reattribute compensation.
+
 **Source owner lease and cross-provider fence:** `active_owner` represents a
 currently held claim, not just a contributor name. Even if source is `ready`,
 the planner emits `OWNER_CONTINUES` while that claim is active and does not
