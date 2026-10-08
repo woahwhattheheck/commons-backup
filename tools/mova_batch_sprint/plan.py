@@ -75,10 +75,24 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         raise ValueError("reward_usd must be finite")
     pr = record.get("pr_url")
     if pr is not None:
-        github_identity(pr, "pr")
+        pr_owner, pr_repo, _ = github_identity(pr, "pr")
+        if (pr_owner, pr_repo) != (owner, repo):
+            raise ValueError("pr_url must be a sponsor-repository PR; put fork carriers in source_pr_url")
     author = record.get("pr_author")
     if author is not None and (not isinstance(author, str) or not re.fullmatch(r"[A-Za-z0-9-]{1,39}", author)):
         raise ValueError("invalid PR author")
+    source_pr = record.get("source_pr_url")
+    source_author = record.get("source_pr_author")
+    if source_pr is not None:
+        src_owner, src_repo, _ = github_identity(source_pr, "pr")
+        if (src_owner, src_repo) == (owner, repo):
+            raise ValueError("source_pr_url must refer to a different, source-carrier repository")
+        if not isinstance(source_author, str) or not re.fullmatch(r"[A-Za-z0-9-]{1,39}", source_author):
+            raise ValueError("source_pr_url needs a valid source_pr_author")
+        if source == "none" and not pr:
+            raise ValueError("fork source requires an explicit building or ready source_state")
+    elif source_author is not None:
+        raise ValueError("source_pr_author requires source_pr_url")
     if source == "published" and (not pr or not author):
         raise ValueError("published source needs PR URL and author")
     if source != "published" and pr:
@@ -105,6 +119,8 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         "issue_state": state, "source_state": source, "competition": competition,
         "claim_state": claim, "reward_usd": amount, "pr_url": pr,
         "pr_author": author.lower() if author else None,
+        "source_pr_url": source_pr,
+        "source_pr_author": source_author.lower() if source_author else None,
         "active_owner": occupied, "fresh": fresh,
         "checked_at": verified.isoformat(),
         "note": str(record.get("note") or "")[:300],
@@ -133,6 +149,8 @@ def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
         if item["claim_state"] == "accepted":
             return "VERIFY_SETTLEMENT", "Accepted claim requires independent payout/receipt evidence"
         return "REVIEW_REJECTION", "Inspect provider rejection/appeal terms on original PR"
+    if item["source_pr_url"] and item["source_pr_author"] != actor.lower():
+        return "PRESERVE_FOREIGN_PR", "Fork source carrier belongs to another author; keep their attribution and submission path"
     if item["issue_state"] != "open":
         return "ISSUE_STATE_HOLD", "No confirmed open sponsor issue for fresh engineering"
     if item["funding"] == "unverified" or not item["funding_url"]:
