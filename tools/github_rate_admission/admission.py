@@ -215,7 +215,17 @@ def status(db, account=None, bucket=None, now=None):
     rows=db.execute("SELECT account,bucket,resource,kind,until_epoch,strikes,event_id FROM gates"+wh,args).fetchall()
     active=[dict(zip(("account","bucket","resource","kind","until_epoch","strikes","event_id"),r)) for r in rows if r[4] is None or r[4]>now]
     rows=db.execute("SELECT operation_id,account,bucket,resource,lease_until,state,outcome FROM leases"+wh,args).fetchall()
-    leases=[dict(zip(("operation_id","account","bucket","resource","lease_until","state","outcome"),r)) for r in rows if r[5]=="unknown" or (r[5]=="reserved" and r[4]>now)]
+    # An expired reservation still has an unreconciled provider effect even
+    # before another acquire transaction promotes it to persistent "unknown".
+    # Expose that fence to idle status readers without mutating the database.
+    leases=[]
+    for row in rows:
+        lease=dict(zip(("operation_id","account","bucket","resource","lease_until","state","outcome"),row))
+        if lease["state"]=="reserved" and lease["lease_until"]<=now:
+            lease["state"]="unknown"
+            lease["outcome"]="unknown"
+        if lease["state"] in ("reserved","unknown"):
+            leases.append(lease)
     return {"as_of_epoch":now,"active_gates":active,"open_leases":leases,"gate_count":len(active),"open_count":len(leases)}
 
 
