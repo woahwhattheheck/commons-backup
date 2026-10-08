@@ -22,6 +22,7 @@ ELIGIBILITY = {"eligible", "human_required", "assignment_required", "unknown", "
 STATES = {"open", "closed", "unknown"}
 SOURCES = {"none", "building", "ready", "published"}
 PR_STATES = {"open", "merged", "closed", "unknown"}
+PR_MERGEABILITY = {"mergeable", "conflicting", "unknown"}
 CLAIMS = {"unknown", "not_submitted", "submitted", "accepted", "rejected", "paid"}
 COMPETITION = {"none", "other_pr", "ours", "unknown"}
 
@@ -80,6 +81,24 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         raise ValueError("pr_state must be open, merged, closed, or unknown")
     if pr_state is not None and not pr:
         raise ValueError("pr_state requires a sponsor pr_url")
+    pr_mergeability = record.get("pr_mergeability")
+    if pr_mergeability is not None and (
+            type(pr_mergeability) is not str or pr_mergeability not in PR_MERGEABILITY):
+        raise ValueError("pr_mergeability must be mergeable, conflicting, unknown, or null")
+    ancestry: dict[str, object] = {}
+    for field in ("pr_base_sha", "pr_head_sha", "pr_merge_base_sha"):
+        value = record.get(field)
+        if value is not None and (
+                not isinstance(value, str) or not re.fullmatch(r"[a-fA-F0-9]{40}", value)):
+            raise ValueError("%s must be an exact 40-hex commit SHA or null" % field)
+        ancestry[field] = value.lower() if value else None
+    for field in ("pr_ahead_by", "pr_behind_by"):
+        value = record.get(field)
+        if value is not None and (type(value) is not int or value < 0):
+            raise ValueError("%s must be a nonnegative integer or null" % field)
+        ancestry[field] = value
+    if (pr_mergeability is not None or any(v is not None for v in ancestry.values())) and not pr:
+        raise ValueError("PR mergeability/ancestry evidence requires a sponsor pr_url")
     if pr is not None:
         pr_owner, pr_repo, _ = github_identity(pr, "pr")
         if (pr_owner, pr_repo) != (owner, repo):
@@ -154,6 +173,12 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         "issue_state": state, "source_state": source, "competition": competition,
         "claim_state": claim, "reward_usd": amount, "pr_url": pr,
         "pr_state": pr_state,
+        "pr_mergeability": pr_mergeability,
+        "pr_base_sha": ancestry["pr_base_sha"],
+        "pr_head_sha": ancestry["pr_head_sha"],
+        "pr_merge_base_sha": ancestry["pr_merge_base_sha"],
+        "pr_ahead_by": ancestry["pr_ahead_by"],
+        "pr_behind_by": ancestry["pr_behind_by"],
         "pr_author": author.lower() if author else None,
         "source_pr_url": source_pr,
         "source_pr_author": source_author.lower() if source_author else None,
@@ -162,6 +187,44 @@ def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
         "take_kind": take_kind, "take_operation_id": take_operation_id,
         "checked_at": verified.isoformat(),
         "note": str(record.get("note") or "")[:300],
+    }
+
+
+def mergeability_advisory(item: dict) -> dict | None:
+    """Classify optional same-snapshot PR mergeability evidence without changing work action."""
+    if not item["pr_url"] or item.get("pr_state") == "closed":
+        return None
+    state = item.get("pr_mergeability")
+    if state is None:
+        return None
+    if state == "mergeable":
+        return {
+            "status": "MERGEABLE_CONFIRMED",
+            "guidance": "Provider reports mergeable; still expected-head fence any merge or source write.",
+        }
+    if state == "unknown":
+        return {
+            "status": "REFRESH_MERGEABILITY",
+            "guidance": "Provider mergeability is unknown/recomputing; do not infer a source conflict.",
+        }
+
+    base = item.get("pr_base_sha")
+    merge_base = item.get("pr_merge_base_sha")
+    behind = item.get("pr_behind_by")
+    if base and merge_base and base == merge_base and behind == 0:
+        return {
+            "status": "REFRESH_MERGEABILITY",
+            "guidance": (
+                "Provider conflict signal contradicts linear ancestry "
+                "(current base is merge base and head is not behind); refresh before conflict repair."
+            ),
+        }
+    return {
+        "status": "CONFLICT_REVIEW",
+        "guidance": (
+            "Provider reports a conflict without linear-ancestry evidence; fresh-fence base/head "
+            "and review the actual divergence before any merge or source rewrite."
+        ),
     }
 
 
@@ -242,6 +305,9 @@ def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
     # listings for that issue still need their own claim/settlement outcomes.
     for item in items:
         item["action"], item["reason"] = action(item, min_usd, actor)
+        advisory = mergeability_advisory(item)
+        if advisory is not None:
+            item["mergeability_advisory"] = advisory
     keyed: dict[str, list[dict]] = defaultdict(list)
     for item in items:
         keyed[item["issue_key"]].append(item)
@@ -377,13 +443,20 @@ def render_slack(batch: dict) -> str:
         refs = ["issue_url=%s" % item["issue_url"],
                 "checked_at=%s" % item["checked_at"],
                 "active_owner=%s" % owner]
-        for name in ("funding_url", "pr_url", "pr_author", "pr_state", "source_pr_url", "source_pr_author"):
-            if item.get(name):
+        for name in (
+                "funding_url", "pr_url", "pr_author", "pr_state", "pr_mergeability",
+                "pr_base_sha", "pr_head_sha", "pr_merge_base_sha",
+                "pr_ahead_by", "pr_behind_by", "source_pr_url", "source_pr_author"):
+            if item.get(name) is not None:
                 refs.append("%s=%s" % (name, item[name]))
         # URL shape checks are not display escaping: urlsplit accepts raw LF/CR.
         # Prevent malformed funding_url text from spoofing dispatch lines.
         safe_refs = [ref.replace("\r", "\\r").replace("\n", "\\n") for ref in refs]
         lines.append("  source_refs | " + " | ".join(safe_refs))
+        if "mergeability_advisory" in item:
+            advisory = item["mergeability_advisory"]
+            lines.append("  mergeability_advisory | status=%s | guidance=%s" % (
+                advisory["status"], advisory["guidance"]))
         if "take_advisory" in item:
             advisory = item["take_advisory"]
             # The Slack feed is untrusted text; never allow an active peer's

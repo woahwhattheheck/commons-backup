@@ -153,6 +153,48 @@ class OwnerCollisionRegression(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "requires a sponsor pr_url"):
             actions(invalid)
 
+    def test_mergeability_evidence_is_advisory_and_detects_provider_contradiction(self):
+        linear = record("issuehunt", source="published")
+        linear.update(
+            pr_url="https://github.com/example/rewarded-sdk/pull/13",
+            pr_author="woahwhattheheck",
+            pr_state="open",
+            pr_mergeability="conflicting",
+            pr_base_sha="a" * 40,
+            pr_head_sha="b" * 40,
+            pr_merge_base_sha="a" * 40,
+            pr_ahead_by=7,
+            pr_behind_by=0,
+        )
+        batch = actions(linear)
+        item = batch["work_orders"][0]
+        # Mergeability evidence is observability, not a payout/claim gate.
+        self.assertEqual(item["action"], "SUBMIT_EXISTING_CLAIM")
+        self.assertEqual(item["mergeability_advisory"]["status"], "REFRESH_MERGEABILITY")
+        output = render_slack(batch)
+        self.assertIn("pr_mergeability=conflicting", output)
+        self.assertIn("pr_behind_by=0", output)
+        self.assertIn("status=REFRESH_MERGEABILITY", output)
+
+        diverged = dict(linear)
+        diverged["pr_merge_base_sha"] = "c" * 40
+        diverged["pr_behind_by"] = 2
+        conflict = actions(diverged)["work_orders"][0]
+        self.assertEqual(conflict["action"], "SUBMIT_EXISTING_CLAIM")
+        self.assertEqual(conflict["mergeability_advisory"]["status"], "CONFLICT_REVIEW")
+
+        unknown = dict(linear)
+        unknown["pr_mergeability"] = "unknown"
+        unknown.pop("pr_merge_base_sha")
+        unknown.pop("pr_behind_by")
+        refresh = actions(unknown)["work_orders"][0]
+        self.assertEqual(refresh["mergeability_advisory"]["status"], "REFRESH_MERGEABILITY")
+
+        invalid = record("grantfox")
+        invalid["pr_mergeability"] = "conflicting"
+        with self.assertRaisesRegex(ValueError, "requires a sponsor pr_url"):
+            actions(invalid)
+
     def test_paid_claim_never_overrides_foreign_attribution(self):
         foreign_upstream = record("algora", source="published")
         foreign_upstream.update(
