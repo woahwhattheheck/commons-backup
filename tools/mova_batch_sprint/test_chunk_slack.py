@@ -24,6 +24,17 @@ class ChunkDeliveryTests(unittest.TestCase):
         self.assertEqual(source, "".join(p["text"].split("\n", 1)[1] for p in parts))
         self.assertTrue(all(len(p["text"].encode("utf-8")) <= 256 for p in parts))
 
+    def test_opt_in_jumbo_line_reassembles_exact_utf8(self):
+        original = "🧾" * 82 + " claim 🔒\r\n" + "π" * 270 + "\n"
+        first = split_messages(original, 256, split_long_lines=True)
+        self.assertGreater(len(first), 2)
+        self.assertEqual(first, split_messages(original, 256, split_long_lines=True))
+        self.assertEqual(original, "".join(part["text"].split("\n", 1)[1] for part in first))
+        expected_digest = hashlib.sha256(original.encode("utf-8")).hexdigest()
+        for i, part in enumerate(first, 1):
+            self.assertIn(f"sha256:{expected_digest} | part {i}/{len(first)}", part["text"])
+            self.assertLessEqual(len(part["text"].encode("utf-8")), 256)
+
     def test_oversize_line_fails_instead_of_truncating(self):
         with self.assertRaisesRegex(ValueError, "indivisible"):
             split_messages("/claim #454 " + "a" * 500, 256)

@@ -8,7 +8,7 @@ Save the planner's Slack-format output to dispatch-slack.txt and run:
 
 The JSON contains schema, original source_sha256, message_count, max_message_bytes, and ordered messages with part and text. Post each text once, in order, to an authorized channel. Every part includes the same full source SHA-256 and its part N/total. A missing or repeated part is detectable without re-querying GitHub. After uncertain Slack delivery, the source digest is not a provider posting receipt: read back the actual message before any retry.
 
-The default 4,000-byte bound is below the connector's 5,000-character limit, including the digest and part header. An indivisible line larger than capacity fails with exit code 2. The command NEVER truncates a bounty, drops a work-order line, silently splits a claim instruction, sends Slack messages, or submits a bounty claim. Large batches still need rate-safe message pacing by the sender. The adapter does no network access, credential reads, rate-limit bypass, or change to original-contributor attribution.
+The default 4,000-byte bound is below the connector's 5,000-character limit, including the digest and part header. An indivisible line larger than capacity fails with exit code 2 by default. Optional `--split-long-lines` preserves UTF-8 characters across parts; reconstruct and verify the source hash before using those parts. The command NEVER truncates a bounty, drops a work-order line, silently splits a claim instruction, sends Slack messages, or submits a bounty claim. Large batches still need rate-safe message pacing by the sender. The adapter does no network access, credential reads, rate-limit bypass, or change to original-contributor attribution.
 
 Focused local validation (from repository root):
 
