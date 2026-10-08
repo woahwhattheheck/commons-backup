@@ -60,5 +60,44 @@ class PrimaryQuotaRecovery(unittest.TestCase):
         self.assertTrue(self.admit("g", self.now + 300)["admitted"])
 
 
+    def test_exact_event_replay_is_idempotent(self):
+        first = self.observe_primary("stable-event", reset_epoch=self.now + 720)
+        replay = self.observe_primary("stable-event", reset_epoch=self.now + 720)
+        self.assertFalse(first["duplicate_event"])
+        self.assertTrue(replay["duplicate_event"])
+        self.assertFalse(replay["gate_updated"])
+        self.assertEqual(replay["classification"], "PRIMARY_LIMIT")
+        self.assertEqual(status(self.db, now=self.now)["gate_count"], 1)
+
+    def test_other_actor_cannot_silence_rate_limit_with_same_event_id(self):
+        self.observe_primary("shared-event")
+        with self.assertRaisesRegex(ValueError, "event_id collision"):
+            observe(self.db, "tokenjunkielabs", "rest", "pulls", "shared-event",
+                    self.now, 403, "API rate limit exceeded for user ID")
+        self.assertFalse(self.db.in_transaction)
+        # Colliding evidence cannot be reported as a successful duplicate;
+        # the second actor must record its actual observation under a new ID.
+        second = observe(self.db, "tokenjunkielabs", "rest", "pulls", "tjl-event",
+                         self.now, 403, "API rate limit exceeded for user ID")
+        self.assertEqual(second["classification"], "PRIMARY_LIMIT")
+        self.assertEqual(status(self.db, now=self.now)["gate_count"], 2)
+        self.assertFalse(acquire(self.db, "tokenjunkielabs", "rest", "pulls",
+                                 "tjl-operation", self.now)["admitted"])
+
+    def test_reused_id_cannot_change_resource_classification_or_operation(self):
+        observe(self.db, "woahwhattheheck", "rest", "pulls", "immutable-event",
+                self.now, 403, "API rate limit exceeded for user ID",
+                operation_id="write-one")
+        for resource, code, message, operation in (
+            ("comments", 403, "API rate limit exceeded for user ID", "write-one"),
+            ("pulls", 429, "secondary rate limit", "write-one"),
+            ("pulls", 403, "API rate limit exceeded for user ID", "write-two"),
+        ):
+            with self.assertRaisesRegex(ValueError, "event_id collision"):
+                observe(self.db, "woahwhattheheck", "rest", resource, "immutable-event",
+                        self.now, code, message, operation_id=operation)
+        self.assertEqual(status(self.db, now=self.now)["gate_count"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()

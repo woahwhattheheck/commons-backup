@@ -115,9 +115,20 @@ def observe(db, account: str, bucket: str, resource: str, event_id: str,
     kind = classify(status,message,pre_provider=pre_provider)
     db.execute("BEGIN IMMEDIATE")
     try:
-        original = db.execute("SELECT kind FROM observations WHERE event_id=?",(event_id,)).fetchone()
+        original = db.execute(
+            "SELECT account,bucket,resource,kind,operation_id FROM observations WHERE event_id=?",
+            (event_id,),
+        ).fetchone()
         if original:
-            result = {"classification":original[0],"duplicate_event":True,"gate_updated":False}
+            # Event IDs identify one immutable provider observation, not merely
+            # a reusable label. Otherwise an unrelated account's 403 can be
+            # mistaken for an earlier account's observation and evade its gate.
+            if original != (account, bucket, resource, kind, operation_id):
+                raise ValueError(
+                    "event_id collision: existing observation has a different "
+                    "account, bucket, resource, classification, or operation"
+                )
+            result = {"classification":original[3],"duplicate_event":True,"gate_updated":False}
         else:
             db.execute("INSERT INTO observations VALUES (?,?,?,?,?,?,?)", (event_id,account,bucket,resource,kind,now,operation_id))
             target = "*" if kind in ("PRIMARY_LIMIT", "SECONDARY_LIMIT", "AUTH_DENIED") else resource
