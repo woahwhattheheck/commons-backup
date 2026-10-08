@@ -239,6 +239,18 @@ def _validate_history_monotonic(history: Iterable[Mapping[str, Any]]) -> None:
                     f"paid_total is positive but award_count is zero for {source_url} ({currency})"
                 )
             if prior is not None:
+                # A source cannot report different numbers for the exact same instant.
+                # Independent providers are not required to report equal totals.
+                if row["observed_at"] == prior["observed_at"]:
+                    snapshot_fields = (
+                        "source_class", "paid_total", "award_count",
+                        "completed_count", "open_pool",
+                    )
+                    if any(row[field] != prior[field] for field in snapshot_fields):
+                        raise UnderwriterInputError(
+                            f"conflicting simultaneous payout snapshots for {source_url} ({currency})"
+                        )
+                    continue
                 if row["paid_total"] < prior["paid_total"]:
                     raise UnderwriterInputError(f"paid_total regressed for {source_url} ({currency})")
                 if row["award_count"] < prior["award_count"]:
@@ -256,21 +268,6 @@ def _latest_history(history: Sequence[Mapping[str, Any]]) -> list[Mapping[str, A
         if previous is None or row["observed_at"] > previous["observed_at"]:
             latest[key] = row
     return sorted(latest.values(), key=lambda row: (str(row["source_url"]), row["observed_at"]))
-
-
-def _validate_cross_source_consistency(latest: Sequence[Mapping[str, Any]]) -> None:
-    """Reject same-class snapshots that claim incompatible totals at the same time."""
-    grouped: dict[tuple[str, datetime], list[Mapping[str, Any]]] = {}
-    for row in latest:
-        grouped.setdefault((str(row["source_class"]), row["observed_at"]), []).append(row)
-    for (source_class, observed_at), rows in grouped.items():
-        if len(rows) < 2:
-            continue
-        totals = {(row["paid_total"], row["award_count"], row["completed_count"]) for row in rows}
-        if len(totals) > 1:
-            raise UnderwriterInputError(
-                f"conflicting payout totals for {source_class} observations at {_iso(observed_at)}"
-            )
 
 
 def _history_band(advertised: Decimal, paid_total: Decimal, award_count: int) -> tuple[Decimal, Decimal, str]:
@@ -318,7 +315,6 @@ def underwrite(
     history = _history_evidence(packet, currency)
     _validate_history_monotonic(history)
     latest = _latest_history(history)
-    _validate_cross_source_consistency(latest)
 
     reasons: list[str] = []
     hard_reject = False

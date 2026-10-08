@@ -26,8 +26,11 @@ See `schema.input.json` and `examples/repeated-payer.json`. Required evidence is
   award/completion counts, and open pool.
 
 For repeated snapshots from the same source, paid/award/completion totals must be
-monotonic. Same-class snapshots claiming incompatible totals at the same observation
-time are rejected as contradictory. Currency must match across all evidence. Evidence
+monotonic. Simultaneous observations of a single normalized source URL must agree on
+source class, paid amount, award/completion counts, and open pool. Distinct
+marketplace or sponsor URLs have independent histories, even if sampled at the
+same instant. This avoids false multi-platform conflicts while detecting
+contradictory statements from the same source. Currency must match across all evidence. Evidence
 older than the configured history window fails closed.
 
 ## Decision rules

@@ -185,13 +185,21 @@ class UnderwriterTests(unittest.TestCase):
         with self.assertRaisesRegex(UnderwriterInputError, "paid_total regressed"):
             underwrite(value, observed_at=NOW)
 
-    def test_conflicting_same_class_same_time_rejected(self):
+    def test_distinct_provider_sources_can_disagree_at_same_instant(self):
         value = packet()
         other = deepcopy(value["payout_history"][0])
         other["source_url"] = "https://other.example.test/org"
         other["paid_total"] = "9000"
         value["payout_history"].append(other)
-        with self.assertRaisesRegex(UnderwriterInputError, "conflicting payout totals"):
+        result = underwrite(value, observed_at=NOW)
+        self.assertEqual(result["realized_payout_evidence"]["source_count"], 2)
+
+    def test_conflicting_same_source_snapshot_is_rejected(self):
+        value = packet()
+        other = deepcopy(value["payout_history"][0])
+        other["open_pool"] = "4000"
+        value["payout_history"].append(other)
+        with self.assertRaisesRegex(UnderwriterInputError, "conflicting simultaneous payout snapshots"):
             underwrite(value, observed_at=NOW)
 
     def test_stale_payout_history_rejects(self):
