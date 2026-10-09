@@ -20,16 +20,41 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: woahwhattheheck/commons-backup
+          SOURCE_READ_TOKEN: ${{ secrets.MIRROR_SOURCE_READ_TOKEN }}
           EXPECTED_LIVE_MIRROR_BLOB: 2d8308965a032c2bcae237842d17a8ff0f14702a
         run: |
           set -euo pipefail
           git init --bare src.git
           cd src.git
+          # The backup repo's GITHUB_TOKEN cannot read a separate private source repo.
+          # GIT_ASKPASS authenticates only the private source fetch; the backup
+          # GITHUB_TOKEN still authorizes destination push/receipt operations.
+          if [ -z "${SOURCE_READ_TOKEN:-}" ]; then
+            echo "::error::MIRROR_SOURCE_READ_TOKEN is required (Contents:read on the private canonical commons repository)"
+            exit 1
+          fi
           git remote add origin https://github.com/woahwhattheheck/commons.git
           DEST_URL="https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git"
-          git fetch --prune --force origin \
+          export GIT_TERMINAL_PROMPT=0
+          export GIT_ASKPASS="$RUNNER_TEMP/commons-source-askpass"
+          umask 077
+          cat > "$GIT_ASKPASS" <<'SOURCE_ASKPASS'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' x-access-token ;;
+            *Password*) printf '%s\n' "$SOURCE_READ_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          SOURCE_ASKPASS
+          chmod 700 "$GIT_ASKPASS"
+          if ! git fetch --prune --force origin \
             '+refs/heads/main:refs/heads/src-main' \
-            '+refs/tags/*:refs/tags/*'
+            '+refs/tags/*:refs/tags/*'; then
+            echo "::error::Private commons source fetch failed; check MIRROR_SOURCE_READ_TOKEN scope and availability"
+            exit 128
+          fi
+          rm -f "$GIT_ASKPASS"
+          unset GIT_ASKPASS SOURCE_READ_TOKEN
           git fetch --prune --no-tags "$DEST_URL" '+refs/heads/main:refs/heads/dst-main'
           REMOTE_MIRRORED=$(git ls-remote "$DEST_URL" refs/backup/source-main)
           if [ -n "$REMOTE_MIRRORED" ]; then
