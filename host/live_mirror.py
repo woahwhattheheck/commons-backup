@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""GITHUB_TOKEN-safe live mirror of canonical main onto commons-backup.
+"""GITHUB_TOKEN-safe full-history mirror to private GitHub repositories.
+
+Each push checks the resolved destination's current private repository metadata.
+Public source snapshots are published through the separate export path.
 
 Same-account GitHub copy at woahwhattheheck/commons-backup. The scheduled
 workflow on the backup `ops` branch force-pushes canonical commons `main`
@@ -32,6 +35,9 @@ import os
 import re
 import subprocess
 import sys
+import urllib.parse
+import urllib.request
+import uuid
 from typing import Any
 
 
@@ -52,6 +58,126 @@ SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 
 class MirrorError(RuntimeError):
     """A live-mirror plan, graft, or push failed its measured contract."""
+
+
+def _destination_repository(dest_url: str) -> tuple[str, str, str | None]:
+    """Resolve a GitHub HTTPS destination without exposing URL credentials."""
+    try:
+        parsed = urllib.parse.urlsplit(dest_url)
+        if (parsed.scheme != "https" or parsed.hostname != "github.com"
+                or parsed.port not in (None, 443) or parsed.query or parsed.fragment
+                or any(ord(char) < 32 for char in dest_url)):
+            raise ValueError()
+        parts = parsed.path.strip("/").split("/")
+        if len(parts) != 2:
+            raise ValueError()
+        owner, repository = parts
+        repository = repository[:-4] if repository.endswith(".git") else repository
+        if not all(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", part) for part in (owner, repository)):
+            raise ValueError()
+        credential = urllib.parse.unquote(parsed.password) if parsed.password else None
+        if credential is None and parsed.username not in (None, "git", "x-access-token", "oauth2"):
+            credential = urllib.parse.unquote(parsed.username)
+        return owner, repository, credential
+    except Exception:
+        raise MirrorError("mirror destination must be a GitHub HTTPS repository") from None
+
+
+def _destination_credential(git_dir: str, dest_url: str, embedded: str | None) -> str:
+    """Use the credential already selected for this exact Git destination."""
+    if embedded:
+        return embedded
+    environment = os.environ.copy()
+    environment["GIT_TERMINAL_PROMPT"] = "0"
+    try:
+        result = subprocess.run(
+            ["git", "--git-dir", git_dir, "credential", "fill"],
+            input=("url=" + dest_url + "\n\n").encode("utf-8"),
+            capture_output=True, check=False, timeout=30, env=environment,
+        )
+        values = {}
+        for line in result.stdout.decode("utf-8").splitlines():
+            if "=" in line:
+                key, value = line.split("=", 1)
+                values[key] = value
+        if result.returncode or not values.get("password"):
+            raise ValueError()
+        return values["password"]
+    except Exception:
+        raise MirrorError("mirror destination credential is unavailable") from None
+
+
+def _resolved_destination(git_dir: str, dest_url: str) -> str:
+    """Apply Git's destination URL rules without contacting a provider."""
+    name = "commons-mirror-destination-" + uuid.uuid4().hex
+    try:
+        result = subprocess.run(
+            ["git", "--git-dir", git_dir, "-c", f"remote.{name}.url={dest_url}",
+             "remote", "get-url", "--push", name],
+            capture_output=True, check=False, timeout=30,
+        )
+        actual = result.stdout.decode("utf-8").strip()
+        if result.returncode or not actual or "\n" in actual:
+            raise ValueError()
+        return actual
+    except Exception:
+        raise MirrorError("mirror destination URL is unavailable") from None
+
+
+def _require_private_metadata(metadata: Any, owner: str, repository: str) -> None:
+    if not isinstance(metadata, dict):
+        raise MirrorError("mirror destination metadata is unavailable")
+    if str(metadata.get("full_name", "")).casefold() != f"{owner}/{repository}".casefold():
+        raise MirrorError("mirror destination metadata does not match the repository")
+    if metadata.get("private") is not True:
+        raise MirrorError("full-history mirrors require a private destination repository")
+
+
+class _NoDestinationRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, request, response, code, message, headers, new_url):
+        return None
+
+
+def require_private_destination(git_dir: str, dest_url: str) -> tuple[str, str]:
+    """Full-history mirror pushes require current private repository metadata."""
+    actual_url = _resolved_destination(git_dir, dest_url)
+    owner, repository, embedded = _destination_repository(actual_url)
+    credential = _destination_credential(git_dir, actual_url, embedded)
+    try:
+        request = urllib.request.Request(
+            "https://api.github.com/repos/" + urllib.parse.quote(owner, safe="")
+            + "/" + urllib.parse.quote(repository, safe=""),
+            headers={"Authorization": "Bearer " + credential,
+                     "Accept": "application/vnd.github+json",
+                     "Cache-Control": "no-cache",
+                     "X-GitHub-Api-Version": "2022-11-28",
+                     "User-Agent": "commons-private-history-mirror"},
+        )
+        opener = urllib.request.build_opener(_NoDestinationRedirect())
+        with opener.open(request, timeout=30) as response:
+            metadata = json.loads(response.read())
+    except Exception:
+        raise MirrorError("mirror destination metadata is unavailable") from None
+    _require_private_metadata(metadata, owner, repository)
+    return actual_url, credential
+
+
+def _guarded_push(git_dir: str, dest_url: str, arguments: list[str]) -> subprocess.CompletedProcess[bytes]:
+    actual_url, credential = require_private_destination(git_dir, dest_url)
+    result = _run(["push", *arguments], git_dir=git_dir, check=False)
+    owner, repository, _ = _destination_repository(actual_url)
+    safe_url = f"https://github.com/{owner}/{repository}.git"
+    for field in ("stdout", "stderr"):
+        value = getattr(result, field)
+        if value:
+            value = value.replace(dest_url.encode("utf-8"), safe_url.encode("utf-8"))
+            value = value.replace(actual_url.encode("utf-8"), safe_url.encode("utf-8"))
+            if credential:
+                value = value.replace(credential.encode("utf-8"), b"[credential removed]")
+            setattr(result, field, value)
+    result.args = [item.replace(dest_url, safe_url).replace(actual_url, safe_url).replace(credential, "[credential removed]")
+                   for item in result.args]
+    return result
 
 
 def _run(
@@ -270,7 +396,7 @@ def _force_refspec(refspec: str) -> str:
 
 def _push(git_dir: str, dest_url: str, refspec: str) -> subprocess.CompletedProcess[bytes]:
     # Same contract as the measured live-mirror job: `git push --force`.
-    return _run(["push", dest_url, _force_refspec(refspec)], git_dir=git_dir, check=False)
+    return _guarded_push(git_dir, dest_url, [dest_url, _force_refspec(refspec)])
 
 
 def _push_main(git_dir: str, dest_url: str, refspec: str, expected: str | None) -> subprocess.CompletedProcess[bytes]:
@@ -279,7 +405,7 @@ def _push_main(git_dir: str, dest_url: str, refspec: str, expected: str | None) 
     # then keeps the newer tip as a graft parent. Zero sha means "must not
     # exist yet".
     lease = f"--force-with-lease=refs/heads/main:{expected or '0' * 40}"
-    return _run(["push", lease, dest_url, refspec.lstrip("+")], git_dir=git_dir, check=False)
+    return _guarded_push(git_dir, dest_url, [lease, dest_url, refspec.lstrip("+")])
 
 
 def _is_ancestor(git_dir: str, old: str, new: str) -> bool:
@@ -506,11 +632,7 @@ def _remote_tag_refs(dest_url: str) -> list[str]:
 
 
 def _push_tag_namespace(git_dir: str, dest_url: str) -> subprocess.CompletedProcess[bytes]:
-    return _run(
-        ["push", "--force", "--prune", dest_url, "refs/tags/*:refs/tags/*"],
-        git_dir=git_dir,
-        check=False,
-    )
+    return _guarded_push(git_dir, dest_url, ["--force", "--prune", dest_url, "refs/tags/*:refs/tags/*"])
 
 
 def push_tags(git_dir: str, dest_url: str) -> dict[str, Any]:
@@ -537,7 +659,7 @@ def push_tags(git_dir: str, dest_url: str) -> dict[str, Any]:
     for remote in _remote_tag_refs(dest_url):
         if remote in local:
             continue
-        deleted = _run(["push", dest_url, f":{remote}"], git_dir=git_dir, check=False)
+        deleted = _guarded_push(git_dir, dest_url, [dest_url, f":{remote}"])
         if deleted.returncode:
             detail = (deleted.stderr or deleted.stdout).decode("utf-8", "replace").strip()
             raise MirrorError(f"tag prune {remote} failed: {detail}")
