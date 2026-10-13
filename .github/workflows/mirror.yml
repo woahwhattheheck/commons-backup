@@ -1,0 +1,141 @@
+name: live-mirror-commons
+on:
+  workflow_dispatch:
+concurrency:
+  group: live-mirror
+  cancel-in-progress: false
+permissions:
+  contents: write
+  actions: write
+jobs:
+  mirror:
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Mirror canonical main onto backup main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: woahwhattheheck/commons-backup
+          SOURCE_READ_TOKEN: ${{ secrets.MIRROR_SOURCE_READ_TOKEN }}
+          EXPECTED_LIVE_MIRROR_BLOB: 2d8308965a032c2bcae237842d17a8ff0f14702a
+        run: |
+          set -euo pipefail
+          git init --bare src.git
+          cd src.git
+          # The backup repo's GITHUB_TOKEN cannot read a separate private source repo.
+          # GIT_ASKPASS authenticates only the private source fetch; the backup
+          # GITHUB_TOKEN still authorizes destination push/receipt operations.
+          if [ -z "${SOURCE_READ_TOKEN:-}" ]; then
+            echo "::error::MIRROR_SOURCE_READ_TOKEN is required (Contents:read on the private canonical commons repository)"
+            exit 1
+          fi
+          git remote add origin https://github.com/woahwhattheheck/commons.git
+          DEST_URL="https://x-access-token:${GH_TOKEN}@github.com/woahwhattheheck/commons-backup.git"
+          export GIT_TERMINAL_PROMPT=0
+          export GIT_ASKPASS="$RUNNER_TEMP/commons-source-askpass"
+          umask 077
+          cat > "$GIT_ASKPASS" <<'SOURCE_ASKPASS'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' x-access-token ;;
+            *Password*) printf '%s\n' "$SOURCE_READ_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          SOURCE_ASKPASS
+          chmod 700 "$GIT_ASKPASS"
+          if ! git fetch --prune --force origin \
+            '+refs/heads/main:refs/heads/src-main' \
+            '+refs/tags/*:refs/tags/*'; then
+            echo "::error::Private commons source fetch failed; check MIRROR_SOURCE_READ_TOKEN scope and availability"
+            exit 128
+          fi
+          rm -f "$GIT_ASKPASS"
+          unset GIT_ASKPASS SOURCE_READ_TOKEN
+          git fetch --prune --no-tags "$DEST_URL" '+refs/heads/main:refs/heads/dst-main'
+          REMOTE_MIRRORED=$(git ls-remote "$DEST_URL" refs/backup/source-main)
+          if [ -n "$REMOTE_MIRRORED" ]; then
+            git fetch --no-tags "$DEST_URL" '+refs/backup/source-main:refs/backup/source-main'
+          fi
+          REMOTE_MIRRORED_DEST=$(git ls-remote "$DEST_URL" refs/backup/dest-main)
+          if [ -n "$REMOTE_MIRRORED_DEST" ]; then
+            git fetch --no-tags "$DEST_URL" '+refs/backup/dest-main:refs/backup/dest-main'
+          fi
+          GOT=$(git rev-parse refs/heads/src-main)
+          DST=$(git rev-parse refs/heads/dst-main)
+          echo "source_main=$GOT"
+          echo "backup_main=$DST"
+          LIVE_MIRROR_BLOB=$(git rev-parse 'refs/heads/src-main:host/live_mirror.py')
+          echo "live_mirror_blob=$LIVE_MIRROR_BLOB"
+          if [ "$LIVE_MIRROR_BLOB" != "$EXPECTED_LIVE_MIRROR_BLOB" ]; then
+            echo "::error::unreviewed host/live_mirror.py blob $LIVE_MIRROR_BLOB; expected $EXPECTED_LIVE_MIRROR_BLOB"
+            exit 1
+          fi
+          git show src-main:host/live_mirror.py > /tmp/live_mirror.py
+          MIRRORED=""
+          if git rev-parse --verify --quiet refs/backup/source-main >/dev/null; then
+            MIRRORED=$(python3 /tmp/live_mirror.py read-source --git-dir . --ref refs/backup/source-main)
+            MIRRORED=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1]).get("src_sha") or "")' "$MIRRORED")
+          fi
+          MIRRORED_DEST=""
+          if git rev-parse --verify --quiet refs/backup/dest-main >/dev/null; then
+            MIRRORED_DEST=$(git rev-parse refs/backup/dest-main)
+          fi
+          echo "mirrored_source=${MIRRORED:-none}"
+          echo "mirrored_dest=${MIRRORED_DEST:-none}"
+          PLAN_ARGS=(plan --src "$GOT" --dst "$DST")
+          if [ -n "$MIRRORED" ] && [ -n "$MIRRORED_DEST" ] && [ "$DST" = "$MIRRORED_DEST" ]; then
+            PLAN_ARGS+=(--mirrored "$MIRRORED")
+          elif [ -n "$MIRRORED" ]; then
+            echo "ignoring source receipt because destination receipt is absent or stale"
+          fi
+          PLAN=$(python3 /tmp/live_mirror.py "${PLAN_ARGS[@]}")
+          echo "$PLAN"
+          ACTION=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["action"])' "$PLAN")
+          if [ "$ACTION" = "already_in_sync" ]; then
+            echo already in sync
+            FINAL_DST="$DST"
+          else
+            DST_REF_ARGS=()
+            if git rev-parse --verify --quiet refs/heads/dst-main >/dev/null; then
+              DST_REF_ARGS=(--dst-ref refs/heads/dst-main)
+            fi
+            PUSH_RESULT=$(python3 /tmp/live_mirror.py push \
+              --git-dir . \
+              --src-ref refs/heads/src-main \
+              "${DST_REF_ARGS[@]}" \
+              --dest-url "$DEST_URL")
+            echo "$PUSH_RESULT"
+            FINAL_DST=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["pushed_sha"])' "$PUSH_RESULT")
+            echo "pushed_via_live_mirror=$FINAL_DST"
+          fi
+          RECORD=$(python3 /tmp/live_mirror.py record-receipts \
+            --git-dir . \
+            --src "$GOT" \
+            --dst "$FINAL_DST" \
+            --dest-url "$DEST_URL")
+          echo "$RECORD"
+          TAGS=$(python3 /tmp/live_mirror.py push-tags --git-dir . --dest-url "$DEST_URL")
+          echo "$TAGS"
+
+      - name: Keep only the live-mirror workflow enabled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: woahwhattheheck/commons-backup
+        run: |
+          set -euo pipefail
+          WORKFLOWS_ENDPOINT="repos/woahwhattheheck/commons-backup/actions/workflows"
+          gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | [.id,.name,.state,.path] | @tsv'
+          for id in $(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | select(.path!=".github/workflows/mirror.yml" and .state=="active") | .id');
+          do
+            echo "disable $id"
+            gh api -X PUT "repos/woahwhattheheck/commons-backup/actions/workflows/${id}/disable" >/dev/null
+          done
+          TRUSTED_ACTIVE=$(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | select(.path==".github/workflows/mirror.yml" and .name=="live-mirror-commons" and .state=="active") | .id' | wc -l)
+          test "$TRUSTED_ACTIVE" -eq 1
+          ACTIVE_EXTRAS=$(gh api --method GET --paginate -f per_page=100 "$WORKFLOWS_ENDPOINT" \
+            --jq '.workflows[] | select(.path!=".github/workflows/mirror.yml" and .state=="active") | .id' | wc -l)
+          test "$ACTIVE_EXTRAS" -eq 0
