@@ -1,0 +1,36 @@
+name: case-study-reference-consent-vault
+
+on:
+  pull_request:
+    paths:
+      - "revenue/case_study_reference_consent_vault/**"
+      - ".github/workflows/case-study-reference-consent-vault.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/case_study_reference_consent_vault/**"
+      - ".github/workflows/case-study-reference-consent-vault.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: case-study-reference-consent-vault-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile
+        run: python -m compileall -q revenue/case_study_reference_consent_vault
+      - name: Hostile suite
+        run: python -m unittest discover -s revenue/case_study_reference_consent_vault/tests -p 'test_*.py' -v
+      - name: Optimized Python
+        run: python -O -m unittest discover -s revenue/case_study_reference_consent_vault/tests -p 'test_*.py' -v
+      - name: Synthetic compile and verify
+        run: |
+          rm -rf /tmp/consent-vault
+          python revenue/case_study_reference_consent_vault/compile_vault.py compile             --input revenue/case_study_reference_consent_vault/fixtures/vault.synthetic.json             --out-dir /tmp/consent-vault
+          python revenue/case_study_reference_consent_vault/compile_vault.py verify             --input revenue/case_study_reference_consent_vault/fixtures/vault.synthetic.json             --artifact /tmp/consent-vault/artifact.json             --internal /tmp/consent-vault/internal_packet.md             --public /tmp/consent-vault/public_projection.md             --receipt /tmp/consent-vault/receipt.json

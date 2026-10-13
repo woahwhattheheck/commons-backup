@@ -1,0 +1,89 @@
+name: T09 public source pack
+on:
+  push:
+    branches: [work/flow-opponent-league-20260907]
+    paths: [.github/workflows/flow-league-source-pack.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 8329e78768906dc6e75ca3712e1690adc1ab2148
+          path: frontier
+          persist-credentials: false
+          sparse-checkout: |
+            revenue/kaggriculture/cloud-frontier-policy/next-panel
+            revenue/kaggriculture/cloud-frontier-policy/export
+            revenue/kaggriculture/cloud-frontier-policy/vendor
+            revenue/kaggriculture/cloud-pack
+            revenue/kaggriculture/cloud-eval
+            revenue/kaggriculture/20260907-offline-agent
+      - uses: actions/checkout@v4
+        with:
+          ref: 473e63d7151d4acdcdeeb76c784aaf4054c062e3
+          path: cap
+          persist-credentials: false
+          sparse-checkout: |
+            revenue/kaggriculture/cloud-model-lab
+      - name: Package exact source without running policies
+        shell: python
+        run: |
+          import hashlib, json, pathlib, subprocess, urllib.request
+          root = pathlib.Path('source-pack')
+          root.mkdir()
+          records = []
+          sources = {
+              'frontier': ('8329e78768906dc6e75ca3712e1690adc1ab2148', [
+                  'revenue/kaggriculture/cloud-frontier-policy/next-panel',
+                  'revenue/kaggriculture/cloud-frontier-policy/export',
+                  'revenue/kaggriculture/cloud-frontier-policy/vendor',
+                  'revenue/kaggriculture/cloud-pack',
+                  'revenue/kaggriculture/cloud-eval',
+                  'revenue/kaggriculture/20260907-offline-agent']),
+              'cap': ('473e63d7151d4acdcdeeb76c784aaf4054c062e3', [
+                  'revenue/kaggriculture/cloud-model-lab'])}
+          def save(destination, data, repository, ref, expected=None):
+              blob = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+              if expected and blob != expected:
+                  raise RuntimeError('source blob mismatch: ' + destination)
+              target = root / destination
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(data)
+              records.append({'path': destination, 'ref': ref, 'repository': repository, 'git_blob': blob, 'sha256': hashlib.sha256(data).hexdigest()})
+          for label, (ref, paths) in sources.items():
+              repo = pathlib.Path(label)
+              got = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip()
+              if got != ref:
+                  raise RuntimeError('checkout revision mismatch: ' + label)
+              raw = subprocess.check_output(['git', 'ls-tree', '-rz', 'HEAD', '--', *paths], cwd=repo)
+              entries = [row for row in raw.split(b'\0') if row]
+              if not entries:
+                  raise RuntimeError('no tracked source: ' + label)
+              for entry in entries:
+                  metadata, raw_path = entry.split(b'\t', 1)
+                  mode, kind, blob = metadata.decode().split()
+                  rel = raw_path.decode()
+                  if kind != 'blob' or mode not in ('100644', '100755'):
+                      raise RuntimeError('non-regular tracked source: ' + rel)
+                  save(label + '/' + rel, (repo / rel).read_bytes(), 'woahwhattheheck/commons', ref, blob)
+          ref = '28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c'
+          pins = {'kaggriculture.py': '3c202c7ee921da239356789e266b694635103fc4', 'kaggriculture.json': 'b354d06b742fe48402513792253f1a5c29366b20', 'utils.py': '91c8822ee6201ba4a5a8416c7dbe34f95dd61c87'}
+          for name, blob in pins.items():
+              path = 'kaggle_environments/' + ('utils.py' if name == 'utils.py' else 'envs/kaggriculture/' + name)
+              url = f'https://raw.githubusercontent.com/Kaggle/kaggle-environments/{ref}/{path}'
+              with urllib.request.urlopen(url, timeout=45) as response:
+                  save('engine/' + name, response.read(), 'Kaggle/kaggle-environments', ref, blob)
+          (root / 'SOURCE_MANIFEST.json').write_text(json.dumps({'complete': True, 'files': records}, indent=2) + '\n')
+          print('Verified source files:', len(records))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flow-league-source-pack-${{ github.run_id }}-${{ github.run_attempt }}
+          path: source-pack/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14

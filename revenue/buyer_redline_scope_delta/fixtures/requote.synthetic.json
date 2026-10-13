@@ -1,0 +1,111 @@
+{
+  "schema": "buyer-redline-scope-delta/v1",
+  "as_of": "2026-09-16T20:45:00-04:00",
+  "baseline": {
+    "document_id": "SYN-SOW-BASE",
+    "generation": "sow-v1",
+    "source": "https://example.invalid/tjl/sow-v1",
+    "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "observed_at": "2026-09-16T17:00:00-04:00",
+    "truth_state": "PROPOSED_NOT_ACCEPTED",
+    "currency": "USD",
+    "price_total_minor": 250000,
+    "payment_days": 30,
+    "clauses": [
+      {
+        "id": "B-SCOPE",
+        "logical_key": "scope.primary",
+        "category": "SCOPE",
+        "text": "One evidence integration workflow.",
+        "terms": {"workflow_count": 1},
+        "buyer_visible": true
+      },
+      {
+        "id": "B-DELIV",
+        "logical_key": "deliverable.packet",
+        "category": "DELIVERABLES",
+        "text": "Deterministic evidence packet and verifier.",
+        "terms": {},
+        "buyer_visible": true
+      },
+      {
+        "id": "B-ACC",
+        "logical_key": "acceptance.packet",
+        "category": "ACCEPTANCE",
+        "text": "Acceptance requires verifier success against agreed fixture.",
+        "terms": {"required": true},
+        "buyer_visible": true
+      },
+      {
+        "id": "B-SCHED",
+        "logical_key": "schedule.delivery",
+        "category": "SCHEDULE",
+        "text": "Delivery within 10 business days after inputs.",
+        "terms": {"business_days": 10},
+        "buyer_visible": true
+      },
+      {
+        "id": "B-DEP",
+        "logical_key": "dependency.inputs",
+        "category": "DEPENDENCIES",
+        "text": "Buyer provides required source documents.",
+        "terms": {},
+        "buyer_visible": true
+      }
+    ]
+  },
+  "counter": {
+    "document_id": "SYN-COUNTER-1",
+    "generation": "counter-v1",
+    "baseline_generation": "sow-v1",
+    "source": "https://example.invalid/buyer/counter-v1",
+    "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "observed_at": "2026-09-16T18:00:00-04:00",
+    "truth_state": "PROPOSED_NOT_ACCEPTED",
+    "currency": "USD",
+    "price_total_minor": 250000,
+    "payment_days": 45,
+    "clauses": [
+      {
+        "id": "C-SCOPE",
+        "logical_key": "scope.primary",
+        "category": "SCOPE",
+        "text": "Two evidence integration workflows.",
+        "terms": {"workflow_count": 2},
+        "buyer_visible": true
+      },
+      {
+        "id": "C-DELIV",
+        "logical_key": "deliverable.packet",
+        "category": "DELIVERABLES",
+        "text": "Deterministic evidence packet and verifier.",
+        "terms": {},
+        "buyer_visible": true
+      },
+      {
+        "id": "C-ACC",
+        "logical_key": "acceptance.packet",
+        "category": "ACCEPTANCE",
+        "text": "Acceptance requires verifier success against agreed fixture.",
+        "terms": {"required": true},
+        "buyer_visible": true
+      },
+      {
+        "id": "C-SCHED",
+        "logical_key": "schedule.delivery",
+        "category": "SCHEDULE",
+        "text": "Delivery within 10 business days after inputs.",
+        "terms": {"business_days": 10},
+        "buyer_visible": true
+      },
+      {
+        "id": "C-DEP",
+        "logical_key": "dependency.inputs",
+        "category": "DEPENDENCIES",
+        "text": "Buyer provides required source documents.",
+        "terms": {},
+        "buyer_visible": true
+      }
+    ]
+  }
+}

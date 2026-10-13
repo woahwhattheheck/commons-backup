@@ -1,0 +1,107 @@
+{
+  "schema": "uiowa-rfq18649-register-namespace-validation/v1",
+  "seat": "ZZ-QUARTZ-A91C-R6",
+  "model": "GPT-6 Astra Pro",
+  "operation": "uiowa-039-review-register-quartz-a91c-20260919",
+  "observed_at": "2026-09-19T15:29:46.560471+00:00",
+  "python": "3.13.5",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "source_parent": "0973e6893c4bcf4cdd17fad096eea5d82d29d663",
+  "canonical_cycle_contract_blob": "9bf19ae0c022c936e0591a171fa4496f1cb6b282",
+  "tests": {
+    "retained": 50,
+    "namespace_and_migration": 30,
+    "normal": 80,
+    "optimized": 80,
+    "skipped": 0
+  },
+  "commands": [
+    {
+      "command": "python -m unittest -q test_review_register.py test_register_namespace.py",
+      "exit_code": 0,
+      "stdout": "Wrote 2 draft intake records; no findings resolved.\n",
+      "stderr": "----------------------------------------------------------------------\nRan 80 tests in 4.969s\n\nOK\n"
+    },
+    {
+      "command": "python -O -m unittest -q test_review_register.py test_register_namespace.py",
+      "exit_code": 0,
+      "stdout": "Wrote 2 draft intake records; no findings resolved.\n",
+      "stderr": "----------------------------------------------------------------------\nRan 80 tests in 4.839s\n\nOK\n"
+    },
+    {
+      "command": "python -m py_compile review_register.py migrate_register.py make_examples.py test_review_register.py test_register_namespace.py",
+      "exit_code": 0
+    }
+  ],
+  "objects": {
+    "review_register.py": {
+      "git_blob": "e5b64e5cd42d95980ae6ca1d6f499e37bef422cc",
+      "sha256": "342aaa2ac77350cd27b708bd32ee6efeae71aab52daeb8e8de611aef1ddfbdc5",
+      "bytes": 25887
+    },
+    "migrate_register.py": {
+      "git_blob": "48ac42f56e9e0055047275babd07ab4d96002e8a",
+      "sha256": "31cde5735e6a1178d1fb203d207fbea4a44c6dcecef44c7457a2fdeaee1b5614",
+      "bytes": 6064
+    },
+    "test_register_namespace.py": {
+      "git_blob": "4db6ea4aaae8cbbb7e6ba6a6112b2af19501e26b",
+      "sha256": "406ab944b08d756e80304ea728251e6bb8699a3a4e3c8de15cfbf822abc6850c",
+      "bytes": 12828
+    },
+    "make_examples.py": {
+      "git_blob": "25b03ba254a2a79cce68895c41b359f71763b37a",
+      "sha256": "941fb53a203e1043d3a90f58a86affb2fb601db738f423d6b65bcd38dbba0aac",
+      "bytes": 7074
+    },
+    "test_review_register.py": {
+      "git_blob": "40b03766e63764dfce38a1a89d9aab630816172b",
+      "sha256": "7a10d6f4b08b31c3203010c6770b7c816560ca1aaf5ac81279e93275a5241c4a",
+      "bytes": 14757
+    },
+    "examples/synthetic-review-cycle.json": {
+      "git_blob": "039ff581e4be859ebf80d720218be898fddcd8be",
+      "sha256": "75c3cc9fd375b5ca2bed0a62dff47286de055b48fd35d152780ee0700efc8fb7",
+      "bytes": 8558
+    }
+  },
+  "old_register_blob": "4076afe28477f7c25d001d6e9d45d9dbdc20f5fc",
+  "source_canonical_sha256": "d7e4ae1e49c9072915bdb455440f11a7d223e30b89613d0463e6f7852ba823e1",
+  "target_canonical_sha256": "fcf241636b2e64b13a66395dcf6186742525d7e965b172027f9628f1595e2a65",
+  "previous_response_receipt_sha256": "fca74ca412ff7fcdb71c5d2a10eb7e7cf55b1e2b8ac79cb0464ef171c6ac1207",
+  "target_response_receipt_sha256": "938a977b7cc753a78e4830b1f608c5dd6d7f1dc269303e7195d77d8e43cc87e6",
+  "response_fields_changed": [
+    "receipt_sha256",
+    "source_packet_sha256"
+  ],
+  "preserved_summary": {
+    "comment_count": 4,
+    "follow_up_comment_ids": [
+      "C-001",
+      "C-003"
+    ],
+    "stale_resolution_comment_ids": [
+      "C-001"
+    ],
+    "status_counts": {
+      "REJECTED": 1,
+      "RESOLVED": 2,
+      "UNRESOLVED": 1
+    }
+  },
+  "migration_receipt_sha256": "b2890645f65b51528c8bf5ad1cd1a1ddf7bc9ac3a9881101ed827fc58c76e7f7",
+  "migration_files_sha256": {
+    "manifest.json": "68933546c074551c6a54102c1d14863c1bad04aacb1fb601bca2349d3a7d606c",
+    "migration.json": "ed607da773ed3d6c104d2e74bfbff997ae110e1c7f403c33b120e3adedade0c9",
+    "register.json": "75c3cc9fd375b5ca2bed0a62dff47286de055b48fd35d152780ee0700efc8fb7"
+  },
+  "normal_optimized_export_byte_parity": true,
+  "source_file_unchanged": true,
+  "limits": [
+    "Focused cloud-container execution, not hosted CI or full Commons validation.",
+    "Canonical patch-cycle root is a source-grounded negative fixture; ORRERY engine not executed.",
+    "Native adapter and browser harness unchanged and not rerun in R6; their earlier receipts remain separately scoped.",
+    "No current-main execution authority or merge approval asserted.",
+    "Source JSON canonical content is preserved except schema; original input file is not changed."
+  ]
+}

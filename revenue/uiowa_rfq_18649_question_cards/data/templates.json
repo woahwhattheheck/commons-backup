@@ -1,0 +1,94 @@
+{
+  "absence_caveat_required_for": [
+    "ABSENT_EVIDENCE"
+  ],
+  "leading_phrases": [
+    "why don't you",
+    "why doesn't",
+    "why did you fail",
+    "failure to",
+    "who approved",
+    "who is responsible for the",
+    "why was there no",
+    "don't you think"
+  ],
+  "note": "Editable question templates, one per uncertainty type. The generator fills {placeholders} from each observation's own fields and refuses to render a card when a required field is missing. Changing wording here changes every card of that type; the code holds no question text.",
+  "templates": {
+    "ABSENT_EVIDENCE": {
+      "context": "The material we were given does not include a {expected_record}. We are asking where it lives, not assuming it is absent.",
+      "label": "Nothing supplied",
+      "question": "We did not receive a {expected_record}. Does one exist, and where is it kept? If there isn't one, how is the outcome it would evidence achieved instead?",
+      "requires": [
+        "expected_record",
+        "expected_by"
+      ],
+      "uncertainty_statement": "No {expected_record} was supplied, although {expected_by} indicates one would be expected."
+    },
+    "AMBIGUOUS_SCOPE": {
+      "context": "This is a scope question, not a challenge to the practice — {stated_in} is clear that {practice}.",
+      "label": "True statement, unclear boundary",
+      "question": "You've described that {practice}. Does that cover {unclear_boundary}? If it differs case by case, what decides it?",
+      "requires": [
+        "practice",
+        "stated_in",
+        "unclear_boundary"
+      ],
+      "uncertainty_statement": "The material establishes that {practice} ({stated_in}), but does not establish whether that includes {unclear_boundary}."
+    },
+    "CONFLICT": {
+      "context": "We are working from {source_a_label} and {source_b_label} only, and we are not assuming either one is wrong.",
+      "label": "Two sources disagree",
+      "question": "On {subject}: {source_a_label} indicates {reading_a}; in {source_b_label}, {reading_b}. Which of those reflects the normal case, and what accounts for the other one?",
+      "requires": [
+        "subject",
+        "source_a_label",
+        "reading_a",
+        "source_b_label",
+        "reading_b"
+      ],
+      "uncertainty_statement": "For {subject}, {source_a_label} and {source_b_label} do not agree, and no exception record was supplied that would explain the difference."
+    },
+    "SINGLE_SOURCE": {
+      "context": "Our only support for this is {only_source_label}. A corroborating record would let us state it rather than attribute it to one account.",
+      "label": "No corroborating record",
+      "question": "You've described that {claim}. Is there a record produced by the system itself, rather than by a person describing it, that we could look at?",
+      "requires": [
+        "claim",
+        "only_source_label"
+      ],
+      "uncertainty_statement": "The claim that {claim} rests on {only_source_label} alone; no second, independently produced record was supplied."
+    },
+    "STALE_EVIDENCE": {
+      "context": "We are not assuming the practice changed. We are asking whether the evidence still describes today.",
+      "label": "Only evidence predates a known change",
+      "question": "Our evidence for {subject} is {evidence_label} from {evidence_date}, before {intervening_change}. Is there an equivalent record from after that change, or did the practice stay the same through it?",
+      "requires": [
+        "subject",
+        "evidence_label",
+        "evidence_date",
+        "intervening_change"
+      ],
+      "uncertainty_statement": "The only evidence for {subject} is {evidence_label} dated {evidence_date}, which predates {intervening_change}."
+    },
+    "UNREPRESENTATIVE_SAMPLE": {
+      "context": "We would rather widen the sample than generalize from {sample_description}.",
+      "label": "Window or subset may not generalize",
+      "question": "The records we have for {subject} cover {sample_description}. Is that a typical period, and if not, which window would be?",
+      "requires": [
+        "subject",
+        "sample_description",
+        "representativeness_concern"
+      ],
+      "uncertainty_statement": "Evidence for {subject} covers {sample_description}; {representativeness_concern} means it may not describe ordinary operation."
+    }
+  },
+  "vague_request_phrases": [
+    "any relevant documentation",
+    "relevant documentation",
+    "any documentation",
+    "whatever you have",
+    "supporting materials",
+    "any evidence",
+    "documentation as available"
+  ]
+}

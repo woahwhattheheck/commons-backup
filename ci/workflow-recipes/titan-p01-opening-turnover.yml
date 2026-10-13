@@ -1,0 +1,86 @@
+name: TITAN P01 exact opening-turnover development screen
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-p01-opening-turnover.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/p01-opening-turnover-20260909/**'
+concurrency:
+  group: titan-p01-opening-turnover-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  p01-exact-development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [wheat, carrot, annual]
+    env:
+      P01_MODE: ${{ matrix.mode }}
+      P01_MAX_DAY: '10'
+      P01_TRACE_DIR: /tmp/p01-traces
+      P01_TRACE_FRONTIERS: '1'
+      P01_CANDIDATE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Verify immutable PR event head
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED="${{ github.event.pull_request.head.sha || github.sha }}"
+          ACTUAL="$(git rev-parse HEAD)"
+          test "$ACTUAL" = "$EXPECTED"
+          echo "candidate_head=$ACTUAL"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact engine dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+      - name: Materialize pinned exact-current P01 runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          DISPATCH=50fc3978603da7a2f155168a0296877007b895ea
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          git worktree add --detach /tmp/p01-dispatch "$DISPATCH"
+          cd /tmp/p01-dispatch/$ROOT
+          python build_integrated.py --check
+          test "$(sha256sum exports/titan-current.tar.gz | awk '{print $1}')" = 'a055fd56ca5821208096f37787f77dbdddc2f65c14c24132d6e219a05e6f02ba'
+          rm -rf /tmp/p01-runtime /tmp/p01-traces
+          mkdir -p /tmp/p01-runtime /tmp/p01-traces
+          tar -xzf exports/titan-current.tar.gz -C /tmp/p01-runtime
+          test "$(sha256sum /tmp/p01-runtime/SOURCE.json | awk '{print $1}')" = 'b96676977687ee8a92d7213380f96bf5774a5ec26925cb4f0d66bdd244eb44ba'
+      - name: Stage isolated P01 experiment
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="$GITHUB_WORKSPACE/revenue/kaggriculture/cloud-execution-lab/p01-opening-turnover-20260909"
+          cp "$SRC"/*.py /tmp/p01-runtime/
+      - name: Focused P01 contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/p01-runtime
+          PYTHONPATH=. python test_p01_opening_turnover.py -v
+      - name: Exact-current paired development screen
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/p01-runtime
+          PYTHONPATH=. python run_p01_hosted_screen.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-p01-${{ matrix.mode }}-exact-development
+          path: |
+            /tmp/P01-${{ matrix.mode }}-SCREEN.json
+            /tmp/p01-traces/*.jsonl
+            /tmp/p01-dispatch/revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz
+            /tmp/p01-runtime/SOURCE.json
+          if-no-files-found: warn
+          retention-days: 30

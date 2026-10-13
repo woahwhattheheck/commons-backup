@@ -1,0 +1,72 @@
+name: titan-v5-official-engine-custody
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v5-official-engine-custody.yml"
+      - "revenue/kaggriculture/20260907-offline-agent/evaluate.py"
+      - "revenue/kaggriculture/20260907-offline-agent/test_engine_custody.py"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/joint-liquidity-bench/paired.py"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/joint-liquidity-bench/test_shared_loader_pin.py"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial/paired.py"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial/feedstock_fourflag_cross.py"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial/test_paired.py"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial/test_feedstock_fourflag_cross.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v5-official-engine-custody-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Assert exact triggering head
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Compile and run engine custody contracts
+        working-directory: revenue/kaggriculture/20260907-offline-agent
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          python -B -m py_compile evaluate.py test_engine_custody.py
+          python -B -m unittest -v test_engine_custody.py
+          python -O -B -m unittest -v test_engine_custody.py
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --porcelain)"
+      - name: Compile and run shared-loader consumer pin contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/joint-liquidity-bench
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          python -B -m py_compile paired.py test_shared_loader_pin.py
+          python -B -m unittest -v test_shared_loader_pin.py
+          python -O -B -m unittest -v test_shared_loader_pin.py
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --porcelain)"
+      - name: Compile and run downstream immutable-pin chain contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          python -B -m py_compile paired.py feedstock_fourflag_cross.py test_paired.py test_feedstock_fourflag_cross.py
+          python -B -m unittest -v test_paired.py test_feedstock_fourflag_cross.py
+          python -O -B -m unittest -v test_paired.py test_feedstock_fourflag_cross.py
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --porcelain)"

@@ -1,0 +1,30 @@
+{
+  "kind": "titan-v4-research-custody",
+  "lane": "B5 fertilizer daily sweep",
+  "mechanism": "r04_fert_daily_sweep",
+  "status": "OVERLAP_DEFER_ENGAGEMENT_CENSUS_REQUIRED",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "legacy_source": {
+    "branch": "riot/v3.1-lane-b5",
+    "head": "8638d0db7068f38966424c59181875d8b128a72a",
+    "parent": "508b342fc46fa91e3d7cdc3f0b7e44934a187c14",
+    "helper_blob": "cd6c1dd50a439f58bce9434db8d628ca8d6f978f",
+    "focused_test_blob": "fb51b305289a311e9e8e4a3a63c38c18c5a1fd30",
+    "default": "OFF"
+  },
+  "mechanism_summary": "Only exact PASS workers are eligible. On an animal tile with fertilizer_available, rewrite PASS to COLLECT_FERTILIZER with same-step tile claiming so a second worker does not no-op. Beside the shed, a PASS worker carrying FERTILIZER may DROP only when no animal item is held and no later same-day FERTILIZE/FEED work would be starved. No movement or market row is added.",
+  "overlap_context": [
+    "current B5 CARROT/JIT lanes own crop fertilization and are not equivalent to this idle animal-tile collection theorem",
+    "current S1/S6 and terminal/EOD fertilizer lanes may overlap some delivery or fertilizer handling",
+    "incumbent sale-fertilizer/E184 logic may already monetize shed fertilizer once deposited"
+  ],
+  "required_next_step": "On literal current main, instrument an exact trigger/action ownership diff against S1, S6, B5 CARROT/JIT, terminal/EOD fertilizer handling, and the incumbent router. Measure whether the legacy sweep still produces a non-overlapping engaged slice and whether that slice is economically positive. Only that proven unique slice may be recomposed; otherwise mark consumed-by-overlap.",
+  "prohibitions": [
+    "do not copy legacy router/apply_v3 wiring",
+    "do not enable a new production key from this custody pack",
+    "do not assume source distinctness implies positive economics",
+    "do not displace non-PASS authored work",
+    "do not advance the old V3.1 branch"
+  ]
+}

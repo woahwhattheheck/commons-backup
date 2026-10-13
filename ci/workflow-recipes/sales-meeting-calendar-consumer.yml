@@ -1,0 +1,32 @@
+name: sales-meeting-calendar-consumer
+
+on:
+  pull_request:
+    paths:
+      - "revenue/sales_meeting_calendar_consumer/**"
+      - "revenue/sales_meeting_readiness/**"
+      - ".github/workflows/sales-meeting-calendar-consumer.yml"
+  push:
+    paths:
+      - "revenue/sales_meeting_calendar_consumer/**"
+      - "revenue/sales_meeting_readiness/**"
+      - ".github/workflows/sales-meeting-calendar-consumer.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hostile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax
+        run: python -m py_compile revenue/sales_meeting_calendar_consumer/*.py
+      - name: Hostiles
+        run: python -m unittest revenue.sales_meeting_calendar_consumer.test_calendar_consumer -q
+      - name: Hostiles optimized
+        run: python -O -m unittest revenue.sales_meeting_calendar_consumer.test_calendar_consumer -q

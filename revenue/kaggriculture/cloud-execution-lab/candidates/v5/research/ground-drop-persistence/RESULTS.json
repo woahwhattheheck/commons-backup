@@ -1,0 +1,81 @@
+{
+  "cases": [
+    {
+      "case": "empty_non_shed_midday",
+      "inventory_after": 500,
+      "position_after": [
+        1,
+        1
+      ],
+      "position_before": [
+        1,
+        1
+      ],
+      "shed_after": 0,
+      "tile_after": null,
+      "tile_before": null
+    },
+    {
+      "case": "locked_non_shed_midday",
+      "inventory_after": 500,
+      "position_after": [
+        9,
+        9
+      ],
+      "position_before": [
+        9,
+        9
+      ],
+      "shed_after": 0,
+      "tile_after": "LOCKED",
+      "tile_before": "LOCKED"
+    },
+    {
+      "case": "locked_shed_access_midday",
+      "inventory_after": 0,
+      "position_after": [
+        5,
+        4
+      ],
+      "position_before": [
+        5,
+        4
+      ],
+      "shed_after": 100,
+      "tile_after": "LOCKED",
+      "tile_before": "LOCKED"
+    },
+    {
+      "case": "empty_non_shed_end_of_day",
+      "inventory_after": 0,
+      "position_after": [
+        4,
+        4
+      ],
+      "position_before": [
+        1,
+        1
+      ],
+      "shed_after": 100,
+      "tile_after": null,
+      "tile_before": null
+    }
+  ],
+  "checks": {
+    "empty_tile_drop_is_noop": true,
+    "eod_routes_inventory_to_capped_shed_not_ground": true,
+    "locked_shed_access_deposits_only_to_shed": true,
+    "ordinary_locked_tile_drop_is_noop": true,
+    "shed_overflow_is_discarded": true
+  },
+  "engine": {
+    "configuration_sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e"
+  },
+  "hypothesis": "DROP can persist inventory on farm tiles outside shed capacity",
+  "policy_change": false,
+  "runtime_change": false,
+  "schema": "titan-v5/ground-drop-persistence/v1",
+  "verdict": "FALSIFIED"
+}

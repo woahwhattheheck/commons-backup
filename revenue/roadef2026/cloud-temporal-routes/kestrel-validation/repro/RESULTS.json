@@ -1,0 +1,86 @@
+{
+  "primary_delivery": "Independent test bank and official-checker counterexample for DOCK temporal routing",
+  "finite_pool": {
+    "finite_pool_cases": 4000,
+    "enumerated_paths": 385538,
+    "mismatches": 0,
+    "cancellation_cases": 9,
+    "cell_bound_cases": 3,
+    "invalid_cases": 4,
+    "generator_seed": 41821,
+    "wall_seconds": 0.40016395499998225,
+    "scope": "Independent exhaustive synthetic finite-pool optimum; not benchmark-network strength"
+  },
+  "bank": {
+    "schema": "kestrel.temporal-oracle-bank.v1",
+    "generator_seed": 41821,
+    "cases": 4000,
+    "enumerated_paths": 385538,
+    "feasible_cases": 3311,
+    "infeasible_cases": 689,
+    "gzip_sha256": "1e9da219190eac4d8c579abd690fbb456d1d69f3850a6e2d1a33e886217fbedf",
+    "gzip_bytes": 186471,
+    "decoded_sha256": "b044a5c9f9142e6b3ae430f25a10dadf5f302f1c902c66288a6bdcad8cec5ccf",
+    "decoded_bytes": 1299819,
+    "expected_value_source": "Exhaustive Python enumeration; no native DP or policy call",
+    "limits": "Synthetic finite-menu algebra; arbitrary nonnegative transition matrices, not an official graph corpus."
+  },
+  "official_counterexample": {
+    "schema": "kestrel.official-complete-neighborhood.v1",
+    "checker_version": "1.2.2",
+    "checker_binary_sha256": "e2a2297b5a43aaf4d95d6cbc65b16e62d4fc5fb1381e59a2323a8bad3015a472",
+    "input_sha256": {
+      "net.json": "4e1fc58163b78c1adc7dcb75c232406215a79be8df3d0d8e10f797784c9f7156",
+      "tm.json": "1ed4cf39326d921024f8bfeb44e4fc2c3af1a2bb55286d61351476881de21483",
+      "scenario.json": "28ae836fff34d9fd5a0a62f6883a2d68230d114f0f3133266ad177d6210b1cd2",
+      "local-optimum.json": "41f25241e8a3473acfbb7c27914af811a9919fd06d69a3e2a03392548f3beb80",
+      "dp-escape.json": "4ef8b822e6408d27170a7ad27f5a3a31f7aa10ac824af0df4a25d24c4bcd8904"
+    },
+    "proposal_checks": {
+      "interval": 120,
+      "schedule": 256
+    },
+    "feasible_proposals": {
+      "interval": 43,
+      "schedule": 10
+    },
+    "improving_constant_intervals": 0,
+    "all_complete_optimal_paths": [[0, 0, 0, 1], [0, 0, 0, 3]],
+    "waypoint_pool": [[], [114], [127], [153]],
+    "incumbent_vector": [10000000,8000000,4000000,2500000,2400000,1500000,1500000,1000000,1000000,800000,500000,100000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    "best_vector": [10000000,6000000,4000000,2400000,2000000,2000000,1000000,800000,500000,200000,100000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    "rational_official_validity_vector_cost_mismatches": 0,
+    "scope": "One constructed cap-two-segment fixture. Complete interval neighborhood, all demands. Complete schedule neighborhood for demand0 only. Not a public-B or joint-demand optimum."
+  },
+  "reference_sedge_screen": {
+    "generated_instances": 120,
+    "generator_seed": 8264901,
+    "improved": 31,
+    "equal": 89,
+    "regressed": 0,
+    "independent_feasibility_checks": 240,
+    "disabled_parity_cases": 12,
+    "rounds": 100,
+    "scope": "Synthetic network development screen; rational independent evaluator, NOT official checker or set B"
+  },
+  "reference_fleet_screen": {
+    "generated_instances": 120,
+    "generator_seed": 8264901,
+    "improved": 20,
+    "equal": 100,
+    "regressed": 0,
+    "independent_feasibility_checks": 240,
+    "disabled_parity_cases": 12,
+    "rounds": 100,
+    "scope": "Synthetic network development screen; rational independent evaluator, NOT official checker or set B"
+  },
+  "limitations": [
+    "Synthetic network screens reuse the same120 instances across two source variants, not240 independent graphs.",
+    "The generator permits duplicate demand endpoints and time0 maintenance, so these screens are not official-schema public-instance evidence.",
+    "Reference variants perform an extra optional DP after100 baseline rounds: not equal-total-work or full-budget speed/quality comparisons.",
+    "The official counterexample is a separately derived five-node/four-slot/max-segments2 case, not a public setA/setB instance.",
+    "The four-segment counterpart admits improving two-waypoint constant intervals, so the complete-neighborhood barrier claim applies only to cap2.",
+    "The maximum load stays10; later rank improves8 to6. No maximum-load, competition ranking, submission, award or payment claim.",
+    "Native reference code is not DOCK source and was not published to the repository."
+  ]
+}

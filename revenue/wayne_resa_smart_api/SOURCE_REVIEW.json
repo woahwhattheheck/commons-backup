@@ -1,0 +1,317 @@
+{
+  "schema": "wayne-smart-independent-runtime-source-review/v1",
+  "status": "PASS_INDEPENDENT_SOURCE_AND_ASSERTION_REVIEW",
+  "reviewer": "ZZ Keystone / diff_tests",
+  "scope": "Independent read-only contract, arithmetic, lifecycle, persistence and readable-output review. This receipt is not an execution result and does not claim hosted checks, production use or buyer acceptance. Tests remain separately reported by the builder.",
+  "source_bindings": [
+    {
+      "path": "revenue/wayne_resa_smart_api/acceptance_lab.py",
+      "bytes": 21578,
+      "sha256": "3ea3b4d643762a5023aceb5c682608a7ceb18e295259832c4d7fe942d3142dd1",
+      "git_blob": "a9e258162faae1ac447f7cac957ec25ee3e2b6f0"
+    },
+    {
+      "path": "revenue/wayne_resa_smart_api/rehearsal.py",
+      "bytes": 11641,
+      "sha256": "32ca8eaac70f992a859ce556fb956aed885749bd736675265289dbbc29a79cd4",
+      "git_blob": "0fc33c8f2e87c2d182481a9cf026ee7bff5e8855"
+    },
+    {
+      "path": "revenue/wayne_resa_smart_api/README.md",
+      "bytes": 10227,
+      "sha256": "8f70a7c676f375dba85bf2c1e08d9a35b6e73acf05eb092dce8935dd4adccce6",
+      "git_blob": "3acbdabbf2883209f40555a3ea752b548e75cf79"
+    },
+    {
+      "path": "revenue/wayne-smart-api/wayne_smart_reconcile.py",
+      "bytes": 16078,
+      "sha256": "13cc35d9baa99d9d2d84462b6993fb92ed13ae61dbc8d869b7c1e7a3ea55072d",
+      "git_blob": "ec605f8c8d42b625da995a1b09ec52b01b495d41"
+    },
+    {
+      "path": "revenue/wayne-smart-api/fixtures/wayne_150_states.json",
+      "bytes": 308,
+      "sha256": "0313d184be3de873291c456313dbd74440de10c88d95a205b21101cad5e44d14",
+      "git_blob": "20987615a5fba3639ca0df0eccb79f86b4c63e3b"
+    },
+    {
+      "path": "revenue/wayne-smart-api/fixtures/manifest.json",
+      "bytes": 887,
+      "sha256": "00751ebcf51d22b3a584923b300c2ea101c0c03d6fda68b404902fb15a94a5ed",
+      "git_blob": "69848b1b1110b5d8a26322664dcbbebb1c461622"
+    },
+    {
+      "path": "revenue/wayne_resa_smart_api/test_acceptance_lab.py",
+      "bytes": 24359,
+      "sha256": "b04d6b180a616ab6f70eef0350f44e82f828e4ca13df072c2f492b30dc4ebe30",
+      "git_blob": "f857938dd9e856725c9128d3d09286410d5360d4"
+    },
+    {
+      "path": "test_wayne_smart_api_response.py",
+      "bytes": 2714,
+      "sha256": "7c86ea21d202b838e23987408a003a6f38cf0f18ce27d9fb85379a29c69d320a",
+      "git_blob": "a5d28cf87a083995c00331a3dda17fd1e1a43a86"
+    },
+    {
+      "path": "revenue/wayne_resa_smart_api/WORKED_REHEARSAL.md",
+      "bytes": 4172,
+      "sha256": "21b7109bf32205789aa2c6927cd8bbdab7e263f5185e32b6ad12c71818ae42e4",
+      "git_blob": "60bc02af0d2d83e1f685ac93db9784bef95fadea"
+    },
+    {
+      "path": "revenue/wayne_resa_smart_api/WORKED_REHEARSAL_BUNDLE.json",
+      "bytes": 313313,
+      "sha256": "5e33adbf9e41dfcf3356903a9fb7d80423db5559e2fe0a70cfa416feebd019ae",
+      "git_blob": "9929dd6642d1d4da8b92ca3d2e90e2747635af56"
+    }
+  ],
+  "review_inputs": [
+    {
+      "path": "independent-acceptance-matrix.json",
+      "sha256": "15af55bd02a37f53078ba0f4400ea27429bd8c97bd4379015e295a74d1a9a8c5"
+    },
+    {
+      "path": "independent-acceptance-supplement.json",
+      "sha256": "127c0826048dc8810bca623e73f8fbdd8a649c00bcb2540fb788fd6522e8e905"
+    },
+    {
+      "path": "independent-source-doc-review-final.json",
+      "sha256": "e58ab9ca010fc2a3e7edb6fe70c293d961825ff15216ecff280db8b968dd1759"
+    }
+  ],
+  "resolved_findings": [
+    {
+      "id": "STALE_ATTEMPT_OUTCOME",
+      "finding": "Per-key-only outcomes could not distinguish a delayed prior-attempt refusal from proof of current-attempt no-send.",
+      "resolution": "Strict NOT_SENT/ACK_LOST shapes require dispatch_event_id. Only accepted DISPATCH sets active identity; mismatched outcomes produce HOLD_STALE_ATTEMPT before mutation, preserving current state, attempt count and deadline.",
+      "status": "STATIC_CORRECTION_VERIFIED"
+    },
+    {
+      "id": "READABLE_CLAIM_PARITY",
+      "finding": "The readable table did not originally include all supplied observation/binding claims, limiting interpretation of rejected evidence.",
+      "resolution": "Markdown retains all event field objects in an exact JSON listing plus the event table, including wrong commit/record/digest, observation enum, dispatch reference and posted amount. Claims are explicitly distinguished from accepted facts.",
+      "status": "STATIC_CORRECTION_VERIFIED"
+    }
+  ],
+  "checks": [
+    {
+      "id": "BASELINE",
+      "result": "PASS",
+      "basis": "Exact three original byte hashes retained; captured files executed with captured fixture copies. Original150 states and replay remain separate from18 wrapper scenarios. No baseline rewrite or re-signing."
+    },
+    {
+      "id": "ATTEMPTS",
+      "result": "PASS",
+      "basis": "DISPATCH alone increments attempts. NOT_SENT operates only on matching active IN_FLIGHT dispatch; due=outcome_time+min(cap,base*2**(attempts-1)). Default exact due100 and300; configurable cap and maximum attempts remain bounded proposed settings."
+    },
+    {
+      "id": "UNCERTAINTY",
+      "result": "PASS",
+      "basis": "ACK_LOST/UNKNOWN hold dispatch. Matching transaction-level COMMITTED resolves only after full binding and exact zero variance; NOT_COMMITTED remains review-only. Historical hold events deliberately retain aggregate review disposition."
+    },
+    {
+      "id": "IDENTITY",
+      "result": "PASS",
+      "basis": "Request digest binds mutation/commit/account/expected cents; duplicate record/source aliases do not reset the same-key journal. Same mutation under different key refused. Record/digest/commit observation binding checked before accepted observation."
+    },
+    {
+      "id": "EVIDENCE_DUPLICATES",
+      "result": "PASS",
+      "basis": "Identical evidence reuse adds no observation; conflicting reuse or later contradictory independent claims cannot silently replace prior committed result and remain visible as holds."
+    },
+    {
+      "id": "INTEGER_LEDGER",
+      "result": "PASS",
+      "basis": "Exact integer cents reject booleans/floats, retain signed subtraction, and count nonzero operations independently of summed delta. Independent expected100137/100274 versus posted100138/100273 gives+1/-1, aggregate0 and two holds."
+    },
+    {
+      "id": "REPLAY",
+      "result": "PASS",
+      "basis": "Full report recomputation from complete saved transcript and pinned baseline, not receipt hash alone. Input profile and ordered events remain bound. Replaying a saved unknown-commit prefix with a later dispatch cannot reset the journal."
+    },
+    {
+      "id": "PERSISTENCE",
+      "result": "PASS",
+      "basis": "Prepare results before output; create new directory/files exclusively. Partial new-directory failure is explicitly acknowledged; existing inputs/outputs are not overwritten. CLI verification is report JSON replay, not authenticated storage."
+    },
+    {
+      "id": "READABLE_PARITY",
+      "result": "PASS",
+      "basis": "Every operation/event remains in Markdown; exact supplied event claims are embedded and per-item signed variance/historical holds remain visible."
+    },
+    {
+      "id": "REHEARSAL_ORACLE",
+      "result": "PASS",
+      "basis": "18 separately authored expected result/state/count arrays, including exact cent constants and stale outcomes; expected values are not generated from reducer decisions. Checking matches precedes output creation."
+    },
+    {
+      "id": "SCOPE",
+      "result": "PASS",
+      "basis": "Runtime and README consistently label proposed offline synthetic semantics, no endpoints, authoritative writes, coverage claim, concurrency proof, buyer approval or submission authority."
+    }
+  ],
+  "execution_by_this_reviewer": {
+    "runtime_test_commands": [],
+    "runtime_tests_executed": 0,
+    "note": "Zero runtime tests run by this reviewer. Inspected builder raw logs:23 normal,23 optimized,24 root normal,24 root optimized allPASS;18-case rehearsals bothPASS. Exact execution commands and source execution receipt remain builder-owned. Independently checked persisted artifact bytes and source assertions without rerunning suites."
+  },
+  "remaining_publication_gate": [],
+  "documentation_copy_verification": {
+    "status": "PASS",
+    "note": "Readback confirms all eight current staging Markdown documents present and byte-identical; earlier missing-attachment observation is resolved. Source semantic review is bound separately; copy equality is not a fresh review of the three design documents.",
+    "files": [
+      {
+        "path": "ARCHITECTURE_AND_DELIVERY.md",
+        "bytes": 7863,
+        "sha256": "203d5170b91438063a6a545de84efe4f48cee164ccf3608e5c89f25f3c37e77e",
+        "identical": true
+      },
+      {
+        "path": "ATTACHMENTS.md",
+        "bytes": 7321,
+        "sha256": "eef73ba5cbfb26670c2094d9b061500f912d1e59b2f76dc5d14121151b86a8b7",
+        "identical": true
+      },
+      {
+        "path": "DESIGN_SOURCE_REVIEW.md",
+        "bytes": 3031,
+        "sha256": "b757395f8aa5680b02cc979c25a6d37670fb5f79b73fb2c2b912bb393e2b27c4",
+        "identical": true
+      },
+      {
+        "path": "REQUIREMENTS.md",
+        "bytes": 20352,
+        "sha256": "41361da712ace538b69bf0d69a46fcaf3e615e6b693c1f340be72bfe5326faba",
+        "identical": true
+      },
+      {
+        "path": "SOURCE_REGISTER.md",
+        "bytes": 6565,
+        "sha256": "bd9e12f38f95286bbd26e726fbee9d58df7fb165923df0e8027e6a262229e4a5",
+        "identical": true
+      },
+      {
+        "path": "SUBMISSION_READINESS.md",
+        "bytes": 12086,
+        "sha256": "88254be94530d295e7a3f423a4d0b9227ed21bbf120377d23f47773858848495",
+        "identical": true
+      },
+      {
+        "path": "UAT_AND_CUTOVER.md",
+        "bytes": 6244,
+        "sha256": "5cc236bd97813bc02d6dedf3ef484fd04c6e3e2958d36d95d3aba0d1cdb862c1",
+        "identical": true
+      },
+      {
+        "path": "WORKSHARE.md",
+        "bytes": 3889,
+        "sha256": "209c19f267dcaa111faacada173b68f861ed6bf4a09899d379efee7fd3997e77",
+        "identical": true
+      }
+    ]
+  },
+  "reviewed_readme_update": {
+    "previous_binding": {
+      "path": "revenue/wayne_resa_smart_api/README.md",
+      "bytes": 9849,
+      "sha256": "6c9da821b9f691425e9f9202ce58391e8108bbb1f1368a937a4d6fa300844039",
+      "git_blob": "fab0ed11ea6581a248fe58c9785ce74497c8e68c"
+    },
+    "change": "Six-line link/documentation addition for actual WORKED_REHEARSAL.md and text bundle; no runtime change. Current README read and reviewed."
+  },
+  "test_assertion_review": {
+    "status": "PASS",
+    "distinct_new_test_methods": 23,
+    "bare_assert_statements_in_test_and_bridge": 0,
+    "new_root_count_explanation": "24 root tests =23 distinct new methods plus one optimized subprocess wrapper repeating the same23. This is not47 distinct cases. Existing11 legacy test methods are separate and no execution of those11 is claimed here.",
+    "covered_material_expectations": [
+      "Explicit stale NOT_SENT and ACK_LOST preserve IN_FLIGHT/attempt2/None retry/dispatch2.",
+      "Duplicate aliases preserve unknown state and retry timing/budget.",
+      "Two signed variances+1 and-1 remain two holds with sum0.",
+      "Complete supplied event claims are parsed back from Markdown and compared to input objects.",
+      "Independently recomputed receipt does not validate semantically altered report/source/authority.",
+      "Actual CLI subprocesses verify persisted JSON/Markdown equality, full replay and unchanged existing bytes after output refusal; optimized flag propagates.",
+      "Frozen original five file blobs, import hygiene and no socket opening are asserted."
+    ],
+    "qualification": "Persisted unknown-commit prefix plus appended dispatch is source-covered through deterministic stateless reconstruction and JSON roundtrip; no separate restart test method is claimed.",
+    "test_author_confirmation": "decoder_review confirmed nested f857938dd9e856725c9128d3d09286410d5360d4 and root a5d28cf87a083995c00331a3dda17fd1e1a43a86 frozen; no edits after passing logs."
+  },
+  "builder_execution_logs_inspected": [
+    {
+      "path": "wayne-lab-tests-normal.log",
+      "bytes": 3790,
+      "sha256": "34e9cb9e91f9592a77df56258caf4f6bec2d76ea9e75b8200c7a2efd1ff7106f",
+      "final_lines": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 23 tests in 0.746s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "path": "wayne-lab-tests-optimized.log",
+      "bytes": 3790,
+      "sha256": "3cd970d8ebdde17c28d64977e7c17870e9bae5ced6abe7365105e64488e70dfa",
+      "final_lines": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 23 tests in 1.638s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "path": "wayne-lab-tests-root.log",
+      "bytes": 5146,
+      "sha256": "b19f9def0bea364604122c7ff7a9ad7cf5418ef2c40f921e0bdbd207d341b9e4",
+      "final_lines": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 24 tests in 2.477s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "path": "wayne-validation/root-optimized.log",
+      "bytes": 123,
+      "sha256": "4e4e4e98683177f57724f8cc73ff5be992d569c16de8ff3edee234737ba4caeb",
+      "final_lines": [
+        "........................",
+        "----------------------------------------------------------------------",
+        "Ran 24 tests in 3.852s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "path": "wayne-validation/rehearsal-normal.log",
+      "bytes": 159,
+      "sha256": "32018f72163ad6a7a3f6a6ef5c5b66a810dbccb5f6fd0320c3d830664b0fe841",
+      "final_lines": [
+        "{\"receipt_sha256\": \"86b39d10ced857272ff6de7d9a25f65b646066b9455efbb3cfc936ab5be74a38\", \"scenario_count\": 18, \"status\": \"LOCAL_SYNTHETIC_EXPECTATIONS_MATCHED\"}"
+      ]
+    },
+    {
+      "path": "wayne-validation/rehearsal-optimized.log",
+      "bytes": 159,
+      "sha256": "32018f72163ad6a7a3f6a6ef5c5b66a810dbccb5f6fd0320c3d830664b0fe841",
+      "final_lines": [
+        "{\"receipt_sha256\": \"86b39d10ced857272ff6de7d9a25f65b646066b9455efbb3cfc936ab5be74a38\", \"scenario_count\": 18, \"status\": \"LOCAL_SYNTHETIC_EXPECTATIONS_MATCHED\"}"
+      ]
+    }
+  ],
+  "worked_artifact_review": {
+    "status": "PASS",
+    "files": 57,
+    "total_utf8_bytes": 273602,
+    "normal_and_optimized_exact_member_sets_and_bytes_equal_bundle": true,
+    "normal_output_directory": "wayne-final-normal",
+    "optimized_output_directory": "wayne-final-optimized",
+    "bundle_canonical_digest_recomputed": "997e5e63b5ff2170885f4e648d59d6e9d2783b842f41a841d06acfe3d0104485",
+    "rehearsal_receipt": "86b39d10ced857272ff6de7d9a25f65b646066b9455efbb3cfc936ab5be74a38",
+    "basis": "Verified every bundled member path/UTF8 length/SHA against both final output directories and exact57-member inventory. Read worked summary, verified18 scenario table preserves historical holds and offsetting variance count. This is artifact inspection, not runtime re-execution."
+  },
+  "review_limits": "No blocking source, arithmetic, assertion or worked-artifact finding remains at these exact bytes. This review does not establish hosted CI, mergeability, current main integration, buyer qualification or permission for external contact/submission."
+}

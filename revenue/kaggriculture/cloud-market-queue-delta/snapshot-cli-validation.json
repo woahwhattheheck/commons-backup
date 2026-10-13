@@ -1,0 +1,124 @@
+{
+  "original_benchmark_commit": "c5f37cc881d3fccf2e8a3d0e16d62febbf3ba9b7",
+  "original_relative_path_exit": 1,
+  "original_exception": "StopIteration at profile lookup: imported source filename absolute, CLI argument relative",
+  "correction": "Resolve baseline-source before loading and profile lookup; evaluator and timed call unchanged.",
+  "validation_kind": "Three-pair-per-workload relative-path CLI smoke; not a replacement for the original 21-pair measurement.",
+  "exit_code": 0,
+  "result": {
+    "schema": "queue-snapshot-benchmark-v1",
+    "baseline_sha256": "c57672b8ee431774c8bd6f2e3d264d716d3ced125eae0928f00be05e1bb1d2ad",
+    "candidate_sha256": "e95e0b8e3cc481d4687e9f0e6c3e53b4e4cbd4cf1b48f740f86acaa8a8b24122",
+    "benchmark_sha256": "d0e309176adf57f82905b677dd0f278cfff2f30fe0ae7be3593622d3c81c4be6",
+    "fixture_sha256": "2b39a4cc171a7dfdf3f560c6e3cf8472e32a5a06f65dd61cb9fb2bcd4bb4941a",
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "cpu_max": "400000 100000",
+    "memory_max": "4294967296",
+    "method": "Two excluded warmups per arm; alternating timed order; full reports compared after every pair; GC enabled, collection before each pair.",
+    "timing_scope": "Warm whole compare_queues call; imports, engine loading and JSON serialization excluded; no agent/game timing claim.",
+    "repeats": 3,
+    "game_panels": 0,
+    "game_seeds": 0,
+    "workloads": [
+      {
+        "scenarios": 1,
+        "initial_hands": 0,
+        "slots": 10,
+        "baseline": {
+          "min_ms": 1.988995,
+          "median_ms": 2.161594,
+          "p95_ms": 2.294464,
+          "max_ms": 2.294464,
+          "samples_ms": [
+            2.294464,
+            1.988995,
+            2.161594
+          ]
+        },
+        "candidate": {
+          "min_ms": 1.451315,
+          "median_ms": 1.455672,
+          "p95_ms": 1.595723,
+          "max_ms": 1.595723,
+          "samples_ms": [
+            1.455672,
+            1.595723,
+            1.451315
+          ]
+        },
+        "median_reduction_percent": 32.65747406774815,
+        "paired_report_matches": 3
+      },
+      {
+        "scenarios": 8,
+        "initial_hands": 6,
+        "slots": 10,
+        "baseline": {
+          "min_ms": 25.089423,
+          "median_ms": 27.522907,
+          "p95_ms": 29.361135,
+          "max_ms": 29.361135,
+          "samples_ms": [
+            27.522907,
+            25.089423,
+            29.361135
+          ]
+        },
+        "candidate": {
+          "min_ms": 17.084511,
+          "median_ms": 17.411875,
+          "p95_ms": 20.120332,
+          "max_ms": 20.120332,
+          "samples_ms": [
+            17.084511,
+            20.120332,
+            17.411875
+          ]
+        },
+        "median_reduction_percent": 36.73678801443467,
+        "paired_report_matches": 3
+      },
+      {
+        "scenarios": 32,
+        "initial_hands": 12,
+        "slots": 10,
+        "baseline": {
+          "min_ms": 136.320961,
+          "median_ms": 137.085771,
+          "p95_ms": 147.111384,
+          "max_ms": 147.111384,
+          "samples_ms": [
+            137.085771,
+            147.111384,
+            136.320961
+          ]
+        },
+        "candidate": {
+          "min_ms": 85.605303,
+          "median_ms": 88.63154,
+          "p95_ms": 91.300899,
+          "max_ms": 91.300899,
+          "samples_ms": [
+            88.63154,
+            91.300899,
+            85.605303
+          ]
+        },
+        "median_reduction_percent": 35.345922955052714,
+        "paired_report_matches": 3
+      }
+    ],
+    "instrumented_baseline_profile": {
+      "comparisons": 5,
+      "scenarios_per_comparison": 8,
+      "total_seconds": 0.7154988919999999,
+      "view_calls": 3520,
+      "view_cumulative_seconds": 0.5302857940000001,
+      "view_cumulative_fraction": 0.7411413210126958,
+      "note": "Profiler overhead included; use paired unprofiled samples for latency."
+    }
+  },
+  "stdout": "{\"scenarios\": 1, \"initial_hands\": 0, \"slots\": 10, \"median_reduction_percent\": 32.65747406774815, \"paired_report_matches\": 3, \"old_ms\": 2.161594, \"new_ms\": 1.455672}\n{\"scenarios\": 8, \"initial_hands\": 6, \"slots\": 10, \"median_reduction_percent\": 36.73678801443467, \"paired_report_matches\": 3, \"old_ms\": 27.522907, \"new_ms\": 17.411875}\n{\"scenarios\": 32, \"initial_hands\": 12, \"slots\": 10, \"median_reduction_percent\": 35.345922955052714, \"paired_report_matches\": 3, \"old_ms\": 137.085771, \"new_ms\": 88.63154}\n"
+}

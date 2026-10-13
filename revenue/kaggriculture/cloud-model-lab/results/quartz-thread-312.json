@@ -1,0 +1,125 @@
+{
+  "claim": "1788848850.483809",
+  "source": {
+    "claim": "1788848850.483809",
+    "review_commit": "e38013ae360936a1acb4f08613a0c174b8a5f8fe",
+    "guard_commit": "7c50bbfb41027f31a2d4bc9470424e815f1fcef1",
+    "review_git_blob": "e95982e9543b696130eb68988549b39558de76c6",
+    "guard_git_blob": "c605905a7962c3a4611bae101b50eb7fa3480691",
+    "author_credit": "Original PR10330 review author and PR10335 guard author; QUARTZ executes existing T1-T5 unchanged on CPython3.12.13."
+  },
+  "process": {
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "/tmp/quartz-titan-thread-312-20260908-01/run_t1_t5.py"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.2608426429978863,
+    "timed_out": false
+  },
+  "original_results": {
+    "python": "3.12.13 (main, Aug  7 2026, 02:25:39) [Clang 22.1.3 ]",
+    "scope": "Published T1-T5 functions, unchanged; T6-T8 not invoked",
+    "guard_sha256": "c8f7c9842ba7e4eb29f6e57a8d6f9ba816140dcbea7817aea2b3efcabe2771c5",
+    "test_sha256": "f85c7a71453bde4b6eb9dbc92695c01ced31e9dfc3a69994e9868276a4432647",
+    "results": [
+      {
+        "test": "T1 cancellation identity",
+        "status": "PASS",
+        "detail": "raised object is the timer's own expired instance",
+        "raised_is_timer_expired": true
+      },
+      {
+        "test": "T2 worker-thread availability",
+        "status": "PASS",
+        "detail": "outcome=cancelled identity_preserved=True",
+        "outcome": "cancelled",
+        "error": null,
+        "identity_preserved": true
+      },
+      {
+        "test": "T3 tracer restoration (main thread)",
+        "status": "PASS",
+        "detail": "guard entered and cancelled; sys.gettrace restored by identity=True threading.gettrace restored by identity=True",
+        "guard_entered": true,
+        "entered": true,
+        "sys_restored": true,
+        "threading_restored": true,
+        "sys_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f0fbac68680>",
+        "thr_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f0fbac68680>"
+      },
+      {
+        "test": "T3 tracer restoration (worker thread)",
+        "status": "PASS",
+        "detail": "guard entered and cancelled; sys.gettrace restored by identity=True threading.gettrace restored by identity=True",
+        "guard_entered": true,
+        "entered": true,
+        "sys_restored": true,
+        "threading_restored": true,
+        "sys_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f0fbac3bd80>",
+        "thr_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f0fbac3bd80>"
+      },
+      {
+        "test": "T4 no signal mutation from a worker",
+        "status": "PASS",
+        "detail": "guard unusable on a worker (DeadlineExceeded: action deadline exhausted) -- so it also cannot mutate signal state; handler identity unchanged=True",
+        "worker_error": "DeadlineExceeded: action deadline exhausted",
+        "handler_identity_unchanged": true,
+        "itimer_interval_unchanged": true
+      },
+      {
+        "test": "T5 bounded CPU-loop cancellation (main thread)",
+        "status": "PASS",
+        "detail": "outcome=cancelled budget=0.05s elapsed=0.05009307299769716 overshoot=9.3e-05",
+        "outcome": "cancelled",
+        "budget_seconds": 0.05,
+        "elapsed_seconds": 0.05009307299769716,
+        "overshoot_seconds": 9.3e-05,
+        "error": null
+      },
+      {
+        "test": "T5 bounded CPU-loop cancellation (worker thread)",
+        "status": "PASS",
+        "detail": "outcome=cancelled budget=0.05s elapsed=0.05005970300044282 overshoot=6e-05",
+        "outcome": "cancelled",
+        "budget_seconds": 0.05,
+        "elapsed_seconds": 0.05005970300044282,
+        "overshoot_seconds": 6e-05,
+        "error": null
+      }
+    ]
+  },
+  "artifact": {
+    "filename": "TITAN-QUARTZ-thread-312-consumer-20260908.zip",
+    "file_id": "file_00000000abf881f5b692f2fab99405b4",
+    "library_file_id": "libfile_cf1e6f1eff608191995a71989e3a68da",
+    "version": 1,
+    "bytes": 17262,
+    "sha256": "b4d02b8bb7e6cddf62daa09f4855d8f04fe2f55c93420ce88df74a7d375d6a01",
+    "payload_files": 9,
+    "local_payload_hashes_verified": true,
+    "saved_size_verified": true,
+    "saved_readback_verified": false,
+    "readback_status": "Independent materialization returned HTTP 502."
+  },
+  "interpretation": {
+    "all_seven_original_functional_rows_pass": true,
+    "stderr_empty": true,
+    "worker_supported": true,
+    "t4_expected_exception": "DeadlineExceeded: action deadline exhausted",
+    "t4_raw_prose_is_misleading": true,
+    "t4_checked_fields": [
+      "handler_identity_unchanged",
+      "itimer_interval_unchanged"
+    ],
+    "t4_does_not_test_every_countdown_state": true,
+    "t6_t7_games_executed": false,
+    "t8_mechanism_probe_executed": false,
+    "runtime_changed": false,
+    "default_or_package_changed": false,
+    "workflow_dispatched": false,
+    "submission_performed": false
+  },
+  "conditions": "CPython3.12.13 on existing8CPU/20GiB cloud workspace. One0.260843s functional process overlapped an independent ROADEF baseline; no performance generalization. Separate3.13 finding not reclassified."
+}

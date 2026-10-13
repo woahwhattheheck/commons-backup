@@ -1,0 +1,89 @@
+{
+  "schema_version": "muhlnickel-shopify-local-handoff/v1",
+  "kind": "LOCAL_SESSION_HANDOFF",
+  "as_of": "2026-08-30",
+  "owner_authorization": "Bryce authorized signup/account roads without another routine approval; computer-use may attempt service signup.",
+  "cloud_measurement": {
+    "shopify_admin": "BLOCKED_CLOUDFLARE_VERIFY_YOU_ARE_HUMAN",
+    "shopify_signup": "BLOCKED_CONNECTION_NEEDS_VERIFICATION",
+    "stripe_dashboard": "BLOCKED_GOOGLE_PASSWORD_REQUIRED",
+    "gmail_mcp": "needsAuth",
+    "attempted_by": [
+      "ChatGPT / Codex (PR #6113 / #6115 lane)",
+      "Cursor cloud computer-use (independent remeasure 2026-08-30)"
+    ],
+    "note": "Two independent cloud browsers hit the same Shopify Cloudflare wall. Stripe minting also lacks a live OAuth/password session on this surface."
+  },
+  "required_local_actions": [
+    {
+      "step": 1,
+      "action": "Open an already-authenticated TokenJunkieLabs/Commons Shopify admin, or complete signup from a browser that passes Cloudflare.",
+      "stop_if": "No intended existing store and signup still blocked — report exact blocker; do not create a duplicate store from a second account."
+    },
+    {
+      "step": 2,
+      "action": "Collision-search products/SKUs before import.",
+      "keys": [
+        "muhlnickel-attested-inference",
+        "MUHL-INFER-500",
+        "MUHL-INFER-1500",
+        "MUHL-INFER-2500",
+        "muhlnickel-generated-token-capacity",
+        "MUHL-TOK-10M",
+        "MUHL-TOK-100M",
+        "MUHL-TOK-1B"
+      ]
+    },
+    {
+      "step": 3,
+      "action": "Import exact merged CSVs from current main.",
+      "paths": [
+        "revenue/muhlnickel_inference/shopify_products.csv",
+        "revenue/muhlnickel_inference/shopify_token_capacity.csv"
+      ],
+      "pinned_main_example": "6c3c30ed31bb44ad75c331b65e8e62e08946a933"
+    },
+    {
+      "step": 4,
+      "action": "Publish both digital-service products; preserve no-shipping and manual fulfillment.",
+      "semantics": {
+        "requires_shipping": false,
+        "fulfillment": "manual",
+        "inventory_gate": false
+      }
+    },
+    {
+      "step": 5,
+      "action": "Read back into Slack #commons threads 1788114100.894679 and 1788115460.362279.",
+      "required_fields": [
+        "store identity",
+        "public product URLs",
+        "titles",
+        "all prices and SKUs",
+        "availability",
+        "checkout reachability"
+      ]
+    }
+  ],
+  "optional_parallel_stripe": {
+    "status": "NOT_MINTED",
+    "skus": [
+      "MUHL-TOK-10M",
+      "MUHL-TOK-100M",
+      "MUHL-TOK-1B",
+      "MUHL-INFER-500",
+      "MUHL-INFER-1500",
+      "MUHL-INFER-2500"
+    ],
+    "note": "Compose with Shopify; do not replace the owner Shopify road. Mint only from an authenticated Stripe livemode session and record exact plink URLs before exposing them on public HTML."
+  },
+  "already_landed_on_main": {
+    "prs": [6113, 6115],
+    "public_page": "attested-inference.html",
+    "offers": [
+      "revenue/muhlnickel_inference/offer.json",
+      "revenue/muhlnickel_inference/token_capacity_offer.json"
+    ],
+    "pitch_pack": "revenue/muhlnickel_inference/pitch_pack.json"
+  }
+}

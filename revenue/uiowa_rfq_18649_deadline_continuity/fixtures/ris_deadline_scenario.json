@@ -1,0 +1,160 @@
+{
+  "scenario_id": "UIOWA-107-SYNTHETIC-RIS-DEADLINE-001",
+  "work_order": "UIOWA-107",
+  "solicitation_id": "18649",
+  "service": "RIS",
+  "unit_of_measure": "hours",
+  "synthetic": true,
+  "authority": "FICTIONAL_REHEARSAL_ONLY",
+  "content_warning": "FICTIONAL. The deadline, the shared identity service, the application change and every number here were invented for rehearsal. Not a University of Iowa finding, not a statement about University capacity, and not a commitment to any date.",
+  "deadline": {
+    "label": "Fictional research-administration reporting submission",
+    "date_basis": "kickoff + 8 weeks; expressed relative to kickoff, never as a calendar appointment",
+    "movable": false,
+    "note": "A fixed external reporting obligation. The window around it is where all the contention sits."
+  },
+  "dependencies": [
+    {
+      "id": "DEP-IDENTITY",
+      "label": "Shared identity service (fictional)",
+      "owned_by_service": "IAM",
+      "note": "The reporting path authenticates through a service RIS does not control. Its change-freeze practice has never been asked for."
+    },
+    {
+      "id": "DEP-APPCHANGE",
+      "label": "Scheduled application change (fictional)",
+      "owned_by_service": "RIS",
+      "note": "A planned change to the reporting application lands close to the window."
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "ASM-001",
+      "statement": "effort to implement the scheduled application change",
+      "basis": "ESTIMATED",
+      "unit": "hours",
+      "low": 12,
+      "high": 20,
+      "stated_by": "fictional RIS application lead",
+      "source_ref": null
+    },
+    {
+      "id": "ASM-002",
+      "statement": "coordination wait on the shared identity service's change-freeze window",
+      "basis": "UNKNOWN",
+      "unit": "hours",
+      "low": null,
+      "high": null,
+      "stated_by": null,
+      "source_ref": null
+    },
+    {
+      "id": "ASM-003",
+      "statement": "analyst capacity available inside the reporting window",
+      "basis": "MEASURED",
+      "unit": "hours",
+      "low": 32,
+      "high": 40,
+      "stated_by": "fictional RIS roster export",
+      "source_ref": "synthetic://uiowa-rfq18649/107/roster-window-export"
+    },
+    {
+      "id": "ASM-004",
+      "statement": "effort to rehearse and stage a rollback before the window",
+      "basis": "ESTIMATED",
+      "unit": "hours",
+      "low": 4,
+      "high": 6,
+      "stated_by": "fictional RIS application lead",
+      "source_ref": null
+    },
+    {
+      "id": "ASM-005",
+      "statement": "unplanned recovery effort if the change misbehaves inside the window",
+      "basis": "ESTIMATED",
+      "unit": "hours",
+      "low": 8,
+      "high": 24,
+      "stated_by": "fictional RIS application lead",
+      "source_ref": null
+    },
+    {
+      "id": "ASM-006",
+      "statement": "temporary analyst capacity obtainable for the window",
+      "basis": "ASSUMED",
+      "unit": "hours",
+      "low": 0,
+      "high": 16,
+      "stated_by": "working figure; nobody has confirmed funding or availability",
+      "source_ref": null
+    },
+    {
+      "id": "ASM-007",
+      "statement": "coordination effort to defer the scheduled change by one cycle",
+      "basis": "MEASURED",
+      "unit": "hours",
+      "low": 2,
+      "high": 2,
+      "stated_by": "fictional RIS change log",
+      "source_ref": "synthetic://uiowa-rfq18649/107/change-deferral-log"
+    }
+  ],
+  "options": [
+    {
+      "id": "OPT-A",
+      "label": "Proceed with the application change as scheduled",
+      "description": "Do the change in its planned slot and absorb whatever it costs inside the reporting window.",
+      "exposure_terms": [
+        {"assumption_ref": "ASM-001"},
+        {"assumption_ref": "ASM-002"},
+        {"assumption_ref": "ASM-005"}
+      ],
+      "capacity_terms": [{"assumption_ref": "ASM-003"}],
+      "not_modelled": [
+        "the cost of the change itself slipping if the identity freeze turns out to be long"
+      ]
+    },
+    {
+      "id": "OPT-B",
+      "label": "Defer the application change until after the reporting deadline",
+      "description": "Move the change one cycle. The reporting window sees only the coordination cost.",
+      "exposure_terms": [{"assumption_ref": "ASM-007"}],
+      "capacity_terms": [{"assumption_ref": "ASM-003"}],
+      "not_modelled": [
+        "the business cost of running the current application version for another cycle",
+        "whether anything downstream depends on the change landing in its original slot"
+      ]
+    },
+    {
+      "id": "OPT-C",
+      "label": "Proceed, with a rehearsed rollback staged before the window",
+      "description": "Pay a known rehearsal cost up front so an in-window failure is a rollback rather than an unplanned recovery.",
+      "exposure_terms": [
+        {"assumption_ref": "ASM-001"},
+        {"assumption_ref": "ASM-002"},
+        {"assumption_ref": "ASM-004"}
+      ],
+      "capacity_terms": [{"assumption_ref": "ASM-003"}],
+      "not_modelled": [
+        "whether a rollback is actually possible once the reporting run has started"
+      ]
+    },
+    {
+      "id": "OPT-D",
+      "label": "Proceed, and add temporary analyst capacity to the window",
+      "description": "Leave the change where it is and widen the window's capacity instead.",
+      "exposure_terms": [
+        {"assumption_ref": "ASM-001"},
+        {"assumption_ref": "ASM-002"},
+        {"assumption_ref": "ASM-005"}
+      ],
+      "capacity_terms": [
+        {"assumption_ref": "ASM-003"},
+        {"assumption_ref": "ASM-006"}
+      ],
+      "not_modelled": [
+        "the ramp-up cost of a temporary analyst who does not know the reporting process"
+      ]
+    }
+  ]
+}

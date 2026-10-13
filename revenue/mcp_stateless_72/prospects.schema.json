@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/mcp_stateless_72/prospects.schema.json",
+  "title": "Commons MCP 2026-07-28 static compatibility evidence pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "schema_sha256",
+    "owner",
+    "scope",
+    "official_sources",
+    "truth",
+    "unapproved_candidate_material",
+    "omitted_private_fields",
+    "prospects"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "https://woahwhattheheck.github.io/commons/revenue/mcp_stateless_72/prospects.schema.json"
+    },
+    "schema_version": {"const": "1.0.0"},
+    "kind": {"const": "MCP_STATELESS_72_VERIFIED_STATIC_SIGNAL_PACK"},
+    "generated_at": {"const": "2026-08-26T23:39:00Z"},
+    "generated_from_main": {"pattern": "^[0-9a-f]{40}$"},
+    "schema_sha256": {"pattern": "^[0-9a-f]{64}$"},
+    "owner": {"const": "COMMONS_ANY_PEER"},
+    "scope": {"type": "string", "minLength": 1},
+    "official_sources": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/officialSource"}
+    },
+    "truth": {"$ref": "#/$defs/truth"},
+    "unapproved_candidate_material": {"$ref": "#/$defs/unapprovedCandidate"},
+    "omitted_private_fields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "prospects": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/prospect"}
+    }
+  },
+  "$defs": {
+    "officialSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "repository", "commit", "path", "raw_url", "commit_url",
+        "checked_at", "byte_count", "sha256", "git_blob_sha1", "newline",
+        "line_count", "facts"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"},
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "path": {"type": "string", "minLength": 1},
+        "raw_url": {"type": "string", "pattern": "^https://raw[.]githubusercontent[.]com/"},
+        "commit_url": {"type": "string", "pattern": "^https://github[.]com/"},
+        "checked_at": {"type": "string", "format": "date-time"},
+        "byte_count": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "git_blob_sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "newline": {"const": "LF"},
+        "line_count": {"type": "integer", "minimum": 1},
+        "facts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/fact"}
+        }
+      }
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line", "statement", "excerpt"],
+      "properties": {
+        "line": {"type": "integer", "minimum": 1},
+        "statement": {"type": "string", "minLength": 1},
+        "excerpt": {"type": "string", "minLength": 1}
+      }
+    },
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "static_protocol_signal_only", "defect_confirmed", "vulnerability_confirmed",
+        "buyer_confirmed", "pain_confirmed", "demand_confirmed",
+        "willingness_to_pay_confirmed", "contact_permission_confirmed",
+        "delivery_readiness_confirmed", "acceptance_confirmed", "revenue_confirmed",
+        "cash_received_usd"
+      ],
+      "properties": {
+        "static_protocol_signal_only": {"const": true},
+        "defect_confirmed": {"const": false},
+        "vulnerability_confirmed": {"const": false},
+        "buyer_confirmed": {"const": false},
+        "pain_confirmed": {"const": false},
+        "demand_confirmed": {"const": false},
+        "willingness_to_pay_confirmed": {"const": false},
+        "contact_permission_confirmed": {"const": false},
+        "delivery_readiness_confirmed": {"const": false},
+        "acceptance_confirmed": {"const": false},
+        "revenue_confirmed": {"const": false},
+        "cash_received_usd": {"const": 0}
+      }
+    },
+    "unapprovedCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["present", "owner_approved"],
+      "properties": {
+        "present": {"const": false},
+        "owner_approved": {"const": false}
+      }
+    },
+    "signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mcp_session_id", "legacy_initialize", "legacy_protocol_version"],
+      "properties": {
+        "mcp_session_id": {"type": "boolean"},
+        "legacy_initialize": {"type": "boolean"},
+        "legacy_protocol_version": {"type": "boolean"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signal", "line", "excerpt"],
+      "properties": {
+        "signal": {
+          "enum": ["MCP_SESSION_ID", "LEGACY_INITIALIZE", "LEGACY_PROTOCOL_VERSION"]
+        },
+        "line": {"type": "integer", "minimum": 1},
+        "excerpt": {"type": "string", "minLength": 1}
+      }
+    },
+    "prospect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "repository", "commit", "path", "raw_url", "commit_url",
+        "checked_at", "byte_count", "sha256", "git_blob_sha1", "newline",
+        "line_count", "signals", "observations", "evidence_state", "owner",
+        "analysis", "nonclaims"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"},
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "path": {"type": "string", "minLength": 1},
+        "raw_url": {"type": "string", "pattern": "^https://raw[.]githubusercontent[.]com/"},
+        "commit_url": {"type": "string", "pattern": "^https://github[.]com/"},
+        "checked_at": {"type": "string", "format": "date-time"},
+        "byte_count": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "git_blob_sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "newline": {"const": "LF"},
+        "line_count": {"type": "integer", "minimum": 1},
+        "signals": {"$ref": "#/$defs/signals"},
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/observation"}
+        },
+        "evidence_state": {"const": "VERIFIED_STATIC_SIGNAL"},
+        "owner": {"const": "COMMONS_ANY_PEER"},
+        "analysis": {"type": "string", "pattern": "^ANALYSIS: .+"},
+        "nonclaims": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

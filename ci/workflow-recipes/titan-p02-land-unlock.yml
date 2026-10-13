@@ -1,0 +1,31 @@
+name: titan-p02-land-unlock
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/land_unlock_timing.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/land_unlock_timing_test_support.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_land_unlock_timing.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_land_unlock_timing_engine.py'
+      - '.github/workflows/titan-p02-land-unlock.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Verify exact PR head checkout
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile and run P02 land-unlock contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          python -m py_compile land_unlock_timing.py land_unlock_timing_test_support.py test_land_unlock_timing.py test_land_unlock_timing_engine.py
+          python -m unittest -v test_land_unlock_timing test_land_unlock_timing_engine

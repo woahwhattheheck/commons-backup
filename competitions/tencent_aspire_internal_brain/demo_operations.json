@@ -1,0 +1,116 @@
+{
+  "schema": "internal-brain-operations/v1",
+  "operations": [
+    {
+      "operation": "query",
+      "request": {
+        "schema": "internal-brain-query/v1",
+        "tenant_id": "northstar",
+        "actor_user_id": "maya",
+        "question": "What is the travel receipt rule?",
+        "max_results": 5
+      }
+    },
+    {
+      "operation": "query",
+      "request": {
+        "schema": "internal-brain-query/v1",
+        "tenant_id": "northstar",
+        "actor_user_id": "maya",
+        "question": "What operating margin improvement is in the finance plan?",
+        "max_results": 5,
+        "document_ids": ["finance-plan"]
+      }
+    },
+    {
+      "operation": "query",
+      "request": {
+        "schema": "internal-brain-query/v1",
+        "tenant_id": "northstar",
+        "actor_user_id": "li",
+        "question": "What operating margin improvement is in the finance plan?",
+        "max_results": 5,
+        "document_ids": ["finance-plan"]
+      }
+    },
+    {
+      "operation": "ingest",
+      "request": {
+        "tenant_id": "northstar",
+        "actor_user_id": "chen",
+        "document": {
+          "schema": "internal-brain-document/v1",
+          "tenant_id": "northstar",
+          "document_id": "equipment-policy",
+          "title": "Fictional Equipment Policy",
+          "content": "For the fictional Northstar team, borrowed equipment must be returned within five working days. Record the handover in the equipment log.",
+          "source_uri": "kb://fictional/policies/equipment/v1",
+          "version": "v1",
+          "classification": 1,
+          "allowed_roles": ["employee", "security_admin"],
+          "labels": ["equipment", "fictional"]
+        }
+      }
+    },
+    {
+      "operation": "ingest",
+      "request": {
+        "tenant_id": "northstar",
+        "actor_user_id": "chen",
+        "document": {
+          "schema": "internal-brain-document/v1",
+          "tenant_id": "northstar",
+          "document_id": "equipment-policy",
+          "title": "Fictional Equipment Policy",
+          "content": "For the fictional Northstar team, borrowed equipment must be returned within five working days. Record the handover in the equipment log.",
+          "source_uri": "kb://fictional/unapproved/equipment/v1",
+          "version": "v1",
+          "classification": 1,
+          "allowed_roles": ["employee", "security_admin"],
+          "labels": ["equipment", "fictional"]
+        }
+      }
+    },
+    {
+      "operation": "query",
+      "request": {
+        "schema": "internal-brain-query/v1",
+        "tenant_id": "northstar",
+        "actor_user_id": "maya",
+        "question": "When must borrowed equipment be returned?",
+        "max_results": 5,
+        "document_ids": ["equipment-policy"]
+      }
+    },
+    {
+      "operation": "ingest",
+      "request": {
+        "tenant_id": "northstar",
+        "actor_user_id": "maya",
+        "document": {
+          "schema": "internal-brain-document/v1",
+          "tenant_id": "northstar",
+          "document_id": "employee-draft-policy",
+          "title": "Fictional Employee Draft",
+          "content": "This fictional draft proposes an equipment checklist. It must not be added by an actor without ingestion permission.",
+          "source_uri": "kb://fictional/drafts/employee-policy/v1",
+          "version": "v1",
+          "classification": 1,
+          "allowed_roles": ["employee", "security_admin"],
+          "labels": ["equipment", "draft", "fictional"]
+        }
+      }
+    },
+    {
+      "operation": "query",
+      "request": {
+        "schema": "internal-brain-query/v1",
+        "tenant_id": "northstar",
+        "actor_user_id": "maya",
+        "question": "Where should the equipment handover be recorded?",
+        "max_results": 5,
+        "document_ids": ["equipment-policy"]
+      }
+    }
+  ]
+}

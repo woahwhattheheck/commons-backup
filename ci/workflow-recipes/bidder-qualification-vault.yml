@@ -1,0 +1,23 @@
+name: Bidder Qualification Evidence Vault
+on:
+  push:
+    paths: ['revenue/bidder_qualification_vault/**', '.github/workflows/bidder-qualification-vault.yml']
+  pull_request:
+    paths: ['revenue/bidder_qualification_vault/**', '.github/workflows/bidder-qualification-vault.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/bidder_qualification_vault/*.py
+      - run: python -m unittest -v revenue.bidder_qualification_vault.test_vault
+      - run: python -O -m unittest -v revenue.bidder_qualification_vault.test_vault

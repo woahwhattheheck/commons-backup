@@ -1,0 +1,28 @@
+{
+  "schema": "titan-v4-donor-preservation-v1",
+  "status": "DONOR_ONLY_PENDING_RUNTIME_GATE",
+  "canonical_baseline": "15b2b5d2025a7c6976557b5ec3e458a3f09f412b",
+  "engine_semantics_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "source": {
+    "path": "r04_idle_hands.py",
+    "git_blob": "7a413ba840fae0bf6319b00d9fd4cb55513e88e8"
+  },
+  "focused_tests": {
+    "path": "test_v4_idle_hands.py",
+    "git_blob": "080a50754e09a2b364056806f15e84ff23fe7ec4"
+  },
+  "arms": ["feed_all", "care_all", "care_goose", "wheat_fert", "idle_all"],
+  "runtime_gate_required": {
+    "focused_normal_and_python_O": true,
+    "panel": "8 seeds x 2 seats",
+    "measure_arms_separately": ["feed_all", "care_all", "care_goose", "wheat_fert"],
+    "idle_all_optional": true,
+    "required_outputs": ["engagement", "margin_delta", "win_loss", "first_regression_witness"]
+  },
+  "nonclaims": [
+    "not production activated",
+    "not strength promoted",
+    "no router key or default change",
+    "no legacy materializer execution against current production ABI"
+  ]
+}

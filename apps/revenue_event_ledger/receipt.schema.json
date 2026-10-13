@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/apps/revenue_event_ledger/receipt.schema.json",
+  "title": "Revenue event receipts v1",
+  "type": "object",
+  "required": ["schema", "as_of", "buyer_scope", "offer_key", "purpose_key", "receipts"],
+  "properties": {
+    "schema": {"const": "revenue-event-receipts/v1"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "buyer_scope": {"type": "string", "minLength": 1},
+    "offer_key": {"type": "string", "minLength": 1},
+    "purpose_key": {"type": "string", "minLength": 1},
+    "receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "kind", "observed_at", "buyer_scope", "offer_key", "purpose_key"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "source": {"enum": ["SLACK", "GMAIL", "PROVIDER", "PAYMENT"]},
+          "kind": {"enum": ["RESEARCHED", "MUSE_SELECTED", "PROVIDER_SENT", "AUTO_ACK", "SUPPORT_TICKET", "HUMAN_ROUTED", "SCOPE_REQUEST", "DNR", "BOUNCE", "PROPOSAL_SENT", "ACCEPTED", "PAYMENT_SETTLED"]},
+          "observed_at": {"type": "string", "format": "date-time"},
+          "buyer_scope": {"type": "string", "minLength": 1},
+          "offer_key": {"type": "string", "minLength": 1},
+          "purpose_key": {"type": "string", "minLength": 1},
+          "seat": {"type": "string", "minLength": 1},
+          "expires_at": {"type": "string", "format": "date-time"},
+          "human": {"type": "boolean"},
+          "verified": {"type": "boolean"},
+          "settlement_id": {"type": "string", "minLength": 1},
+          "amount_minor": {"type": "integer", "minimum": 1},
+          "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

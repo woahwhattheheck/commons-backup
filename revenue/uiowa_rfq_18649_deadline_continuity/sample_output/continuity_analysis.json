@@ -1,0 +1,360 @@
+{
+  "assumptions": [
+    {
+      "basis": "ESTIMATED",
+      "basis_meaning": "a practitioner's range, not a measurement",
+      "high": 20,
+      "id": "ASM-001",
+      "low": 12,
+      "resolved": true,
+      "source_ref": null,
+      "stated_by": "fictional RIS application lead",
+      "statement": "effort to implement the scheduled application change",
+      "unit": "hours"
+    },
+    {
+      "basis": "UNKNOWN",
+      "basis_meaning": "nobody has established this; no bound is available",
+      "high": null,
+      "id": "ASM-002",
+      "low": null,
+      "resolved": false,
+      "source_ref": null,
+      "stated_by": null,
+      "statement": "coordination wait on the shared identity service's change-freeze window",
+      "unit": "hours"
+    },
+    {
+      "basis": "MEASURED",
+      "basis_meaning": "taken from a record; the range is the observed spread",
+      "high": 40,
+      "id": "ASM-003",
+      "low": 32,
+      "resolved": true,
+      "source_ref": "synthetic://uiowa-rfq18649/107/roster-window-export",
+      "stated_by": "fictional RIS roster export",
+      "statement": "analyst capacity available inside the reporting window",
+      "unit": "hours"
+    },
+    {
+      "basis": "ESTIMATED",
+      "basis_meaning": "a practitioner's range, not a measurement",
+      "high": 6,
+      "id": "ASM-004",
+      "low": 4,
+      "resolved": true,
+      "source_ref": null,
+      "stated_by": "fictional RIS application lead",
+      "statement": "effort to rehearse and stage a rollback before the window",
+      "unit": "hours"
+    },
+    {
+      "basis": "ESTIMATED",
+      "basis_meaning": "a practitioner's range, not a measurement",
+      "high": 24,
+      "id": "ASM-005",
+      "low": 8,
+      "resolved": true,
+      "source_ref": null,
+      "stated_by": "fictional RIS application lead",
+      "statement": "unplanned recovery effort if the change misbehaves inside the window",
+      "unit": "hours"
+    },
+    {
+      "basis": "ASSUMED",
+      "basis_meaning": "a working figure with nothing behind it yet",
+      "high": 16,
+      "id": "ASM-006",
+      "low": 0,
+      "resolved": true,
+      "source_ref": null,
+      "stated_by": "working figure; nobody has confirmed funding or availability",
+      "statement": "temporary analyst capacity obtainable for the window",
+      "unit": "hours"
+    },
+    {
+      "basis": "MEASURED",
+      "basis_meaning": "taken from a record; the range is the observed spread",
+      "high": 2,
+      "id": "ASM-007",
+      "low": 2,
+      "resolved": true,
+      "source_ref": "synthetic://uiowa-rfq18649/107/change-deferral-log",
+      "stated_by": "fictional RIS change log",
+      "statement": "coordination effort to defer the scheduled change by one cycle",
+      "unit": "hours"
+    }
+  ],
+  "comparisons": [
+    {
+      "bound_required": [],
+      "detail": "OPT-B ends before OPT-A begins, so the comparison holds across the whole range",
+      "discriminating_assumptions": [],
+      "evidence_requests": [],
+      "exposures": {
+        "OPT-A": {
+          "high": null,
+          "low": 20
+        },
+        "OPT-B": {
+          "high": 2,
+          "low": 2
+        }
+      },
+      "lower_in_window_exposure": "OPT-B",
+      "pair": [
+        "OPT-A",
+        "OPT-B"
+      ],
+      "status": "SEPARATED"
+    },
+    {
+      "bound_required": [
+        "ASM-002"
+      ],
+      "detail": "the exposure ranges overlap; neither option is lower across the whole range",
+      "discriminating_assumptions": [],
+      "evidence_requests": [
+        {
+          "ask": "Obtain any upper bound for: coordination wait on the shared identity service's change-freeze window",
+          "assumption_ref": "ASM-002",
+          "why": "with no upper bound on this input, OPT-A and OPT-C cannot be compared at all"
+        }
+      ],
+      "exposures": {
+        "OPT-A": {
+          "high": null,
+          "low": 20
+        },
+        "OPT-C": {
+          "high": null,
+          "low": 16
+        }
+      },
+      "lower_in_window_exposure": null,
+      "pair": [
+        "OPT-A",
+        "OPT-C"
+      ],
+      "status": "NOT_SEPARABLE"
+    },
+    {
+      "bound_required": [
+        "ASM-002"
+      ],
+      "detail": "the exposure ranges overlap; neither option is lower across the whole range",
+      "discriminating_assumptions": [],
+      "evidence_requests": [
+        {
+          "ask": "Confirm: temporary analyst capacity obtainable for the window",
+          "assumption_ref": "ASM-006",
+          "why": "OPT-A and OPT-D have identical in-window exposure; they differ only in capacity, and this ASSUMED input is the whole difference"
+        },
+        {
+          "ask": "Obtain any upper bound for: coordination wait on the shared identity service's change-freeze window",
+          "assumption_ref": "ASM-002",
+          "why": "with no upper bound on this input, OPT-A and OPT-D cannot be compared at all"
+        }
+      ],
+      "exposures": {
+        "OPT-A": {
+          "high": null,
+          "low": 20
+        },
+        "OPT-D": {
+          "high": null,
+          "low": 20
+        }
+      },
+      "lower_in_window_exposure": null,
+      "pair": [
+        "OPT-A",
+        "OPT-D"
+      ],
+      "status": "NOT_SEPARABLE"
+    },
+    {
+      "bound_required": [],
+      "detail": "OPT-B ends before OPT-C begins, so the comparison holds across the whole range",
+      "discriminating_assumptions": [],
+      "evidence_requests": [],
+      "exposures": {
+        "OPT-B": {
+          "high": 2,
+          "low": 2
+        },
+        "OPT-C": {
+          "high": null,
+          "low": 16
+        }
+      },
+      "lower_in_window_exposure": "OPT-B",
+      "pair": [
+        "OPT-B",
+        "OPT-C"
+      ],
+      "status": "SEPARATED"
+    },
+    {
+      "bound_required": [],
+      "detail": "OPT-B ends before OPT-D begins, so the comparison holds across the whole range",
+      "discriminating_assumptions": [],
+      "evidence_requests": [],
+      "exposures": {
+        "OPT-B": {
+          "high": 2,
+          "low": 2
+        },
+        "OPT-D": {
+          "high": null,
+          "low": 20
+        }
+      },
+      "lower_in_window_exposure": "OPT-B",
+      "pair": [
+        "OPT-B",
+        "OPT-D"
+      ],
+      "status": "SEPARATED"
+    },
+    {
+      "bound_required": [
+        "ASM-002"
+      ],
+      "detail": "the exposure ranges overlap; neither option is lower across the whole range",
+      "discriminating_assumptions": [],
+      "evidence_requests": [
+        {
+          "ask": "Obtain any upper bound for: coordination wait on the shared identity service's change-freeze window",
+          "assumption_ref": "ASM-002",
+          "why": "with no upper bound on this input, OPT-C and OPT-D cannot be compared at all"
+        }
+      ],
+      "exposures": {
+        "OPT-C": {
+          "high": null,
+          "low": 16
+        },
+        "OPT-D": {
+          "high": null,
+          "low": 20
+        }
+      },
+      "lower_in_window_exposure": null,
+      "pair": [
+        "OPT-C",
+        "OPT-D"
+      ],
+      "status": "NOT_SEPARABLE"
+    }
+  ],
+  "deadline": {
+    "date_basis": "kickoff + 8 weeks; expressed relative to kickoff, never as a calendar appointment",
+    "label": "Fictional research-administration reporting submission",
+    "movable": false,
+    "note": "A fixed external reporting obligation. The window around it is where all the contention sits."
+  },
+  "meta": {
+    "authority": "FICTIONAL_REHEARSAL_ONLY",
+    "prohibited_interpretation": [
+      "University of Iowa finding",
+      "statement of current University capacity or schedule",
+      "a commitment, appointment, or scheduled date",
+      "employee performance assessment"
+    ],
+    "scenario_id": "UIOWA-107-SYNTHETIC-RIS-DEADLINE-001",
+    "service": "RIS",
+    "solicitation_id": "18649",
+    "synthetic": true,
+    "unit": "hours",
+    "work_order": "UIOWA-107"
+  },
+  "options": [
+    {
+      "capacity": {
+        "high": 40,
+        "low": 32
+      },
+      "description": "Do the change in its planned slot and absorb whatever it costs inside the reporting window.",
+      "exposure": {
+        "high": null,
+        "low": 20
+      },
+      "label": "Proceed with the application change as scheduled",
+      "not_modelled": [
+        "the cost of the change itself slipping if the identity freeze turns out to be long"
+      ],
+      "option_id": "OPT-A",
+      "unbounded_inputs": [
+        "ASM-002"
+      ],
+      "verdict": "NOT_DETERMINED",
+      "verdict_meaning": "the ranges overlap or a bound is missing; not answerable yet"
+    },
+    {
+      "capacity": {
+        "high": 40,
+        "low": 32
+      },
+      "description": "Move the change one cycle. The reporting window sees only the coordination cost.",
+      "exposure": {
+        "high": 2,
+        "low": 2
+      },
+      "label": "Defer the application change until after the reporting deadline",
+      "not_modelled": [
+        "the business cost of running the current application version for another cycle",
+        "whether anything downstream depends on the change landing in its original slot"
+      ],
+      "option_id": "OPT-B",
+      "unbounded_inputs": [],
+      "verdict": "FITS",
+      "verdict_meaning": "the worst case still sits inside the capacity available in the window"
+    },
+    {
+      "capacity": {
+        "high": 40,
+        "low": 32
+      },
+      "description": "Pay a known rehearsal cost up front so an in-window failure is a rollback rather than an unplanned recovery.",
+      "exposure": {
+        "high": null,
+        "low": 16
+      },
+      "label": "Proceed, with a rehearsed rollback staged before the window",
+      "not_modelled": [
+        "whether a rollback is actually possible once the reporting run has started"
+      ],
+      "option_id": "OPT-C",
+      "unbounded_inputs": [
+        "ASM-002"
+      ],
+      "verdict": "NOT_DETERMINED",
+      "verdict_meaning": "the ranges overlap or a bound is missing; not answerable yet"
+    },
+    {
+      "capacity": {
+        "high": 56,
+        "low": 32
+      },
+      "description": "Leave the change where it is and widen the window's capacity instead.",
+      "exposure": {
+        "high": null,
+        "low": 20
+      },
+      "label": "Proceed, and add temporary analyst capacity to the window",
+      "not_modelled": [
+        "the ramp-up cost of a temporary analyst who does not know the reporting process"
+      ],
+      "option_id": "OPT-D",
+      "unbounded_inputs": [
+        "ASM-002"
+      ],
+      "verdict": "NOT_DETERMINED",
+      "verdict_meaning": "the ranges overlap or a bound is missing; not answerable yet"
+    }
+  ],
+  "unresolved_assumptions": [
+    "ASM-002"
+  ]
+}

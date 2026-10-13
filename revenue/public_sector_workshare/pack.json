@@ -1,0 +1,224 @@
+{
+  "authority_ceiling": [
+    "no buyer or prime contact from pack bytes alone",
+    "no bid submission or portal mutation",
+    "no contract/signature/teaming commitment",
+    "no OEM/certification/clearance/past-performance claim without evidence",
+    "no spend or payment mutation",
+    "no award/payment/revenue assertion without provider evidence"
+  ],
+  "award_asserted": false,
+  "buyer_acceptance_asserted": false,
+  "commercial_truth": "PROPOSED_NOT_ACCEPTED",
+  "coordination_contract": {
+    "ambiguous_provider_outcome": "DNR_RECONCILE_NEVER_RESEND",
+    "lease_receipt_schema": "tjl-public-sector-single-writer-lease/v1",
+    "lease_required": true,
+    "note": "Duplicate-contact coordination only; it does not create authentication, provider, buyer, or commercial authority.",
+    "required_pre_send_observations": [
+      "fresh Slack relationship/claim census",
+      "fresh mailbox/thread census",
+      "single-writer lease receipt binding exact opportunity+organization_id+route_id",
+      "immediate second Slack/mailbox census before provider mutation"
+    ],
+    "security_authority_created": false,
+    "send_log_fields": [
+      "collision_key",
+      "opportunity_id",
+      "organization_id",
+      "route_id",
+      "target_authority_sha256",
+      "lease_receipt_sha256",
+      "lease_generation",
+      "seat",
+      "provider_message_id",
+      "provider_thread_id",
+      "sent_utc",
+      "state"
+    ],
+    "single_writer_key_formula": "sha256(lower(opportunity_id) + '\n' + lower(organization_id) + '\n' + lower(route_id))",
+    "target_authority_schema": "tjl-public-sector-target-authority/v1"
+  },
+  "model_family": "gpt-5.6-sol",
+  "modules": [
+    {
+      "acceptance_tests": [
+        "every admitted source represented exactly once",
+        "every required target field has an explicit mapping or exception",
+        "configured count/key/domain/aggregate invariants pass or enumerate exceptions",
+        "same input generation reproduces byte-equivalent manifest semantics"
+      ],
+      "exclusions": [
+        "production-data custody before contract",
+        "legal/privacy classification decisions",
+        "prime solution architecture",
+        "buyer sign-off authority"
+      ],
+      "id": "MIGRATION_EVIDENCE",
+      "name": "Migration evidence and reconciliation",
+      "outputs": [
+        "immutable source manifest",
+        "mapping ledger",
+        "load/reject reconciliation",
+        "referential-integrity report",
+        "source-to-target trace receipts"
+      ],
+      "required_inputs": [
+        "owner-approved source inventory",
+        "target data contract",
+        "mapping/transform rules",
+        "approved non-production or synthetic fixtures",
+        "acceptance tolerances"
+      ]
+    },
+    {
+      "acceptance_tests": [
+        "agreed happy and failure paths are machine-verifiable",
+        "replay/idempotency expectations are explicit",
+        "interface versions are source-bound",
+        "all variances are enumerated rather than silently coerced"
+      ],
+      "exclusions": [
+        "credential issuance",
+        "provider administration",
+        "production endpoint ownership",
+        "security certification"
+      ],
+      "id": "INTEGRATION_CONFORMANCE",
+      "name": "Integration contract conformance and replay",
+      "outputs": [
+        "contract-test suite",
+        "replay fixtures",
+        "failure-path matrix",
+        "correlation trace index",
+        "versioned interface evidence packet"
+      ],
+      "required_inputs": [
+        "prime-owned interface inventory",
+        "request/response contracts",
+        "non-production endpoints or fixtures",
+        "retry/idempotency rules",
+        "expected failure semantics"
+      ]
+    },
+    {
+      "acceptance_tests": [
+        "every in-scope requirement maps to evidence or explicit gap",
+        "test outcomes preserve exact source/result identity",
+        "unresolved exceptions remain visible",
+        "summary can be recomputed from the ledger"
+      ],
+      "exclusions": [
+        "buyer acceptance decision",
+        "legal compliance attestation",
+        "business-owner signoff",
+        "production go-live decision"
+      ],
+      "id": "UAT_ACCEPTANCE_EVIDENCE",
+      "name": "UAT and acceptance evidence",
+      "outputs": [
+        "requirements-to-test matrix",
+        "deterministic result ledger",
+        "exception/defect queue",
+        "evidence index",
+        "acceptance-readiness summary"
+      ],
+      "required_inputs": [
+        "prime/buyer requirement IDs",
+        "approved test cases",
+        "expected outcomes",
+        "test-environment constraints",
+        "defect disposition vocabulary"
+      ]
+    },
+    {
+      "acceptance_tests": [
+        "snapshot and delta identities are exact",
+        "late changes are reconciled explicitly",
+        "rollback triggers remain inspectable",
+        "release bundle traces each claim to an artifact"
+      ],
+      "exclusions": [
+        "production deployment authority",
+        "buyer change-control approval",
+        "system-of-record mutation outside the contracted runbook",
+        "prime project-management responsibility"
+      ],
+      "id": "CUTOVER_REPLAY",
+      "name": "Cutover, delta reconciliation, and replay evidence",
+      "outputs": [
+        "rehearsal receipt",
+        "full-load receipt",
+        "delta receipt",
+        "late-change reconciliation",
+        "rollback checkpoint ledger",
+        "release evidence bundle"
+      ],
+      "required_inputs": [
+        "prime-owned cutover plan",
+        "approved migration snapshots",
+        "delta/change window",
+        "rollback criteria",
+        "environment/capacity limits"
+      ]
+    }
+  ],
+  "offers": [
+    {
+      "duration_weeks_max": 4,
+      "duration_weeks_min": 2,
+      "excludes": [
+        "production cutover",
+        "buyer submission",
+        "prime platform implementation",
+        "licenses",
+        "travel",
+        "third-party fees"
+      ],
+      "id": "PILOT_2_TO_4_WEEK",
+      "price_usd": 25000,
+      "scope": "one bounded migration or integration evidence seam, synthetic/non-production proof, acceptance matrix, reproducible handoff",
+      "status": "PROPOSED_NOT_ACCEPTED"
+    },
+    {
+      "duration_weeks_max": 12,
+      "duration_weeks_min": 8,
+      "excludes": [
+        "prime platform licensing",
+        "prime solution architecture",
+        "regulatory certification",
+        "production hosting",
+        "buyer contract authority",
+        "third-party fees"
+      ],
+      "id": "IMPLEMENTATION_WORKSHARE",
+      "price_usd": 125000,
+      "scope": "migration evidence + up to eight interface conformance families + UAT evidence + one cutover rehearsal/reconciliation workstream",
+      "status": "PROPOSED_NOT_ACCEPTED"
+    }
+  ],
+  "operation": "PUBLIC-SECTOR-WORKSHARE-CAPTURE-20260913",
+  "owner_seat": "Zeta-Five",
+  "payment_asserted": false,
+  "proof_refs": [
+    {
+      "id": "OR-ODA-S-DASOBO-00017788",
+      "kind": "merged_qualification",
+      "merge_commit": "8ffd13dd910589aa7ff7e56862b1740f07efea5e",
+      "url": "https://github.com/woahwhattheheck/commons/pull/13907"
+    },
+    {
+      "id": "NYSED-RFP-144-OCUE",
+      "kind": "merged_qualification",
+      "merge_commit": "4178bc0daf9d6fa11fabf818d96062dc0915447d",
+      "url": "https://github.com/woahwhattheheck/commons/pull/13547"
+    },
+    {
+      "id": "PUBLIC-SECTOR-WORKSHARE-CAPTURE-20260913",
+      "kind": "source_build_demand",
+      "url": "https://github.com/woahwhattheheck/commons/issues/14283"
+    }
+  ],
+  "recognized_revenue_asserted": false,
+  "schema": "tjl-public-sector-workshare-pack/v1"
+}

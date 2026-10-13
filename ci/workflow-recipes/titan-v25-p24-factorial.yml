@@ -1,0 +1,118 @@
+name: TITAN P24 exact configuration factorial
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v25-p24-factorial.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/p24-composition-20260909/**'
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: 'Distinct development seeds (held seeds require a frozen selection)'
+        required: true
+        default: '2609099501'
+permissions:
+  contents: read
+concurrency:
+  group: titan-p24-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  p24-factorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify triggering source head
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact engine dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+      - name: Unit and safety contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab/p24-composition-20260909
+          python -m unittest -v test_p24_factorial.py
+      - name: Materialize exact dispatch archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          DISPATCH=50fc3978603da7a2f155168a0296877007b895ea
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          git worktree add --detach /tmp/p24-dispatch "$DISPATCH"
+          cd "/tmp/p24-dispatch/$ROOT"
+          python build_integrated.py --check
+          test "$(stat -c %s exports/titan-current.tar.gz)" = '423575'
+          test "$(sha256sum exports/titan-current.tar.gz | awk '{print $1}')" = 'a055fd56ca5821208096f37787f77dbdddc2f65c14c24132d6e219a05e6f02ba'
+          test "$(sha256sum runtime/integrated-selected/CURRENT-SOURCE.json | awk '{print $1}')" = 'b96676977687ee8a92d7213380f96bf5774a5ec26925cb4f0d66bdd244eb44ba'
+      - name: Exact-Arlene 2^4 development screen
+        shell: bash
+        env:
+          DISPATCH_SEEDS: ${{ github.event_name == 'workflow_dispatch' && inputs.seeds || '2609099501' }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/p24-results
+          # Touch report early so artifact gate cannot be satisfied by archive alone.
+          echo '{}' > /tmp/p24-results/P24-FACTORIAL.json
+          python revenue/kaggriculture/cloud-execution-lab/p24-composition-20260909/run_p24_factorial.py \
+            --archive /tmp/p24-dispatch/revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz \
+            --expected-archive-sha256 a055fd56ca5821208096f37787f77dbdddc2f65c14c24132d6e219a05e6f02ba \
+            --expected-archive-bytes 423575 \
+            --expected-member-count 107 \
+            --expected-source-sha256 b96676977687ee8a92d7213380f96bf5774a5ec26925cb4f0d66bdd244eb44ba \
+            --dispatch-commit 50fc3978603da7a2f155168a0296877007b895ea \
+            --phase development \
+            --runner-head "$(git rev-parse HEAD)" \
+            --seeds "$DISPATCH_SEEDS" \
+            --opponent exact_public_arlene=runtime:reference/next-panel/vendor/arlene.py::agent \
+            --action-timeout 1.0 \
+            --startup-timeout 10.0 \
+            --game-timeout 120.0 \
+            --output /tmp/p24-results/P24-FACTORIAL.json \
+            --markdown /tmp/p24-results/P24-FACTORIAL.md
+      - name: Validate evidence receipt (fail-closed)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPORT=/tmp/p24-results/P24-FACTORIAL.json
+          test -f "$REPORT"
+          python - <<'PY'
+          import json, sys
+          path = "/tmp/p24-results/P24-FACTORIAL.json"
+          with open(path) as f:
+              data = json.load(f)
+          if data.get("schema_version") != 1:
+              sys.exit("schema_version must be 1")
+          status = data.get("status")
+          if status not in ("running", "failed", "complete"):
+              sys.exit(f"status must be running|failed|complete, got {status!r}")
+          arch = data.get("archive") or {}
+          if not arch.get("sha256") or not arch.get("source_manifest_sha256"):
+              sys.exit("archive identities required")
+          if data.get("operation") != "op:titan-v25-orders-20260909-P24":
+              sys.exit("operation identity required")
+          print("receipt_ok", status, arch.get("sha256")[:12])
+          PY
+      - name: Upload exact evidence and runnable archive
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-p24-factorial-${{ github.run_id }}
+          path: |
+            /tmp/p24-results/P24-FACTORIAL.json
+            /tmp/p24-results/P24-FACTORIAL.md
+            /tmp/p24-dispatch/revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz
+            /tmp/p24-dispatch/revenue/kaggriculture/cloud-execution-lab/runtime/integrated-selected/CURRENT-ARCHIVE.json
+            /tmp/p24-dispatch/revenue/kaggriculture/cloud-execution-lab/runtime/integrated-selected/CURRENT-SOURCE.json
+          if-no-files-found: error
+          retention-days: 30

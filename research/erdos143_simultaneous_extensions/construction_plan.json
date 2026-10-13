@@ -1,0 +1,18 @@
+{
+  "schema": "commons.once_only_plan/v1",
+  "id": "ERDOS143-SIMULTANEOUS-20261006-7CA6",
+  "vertices": 17,
+  "new_candidate_pairs": 135,
+  "inherited_candidate_pairs": 1,
+  "conflict": "For a<b use min(b mod a, a-(b mod a))<2; equality 2 is compatible.",
+  "nearest_tie_rule": "choose floor(b/a)",
+  "family": "Independent sets of the new conflict graph, with inherited 87/88 edge.",
+  "weights": "D is product of candidate numerators, weight_i=2D/a_i. Exact reciprocal sum of added candidates only.",
+  "construction": "Memoized include/exclude DAG; counts, maximum scaled weight and tie count for every cardinality.",
+  "reader": "Saved DAG seeded into reader; new conditional states are permitted and counted. Fixed-label bitvector lexicographic rank, 0 before 1.",
+  "limitations": [
+    "Finite selected candidate set, not all rational extensions.",
+    "No inference about convergence or infinite well-separated sets.",
+    "No old prefix-membership or CRT rebuild."
+  ]
+}

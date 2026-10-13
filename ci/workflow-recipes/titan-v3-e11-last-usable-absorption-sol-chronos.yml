@@ -1,0 +1,71 @@
+name: titan-v3-e11-last-usable-absorption-sol-chronos
+
+on:
+  pull_request:
+    paths:
+      - "analysis/titan-v3-e11-last-usable-absorption/**"
+      - ".github/workflows/titan-v3-e11-last-usable-absorption-sol-chronos.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Fetch and authenticate pinned official engine
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/upstream
+          REF=28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c
+          BASE="https://raw.githubusercontent.com/Kaggle/kaggle-environments/${REF}/kaggle_environments/envs/kaggriculture"
+          curl --fail --location --retry 3 --silent --show-error "$BASE/kaggriculture.py" -o evidence/upstream/kaggriculture.py
+          curl --fail --location --retry 3 --silent --show-error "$BASE/kaggriculture.json" -o evidence/upstream/kaggriculture.json
+          echo "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e  evidence/upstream/kaggriculture.py" | sha256sum --check
+          echo "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867  evidence/upstream/kaggriculture.json" | sha256sum --check
+      - name: Materialize exact one-factor successor
+        run: |
+          set -euo pipefail
+          ROOT=analysis/titan-v3-e11-last-usable-absorption
+          python "$ROOT/repair.py" \
+            --source "$ROOT/fixtures/e11_rival_sell.py" \
+            --engine evidence/upstream/kaggriculture.py \
+            --engine-config evidence/upstream/kaggriculture.json \
+            --output evidence/e11_rival_sell.repaired.py \
+            --receipt evidence/REPAIR-RECEIPT.json
+          python -m py_compile "$ROOT/repair.py" "$ROOT/test_repair.py" evidence/e11_rival_sell.repaired.py
+      - name: Run predecessor-killing and official-engine contracts
+        env:
+          TITAN_ENGINE_PY: ${{ github.workspace }}/evidence/upstream/kaggriculture.py
+          TITAN_ENGINE_JSON: ${{ github.workspace }}/evidence/upstream/kaggriculture.json
+        run: |
+          set -euo pipefail
+          python -m unittest -v analysis/titan-v3-e11-last-usable-absorption/test_repair.py
+      - name: Bind retained evidence and checkout nonmutation
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum \
+            analysis/titan-v3-e11-last-usable-absorption/fixtures/e11_rival_sell.py \
+            evidence/upstream/kaggriculture.py \
+            evidence/upstream/kaggriculture.json \
+            evidence/e11_rival_sell.repaired.py \
+            evidence/REPAIR-RECEIPT.json | tee evidence/SHA256SUMS
+          git diff --exit-code
+          git status --porcelain=v1 --untracked-files=no | tee evidence/GIT-STATUS.txt
+          test ! -s evidence/GIT-STATUS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v3-e11-last-usable-absorption-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 30

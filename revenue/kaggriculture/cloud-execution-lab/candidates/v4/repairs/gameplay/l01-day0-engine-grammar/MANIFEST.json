@@ -1,0 +1,28 @@
+{
+  "kind": "titan-v4-repair-authority",
+  "lane": "L01 DAY0 engine-grammar fail-closed repair",
+  "status": "exact_source_and_test_custody_default_off_not_wired",
+  "canonical_workspace": "main/revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "recovered_from_detached_commit": "6f96728fdc9d8913b32130960285c9e8e2d58795",
+  "source_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v3/overlay/l01_mechanics.py",
+  "source_blob": "dab015f736dd02bdd9b85df525499ad228606a25",
+  "focused_test_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v3/overlay/checks/test_l01_day0_engine_grammar.py",
+  "focused_test_blob": "c430946816bd12abdfff6d29a57b714107f440cf",
+  "defect": "The frozen DAY0BUY alternate basket asks BUY_PRODUCT for CARROT, MELON, MILK, STRAWBERRY and TOMATO although the pinned interpreter accepts BUY_PRODUCT only for WHEAT and FERTILIZER; blindly enabling the old basket can collapse the intended opening instead of executing it.",
+  "repair": "Validate the static DAY0 basket against engine grammar before mutating route step 0. If any row is unsupported or malformed, fail closed and preserve the canonical WHEAT-13 opening. Preserve all-flags-off exact identity.",
+  "focused_regressions": [
+    "the shipped basket reports exactly five unsupported products",
+    "DAY0BUY preserves canonical WHEAT-13 when the basket is invalid",
+    "rejection is idempotent",
+    "WHEAT and FERTILIZER-only rows pass the grammar gate",
+    "malformed quantity/order-count/op rows fail closed",
+    "all flags OFF remain exact identity"
+  ],
+  "integration_rule": "Custody/evidence only. Do not wire legacy L01 wholesale into current production ABI from this manifest; consume only the grammar fail-closed semantic after current-ABI deconflict and keep feature default OFF until evidence gates authorize it.",
+  "prohibitions": [
+    "do not revive detached 6f967 ancestry as an integration root",
+    "do not activate L01 DAY0BUY from custody alone",
+    "do not execute legacy apply_v4 materializer against current production",
+    "do not replace current canonical opening with the invalid static basket"
+  ]
+}

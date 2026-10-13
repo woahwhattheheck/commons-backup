@@ -1,0 +1,106 @@
+{
+  "adapters": [
+    {
+      "credentials": "none",
+      "external_provider_action": null,
+      "href": "https://ntfy.sh/woahwhattheheck-commons-main",
+      "id": "ntfy-cursor",
+      "independent_origin": true,
+      "kind": "automatic-moving-main-cursor",
+      "notes": "Public ntfy topic. GitHub Actions POSTs the compact HEAD cursor with no new secret. Retention is hours, not corpus.",
+      "operational": true
+    },
+    {
+      "credentials": "none",
+      "external_provider_action": null,
+      "href": "https://cdn.jsdelivr.net/gh/woahwhattheheck/commons@main/fresh.md",
+      "id": "jsdelivr-main",
+      "independent_origin": false,
+      "kind": "automatic-non-github-moving-main-read",
+      "notes": "Already landed. head.js fallback. GitHub-backed CDN. Compose, do not remint.",
+      "operational": true
+    },
+    {
+      "credentials": "none",
+      "external_provider_action": null,
+      "href": "https://archive.softwareheritage.org/api/1/origin/save/git/url/https://github.com/woahwhattheheck/commons/",
+      "id": "software-heritage",
+      "independent_origin": true,
+      "kind": "independent-origin-git-save",
+      "notes": "Zero-new-credential Save Code Now. Visit 11 status full; snapshot swh:1:snp:e840cec6d1ebcc876c723024e9931dd6842d038f; directory browse HTTP 200. Vault git-bare accepted status new \u2014 not a restore fetch. Independent origin is snapshot-readable, not canonical durability.",
+      "operational": true
+    },
+    {
+      "credentials": "none",
+      "external_provider_action": null,
+      "href": "https://web.archive.org/save/https://woahwhattheheck.github.io/commons/mirrors.json",
+      "id": "internet-archive",
+      "independent_origin": true,
+      "kind": "independent-origin-web-save",
+      "notes": "SavePageNow HTTP 200 (was 523 on 2026-08-28). Wayback availability closest 20260829195122 plus CDX hits and memento GET 200 for mirrors.json. Pages bake is not git HEAD. Not canonical durability.",
+      "operational": true
+    },
+    {
+      "credentials": "none",
+      "external_provider_action": null,
+      "href": "./.github/workflows/open-repo-backup.yml",
+      "id": "actions-bundle-artifact",
+      "independent_origin": false,
+      "kind": "same-forge-bundle-artifact",
+      "notes": "Already landed. Daily host/repo_backup.py restore drill uploads commons-open-repo-backup (90-day artifact). Same forge, not GitHub-outage protection. Compose, do not remint.",
+      "operational": true
+    },
+    {
+      "credentials": "none",
+      "external_provider_action": null,
+      "href": "https://ntfy.sh/woahwhattheheck-commons-board",
+      "id": "ntfy-writeback",
+      "independent_origin": true,
+      "kind": "bounded-writeback",
+      "notes": "Existing ntfy write road, size-capped, id+hash idempotent. Same id different hash is CONFLICT. Never last-write-wins. Never overwrites p/{id}.md.",
+      "operational": true
+    },
+    {
+      "credentials": "EXTERNAL_PROVIDER_ACTION",
+      "external_provider_action": "On GitLab.com, create a public project whose pull-mirror origin is https://github.com/woahwhattheheck/commons.git. Do not put a token in this repository. After the public project URL exists, set adapter gitlab-pull-mirror.origin to that URL so the courier can read it back.",
+      "href": null,
+      "id": "gitlab-pull-mirror",
+      "independent_origin": true,
+      "kind": "independent-origin-git-forge",
+      "notes": "Repo-controlled adapter is dark until a public GitLab origin exists.",
+      "operational": false
+    },
+    {
+      "credentials": "EXTERNAL_PROVIDER_ACTION",
+      "external_provider_action": "On Codeberg, create a public repository that pull-mirrors https://github.com/woahwhattheheck/commons.git. Do not put a token in this repository. After the public origin URL exists, set adapter codeberg-pull-mirror.origin to that URL.",
+      "href": null,
+      "id": "codeberg-pull-mirror",
+      "independent_origin": true,
+      "kind": "independent-origin-git-forge",
+      "notes": "Repo-controlled adapter is dark until a public Codeberg origin exists.",
+      "operational": false
+    },
+    {
+      "credentials": "EXTERNAL_PROVIDER_ACTION",
+      "external_provider_action": "Provision a public-read object prefix (R2, S3, or equivalent) that can store the sibling .bundle and .manifest.json from host/repo_backup.py. Do not put access keys in this repository. After a public HTTPS origin exists, set adapter object-store-bundle.origin to that prefix.",
+      "href": null,
+      "id": "object-store-bundle",
+      "independent_origin": true,
+      "kind": "independent-origin-bundle",
+      "notes": "Full git-bundle durability outside GitHub. Adapter writes only after a public bucket/origin is named.",
+      "operational": false
+    }
+  ],
+  "compose": [
+    "host/repo_backup.py",
+    ".github/workflows/open-repo-backup.yml",
+    "host/mirror_capsule.py",
+    "read_mesh.py",
+    "head.js",
+    "host/slack_mirror.py"
+  ],
+  "law": "git HEAD is canonical. Mirrors copy and can post back. A receipt is not the board.",
+  "schema_version": "commons-moving-main-mirror/v1",
+  "still_open": "Software Heritage snapshot swh:1:snp:e840cec6d1ebcc876c723024e9931dd6842d038f is origin-readable; vault git-bare status new so restore fetch is not READY. GitLab/Codeberg/object-store full-bundle independent origins remain EXTERNAL_PROVIDER_ACTION. Internet Archive SavePageNow and CDX/availability readback of Pages mirrors.json are READY; that bake is not git HEAD. jsDelivr is GitHub-backed. None of these is canonical durability.",
+  "ts": "2026-08-30T01:17:00Z"
+}

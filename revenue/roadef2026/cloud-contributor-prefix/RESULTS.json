@@ -1,0 +1,285 @@
+{
+  "status": "PASS",
+  "operation": "quay-roadef-contributor-prefix-20260908-01",
+  "scope": "Exact contributor selection; local constructed workloads only",
+  "source": {
+    "original_fleet": {
+      "bytes": 34254,
+      "blob": "9354ec61fc32bb7ebbdaaa4a9bff7c7780a7e1df",
+      "sha256": "322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1"
+    },
+    "prefix_only": {
+      "bytes": 34872,
+      "blob": "40325316ed3ca32215d058d027ca2a7b9da0d26a",
+      "sha256": "4f050504c421ab33e8aa1bb7597c3f5ec040e4f518df8ea70238ebf561267330"
+    },
+    "current_topology": {
+      "bytes": 34974,
+      "blob": "b64183efd119841865dffb51f6dc65d17d50116f",
+      "sha256": "a3bf3968145cd6dc2431ad34720c634395e326f7425e56f2cdbc3d4c2b4fa905"
+    },
+    "joined_candidate": {
+      "bytes": 35592,
+      "blob": "891c87fb2976a7dff6d914eafe9c0ca14b893646",
+      "sha256": "77cfa308b87e941b130f837b13f62564e8ee098911f45d9c06d2648b0aa83c05"
+    }
+  },
+  "native_method": {
+    "gcc_O3_comparisons": 21600,
+    "clang_O3_comparisons": 21600,
+    "clang_asan_ubsan_O1_comparisons": 21600,
+    "unique_comparisons_per_configuration": 21600
+  },
+  "source_transform_unittest_methods": 11,
+  "negative_controls": {
+    "unmodified_comparisons": 21600,
+    "compiled_and_failed_as_expected": [
+      "reversed_id_tie",
+      "ignore_exclusion",
+      "wrong_prefix_size"
+    ]
+  },
+  "full_solver": [
+    {
+      "source_basis": "original_fleet",
+      "pairs": 48,
+      "solver_invocations": 96,
+      "checker_invocations": 192,
+      "identical_solutions_and_nontime_stats": true,
+      "valid_and_identical_6_and_12_decimal_checker_reports": true,
+      "pairs_exercising_joint": 16,
+      "joint_attempted": 52869,
+      "binary_sha256": {
+        "original": "1b6828b4a45cd8e68a497c735ee52ea59006ebfa0656037bf1c56bd2717f58bf",
+        "candidate": "01adce93d15b64d46451bb803a044405bdf62757c00d488520f2701ff49b71fb",
+        "checker": "851f4ed1a90fb208b030bf2f32375029b27e4441e3f1857daa124e406ceb7e0e"
+      }
+    },
+    {
+      "source_basis": "topology_join",
+      "pairs": 48,
+      "solver_invocations": 96,
+      "checker_invocations": 192,
+      "identical_solutions_and_nontime_stats": true,
+      "valid_and_identical_6_and_12_decimal_checker_reports": true,
+      "pairs_exercising_joint": 16,
+      "joint_attempted": 52869,
+      "binary_sha256": {
+        "original": "74fc59acaebde5f9fc3a92a2170444d62714772f590b0f780ee5076f258599e1",
+        "candidate": "e26bfe1633f4ea7216b30eeec7d6f22d709b16b1c6908a428045a03c4a4a1cb9",
+        "checker": "851f4ed1a90fb208b030bf2f32375029b27e4441e3f1857daa124e406ceb7e0e"
+      }
+    }
+  ],
+  "manifest": {
+    "base_commit": "ba4a2a5e652cda972377799f32b5e4a39a995564",
+    "previous_blob": "4750426326e3fd5f731a40ee0df71c35fee4a7f7",
+    "candidate_blob": "23cddf09251753e8167968aa3ef91fe413c5e037",
+    "unchanged_non_runtime_rows": 32
+  },
+  "benchmark": {
+    "gcc": [
+      {
+        "demands": 4,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.009487506,
+        "median_candidate_s": 0.008949927,
+        "change_percent": -5.66617823482799
+      },
+      {
+        "demands": 4,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.009427643,
+        "median_candidate_s": 0.008929541,
+        "change_percent": -5.283420256791649
+      },
+      {
+        "demands": 32,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.010289369,
+        "median_candidate_s": 0.009714595,
+        "change_percent": -5.586095707132288
+      },
+      {
+        "demands": 32,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.010702222,
+        "median_candidate_s": 0.009967639,
+        "change_percent": -6.863836313617866
+      },
+      {
+        "demands": 128,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.011796941,
+        "median_candidate_s": 0.008412035,
+        "change_percent": -28.69308238466226
+      },
+      {
+        "demands": 128,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.012002763,
+        "median_candidate_s": 0.011733978,
+        "change_percent": -2.2393593875010165
+      },
+      {
+        "demands": 1024,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.039927124,
+        "median_candidate_s": 0.010275199,
+        "change_percent": -74.26511611505
+      },
+      {
+        "demands": 1024,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.04032594,
+        "median_candidate_s": 0.012381633,
+        "change_percent": -69.29610816263676
+      },
+      {
+        "demands": 8192,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.113260222,
+        "median_candidate_s": 0.071457915,
+        "change_percent": -36.908198007946694
+      },
+      {
+        "demands": 8192,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.116401175,
+        "median_candidate_s": 0.075580566,
+        "change_percent": -35.068897715164816
+      },
+      {
+        "demands": 32768,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.085497304,
+        "median_candidate_s": 0.03113069,
+        "change_percent": -63.58868812986196
+      },
+      {
+        "demands": 32768,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.088527311,
+        "median_candidate_s": 0.03118426,
+        "change_percent": -64.77441859721685
+      }
+    ],
+    "clang": [
+      {
+        "demands": 4,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.010856924,
+        "median_candidate_s": 0.010779602,
+        "change_percent": -0.7121906720540805
+      },
+      {
+        "demands": 4,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.010422571,
+        "median_candidate_s": 0.010536893,
+        "change_percent": 1.0968694768306309
+      },
+      {
+        "demands": 32,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.011060236,
+        "median_candidate_s": 0.010051579,
+        "change_percent": -9.119669779198203
+      },
+      {
+        "demands": 32,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.011315408,
+        "median_candidate_s": 0.010678781,
+        "change_percent": -5.6261957147281
+      },
+      {
+        "demands": 128,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.011704966,
+        "median_candidate_s": 0.008134129,
+        "change_percent": -30.507025821347966
+      },
+      {
+        "demands": 128,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.011785772,
+        "median_candidate_s": 0.011527079,
+        "change_percent": -2.194960160437509
+      },
+      {
+        "demands": 1024,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.028764393,
+        "median_candidate_s": 0.008507644,
+        "change_percent": -70.42300179948174
+      },
+      {
+        "demands": 1024,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.028656044,
+        "median_candidate_s": 0.010401635,
+        "change_percent": -63.70177614188477
+      },
+      {
+        "demands": 8192,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.107287066,
+        "median_candidate_s": 0.071240325,
+        "change_percent": -33.59840318496548
+      },
+      {
+        "demands": 8192,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.105629441,
+        "median_candidate_s": 0.070531799,
+        "change_percent": -33.22713977062512
+      },
+      {
+        "demands": 32768,
+        "limit": 4,
+        "pairs": 9,
+        "median_original_s": 0.078210708,
+        "median_candidate_s": 0.030180196,
+        "change_percent": -61.41168291175679
+      },
+      {
+        "demands": 32768,
+        "limit": 32,
+        "pairs": 9,
+        "median_original_s": 0.082070781,
+        "median_candidate_s": 0.032507513,
+        "change_percent": -60.39088137835559
+      }
+    ]
+  },
+  "limits": [
+    "No public benchmark or equal-time score comparison",
+    "No whole-solver speedup claim",
+    "No Docker or hosted CI result",
+    "S139 draft and attachment unchanged; no submission",
+    "Prior rejected performance approach retained in raw evidence"
+  ]
+}

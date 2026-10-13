@@ -1,0 +1,69 @@
+{
+  "id": "referral-intake-completeness",
+  "version": 3,
+  "buyer": "clinic operations director",
+  "workflow": [
+    "synthetic no-PHI referral packet",
+    "deterministic required-field checklist",
+    "exactly one intake-queue ticket",
+    "timestamped progress and intake receipts",
+    "restart-safe local delivery journal with canonical SHA-256 packet binding"
+  ],
+  "referral_classes": {
+    "imaging-slot": {
+      "queue": "IMAGING_SCHEDULING",
+      "required": ["referringClinicId", "destinationClinicId", "laterality", "insuranceAuthFlag", "preferredWindow"]
+    },
+    "specialist-consult": {
+      "queue": "SPECIALIST_INTAKE",
+      "required": ["referringClinicId", "destinationClinicId", "reasonCategory", "insuranceAuthFlag", "recordsSetFlag"]
+    },
+    "procedure-slot": {
+      "queue": "PROCEDURE_SCHEDULING",
+      "required": ["referringClinicId", "destinationClinicId", "laterality", "procedureClass", "insuranceAuthFlag"]
+    },
+    "records-transfer": {
+      "queue": "RECORDS_INTAKE",
+      "required": ["referringClinicId", "destinationClinicId", "recordsSetFlag", "releaseAttestation"]
+    }
+  },
+  "acceptance": [
+    "every checklist item comes from the referral-class matrix",
+    "complete packets route once to the class lane",
+    "incomplete or hold packets route once to INCOMPLETE_INTAKE",
+    "replay creates no second queue ticket",
+    "the browser page is a local synthetic preview; durable restart evidence comes from host/referral_intake_durable_runner.js",
+    "an injected crash after checklist or after queue atomically publishes a journal checkpoint, exits 75, and a fresh Node process resumes to one queue ticket",
+    "rollback of a persisted crashed run clears the ticket and a fresh process can rerun cleanly",
+    "same referral id with different canonical packet bytes fails closed before journal mutation",
+    "the journal carries a canonical integrity SHA-256 and verify rejects modified content",
+    "durable state omits raw packet fields; PHI-refused state and packet bindings are not persisted",
+    "PHI-shaped or clinical keys are refused",
+    "diagnoses, care approvals, denials, and treatment advice remain zero"
+  ],
+  "runner": {
+    "path": "host/referral_intake_durable_runner.js",
+    "dependencies": "Node.js standard library only plus the shipped referral-intake-completeness.js engine",
+    "run": "node host/referral_intake_durable_runner.js run --packet packet.json --journal journal.json --receipt receipt.json",
+    "inject_crash": "node host/referral_intake_durable_runner.js run --packet packet.json --journal journal.json --crash-at after_queue",
+    "resume": "node host/referral_intake_durable_runner.js run --packet packet.json --journal journal.json",
+    "rollback": "node host/referral_intake_durable_runner.js rollback --referral-id REF-SYN-4401 --journal journal.json",
+    "verify": "node host/referral_intake_durable_runner.js verify --journal journal.json",
+    "injected_crash_exit": 75,
+    "journal_schema": "commons-referral-intake-durable-journal-v1",
+    "receipt_schema": "commons-referral-intake-durable-receipt-v1",
+    "verification_schema": "commons-referral-intake-journal-verification-v1"
+  },
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_pilot_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "synthetic fixtures only; the public browser page is local preview, the delivery runner writes only sanitized replay state and hashes, PHI-refused state is not persisted, and no server submission occurs",
+  "decision_boundary": "completeness and routing only; never a clinical decision"
+}

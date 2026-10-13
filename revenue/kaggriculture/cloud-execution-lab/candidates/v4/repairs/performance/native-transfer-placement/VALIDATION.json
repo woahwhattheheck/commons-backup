@@ -1,0 +1,300 @@
+{
+  "schema": "titan.v4.portage.validation.v1",
+  "claim": "ASTRA-PORTAGE",
+  "canonical_branch": "main",
+  "scope": "three-function source-pinned native performance component; not a production/default/EV promotion",
+  "artifact": {
+    "id": 10175943272,
+    "zip_sha256": "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8",
+    "runtime_archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "authenticated_runtime_members": 109
+  },
+  "file_blobs": {
+    "compose_portage.py": "7f6f8c4c65292c0efa23d85ffe3122d7779b2942",
+    "check_portage.py": "be4527f1d086fba7adab47708929609505813b23",
+    "run_portage.py": "975f23d7238d94901fe43b27f5939dcd0f46ec29",
+    "README.md": "d897c71cfd8e8b19763cd9db456cb4c4e9b84c5d"
+  },
+  "dependency_blobs": {
+    "mechanics.py": "044a4f9c0a4a44dde10ada57563238bcaf82075d",
+    "scheduler.py": "a483b24dd72b580d7d8811636b54d2d44f391575",
+    "checks/reference/evaluator/evaluate.py": "1fb6b655bb4ca1e1684be165a8ef513e2e6c2325",
+    "checks/reference/evaluator/loader.py": "23948e10cfc3d32f46c9abb1321b0d8fc8db21d5",
+    "checks/reference/engine/kaggriculture.py": "3c202c7ee921da239356789e266b694635103fc4",
+    "observed_clone.py": "f810d53193d3035655a36c21021e18ba1d415916",
+    "reference/decision/decision.py": "2931aa55831204fbb473ab85a6f5b81ec947fcf7",
+    "reference/next-panel/vendor/arlene.py": "bdb9cf58148a3c7961c085f4902759537decabf6",
+    "checks/test_operating_stock.py": "6f17352352f3c40612d306aa2ef9ac0c390b538c",
+    "checks/test_feed_stock.py": "ebdefd88e59c0a0c3fce8514edf792e92664ef5d",
+    "checks/test_crop_release.py": "19720197551d83cd22f9223c614d4c2efc4c8ecb",
+    "checks/test_funded_prefix.py": "2a78fb5139bf0fee6198fcb60c37a899d44dda16"
+  },
+  "composed_mechanics": {
+    "bytes": 23150,
+    "blob": "64818e396f07ed99a597264c1b074ce1d4d35ab6",
+    "sha256": "c1077c274441bc0d832ac88c707a9587181da0a153ee59b26a3879dbde738326"
+  },
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "gates": {
+    "normal": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "optimized": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases_per_mode": {
+      "integer_geometry_cells": 648,
+      "spawn_cells": 486,
+      "ordered_transfer_cells": 640,
+      "full_interpreter_pairs": 180,
+      "native_post_units_cells": 40,
+      "native_receipt_optimizer_cells": 24,
+      "adjacency_spawn_geometry_calls": [
+        [
+          1,
+          5
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    }
+  },
+  "negative_controls": {
+    "normal_and_optimized_same_results": {
+      "geometry_missing_edge": {
+        "killed": true,
+        "failures": 7,
+        "errors": 0
+      },
+      "geometry_extra_edge": {
+        "killed": true,
+        "failures": 1,
+        "errors": 0
+      },
+      "spawn_reversed_tie": {
+        "killed": true,
+        "failures": 2,
+        "errors": 0
+      },
+      "reverse_actor_priority": {
+        "killed": true,
+        "failures": 3,
+        "errors": 0
+      },
+      "capacity_extra_one": {
+        "killed": true,
+        "failures": 3,
+        "errors": 0
+      },
+      "shed_subclass_values": {
+        "killed": true,
+        "failures": 1,
+        "errors": 0
+      },
+      "retain_cargo": {
+        "killed": true,
+        "failures": 3,
+        "errors": 0
+      }
+    },
+    "test_processes_per_mode": 7,
+    "tests_per_process": 12,
+    "rejection_requires_assertion_failure_and_no_errors": true
+  },
+  "benchmark": {
+    "optimized": 0,
+    "alternating_pairs": 7,
+    "unit": "milliseconds per declared batch",
+    "results": {
+      "geometry": {
+        "iterations": 30000,
+        "baseline": [
+          71.80388,
+          74.046053,
+          74.428681,
+          73.559032,
+          75.175467,
+          71.110538,
+          74.052558
+        ],
+        "candidate": [
+          40.944443,
+          41.462772,
+          41.897467,
+          42.098064,
+          43.297972,
+          41.956161,
+          43.02198
+        ],
+        "reduction_percent": 43.3377
+      },
+      "spawn": {
+        "iterations": 30000,
+        "baseline": [
+          67.655167,
+          84.274298,
+          68.536584,
+          66.969372,
+          71.325026,
+          67.668097,
+          67.858578
+        ],
+        "candidate": [
+          41.70587,
+          38.992849,
+          42.664129,
+          38.553057,
+          38.572736,
+          39.175229,
+          38.334253
+        ],
+        "reduction_percent": 42.5381
+      },
+      "transfer_dense": {
+        "iterations": 6000,
+        "baseline": [
+          142.132125,
+          145.014767,
+          143.062934,
+          146.293051,
+          142.823069,
+          146.605244,
+          142.295016
+        ],
+        "candidate": [
+          66.739831,
+          64.988205,
+          67.645162,
+          66.469811,
+          66.485554,
+          72.09065,
+          65.953405
+        ],
+        "reduction_percent": 53.5271
+      },
+      "transfer_one": {
+        "iterations": 30000,
+        "baseline": [
+          24.571275,
+          24.873112,
+          25.400054,
+          26.204215,
+          25.950891,
+          24.821977,
+          25.326535
+        ],
+        "candidate": [
+          22.727823,
+          21.544069,
+          21.957982,
+          21.954437,
+          22.654105,
+          20.848519,
+          21.097337
+        ],
+        "reduction_percent": 13.3145
+      },
+      "transfer_empty": {
+        "iterations": 30000,
+        "baseline": [
+          11.725759,
+          11.575835,
+          11.165388,
+          11.11909,
+          11.517599,
+          11.656274,
+          11.616616
+        ],
+        "candidate": [
+          11.139079,
+          11.598729,
+          11.775842,
+          11.491471,
+          11.641032,
+          11.498762,
+          11.008765
+        ],
+        "reduction_percent": 0.6658
+      },
+      "native_post_units": {
+        "iterations": 2000,
+        "baseline": [
+          37.431545,
+          36.868471,
+          36.360868,
+          38.036303,
+          37.381593,
+          35.757977,
+          37.540929
+        ],
+        "candidate": [
+          32.793622,
+          33.735357,
+          33.468171,
+          33.638936,
+          32.856046,
+          32.298089,
+          35.478372
+        ],
+        "reduction_percent": 10.4688
+      },
+      "native_receipt_profile": {
+        "iterations": 1000,
+        "baseline": [
+          84.583961,
+          85.247074,
+          87.208011,
+          89.012785,
+          91.143935,
+          84.862335,
+          87.023487
+        ],
+        "candidate": [
+          67.772215,
+          68.859471,
+          69.804246,
+          70.261765,
+          76.871431,
+          73.739329,
+          67.489536
+        ],
+        "reduction_percent": 19.7869
+      }
+    }
+  },
+  "inherited_suites": {
+    "arms": [
+      "unchanged b567 baseline",
+      "only mechanics replaced"
+    ],
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "tests_per_arm_mode": 85,
+    "all_16_processes_returned_zero": true,
+    "files": {
+      "test_operating_stock.py": 31,
+      "test_feed_stock.py": 24,
+      "test_crop_release.py": 22,
+      "test_funded_prefix.py": 8
+    }
+  },
+  "not_run": [
+    "full game EV",
+    "hosted Kaggle timing",
+    "real deadline hit-rate",
+    "Python 3.11",
+    "combined peer stack",
+    "repository-wide CI"
+  ],
+  "mutations": "No production source, config/default, release archive, Kaggle or workflow dispatch mutation."
+}

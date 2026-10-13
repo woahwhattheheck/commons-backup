@@ -1,0 +1,67 @@
+{
+  "authority": {
+    "cash_or_revenue_authorized": false,
+    "contest_submission_authorized": false,
+    "contract_authorized": false,
+    "dm_send_authorized": false,
+    "email_send_authorized": false,
+    "form_submit_authorized": false,
+    "payment_authorized": false,
+    "provider_mutation_authorized": false,
+    "signature_authorized": false
+  },
+  "collision_key": {
+    "algorithm": "sha256-canonical-json-v2-org-lane",
+    "fields": [
+      "org",
+      "domain",
+      "purpose",
+      "opportunity"
+    ],
+    "normalization": {
+      "domain": "idna-host-lower-strip-scheme-www-path-trailing-dot",
+      "opportunity": "unicode-casefold-trim-collapse-space",
+      "org": "unicode-casefold-trim-collapse-space",
+      "purpose": "unicode-casefold-trim-collapse-space",
+      "route": "unicode-casefold-trim-collapse-space"
+    }
+  },
+  "contract_digest_sha256": "4b15651ae153dff379375d285f3a705a2ce4b87014d5d1e08e2dea490251f553",
+  "events": [
+    "CLAIM",
+    "SENT",
+    "BOUNCE",
+    "HUMAN_EVENT",
+    "HOLD"
+  ],
+  "invariants": [
+    "exactly_one_active_lease_per_collision_key",
+    "active_lease_blocks_parallel_claims_across_routes",
+    "ordinary_expired_lease_may_be_recovered_with_an_explicit_route",
+    "sent_requires_current_lease_holder_matching_leased_route_and_provider_receipt",
+    "sent_hard_fences_lane_until_genuine_human_event",
+    "bounce_requires_current_lease_holder_matching_leased_route_and_provider_receipt",
+    "bounce_is_route_failure_not_buyer_rejection",
+    "human_event_requires_distinct_retained_evidence",
+    "human_event_reopens_only_a_bounded_next_action",
+    "hold_blocks_claims_until_new_human_event",
+    "event_ids_provider_receipts_and_human_evidence_ids_are_single_use",
+    "timestamps_are_strictly_monotone_utc",
+    "no_event_grants_external_send_authority"
+  ],
+  "lease": {
+    "default_ttl_seconds": 300,
+    "max_ttl_seconds": 1800,
+    "min_ttl_seconds": 30
+  },
+  "product": "OneWriter",
+  "schema_version": 2,
+  "states": [
+    "CLEAR",
+    "LEASED",
+    "HARD_DNR",
+    "DEAD_ROUTE",
+    "HUMAN_EVENT_REOPEN",
+    "HOLD"
+  ]
+}

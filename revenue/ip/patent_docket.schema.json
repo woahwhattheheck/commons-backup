@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/patent_docket.schema.json",
+  "title": "Commons Patent Docket",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "scope",
+    "legal_scope",
+    "omitted_private_fields",
+    "inventor_provenance",
+    "status_provenance",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-patent-docket/v1"},
+    "kind": {"const": "PATENT_DOCKET"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "generated_from_main": {"$ref": "#/$defs/git_sha"},
+    "scope": {"type": "string", "minLength": 1},
+    "legal_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "patentability_claimed",
+        "validity_claimed",
+        "ownership_adjudicated",
+        "filing_receipt_verified",
+        "application_numbers_public"
+      ],
+      "properties": {
+        "patentability_claimed": {"const": false},
+        "validity_claimed": {"const": false},
+        "ownership_adjudicated": {"const": false},
+        "filing_receipt_verified": {"const": false},
+        "application_numbers_public": {"const": false}
+      }
+    },
+    "omitted_private_fields": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "application_number",
+          "filing_receipt",
+          "legal_correspondence",
+          "attorney_notes"
+        ]
+      }
+    },
+    "inventor_provenance": {"$ref": "#/$defs/provenance"},
+    "status_provenance": {"$ref": "#/$defs/provenance"},
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/entry"}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "blob_sha", "sha256", "byte_count", "public_url"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha": {"$ref": "#/$defs/git_sha"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 1},
+        "public_url": {
+          "type": "string",
+          "pattern": "^https://github\\.com/woahwhattheheck/commons/blob/main/.+$"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "blob_sha",
+        "sha256",
+        "byte_count",
+        "public_url",
+        "evidence_key",
+        "statement"
+      ],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha": {"$ref": "#/$defs/git_sha"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_count": {"type": "integer", "minimum": 1},
+        "public_url": {
+          "type": "string",
+          "pattern": "^https://github\\.com/woahwhattheheck/commons/blob/main/.+$"
+        },
+        "evidence_key": {"type": "string", "minLength": 1},
+        "statement": {"type": "string", "minLength": 1}
+      }
+    },
+    "public_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "commit_sha", "disclosed_at", "public_url"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "commit_sha": {"$ref": "#/$defs/git_sha"},
+        "disclosed_at": {"type": "string", "format": "date-time"},
+        "public_url": {
+          "type": "string",
+          "pattern": "^https://github\\.com/woahwhattheheck/commons/blob/[0-9a-f]{40}/.+$"
+        }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "invention_summary",
+        "inventors",
+        "jurisdiction",
+        "filing_type",
+        "filing_status",
+        "source",
+        "earliest_public_receipt",
+        "counsel_questions"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{7,79}$"},
+        "title": {"type": "string", "minLength": 1},
+        "invention_summary": {"type": "string", "minLength": 1},
+        "inventors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "jurisdiction": {"const": "US"},
+        "filing_type": {"const": "PROVISIONAL"},
+        "filing_status": {
+          "enum": ["DRAFT_READY_TO_FILE", "OWNER_REPORTED_FILED", "UNKNOWN"]
+        },
+        "source": {"$ref": "#/$defs/source"},
+        "earliest_public_receipt": {"$ref": "#/$defs/public_receipt"},
+        "counsel_questions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

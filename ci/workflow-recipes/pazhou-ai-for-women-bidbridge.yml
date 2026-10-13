@@ -1,0 +1,36 @@
+name: Pazhou BidBridge focused
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/pazhou-ai-for-women-bidbridge-2026/**'
+      - '.github/workflows/pazhou-ai-for-women-bidbridge.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/pazhou-ai-for-women-bidbridge-2026/**'
+      - '.github/workflows/pazhou-ai-for-women-bidbridge.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: node --check competitions/pazhou-ai-for-women-bidbridge-2026/bidbridge.js
+      - name: Focused tests
+        run: node --test competitions/pazhou-ai-for-women-bidbridge-2026/test_bidbridge.mjs
+      - name: Focused tests without addons
+        run: node --no-addons --test competitions/pazhou-ai-for-women-bidbridge-2026/test_bidbridge.mjs
+      - name: Validate synthetic JSON and truth-boundary strings
+        run: |
+          python3 -m json.tool competitions/pazhou-ai-for-women-bidbridge-2026/demo-opportunity.json >/dev/null
+          ! grep -Rni 'innerHTML' competitions/pazhou-ai-for-women-bidbridge-2026/index.html competitions/pazhou-ai-for-women-bidbridge-2026/bidbridge.js
+          grep -q 'No customer, pilot, revenue, registration, submission, acceptance, or award is claimed' competitions/pazhou-ai-for-women-bidbridge-2026/business-plan.md

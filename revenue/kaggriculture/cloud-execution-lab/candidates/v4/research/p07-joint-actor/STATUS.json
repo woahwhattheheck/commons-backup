@@ -1,0 +1,29 @@
+{
+  "lane": "P07 joint_actor_assignment",
+  "disposition": "PARKED_CORRECTNESS_EVIDENCE_ONLY",
+  "source_manifest_origin": "V3-MANIFEST pending lane",
+  "owned_implementation_pr": 11979,
+  "latest_reviewed_implementation_head": "5f0bfa6ddf2cde1c485da9d04f149b0204df6b70",
+  "active_parity_evidence_pr": 12033,
+  "active_parity_evidence_head": "eec364abe432bbee946e0b26d2ffa0bff36cfa8c",
+  "evidence": {
+    "cells": 12,
+    "canonical_excess_actor_rows": 264,
+    "canonical_excess_non_pass_commands": 204,
+    "candidate_excess_actor_rows": 0,
+    "candidate_excess_non_pass_commands": 0,
+    "action_digest_changed_cells": 12,
+    "own_cash_delta_all_cells": 0.0,
+    "margin_delta_all_cells": 0.0,
+    "new_losses": 0,
+    "machine_verdict": "ACTIVE_PARITY_EXTEND_PANEL"
+  },
+  "do_not_promote_blockers": [
+    "latest owned successor replay is not interpreter-equivalent for phantom/nonexistent-hand PLANT demand",
+    "panel markdown renderer can crash on verdict schema mismatch",
+    "strength gate can advance catastrophic new losses because loss and per-stratum margin/tail guards are missing",
+    "activation trace is not keyed to opponent/seed/seat/arm cells, so committed activation is not causally joined to score deltas",
+    "final market mutation binding remains incomplete"
+  ],
+  "integration_rule": "Do not port or enable P07 gameplay from these heads. Preserve as correctness evidence; any future P07 revival must first close all listed blockers and rerun an exact current-main, nonzero-activation, loss-safe official-engine panel."
+}

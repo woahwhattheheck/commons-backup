@@ -1,0 +1,36 @@
+name: SwarmOps dossier
+
+on:
+  pull_request:
+    paths:
+      - "revenue/swarmops_dossier/**"
+      - ".github/workflows/swarmops-dossier.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "revenue/swarmops_dossier/**"
+      - ".github/workflows/swarmops-dossier.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile package
+        run: python -m py_compile revenue/swarmops_dossier/*.py
+      - name: Acceptance fixture
+        run: python -m revenue.swarmops_dossier.acceptance
+      - name: Standard hostile suite
+        run: python -m unittest -v revenue.swarmops_dossier.test_engine
+      - name: Optimized hostile suite
+        run: python -O -m unittest -v revenue.swarmops_dossier.test_engine

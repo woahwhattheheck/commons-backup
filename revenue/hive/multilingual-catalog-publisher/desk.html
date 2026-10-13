@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Multilingual Catalog Desk</title>
+<style>
+:root{font-family:ui-sans-serif,system-ui,sans-serif;color-scheme:light dark;--gap:12px}
+*{box-sizing:border-box} body{max-width:1180px;margin:auto;padding:24px}
+h1{margin:.2rem 0} .sub{opacity:.76;margin:0 0 18px}
+.grid{display:grid;gap:var(--gap)} .two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.panel{border:1px solid #7778;border-radius:12px;padding:14px;margin:12px 0}
+label{display:block;font-weight:650;margin:8px 0 4px} input,textarea,button{font:inherit}
+input[type=text],textarea{width:100%;padding:8px;border:1px solid #7778;border-radius:7px;background:transparent}
+textarea{min-height:120px;resize:vertical} button{padding:8px 12px;border-radius:8px;border:1px solid #7778;cursor:pointer}
+.actions{display:flex;flex-wrap:wrap;gap:8px}.status{white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;border-radius:8px;background:#7771}
+.product{border:1px solid #7776;border-radius:10px;padding:12px;margin:10px 0}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}.source{white-space:pre-wrap;padding:8px;background:#7771;border-radius:6px;min-height:2.5em}
+.field-title{font-size:.86rem;opacity:.72}.badge{display:inline-block;padding:3px 7px;border:1px solid #7778;border-radius:999px;font-size:.8rem}
+.issue{border-left:4px solid currentColor;padding-left:8px;margin:7px 0} .muted{opacity:.72}.danger{font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{border-bottom:1px solid #7774;padding:6px;text-align:left;vertical-align:top}
+code{font-family:ui-monospace,monospace} @media(max-width:650px){.compare{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>Multilingual Catalog Desk</h1>
+<p class="sub">Local-only operator desk over the exact HIVE047 catalog publisher. Source/catalog commerce fields are not editable here. Missing or unsafe locale text stays review-only.</p>
+
+<section class="panel">
+<h2>1. Start or reopen</h2>
+<div class="grid two">
+<div>
+<label>Catalog CSV or JSON</label><input id="catalogFile" type="file" accept=".csv,.json,text/csv,application/json">
+<div class="grid two"><div><label>Source locale</label><input id="sourceLocale" type="text" value="en-US"></div>
+<div><label>Target locale</label><input id="targetLocale" type="text" value="es-ES"></div></div>
+<button id="newBtn">Create portable workspace</button>
+</div>
+<div>
+<label>Workspace JSON</label><input id="workspaceFile" type="file" accept=".json,application/json">
+<button id="openBtn">Reopen workspace</button>
+<p class="muted">The workspace embeds the exact original catalog bytes, source-bound translations, glossary/profile settings, and revision receipts.</p>
+</div>
+</div>
+</section>
+
+<section id="settingsPanel" class="panel" hidden>
+<h2>2. Locale controls</h2>
+<div class="grid two">
+<div><label>Glossary JSON</label><textarea id="glossary"></textarea></div>
+<div><label>Locale display profile JSON</label><textarea id="profile"></textarea></div>
+</div>
+<div class="actions"><button id="settingsBtn">Validate & apply settings</button><button id="saveBtn">Save workspace JSON</button></div>
+</section>
+
+<section id="editorPanel" class="panel" hidden>
+<h2>3. Side-by-side locale review</h2>
+<p><span id="workspaceBadge" class="badge"></span> <span class="muted">Only name, description, ingredients, and specifications are editable target fields.</span></p>
+<div id="products"></div>
+<div class="actions"><button id="syncBtn">Validate target edits</button><button id="publishBtn">Build review/store pack</button></div>
+</section>
+
+<section id="revisionPanel" class="panel" hidden>
+<h2>4. Controlled revision</h2>
+<p class="muted">For an already translated workspace, apply an explicit expected-value patch. The canonical core rejects stale expected values, duplicate targets, protected fields, blanks, and no-ops.</p>
+<label>Revision ID</label><input id="revisionId" type="text" value="desk-r1">
+<label>Changes JSON array</label>
+<textarea id="changes">[]</textarea>
+<button id="reviseBtn">Apply target-only revision</button>
+</section>
+
+<section id="resultPanel" class="panel" hidden>
+<h2>Publication result</h2>
+<div id="resultStatus" class="status"></div>
+<div class="actions"><button id="downloadBtn" hidden>Download pack ZIP</button></div>
+<div id="issues"></div>
+<h3>Field review</h3>
+<div style="overflow:auto"><table><thead><tr><th>SKU</th><th>Field</th><th>Status</th><th>Issues</th></tr></thead><tbody id="reviewRows"></tbody></table></div>
+</section>
+
+<section class="panel">
+<h2>Safety boundary</h2>
+<ul>
+<li>The server binds to loopback only and uses no external translation/model/storefront service.</li>
+<li>The browser never receives a control for price, unit, currency, SKU, or other protected commerce values.</li>
+<li>A changed catalog digest, source snapshot, or source fingerprint fails workspace validation.</li>
+<li><strong>STORE-READY</strong> is emitted only when the canonical publisher reports zero issues; otherwise the ZIP is marked <strong>DRAFT-REVIEW-REQUIRED</strong>.</li>
+</ul>
+</section>
+
+<div id="status" class="status">Desk loaded. Choose a catalog or workspace.</div>
+
+<script>
+"use strict";
+let workspace=null, pack=null;
+const $=id=>document.getElementById(id);
+const fields=["name","description","ingredients","specifications"];
+
+function note(text){$("status").textContent=text}
+function parseJson(text,label){try{return JSON.parse(text)}catch(e){throw new Error(label+": "+e.message)}}
+function b64ToBytes(s){const bin=atob(s), a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a}
+function bytesToB64(a){let s="";const step=0x8000;for(let i=0;i<a.length;i+=step)s+=String.fromCharCode(...a.subarray(i,i+step));return btoa(s)}
+function downloadBytes(bytes,name,type){const u=URL.createObjectURL(new Blob([bytes],{type}));const a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+async function api(path,body){
+  const r=await fetch(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const data=await r.json(); if(!r.ok||data.status==="error")throw new Error(data.error||("HTTP "+r.status)); return data;
+}
+function targetInputs(){
+  const edits=[]; document.querySelectorAll("[data-sku][data-field]").forEach(el=>edits.push({sku:el.dataset.sku,field:el.dataset.field,value:el.value}));
+  return edits;
+}
+async function syncEdits(){
+  if(!workspace)throw new Error("No workspace");
+  const settings=await api("/api/settings",{workspace,glossary:parseJson($("glossary").value,"Glossary JSON"),locale_profile:parseJson($("profile").value,"Profile JSON")});
+  workspace=settings.workspace;
+  const edited=await api("/api/edit",{workspace,edits:targetInputs()}); workspace=edited.workspace; renderWorkspace(); return workspace;
+}
+function renderWorkspace(){
+  if(!workspace)return;
+  $("settingsPanel").hidden=$("editorPanel").hidden=$("revisionPanel").hidden=false;
+  $("glossary").value=JSON.stringify(workspace.glossary,null,2);
+  $("profile").value=JSON.stringify(workspace.locale_profile,null,2);
+  $("workspaceBadge").textContent=workspace.translations.source_locale+" → "+workspace.translations.target_locale+" · "+Object.keys(workspace.translations.products).length+" SKUs";
+  const host=$("products");host.textContent="";
+  Object.entries(workspace.translations.products).sort().forEach(([sku,p])=>{
+    const card=document.createElement("article");card.className="product";
+    const h=document.createElement("h3");h.textContent=sku;card.appendChild(h);
+    fields.forEach(field=>{
+      const title=document.createElement("div");title.className="field-title";title.textContent=field;card.appendChild(title);
+      const row=document.createElement("div");row.className="compare";
+      const source=document.createElement("div");source.className="source";source.textContent=p.source[field];row.appendChild(source);
+      const target=document.createElement(field==="description"||field==="specifications"?"textarea":"input");
+      if(target.tagName==="INPUT")target.type="text"; target.value=p.target[field];target.dataset.sku=sku;target.dataset.field=field;
+      row.appendChild(target);card.appendChild(row);
+    }); host.appendChild(card);
+  });
+  note("Workspace validated. Catalog SHA-256: "+workspace.catalog_sha256);
+}
+function renderResult(data){
+  pack=data;$("resultPanel").hidden=false;
+  $("resultStatus").textContent=(data.ready?"STORE-READY":"DRAFT — REVIEW REQUIRED")+"\nissues: "+data.manifest.issues.length+"\nZIP SHA-256: "+data.download_sha256;
+  $("downloadBtn").hidden=false;
+  const issues=$("issues");issues.textContent="";
+  data.manifest.issues.forEach(i=>{const d=document.createElement("div");d.className="issue";d.textContent=[i.sku,i.field,i.code,i.message].filter(Boolean).join(" · ");issues.appendChild(d)});
+  const rows=$("reviewRows");rows.textContent="";
+  data.review.forEach(r=>{const tr=document.createElement("tr");[r.sku,r.field,r.status,r.issue_codes].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.appendChild(td)});rows.appendChild(tr)});
+}
+
+$("newBtn").onclick=async()=>{
+  try{const f=$("catalogFile").files[0];if(!f)throw new Error("Choose a catalog file");
+    const bytes=new Uint8Array(await f.arrayBuffer());
+    const data=await api("/api/template",{catalog_name:f.name,catalog_b64:bytesToB64(bytes),source_locale:$("sourceLocale").value,target_locale:$("targetLocale").value});
+    workspace=data.workspace;renderWorkspace();
+  }catch(e){note("ERROR: "+e.message)}
+};
+$("openBtn").onclick=async()=>{
+  try{const f=$("workspaceFile").files[0];if(!f)throw new Error("Choose a workspace JSON file");
+    const data=await api("/api/open",{workspace:parseJson(await f.text(),"Workspace JSON")});workspace=data.workspace;renderWorkspace();
+  }catch(e){note("ERROR: "+e.message)}
+};
+$("settingsBtn").onclick=async()=>{try{await syncEdits();note("Locale settings and visible target edits validated.")}catch(e){note("ERROR: "+e.message)}};
+$("syncBtn").onclick=async()=>{try{await syncEdits();note("Target edits validated; protected source remains bound.")}catch(e){note("ERROR: "+e.message)}};
+$("saveBtn").onclick=async()=>{try{await syncEdits();const d=await api("/api/export",{workspace});downloadBytes(b64ToBytes(d.workspace_b64),"catalog-workspace-"+workspace.translations.target_locale+".json","application/json");note("Portable workspace exported · SHA-256 "+d.sha256)}catch(e){note("ERROR: "+e.message)}};
+$("publishBtn").onclick=async()=>{try{await syncEdits();const d=await api("/api/publish",{workspace});renderResult(d);note(d.ready?"Canonical publisher reports STORE-READY.":"Canonical publisher reports REVIEW REQUIRED; draft only.")}catch(e){note("ERROR: "+e.message)}};
+$("downloadBtn").onclick=()=>{if(pack)downloadBytes(b64ToBytes(pack.download_b64),pack.download_name,"application/zip")};
+$("reviseBtn").onclick=async()=>{try{await syncEdits();const d=await api("/api/revise",{workspace,revision_id:$("revisionId").value,changes:parseJson($("changes").value,"Changes JSON")});workspace=d.workspace;renderWorkspace();note("Controlled revision applied; previous translations + receipt retained.")}catch(e){note("ERROR: "+e.message)}};
+</script>
+</body></html>

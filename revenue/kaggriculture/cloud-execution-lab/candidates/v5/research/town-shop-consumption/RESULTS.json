@@ -1,0 +1,45 @@
+{
+  "schema": "titan.v5.research.town-shop-consumption/v1",
+  "date": "2026-09-12",
+  "engine_path": "revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py",
+  "engine_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "verdict": "SOURCE_CORRECTION",
+  "summary": "Duplicate town shops consume independently, but the 2x multiplier applies only to single-product shops. BAKERY and BRUNCH_SPOT consume one EGG per shop tick, not two, and shops unlock every 3 days by default rather than nightly.",
+  "defaults": {
+    "turns_per_day": 24,
+    "town_shop_unlock_interval_days": 3,
+    "town_shop_sell_interval_turns": 4,
+    "town_center_sell_interval_turns": 24,
+    "town_shop_ticks_per_day": 6,
+    "town_center_ticks_per_day": 1,
+    "max_shop_instances": 8
+  },
+  "egg": {
+    "consumer_shops": [
+      "BAKERY",
+      "BRUNCH_SPOT"
+    ],
+    "shop_multiplier_per_tick": 1,
+    "per_egg_shop_per_day": 6,
+    "max_unlocked_instances_through_day_8_at_defaults": 2,
+    "day_8_total_demand_upper_bound_including_town_center": 13,
+    "full_eight_shop_cap_total_demand_upper_bound_including_town_center": 49,
+    "interpretation": "A 37+ EGG/day town is possible only after substantially more shop unlocks and an EGG-heavy realized composition; it is not produced by a 2x BAKERY/BRUNCH multiplier and cannot occur by day 8 under the default 3-day unlock cadence."
+  },
+  "doubled_single_product_shops": {
+    "PET_CAFE": "CARROT",
+    "YARN_STORE": "WOOL"
+  },
+  "max_daily_demand_at_eight_shop_cap_including_town_center": {
+    "WHEAT": 49,
+    "CARROT": 97,
+    "TOMATO": 49,
+    "STRAWBERRY": 49,
+    "MELON": 1,
+    "EGG": 49,
+    "MILK": 49,
+    "WOOL": 97,
+    "FERTILIZER": 0
+  },
+  "scope": "Research semantics only. No production runtime, defaults, configuration, archive, opponent, simulation, or Kaggle mutation. QUILL #4 RNG steering remains a separate owner lane."
+}

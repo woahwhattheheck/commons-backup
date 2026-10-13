@@ -1,0 +1,55 @@
+name: commercial-lifecycle-ledger
+
+on:
+  pull_request:
+    paths:
+      - "revenue/commercial_lifecycle_ledger/**"
+      - ".github/workflows/commercial-lifecycle-ledger.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "revenue/commercial_lifecycle_ledger/**"
+      - ".github/workflows/commercial-lifecycle-ledger.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  ledger-tests:
+    name: python-${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile ledger package
+        run: |
+          python -m py_compile \
+            revenue/commercial_lifecycle_ledger/lifecycle.py \
+            revenue/commercial_lifecycle_ledger/test_lifecycle.py \
+            revenue/commercial_lifecycle_ledger/test_lifecycle_financial_edges.py \
+            revenue/commercial_lifecycle_ledger/test_ingestion_hardening.py \
+            revenue/commercial_lifecycle_ledger/test_evidence_identity.py
+      - name: Run lifecycle and ingestion regressions
+        run: |
+          python -m unittest -v \
+            revenue.commercial_lifecycle_ledger.test_lifecycle \
+            revenue.commercial_lifecycle_ledger.test_lifecycle_financial_edges \
+            revenue.commercial_lifecycle_ledger.test_ingestion_hardening \
+            revenue.commercial_lifecycle_ledger.test_evidence_identity
+      - name: Run optimized lifecycle and ingestion regressions
+        run: |
+          python -O -m unittest -v \
+            revenue.commercial_lifecycle_ledger.test_lifecycle \
+            revenue.commercial_lifecycle_ledger.test_lifecycle_financial_edges \
+            revenue.commercial_lifecycle_ledger.test_ingestion_hardening \
+            revenue.commercial_lifecycle_ledger.test_evidence_identity

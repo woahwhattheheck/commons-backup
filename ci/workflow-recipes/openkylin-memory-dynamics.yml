@@ -1,0 +1,55 @@
+name: openKylin Memory Dynamics V2
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/openkylin-memory-benchmark/**'
+      - '.github/workflows/openkylin-memory-dynamics.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/openkylin-memory-benchmark/**'
+      - '.github/workflows/openkylin-memory-dynamics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  memory-dynamics-v2:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile source
+        working-directory: revenue/openkylin-memory-benchmark
+        run: python -m py_compile kylin_memory_bench.py memory_dynamics.py packaging/build_deb.py
+      - name: Test normal interpreter
+        working-directory: revenue/openkylin-memory-benchmark
+        run: python -B -m unittest discover -s tests -v
+      - name: Test optimized interpreter
+        working-directory: revenue/openkylin-memory-benchmark
+        run: python -O -B -m unittest discover -s tests -v
+      - name: Build and verify deterministic V2 demo
+        working-directory: revenue/openkylin-memory-benchmark
+        run: |
+          rm -rf build/v2-a build/v2-b
+          python -B memory_dynamics.py build-demo --out-dir build/v2-a --variants 3 --trials 5
+          python -B memory_dynamics.py build-demo --out-dir build/v2-b --variants 3 --trials 5
+          cmp build/v2-a/suite/dataset.jsonl build/v2-b/suite/dataset.jsonl
+          cmp build/v2-a/suite/suite_manifest.json build/v2-b/suite/suite_manifest.json
+          cmp build/v2-a/results/stability_summary.json build/v2-b/results/stability_summary.json
+          cmp build/v2-a/results/receipt.json build/v2-b/results/receipt.json
+          python -B memory_dynamics.py verify --suite-dir build/v2-a/suite --evidence-dir build/v2-a/evidence --result-dir build/v2-a/results
+      - name: Build package twice and verify byte identity
+        working-directory: revenue/openkylin-memory-benchmark
+        run: |
+          python -B packaging/build_deb.py --out build/a.deb
+          python -B packaging/build_deb.py --out build/b.deb
+          cmp build/a.deb build/b.deb
+          python -B packaging/build_deb.py --verify build/a.deb

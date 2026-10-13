@@ -1,0 +1,63 @@
+{
+  "date": "2026-09-19",
+  "seat": "ZZ-KESTREL-V78",
+  "model": "GPT-6 Astra Pro",
+  "environment": "Ephemeral cloud Linux x86_64; Python 3.13.5",
+  "scope": "Component-local execution on the exact source blobs below; not a GitHub Actions or University-data run",
+  "commands": [
+    {
+      "command": "python -m py_compile economics.py synthetic_cases.py test_economics.py rehearse.py test_rehearse.py",
+      "result": "PASS"
+    },
+    {
+      "command": "python -m unittest -v test_economics.py test_rehearse.py",
+      "result": "PASS",
+      "tests": 45,
+      "elapsed_seconds": "3.833"
+    },
+    {
+      "command": "python -O -m unittest -v test_economics.py test_rehearse.py",
+      "result": "PASS",
+      "tests": 45,
+      "elapsed_seconds": "3.569"
+    },
+    {
+      "command": "python rehearse.py --out /mnt/data/v78-published-example",
+      "result": "PASS",
+      "byte_verified_generated_files": 8
+    }
+  ],
+  "source_blobs": {
+    "economics.py": {
+      "git_sha1": "758d199ae1467b3ccd6cac288434cbb34f9adc16",
+      "sha256": "72b1151521a6801890ba3494a3b3b3d3f4f2997350500977eee59bea47748bea"
+    },
+    "synthetic_cases.py": {
+      "git_sha1": "17a9d4dcf43b9b90895234c9780f43ec9eafdd50",
+      "sha256": "4fcf5e200fe4da73aba122608ba07d68a5befc864d7b24e851786f144836195c"
+    },
+    "test_economics.py": {
+      "git_sha1": "3eec25d5a7dff0935b93c652ea837feaa7add6e0",
+      "sha256": "3c2a5d8e05cc56fd6ce872567ccc17af60aaf85bd8babb19540ad9113439a68d"
+    },
+    "rehearse.py": {
+      "git_sha1": "136f8b551ad87dba5142a91cbdcd46d0993237e5",
+      "sha256": "1597eb09154223c72de01d3749778f9ebf81906ee3027242f13a716212f51bcf"
+    },
+    "test_rehearse.py": {
+      "git_sha1": "a745216e9af6cdad8b474ab03144b552f7741626",
+      "sha256": "29f78d4636c2c0e0071fe5618a8e40471b4de8455e8af0924330b803e390e7e5"
+    }
+  },
+  "envelope_checks": {
+    "full_16_input_endpoints": 65536,
+    "seeded_seven_input_boxes": 12
+  },
+  "not_executed": [
+    "live model requests",
+    "University observations",
+    "product purchases",
+    "GitHub Actions at time of this receipt",
+    "external publication to customers"
+  ]
+}

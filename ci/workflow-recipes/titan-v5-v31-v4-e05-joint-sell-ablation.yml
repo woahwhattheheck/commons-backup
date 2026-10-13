@@ -1,0 +1,59 @@
+name: TITAN V5 V3.1-V4 E05 joint SELL ablation
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/v31-v4-e05-joint-sell-ablation/**'
+      - '.github/workflows/titan-v5-v31-v4-e05-joint-sell-ablation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-gate:
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact pull-request head
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Focused contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v31-v4-e05-joint-sell-ablation
+        run: |
+          python -B -m unittest -v test_ablation test_paired
+          python -O -B -m unittest -v test_ablation test_paired
+          python -m py_compile ablation.py paired.py test_ablation.py test_paired.py
+      - name: Exact submitted-V4 source surface audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          root='revenue/kaggriculture/cloud-execution-lab'
+          v4='4af1113154e78c662780e6658cd920daac7902e3'
+          git show "$v4:$root/frozen_selected.py" > /tmp/e05-frozen.py
+          git show "$v4:$root/selected_sell_core.py" > /tmp/e05-core.py
+          PYTHONPATH="$root/candidates/v5/v31-v4-e05-joint-sell-ablation" python - <<'PY'
+          from pathlib import Path
+          import ablation
+          members = {
+              'main.py': b'exact-source-audit-placeholder\n',
+              'frozen_selected.py': Path('/tmp/e05-frozen.py').read_bytes(),
+              'selected_sell_core.py': Path('/tmp/e05-core.py').read_bytes(),
+          }
+          candidate, receipt = ablation.ablate_joint_sell(members)
+          assert receipt['changed_members'] == ['frozen_selected.py']
+          assert candidate['main.py'] == members['main.py']
+          assert candidate['selected_sell_core.py'] == members['selected_sell_core.py']
+          PY

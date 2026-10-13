@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/collaboration_targets.schema.json",
+  "title": "Commons Collaboration Targets",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "assessed_at",
+    "scope",
+    "boundary",
+    "truth",
+    "offer_catalog_source",
+    "targets"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-collaboration-targets/v1"},
+    "kind": {"const": "COLLABORATION_TARGETS"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "generated_from_main": {"$ref": "#/$defs/git_sha"},
+    "assessed_at": {"const": "2026-08-26"},
+    "scope": {"type": "string", "minLength": 1},
+    "boundary": {"type": "string", "minLength": 1},
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contacted", "interest_verified", "agreement_signed", "delivery_completed", "cash_received"],
+      "properties": {
+        "contacted": {"const": false},
+        "interest_verified": {"const": false},
+        "agreement_signed": {"const": false},
+        "delivery_completed": {"const": false},
+        "cash_received": {"const": false}
+      }
+    },
+    "offer_catalog_source": {"$ref": "#/$defs/commons_source"},
+    "targets": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/target"}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"},
+    "commons_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "blob_sha"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha": {"$ref": "#/$defs/git_sha"}
+      }
+    },
+    "external_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit_sha", "readme_path", "readme_blob_sha", "evidence_phrase", "immutable_url", "observed_at"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "commit_sha": {"$ref": "#/$defs/git_sha"},
+        "readme_path": {"type": "string", "minLength": 1},
+        "readme_blob_sha": {"$ref": "#/$defs/git_sha"},
+        "evidence_phrase": {"type": "string", "minLength": 8},
+        "immutable_url": {"type": "string", "pattern": "^https://github\\.com/"},
+        "observed_at": {"const": "2026-08-26"}
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "entity", "route", "status", "mapped_offer_id", "collaboration_hypothesis",
+        "evidence_limit", "next_action", "asset_boundary", "uses_owner_archive_payload", "source"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "entity": {"type": "string", "minLength": 1},
+        "route": {"enum": ["LAB_REPRODUCTION", "VENDOR_INTEGRATION", "RESEARCHER_EVALUATION"]},
+        "status": {"const": "RESEARCHED_NOT_CONTACTED"},
+        "mapped_offer_id": {
+          "enum": ["whitebox-sponsored-benchmark", "whitebox-joint-paper-reproduction", "whitebox-private-evaluation"]
+        },
+        "collaboration_hypothesis": {"type": "string", "minLength": 24},
+        "evidence_limit": {"type": "string", "minLength": 24},
+        "next_action": {"type": "string", "minLength": 24},
+        "asset_boundary": {"const": "CUSTOMER_OWNED_OR_INDEPENDENTLY_CLEARED"},
+        "uses_owner_archive_payload": {"const": false},
+        "source": {"$ref": "#/$defs/external_source"}
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "schema": "roadef.checker-attempt-retention.v1",
+  "python": "3.13.5",
+  "source": {
+    "original_supervisor": {
+      "bytes": 21743,
+      "sha256": "e132568db1a88d38380d222d84b210a823da019c644974afcb535bbade2d7d67",
+      "git_blob": "2201b2cd345d80c5745f0d47f7ed14dea434cba7"
+    },
+    "candidate_supervisor": {
+      "bytes": 22098,
+      "sha256": "4197005faf03a9d046ef94a2099007c35d24536b65290c7f38d85e59413d49e0",
+      "git_blob": "68de7985ac71b8be836fab64f283943a57461a9f"
+    },
+    "comparator": {
+      "bytes": 5546,
+      "sha256": "0b2d2bfbb3314ea76d1c434bf5fe2cc424ebc38d337c0f0b23a05b1a089adc9b",
+      "git_blob": "b9865e824ba2aaeda31f9e2a877e6c24ba447433"
+    },
+    "test": {
+      "bytes": 15696,
+      "sha256": "ca17dc5071368b5a6fca326b128bf502295a715115b0e1b6ecf8733bf21e631d",
+      "git_blob": "afa97bd779944bb80e4d3030a77be988b76bc17b"
+    }
+  },
+  "changed_function_AST": [
+    "enqueue"
+  ],
+  "focused": {
+    "run": 13,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "original_control": {
+    "run": 13,
+    "failures": 10,
+    "errors": 0,
+    "skipped": 0
+  },
+  "retained": {
+    "run": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "source": {
+      "bytes": 5913,
+      "sha256": "1deb7ab76b79a609bb10120ef3e9166e0fbda29af1e533cbd15f42b850777945",
+      "git_blob": "6b5bfd883260a91a3346fa34e8e077c2396befca"
+    }
+  },
+  "paired_unchanged_selected_outputs": [
+    {
+      "case": "test_binary_failure_then_success_retains_both_raw_streams",
+      "launches_each": 2,
+      "solution_sha256": "e77691bb1b1233dcd2945a0be780097083e9c61d0865418016e88a2e2359101c"
+    },
+    {
+      "case": "test_cache_reuse_does_not_reopen_or_mutate_attempt_files",
+      "launches_each": 2,
+      "solution_sha256": "e77691bb1b1233dcd2945a0be780097083e9c61d0865418016e88a2e2359101c"
+    },
+    {
+      "case": "test_exited_lane_scheduler_finishes_retry_and_retains_failures",
+      "launches_each": 2,
+      "solution_sha256": "e77691bb1b1233dcd2945a0be780097083e9c61d0865418016e88a2e2359101c"
+    },
+    {
+      "case": "test_first_success_keeps_original_paths_and_exact_selection",
+      "launches_each": 1,
+      "solution_sha256": "754d340e0f4c4ed733e1c743b34d7782b2585f397d4e931d6af5f66d94dfa03e"
+    },
+    {
+      "case": "test_launch_failure_preserves_empty_first_artifacts",
+      "launches_each": 1,
+      "solution_sha256": "754d340e0f4c4ed733e1c743b34d7782b2585f397d4e931d6af5f66d94dfa03e"
+    },
+    {
+      "case": "test_partial_timeout_streams_survive_successful_retry",
+      "launches_each": 2,
+      "solution_sha256": "8f79abdc863e8bfc6fbfdd643b2bcf701fc66c9be2ac4465ed815138c1ea7455"
+    },
+    {
+      "case": "test_recovered_equal_vector_keeps_existing_incumbent",
+      "launches_each": 3,
+      "solution_sha256": "2b5a2c85b410b93f86613200e4dc167d1769dcb2f362bfb1cb5e764b919a48ce"
+    },
+    {
+      "case": "test_zero_exit_malformed_report_is_retained_after_recovery",
+      "launches_each": 2,
+      "solution_sha256": "14e10764de1400bcd7381c4a1e626063b0adc74d02048c77ff8a088b68ed0d1a"
+    }
+  ],
+  "control_truncated_at_expected_assertion": [
+    {
+      "case": "test_distinct_solution_digests_each_have_their_own_attempts",
+      "original_launches": 2,
+      "new_launches": 4,
+      "reason": "original test stopped at its expected evidence-retention assertion; outputs not paired"
+    },
+    {
+      "case": "test_live_checkpoint_update_does_not_change_frozen_retry",
+      "original_launches": 2,
+      "new_launches": 3,
+      "reason": "original test stopped at its expected evidence-retention assertion; outputs not paired"
+    }
+  ],
+  "complete_cli_equal_fields": {
+    "status": "complete",
+    "validated": true,
+    "solution_sha256": "4bbb8893248f5c1dbfa5531f63918c83f6f803276e97910c03d10e2a9a300ef2",
+    "maximum_load": "3",
+    "load_count": 1,
+    "total_cost_diagnostic": 0
+  },
+  "complete_cli_source_calls": {
+    "solver_lanes": 3,
+    "checker_attempts": 3
+  },
+  "benchmark_panels": 0,
+  "official_checker_calls": 0,
+  "solver_algorithm_runs": 0,
+  "scope": "complete supervisor/comparator; real protocol-fixture subprocesses; one full CLI per source. No official feasibility, public-instance score, Docker, or new deadline claim."
+}

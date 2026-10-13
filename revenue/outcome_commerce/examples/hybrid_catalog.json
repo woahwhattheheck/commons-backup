@@ -1,0 +1,65 @@
+{
+  "schema_version": "outcome-commerce/v1",
+  "kind": "OUTCOME_COMMERCE_CATALOG",
+  "canonical_page": "commerce.html",
+  "manifest": "revenue/outcome_commerce/manifest.json",
+  "terms_rule": "Synthetic test fixture only.",
+  "economic_truth": [
+    "QUOTED",
+    "CHARGEABLE",
+    "INVOICED",
+    "AUTHORIZATION",
+    "SETTLEMENT",
+    "PAYOUT",
+    "BANK_AVAILABLE"
+  ],
+  "pricing_models": [
+    "fixed",
+    "subscription",
+    "usage",
+    "outcome",
+    "milestone",
+    "take_rate",
+    "license",
+    "sponsorship"
+  ],
+  "integration_sources": [
+    "revenue/outcome_commerce/examples/synthetic_source.json"
+  ],
+  "listings": [
+    {
+      "id": "synthetic-hybrid-agent",
+      "name": "Synthetic hybrid agent",
+      "state": "EXAMPLE_ONLY",
+      "source": {
+        "path": "revenue/outcome_commerce/examples/synthetic_source.json",
+        "pointer": "",
+        "offer_id": "synthetic-hybrid-agent",
+        "blob_sha": "0000000000000000000000000000000000000000",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "hybrid_test_fixture",
+        "components": [
+          {"id": "platform_fee", "kind": "fixed", "amount": "99.00", "basis": "one activation"},
+          {"id": "subscription_cycle", "kind": "subscription", "amount": "49.00", "basis": "one cycle"},
+          {"id": "action_units", "kind": "usage", "meter": "actions", "unit_amount": "0.10", "included": "1000"},
+          {"id": "outcomes", "kind": "outcome", "meter": "verified outcomes", "unit_amount": "50.00", "included": "0"},
+          {"id": "milestone_delivery", "kind": "milestone", "amount": "1000.00", "basis": "accepted delivery"},
+          {"id": "marketplace_take", "kind": "take_rate", "meter": "gross revenue", "rate_bps": 500},
+          {"id": "license_fee", "kind": "license", "amount": "2000.00", "basis": "one license term"},
+          {"id": "sponsor_units", "kind": "sponsorship", "meter": "delivered placements", "unit_amount": "25.00", "included": "0"}
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/outcome_commerce/examples/synthetic_source.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "revenue/outcome_commerce/examples/hybrid_catalog.json"
+      }
+    }
+  ]
+}

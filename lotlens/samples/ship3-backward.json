@@ -1,0 +1,646 @@
+{
+  "annotations": [],
+  "content_sha256": "c85c908291338ca63f2041cf6b0774f7f2c430953abb9963e5b396539bad46fe",
+  "generated_at": "2026-09-05T12:11:33.853711Z",
+  "impact": {
+    "affected": [
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "formula_id": "F-LEMON",
+          "formula_version": "2.1",
+          "produced_at": "2026-08-05",
+          "product": "RTD-LEMON",
+          "quantity": 1000.0,
+          "unit": "L"
+        },
+        "hops": 3,
+        "id": "BATCH-P1",
+        "key": "pilot-plant/batch/BATCH-P1",
+        "kind": "batch",
+        "namespace": "pilot-plant",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P2",
+            "quantity": 500.0,
+            "relation": "packed",
+            "sources": [
+              {
+                "file": "packages.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/package/PKG-P2-2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P1",
+            "quantity": 400.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P2",
+            "unit": "L"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      },
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "formula_id": "F-LEMON",
+          "formula_version": "2.1",
+          "produced_at": "2026-08-06",
+          "product": "RTD-LEMON",
+          "quantity": 1200.0,
+          "unit": "L"
+        },
+        "hops": 2,
+        "id": "BATCH-P2",
+        "key": "pilot-plant/batch/BATCH-P2",
+        "kind": "batch",
+        "namespace": "pilot-plant",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P2",
+            "quantity": 500.0,
+            "relation": "packed",
+            "sources": [
+              {
+                "file": "packages.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/package/PKG-P2-2",
+            "unit": "L"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      },
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "packed_at": "2026-08-06",
+          "product": "RTD-LEMON",
+          "quantity": 500.0,
+          "unit": "L"
+        },
+        "hops": 1,
+        "id": "PKG-P2-2",
+        "key": "pilot-plant/package/PKG-P2-2",
+        "kind": "package",
+        "namespace": "pilot-plant",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      },
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "material": "citric acid",
+          "quantity": 60.0,
+          "received_at": "2026-08-01",
+          "supplier": "Acme Acids",
+          "unit": "kg"
+        },
+        "hops": 5,
+        "id": "LOT-CITRIC-01",
+        "key": "sup-acme/lot/LOT-CITRIC-01",
+        "kind": "lot",
+        "namespace": "sup-acme",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P2",
+            "quantity": 500.0,
+            "relation": "packed",
+            "sources": [
+              {
+                "file": "packages.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/package/PKG-P2-2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P1",
+            "quantity": 400.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "sup-acme/lot/LOT-CITRIC-01A",
+            "quantity": 10.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 2,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P1",
+            "unit": "kg"
+          },
+          {
+            "assumption": null,
+            "from": "sup-acme/lot/LOT-CITRIC-01",
+            "quantity": 30.0,
+            "relation": "split",
+            "sources": [
+              {
+                "file": "splits.csv",
+                "line": 2,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "sup-acme/lot/LOT-CITRIC-01A",
+            "unit": "kg"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      },
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "material": "citric acid",
+          "quantity": 30.0,
+          "received_at": "2026-08-01",
+          "supplier": "Acme Acids",
+          "unit": "kg"
+        },
+        "hops": 4,
+        "id": "LOT-CITRIC-01A",
+        "key": "sup-acme/lot/LOT-CITRIC-01A",
+        "kind": "lot",
+        "namespace": "sup-acme",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P2",
+            "quantity": 500.0,
+            "relation": "packed",
+            "sources": [
+              {
+                "file": "packages.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/package/PKG-P2-2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P1",
+            "quantity": 400.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "sup-acme/lot/LOT-CITRIC-01A",
+            "quantity": 10.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 2,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P1",
+            "unit": "kg"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      },
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "material": "cane sugar",
+          "quantity": 500.0,
+          "received_at": "2026-08-02",
+          "supplier": "Acme Sweet",
+          "unit": "kg"
+        },
+        "hops": 3,
+        "id": "LOT-SUGAR-02",
+        "key": "sup-acme/lot/LOT-SUGAR-02",
+        "kind": "lot",
+        "namespace": "sup-acme",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P2",
+            "quantity": 500.0,
+            "relation": "packed",
+            "sources": [
+              {
+                "file": "packages.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/package/PKG-P2-2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "sup-acme/lot/LOT-SUGAR-02",
+            "quantity": 80.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 5,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P2",
+            "unit": "kg"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      },
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "material": "process water",
+          "quantity": 8000.0,
+          "received_at": "2026-08-03",
+          "supplier": "Aqua Ltd",
+          "unit": "L"
+        },
+        "hops": 3,
+        "id": "LOT-WATER-01",
+        "key": "sup-aqua/lot/LOT-WATER-01",
+        "kind": "lot",
+        "namespace": "sup-aqua",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P2",
+            "quantity": 500.0,
+            "relation": "packed",
+            "sources": [
+              {
+                "file": "packages.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/package/PKG-P2-2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "sup-aqua/lot/LOT-WATER-01",
+            "quantity": 700.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 6,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P2",
+            "unit": "L"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      },
+      {
+        "assumptions_on_path": [],
+        "attrs": {
+          "material": "process water",
+          "quantity": 10000.0,
+          "received_at": "2026-08-01",
+          "supplier": "H2O Co",
+          "unit": "L"
+        },
+        "hops": 4,
+        "id": "LOT-WATER-01",
+        "key": "sup-h2o/lot/LOT-WATER-01",
+        "kind": "lot",
+        "namespace": "sup-h2o",
+        "path": [
+          {
+            "assumption": null,
+            "from": "pilot-plant/package/PKG-P2-2",
+            "quantity": 500.0,
+            "relation": "shipped",
+            "sources": [
+              {
+                "file": "shipments.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/shipment/SHIP-3",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P2",
+            "quantity": 500.0,
+            "relation": "packed",
+            "sources": [
+              {
+                "file": "packages.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/package/PKG-P2-2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "pilot-plant/batch/BATCH-P1",
+            "quantity": 400.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 4,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P2",
+            "unit": "L"
+          },
+          {
+            "assumption": null,
+            "from": "sup-h2o/lot/LOT-WATER-01",
+            "quantity": 900.0,
+            "relation": "consumed",
+            "sources": [
+              {
+                "file": "consumption.csv",
+                "line": 3,
+                "version": "93948a1e5f015bad"
+              }
+            ],
+            "status": "known",
+            "to": "pilot-plant/batch/BATCH-P1",
+            "unit": "L"
+          }
+        ],
+        "status": "KNOWN_AFFECTED"
+      }
+    ],
+    "contradictions": [],
+    "counts": {
+      "KNOWN_AFFECTED": 8,
+      "POTENTIALLY_AFFECTED": 0,
+      "contradictions": 0,
+      "coverage_gaps": 0,
+      "unresolved": 0
+    },
+    "coverage_gaps": [],
+    "cycles": [],
+    "note": "KNOWN_AFFECTED has a documented row path; POTENTIALLY_AFFECTED needs the named assumption; a coverage gap means the records stop there, not that nothing happened after it.",
+    "query": {
+      "assumptions": [],
+      "direction": "backward",
+      "start": "pilot-plant/shipment/SHIP-3"
+    },
+    "schema": "commons-lotlens/v1",
+    "start": {
+      "attrs": {
+        "customer": "Market South",
+        "quantity": 500.0,
+        "shipped_at": "2026-08-08",
+        "unit": "L"
+      },
+      "id": "SHIP-3",
+      "key": "pilot-plant/shipment/SHIP-3",
+      "kind": "shipment",
+      "namespace": "pilot-plant",
+      "sources": [
+        {
+          "file": "shipments.csv",
+          "line": 4,
+          "version": "93948a1e5f015bad"
+        }
+      ]
+    },
+    "start_found": true,
+    "unresolved": []
+  },
+  "imports": [
+    {
+      "files": [
+        {
+          "bytes": 434,
+          "name": "batches.csv",
+          "sha256": "5432c0122c737966aa7c8323f6d05e17bc5d43b9d1809b97379a1d2e10939a5a"
+        },
+        {
+          "bytes": 641,
+          "name": "consumption.csv",
+          "sha256": "66ef839709b6bb39939e3b157872774a82ff00b00a24f31cb27f2200601ab77d"
+        },
+        {
+          "bytes": 490,
+          "name": "lots.csv",
+          "sha256": "b2ee97860e5223f3fb656dd6a8dd85598134e0e5b71e9694fe04ddd53390f115"
+        },
+        {
+          "bytes": 565,
+          "name": "packages.csv",
+          "sha256": "96d1447bc19efe1671e4d60d0013fe156adc8ce3b12b088008b2a699f05d2fdd"
+        },
+        {
+          "bytes": 121,
+          "name": "rework.csv",
+          "sha256": "fb66c62257fb633898df08c8a3c96969ae11616c3fb649f98c541e8a4eea9c33"
+        },
+        {
+          "bytes": 575,
+          "name": "shipments.csv",
+          "sha256": "3e345b812aca75f8cc401656fd12e5559875ce1a10ac315aeeeb12f12470593e"
+        },
+        {
+          "bytes": 132,
+          "name": "splits.csv",
+          "sha256": "d920eb7eeeae1816148b2e00c5a89fe2b9f43776628490822e8cb650a0211b09"
+        }
+      ],
+      "imported_at": "2026-09-05T12:11:33.374796Z",
+      "label": "pilot",
+      "rows": {
+        "batches.csv": 6,
+        "consumption.csv": 11,
+        "lots.csv": 7,
+        "packages.csv": 9,
+        "rework.csv": 1,
+        "shipments.csv": 9,
+        "splits.csv": 2
+      },
+      "version": "93948a1e5f015bad"
+    }
+  ],
+  "schema": "commons-lotlens/v1/report"
+}

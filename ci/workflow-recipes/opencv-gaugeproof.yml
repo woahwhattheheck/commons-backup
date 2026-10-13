@@ -1,0 +1,47 @@
+name: OpenCV GaugeProof
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/opencv-gaugeproof-2026/**'
+      - '.github/workflows/opencv-gaugeproof.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/opencv-gaugeproof-2026/**'
+      - '.github/workflows/opencv-gaugeproof.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opencv-gaugeproof-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install
+        working-directory: competitions/opencv-gaugeproof-2026
+        run: python -m pip install -r requirements.txt
+      - name: Test normal
+        working-directory: competitions/opencv-gaugeproof-2026
+        run: PYTHONPATH=. python -m unittest discover -s tests -v
+      - name: Test optimized
+        working-directory: competitions/opencv-gaugeproof-2026
+        run: PYTHONPATH=. python -O -m unittest discover -s tests -v
+      - name: Demo + verify
+        working-directory: competitions/opencv-gaugeproof-2026
+        run: |
+          PYTHONPATH=. python -m gaugeproof.cli demo --output /tmp/gaugeproof-demo
+          PYTHONPATH=. python -m gaugeproof.cli verify /tmp/gaugeproof-demo/receipt.json

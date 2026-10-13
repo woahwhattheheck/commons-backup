@@ -1,0 +1,63 @@
+{
+  "checker": "ASTRA-TOMATO",
+  "classification": "independent execution of preserved peer source; not source authorship or game EV",
+  "commands": [
+    "python price_window_engine_evidence.py --engine kaggriculture.py --output peer-lot-normal.json",
+    "python -O price_window_engine_evidence.py --engine kaggriculture.py --output peer-lot-optimized.json",
+    "cmp peer-lot-normal.json peer-lot-optimized.json"
+  ],
+  "constructed_mask_liquidations_per_run": 1024,
+  "engine_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "exhaustive_masks": [
+    {
+      "additional_supply_budget": 0,
+      "all_25_units_at_least_1470": 4,
+      "schedules": 256,
+      "spot_at_least_1470": 6
+    },
+    {
+      "additional_supply_budget": 25,
+      "all_25_units_at_least_1470": 2,
+      "schedules": 256,
+      "spot_at_least_1470": 4
+    },
+    {
+      "additional_supply_budget": 100,
+      "all_25_units_at_least_1470": 0,
+      "schedules": 256,
+      "spot_at_least_1470": 0
+    },
+    {
+      "additional_supply_budget": 200,
+      "all_25_units_at_least_1470": 0,
+      "schedules": 256,
+      "spot_at_least_1470": 0
+    }
+  ],
+  "forecast_blob": "990abeb2f22a1d83f1240ec62a30c15c04c36ffe",
+  "forecast_peer_exact_agreement_counts_0_through_8": true,
+  "normal_exit": 0,
+  "normal_optimized_outputs_byte_identical": true,
+  "not_seed_probabilities": true,
+  "optimized_exit": 0,
+  "peer_output_sha256": "05b647c693217ce8700016483b3c3946286cee7f117f18841460a10186768510",
+  "peer_source": "price_window_engine_evidence.py",
+  "peer_source_blob": "6f7f97096d984cb4210b3c0849d240db37d6f770",
+  "production_activated": false,
+  "py_compile": true,
+  "python_version": "3.13.5",
+  "six_earliest_shops_25_unit_lot": {
+    "earliest_tomato_shops": 6,
+    "final_executable_quote": 1506,
+    "lot_25": {
+      "filled_units": 25,
+      "first_quote": 1506,
+      "inventory_after": 9293,
+      "inventory_before": 9268,
+      "minimum_unit_quote": 1384,
+      "spot_times_quantity_overstatement": 1534.0,
+      "total_revenue": 36116.0
+    },
+    "terminal_inventory": 9268
+  }
+}

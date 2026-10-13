@@ -1,0 +1,146 @@
+name: roadef-rank-traversal-paired
+run-name: roadef-rank-traversal-${{ inputs.operation_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation_id:
+        description: 'Unique reviewed operation ID; inspect existing runs before dispatch'
+        required: true
+        type: string
+      integration_ref:
+        description: 'Exact 40-character commit containing reviewed d85 integration and trial'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: roadef-rank-traversal-paired
+  cancel-in-progress: false
+
+jobs:
+  cold-pairs:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.run_attempt == '1' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      OPERATION_ID: ${{ inputs.operation_id }}
+      INTEGRATION_REF: ${{ inputs.integration_ref }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Validate immutable manual inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$OPERATION_ID" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{7,79}$ ]]
+          [[ "$INTEGRATION_REF" =~ ^[0-9a-f]{40}$ ]]
+          TRIAL_ROOT="$RUNNER_TEMP/roadef-rank-traversal"
+          export TRIAL_ROOT
+          printf 'TRIAL_ROOT=%s\n' "$TRIAL_ROOT" >> "$GITHUB_ENV"
+          mkdir "$TRIAL_ROOT"
+          python3 -B - <<'PY'
+          import json, os, pathlib
+          names = ('OPERATION_ID', 'INTEGRATION_REF', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+                   'GITHUB_SHA', 'GITHUB_REF', 'GITHUB_WORKFLOW_REF', 'RUNNER_NAME', 'RUNNER_OS', 'RUNNER_ARCH')
+          record = {name: os.environ.get(name) for name in names}
+          record.update(artifact_name='roadef-rank-traversal-' + os.environ['OPERATION_ID'] + '-' + os.environ['GITHUB_RUN_ID'],
+                        ordered_arms=['A04 base_e801', 'A04 new_d85', 'A14 new_d85', 'A14 base_e801'],
+                        prior_run_id='34211426650', prior_artifact_id='10050120696',
+                        prior_integration_ref='320bfc25002d4836c13fa772d8e82de7d7cb8054',
+                        portfolio_seconds=585, internal_search_seconds=565, solver_trials_planned=4,
+                        submission='not performed; no qualification action in this workflow')
+          pathlib.Path(os.environ['TRIAL_ROOT'], 'RUN.json').write_text(json.dumps(record, indent=2) + '\n')
+          PY
+
+      - name: Checkout exact reviewed integration and trial
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.integration_ref }}
+          path: harness
+          sparse-checkout: |
+            revenue/roadef2026/cloud-rank-traversal
+            revenue/roadef2026/cloud-rank-traversal-trial
+            .github/workflows
+
+      - name: Retrieve immutable completed experiment
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: '10050120696'
+          run-id: '34211426650'
+          repository: woahwhattheheck/commons
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          merge-multiple: true
+          path: ${{ env.TRIAL_ROOT }}/prior
+
+      - name: Verify retained artifact and build only new candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          integration="$GITHUB_WORKSPACE/harness/revenue/roadef2026/cloud-rank-traversal"
+          trial="$GITHUB_WORKSPACE/harness/revenue/roadef2026/cloud-rank-traversal-trial"
+          prior="$TRIAL_ROOT/prior"
+          test "$(git -C "$GITHUB_WORKSPACE/harness" rev-parse HEAD)" = "$INTEGRATION_REF"
+          python3 -B "$trial/run_paired_trial.py" --prior "$prior" --verify-prior-only \
+            > "$TRIAL_ROOT/prior-readback.json"
+          test "$(sha256sum "$integration/build_rank_traversal.py" | cut -d' ' -f1)" = 264ae946c36954f7a9545dc569af8666ee4c58e161210056d5988349f4181c30
+          test "$(sha256sum "$integration/main.cpp" | cut -d' ' -f1)" = d85ee6187607b1e04c9d77073d42e3eba699fe42309ee3f3324f25528a8f945e
+          mkdir "$TRIAL_ROOT/source"
+          cp -a "$integration/." "$TRIAL_ROOT/source/integration"
+          cp -a "$trial/." "$TRIAL_ROOT/source/trial"
+          cp "$GITHUB_WORKSPACE/harness/.github/workflows/roadef-rank-traversal-paired.yml" "$TRIAL_ROOT/source/"
+          python3 -B "$integration/build_rank_traversal.py" "$prior/new.cpp" \
+            --output "$TRIAL_ROOT/new.cpp" --patch "$TRIAL_ROOT/generated.patch" \
+            --receipt "$TRIAL_ROOT/integration-receipt.json" > "$TRIAL_ROOT/integration.stdout"
+          test "$(sha256sum "$TRIAL_ROOT/new.cpp" | cut -d' ' -f1)" = d85ee6187607b1e04c9d77073d42e3eba699fe42309ee3f3324f25528a8f945e
+          test "$(sha256sum "$TRIAL_ROOT/generated.patch" | cut -d' ' -f1)" = 9d18568c3cefada7c2f3af964b863a740d5024da34ad4923f92019e1727f47f6
+          cmp "$TRIAL_ROOT/new.cpp" "$integration/main.cpp"
+          chmod +x "$prior/new-candidate" "$prior/context/bin/candidate" \
+            "$prior/context/bin/sedge" "$prior/context/bin/flora" "$prior/context/bin/checker"
+          g++ --version > "$TRIAL_ROOT/compiler-version.txt"
+          g++ -O3 -std=c++20 -DNDEBUG -I"$prior/context/sources/sedge/vendor" \
+            "$TRIAL_ROOT/new.cpp" -o "$TRIAL_ROOT/new-candidate" \
+            > "$TRIAL_ROOT/new-build.stdout" 2> "$TRIAL_ROOT/new-build.stderr"
+
+      - name: Execute exactly four sequential cold arms
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B harness/revenue/roadef2026/cloud-rank-traversal-trial/run_paired_trial.py \
+            --prior "$TRIAL_ROOT/prior" \
+            --base-source "$TRIAL_ROOT/prior/new.cpp" --base-candidate "$TRIAL_ROOT/prior/new-candidate" \
+            --new-source "$TRIAL_ROOT/new.cpp" --new-candidate "$TRIAL_ROOT/new-candidate" \
+            --integration-receipt "$TRIAL_ROOT/integration-receipt.json" \
+            --operation-id "$OPERATION_ID" --integration-ref "$INTEGRATION_REF" \
+            --output "$TRIAL_ROOT/results" > "$TRIAL_ROOT/trial.stdout" 2> "$TRIAL_ROOT/trial.stderr"
+
+      - name: Retain complete prior artifact and new evidence manifest
+        if: always()
+        shell: bash
+        run: |
+          python3 -B - <<'PY'
+          import hashlib, json, os, pathlib
+          root = pathlib.Path(os.environ.get('TRIAL_ROOT', os.path.join(os.environ['RUNNER_TEMP'], 'roadef-rank-traversal')))
+          if root.is_dir():
+              rows = []
+              for path in sorted(root.rglob('*')):
+                  if path.is_file() and path != root / 'ARTIFACT-MANIFEST.json':
+                      with path.open('rb') as stream:
+                          digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+                      rows.append({'path': path.relative_to(root).as_posix(), 'bytes': path.stat().st_size,
+                                   'sha256': digest})
+              (root / 'ARTIFACT-MANIFEST.json').write_text(json.dumps({'operation_id': os.environ['OPERATION_ID'],
+                  'run_id': os.environ['GITHUB_RUN_ID'], 'prior_artifact_id': '10050120696', 'files': rows}, indent=2) + '\n')
+          PY
+
+      - name: Upload retained run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roadef-rank-traversal-${{ inputs.operation_id }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/roadef-rank-traversal
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90

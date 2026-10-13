@@ -1,0 +1,30 @@
+name: STEP storage concept
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/storage-design-step-2026/**'
+      - '.github/workflows/storage-design-step.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/storage-design-step-2026/**'
+      - '.github/workflows/storage-design-step.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Model tests
+        run: python competitions/storage-design-step-2026/tests/test_model.py
+      - name: Submission packet is structurally valid and intentionally blocked
+        run: python competitions/storage-design-step-2026/validate_submission.py
+      - name: Compile
+        run: python -m py_compile competitions/storage-design-step-2026/model/production_model.py competitions/storage-design-step-2026/validate_submission.py

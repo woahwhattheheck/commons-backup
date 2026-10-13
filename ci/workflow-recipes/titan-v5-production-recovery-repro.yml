@@ -1,0 +1,157 @@
+name: TITAN V5 production recovery exact reproduction
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/selective-carrot/**'
+      - '.github/workflows/titan-v5-production-recovery-repro.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v5-production-recovery-repro-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-reproduction:
+    name: exact reproduction (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    env:
+      CANDIDATE_DIR: revenue/kaggriculture/cloud-execution-lab/candidates/v5/selective-carrot
+      RELEASE_BASE: https://github.com/woahwhattheheck/commons/releases/download/titan-kaggriculture-gauntlet-20260912
+      V31_SHA: 5db3921f85efbc7596e5a1e7e198fc5f4644ceea43d8e8323c74ded7b4ba4361
+      CAP12_SHA: 5bf8e90602e145b353b9ff421fc514f2cf8af77ec549557e5e0acc1bc6bd67aa
+      RECOVERY_SHA: a44bf380cd79f967893ea90273be7dc92d6fd4f5e553aac0b02e457e85cf4ca8
+      DELIVERY_SHA: 0d42ee5fabb089745fa0064207654bfdf5df9466ba6499d91b6e685d4880cab1
+      PRODUCTION_V2_SHA: 0aded66a2c393cc60f4f45d10f11c384a7e788182bf5430863829a02b66daf02
+      PRODUCTION_SHA: 20f201161b14af7755146b08207593f9fa5df641d2f31e680792ea62c0e24239
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Assert exact checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected='${{ github.event.pull_request.head.sha || github.sha }}'
+          test "$(git rev-parse HEAD)" = "$expected"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Fetch and authenticate immutable release inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          inputs="$RUNNER_TEMP/titan-production-recovery-inputs"
+          mkdir -p "$inputs"
+          curl -fL --retry 3 --retry-all-errors \
+            "$RELEASE_BASE/titan-v3.1-56172377-5db3921f.tar.gz" \
+            -o "$inputs/v31.tar.gz"
+          curl -fL --retry 3 --retry-all-errors \
+            "$RELEASE_BASE/titan-v5-selective-carrot-cap12.tar.gz" \
+            -o "$inputs/cap12.tar.gz"
+          curl -fL --retry 3 --retry-all-errors \
+            "$RELEASE_BASE/v4-runtime-repair-route-recovery.tar.gz" \
+            -o "$inputs/route-recovery.tar.gz"
+          printf '%s  %s\n' "$V31_SHA" "$inputs/v31.tar.gz" | sha256sum -c -
+          printf '%s  %s\n' "$CAP12_SHA" "$inputs/cap12.tar.gz" | sha256sum -c -
+          printf '%s  %s\n' "$RECOVERY_SHA" "$inputs/route-recovery.tar.gz" | sha256sum -c -
+
+      - name: Reproduce delivery v2 and production recovery v2 and v3
+        shell: bash
+        run: |
+          set -euo pipefail
+          inputs="$RUNNER_TEMP/titan-production-recovery-inputs"
+          work="$RUNNER_TEMP/titan-production-recovery-py${{ matrix.python-version }}"
+          mkdir -p "$work"
+          cd "$CANDIDATE_DIR"
+
+          python -B -m unittest -v test_delivery_receipts.py
+          python -O -B -m unittest -v test_delivery_receipts.py
+
+          python -B build_delivery.py \
+            --cap12 "$inputs/cap12.tar.gz" \
+            --route-recovery "$inputs/route-recovery.tar.gz" \
+            --out "$work/delivery" \
+            --tar "$work/delivery.tar.gz"
+          printf '%s  %s\n' "$DELIVERY_SHA" "$work/delivery.tar.gz" | sha256sum -c -
+
+          python -B test_production_recovery.py \
+            --v31 "$inputs/v31.tar.gz" \
+            --delivery "$work/delivery.tar.gz"
+          python -O -B test_production_recovery.py \
+            --v31 "$inputs/v31.tar.gz" \
+            --delivery "$work/delivery.tar.gz"
+
+          python -B build_production_recovery.py \
+            --v31 "$inputs/v31.tar.gz" \
+            --delivery "$work/delivery.tar.gz" \
+            --out "$work/production" \
+            --tar "$work/production.tar.gz"
+          printf '%s  %s\n' "$PRODUCTION_SHA" "$work/production.tar.gz" | sha256sum -c -
+
+          python -B build_production_recovery.py \
+            --version v2 \
+            --v31 "$inputs/v31.tar.gz" \
+            --delivery "$work/delivery.tar.gz" \
+            --out "$work/production-v2" \
+            --tar "$work/production-v2.tar.gz"
+          printf '%s  %s\n' "$PRODUCTION_V2_SHA" "$work/production-v2.tar.gz" | sha256sum -c -
+
+      - name: Independently verify emitted manifests and member bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/titan-production-recovery-py${{ matrix.python-version }}"
+          python - "$work" "$DELIVERY_SHA" "$PRODUCTION_SHA" <<'PY'
+          import hashlib
+          import json
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          delivery_sha, production_sha = sys.argv[2:]
+
+          def sha(path):
+              h = hashlib.sha256()
+              with Path(path).open('rb') as stream:
+                  for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          delivery = json.loads((root / 'delivery-manifest.json').read_text(encoding='utf-8'))
+          production = json.loads((root / 'production-manifest.json').read_text(encoding='utf-8'))
+          assert delivery['candidate_archive_sha256'] == delivery_sha
+          assert delivery['version'] == 'v2'
+          assert sha(root / 'delivery.tar.gz') == delivery_sha
+          assert production['schema'] == 'titan-production-recovery-build/v3'
+          assert production['version'] == 'v3'
+          assert production['candidate_archive_sha256'] == production_sha
+          assert len(production['donor_dependencies']) == 13
+          assert len(production['files']) == 92
+          assert sha(root / 'production.tar.gz') == production_sha
+
+          emitted = {}
+          for path in sorted((root / 'production').rglob('*')):
+              if path.is_file():
+                  emitted[path.relative_to(root / 'production').as_posix()] = sha(path)
+          assert emitted == production['files']
+          print(json.dumps({
+              'delivery_sha256': delivery_sha,
+              'production_sha256': production_sha,
+              'production_members': len(emitted),
+              'donor_dependencies': len(production['donor_dependencies']),
+          }, sort_keys=True))
+          PY

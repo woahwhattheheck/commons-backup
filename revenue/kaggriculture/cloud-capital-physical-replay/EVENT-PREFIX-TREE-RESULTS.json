@@ -1,0 +1,98 @@
+{
+  "schema": "titan.event-prefix-tree.results.v1",
+  "scope": "Existing DELVE226 own-state actor and six declared conditional shop worlds; no games, seeds, probabilities, rival utility, or policy selection.",
+  "source": {
+    "baseline_flat_prefix": {
+      "bytes": 15553,
+      "sha256": "e10ad40f1800d2be85dea3f5a2f2087de8ab6f25da060e94e879d248962e9071",
+      "git_blob": "abea585eb8b10047377398a520ab96d168bd34b9"
+    },
+    "candidate_recursive_prefix": {
+      "bytes": 21593,
+      "sha256": "5f69af60727e4210fb9101ef98e318bae4c55a5837262c16a25fb86c65449aaa",
+      "git_blob": "9c27cd3e945c548e7efe40391a20205acd9f0998"
+    },
+    "test_event_prefix_tree": {
+      "bytes": 9803,
+      "sha256": "031dc73929fc95399ea6e873e55fe8d46891ec273490829137dd04dff8cbb301",
+      "git_blob": "7cb8cfb7ac7012161793f38f6b2b2bd3fde57dc3"
+    },
+    "check_event_prefix_tree": {
+      "bytes": 8812,
+      "sha256": "55fa5e0597c8f29e12f96ae9870c2dc658cedfe9be64b720650d504291aa6bb8",
+      "git_blob": "83f5fa7b59d080b5fd92b3eb71359e2b34af8704"
+    },
+    "benchmark_event_prefix_tree": {
+      "bytes": 4139,
+      "sha256": "c0f5cc537331ef70676f17531d5dce5d9f910a97f35d414e27c1e9ea587bd8a0",
+      "git_blob": "a626b460135620e504883dfda19081a9c755b265"
+    },
+    "engine_sha256": {
+      "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+    }
+  },
+  "test_suite": {
+    "methods": 51,
+    "passed": 51,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "inherited_methods": 37,
+    "new_methods": 14,
+    "log_sha256": "736a10e6b3cb78e0fe34cfc72430ba2a656772857277c3d47d2e61733ba62972"
+  },
+  "saved_bank": {
+    "routes": 2,
+    "worlds": 6,
+    "complete_cases": 12,
+    "all_case_fields_match_saved_references": true,
+    "actor_unchanged": true,
+    "input_unchanged": true,
+    "flat_decisions": 5306,
+    "recursive_decisions": 3866,
+    "naive_independent_decisions": 5916,
+    "decisions_removed_vs_flat": 1440,
+    "decision_reduction_vs_flat_fraction": 0.2713908782510366,
+    "decisions_removed_vs_naive": 2050,
+    "decision_reduction_vs_naive_fraction": 0.3465179175118323,
+    "flat_wall_seconds": 104.51451694700017,
+    "recursive_wall_seconds": 72.85721147499999,
+    "sequential_wall_reduction_fraction": 0.3028986440998791,
+    "branch_steps": [287, 359, 431, 503, 575],
+    "prefixes_computed": 10,
+    "reused_decisions": 2050,
+    "segment_calls": 22,
+    "final_cash": {
+      "7015cc00acfa4922|observed_shops_continue_no_rival": 89291.0,
+      "7015cc00acfa4922|hypothetical_yarn_288_no_rival": 109492.0,
+      "7015cc00acfa4922|hypothetical_yarn_360_no_rival": 108036.0,
+      "7015cc00acfa4922|hypothetical_yarn_432_no_rival": 103144.0,
+      "7015cc00acfa4922|hypothetical_yarn_504_no_rival": 96915.0,
+      "7015cc00acfa4922|hypothetical_yarn_576_no_rival": 93530.0,
+      "dc76e4003029ac51|observed_shops_continue_no_rival": 84040.0,
+      "dc76e4003029ac51|hypothetical_yarn_288_no_rival": 118750.0,
+      "dc76e4003029ac51|hypothetical_yarn_360_no_rival": 113011.0,
+      "dc76e4003029ac51|hypothetical_yarn_432_no_rival": 98960.0,
+      "dc76e4003029ac51|hypothetical_yarn_504_no_rival": 92932.0,
+      "dc76e4003029ac51|hypothetical_yarn_576_no_rival": 88887.0
+    }
+  },
+  "alternating_constructed_benchmark": {
+    "repetitions": 9,
+    "flat_median_wall_seconds": 0.2548223070000404,
+    "recursive_median_wall_seconds": 0.22870658400006505,
+    "median_wall_reduction_fraction": 0.10248601587290074,
+    "flat_decisions": 474,
+    "recursive_decisions": 330,
+    "all_case_fields_match": true
+  },
+  "limits": [
+    "The saved-bank wall times are sequential observations on one cloud container, not an alternating controlled benchmark.",
+    "The alternating benchmark is a constructed short-horizon T04 workload, not whole-agent or game latency.",
+    "Only exact declared T04 event fields are reusable. Unsupported scenario schemas retain independent execution.",
+    "The cooperative deadline does not preempt one dependency call.",
+    "This changes conditional-model execution cost only; it does not select a route or estimate scenario probabilities."
+  ]
+}

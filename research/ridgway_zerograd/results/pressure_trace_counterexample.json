@@ -1,0 +1,65 @@
+{
+  "fully_weak_low_degree": {
+    "boundary": "fully weak",
+    "consistency_defect_lhs_minus_rhs": "-1",
+    "divergence": "0",
+    "domain": "[0,1]^2",
+    "forcing": "f=(1,0)",
+    "forcing_pairing": "1",
+    "pressure": "p=x",
+    "pressure_boundary_flux": "1",
+    "pressure_free_kernel_lhs_at_u_zero": "0",
+    "pressure_volume_pairing": "0",
+    "scope": "exact low-degree fully-weak consistency witness",
+    "test_velocity": "v=(1,0)",
+    "velocity_degree": 0
+  },
+  "local_p4_boundary_triangle": {
+    "consistency_defect_lhs_minus_rhs": "-1/30",
+    "contained_in_full_P4_velocity_space": true,
+    "divergence_polynomial": {},
+    "domain": "reference triangle x>=0,y>=0,x+y<=1",
+    "forcing": "f=(1,0)",
+    "forcing_pairing": "1/30",
+    "pressure": "p=x",
+    "pressure_boundary_flux": "1/30",
+    "pressure_free_kernel_lhs_at_u_zero": "0",
+    "pressure_volume_pairing": "0",
+    "scope": "exact local P3/P4-compatible weak-boundary consistency witness; extendable by zero across the two non-weak edges",
+    "stream_function": "psi=x^2 y^2",
+    "velocity": "v=(2*x^2*y,-2*x*y^2)",
+    "velocity_degree": 3,
+    "weak_boundary_edge": "x+y=1",
+    "zero_extension_edges": [
+      "x=0",
+      "y=0"
+    ],
+    "zero_extension_trace_zero": true
+  },
+  "schema": "commons.ridgway-zerograd-pressure-trace-counterexample/v2",
+  "strong_outer_weak_inner": {
+    "consistency_defect_lhs_minus_rhs": "2436/5",
+    "divergence_polynomial": {},
+    "domain": "[-2,2]^2 minus [-1,1]^2",
+    "forcing": "f=(1,0)",
+    "forcing_pairing": "-2436/5",
+    "inner_edge_fluxes": {
+      "inner_bottom_y=-1": "0",
+      "inner_left_x=-1": "-162",
+      "inner_right_x=1": "-162",
+      "inner_top_y=1": "-816/5"
+    },
+    "pressure": "p=x",
+    "pressure_boundary_flux": "-2436/5",
+    "pressure_free_kernel_lhs_at_u_zero": "0",
+    "pressure_volume_pairing": "0",
+    "scope": "mixed-boundary topology witness; velocity degree 8, retained as an independent sanity check rather than a P4 membership claim",
+    "stream_function": "(4-x^2)^2(4-y^2)^2(1+y)",
+    "strong_boundary": "outer square",
+    "strong_outer_trace_zero": true,
+    "velocity": "v=(d_y psi,-d_x psi)",
+    "velocity_degree": 8,
+    "weak_boundary": "inner square"
+  },
+  "theorem_ceiling": "proves a pressure-normal consistency defect including an exact P3 velocity witness contained in a full P4 weak-boundary space; does not prove the full prize convergence theorem, sponsor-specific curved-domain error lower bound, publication, or prize entitlement"
+}

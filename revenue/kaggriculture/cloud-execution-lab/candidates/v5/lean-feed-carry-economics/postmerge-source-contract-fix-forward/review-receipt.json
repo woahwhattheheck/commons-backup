@@ -1,0 +1,73 @@
+{
+  "files": {
+    ".github/workflows/titan-v5-lean-feed-carry.yml": {
+      "bytes": 1809,
+      "sha256": "c53de6fddb979352dd2ed52fb2d46b177b2be441aad935e29b8bbb34260f5ac9"
+    },
+    "HANDOFF.md": {
+      "bytes": 1421,
+      "sha256": "82daf7198978a34aa61be28f0a9544db1c11fd7a1192f65e2067ce91cceb5880"
+    },
+    "POSTMERGE_SOURCE_RED.md": {
+      "bytes": 1810,
+      "sha256": "3fafbc845d669993714219660d35b4f37f4ff43561c022077c18b6f6cb12c8d4"
+    },
+    "README.md": {
+      "bytes": 2308,
+      "sha256": "d8e4af28536486997d5d2f105ade72f466dcf300fa4cef2d4a4225eef9f80a43"
+    },
+    "d2_contract.json": {
+      "bytes": 1040,
+      "sha256": "814ecb0b80e2ce37e84a2b898cfab84db3a77d635db88ebab917694c5fae8129"
+    },
+    "lean_feed_core.py": {
+      "bytes": 9347,
+      "sha256": "15e3254781d5242d702fa50f97a5d09ac76301469b03c77edc294fb974803ddb"
+    },
+    "lean_feed_source_contract.py": {
+      "bytes": 9973,
+      "sha256": "474889f75e21b29a124de73b132f2db516187d100dc462467e4443454fd3603b"
+    },
+    "test_cli_smoke.py": {
+      "bytes": 977,
+      "sha256": "f5daa1c7bd4addcb1236b84a146ec1a4cb57caff861c27feb856c7228649a998"
+    },
+    "test_lean_feed_source_contract.py": {
+      "bytes": 4909,
+      "sha256": "e375439eb0260b8ae3c188506076190c601e6c3d0e1dac9fc0b96d1b7696157f"
+    },
+    "tests-normal.txt": {
+      "bytes": 3682,
+      "sha256": "b90a886c96e9bfdac2c6a14573247b898e7e9b19dfa0d372e57bdf2df2660d89"
+    },
+    "tests-optimized.txt": {
+      "bytes": 3682,
+      "sha256": "b90a886c96e9bfdac2c6a14573247b898e7e9b19dfa0d372e57bdf2df2660d89"
+    }
+  },
+  "findings": [
+    "official engine FEED consumes WHEAT only",
+    "BUY_PRODUCT supports WHEAT/FERTILIZER and quotes per unit at changing post-buy inventory",
+    "merged d2_contract invents Corn/Pasture/Straw fixed reserve and a buy_feed policy call without retained D2 member bytes",
+    "retained lineage helper edits SELL WHEAT and is not a generic feed buyer"
+  ],
+  "fix": {
+    "d2_member_binding": "BLOCKED_RAW_ARCHIVE_BYTES_NOT_RETAINED",
+    "legacy_oracle_authority": "NON_AUTHORIZING_SYNTHETIC_ONLY",
+    "promotion_authorized": false,
+    "source_contract_state": "SOURCE_MODEL_BLOCKED"
+  },
+  "operation": "TITAN-V5-LEAN-FEED-SOURCE-CONTRACT-FIXFORWARD-20260914",
+  "receipt_sha256": "297f7cf6e38f8e4be7fd00387e228194e366648570b781cd7abe05be41f2d4d8",
+  "reviewed_main": "bd2d92c4e770e9456f74525f78e2c8df28513836",
+  "schema": "titan-v5-lean-feed-postmerge-fix-receipt-v1",
+  "target_issue": 14337,
+  "target_merge": "a590e578574e09995bea4bf8a5eaffa56cd72461",
+  "target_pr": 14345,
+  "target_repo": "woahwhattheheck/commons",
+  "validation": {
+    "normal": "16/16 PASS",
+    "optimized": "16/16 PASS",
+    "py_compile": "PASS"
+  }
+}

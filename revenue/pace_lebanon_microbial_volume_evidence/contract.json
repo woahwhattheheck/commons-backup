@@ -1,0 +1,40 @@
+{
+  "id": "pace-lebanon-microbial-volume-evidence-lims-01",
+  "version": 1,
+  "buyer": "Pace Life Sciences / Amanda Yoakum",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788152005.579669"
+  },
+  "workflow": [
+    "sample, lot, matrix, and specification reconciliation",
+    "controlled method and version binding",
+    "microbial-limits, sterility, or CCIT routing",
+    "configured incubation and run timepoints without rush shortening",
+    "QC and positive-control gate",
+    "staged evidence report with count, unit, timepoint, method, result, and source hashes",
+    "named-human report release"
+  ],
+  "acceptance": [
+    "120 frozen synthetic submissions",
+    "exactly 90 READY submissions, 90 jobs, and 90 staged reports",
+    "exactly 30 holds: 8 duplicate IDs, 7 missing method/specification/matrix, 5 route mismatches, 5 incubation-window violations, and 5 QC/positive-control failures",
+    "held records create no job, result, staged report, or release",
+    "30 valid records route to each of MICROBIAL_LIMITS, STERILITY, and CCIT",
+    "configured duration and timepoints never shorten for rush work",
+    "count, unit, timepoint, method, result, and source hashes remain linked in every staged report",
+    "replay creates zero submissions, jobs, holds, or reports",
+    "automated release is denied; a named quality reviewer is required"
+  ],
+  "exclusions": [
+    "no GMP, regulatory, clinical, diagnostic, sterility, or product-quality decision",
+    "no live instrument, portal, or reporting interface",
+    "no production write, outreach, automatic report release, or cash claim"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic workflow and evidence-lineage proof only; never production readiness or compliance",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

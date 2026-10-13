@@ -1,0 +1,31 @@
+{
+  "note": "Entirely synthetic demo campaign for Hive demand bm-hive-20260908-021. Every brand, creator, URL and metric is fictional. Replaying this script against the same database is idempotent.",
+  "operations": [
+    {"operation_id": "demo-brand", "operation": "brand/create", "data": {"name": "Northwind Trail Snacks demo"}},
+    {"operation_id": "demo-creator-a", "operation": "creator/create", "data": {"handle": "demo.alder", "consent_on": "2026-09-01", "payout_route_ref": "ROUTE-DEMO-ALDER"}},
+    {"operation_id": "demo-creator-b", "operation": "creator/create", "data": {"handle": "demo.birch", "consent_on": "2026-09-01", "payout_route_ref": "ROUTE-DEMO-BIRCH"}},
+    {"operation_id": "demo-creator-c", "operation": "creator/create", "data": {"handle": "demo.cedar", "consent_on": "2026-09-05", "payout_route_ref": "ROUTE-DEMO-CEDAR"}},
+    {"operation_id": "demo-campaign", "operation": "campaign/create", "data": {
+      "brand_id": {"$ref": "demo-brand"},
+      "title": "September trail-mix launch (demo)",
+      "brief": "Post one original short video showing the demo trail mix in an outdoor setting. Say what you actually think. Include the disclosure tag in the caption. No health or performance claims.",
+      "rights_terms": "Brand may repost the approved video on its own channels for 90 days with creator credit. Creator keeps ownership. No paid amplification of the creator's face without a separate written agreement.",
+      "currency": "USD",
+      "budget_minor": 50000,
+      "rule": {"kind": "FIXED_PER_APPROVED", "amount_minor": 20000, "allow_partial": true},
+      "eligibility": {"platforms": ["TIKTOK", "INSTAGRAM"], "disclosure_tag": "#ad", "requires_disclosure": true, "requires_rights_acceptance": true, "window_start": "2026-09-01", "window_end": "2026-09-30"}
+    }},
+    {"operation_id": "demo-asset-brief", "operation": "campaign/action", "data": {"id": {"$ref": "demo-campaign"}, "version": 1, "action": "asset", "name": "creative-brief.md", "license": "Internal brief; share with consenting campaign creators only.", "content": "# Creative brief (demo)\n\n- One short video, 15-45 seconds, outdoors.\n- Show the demo pouch clearly once.\n- Say what you actually think; no scripted superlatives.\n- Caption must include #ad.\n- No health, energy, weight or performance claims.\n"}},
+    {"operation_id": "demo-asset-logo", "operation": "campaign/action", "data": {"id": {"$ref": "demo-campaign"}, "version": 2, "action": "asset", "name": "logo-usage.txt", "license": "Demo wordmark; use unmodified; no implied endorsement of third parties.", "content": "Demo wordmark usage: keep clear space equal to the height of the N; do not recolor.\n"}},
+    {"operation_id": "demo-open", "operation": "campaign/action", "data": {"id": {"$ref": "demo-campaign"}, "version": 3, "action": "open"}},
+    {"operation_id": "demo-sub-1", "operation": "submission/create", "data": {"campaign_id": {"$ref": "demo-campaign"}, "creator_id": {"$ref": "demo-creator-a"}, "platform": "TIKTOK", "url": "https://demo.invalid/alder/video/1001", "posted_on": "2026-09-08", "disclosure_present": true, "rights_accepted": true}},
+    {"operation_id": "demo-sub-2", "operation": "submission/create", "data": {"campaign_id": {"$ref": "demo-campaign"}, "creator_id": {"$ref": "demo-creator-b"}, "platform": "INSTAGRAM", "url": "https://demo.invalid/birch/reel/2002", "posted_on": "2026-09-09", "disclosure_present": false, "rights_accepted": true}},
+    {"operation_id": "demo-sub-3", "operation": "submission/create", "data": {"campaign_id": {"$ref": "demo-campaign"}, "creator_id": {"$ref": "demo-creator-c"}, "platform": "TIKTOK", "url": "https://demo.invalid/cedar/video/3003", "posted_on": "2026-09-10", "disclosure_present": true, "rights_accepted": true}},
+    {"operation_id": "demo-sub-4", "operation": "submission/create", "data": {"campaign_id": {"$ref": "demo-campaign"}, "creator_id": {"$ref": "demo-creator-b"}, "platform": "INSTAGRAM", "url": "https://demo.invalid/birch/reel/2003", "posted_on": "2026-09-11", "disclosure_present": true, "rights_accepted": true}},
+    {"operation_id": "demo-review-1", "operation": "submission/review", "data": {"id": {"$ref": "demo-sub-1"}, "version": 1, "decision": "approve", "note": "Brief followed; disclosure in caption; approved.", "metrics": {"views": 4200}}},
+    {"operation_id": "demo-review-2", "operation": "submission/review", "data": {"id": {"$ref": "demo-sub-2"}, "version": 1, "decision": "reject", "note": "Caption is missing the #ad disclosure; creator may repost with disclosure as a new submission."}},
+    {"operation_id": "demo-review-3", "operation": "submission/review", "data": {"id": {"$ref": "demo-sub-3"}, "version": 1, "decision": "approve", "note": "Approved.", "metrics": {"views": 1800}}},
+    {"operation_id": "demo-review-4", "operation": "submission/review", "data": {"id": {"$ref": "demo-sub-4"}, "version": 1, "decision": "approve", "note": "Approved; remaining budget applied.", "metrics": {"views": 950}}},
+    {"operation_id": "demo-handoff", "operation": "payable/handoff", "data": {"campaign_id": {"$ref": "demo-campaign"}}}
+  ]
+}

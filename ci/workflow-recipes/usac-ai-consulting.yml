@@ -1,0 +1,43 @@
+name: usac-ai-consulting-qualification
+
+on:
+  pull_request:
+    paths:
+      - "revenue/usac_ai_consulting/**"
+      - "tests/test_usac_ai_consulting.py"
+      - ".github/workflows/usac-ai-consulting.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/usac_ai_consulting/**"
+      - "tests/test_usac_ai_consulting.py"
+      - ".github/workflows/usac-ai-consulting.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hostile-qualification:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Normal interpreter
+        run: python -m unittest tests.test_usac_ai_consulting
+      - name: Optimized interpreter
+        run: python -O -m unittest tests.test_usac_ai_consulting
+      - name: Default facts must fail closed
+        run: |
+          set +e
+          python revenue/usac_ai_consulting/qualification.py \
+            --manifest revenue/usac_ai_consulting/source_manifest.json \
+            --facts revenue/usac_ai_consulting/sample_facts.json \
+            --as-of 2026-09-13T14:45:00Z \
+            --require-submission-ready
+          code=$?
+          test "$code" -eq 2

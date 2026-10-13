@@ -1,0 +1,47 @@
+name: CUHK-X Large Model readiness
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/cuhk_x_large_model_track/**'
+      - 'tests/test_cuhkx_large_model_readiness.py'
+      - '.github/workflows/cuhkx-large-readiness.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/cuhk_x_large_model_track/**'
+      - 'tests/test_cuhkx_large_model_readiness.py'
+      - '.github/workflows/cuhkx-large-readiness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  fail-closed-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax
+        run: python -m py_compile competitions/cuhk_x_large_model_track/check_readiness.py tests/test_cuhkx_large_model_readiness.py
+      - name: Focused regression tests
+        run: python -m unittest discover -s tests -p 'test_cuhkx_large_model_readiness.py' -v
+      - name: Default entry must remain blocked
+        run: |
+          set +e
+          out="$(python competitions/cuhk_x_large_model_track/check_readiness.py --stage entry-ready)"
+          code=$?
+          set -e
+          test "$code" -eq 2
+          printf '%s' "$out" | grep -q '"decision": "BLOCKED_MISSING_EVIDENCE"'
+          printf '%s' "$out" | grep -q '"official_site_registered"'
+      - name: Default submission must remain blocked
+        run: |
+          set +e
+          out="$(python competitions/cuhk_x_large_model_track/check_readiness.py --stage submission-complete)"
+          code=$?
+          set -e
+          test "$code" -eq 2
+          printf '%s' "$out" | grep -q '"valid_submission_made"'

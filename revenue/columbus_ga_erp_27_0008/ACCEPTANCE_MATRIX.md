@@ -1,0 +1,33 @@
+# Columbus GA ERP 27-0008 — workshare acceptance matrix
+
+Operation: `COLUMBUS-GA-ERP-27-0008-TYLER-WORKSHARE-SWARMZ-20260917`  
+Commercial state: **PROPOSED_NOT_ACCEPTED**  
+Prime target state: **QUALIFIED_TARGET_ONLY / BIDDER_STATUS_UNKNOWN**
+
+This matrix converts the buyer's published implementation/data-conversion/testing/cutover seams into a bounded specialist evidence contract. It does not certify ERP product compliance and cannot create buyer acceptance.
+
+| Gate | Buyer / workshare seam | Required evidence | PASS condition | HOLD / reject condition | Authority owner |
+|---|---|---|---|---|---|
+| `SOURCE_PIN` | Current RFP generation and addenda | buyer first-party RFP + every current addendum + retrieval/source IDs | current due date and changed terms are taken from the latest controlling buyer source; superseded facts are marked historical | missing/unread addendum, stale discovery-only deadline, or conflicting buyer generations | prime for submission; TJLabs for its source ledger only |
+| `PRIME_FIT` | Public-sector ERP prime qualifications and comparable references | prime-owned statement that it is pursuing the opportunity plus its own qualification evidence | target independently confirms pursuit and owns all prime qualification representations | target has not confirmed pursuit; bidder status inferred from product fit; qualification evidence missing | prime only |
+| `INPUT_READY` | Data-conversion planning and implementation methodology | frozen source/target generation IDs, entity/field maps, transformation rules, interface inventory, test evidence boundary | admitted evidence generations and owners are explicit and immutable for the run | live/unbounded data dump, missing generation identity, contradictory mappings, absent owner | prime supplies; TJLabs validates bounded packet |
+| `MIGRATION_RECON` | Extraction, cleansing, mapping, loading, validation and reconciliation of legacy data | admitted source/target rows or approved synthetic/de-identified evidence; canonical IDs; rule set | every admitted row receives exactly one terminal disposition; counts/hash/semantic totals reconcile or expose named exceptions; deterministic replay | duplicate/conflicting identity, silent row loss, unexplained count/amount delta, unverifiable transformation | TJLabs evidence engine; prime owns transformation/product action |
+| `INTERFACE_REPLAY` | Integration development and interface testing | owner/source/target contracts, event IDs, retry/idempotency policy, bounded success/failure fixtures/evidence | every admitted event has one observable result; replay cannot create an unrecorded duplicate effect; failures and rollback behavior are explicit | missing contract/owner, conflicting event ID reuse, duplicate effect, unsupported retry assumption | prime owns interface; TJLabs owns evidence analysis |
+| `TEST_TRACE` | Unit/system/integration/interface/conversion/performance/security/UAT evidence | requirement IDs, prime configuration/design refs, test case IDs, observed evidence, retest lineage | every admitted requirement maps to evidence or an explicit gap; failures retain lineage; machine result never substitutes for human UAT authority | orphan requirement, caller-authored PASS with no evidence, overwritten failure history, inferred buyer signoff | prime/buyer own acceptance; TJLabs owns traceability only |
+| `PARALLEL_PAYROLL` | Published parallel-payroll/testing seam where applicable | prime-defined bounded payroll comparison evidence with synthetic/de-identified or buyer-authorized data | compared fields/totals and tolerances are explicit; every delta is explained or HOLD | TJLabs asked to certify payroll correctness from incomplete evidence; sensitive data supplied without separate authorization | prime/buyer; TJLabs evidence support only |
+| `CUTOVER_READY` | Cutover readiness, freeze, transition continuity and rollback | cutover plan, dependency graph, freeze boundary, evidence receipts, rollback/replay criteria | critical dependencies are PASS or explicit HOLD; rollback trigger and owner are testable; same evidence replays deterministically | hidden dependency, missing rollback criterion, stale receipt, TJLabs asked to make go-live decision | prime/buyer make go/no-go; TJLabs supplies evidence |
+| `TRACEABILITY` | Reviewer-verifiable proposal / implementation evidence | source pointer, evidence digest, generation ID, responsible owner for each retained claim | every TJLabs-produced claim resolves to a retained source/evidence object and generation | unsupported product/reference/security/staffing/compliance assertion | prime owns corporate/product claims; TJLabs only its artifacts |
+| `COMMERCIAL` | Proposed specialist workshare | agreed scope, inputs, price, timing, authorized counterparty acceptance/work order | only after a valid authorized acceptance/work order may an invoice/receivable state be created separately | silence, routing acknowledgement, meeting, prime interest, proposal submission or buyer event treated as acceptance/payment/revenue | authorized business counterparty / owner |
+
+## Buyer-scope mapping
+
+The original solicitation's implementation-services section calls for project governance, data migration/conversion, interfaces, testing/UAT, training/transition, cutover and support. The data-conversion portion specifically describes extraction, cleansing, mapping, loading and validation from the current CGI Advantage environment and asks for conversion approach, test conversions and responsibilities. The testing portion calls for unit, system, integration, interface, conversion, performance, security and user-acceptance testing, including acceptance criteria and defect handling. Cutover planning includes readiness, freeze and rollback considerations. Comparable public-sector implementations remain a prime qualification gate rather than a TJLabs-inherited credential.
+
+## Fail-closed rules
+
+1. `UNKNOWN != PASS`. Missing prime, buyer or evidence facts remain HOLD.
+2. A clean TJLabs receipt means only that the admitted evidence reconciles under the declared policy; it never means Columbus accepted the ERP or deliverable.
+3. A target's public product footprint or Georgia references do not establish bidder status for RFP 27-0008.
+4. Any new Columbus addendum superseding a modeled field requires `SOURCE_PIN` refresh before proposal-facing use.
+5. No buyer/customer/employee production data enters a TJLabs evidence run without separate authorization and controls.
+6. No target contact, buyer contact, submission, contract, invoice, payment, cash or recognized-revenue claim is created by this matrix.

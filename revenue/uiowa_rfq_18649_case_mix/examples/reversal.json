@@ -1,0 +1,82 @@
+{
+  "groups": [
+    {
+      "id": "A",
+      "label": "Fictional routine-heavy team",
+      "metric": {
+        "direction": "higher_is_better",
+        "eligible_definition": "Sampled changes initiated in the window; unknown follow-up remains in the denominator",
+        "event_definition": "Sampled change completed without rollback within seven calendar days",
+        "measure_class": "observed_outcome",
+        "strata_definition": "routine: one-system standard change; complex: multi-system coordinated change",
+        "unit": "sampled change",
+        "window_end": "2026-04-01",
+        "window_start": "2026-01-01"
+      },
+      "rows": [
+        {
+          "events": 90,
+          "non_events": 10,
+          "sources": [
+            "synthetic:A/routine"
+          ],
+          "stratum": "routine",
+          "unknown": 0
+        },
+        {
+          "events": 1,
+          "non_events": 9,
+          "sources": [
+            "synthetic:A/complex"
+          ],
+          "stratum": "complex",
+          "unknown": 0
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "label": "Fictional complex-heavy team",
+      "metric": {
+        "direction": "higher_is_better",
+        "eligible_definition": "Sampled changes initiated in the window; unknown follow-up remains in the denominator",
+        "event_definition": "Sampled change completed without rollback within seven calendar days",
+        "measure_class": "observed_outcome",
+        "strata_definition": "routine: one-system standard change; complex: multi-system coordinated change",
+        "unit": "sampled change",
+        "window_end": "2026-04-01",
+        "window_start": "2026-01-01"
+      },
+      "rows": [
+        {
+          "events": 19,
+          "non_events": 1,
+          "sources": [
+            "synthetic:B/routine"
+          ],
+          "stratum": "routine",
+          "unknown": 0
+        },
+        {
+          "events": 50,
+          "non_events": 50,
+          "sources": [
+            "synthetic:B/complex"
+          ],
+          "stratum": "complex",
+          "unknown": 0
+        }
+      ]
+    }
+  ],
+  "population_note": "Invented A/B sampled change records; not University records or a population census. Window is start-inclusive/end-exclusive.",
+  "reference": {
+    "rationale": "Fictional 50/50 routine/complex comparison scenario, chosen explicitly rather than estimated from either group.",
+    "weights": {
+      "complex": "1/2",
+      "routine": "1/2"
+    }
+  },
+  "schema": "tjlabs.case-mix.input/v1",
+  "synthetic": true
+}

@@ -1,0 +1,418 @@
+{
+  "claim": {
+    "maximum_pair_sum": 85,
+    "menu_size": 20,
+    "modulus": 6324430497,
+    "primes": [
+      3,
+      7,
+      11,
+      19,
+      23,
+      31,
+      43,
+      47
+    ],
+    "statement": "for every integer n there is a listed restricted-square pair s with gcd(n-s, product(primes)) = 1"
+  },
+  "dynamic_program": {
+    "method": "exact survivor-bitmask enumeration over every residue per prime",
+    "trace": [
+      {
+        "minimum_survivors": 10,
+        "prime": 3,
+        "reachable_masks": 3,
+        "zero_mask_reachable": false
+      },
+      {
+        "minimum_survivors": 7,
+        "prime": 7,
+        "reachable_masks": 21,
+        "zero_mask_reachable": false
+      },
+      {
+        "minimum_survivors": 6,
+        "prime": 11,
+        "reachable_masks": 181,
+        "zero_mask_reachable": false
+      },
+      {
+        "minimum_survivors": 5,
+        "prime": 19,
+        "reachable_masks": 1507,
+        "zero_mask_reachable": false
+      },
+      {
+        "minimum_survivors": 4,
+        "prime": 23,
+        "reachable_masks": 10746,
+        "zero_mask_reachable": false
+      },
+      {
+        "minimum_survivors": 3,
+        "prime": 31,
+        "reachable_masks": 61553,
+        "zero_mask_reachable": false
+      },
+      {
+        "minimum_survivors": 2,
+        "prime": 43,
+        "reachable_masks": 202209,
+        "zero_mask_reachable": false
+      },
+      {
+        "minimum_survivors": 1,
+        "prime": 47,
+        "reachable_masks": 508812,
+        "zero_mask_reachable": false
+      }
+    ],
+    "zero_mask_reachable_final": false
+  },
+  "menu": [
+    {
+      "a": 0,
+      "b": 0,
+      "c": 0,
+      "d": 0,
+      "left": 1,
+      "right": 1,
+      "total": 2
+    },
+    {
+      "a": 0,
+      "b": 0,
+      "c": 1,
+      "d": 0,
+      "left": 1,
+      "right": 4,
+      "total": 5
+    },
+    {
+      "a": 1,
+      "b": 0,
+      "c": 1,
+      "d": 0,
+      "left": 4,
+      "right": 4,
+      "total": 8
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "c": 0,
+      "d": 0,
+      "left": 9,
+      "right": 1,
+      "total": 10
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "c": 1,
+      "d": 0,
+      "left": 9,
+      "right": 4,
+      "total": 13
+    },
+    {
+      "a": 0,
+      "b": 0,
+      "c": 2,
+      "d": 0,
+      "left": 1,
+      "right": 16,
+      "total": 17
+    },
+    {
+      "a": 1,
+      "b": 0,
+      "c": 2,
+      "d": 0,
+      "left": 4,
+      "right": 16,
+      "total": 20
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "c": 2,
+      "d": 0,
+      "left": 9,
+      "right": 16,
+      "total": 25
+    },
+    {
+      "a": 0,
+      "b": 0,
+      "c": 0,
+      "d": 1,
+      "left": 1,
+      "right": 25,
+      "total": 26
+    },
+    {
+      "a": 1,
+      "b": 0,
+      "c": 0,
+      "d": 1,
+      "left": 4,
+      "right": 25,
+      "total": 29
+    },
+    {
+      "a": 2,
+      "b": 0,
+      "c": 2,
+      "d": 0,
+      "left": 16,
+      "right": 16,
+      "total": 32
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "c": 0,
+      "d": 1,
+      "left": 9,
+      "right": 25,
+      "total": 34
+    },
+    {
+      "a": 1,
+      "b": 1,
+      "c": 0,
+      "d": 0,
+      "left": 36,
+      "right": 1,
+      "total": 37
+    },
+    {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 0,
+      "left": 36,
+      "right": 4,
+      "total": 40
+    },
+    {
+      "a": 2,
+      "b": 0,
+      "c": 0,
+      "d": 1,
+      "left": 16,
+      "right": 25,
+      "total": 41
+    },
+    {
+      "a": 1,
+      "b": 1,
+      "c": 2,
+      "d": 0,
+      "left": 36,
+      "right": 16,
+      "total": 52
+    },
+    {
+      "a": 1,
+      "b": 1,
+      "c": 0,
+      "d": 1,
+      "left": 36,
+      "right": 25,
+      "total": 61
+    },
+    {
+      "a": 0,
+      "b": 0,
+      "c": 3,
+      "d": 0,
+      "left": 1,
+      "right": 64,
+      "total": 65
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "c": 3,
+      "d": 0,
+      "left": 9,
+      "right": 64,
+      "total": 73
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "c": 1,
+      "d": 0,
+      "left": 81,
+      "right": 4,
+      "total": 85
+    }
+  ],
+  "negative_evidence": {
+    "final_menu_does_not_extend_through_59": {
+      "modulus": 373141399323,
+      "primes": [
+        3,
+        7,
+        11,
+        19,
+        23,
+        31,
+        43,
+        47,
+        59
+      ],
+      "residue": 41144806933,
+      "rows": [
+        {
+          "gcd": 59,
+          "pair_sum": 2
+        },
+        {
+          "gcd": 47,
+          "pair_sum": 5
+        },
+        {
+          "gcd": 43,
+          "pair_sum": 8
+        },
+        {
+          "gcd": 33,
+          "pair_sum": 10
+        },
+        {
+          "gcd": 21,
+          "pair_sum": 13
+        },
+        {
+          "gcd": 31,
+          "pair_sum": 17
+        },
+        {
+          "gcd": 7,
+          "pair_sum": 20
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 25
+        },
+        {
+          "gcd": 19,
+          "pair_sum": 26
+        },
+        {
+          "gcd": 23,
+          "pair_sum": 29
+        },
+        {
+          "gcd": 11,
+          "pair_sum": 32
+        },
+        {
+          "gcd": 21,
+          "pair_sum": 34
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 37
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 40
+        },
+        {
+          "gcd": 7,
+          "pair_sum": 41
+        },
+        {
+          "gcd": 3243,
+          "pair_sum": 52
+        },
+        {
+          "gcd": 177,
+          "pair_sum": 61
+        },
+        {
+          "gcd": 11,
+          "pair_sum": 65
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 73
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 85
+        }
+      ]
+    },
+    "seed_menu_does_not_extend_through_43": {
+      "modulus": 134562351,
+      "primes": [
+        3,
+        7,
+        11,
+        19,
+        23,
+        31,
+        43
+      ],
+      "residue": 99162274,
+      "rows": [
+        {
+          "gcd": 11,
+          "pair_sum": 2
+        },
+        {
+          "gcd": 23,
+          "pair_sum": 5
+        },
+        {
+          "gcd": 7,
+          "pair_sum": 8
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 10
+        },
+        {
+          "gcd": 43,
+          "pair_sum": 17
+        },
+        {
+          "gcd": 19,
+          "pair_sum": 20
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 25
+        },
+        {
+          "gcd": 31,
+          "pair_sum": 32
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 34
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 37
+        },
+        {
+          "gcd": 3,
+          "pair_sum": 40
+        },
+        {
+          "gcd": 21,
+          "pair_sum": 85
+        }
+      ]
+    }
+  },
+  "proof_scope": "finite CRT lemma only; not a proof or counterexample of A308734",
+  "schema": "sun-a308734-low-obstruction-cover/v1"
+}

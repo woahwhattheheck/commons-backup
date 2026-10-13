@@ -1,0 +1,44 @@
+{
+  "id": "baddl-eia-accession-release-lims-01",
+  "version": 1,
+  "buyer": "Florida BADDL / Y. Reddy Bommineni",
+  "lead": {
+    "channel": "C0BTURDA3PW",
+    "ts": "1788149460.347539"
+  },
+  "workflow": [
+    "VS 10-11 / VSPS / GVL intake normalization",
+    "exact sample-ID reconciliation",
+    "signature and completeness gates",
+    "EIA worklist routing",
+    "simulated analyzer result import",
+    "named human result release",
+    "simulated report routing",
+    "provenance and audit export"
+  ],
+  "acceptance": [
+    "24 synthetic fixtures: eight paper VS 10-11, eight VSPS, eight GVL",
+    "one unsigned paper form HOLD_UNSIGNED_FORM",
+    "one duplicate tube ID HOLD_DUPLICATE_TUBE_ID",
+    "exactly 22 enter the EIA worklist",
+    "simulated results: 19 negative, two positive, one invalid",
+    "authorized human releases exactly 21",
+    "invalid remains HOLD",
+    "replay adds zero accessions",
+    "audit_sha256 1849cde855a07b5eef7c389e36c3896bd257161d6d6970292ad17509b55cd204"
+  ],
+  "exclusions": [
+    "no PHI",
+    "no live animal status",
+    "no regulatory submission",
+    "no billing writes",
+    "no automatic result release",
+    "no portal, analyzer, agency, or live reporting action"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic accession, hold, simulated result, and human-release receipts only; never diagnosis, animal-status mutation, agency submit, or live instrument I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

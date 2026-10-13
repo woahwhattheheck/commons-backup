@@ -1,0 +1,29 @@
+{
+  "observed_utc_date": "2026-09-13",
+  "competition": {
+    "url": "https://quantiphy.stanford.edu/competition/",
+    "current_deadline": "2026-10-23T23:59:00 AoE",
+    "tracks": ["Main", "Open-Weight"],
+    "awards_usd_per_track": [1000, 500, 250],
+    "validation_pairs": 159,
+    "test_ground_truth_public": false
+  },
+  "official_evaluator": {
+    "repository": "Paulineli/QuantiPhy",
+    "path": "evaluator.py",
+    "reference": "refs/heads/main",
+    "public_contract": {
+      "thresholds": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95],
+      "macro_categories": ["S2", "D2", "S3", "D3"],
+      "prediction_transform": "abs(parsed_value)"
+    },
+    "note": "Repository README still displayed a Nov 5 deadline when observed; current competition website displays Oct 23 and is treated as authoritative/conservative."
+  },
+  "open_weight_baseline": {
+    "repository": "MirroS-Lab/Code-as-World",
+    "commit": "1353bf07d24e5463caff92ce23ffd34d03984831",
+    "license": "Apache-2.0",
+    "models": ["MirroS-Lab/Code-as-World-VL-4B", "MirroS-Lab/Code-as-World-VL-9B"],
+    "release_support": "repository README documents local QuantiPhy validation inference for both checkpoints"
+  }
+}

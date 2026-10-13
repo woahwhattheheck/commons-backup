@@ -1,0 +1,42 @@
+name: Hutter MixerLab larger-corpus measurement
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/hutter-large-corpus-measure.yml'
+      - 'competitions/hutter-prize-enwik9-2026/large_corpus_benchmark.py'
+      - 'competitions/hutter-prize-enwik9-2026/tests/test_large_corpus_benchmark.py'
+
+permissions:
+  contents: read
+
+jobs:
+  paired-enwik8-prefixes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: competitions/hutter-prize-enwik9-2026
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source proof and focused tests
+        run: |
+          python -m py_compile mixerlab.py match_model.py large_corpus_benchmark.py tests/test_large_corpus_benchmark.py
+          python -m unittest -v tests.test_large_corpus_benchmark
+          python -O -m unittest -v tests.test_large_corpus_benchmark
+      - name: Paired public enwik8 prefix measurement
+        run: |
+          python large_corpus_benchmark.py run \
+            --prefixes 65536,262144 \
+            --table-bits 12 \
+            --match-bits 12 \
+            --timeout-seconds 900 \
+            --cache "$RUNNER_TEMP/hutter-enwik8" \
+            --json-out "$RUNNER_TEMP/HUTTER_LARGER_CORPUS_EVIDENCE.json" \
+            --markdown-out "$RUNNER_TEMP/HUTTER_LARGER_CORPUS_EVIDENCE.md"
+          echo '--- canonical evidence ---'
+          cat "$RUNNER_TEMP/HUTTER_LARGER_CORPUS_EVIDENCE.json"

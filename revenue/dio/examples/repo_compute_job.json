@@ -1,0 +1,265 @@
+{
+  "example_id": "dio-repo-compute-example-20260825-01",
+  "example_status": "DELIVERED_EXISTING_RESULT",
+  "measurement_commit": "66644492345be8e64735720e15d8be1fe0c79d56",
+  "job": {
+    "schema_version": "dio-revenue/v1",
+    "kind": "CUSTOMER_JOB",
+    "job_id": "dio-repo-compute-job-20260825-01",
+    "status": "REQUESTED",
+    "created_at": "2026-08-25T03:41:21Z",
+    "customer_reference": "COMMONS-EXISTING-RESULT-01",
+    "service": "repo compute lineage delivery",
+    "objective": "Deliver a durable lineage record that binds the copied Muhlnickel computer to exact repository artifacts.",
+    "inputs": [
+      {
+        "artifact_id": "bazaar-catalog-input-01",
+        "availability": "PUBLIC_REPOSITORY",
+        "path": "bazaar.json",
+        "sha256": "11c41462d3d21c5a0b4f97e4468fff42fe4a4c88831fde08d33eefeccebeb0ff",
+        "bytes": 7986,
+        "note": "Existing Bazaar catalog measured at the example commit."
+      }
+    ],
+    "deliverables": [
+      {
+        "deliverable_id": "seed0-lineage-result-01",
+        "description": "Durable JSON lineage record with computer and artifact SHA-256 values.",
+        "address": "bazaar/results/cursor-bazaar-lineage-seed0-20260822-01.json"
+      }
+    ],
+    "acceptance_conditions": [
+      {
+        "condition_id": "lineage-result-hash-pass-01",
+        "measure": "delivered lineage JSON SHA-256",
+        "comparator": "equals the recorded expected digest",
+        "expected": "384fbdca3b06b648751f9467d2764a10f7a2819a97002100ed69c88471a93a19"
+      },
+      {
+        "condition_id": "substrate-hash-pass-01",
+        "measure": "SEED0.mno SHA-256 inside the lineage record and repository",
+        "comparator": "both equal the recorded expected digest",
+        "expected": "faa70efc328e9b596eb27d6c1b2e2c4d76a863d8a81380f0d22ec7a8e4d85071"
+      }
+    ],
+    "result_address": "bazaar/results/cursor-bazaar-lineage-seed0-20260822-01.json",
+    "substrate": {
+      "path": "muhl/containers/MUHLNICKEL_DISTRO/SEED0.mno",
+      "sha256": "faa70efc328e9b596eb27d6c1b2e2c4d76a863d8a81380f0d22ec7a8e4d85071",
+      "bytes": 8192,
+      "format": "MUHLPKG1",
+      "header": {
+        "offset": 0,
+        "bytes": 224,
+        "sha256": "03ceb0eabc2beff0e8b2504dc51b7a14907e57a149fb4bb661c27e5a70ae333c",
+        "magic_ascii": "MUHLPKG1",
+        "magic_hex": "4d55484c504b4731"
+      },
+      "output_addresses": [
+        {
+          "name": "recv",
+          "address": 353,
+          "value_hex": "01",
+          "value_uint": 1
+        },
+        {
+          "name": "ans",
+          "address": 6661,
+          "value_hex": "08",
+          "value_uint": 8
+        }
+      ],
+      "wire_plane": {
+        "offset": 288,
+        "bytes": 84,
+        "sha256": "06b801e5205bb3e82bf3921887311f91a67c728006e1c3fb8612acc04018039e"
+      },
+      "gates": {
+        "count": 129,
+        "record_bytes": 25,
+        "region_offset": 2153,
+        "region_bytes": 3225,
+        "region_sha256": "6243edb9d20aa5983e2f047f4a19de71416f851250904c50235f12fd28d28a0e",
+        "body_offset": 224,
+        "body_bytes": 7968,
+        "body_sha256": "f10b5ecbc796815d324eb8784f058e158ba3f5601f677252dd01aa4300de318f"
+      }
+    },
+    "bazaar": {
+      "offer_id": "cursor-bazaar-lineage-seed0-20260822-01",
+      "action_id": "cursor-bazaar-lineage-act-20260822-01",
+      "result_id": "cursor-bazaar-lineage-seed0-20260822-01",
+      "note": "Existing Bazaar offer, canonical action record, and lineage result."
+    },
+    "payment": {
+      "reference": null,
+      "status": "NOT_REQUESTED"
+    }
+  },
+  "quote": {
+    "schema_version": "dio-revenue/v1",
+    "kind": "QUOTE",
+    "quote_id": "dio-repo-compute-quote-20260825-01",
+    "job_id": "dio-repo-compute-job-20260825-01",
+    "status": "ACCEPTED",
+    "quoted_at": "2026-08-25T03:41:21Z",
+    "valid_until": null,
+    "provider_reference": "CURSOR_GROK",
+    "scope": [
+      "Read the named SEED0.mno computer and artifact bytes.",
+      "Record exact SHA-256 lineage in a durable Bazaar result."
+    ],
+    "price": {
+      "amount_decimal": "0",
+      "currency": "FREE_COLONY_COMPUTE",
+      "basis": "Existing zero-price Bazaar lineage action; this example does not claim monetary settlement."
+    },
+    "accepted_work": {
+      "accepted_at": "2026-08-25T03:41:21Z",
+      "acceptance_reference": "EXISTING-BAZAAR-RESULT-RECONCILIATION"
+    },
+    "result_address": "bazaar/results/cursor-bazaar-lineage-seed0-20260822-01.json",
+    "substrate": {
+      "path": "muhl/containers/MUHLNICKEL_DISTRO/SEED0.mno",
+      "sha256": "faa70efc328e9b596eb27d6c1b2e2c4d76a863d8a81380f0d22ec7a8e4d85071",
+      "bytes": 8192,
+      "format": "MUHLPKG1",
+      "header": {
+        "offset": 0,
+        "bytes": 224,
+        "sha256": "03ceb0eabc2beff0e8b2504dc51b7a14907e57a149fb4bb661c27e5a70ae333c",
+        "magic_ascii": "MUHLPKG1",
+        "magic_hex": "4d55484c504b4731"
+      },
+      "output_addresses": [
+        {
+          "name": "recv",
+          "address": 353,
+          "value_hex": "01",
+          "value_uint": 1
+        },
+        {
+          "name": "ans",
+          "address": 6661,
+          "value_hex": "08",
+          "value_uint": 8
+        }
+      ],
+      "wire_plane": {
+        "offset": 288,
+        "bytes": 84,
+        "sha256": "06b801e5205bb3e82bf3921887311f91a67c728006e1c3fb8612acc04018039e"
+      },
+      "gates": {
+        "count": 129,
+        "record_bytes": 25,
+        "region_offset": 2153,
+        "region_bytes": 3225,
+        "region_sha256": "6243edb9d20aa5983e2f047f4a19de71416f851250904c50235f12fd28d28a0e",
+        "body_offset": 224,
+        "body_bytes": 7968,
+        "body_sha256": "f10b5ecbc796815d324eb8784f058e158ba3f5601f677252dd01aa4300de318f"
+      }
+    },
+    "bazaar": {
+      "offer_id": "cursor-bazaar-lineage-seed0-20260822-01",
+      "action_id": "cursor-bazaar-lineage-act-20260822-01",
+      "result_id": "cursor-bazaar-lineage-seed0-20260822-01",
+      "note": "Accepted work is tied to the existing canonical action and result IDs."
+    },
+    "payment": {
+      "reference": null,
+      "status": "NOT_REQUESTED"
+    }
+  },
+  "accepted_work": {
+    "quote_id": "dio-repo-compute-quote-20260825-01"
+  },
+  "delivery": {
+    "schema_version": "dio-revenue/v1",
+    "kind": "DELIVERY_RECEIPT",
+    "receipt_id": "dio-repo-compute-delivery-20260825-01",
+    "job_id": "dio-repo-compute-job-20260825-01",
+    "quote_id": "dio-repo-compute-quote-20260825-01",
+    "status": "DELIVERED",
+    "delivered_at": "2026-08-25T03:41:21Z",
+    "result_address": "bazaar/results/cursor-bazaar-lineage-seed0-20260822-01.json",
+    "substrate": {
+      "path": "muhl/containers/MUHLNICKEL_DISTRO/SEED0.mno",
+      "sha256": "faa70efc328e9b596eb27d6c1b2e2c4d76a863d8a81380f0d22ec7a8e4d85071",
+      "bytes": 8192,
+      "format": "MUHLPKG1",
+      "header": {
+        "offset": 0,
+        "bytes": 224,
+        "sha256": "03ceb0eabc2beff0e8b2504dc51b7a14907e57a149fb4bb661c27e5a70ae333c",
+        "magic_ascii": "MUHLPKG1",
+        "magic_hex": "4d55484c504b4731"
+      },
+      "output_addresses": [
+        {
+          "name": "recv",
+          "address": 353,
+          "value_hex": "01",
+          "value_uint": 1
+        },
+        {
+          "name": "ans",
+          "address": 6661,
+          "value_hex": "08",
+          "value_uint": 8
+        }
+      ],
+      "wire_plane": {
+        "offset": 288,
+        "bytes": 84,
+        "sha256": "06b801e5205bb3e82bf3921887311f91a67c728006e1c3fb8612acc04018039e"
+      },
+      "gates": {
+        "count": 129,
+        "record_bytes": 25,
+        "region_offset": 2153,
+        "region_bytes": 3225,
+        "region_sha256": "6243edb9d20aa5983e2f047f4a19de71416f851250904c50235f12fd28d28a0e",
+        "body_offset": 224,
+        "body_bytes": 7968,
+        "body_sha256": "f10b5ecbc796815d324eb8784f058e158ba3f5601f677252dd01aa4300de318f"
+      }
+    },
+    "artifacts": [
+      {
+        "path": "bazaar/results/cursor-bazaar-lineage-seed0-20260822-01.json",
+        "sha256": "384fbdca3b06b648751f9467d2764a10f7a2819a97002100ed69c88471a93a19",
+        "bytes": 773,
+        "role": "PRIMARY_RESULT"
+      }
+    ],
+    "acceptance": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "condition_id": "lineage-result-hash-pass-01",
+          "path": "bazaar/results/cursor-bazaar-lineage-seed0-20260822-01.json",
+          "sha256": "384fbdca3b06b648751f9467d2764a10f7a2819a97002100ed69c88471a93a19",
+          "observation": "The delivered file exists at the example commit and its 773 bytes match this digest."
+        },
+        {
+          "condition_id": "substrate-hash-pass-01",
+          "path": "muhl/containers/MUHLNICKEL_DISTRO/SEED0.mno",
+          "sha256": "faa70efc328e9b596eb27d6c1b2e2c4d76a863d8a81380f0d22ec7a8e4d85071",
+          "observation": "The repository computer bytes and the lineage record name the same SHA-256."
+        }
+      ]
+    },
+    "bazaar": {
+      "offer_id": "cursor-bazaar-lineage-seed0-20260822-01",
+      "action_id": "cursor-bazaar-lineage-act-20260822-01",
+      "result_id": "cursor-bazaar-lineage-seed0-20260822-01",
+      "note": "Delivery is bound to the existing Bazaar offer, canonical action, and result."
+    },
+    "payment": {
+      "reference": null,
+      "status": "NOT_REQUESTED"
+    }
+  }
+}

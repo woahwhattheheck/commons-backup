@@ -1,0 +1,76 @@
+{
+  "schema_version": "commons-marketing-sales-operating-contract/v1",
+  "kind": "MARKETING_SALES_OPERATING_CONTRACT",
+  "offer_id": "same-day-agent-survival-proof",
+  "price_usd": 2500,
+  "goal": {
+    "weekly_captures": 10,
+    "weekly_gross_captured_usd": 25000,
+    "minimum_delivery_capacity": 15
+  },
+  "universe": {
+    "minimum_research_entities": 10000,
+    "minimum_github_organization_entities": 1000,
+    "weekly_new_qualified_accounts": 2301,
+    "weekly_verified_business_routes": 1726,
+    "weekly_actual_sends": 1588,
+    "weekly_positive_human_replies": 64,
+    "weekly_confirmed_bookings": 32,
+    "weekly_purchase_authorizations": 12,
+    "weekly_captured_payments": 10,
+    "weekly_completed_deliveries": 10,
+    "rolling_research_queue": 50
+  },
+  "qualification": {
+    "account_unit": "verified organization, never an issue-author row",
+    "minimum_score": 7,
+    "required": [
+      "organization verified",
+      "current first-party pain source",
+      "observable production or business impact",
+      "binary stop, rollback, or receipt fit",
+      "relevant owner role",
+      "legitimate public business route",
+      "no suppression or hard disqualifier"
+    ],
+    "score": {
+      "current_production_incident": 3,
+      "business_impact_or_manual_mitigation": 2,
+      "relevant_owner_and_public_route": 2,
+      "public_or_synthetic_binary_proof": 1,
+      "current_budget_signal": 1,
+      "under_90_days_or_confirmed_active": 1
+    }
+  },
+  "segments": [
+    "ai-native-saas-production",
+    "agent-framework-runtime-platform",
+    "ai-agency-systems-integrator",
+    "agentops-observability-evaluation",
+    "support-crm-back-office-agents",
+    "sre-devops-coding-agents",
+    "regulated-agent-operations",
+    "enterprise-pilot-to-production"
+  ],
+  "truth_boundaries": {
+    "draft_is_send": false,
+    "click_is_booking": false,
+    "auto_reply_is_positive_reply": false,
+    "authorization_is_capture": false,
+    "captured_gross_is_profit": false,
+    "public_thread_is_business_route": false,
+    "transport_actions": 0,
+    "cash_usd": 0
+  },
+  "stop_rules": {
+    "hard_bounce_rate_gte": 0.03,
+    "complaint_rate_gte": 0.001,
+    "positive_reply_rate_lt_after_500_sends": 0.015,
+    "booking_to_authorization_lt_after_20_bookings": 0.2,
+    "authorization_to_capture_lt_after_10_authorizations": 0.85,
+    "on_time_delivery_lt": 0.9,
+    "refund_rate_gt": 0.05,
+    "dispute_rate_gt": 0.01,
+    "backlog_days_gt": 7
+  }
+}

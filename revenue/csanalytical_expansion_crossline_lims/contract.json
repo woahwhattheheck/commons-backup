@@ -1,0 +1,60 @@
+{
+  "id": "csanalytical-expansion-crossline-evidence-lims-01",
+  "version": 1,
+  "buyer": "Brandon Zurawlow / CS Analytical",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "lane": "build-demand"
+  },
+  "lines": [
+    "CCIT",
+    "RAW_MATERIAL",
+    "GAS",
+    "MICRO"
+  ],
+  "workflow": [
+    "client study intake",
+    "sample/lot binding",
+    "product/package component binding",
+    "CCIT vs raw-material/gas/micro route",
+    "method/version lock",
+    "instrument/run",
+    "QC/audit hashes",
+    "staged report",
+    "named-human release"
+  ],
+  "acceptance": [
+    "120 synthetic submissions",
+    "exactly 90 READY staged reports",
+    "exactly 30 HOLD: 8 DUPLICATE_ID, 7 WRONG_LINE, 5 MISSING_METADATA, 5 QC_FAIL, 5 SOURCE_HASH_MISMATCH",
+    "intake holds schedule nothing",
+    "no held record stages or releases a report",
+    "method, instrument, value, unit, audit, and source hashes match the fixture",
+    "replay creates zero new records",
+    "human releaser required; autonomous release denied"
+  ],
+  "hold_codes": [
+    "DUPLICATE_ID",
+    "WRONG_LINE",
+    "MISSING_METADATA",
+    "QC_FAIL",
+    "SOURCE_HASH_MISMATCH"
+  ],
+  "golden": {
+    "fixture_sha256": "e248e432de17950f923d64174961703353cdde455d1e78d2e9ca9e3d67cbd6c9",
+    "audit_sha256": "92a9ada5d3cf7855c85603fef25c525dee398bb670d980d3847c0cff248beda8",
+    "report_digest": "74515e546b1f5ed49cd9c13d55812067043bc4eccbda41138baf29a1ba595353"
+  },
+  "exclusions": [
+    "no autonomous certification or release",
+    "no compliance decision",
+    "no interface marked live before golden-round-trip validation",
+    "no production writes, outreach, or prospect-facing demo"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake, cross-line routing, QC hold, hash match, and human release receipts only; never live instrument I/O, regulatory compliance, or production LIMS writes",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

@@ -1,0 +1,1545 @@
+{
+  "schema": "commons.kimberling23_quadratic_beatty_delivery/v1",
+  "operation_id": "KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+  "date_utc": "2026-10-04",
+  "module_path": "research/ppl034_kimberling_beatty/quadratic_beatty_index.cjs",
+  "sources": [
+    {
+      "source_id": "Kimberling-special-numbers-23",
+      "author": "Clark Kimberling",
+      "url": "https://faculty.evansville.edu/ck6/integer/unsolved.html",
+      "section": "23. Special Numbers",
+      "use": "The question asks which real slopes yield a homogeneous linearly recurrent subsequence in floor(n*r). The quadratic/r>1 hypotheses here belong to this construction."
+    },
+    {
+      "source_id": "Conrad-generalized-Pell",
+      "author": "Brian Conrad",
+      "title": "Math 154. Generalized Pell equation",
+      "url": "https://math.stanford.edu/~conrad/154Page/handouts/genpell.pdf",
+      "use": "Positive norm-one units exist for every positive nonsquare integer D; a fundamental unit is not required. Example 3.1 explicitly records the unit 4+sqrt(15). Its generalized-Pell search and example were not replayed."
+    },
+    {
+      "source_id": "Silber-Wythoff-1976",
+      "author": "Robert Silber",
+      "title": "A Fibonacci Property of Wythoff Pairs",
+      "publication": "Fibonacci Quarterly 14(4) (1976), 380-384",
+      "url": "https://www.fq.math.ca/Scanned/14-4/silber2.pdf",
+      "use": "Prior recurrence constructions for the golden-ratio Beatty/Wythoff setting. No exact match to the entire present parameterized family or novelty claim is asserted."
+    }
+  ],
+  "request": {
+    "source_id": "New quadratic Beatty subsequence at (7-sqrt(15))/2, using the source-listed Pell unit 4+sqrt(15)",
+    "D": "15",
+    "u": "7",
+    "v": "2",
+    "sign": -1,
+    "p": "4",
+    "q": "1"
+  },
+  "compilation": {
+    "schema": "kimberling.quadratic_beatty_compilation/v1",
+    "status": "CERTIFIED_QUADRATIC_BEATTY_INPUT",
+    "source_id": "New quadratic Beatty subsequence at (7-sqrt(15))/2, using the source-listed Pell unit 4+sqrt(15)",
+    "parameters": {
+      "D": "15",
+      "u": "7",
+      "v": "2",
+      "sign": -1,
+      "p": "4",
+      "q": "1"
+    },
+    "certificate": {
+      "positive_nonsquare_D": true,
+      "sqrt_floor": "3",
+      "sqrt_lower_squared_gap": "6",
+      "sqrt_upper_squared_gap": "1",
+      "pell_norm": "1",
+      "positive_p_and_q": true,
+      "fundamental_unit_checked": false,
+      "slope_greater_than_one": true,
+      "seed_side": "ceiling",
+      "seed_norm": "1",
+      "conjugate_multiplier": "p-q*sqrt(D)=1/(p+q*sqrt(D)), strictly between zero and one",
+      "recurrence": {
+        "lag_one": "8",
+        "lag_two": "-1",
+        "homogeneous": true
+      },
+      "indices_and_values_strictly_increasing": true,
+      "mathematical_construction_for_every_integer_index_ge_zero": true
+    },
+    "initial_states": [
+      [
+        0,
+        "4",
+        "1",
+        "2",
+        "3"
+      ],
+      [
+        1,
+        "31",
+        "8",
+        "16",
+        "25"
+      ]
+    ],
+    "snapshot": {
+      "schema": "kimberling.quadratic_beatty_pell_index/v1",
+      "source_id": "New quadratic Beatty subsequence at (7-sqrt(15))/2, using the source-listed Pell unit 4+sqrt(15)",
+      "max_index": 256,
+      "parameters": {
+        "D": "15",
+        "u": "7",
+        "v": "2",
+        "sign": -1,
+        "p": "4",
+        "q": "1"
+      },
+      "sqrt_floor": "3",
+      "seed_norm": "1",
+      "recurrence_coefficient": "8",
+      "initial_state_columns": [
+        "index",
+        "x",
+        "z",
+        "beatty_index",
+        "value"
+      ],
+      "initial_states": [
+        [
+          0,
+          "4",
+          "1",
+          "2",
+          "3"
+        ],
+        [
+          1,
+          "31",
+          "8",
+          "16",
+          "25"
+        ]
+      ],
+      "power_columns": [
+        "exponent",
+        "p_component",
+        "q_component",
+        "D_times_q_component"
+      ],
+      "power_basis": [
+        [
+          1,
+          "4",
+          "1",
+          "15"
+        ],
+        [
+          2,
+          "31",
+          "8",
+          "120"
+        ],
+        [
+          4,
+          "1921",
+          "496",
+          "7440"
+        ],
+        [
+          8,
+          "7380481",
+          "1905632",
+          "28584480"
+        ],
+        [
+          16,
+          "108942999582721",
+          "28128961537984",
+          "421934423069760"
+        ],
+        [
+          32,
+          "23737154316161495960243527681",
+          "6128906890189931940783148928",
+          "91933603352848979111747233920"
+        ],
+        [
+          64,
+          "1126904990058528673830897031906808442930637286502826475521",
+          "290965617283647749462762752238980573622074160924626951936",
+          "4364484259254716241941441283584708604331112413869404279040"
+        ],
+        [
+          128,
+          "2539829713237625218399332337048693659340017914743172638480036922118997742101486650116884451664904432993741624442881",
+          "655781212104805451963714799695296251927861628274539138421915993159673794265629975780579064415170068939407895117312",
+          "9836718181572081779455721995429443778917924424118087076328739897395106913984449636708685966227551034091118426759680"
+        ],
+        [
+          256,
+          "12901469944489435099107885764830672318207423739757143445989894048446280363626932800054251447530176201465257300496901933167308283750023798389304602778214262541325429465412697950335382975827351019475397568173263295119889107263160321",
+          "3331145215773540621460840649033720122716329001707748333350757600397939415340357515661580526940201835337804818264106747594748956343682105813242441658496370446689607616613032743330983195232078556441587612596006642074410784276511744",
+          "49967178236603109321912609735505801840744935025616225000261364005969091230105362734923707904103027530067072273961601213921234345155231587198636624877445556700344114249195491149964747928481178346623814188940099631116161764147676160"
+        ]
+      ]
+    },
+    "work": {
+      "integer_sqrt_iterations": 2,
+      "pell_norm_checks": 1,
+      "power_squarings": 8,
+      "initial_state_matrix_applications": 1,
+      "fundamental_unit_search_steps": 0,
+      "irrational_sqrt_or_floor_evaluations": 0
+    },
+    "scope": "An explicit sufficient quadratic family. No full characterization, minimal recurrence order, or novelty claim."
+  },
+  "retained_consumer": {
+    "runtime": "fresh_connected_v8",
+    "compiler_replayed": false,
+    "pell_identity_rechecked": false,
+    "power_basis_recomputed": false,
+    "prefix_page": {
+      "status": "INDEX_PAGE",
+      "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+      "start_index": 0,
+      "records": [
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 0,
+          "x": "4",
+          "z": "1",
+          "beatty_index": "2",
+          "value": "3",
+          "floor_witness": {
+            "sqrt_interval_lower": "3",
+            "sqrt_interval_upper": "4",
+            "lower_squared_gap": "6",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_initial_state",
+            "power_exponents_used": []
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 1,
+          "x": "31",
+          "z": "8",
+          "beatty_index": "16",
+          "value": "25",
+          "floor_witness": {
+            "sqrt_interval_lower": "30",
+            "sqrt_interval_upper": "31",
+            "lower_squared_gap": "60",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_initial_state",
+            "power_exponents_used": []
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 2,
+          "x": "244",
+          "z": "63",
+          "beatty_index": "126",
+          "value": "197",
+          "floor_witness": {
+            "sqrt_interval_lower": "243",
+            "sqrt_interval_upper": "244",
+            "lower_squared_gap": "486",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              2
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 3,
+          "x": "1921",
+          "z": "496",
+          "beatty_index": "992",
+          "value": "1551",
+          "floor_witness": {
+            "sqrt_interval_lower": "1920",
+            "sqrt_interval_upper": "1921",
+            "lower_squared_gap": "3840",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              1,
+              2
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 4,
+          "x": "15124",
+          "z": "3905",
+          "beatty_index": "7810",
+          "value": "12211",
+          "floor_witness": {
+            "sqrt_interval_lower": "15123",
+            "sqrt_interval_upper": "15124",
+            "lower_squared_gap": "30246",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              4
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 5,
+          "x": "119071",
+          "z": "30744",
+          "beatty_index": "61488",
+          "value": "96137",
+          "floor_witness": {
+            "sqrt_interval_lower": "119070",
+            "sqrt_interval_upper": "119071",
+            "lower_squared_gap": "238140",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              1,
+              4
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 6,
+          "x": "937444",
+          "z": "242047",
+          "beatty_index": "484094",
+          "value": "756885",
+          "floor_witness": {
+            "sqrt_interval_lower": "937443",
+            "sqrt_interval_upper": "937444",
+            "lower_squared_gap": "1874886",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              2,
+              4
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 7,
+          "x": "7380481",
+          "z": "1905632",
+          "beatty_index": "3811264",
+          "value": "5958943",
+          "floor_witness": {
+            "sqrt_interval_lower": "7380480",
+            "sqrt_interval_upper": "7380481",
+            "lower_squared_gap": "14760960",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              1,
+              2,
+              4
+            ]
+          }
+        }
+      ],
+      "next_index": 8,
+      "max_index": 256,
+      "mathematical_sequence_infinite": true
+    },
+    "threshold": "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "lower_bound": {
+      "status": "FOUND_IN_INDEX_RANGE",
+      "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+      "target": "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "index": 223,
+      "term": {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 223,
+        "x": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189121",
+        "z": "70167324427459334519089311848241041285492242373211102235487620248761624463569593974701582282322637151785496424563213916527886971640238264560712859233283721740928162025417456846592955154230648502299776",
+        "beatty_index": "140334648854918669038178623696482082570984484746422204470975240497523248927139187949403164564645274303570992849126427833055773943280476529121425718466567443481856324050834913693185910308461297004599552",
+        "value": "219414392036732466074842761967576947121609498234669304828852006249708345189018463957937310371983016017274163900087233022066080408302200359827326793471080509701878060466438059620033498764245508206909311",
+        "floor_witness": {
+          "sqrt_interval_lower": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189120",
+          "sqrt_interval_upper": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189121",
+          "lower_squared_gap": "543513757910965751117564841940220683753672396755616821639122670983246052111937387729947531208550888090448622143710528787258256786358934984195326442323811084969238147422968276612234374630738062618378240",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            64,
+            128
+          ]
+        }
+      },
+      "previous": {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 222,
+        "x": "34517649410041484448790006156825748224961157913067109745931038235067737270330865839371328182262218904114797918972848826598208998114295999979959996148366343824553864464674700525574421948016397702259844",
+        "z": "8912418754354462517574826422853823265132771115035998122389145503423471798309682033832563525015104561917674626397591272482419493381485566145188215771229344479093574390185689080254633301553562700009983",
+        "beatty_index": "17824837508708925035149652845707646530265542230071996244778291006846943596619364067665127050030209123835349252795182544964838986762971132290376431542458688958187148780371378160509266603107125400019966",
+        "value": "27869281870439753174233778803151014630968239892184877110792980288896565317836908397456616492843513029308924465810290080778727455556102963036357514250239067529101156266625123036208011162858541197810037",
+        "floor_witness": {
+          "sqrt_interval_lower": "34517649410041484448790006156825748224961157913067109745931038235067737270330865839371328182262218904114797918972848826598208998114295999979959996148366343824553864464674700525574421948016397702259843",
+          "sqrt_interval_upper": "34517649410041484448790006156825748224961157913067109745931038235067737270330865839371328182262218904114797918972848826598208998114295999979959996148366343824553864464674700525574421948016397702259844",
+          "lower_squared_gap": "69035298820082968897580012313651496449922315826134219491862076470135474540661731678742656364524437808229595837945697653196417996228591999959919992296732687649107728929349401051148843896032795404519686",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            2,
+            4,
+            8,
+            16,
+            64,
+            128
+          ]
+        }
+      },
+      "trace": [
+        {
+          "index": 256,
+          "value": "82009297638524333376314585731930378549934548241472158671529530950512053490305446103763301192813152463787234538924093518233661283717938770740065549895095603430941187412207519514308930465499074292166831668267876232327007517384133635",
+          "at_least_target": true
+        },
+        {
+          "index": 128,
+          "value": "16144644897075346530726289407184932253082254911798526714925018677432752551757649635498181192391924195193527509853699",
+          "at_least_target": false
+        },
+        {
+          "index": 192,
+          "value": "36386961794474338133502445993537423540976809391412401594648785884582761913553808636824267620990620896091125006920117300887336418160076036335446347699431282548058604399802627",
+          "at_least_target": false
+        },
+        {
+          "index": 224,
+          "value": "1727445854423419975424508316937464562341907745985169561520023069708770196194310803266041866483020615108884386734887574095749915810861499915582256833518405010085923327464879353924059978951105524457464451",
+          "at_least_target": true
+        },
+        {
+          "index": 208,
+          "value": "7928209527183805577283399263561360742478287648769846576171145058268936430631294596878563141043404692753733277708902722042384433186165667888172813286872346728617769406671902288888596293059",
+          "at_least_target": false
+        },
+        {
+          "index": 216,
+          "value": "117027999558797584035107976075207147456999842377882419845513580995286510956356982167047953770060345231701391151849068362145206031529892313252716387941808479887639450586730591928457416993106168355",
+          "at_least_target": false
+        },
+        {
+          "index": 220,
+          "value": "449621543844721377985968857898344778123127330292819349141708202816853511577517376268356073277192708268930145350410912531186433616883792671909049996417176718348361065878274320836713146124029806757843",
+          "at_least_target": false
+        },
+        {
+          "index": 222,
+          "value": "27869281870439753174233778803151014630968239892184877110792980288896565317836908397456616492843513029308924465810290080778727455556102963036357514250239067529101156266625123036208011162858541197810037",
+          "at_least_target": false
+        },
+        {
+          "index": 223,
+          "value": "219414392036732466074842761967576947121609498234669304828852006249708345189018463957937310371983016017274163900087233022066080408302200359827326793471080509701878060466438059620033498764245508206909311",
+          "at_least_target": true
+        }
+      ],
+      "interpretation": "First constructed subsequence value at least the target; this does not search every value in the full Beatty sequence."
+    },
+    "threshold_page": {
+      "status": "INDEX_PAGE",
+      "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+      "start_index": 223,
+      "records": [
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 223,
+          "x": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189121",
+          "z": "70167324427459334519089311848241041285492242373211102235487620248761624463569593974701582282322637151785496424563213916527886971640238264560712859233283721740928162025417456846592955154230648502299776",
+          "beatty_index": "140334648854918669038178623696482082570984484746422204470975240497523248927139187949403164564645274303570992849126427833055773943280476529121425718466567443481856324050834913693185910308461297004599552",
+          "value": "219414392036732466074842761967576947121609498234669304828852006249708345189018463957937310371983016017274163900087233022066080408302200359827326793471080509701878060466438059620033498764245508206909311",
+          "floor_witness": {
+            "sqrt_interval_lower": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189120",
+            "sqrt_interval_upper": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189121",
+            "lower_squared_gap": "543513757910965751117564841940220683753672396755616821639122670983246052111937387729947531208550888090448622143710528787258256786358934984195326442323811084969238147422968276612234374630738062618378240",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              64,
+              128
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 224,
+          "x": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253124",
+          "z": "552426176665320213635139668363074507018805167870652819761511816486669523910247069763780094733565992652366296770108120059740676279740420550340514658095040429448331721813153965692489007932291625318388225",
+          "beatty_index": "1104852353330640427270279336726149014037610335741305639523023632973339047820494139527560189467131985304732593540216240119481352559480841100681029316190080858896663443626307931384978015864583250636776450",
+          "value": "1727445854423419975424508316937464562341907745985169561520023069708770196194310803266041866483020615108884386734887574095749915810861499915582256833518405010085923327464879353924059978951105524457464451",
+          "floor_witness": {
+            "sqrt_interval_lower": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253123",
+            "sqrt_interval_upper": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253124",
+            "lower_squared_gap": "4279074764467643040042938723208113973579456858218800353621119291395832942354837370160837593303882666915359381311738532644869636294642887873602691546293755992104797450454396811846726153149871705542506246",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              32,
+              64,
+              128
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 225,
+          "x": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835871",
+          "z": "4349242088895102374562028035056355014864949100592011455856606911644594566818406964135539175586205304067144877736301746561397523266283126138163404405527039713845725612479814268693319108304102354044806024",
+          "beatty_index": "8698484177790204749124056070112710029729898201184022911713213823289189133636813928271078351172410608134289755472603493122795046532566252276326808811054079427691451224959628537386638216608204708089612048",
+          "value": "13600152443350627337321223773532139551613652469646687187331332551420453224365467962170397621492181904853800929979013359743933246078589798964830727874676159570985508559252596771772446332844598687452806297",
+          "floor_witness": {
+            "sqrt_interval_lower": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835870",
+            "sqrt_interval_upper": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835871",
+            "lower_squared_gap": "33689084357830178569225944943724691104881982468994786007329831660183417486726761573556753215222510447232426428350197732371698833570784168004626205928026236851869141456212206218161574850568235581721671740",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              1,
+              32,
+              64,
+              128
+            ]
+          }
+        },
+        {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 226,
+          "x": "132616800049086892756882310413294707432738201446869743852508766995035753475729627609146594064238100455472026022744921663164360516135815228081703477938958069411424167099621626466722936325698006474115433844",
+          "z": "34241510534495498782861084612087765611900787636865438827091343476670087010637008643320533309956076439884792725120305852431439509850524588554966720586121277281317473178025360183854063858500527207040059967",
+          "beatty_index": "68483021068990997565722169224175531223801575273730877654182686953340174021274017286641066619912152879769585450240611704862879019701049177109933441172242554562634946356050720367708127717001054414080119934",
+          "value": "107073773692381598723145281871319651850567312011188327937130637341654855598729432894097139105454434623721523053097219303855716052817856891803063566163890871557798145146555894820255510683805683975164985925",
+          "floor_witness": {
+            "sqrt_interval_lower": "132616800049086892756882310413294707432738201446869743852508766995035753475729627609146594064238100455472026022744921663164360516135815228081703477938958069411424167099621626466722936325698006474115433843",
+            "sqrt_interval_upper": "132616800049086892756882310413294707432738201446869743852508766995035753475729627609146594064238100455472026022744921663164360516135815228081703477938958069411424167099621626466722936325698006474115433844",
+            "lower_squared_gap": "265233600098173785513764620826589414865476402893739487705017533990071506951459255218293188128476200910944052045489843326328721032271630456163406955877916138822848334199243252933445872651396012948230867686",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              2,
+              32,
+              64,
+              128
+            ]
+          }
+        }
+      ],
+      "next_index": 227,
+      "max_index": 256,
+      "mathematical_sequence_infinite": true
+    },
+    "ranked_page_term": {
+      "status": "MEMBER_OF_CONSTRUCTED_SUBSEQUENCE",
+      "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+      "value": "13600152443350627337321223773532139551613652469646687187331332551420453224365467962170397621492181904853800929979013359743933246078589798964830727874676159570985508559252596771772446332844598687452806297",
+      "rank": 225,
+      "lower_bound": {
+        "status": "FOUND_IN_INDEX_RANGE",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "target": "13600152443350627337321223773532139551613652469646687187331332551420453224365467962170397621492181904853800929979013359743933246078589798964830727874676159570985508559252596771772446332844598687452806297",
+        "index": 225,
+        "term": {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 225,
+          "x": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835871",
+          "z": "4349242088895102374562028035056355014864949100592011455856606911644594566818406964135539175586205304067144877736301746561397523266283126138163404405527039713845725612479814268693319108304102354044806024",
+          "beatty_index": "8698484177790204749124056070112710029729898201184022911713213823289189133636813928271078351172410608134289755472603493122795046532566252276326808811054079427691451224959628537386638216608204708089612048",
+          "value": "13600152443350627337321223773532139551613652469646687187331332551420453224365467962170397621492181904853800929979013359743933246078589798964830727874676159570985508559252596771772446332844598687452806297",
+          "floor_witness": {
+            "sqrt_interval_lower": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835870",
+            "sqrt_interval_upper": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835871",
+            "lower_squared_gap": "33689084357830178569225944943724691104881982468994786007329831660183417486726761573556753215222510447232426428350197732371698833570784168004626205928026236851869141456212206218161574850568235581721671740",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              1,
+              32,
+              64,
+              128
+            ]
+          }
+        },
+        "previous": {
+          "status": "EXACT_CONSTRUCTED_TERM",
+          "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+          "index": 224,
+          "x": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253124",
+          "z": "552426176665320213635139668363074507018805167870652819761511816486669523910247069763780094733565992652366296770108120059740676279740420550340514658095040429448331721813153965692489007932291625318388225",
+          "beatty_index": "1104852353330640427270279336726149014037610335741305639523023632973339047820494139527560189467131985304732593540216240119481352559480841100681029316190080858896663443626307931384978015864583250636776450",
+          "value": "1727445854423419975424508316937464562341907745985169561520023069708770196194310803266041866483020615108884386734887574095749915810861499915582256833518405010085923327464879353924059978951105524457464451",
+          "floor_witness": {
+            "sqrt_interval_lower": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253123",
+            "sqrt_interval_upper": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253124",
+            "lower_squared_gap": "4279074764467643040042938723208113973579456858218800353621119291395832942354837370160837593303882666915359381311738532644869636294642887873602691546293755992104797450454396811846726153149871705542506246",
+            "upper_squared_gap": "1",
+            "preserved_norm": "1",
+            "identities": [
+              "D*z^2-lower^2=lower_squared_gap",
+              "upper^2-D*z^2=upper_squared_gap"
+            ],
+            "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+            "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+          },
+          "construction": {
+            "from": "retained_power_basis",
+            "power_exponents_used": [
+              32,
+              64,
+              128
+            ]
+          }
+        },
+        "trace": [
+          {
+            "index": 256,
+            "value": "82009297638524333376314585731930378549934548241472158671529530950512053490305446103763301192813152463787234538924093518233661283717938770740065549895095603430941187412207519514308930465499074292166831668267876232327007517384133635",
+            "at_least_target": true
+          },
+          {
+            "index": 128,
+            "value": "16144644897075346530726289407184932253082254911798526714925018677432752551757649635498181192391924195193527509853699",
+            "at_least_target": false
+          },
+          {
+            "index": 192,
+            "value": "36386961794474338133502445993537423540976809391412401594648785884582761913553808636824267620990620896091125006920117300887336418160076036335446347699431282548058604399802627",
+            "at_least_target": false
+          },
+          {
+            "index": 224,
+            "value": "1727445854423419975424508316937464562341907745985169561520023069708770196194310803266041866483020615108884386734887574095749915810861499915582256833518405010085923327464879353924059978951105524457464451",
+            "at_least_target": false
+          },
+          {
+            "index": 240,
+            "value": "376386265995247527389443891285981382136548555345503411143899246901059402309211919708722017710149125304646370387198814803688857401410777253616701243837109662373962773832551889299790601992967160981790472801524786409283",
+            "at_least_target": true
+          },
+          {
+            "index": 232,
+            "value": "25498762614201517139282542337413835673099456038845283461311344888674662419175771096688563524582773896885098234641747854108397019718963642310881371101492249938099989163142752838407013504426140047089710271393507",
+            "at_least_target": true
+          },
+          {
+            "index": 228,
+            "value": "6636846523073235700859582967704880950172831436947691162540579492112892276925030528630756582671691926055625544905292709264958645358896265791874358845327715631573399075759000599501917602417001300935771662899",
+            "at_least_target": true
+          },
+          {
+            "index": 226,
+            "value": "107073773692381598723145281871319651850567312011188327937130637341654855598729432894097139105454434623721523053097219303855716052817856891803063566163890871557798145146555894820255510683805683975164985925",
+            "at_least_target": true
+          },
+          {
+            "index": 225,
+            "value": "13600152443350627337321223773532139551613652469646687187331332551420453224365467962170397621492181904853800929979013359743933246078589798964830727874676159570985508559252596771772446332844598687452806297",
+            "at_least_target": true
+          }
+        ],
+        "interpretation": "First constructed subsequence value at least the target; this does not search every value in the full Beatty sequence."
+      },
+      "scope": "Membership and zero-based rank in this constructed subsequence, not in the entire Beatty sequence."
+    },
+    "all_queried_terms": [
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 0,
+        "x": "4",
+        "z": "1",
+        "beatty_index": "2",
+        "value": "3",
+        "floor_witness": {
+          "sqrt_interval_lower": "3",
+          "sqrt_interval_upper": "4",
+          "lower_squared_gap": "6",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_initial_state",
+          "power_exponents_used": []
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 1,
+        "x": "31",
+        "z": "8",
+        "beatty_index": "16",
+        "value": "25",
+        "floor_witness": {
+          "sqrt_interval_lower": "30",
+          "sqrt_interval_upper": "31",
+          "lower_squared_gap": "60",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_initial_state",
+          "power_exponents_used": []
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 2,
+        "x": "244",
+        "z": "63",
+        "beatty_index": "126",
+        "value": "197",
+        "floor_witness": {
+          "sqrt_interval_lower": "243",
+          "sqrt_interval_upper": "244",
+          "lower_squared_gap": "486",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            2
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 3,
+        "x": "1921",
+        "z": "496",
+        "beatty_index": "992",
+        "value": "1551",
+        "floor_witness": {
+          "sqrt_interval_lower": "1920",
+          "sqrt_interval_upper": "1921",
+          "lower_squared_gap": "3840",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            1,
+            2
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 4,
+        "x": "15124",
+        "z": "3905",
+        "beatty_index": "7810",
+        "value": "12211",
+        "floor_witness": {
+          "sqrt_interval_lower": "15123",
+          "sqrt_interval_upper": "15124",
+          "lower_squared_gap": "30246",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            4
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 5,
+        "x": "119071",
+        "z": "30744",
+        "beatty_index": "61488",
+        "value": "96137",
+        "floor_witness": {
+          "sqrt_interval_lower": "119070",
+          "sqrt_interval_upper": "119071",
+          "lower_squared_gap": "238140",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            1,
+            4
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 6,
+        "x": "937444",
+        "z": "242047",
+        "beatty_index": "484094",
+        "value": "756885",
+        "floor_witness": {
+          "sqrt_interval_lower": "937443",
+          "sqrt_interval_upper": "937444",
+          "lower_squared_gap": "1874886",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            2,
+            4
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 7,
+        "x": "7380481",
+        "z": "1905632",
+        "beatty_index": "3811264",
+        "value": "5958943",
+        "floor_witness": {
+          "sqrt_interval_lower": "7380480",
+          "sqrt_interval_upper": "7380481",
+          "lower_squared_gap": "14760960",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            1,
+            2,
+            4
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 128,
+        "x": "19996037034522582653053051343624218416277996083090777630248887585871097882390396237176223772887168766066084924531204",
+        "z": "5162954561656847026254191535829878667051464427841329192167700894757692919164006553239200709325584708751373204912129",
+        "beatty_index": "10325909123313694052508383071659757334102928855682658384335401789515385838328013106478401418651169417502746409824258",
+        "value": "16144644897075346530726289407184932253082254911798526714925018677432752551757649635498181192391924195193527509853699",
+        "floor_witness": {
+          "sqrt_interval_lower": "19996037034522582653053051343624218416277996083090777630248887585871097882390396237176223772887168766066084924531203",
+          "sqrt_interval_upper": "19996037034522582653053051343624218416277996083090777630248887585871097882390396237176223772887168766066084924531204",
+          "lower_squared_gap": "39992074069045165306106102687248436832555992166181555260497775171742195764780792474352447545774337532132169849062406",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 192,
+        "x": "45067267831197284377834064133911569097658856021519347981586981244144869284322876733339251225488577523049501768091037718601696686354969790342050947019077025629321280303133444",
+        "z": "11636318517953088930190930018206998948376523630418821368033681018389661599696669338594788406639885488448660967858736431355576157787863689525356756388358329739625697814705153",
+        "beatty_index": "23272637035906177860381860036413997896753047260837642736067362036779323199393338677189576813279770976897321935717472862711152315575727379050713512776716659479251395629410306",
+        "value": "36386961794474338133502445993537423540976809391412401594648785884582761913553808636824267620990620896091125006920117300887336418160076036335446347699431282548058604399802627",
+        "floor_witness": {
+          "sqrt_interval_lower": "45067267831197284377834064133911569097658856021519347981586981244144869284322876733339251225488577523049501768091037718601696686354969790342050947019077025629321280303133443",
+          "sqrt_interval_upper": "45067267831197284377834064133911569097658856021519347981586981244144869284322876733339251225488577523049501768091037718601696686354969790342050947019077025629321280303133444",
+          "lower_squared_gap": "90134535662394568755668128267823138195317712043038695963173962488289738568645753466678502450977155046099003536182075437203393372709939580684101894038154051258642560606266886",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 208,
+        "x": "9819526681057002597280409641878176498386738641435769476073837314966564391942594195463835696070394580574791073150844964681284101341316297293532535034121054383546292188542980591816330094404",
+        "z": "2535390886891544024937686986491362462980718041457945150320711767605071546081984113191771262444828467618360621551392526674809790646783137883100764045856200158880580227887840411529275198209",
+        "beatty_index": "5070781773783088049875373972982724925961436082915890300641423535210143092163968226383542524889656935236721243102785053349619581293566275766201528091712400317761160455775680823058550396418",
+        "value": "7928209527183805577283399263561360742478287648769846576171145058268936430631294596878563141043404692753733277708902722042384433186165667888172813286872346728617769406671902288888596293059",
+        "floor_witness": {
+          "sqrt_interval_lower": "9819526681057002597280409641878176498386738641435769476073837314966564391942594195463835696070394580574791073150844964681284101341316297293532535034121054383546292188542980591816330094403",
+          "sqrt_interval_upper": "9819526681057002597280409641878176498386738641435769476073837314966564391942594195463835696070394580574791073150844964681284101341316297293532535034121054383546292188542980591816330094404",
+          "lower_squared_gap": "19639053362114005194560819283756352996773477282871538952147674629933128783885188390927671392140789161149582146301689929362568202682632594587065070068242108767092584377085961183632660188806",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            16,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 216,
+        "x": "144945660197067869936129529945721306456812930436776313328982290007073559637558422794179047357898272300502891413882770046661455330098819116322004425554660429895248890030445302427819516069178124644",
+        "z": "37424808536552207710176786574418350559116110402094104739213695857480010084845057851603857303994088218886326080818834058400951623089815918510674401928066987111841191516739413479468133294612041857",
+        "beatty_index": "74849617073104415420353573148836701118232220804188209478427391714960020169690115703207714607988176437772652161637668116801903246179631837021348803856133974223682383033478826958936266589224083714",
+        "value": "117027999558797584035107976075207147456999842377882419845513580995286510956356982167047953770060345231701391151849068362145206031529892313252716387941808479887639450586730591928457416993106168355",
+        "floor_witness": {
+          "sqrt_interval_lower": "144945660197067869936129529945721306456812930436776313328982290007073559637558422794179047357898272300502891413882770046661455330098819116322004425554660429895248890030445302427819516069178124643",
+          "sqrt_interval_upper": "144945660197067869936129529945721306456812930436776313328982290007073559637558422794179047357898272300502891413882770046661455330098819116322004425554660429895248890030445302427819516069178124644",
+          "lower_squared_gap": "289891320394135739872259059891442612913625860873552626657964580014147119275116845588358094715796544601005782827765540093322910660197638232644008851109320859790497780060890604855639032138356249286",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            8,
+            16,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 220,
+        "x": "556881188750515803511020119139403157863361500760627437164724876283239583094996960603550648316238597437780320447360926654139735764908061956173988051835321069940871582633026662251084202080804768857204",
+        "z": "143786104656462454499569853862535419426641261579063826615204725585727584953216333838843817370490186529530066542538834169332309911684550661154719721178928255469890378358757283298256764029262082230721",
+        "beatty_index": "287572209312924908999139707725070838853282523158127653230409451171455169906432667677687634740980373059060133085077668338664619823369101322309439442357856510939780756717514566596513528058524164461442",
+        "value": "449621543844721377985968857898344778123127330292819349141708202816853511577517376268356073277192708268930145350410912531186433616883792671909049996417176718348361065878274320836713146124029806757843",
+        "floor_witness": {
+          "sqrt_interval_lower": "556881188750515803511020119139403157863361500760627437164724876283239583094996960603550648316238597437780320447360926654139735764908061956173988051835321069940871582633026662251084202080804768857203",
+          "sqrt_interval_upper": "556881188750515803511020119139403157863361500760627437164724876283239583094996960603550648316238597437780320447360926654139735764908061956173988051835321069940871582633026662251084202080804768857204",
+          "lower_squared_gap": "1113762377501031607022040238278806315726723001521254874329449752566479166189993921207101296632477194875560640894721853308279471529816123912347976103670642139881743165266053324502168404161609537714406",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            4,
+            8,
+            16,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 222,
+        "x": "34517649410041484448790006156825748224961157913067109745931038235067737270330865839371328182262218904114797918972848826598208998114295999979959996148366343824553864464674700525574421948016397702259844",
+        "z": "8912418754354462517574826422853823265132771115035998122389145503423471798309682033832563525015104561917674626397591272482419493381485566145188215771229344479093574390185689080254633301553562700009983",
+        "beatty_index": "17824837508708925035149652845707646530265542230071996244778291006846943596619364067665127050030209123835349252795182544964838986762971132290376431542458688958187148780371378160509266603107125400019966",
+        "value": "27869281870439753174233778803151014630968239892184877110792980288896565317836908397456616492843513029308924465810290080778727455556102963036357514250239067529101156266625123036208011162858541197810037",
+        "floor_witness": {
+          "sqrt_interval_lower": "34517649410041484448790006156825748224961157913067109745931038235067737270330865839371328182262218904114797918972848826598208998114295999979959996148366343824553864464674700525574421948016397702259843",
+          "sqrt_interval_upper": "34517649410041484448790006156825748224961157913067109745931038235067737270330865839371328182262218904114797918972848826598208998114295999979959996148366343824553864464674700525574421948016397702259844",
+          "lower_squared_gap": "69035298820082968897580012313651496449922315826134219491862076470135474540661731678742656364524437808229595837945697653196417996228591999959919992296732687649107728929349401051148843896032795404519686",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            2,
+            4,
+            8,
+            16,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 223,
+        "x": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189121",
+        "z": "70167324427459334519089311848241041285492242373211102235487620248761624463569593974701582282322637151785496424563213916527886971640238264560712859233283721740928162025417456846592955154230648502299776",
+        "beatty_index": "140334648854918669038178623696482082570984484746422204470975240497523248927139187949403164564645274303570992849126427833055773943280476529121425718466567443481856324050834913693185910308461297004599552",
+        "value": "219414392036732466074842761967576947121609498234669304828852006249708345189018463957937310371983016017274163900087233022066080408302200359827326793471080509701878060466438059620033498764245508206909311",
+        "floor_witness": {
+          "sqrt_interval_lower": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189120",
+          "sqrt_interval_upper": "271756878955482875558782420970110341876836198377808410819561335491623026055968693864973765604275444045224311071855264393629128393179467492097663221161905542484619073711484138306117187315369031309189121",
+          "lower_squared_gap": "543513757910965751117564841940220683753672396755616821639122670983246052111937387729947531208550888090448622143710528787258256786358934984195326442323811084969238147422968276612234374630738062618378240",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 224,
+        "x": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253124",
+        "z": "552426176665320213635139668363074507018805167870652819761511816486669523910247069763780094733565992652366296770108120059740676279740420550340514658095040429448331721813153965692489007932291625318388225",
+        "beatty_index": "1104852353330640427270279336726149014037610335741305639523023632973339047820494139527560189467131985304732593540216240119481352559480841100681029316190080858896663443626307931384978015864583250636776450",
+        "value": "1727445854423419975424508316937464562341907745985169561520023069708770196194310803266041866483020615108884386734887574095749915810861499915582256833518405010085923327464879353924059978951105524457464451",
+        "floor_witness": {
+          "sqrt_interval_lower": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253123",
+          "sqrt_interval_upper": "2139537382233821520021469361604056986789728429109400176810559645697916471177418685080418796651941333457679690655869266322434818147321443936801345773146877996052398725227198405923363076574935852771253124",
+          "lower_squared_gap": "4279074764467643040042938723208113973579456858218800353621119291395832942354837370160837593303882666915359381311738532644869636294642887873602691546293755992104797450454396811846726153149871705542506246",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            32,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 225,
+        "x": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835871",
+        "z": "4349242088895102374562028035056355014864949100592011455856606911644594566818406964135539175586205304067144877736301746561397523266283126138163404405527039713845725612479814268693319108304102354044806024",
+        "beatty_index": "8698484177790204749124056070112710029729898201184022911713213823289189133636813928271078351172410608134289755472603493122795046532566252276326808811054079427691451224959628537386638216608204708089612048",
+        "value": "13600152443350627337321223773532139551613652469646687187331332551420453224365467962170397621492181904853800929979013359743933246078589798964830727874676159570985508559252596771772446332844598687452806297",
+        "floor_witness": {
+          "sqrt_interval_lower": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835870",
+          "sqrt_interval_upper": "16844542178915089284612972471862345552440991234497393003664915830091708743363380786778376607611255223616213214175098866185849416785392084002313102964013118425934570728106103109080787425284117790860835871",
+          "lower_squared_gap": "33689084357830178569225944943724691104881982468994786007329831660183417486726761573556753215222510447232426428350197732371698833570784168004626205928026236851869141456212206218161574850568235581721671740",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            1,
+            32,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 226,
+        "x": "132616800049086892756882310413294707432738201446869743852508766995035753475729627609146594064238100455472026022744921663164360516135815228081703477938958069411424167099621626466722936325698006474115433844",
+        "z": "34241510534495498782861084612087765611900787636865438827091343476670087010637008643320533309956076439884792725120305852431439509850524588554966720586121277281317473178025360183854063858500527207040059967",
+        "beatty_index": "68483021068990997565722169224175531223801575273730877654182686953340174021274017286641066619912152879769585450240611704862879019701049177109933441172242554562634946356050720367708127717001054414080119934",
+        "value": "107073773692381598723145281871319651850567312011188327937130637341654855598729432894097139105454434623721523053097219303855716052817856891803063566163890871557798145146555894820255510683805683975164985925",
+        "floor_witness": {
+          "sqrt_interval_lower": "132616800049086892756882310413294707432738201446869743852508766995035753475729627609146594064238100455472026022744921663164360516135815228081703477938958069411424167099621626466722936325698006474115433843",
+          "sqrt_interval_upper": "132616800049086892756882310413294707432738201446869743852508766995035753475729627609146594064238100455472026022744921663164360516135815228081703477938958069411424167099621626466722936325698006474115433844",
+          "lower_squared_gap": "265233600098173785513764620826589414865476402893739487705017533990071506951459255218293188128476200910944052045489843326328721032271630456163406955877916138822848334199243252933445872651396012948230867686",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            2,
+            32,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 228,
+        "x": "8220102065661153529406681776262667803842978761276814718678732994046518799024059493082008413186110286905807933719529273849867917182273222697128814286442253425512245961451313642530898689116701465542385645204",
+        "z": "2122421226962055604323752106281078393430830028317786554459901783737058725135584288816109285122543173280204782660688854730689508934452784069857596161681424151012235005315759177433259470219100395211165329729",
+        "beatty_index": "4244842453924111208647504212562156786861660056635573108919803567474117450271168577632218570245086346560409565321377709461379017868905568139715192323362848302024470010631518354866518940438200790422330659458",
+        "value": "6636846523073235700859582967704880950172831436947691162540579492112892276925030528630756582671691926055625544905292709264958645358896265791874358845327715631573399075759000599501917602417001300935771662899",
+        "floor_witness": {
+          "sqrt_interval_lower": "8220102065661153529406681776262667803842978761276814718678732994046518799024059493082008413186110286905807933719529273849867917182273222697128814286442253425512245961451313642530898689116701465542385645203",
+          "sqrt_interval_upper": "8220102065661153529406681776262667803842978761276814718678732994046518799024059493082008413186110286905807933719529273849867917182273222697128814286442253425512245961451313642530898689116701465542385645204",
+          "lower_squared_gap": "16440204131322307058813363552525335607685957522553629437357465988093037598048118986164016826372220573811615867439058547699735834364546445394257628572884506851024491922902627285061797378233402931084771290406",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            4,
+            32,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 232,
+        "x": "31581629996732769626158951362931808098307737611097093039763515352567079527933965395002391243042239070350780623670740814261926215379475574280924967687165364513940052931497221787405306840223290455677992877620644",
+        "z": "8154341801562040966491641957192234824486741949991768071582122891605963135301390927384422109660716138176554122616069809767189033585491316655972334112665373493148577442091424946544617192092775786109671878430593",
+        "beatty_index": "16308683603124081932983283914384469648973483899983536143164245783211926270602781854768844219321432276353108245232139619534378067170982633311944668225330746986297154884182849893089234384185551572219343756861186",
+        "value": "25498762614201517139282542337413835673099456038845283461311344888674662419175771096688563524582773896885098234641747854108397019718963642310881371101492249938099989163142752838407013504426140047089710271393507",
+        "floor_witness": {
+          "sqrt_interval_lower": "31581629996732769626158951362931808098307737611097093039763515352567079527933965395002391243042239070350780623670740814261926215379475574280924967687165364513940052931497221787405306840223290455677992877620643",
+          "sqrt_interval_upper": "31581629996732769626158951362931808098307737611097093039763515352567079527933965395002391243042239070350780623670740814261926215379475574280924967687165364513940052931497221787405306840223290455677992877620644",
+          "lower_squared_gap": "63163259993465539252317902725863616196615475222194186079527030705134159055867930790004782486084478140701561247341481628523852430758951148561849935374330729027880105862994443574810613680446580911355985755241286",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            8,
+            32,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 240,
+        "x": "466175240279830397069104253206564606461051175126388178941984629705482452803165503788474109628994174893566547515006647991478695042753932097070763451437539031960644444721823041510736585668470138568148962166976205246404",
+        "z": "120365929467868274922649734927506569799657104353127370012269125229505979301768203356742303905591900028316131128886494685023936063452101335812494956467806956333515316936339275830075312523062471364277062138357284522241",
+        "beatty_index": "240731858935736549845299469855013139599314208706254740024538250459011958603536406713484607811183800056632262257772989370047872126904202671624989912935613912667030633872678551660150625046124942728554124276714569044482",
+        "value": "376386265995247527389443891285981382136548555345503411143899246901059402309211919708722017710149125304646370387198814803688857401410777253616701243837109662373962773832551889299790601992967160981790472801524786409283",
+        "floor_witness": {
+          "sqrt_interval_lower": "466175240279830397069104253206564606461051175126388178941984629705482452803165503788474109628994174893566547515006647991478695042753932097070763451437539031960644444721823041510736585668470138568148962166976205246403",
+          "sqrt_interval_upper": "466175240279830397069104253206564606461051175126388178941984629705482452803165503788474109628994174893566547515006647991478695042753932097070763451437539031960644444721823041510736585668470138568148962166976205246404",
+          "lower_squared_gap": "932350480559660794138208506413129212922102350252776357883969259410964905606331007576948219257988349787133095030013295982957390085507864194141526902875078063921288889443646083021473171336940277136297924333952410492806",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            16,
+            32,
+            64,
+            128
+          ]
+        }
+      },
+      {
+        "status": "EXACT_CONSTRUCTED_TERM",
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "index": 256,
+        "x": "101573058014560849718344152794828491113574629984644798784220940199754212684613093935140713694223732335928101475949208946590467480155326780755855035990302606865645832110846282951306279831790582424525404461633152811595718193200317444",
+        "z": "26226050807583597584951248360965552809072739746588136779392924450038038024988362862700573555290983542816476573553328923546304109124752221642274369412199744328083859931864828923659315756755665245241748018557289863417532244369207297",
+        "beatty_index": "52452101615167195169902496721931105618145479493176273558785848900076076049976725725401147110581967085632953147106657847092608218249504443284548738824399488656167719863729657847318631513511330490483496037114579726835064488738414594",
+        "value": "82009297638524333376314585731930378549934548241472158671529530950512053490305446103763301192813152463787234538924093518233661283717938770740065549895095603430941187412207519514308930465499074292166831668267876232327007517384133635",
+        "floor_witness": {
+          "sqrt_interval_lower": "101573058014560849718344152794828491113574629984644798784220940199754212684613093935140713694223732335928101475949208946590467480155326780755855035990302606865645832110846282951306279831790582424525404461633152811595718193200317443",
+          "sqrt_interval_upper": "101573058014560849718344152794828491113574629984644798784220940199754212684613093935140713694223732335928101475949208946590467480155326780755855035990302606865645832110846282951306279831790582424525404461633152811595718193200317444",
+          "lower_squared_gap": "203146116029121699436688305589656982227149259969289597568441880399508425369226187870281427388447464671856202951898417893180934960310653561511710071980605213731291664221692565902612559663581164849050808923266305623191436386400634886",
+          "upper_squared_gap": "1",
+          "preserved_norm": "1",
+          "identities": [
+            "D*z^2-lower^2=lower_squared_gap",
+            "upper^2-D*z^2=upper_squared_gap"
+          ],
+          "consequence": "value < beatty_index*(u+sign*sqrt(D))/v < value+1",
+          "derivation": "The supplied Pell power and seed premises preserve x^2-D*z^2. No new integer square root or direct square check was performed for this term."
+        },
+        "construction": {
+          "from": "retained_power_basis",
+          "power_exponents_used": [
+            256
+          ]
+        }
+      }
+    ],
+    "description": {
+      "status": "OPEN_RETAINED_QUADRATIC_BEATTY_INDEX",
+      "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+      "parameters": {
+        "D": "15",
+        "u": "7",
+        "v": "2",
+        "sign": -1,
+        "p": "4",
+        "q": "1"
+      },
+      "recurrence_coefficient": "8",
+      "max_index": 256,
+      "indexed_terms": 257,
+      "mathematical_sequence_infinite": true,
+      "boundary": {
+        "source_id": "The complete retained minus15 power basis of KIMBERLING23-QUADRATIC-BEATTY-PELL-20261004-7CA6",
+        "snapshot_source_id": "New quadratic Beatty subsequence at (7-sqrt(15))/2, using the source-listed Pell unit 4+sqrt(15)",
+        "source_authenticated": false,
+        "pell_norm_rechecked": false,
+        "nonsquare_and_slope_rechecked": false,
+        "seed_floor_rechecked": false,
+        "power_basis_recomputed": false,
+        "power_and_initial_state_relations_reverified": false,
+        "recurrence_coefficient_reverified": false,
+        "validation": "Bounded schema, indexed row coverage, canonical integers and positive numeric ranges only. Unit, seed, power, recurrence and monotonicity identities are trusted mathematical source premises."
+      }
+    },
+    "work": {
+      "term_requests": 34,
+      "cache_hits": 14,
+      "new_term_states": 20,
+      "quadratic_matrix_applications": 63,
+      "binary_search_comparisons": 18,
+      "pell_norm_checks": 0,
+      "power_squarings": 0,
+      "irrational_sqrt_or_floor_evaluations": 0
+    },
+    "observed_ms": 7,
+    "timing_is_benchmark": false
+  },
+  "execution": {
+    "runtime": "connected_v8",
+    "compiler_calls": 1,
+    "observed_ms": 1,
+    "timing_is_benchmark": false,
+    "fundamental_unit_searches": 0,
+    "source_generalized_pell_example_replayed": false
+  },
+  "scope": {
+    "exact_slope": "(7-sqrt(15))/2",
+    "input_unit": "4+sqrt(15)",
+    "all_integer_index_theorem": true,
+    "executable_indices": {
+      "minimum": 0,
+      "maximum": 256
+    },
+    "actual_power_rows": 9,
+    "actual_complete_term_records": 22,
+    "first_constructed_value_ge_10_power_200_index": 223,
+    "all_probed_and_returned_term_records_retained": true,
+    "theorem_for_every_real_quadratic_irrational_r_greater_than_one": true,
+    "general_real_slope_characterization": false,
+    "search_for_a_pell_unit": false,
+    "minimal_recurrence_order_claim": false,
+    "entire_beatty_sequence_rank": false,
+    "novelty_or_external_frontier_claim": false,
+    "source_proof_audit": false,
+    "native_or_sponsor_action": false
+  }
+}

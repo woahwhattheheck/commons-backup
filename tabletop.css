@@ -1,0 +1,169 @@
+.tabletop-controls{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.65rem;
+  margin:.8rem 0;
+}
+.tabletop-controls button{
+  min-height:44px;
+  padding:.55rem .8rem;
+}
+.source-health{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem .9rem;
+  padding-left:1.2rem;
+}
+.source-health .ok{color:#3fa45b}
+.source-health .unknown{color:#c0554a}
+.move-status{
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  white-space:nowrap;
+}
+.traffic-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem 1rem;
+  margin:.7rem 0 1rem;
+  font-size:.88rem;
+}
+.traffic-legend b,.token-state{
+  display:inline-block;
+  border:1px solid currentColor;
+  border-radius:999px;
+  padding:.08rem .4rem;
+  font-size:.72rem;
+  letter-spacing:.025em;
+}
+.legend-heavy{color:#c0554a}
+.legend-flow{color:#c08a2e}
+.legend-clear{color:#3fa45b}
+.matrix{
+  display:grid;
+  grid-template-columns:minmax(16rem,.72fr) minmax(20rem,1.28fr);
+  gap:.8rem;
+  align-items:start;
+}
+.matrix-zone{
+  min-width:0;
+  border:1px solid #3a3a40;
+  border-radius:10px;
+  background:#101014;
+  padding:.7rem;
+  overflow:hidden;
+}
+.matrix-zone h2{
+  display:flex;
+  justify-content:space-between;
+  gap:.75rem;
+  margin:.1rem 0 .2rem;
+  font-size:1.05rem;
+}
+.zone-count{
+  min-width:2rem;
+  border-radius:999px;
+  background:#252933;
+  padding:.08rem .45rem;
+  text-align:center;
+  font-size:.82rem;
+}
+.zone-summary{
+  min-height:2.7em;
+  margin:.2rem 0 .6rem;
+  opacity:.76;
+  font-size:.78rem;
+}
+.token-field{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(9rem,1fr));
+  gap:.5rem;
+  min-height:3.25rem;
+  padding:.15rem;
+  overflow:auto;
+  overscroll-behavior:contain;
+}
+.token-field.is-unknown::before{
+  content:attr(data-error);
+  display:block;
+  grid-column:1/-1;
+  border:1px dashed #c0554a;
+  border-radius:8px;
+  padding:.65rem;
+  color:#c0554a;
+}
+.token{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 44px;
+  min-height:50px;
+  border:1px solid #566171;
+  border-left-width:4px;
+  border-radius:9px;
+  background:#171b22;
+  box-shadow:0 2px 7px rgb(0 0 0 / .28);
+  will-change:transform;
+}
+.token:focus-within{outline:2px solid #8bb8ff;outline-offset:2px;z-index:3}
+.token-link{
+  display:flex;
+  min-width:0;
+  flex-direction:column;
+  justify-content:center;
+  gap:.17rem;
+  padding:.38rem .25rem .38rem .48rem;
+  color:inherit;
+  text-decoration:none;
+}
+.token-label,.token-detail{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.token-label{font-weight:700;font-size:.8rem}
+.token-detail{opacity:.73;font-size:.68rem}
+.token-state{align-self:flex-start;width:max-content}
+.drag-handle{
+  width:44px;
+  min-height:44px;
+  border:0;
+  border-left:1px solid #39404d;
+  border-radius:0 8px 8px 0;
+  background:transparent;
+  color:inherit;
+  cursor:grab;
+  touch-action:none;
+  font-size:1.15rem;
+}
+.drag-handle:active{cursor:grabbing}
+.token[data-state="PRESENT"],.token[data-state="CLEAR"],.token[data-state="INTEGRATED"]{border-left-color:#3fa45b}
+.token[data-state="OPEN"],.token[data-state="HEAVY"]{border-left-color:#c0554a}
+.token[data-state="PARTIAL"],.token[data-state="HALF"],.token[data-state="FLOW"],.token[data-state="SPEC'D"],.token[data-state="SPLIT"]{border-left-color:#c08a2e}
+.token[data-state="LEAVING"],.token[data-state="UNKNOWN"]{border-left-color:#777}
+#roster{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  gap:.8rem;
+}
+#roster section{
+  border:1px solid #34343a;
+  border-radius:8px;
+  padding:.55rem .7rem;
+}
+#roster h3{margin:.1rem 0 .35rem}
+#roster ul{margin:0;padding-left:1.1rem}
+#roster li{margin:.24rem 0;font-size:.84rem}
+@media (max-width:48rem){
+  .matrix{grid-template-columns:1fr}
+  .matrix-zone{grid-column:1}
+  .zone-summary{min-height:0}
+  .token-field{grid-template-columns:repeat(auto-fill,minmax(8.25rem,1fr))}
+}
+@media (prefers-reduced-motion:reduce){
+  .token{scroll-behavior:auto}
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Focused Storefront — Synthetic Commerce Harness</title>
+<style>
+body{font:16px/1.45 system-ui,sans-serif;max-width:1050px;margin:auto;padding:1.2rem;background:#f6f7f8;color:#17212b}header,section{background:white;border:1px solid #d8dde3;border-radius:12px;padding:1rem 1.2rem;margin:1rem 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.warn{background:#fff7db;border-left:5px solid #b17a00;padding:.8rem}img{max-width:100%;border:1px solid #ddd}button,input{font:inherit;padding:.55rem}.badge{display:inline-block;padding:.15rem .45rem;border-radius:5px;background:#e9eef3;margin:.1rem}pre{white-space:pre-wrap;overflow:auto;background:#f1f3f5;padding:.8rem;border-radius:6px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+<header><h1>Focused Storefront</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>Local storefront/order-return rehearsal for demand 033.</p></header>
+<p class="warn"><strong>Supplier/sample gate is open.</strong> This package ships with a fictional supplier and a self-authored SVG, not a real supplier quote, physical sample, checkout, shipment, refund, or sale.</p>
+<div class="grid">
+<section><h2 id="name">Loading…</h2><img id="product" src="/media/synthetic-cable-clip.svg" alt="Synthetic product fixture"><p id="description"></p><p id="terms"></p><p id="econ"></p></section>
+<section><h2>Local order rehearsal</h2><label>Quantity <input id="qty" type="number" min="1" value="1"></label><br><button id="order">Place synthetic order</button><button id="fulfill" disabled>Mark fulfilled</button><button id="return" disabled>Request return</button><button id="complete" disabled>Complete + restock</button><p id="status" aria-live="polite"></p><p><a href="/api/export.json">Export JSON</a> · <a href="/api/handoff.csv">Fulfillment handoff CSV</a></p></section>
+</div>
+<section><h2>Current local state</h2><div id="gates"></div><pre id="state"></pre></section>
+<script>
+const $=id=>document.getElementById(id); let current=null, ret=null;
+async function api(path,body){const r=await fetch(path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});const d=await r.json();if(!r.ok)throw new Error(d.error||r.status);return d}
+async function refresh(){const s=await api('/api/state');$('name').textContent=s.fixture.product.name;$('description').textContent=s.fixture.product.description;$('terms').textContent=s.fixture.shipping_terms+' '+s.fixture.support_terms;const e=s.unit_economics;$('econ').textContent=`Modeled unit contribution: $${(e.contribution_cents/100).toFixed(2)} before taxes/overhead.`;$('gates').replaceChildren(...Object.entries(s.gates).map(([k,v])=>{const b=document.createElement('span');b.className='badge';b.textContent=`${k}: ${v}`;return b}));$('state').textContent=JSON.stringify({inventory:s.inventory,orders:s.orders,returns:s.returns},null,2)}
+$('order').onclick=async()=>{try{current=await api('/api/orders',{idempotency_key:crypto.randomUUID(),quantity:Number($('qty').value)});$('status').textContent=`Placed ${current.id}`;$('fulfill').disabled=false;await refresh()}catch(e){$('status').textContent=e.message}};
+$('fulfill').onclick=async()=>{try{current=await api('/api/fulfill',{order_id:current.id});$('status').textContent='Fulfilled locally';$('return').disabled=false;$('fulfill').disabled=true;await refresh()}catch(e){$('status').textContent=e.message}};
+$('return').onclick=async()=>{try{ret=await api('/api/returns',{idempotency_key:crypto.randomUUID(),order_id:current.id,reason:'Synthetic fit rehearsal'});$('status').textContent=`Return requested ${ret.id}`;$('complete').disabled=false;$('return').disabled=true;await refresh()}catch(e){$('status').textContent=e.message}};
+$('complete').onclick=async()=>{try{ret=await api('/api/returns/complete',{return_id:ret.id,restock:true});$('status').textContent='Return completed and stock restored locally';$('complete').disabled=true;await refresh()}catch(e){$('status').textContent=e.message}};
+refresh().catch(e=>$('status').textContent=e.message);
+</script>

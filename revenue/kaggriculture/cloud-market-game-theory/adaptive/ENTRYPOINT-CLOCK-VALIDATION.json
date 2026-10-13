@@ -1,0 +1,39 @@
+{
+  "scope": "Existing adaptive/fixed/static file-entrypoints. Recording runtime fixtures, not full runtime or gameplay execution.",
+  "python": "3.13.5",
+  "test_sha256": "19074f7ba107826b7321e20c775e77e5bb753bb045664204a65b0effbb5ab077",
+  "base_commit": "3b86aa1ae0c6ed5c16fb7c88888cdd17af816c20",
+  "before": {
+    "methods": 18,
+    "entrypoints_per_method": 3,
+    "successful": false,
+    "failures": 18,
+    "errors": 21,
+    "sources": {
+      "main.py": {"sha256": "fd7dfc44027b56c3338a766c9495d5fce6743d730b49803c3701619b8af67f88", "git_blob": "a22bf076952cfccc321ed5a7fa1c7d73e65078b2"},
+      "fixed_main.py": {"sha256": "208a78a55bcb2bb8c64a3f4a5424573185e7a950a6a03f1ad6d3699f2c355682", "git_blob": "7e31b67d8864c18f65e9e03a7d7b6410e6a2e736"},
+      "static_main.py": {"sha256": "14d9d2efa529f168e4ccc2fbc8f5cf468136fe33ce1218ffcf0caf3973312159", "git_blob": "2e35d5cf97bdfc5c6ef03200f0d31bd4b22ca0f0"},
+      "selected_action_sell.py": {"sha256": "d78c08bd8312915bd72c9a31a6dc3e49906eb4ff53b12f04fb4c679ebf742ba5", "git_blob": "0364fa0ab6c3f0d7cc93569efb14d3f5af66da72"}
+    }
+  },
+  "after": {
+    "methods": 18,
+    "entrypoints_per_method": 3,
+    "successful": true,
+    "failures": 0,
+    "errors": 0,
+    "sources": {
+      "main.py": {"sha256": "1e6ac348eacb3e2bd5a9e7004502c11f0b1a49f229afe1d151b24d3dea385024", "git_blob": "40bbe122516fd4a54eea8fdc153ed7d2dd67a478"},
+      "fixed_main.py": {"sha256": "a8f849ae9a0db4421574dd45478fbae2e70101abfb72a5a0e74b7ee73f26c1ed", "git_blob": "8dd56b4a92b7b00b1b300cd0825cd03e3f97ea1d"},
+      "static_main.py": {"sha256": "0cddd4530ba14ed12f831f9dc4a272b0525ed2820333f97ed75f40d728cfc21c", "git_blob": "f7c5f412bddacd7e55fbb011353f075a89fbc085"},
+      "selected_action_sell.py": {"sha256": "d78c08bd8312915bd72c9a31a6dc3e49906eb4ff53b12f04fb4c679ebf742ba5", "git_blob": "0364fa0ab6c3f0d7cc93569efb14d3f5af66da72"}
+    },
+    "log": "test_action_body_error_is_not_retried (__main__.EntrypointClockTests.test_action_body_error_is_not_retried) ... ok\ntest_configured_day_length (__main__.EntrypointClockTests.test_configured_day_length) ... ok\ntest_constructor_body_error_is_not_retried (__main__.EntrypointClockTests.test_constructor_body_error_is_not_retried) ... ok\ntest_day_hour_inputs_retain_actor_and_deliver_clock (__main__.EntrypointClockTests.test_day_hour_inputs_retain_actor_and_deliver_clock) ... ok\ntest_distinct_raw_namespaces_do_not_share_actors (__main__.EntrypointClockTests.test_distinct_raw_namespaces_do_not_share_actors) ... ok\ntest_explicit_step_needs_no_day_or_hour (__main__.EntrypointClockTests.test_explicit_step_needs_no_day_or_hour) ... ok\ntest_explicit_step_takes_precedence (__main__.EntrypointClockTests.test_explicit_step_takes_precedence) ... ok\ntest_input_clock_normalization_does_not_mutate_caller (__main__.EntrypointClockTests.test_input_clock_normalization_does_not_mutate_caller) ... ok\ntest_invalid_clock_is_not_silently_repaired (__main__.EntrypointClockTests.test_invalid_clock_is_not_silently_repaired) ... ok\ntest_legacy_raw_path_remains_supported (__main__.EntrypointClockTests.test_legacy_raw_path_remains_supported) ... ok\ntest_missing_all_clock_fields_is_not_fabricated_zero (__main__.EntrypointClockTests.test_missing_all_clock_fields_is_not_fabricated_zero) ... ok\ntest_mode_and_action_identity_are_preserved (__main__.EntrypointClockTests.test_mode_and_action_identity_are_preserved) ... ok\ntest_module_path_precedes_private_override (__main__.EntrypointClockTests.test_module_path_precedes_private_override) ... ok\ntest_new_day_is_not_new_episode (__main__.EntrypointClockTests.test_new_day_is_not_new_episode) ... ok\ntest_none_configuration_uses_existing_defaults (__main__.EntrypointClockTests.test_none_configuration_uses_existing_defaults) ... ok\ntest_none_step_uses_public_clock (__main__.EntrypointClockTests.test_none_step_uses_public_clock) ... ok\ntest_raw_compile_without_private_path (__main__.EntrypointClockTests.test_raw_compile_without_private_path) ... ok\ntest_true_zero_resets_actor_not_runtime (__main__.EntrypointClockTests.test_true_zero_resets_actor_not_runtime) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.264s\n\nOK\n"
+  },
+  "interpretation": "18 methods x 3 entrypoints = 54 subcases; old source has 39 failing subcases (18 assertions and 21 errors), not 39 independent defects. Fixed source passes all 54. Some tests assert the new lifecycle contract.",
+  "games": 0,
+  "economic_decision_tests": 0,
+  "runtime_py_changed": false,
+  "clock_source": "Unchanged absolute_step compiled from selected_action_sell.py in original PR9997 archive SHA256 95c7bf10a20149419e6208e43cdf2bf0728e22fe61b600180eaa1a3fbcc1b153.",
+  "official_loader_note": "Pinned Kaggle agent.py blob 537c1af1dfb2b2c8f90edab06596e3134f2c70e6: build_agent supplies __raw_path__; direct get_last_callable/compile need not. Existing __raw_path__ support is retained; filename fallback is extra compatibility, not proof the normal wrapper was broken."
+}

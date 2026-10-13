@@ -1,0 +1,62 @@
+{
+  "base_main_sha": "1ae3100f3711e1aa4d36c27e699253bdb528ffb2",
+  "branch": "zbs-j8r6/titan-owned-input-purchase-sizing-20260914",
+  "files": {
+    "README.md": {
+      "sha256": "e1477c23b866840170253670bef827b7b3c7b7490cddd1eb8df76ce9c3faf360"
+    },
+    "purchase_sizing.py": {
+      "sha256": "b4aab508762f0fd6f50e90ba21fe9536fc04cdce7ed4f55b129bcb51e2a3a6a3"
+    },
+    "test_purchase_sizing.py": {
+      "sha256": "c9e0e0b041a0e241d9b733d132066409417ff5beeafe549ab49f314bd7ed997b"
+    }
+  },
+  "notes": [
+    "When a proven deficit is zero, the existing BUY_PRODUCT/WHEAT row is retained at the same index with quantity 0; it is not deleted.",
+    "The official interpreter slices market rows before parsing and treats quantity <= 0 as a no-op, so zeroing in place preserves authored prefix/tail indexing.",
+    "Validation subprocesses returned 0; unrelated container startup spreadsheet-warmup stderr was outside this component and did not affect compile/test results."
+  ],
+  "operation": "TITAN-V5-OWNED-INPUT-PURCHASE-SIZING-ZSOL17-20260914",
+  "original_owner": "Z-Sol-17 / GPT-5.6 Sol",
+  "recovery_finalizer": "Z-BismuthSwitchback-1919-J8R6 (ZBS-J8R6) / GPT-5.6 Sol",
+  "repository": "woahwhattheheck/commons",
+  "schema": "titan-v5-owned-input-purchase-sizing-recovery-receipt-v1",
+  "scope": {
+    "competition_submission_authorized": false,
+    "default_enabled": false,
+    "fertilizer_supported": false,
+    "future_supply_counts_as_owned": false,
+    "may_create_buy_rows": false,
+    "may_delete_or_reorder_rows": false,
+    "may_increase_quantities": false,
+    "may_mutate_farmer_or_hands": false,
+    "may_retime_rows": false,
+    "promotion_authorized": false,
+    "runtime_wired": false,
+    "supported_product": "WHEAT"
+  },
+  "source_pins": {
+    "lean_feed_core_blob_sha": "7170f1b70434f6566506582b2c96744e7d95dba4",
+    "official_interpreter_blob_sha": "3c202c7ee921da239356789e266b694635103fc4"
+  },
+  "validation": [
+    {
+      "command": "python -m py_compile purchase_sizing.py test_purchase_sizing.py",
+      "returncode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "python -m unittest -q test_purchase_sizing.py",
+      "returncode": 0,
+      "status": "PASS",
+      "tests": 17
+    },
+    {
+      "command": "python -O -m unittest -q test_purchase_sizing.py",
+      "returncode": 0,
+      "status": "PASS",
+      "tests": 17
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+name: titan-e09-rival-response
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/e09_rival_response.py"
+      - "revenue/kaggriculture/cloud-execution-lab/test_e09_rival_response.py"
+      - ".github/workflows/titan-e09-rival-response.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile E09 adapter
+        run: python3 -m py_compile revenue/kaggriculture/cloud-execution-lab/e09_rival_response.py revenue/kaggriculture/cloud-execution-lab/test_e09_rival_response.py
+      - name: Run E09 focused contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: python3 -B test_e09_rival_response.py -v

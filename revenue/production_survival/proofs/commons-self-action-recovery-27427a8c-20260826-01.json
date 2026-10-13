@@ -1,0 +1,191 @@
+{
+  "schema_version": "production-survival-proof/v1",
+  "kind": "PRODUCTION_SURVIVAL_SELF_PROOF",
+  "proof_id": "commons-self-action-recovery-27427a8c-20260826-01",
+  "proof_status": "PASS",
+  "scope": "LOCAL_SYNTHETIC_SELF_PROOF",
+  "data_classification": "PUBLIC_SYNTHETIC",
+  "synthetic_input_sentence": "A synthetic agent should preserve its safe state, but in production it encounters a bounded invariant failure.",
+  "source": {
+    "repository": "woahwhattheheck/commons",
+    "audit_head": "27427a8cc0408a0466ac8d4b88fb2ba9bbba56e2",
+    "audit_head_commit_time": "2026-08-26T05:08:02Z",
+    "offer_path": "revenue/production_survival/offer.json",
+    "offer_blob_sha": "84b664c07d0677a92c8e79797f80ebde823da447",
+    "schema_path": "revenue/production_survival/proof-v1.schema.json",
+    "transaction_run_id": "local-synthetic-64624b49b80642d0a354c879501ea659"
+  },
+  "execution": {
+    "executed_at": "2026-08-26T05:08:41.694920Z",
+    "driver_exit_code": 0,
+    "runtime": {
+      "implementation": "CPython",
+      "version": "3.12.10",
+      "platform": "Windows"
+    },
+    "workspace": {
+      "kind": "isolated_temporary_directory",
+      "path_disclosed": false,
+      "persistence_claimed": false
+    }
+  },
+  "states": {
+    "pre": {
+      "logical_path": "state.json",
+      "bytes": 29,
+      "sha256": "7c12a86dead27413f1241d705364f972487d508a790373d8af7c4ed8e007e48e",
+      "content_base64": "eyJzdGF0ZSI6InNhZmUiLCJ2ZXJzaW9uIjoxfQo="
+    },
+    "mutated": {
+      "logical_path": "state.json",
+      "bytes": 32,
+      "sha256": "cf59ba2de13cb16cd56316ceba2f2e8164dd60af17c8b263c1918e847c19475e",
+      "content_base64": "eyJzdGF0ZSI6Im11dGF0ZWQiLCJ2ZXJzaW9uIjoyfQo="
+    },
+    "post": {
+      "logical_path": "state.json",
+      "bytes": 29,
+      "sha256": "7c12a86dead27413f1241d705364f972487d508a790373d8af7c4ed8e007e48e",
+      "content_base64": "eyJzdGF0ZSI6InNhZmUiLCJ2ZXJzaW9uIjoxfQo="
+    }
+  },
+  "steps": [
+    {
+      "step_id": "prepare-pre-state",
+      "argv": [
+        "python",
+        "-c",
+        "from pathlib import Path; import base64; Path(\"state.json\").write_bytes(base64.b64decode(\"eyJzdGF0ZSI6InNhZmUiLCJ2ZXJzaW9uIjoxfQo=\")); print(\"PREPARED\")"
+      ],
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "matched_expected": true,
+      "stdout": "PREPARED\r\n",
+      "stdout_sha256": "03516a7477b19dacfbc9a433b84501b22c7481c2b8e521afd7e9781051b49732",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-08-26T05:06:59.291235Z",
+      "finished_at": "2026-08-26T05:07:32.196705Z"
+    },
+    {
+      "step_id": "snapshot-pre-state",
+      "argv": [
+        "python",
+        "-c",
+        "from pathlib import Path; Path(\"pre-state.bin\").write_bytes(Path(\"state.json\").read_bytes()); print(\"SNAPSHOT\")"
+      ],
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "matched_expected": true,
+      "stdout": "SNAPSHOT\r\n",
+      "stdout_sha256": "50933eecc3ec2dbd0230a87703d8881afd74aa45ff6e2a6464f1b557bd98bc5a",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-08-26T05:07:32.495102Z",
+      "finished_at": "2026-08-26T05:07:48.578120Z"
+    },
+    {
+      "step_id": "happy-path-mutation",
+      "argv": [
+        "python",
+        "-c",
+        "from pathlib import Path; import base64; Path(\"state.json\").write_bytes(base64.b64decode(\"eyJzdGF0ZSI6Im11dGF0ZWQiLCJ2ZXJzaW9uIjoyfQo=\")); print(\"MUTATED\")"
+      ],
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "matched_expected": true,
+      "stdout": "MUTATED\r\n",
+      "stdout_sha256": "13db6782962058146b373f86b4ec585692a8ef1b27105381ce436d4e13063797",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-08-26T05:07:48.578120Z",
+      "finished_at": "2026-08-26T05:08:04.757084Z"
+    },
+    {
+      "step_id": "bounded-invariant-failure",
+      "argv": [
+        "python",
+        "-c",
+        "import json, sys; state=json.loads(open(\"state.json\", encoding=\"utf-8\").read()); observed=state.get(\"state\"); print(f\"EXPECTED_STOP invariant=state_is_safe observed={observed}\"); sys.exit(0 if observed == \"safe\" else 23)"
+      ],
+      "expected_exit_code": 23,
+      "actual_exit_code": 23,
+      "matched_expected": true,
+      "stdout": "EXPECTED_STOP invariant=state_is_safe observed=mutated\r\n",
+      "stdout_sha256": "8b7af968baa2ea1519da68f567399f1c2f9af53530883c74a5a711d4e4002fb1",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-08-26T05:08:10.349557Z",
+      "finished_at": "2026-08-26T05:08:20.334713Z"
+    },
+    {
+      "step_id": "rollback",
+      "argv": [
+        "python",
+        "-c",
+        "from pathlib import Path; Path(\"state.json\").write_bytes(Path(\"pre-state.bin\").read_bytes()); print(\"ROLLED_BACK\")"
+      ],
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "matched_expected": true,
+      "stdout": "ROLLED_BACK\r\n",
+      "stdout_sha256": "44ec3907204d69226cc0c3ca2d5a907907fb992fcd33681c3bec8967c7e63b4d",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-08-26T05:08:20.334713Z",
+      "finished_at": "2026-08-26T05:08:30.465535Z"
+    },
+    {
+      "step_id": "verify-post-equals-pre",
+      "argv": [
+        "python",
+        "-c",
+        "from pathlib import Path; import sys; same=Path(\"state.json\").read_bytes() == Path(\"pre-state.bin\").read_bytes(); print(f\"VERIFIED_EQUAL={str(same).lower()}\"); sys.exit(0 if same else 24)"
+      ],
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "matched_expected": true,
+      "stdout": "VERIFIED_EQUAL=true\r\n",
+      "stdout_sha256": "2d5085185990062b09ac81cbece83f1895b8e40dc45da1d84eee040608c2cf22",
+      "stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-08-26T05:08:30.465535Z",
+      "finished_at": "2026-08-26T05:08:41.693921Z"
+    }
+  ],
+  "rollback": {
+    "trigger_step_id": "bounded-invariant-failure",
+    "rollback_step_id": "rollback",
+    "verification_step_id": "verify-post-equals-pre",
+    "trigger_exit_code": 23,
+    "rollback_exit_code": 0,
+    "verification_exit_code": 0,
+    "pre_sha256": "7c12a86dead27413f1241d705364f972487d508a790373d8af7c4ed8e007e48e",
+    "mutated_sha256": "cf59ba2de13cb16cd56316ceba2f2e8164dd60af17c8b263c1918e847c19475e",
+    "post_sha256": "7c12a86dead27413f1241d705364f972487d508a790373d8af7c4ed8e007e48e",
+    "mutated_differs_from_pre": true,
+    "post_equals_pre": true
+  },
+  "assertions": {
+    "all_exit_codes_expected": true,
+    "failure_exit_code_observed": true,
+    "mutation_changed_bytes": true,
+    "pre_sha256_equals_post_sha256": true,
+    "rollback_restored_exact_bytes": true
+  },
+  "commercial_truth": {
+    "commercial_state": "NO_COMMERCIAL_CLAIM",
+    "buyer_claimed": false,
+    "demand_claimed": false,
+    "acceptance_claimed": false,
+    "delivery_claimed": false,
+    "cash_claimed": false,
+    "collected_cash_usd": 0
+  },
+  "limitations": [
+    "This is one local synthetic transaction, not a buyer production environment.",
+    "It demonstrates byte-level rollback of a public synthetic state file; it does not establish model behavior, provider uptime, or distributed rollback.",
+    "It does not establish a buyer, demand, acceptance, customer delivery, payment, payout, or cash.",
+    "No network call, credential, private data, buyer artifact, or confidential system detail was involved in the transaction."
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "operation": "swarm-verifier-execution-evidence-lantern83-20260919",
+  "builder": {
+    "seat": "ZZ-LANTERN-83",
+    "model": "GPT-6 Astra Pro",
+    "family": "gpt"
+  },
+  "original_author": "OP5-CONTROL / Opus 5",
+  "original_commit": "ceaebe3e65099b7df3f71ed2f06aea249003eb74",
+  "original_git_blob": "1a5c269757a7cd351a1d946d1b2c27dd0456dec7",
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux"
+  },
+  "source_files": {
+    "verify_lanes.py": {
+      "bytes": 11816,
+      "git_blob_sha": "c199ff3e9108ba35e9aa070d766bcd0bde4579f5",
+      "sha256": "21230e1f12b34794d915d66ec318d9a1c42322e55b4008cf9d0360c0dba9bb86"
+    },
+    "test_verify_lanes.py": {
+      "bytes": 12318,
+      "git_blob_sha": "b23bb1d247b2e8da7ef1b3a29bf774c27d2563a2",
+      "sha256": "8e74d223a7d585b716c89e8d6cf57ed72c228f586fee0bbba9ee87aa3381f3ee"
+    }
+  },
+  "commands": [
+    {
+      "command": "python -m unittest -q test_verify_lanes.py",
+      "result": "PASS",
+      "tests": 34,
+      "seconds": 17.429
+    },
+    {
+      "command": "python -O -m unittest -q test_verify_lanes.py",
+      "result": "PASS",
+      "tests": 34,
+      "seconds": 17.651,
+      "optimized_child_processes": true
+    }
+  ],
+  "counterexamples": {
+    "undiscovered_failure": {
+      "fixture": "import unittest\nclass TestBroken(unittest.TestCase):\n    def test_broken(self): self.fail(\"real test never called\")\n",
+      "before": {
+        "status": "PASS",
+        "tests": 0
+      },
+      "after": {
+        "status": "FAIL",
+        "tests": 1,
+        "tests_executed": 1,
+        "tests_skipped": 0,
+        "skip_events": 0
+      }
+    },
+    "all_skipped": {
+      "fixture": "import unittest\n@unittest.skip(\"no backend\")\nclass TestSkipped(unittest.TestCase):\n    def test_backend(self): self.fail(\"not executed\")\nif __name__ == \"__main__\": unittest.main()\n",
+      "before": {
+        "status": "PASS",
+        "tests": 1
+      },
+      "after": {
+        "status": "SKIPPED",
+        "tests": 1,
+        "tests_executed": 0,
+        "tests_skipped": 1,
+        "skip_events": 1
+      }
+    },
+    "silent_script": {
+      "fixture": "print(\"loaded, no test runner\")\n",
+      "before": {
+        "status": "PASS",
+        "tests": 0
+      },
+      "after": {
+        "status": "UNVERIFIED",
+        "tests": 0,
+        "tests_executed": 0,
+        "tests_skipped": 0,
+        "skip_events": 0
+      }
+    }
+  },
+  "scope": [
+    "Disposable fictional fixture lanes; no real-lane audit performed.",
+    "Focused ephemeral-container execution, not a hosted or full-repository CI result.",
+    "Published source is byte-bound; no evidence authenticity or production assurance claimed."
+  ]
+}

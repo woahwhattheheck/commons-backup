@@ -1,0 +1,112 @@
+{
+  "candidate_bytes": 20276,
+  "candidate_git_blob": "4dcf25f0a1a68f6842b71c6cb58ee878c06f6a08",
+  "candidate_sha256": "0d5b09bd24471305876eef72b862b6be3df64fee8a53bb1dcb9052c793544cc8",
+  "canonical_branch": "main",
+  "cash_reserve_consumers_repaired": 1,
+  "cash_semantics_donor_git_blob": "5e8f54ca20fa755bc6ced55decdcdf0193cda812",
+  "claim": "SOURCE_ONLY_NOT_MATERIALIZED_V4_NOT_STRENGTH_EVIDENCE",
+  "current_predebit_consumers_repaired": 1,
+  "engine_reference_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "files": {
+    "cash_prefix_donor.py": {
+      "git_blob": "5e8f54ca20fa755bc6ced55decdcdf0193cda812",
+      "role": "preserved provenance only; do not apply after the composed repair"
+    },
+    "repair_receipt_prefix.py": {
+      "bytes": 4851,
+      "git_blob": "39b772c0336e454d506cd0eb9f2d0f3f85aad0c3",
+      "sha256": "7859f43771ea9e038b506ef48e0ca64a1dbd869c90e3b8e63f31df84882f8557"
+    },
+    "repair_scheduler_prefix.py": {
+      "bytes": 3986,
+      "git_blob": "00ec554ae3347e7898ceae83fde5d0870a421890",
+      "sha256": "adea5740efbf67955e8b1fb99e5f8e787bf39f7347cf1209e21690198c0f460a"
+    },
+    "scheduler-prefix.patch": {
+      "bytes": 2271,
+      "git_blob": "86cd6e41be1f9bb295b578520bbeb13a1037b97c",
+      "sha256": "f499c2718356fbef0868de13c879a29168e6d063055185377ba0813c31a76f70"
+    },
+    "scheduler_candidate.py": {
+      "bytes": 20276,
+      "git_blob": "4dcf25f0a1a68f6842b71c6cb58ee878c06f6a08",
+      "sha256": "0d5b09bd24471305876eef72b862b6be3df64fee8a53bb1dcb9052c793544cc8"
+    },
+    "scheduler_source.py": {
+      "bytes": 19829,
+      "git_blob": "da1b6fb571e79ba7dab54c8d816e45afb934e4d2",
+      "sha256": "2915af42b6b4cb280526f105705257b6ed35173391d1f11bb80dd73d55fc48f7"
+    },
+    "test_receipt_prefix.py": {
+      "bytes": 10676,
+      "git_blob": "45fb76c8de4f4bf1a370bbc76225cbae500ed40d",
+      "sha256": "6ac5dce8759ac5bd93e68695bbf10b9ff8e6f092bf6d5aa7cafebb19b3ed393e"
+    },
+    "test_scheduler_prefix.py": {
+      "bytes": 12412,
+      "git_blob": "e0c01951d6df4e639e761fe6bec5f0fdf27fc26d",
+      "sha256": "3ac35d9cccac7a73a5b4a2a42a47977081e94388ceaef225790e803511c998e0"
+    }
+  },
+  "integration_limits": [
+    "Verify actual materialized package scheduler blob and SellScheduler call-path reachability before any production semantic port.",
+    "Do not run legacy apply_v4 against the current titan_runtime production architecture.",
+    "Other scheduler act() market scans and existing timing/economic assumptions are unchanged and are not certified by this repair.",
+    "No workflow, checker, shared composer, runtime default, export archive, or Kaggle submission is changed."
+  ],
+  "intermediate_receipt_git_blob": "81ec33c9e0f0a8045edff86c4a4095679c391476",
+  "new_feature_keys": [],
+  "operation": "ASTRA-PREFIX3-CANONICAL-COMPOSITION",
+  "production_files_changed": [],
+  "provenance": {
+    "cash_prefix_recovery_pr": 12643,
+    "composition_claim": "https://github.com/woahwhattheheck/commons/pull/12018#issuecomment-5642660395",
+    "released_receipt_recovery": "https://github.com/woahwhattheheck/commons/pull/12018#issuecomment-5642635617"
+  },
+  "receipt_donor_git_blob": "39b772c0336e454d506cd0eb9f2d0f3f85aad0c3",
+  "runtime_activated": false,
+  "schema": "titan-v4-scheduler-prefix-repair/v1",
+  "shared_prefix_helpers": 1,
+  "source_commit": "465f4263da1c98acf78889d67cdd21b61dbba145",
+  "source_git_blob": "da1b6fb571e79ba7dab54c8d816e45afb934e4d2",
+  "source_path": "revenue/kaggriculture/cloud-execution-lab/scheduler.py",
+  "source_sha256": "2915af42b6b4cb280526f105705257b6ed35173391d1f11bb80dd73d55fc48f7",
+  "status": "composed_source_and_tests_ready_for_package_applicability_gate",
+  "total_prefix_consumers": 3,
+  "turn_loop_consumers_repaired": 1,
+  "verification": {
+    "commands": [
+      {
+        "command": "python test_receipt_prefix.py",
+        "result": "PASS",
+        "tests": 13
+      },
+      {
+        "command": "python -O test_receipt_prefix.py",
+        "result": "PASS",
+        "tests": 13
+      },
+      {
+        "command": "python test_scheduler_prefix.py",
+        "result": "PASS",
+        "tests": 18
+      },
+      {
+        "command": "python -O test_scheduler_prefix.py",
+        "result": "PASS",
+        "tests": 18
+      }
+    ],
+    "competitive_strength_claim": false,
+    "composition_suffix_grid_vectors_per_mode": 240,
+    "drift_repeat_intermediate_and_output_overwrite_rejected": true,
+    "full_engine_episodes_run": 0,
+    "input_nonmutation": true,
+    "py_compile": "PASS",
+    "python_version": "3.13.5",
+    "scope": "Differential function-level tests on exact AST-selected source. Original EOD fixture is pinned-engine-derived; future unit execution is PASS-only. Cash prices, hire/land costs and hand spawning use explicit test doubles. The cash-and-loop partial donor witness reconstructs its two-consumer semantics, rather than claiming byte identity with its generated postimage.",
+    "unchanged_non_target_source_verified_by_exact_reverse_transform": true
+  },
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/scheduler/executable-prefix"
+}

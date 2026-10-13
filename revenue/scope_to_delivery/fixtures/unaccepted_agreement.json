@@ -1,0 +1,77 @@
+{
+  "schema_version": "commons-scope-agreement/v1",
+  "kind": "SCOPE_AGREEMENT",
+  "agreement_id": "agr-synthetic-production-survival-unaccepted-20260828-01",
+  "sku_id": "production-survival-sprint",
+  "quote": {
+    "currency": "USD",
+    "amount": "15000.00"
+  },
+  "window": {
+    "start": "2026-08-28T13:00:00-04:00",
+    "end": "2026-08-28T21:00:00-04:00",
+    "timezone": "America/New_York"
+  },
+  "buyer_ref": "buyer_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "intake_sentence": "My agent should finish one external effect after a crash, but in production it repeats the effect.",
+  "acceptance_rows": [
+    {
+      "id": "happy-path",
+      "given": "Synthetic file-backed input named in these public fixtures",
+      "when": "The happy path is run inside the agreed America/New_York window",
+      "then": "The agreed recovery outcome is observed and hashed on a public fixture file",
+      "evidence_required": [
+        "public_ref",
+        "sha256"
+      ]
+    },
+    {
+      "id": "failure-or-stop-path",
+      "given": "The same synthetic input",
+      "when": "The named process crash is forced after the external effect",
+      "then": "The stop path is visible and hashed on a public fixture file",
+      "evidence_required": [
+        "public_ref",
+        "sha256"
+      ]
+    },
+    {
+      "id": "rollback-or-reset",
+      "given": "State after the forced failure",
+      "when": "Rollback reuses the idempotency key",
+      "then": "The named reset outcome is observed and hashed on a public fixture file",
+      "evidence_required": [
+        "public_ref",
+        "sha256"
+      ]
+    },
+    {
+      "id": "durable-receipt",
+      "given": "The completed synthetic run",
+      "when": "The receipt fixture is published",
+      "then": "The receipt links the proof, states limits, and carries content hashes",
+      "evidence_required": [
+        "public_ref",
+        "sha256"
+      ]
+    }
+  ],
+  "exclusions": [
+    "credentials",
+    "private-data",
+    "pii-phi",
+    "authentication",
+    "billing",
+    "production-migration",
+    "ongoing-hosting-or-sla",
+    "white-box-or-model-files"
+  ],
+  "refund_choice": "REFUND_IF_MISS",
+  "written_acceptance": {
+    "status": "ABSENT",
+    "attestation": null,
+    "terms_digest": "a2b4cbdfdd0201eb44f27e83007babb6570be4148db9bf542f2f51a1f0576d6c",
+    "public_ref": null,
+    "accepted_at": null
+  }
+}

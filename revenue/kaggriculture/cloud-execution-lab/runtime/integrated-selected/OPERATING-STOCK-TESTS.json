@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "operation": "titan-v2-operating-stock-water-service-20260909",
+  "status": "bounded_behavior_enabled_due_day_water_and_funding_checked",
+  "archive": {
+    "path": "exports/titan-current.tar.gz",
+    "entrypoint": "main.py::agent",
+    "config": "TITAN-CONFIG.json",
+    "sha256": "f6967e16a2e98d576eedd09367f577660139a3fb503b7fc80b3672ff9e241ac3",
+    "bytes": 359171,
+    "runtime_files": 98,
+    "source_manifest": "runtime/integrated-selected/CURRENT-SOURCE.json",
+    "source_manifest_sha256": "5ff9160e2254d614b63a810f3ccbe902caedb55ef3f83a874e4e4403752b12c1"
+  },
+  "predecessor_archive_sha256": "73ae010923cb66198b837baade34f273dff25e2fd4c8318d8bb61adcef31be0e",
+  "submission_status": "not_submitted",
+  "default_operating_stock": true,
+  "source_sha256": {
+    "operating_stock.py": "9181beb34754975377bbc4ed6e5766cbb63bb691f57c2fa50e0c4f67459e62af",
+    "test_operating_stock.py": "3367778e61cec4ae88f139a0999762088eea7012b38badab57310666161aa197",
+    "titan_runtime.py": "70245afcc4a544e671f5b9d591238bcf3fb935a076352de273ea5d87fc090958",
+    "frozen_selected.py": "afeaab24b23e4c50a40c345d51bc97186f859da91914e2f50b77cbb9e137480a",
+    "TITAN-CONFIG.json": "0a56ba29d6806c798a318c4c1c7214df0836b5ee47c9358bdf1d82ec05c464ca",
+    "build_integrated.py": "63761f8e456b284cbbf75fa49d7e14034b084fce0a490e33dace793e03f5067b"
+  },
+  "test_evidence": [
+    {
+      "command": "PYTHONPATH=../cloud-runtime-pulse:../cloud-quickstep python -m unittest -q test_operating_stock",
+      "tests": 29,
+      "passed": 29,
+      "scope": "stateless proposals, funding, capacity, runtime boundary and canonical configuration; no state advancement; production-day water and paid worker availability included"
+    },
+    {
+      "command": "python -m unittest -q checks.test_operating_stock",
+      "tests": 29,
+      "passed": 29,
+      "scope": "the same 29 contracts from this exact extracted archive; not 29 additional cases; production-day water and paid worker availability included"
+    }
+  ],
+  "game_evidence": {
+    "new_full_games": 0,
+    "new_simulation_panels": 0,
+    "new_interpreter_transitions": 0,
+    "new_agent_act_calls": 0,
+    "playing_strength_measured": false
+  },
+  "activation_changes": [
+    "Canonical operating_stock=true; frozen consumer captures the completed selected-unit state.",
+    "At most two withheld fertilizer units for an existing actor and existing ongoing crops.",
+    "Value only final otherwise-unfunded consumption; incumbent carried/unsold stock is excluded from incremental benefit.",
+    "Reject unresolved same-day branch and include funding commitments through the full current day, even after a shorter service rejoin.",
+    "Require actual cash covering all same-day fixed spending plus 100 times the input-price scenario; no future sale credit.",
+    "Preserve all unit actions and market slot ordering; decline shared-allocation/capacity ambiguities.",
+    "Require WATER on the actual bonus-production day even when the crop is not yet wilting.",
+    "Project only free moves, target survival, paid hires and spawn occupancy through that refresh; never advance the game engine.",
+    "Give sales no funding credit and set the cash lower bound to zero after variable-price purchases; later HIRE must still be funded."
+  ],
+  "limits": [
+    "100-unit rival-supply value and 100-times-input cash cushion remain explicit policy heuristics.",
+    "The service calculation checks the existing route and funded worker availability; future execution, opponent behavior and final score remain unmeasured.",
+    "Historical input proposals are not newly executed candidate games."
+  ],
+  "retained_predecessor_evidence": {
+    "disabled_stock": "OPERATING-STOCK-DISABLED-TESTS.json",
+    "weed_continuation": "WEED-CONTINUATION-TESTS.json",
+    "exact_db34_archive_checks": "WEED-ARCHIVE-TESTS.json",
+    "pre_water_active_stock": "OPERATING-STOCK-PRE-WATER-TESTS.json"
+  }
+}

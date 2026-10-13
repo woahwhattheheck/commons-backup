@@ -1,0 +1,44 @@
+name: titan-v3-paired-game-derived-numeric-closure
+
+on:
+  push:
+    branches:
+      - grok-build/pr11621-derived-numeric-closure-land-20260909-01
+      - sol-cipher/titan-v3-paired-game-derived-numeric-closure-20260909-02
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/**
+      - .github/workflows/titan-v3-paired-game-derived-numeric-closure.yml
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/**
+      - .github/workflows/titan-v3-paired-game-derived-numeric-closure.yml
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate
+
+jobs:
+  exact-head-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Run paired-game gate suite
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          PYTHONHASHSEED: "0"
+        run: |
+          python3 -m unittest -v \
+            test_validation.py \
+            test_policy_cli.py \
+            test_numeric_closure.py \
+            test_derived_numeric_closure.py \
+            test_dual_predecessor_gate.py
+      - name: Compile sources
+        run: python3 -m compileall -q .

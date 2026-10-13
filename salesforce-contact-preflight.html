@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>Salesforce Contact Exactly-Once Preflight</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--card:#102238;--ink:#eff7ff;--muted:#9fc2df;--ok:#4ee0a0;--line:#274866}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#07111f,#142943);color:var(--ink);font:16px/1.45 system-ui,sans-serif}
+main{max-width:1080px;margin:auto;padding:42px 20px}h1{font-size:clamp(2rem,6vw,4rem);line-height:1;margin:.2em 0}.eyebrow{color:var(--ok);font-weight:800;letter-spacing:.14em}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{min-width:0;background:#102238dd;border:1px solid var(--line);border-radius:18px;padding:20px}
+textarea,pre{width:100%;min-height:420px;background:#07111f;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto}
+button{background:var(--ok);color:#04140d;border:0;border-radius:999px;padding:12px 20px;font-weight:900;cursor:pointer}.truth{color:var(--muted)}
+#output:focus-visible{outline:3px solid var(--ok);outline-offset:3px}
+@media(max-width:760px){.grid{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body><main>
+<nav aria-label="Back to Commons"><a href="./index.html">← Commons</a></nav>
+<p class="eyebrow">SYNTHETIC · READ-ONLY · EXACTLY ONCE</p>
+<h1>Salesforce contact preflight</h1>
+<p class="lead">Replay contact create, update, and merge events before touching a live org. Every event gets an auditable receipt; conflicts fail visibly; dashboard totals must reconcile.</p>
+<p class="truth">$199 / one business day diagnostic. Optional $2,500 sandbox proof only after a pass. No Salesforce login, production records, approval, or autonomous write.</p>
+<p class="price-actions"><a class="buy" href="https://buy.stripe.com/4gM8wO4SxbnrdKV9h043S0m" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a> <span class="small">Secure Stripe checkout opens in a new tab.</span></p>
+<p class="truth" data-postpay-handoff="1"><strong>After purchase:</strong> email one sanitized synthetic event packet, a public work route, and the email used for your Stripe receipt to <a href="mailto:tokenjunkielabs@gmail.com?subject=Salesforce%20contact%20preflight%20%24199">tokenjunkielabs@gmail.com</a>. The one-business-day clock starts when usable in-scope evidence arrives.</p>
+
+
+
+<div class="grid"><section class="card"><h2 id="events-heading">Synthetic events</h2><textarea id="input" aria-labelledby="events-heading"></textarea><p><button id="run">Run preflight</button></p></section>
+<section class="card"><h2 id="receipt-heading">Receipt</h2><pre id="output" role="region" aria-labelledby="receipt-heading" tabindex="0">Ready.</pre></section></div>
+<p class="foot-cta"><a class="buy" href="https://buy.stripe.com/4gM8wO4SxbnrdKV9h043S0m" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a> <span class="small">Secure Stripe checkout opens in a new tab.</span></p>
+</main>
+<script src="salesforce-contact-preflight.js"></script>
+<script>
+const sample=[
+ {event_id:"c1",operation:"create",fields:{external_id:"P-100",email:"ada@example.org",department:"Programs"}},
+ {event_id:"c2",operation:"create",fields:{email:"ada.alt@example.org"}},
+ {event_id:"u1",operation:"update",match_key:"external_id:p-100",fields:{last_name:"Lovelace"}},
+ {event_id:"m1",operation:"merge",source_key:"email:ada.alt@example.org",target_key:"external_id:p-100"},
+ {event_id:"u1",operation:"update",match_key:"external_id:p-100",fields:{last_name:"Lovelace"}}
+];
+input.value=JSON.stringify(sample,null,2);
+run.onclick=()=>{try{output.textContent=JSON.stringify(SalesforceContactPreflight.run(JSON.parse(input.value)),null,2)}catch(e){output.textContent="ERROR: "+e.message}};
+</script></body></html>

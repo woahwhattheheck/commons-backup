@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tokenjunkielabs.invalid/schemas/titan-p11-service-calendar-v1.json",
+  "title": "TITAN P11 service-calendar admission payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["state", "obligations"],
+  "properties": {
+    "max_nodes": {"type": "integer", "minimum": 1, "default": 250000},
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_turn", "terminal_turn"],
+      "properties": {
+        "current_turn": {"type": "integer", "minimum": 0},
+        "terminal_turn": {"type": "integer", "minimum": 0},
+        "cash": {"type": "integer", "minimum": 0, "default": 0},
+        "inventory": {"$ref": "#/$defs/nonnegativeMap"},
+        "room_used": {"$ref": "#/$defs/nonnegativeMap"},
+        "room_capacity": {"$ref": "#/$defs/nonnegativeMap"},
+        "actor_capacity": {"$ref": "#/$defs/nonnegativeMap"},
+        "machine_capacity": {"$ref": "#/$defs/nonnegativeMap"},
+        "actor_reservations": {"$ref": "#/$defs/reservations"},
+        "machine_reservations": {"$ref": "#/$defs/reservations"},
+        "completed": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "phase_order": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/obligation"}
+    }
+  },
+  "$defs": {
+    "integerMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer"}
+    },
+    "nonnegativeMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "positiveMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 1}
+    },
+    "reservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["turn", "resource"],
+      "properties": {
+        "turn": {"type": "integer", "minimum": 0},
+        "resource": {"type": "string", "minLength": 1},
+        "units": {"type": "integer", "minimum": 1, "default": 1}
+      }
+    },
+    "reservations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/reservation"}
+    },
+    "obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "earliest_turn", "latest_turn"],
+      "properties": {
+        "key": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "minLength": 1, "default": "service"},
+        "earliest_turn": {"type": "integer", "minimum": 0},
+        "latest_turn": {"type": "integer", "minimum": 0},
+        "phase": {"type": "string", "minLength": 1, "default": "service"},
+        "depends_on": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "actor_demand": {"$ref": "#/$defs/positiveMap"},
+        "machine_demand": {"$ref": "#/$defs/positiveMap"},
+        "cash_delta": {"type": "integer", "default": 0},
+        "inventory_delta": {"$ref": "#/$defs/integerMap"},
+        "room_delta": {"$ref": "#/$defs/integerMap"},
+        "settlement_lag": {"type": "integer", "minimum": 0, "default": 0}
+      }
+    }
+  }
+}

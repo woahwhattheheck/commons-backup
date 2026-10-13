@@ -1,0 +1,139 @@
+{
+  "schema": "titan.seller-recovery.current-source-evidence.v1",
+  "source_checkpoint": "4cf8f678507574afb0d8a1a0f24056e55bb168ab",
+  "source_scope": "Nine exact default-path blobs read back from GitHub and executed from a clean local tree.",
+  "canonical_archive_at_checkpoint": {
+    "materialized": false,
+    "manifest_sha256": "c2b4294c6014514e93f3d92ecd17b8e6a01b3533df6cb81e0b47d67fc74d6197",
+    "archive_sha256": "f623c088765301872123697db250b10651d3027cb347b5a05ceb7b7eb270f279",
+    "bytes": 290697,
+    "runtime_files": 78
+  },
+  "input": {
+    "origin": "DELVE development9965001 seat0 control, retained full frames; NOT WIDEFIELD9921001",
+    "seat": 0,
+    "observations": 719,
+    "encoded_sha256": "6d850535bc06fd9d366119365651e789c32ec8a48c96bedaa992fd19a1ff060e",
+    "decoded_sha256": "75f39921d9a749b50b84101f34f8119b51f9646d2ab725d8453f17fdee66083f",
+    "expected_actions_used_as_actor_inputs": false,
+    "opponent_private_state_used_as_actor_inputs": false
+  },
+  "cases": {
+    "baseline_entry450": {
+      "report": {
+        "sha256": "7066553ba0cbbcdde61f48116617bf42eef9825ae2dce6a561d5ee7e409d17c5",
+        "bytes": 90553,
+        "decoded_sha256": "1e77e7b00c870ef8e29044751a7d34e7dc6e27d0faa085a20a634af908cddd20",
+        "decoded_bytes": 2007312
+      },
+      "cancel_step": 450,
+      "boundary": "transform_entry",
+      "through": 718,
+      "calls_per_actor": 719,
+      "fallback_equals_uninterrupted_action": true,
+      "all_routes_equal": true,
+      "later_action_differences": [451, 453],
+      "later_seller_state_differences_count": 268,
+      "continuity_preserved": false,
+      "actual_parent_events": [
+        {"parent_calls": 719, "transform_calls": 719},
+        {"parent_calls": 719, "transform_calls": 718}
+      ],
+      "step451": {
+        "reference_market": [["SELL", "STRAWBERRY", 10]],
+        "recovered_market": [[]],
+        "different_state_fields": ["planned", "pending", "observed_harvests"],
+        "route_equal": true
+      },
+      "step453": {
+        "reference_market": [["SELL", "MILK", 3]],
+        "recovered_market": [],
+        "different_state_fields": ["planned", "pending", "observed_harvests"],
+        "route_equal": true
+      }
+    },
+    "bounded_rehydration_entry450_through460": {
+      "report": {
+        "sha256": "9ec97b2c96e9cccdd86d5f565fa87cfb2f631cd567be26b17ce49565481daabd",
+        "bytes": 59908,
+        "decoded_sha256": "53f629f5f43bf75700331b0c216897aa1ca211c3bb4b798c0465ac63c7fb7558",
+        "decoded_bytes": 1580602
+      },
+      "cancel_step": 450,
+      "boundary": "transform_entry",
+      "through": 460,
+      "calls_per_actor": 461,
+      "fallback_equals_uninterrupted_action": true,
+      "all_routes_equal": true,
+      "later_action_differences": [],
+      "later_seller_state_differences_count": 0,
+      "continuity_preserved": true,
+      "actual_parent_events": [
+        {"parent_calls": 461, "transform_calls": 461},
+        {"parent_calls": 461, "transform_calls": 460}
+      ],
+      "intervention": {
+        "restore_completed_fields": ["planned", "pending", "previous", "observed_harvests"],
+        "observe_skipped": true,
+        "production_repair": false
+      }
+    },
+    "negative_replan447_through460": {
+      "report": {
+        "sha256": "3d9b0fe9f08e5237a5a460eb9d69120276737720d7e94cc85479f830df5107a0",
+        "bytes": 63551,
+        "decoded_sha256": "9c95b78ecbf705146eb5936818277fdf712123a8199aac61d8dcce5a02d857f1",
+        "decoded_bytes": 1717838
+      },
+      "cancel_step": 447,
+      "boundary": "transform_entry",
+      "through": 460,
+      "calls_per_actor": 461,
+      "fallback_equals_uninterrupted_action": true,
+      "all_routes_equal": true,
+      "later_action_differences": [449, 453],
+      "later_seller_state_differences_count": 6,
+      "continuity_preserved": false,
+      "actual_parent_events": [
+        {"parent_calls": 461, "transform_calls": 461},
+        {"parent_calls": 461, "transform_calls": 460}
+      ],
+      "intervention": {
+        "restore_completed_fields": ["planned", "pending", "previous", "observed_harvests"],
+        "observe_skipped": true,
+        "production_repair": false
+      },
+      "step449": {
+        "reference_market": [["SELL", "WHEAT", 4]],
+        "recovered_market": [["SELL", "WHEAT", 4], ["SELL", "MILK", 3]]
+      },
+      "step453": {
+        "reference_market": [["SELL", "MILK", 3]],
+        "recovered_market": []
+      }
+    }
+  },
+  "interpretation": {
+    "measured_gap": "After an exact selected-action fallback, reconstruction retains the completed route but not the prior frozen seller plan/history; current-source actions omit STRAWBERRY10 at 451 and MILK3 at 453.",
+    "bounded_sufficient_intervention": "Restoring the four completed seller fields and advancing the original public observer once preserves every action and compared seller-state digest through step460 in this retained sequence.",
+    "non_general_control": "At cancellation step447 the prior checkpoint cannot recreate the replanning that completed inside the cancelled call; differences remain at449 and453. Do not blindly restore an older ledger or claim a production repair.",
+    "builder_contract": "A production change must distinguish a completed selected/output-associated seller checkpoint from state mutated by a call that never returned. It must also account for the skipped public observation without using retained expected actions or outcomes."
+  },
+  "scope": {
+    "new_games": 0,
+    "engine_interpreter_calls": 0,
+    "new_seed_reservations": [],
+    "natural_deadline_overruns": 0,
+    "policy_strength_claim": false,
+    "canonical_runtime_changed": false
+  },
+  "library_evidence": {
+    "schema": "titan.seller-recovery.library-evidence.v1",
+    "library_path": "/TITAN-seller-recovery-current-4cf8f678-20260908.zip",
+    "file_id": "file_00000000edb881f5a5cc05e90fbe8fd8",
+    "library_file_id": "libfile_b5d77cfe93548191b372281f12248fd1",
+    "bytes": 503295,
+    "sha256": "c08bc3b79335e6ddb7b2f1576e4f8294b90d1904b6af0d41323457d76b305796",
+    "contents": "Full input, three detailed reports, nine exact source files, logs, checker, compact evidence, and manifest."
+  }
+}

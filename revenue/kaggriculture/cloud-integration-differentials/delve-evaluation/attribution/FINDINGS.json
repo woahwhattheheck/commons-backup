@@ -1,0 +1,65 @@
+{
+  "schema": "delve.market-gap-findings.v1",
+  "base_source": "17e149e75092c905e4ef96ce0dca8806e521ea5e",
+  "engine_ref": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "input_archive": {
+    "name": "TITAN-DELVE-funded-seed-evidence.zip",
+    "sha256": "aaa2d811a919b6b1c2219082753cfe476a0a0fac7567d3ad1d72c9f373a912f9",
+    "manifest_sha256": "809b73067e4b5f3d58d5aa4dd3bccae664e73470ed3b8f0a478728f04a074873"
+  },
+  "evidence_archive": {
+    "name": "TITAN-DELVE-market-gap-attribution.zip",
+    "location": "Bryce Library",
+    "sha256": "598ea65c175606722ddd5f3f5d207da6cb5f0219d46aaab9e5162beeb6e4d8b6",
+    "bytes": 2831864,
+    "manifest_files": 84,
+    "manifest_sha256": "ff5755ff625786de9e147ebf4d491365431a7a7cc481ff7a35232d18f133d10f",
+    "contains": ["complete responsive game frames and telemetry", "initial instrumentation failure", "complete canonical fixed-command suffix states", "recorded cash-attribution reports", "executed source versions", "20-test output", "reproduction scripts"]
+  },
+  "recorded_streams": {
+    "count": 8,
+    "full_state_matches": 5752,
+    "cash_residual": [0, 0],
+    "new_agent_games": 0,
+    "cells": [
+      {"seed": 9965001, "position": 0, "funded_cash_own_rival": [52981, 52446], "frozen_cash_own_rival": [52356, 51768], "delta_margin": -53, "nonzero_cash_causes_own_rival": {"BUY_SEED:WHEAT": [250, 0], "SELL:EGG": [151, -1], "SELL:MILK": [328, 533], "SELL:STRAWBERRY": [-104, 146]}},
+      {"seed": 9965001, "position": 1, "funded_cash_own_rival": [53104, 52313], "frozen_cash_own_rival": [52489, 51635], "delta_margin": -63, "nonzero_cash_causes_own_rival": {"BUY_SEED:WHEAT": [240, 0], "SELL:EGG": [151, -1], "SELL:MILK": [328, 533], "SELL:STRAWBERRY": [-104, 146]}},
+      {"seed": 9965019, "position": 0, "funded_cash_own_rival": [77678, 77208], "frozen_cash_own_rival": [77911, 77392], "delta_margin": -49, "nonzero_cash_causes_own_rival": {"SELL:MILK": [-23, 21], "SELL:STRAWBERRY": [-210, -205]}},
+      {"seed": 9965019, "position": 1, "funded_cash_own_rival": [77678, 77208], "frozen_cash_own_rival": [77911, 77392], "delta_margin": -49, "nonzero_cash_causes_own_rival": {"SELL:MILK": [-23, 21], "SELL:STRAWBERRY": [-210, -205]}}
+    ]
+  },
+  "clean_regime": {"seed": 9965019, "worker_decisions_identical": 719, "milk_units_each": 261, "strawberry_units_each": 262, "milk_relative_gap": -44, "strawberry_relative_gap": -5},
+  "fixed_command_suffixes": {
+    "positions": [0, 1], "start": 360, "decisions_each": 359, "canonical_count": 6,
+    "new_agent_games": 0, "independent_regimes": 1,
+    "results_each_position": [
+      {"arm": "suppress360", "cash_own_rival": [77574, 77290], "delta_own_rival": [-104, 82], "delta_margin": -186, "extra_terminal_milk": 3},
+      {"arm": "due381", "cash_own_rival": [77687, 77223], "delta_own_rival": [9, 15], "delta_margin": -6, "extra_terminal_milk": 0},
+      {"arm": "joint", "cash_own_rival": [77675, 77200], "delta_own_rival": [-3, -8], "delta_margin": 5, "extra_terminal_milk": 1}
+    ]
+  },
+  "responsive_development": {
+    "seed": 9965019, "position": 0, "independent_regimes": 1, "control_reused": true,
+    "attempts": 4, "complete_games": 3, "initial_instrumentation_failures": 1,
+    "initial_failure": "Ambient configuration was removed by existing actor isolation; corrected explicit per-run descriptor. No game score assigned to failed attempt.",
+    "results": [
+      {"arm": "suppress360", "status": "complete", "decisions": 719, "cash_own_rival": [77682, 77200], "delta_own_rival": [4, -8], "delta_margin": 12, "verdict": "W", "own_changed_decisions": [360, 375, 386, 405]},
+      {"arm": "due381", "status": "complete", "decisions": 719, "cash_own_rival": [77676, 77200], "delta_own_rival": [-2, -8], "delta_margin": 6, "verdict": "W", "own_changed_decisions": [381, 386, 405]},
+      {"arm": "joint", "status": "complete", "decisions": 719, "cash_own_rival": [77680, 77192], "delta_own_rival": [2, -16], "delta_margin": 18, "verdict": "W", "own_changed_decisions": [360, 375, 381, 386, 390, 405, 408]}
+    ],
+    "all_worker_actions_unchanged": true,
+    "all_rival_requested_actions_unchanged": true,
+    "all_productive_tiles_unchanged": true,
+    "terminal_physical_inventory_unchanged": true,
+    "joint_margin": 488,
+    "frozen_margin": 519,
+    "joint_remaining_gap": 31
+  },
+  "validation": {"new_regression_methods": 20, "result": "passed", "hosted_ci": "separate from local validation"},
+  "limitations": [
+    "Timed interventions are development ablations, not general policy code.",
+    "Fixed-command suffix effects do not predict responsive policy effects.",
+    "All live treatments and the original control remain wins; no WTL gain.",
+    "No new held seeds, policy promotion, Kaggle write, new spend or owner-PC work."
+  ]
+}

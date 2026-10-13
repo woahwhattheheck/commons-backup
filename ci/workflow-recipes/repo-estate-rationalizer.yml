@@ -1,0 +1,27 @@
+name: Repository Estate Rationalizer
+
+on:
+  pull_request:
+    paths:
+      - 'tools/repo_estate_rationalizer/**'
+      - '.github/workflows/repo-estate-rationalizer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --disable-pip-version-check pytest
+      - run: python -m py_compile tools/repo_estate_rationalizer/schema.py tools/repo_estate_rationalizer/rationalizer.py tools/repo_estate_rationalizer/test_rationalizer.py
+      - run: python -m pytest -q tools/repo_estate_rationalizer/test_rationalizer.py
+      - run: PYTHONPATH=. python -O tools/repo_estate_rationalizer/test_rationalizer.py

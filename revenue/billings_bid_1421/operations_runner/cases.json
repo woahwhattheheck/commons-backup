@@ -1,0 +1,222 @@
+{
+  "schema": "commons-billings-bid-1421-operations-runner-cases-v1",
+  "leftover_id": "billings-bid-1421-operations-runner-20260831-01",
+  "package_section": "6. Nonproduction security and RBAC boundary / Planned RBAC tests",
+  "cash_usd": 0,
+  "cases": [
+    {
+      "id": "RBAC-01",
+      "title": "Unknown or disabled directory actor is refused",
+      "package_item": 1,
+      "attempts": [
+        {
+          "request_id": "RBAC-01-UNKNOWN",
+          "actor": "NO-SUCH-PERSON",
+          "verb": "create_sample",
+          "resource_id": null,
+          "site": "WEST",
+          "expect_decision": "DENY",
+          "expect_reason": "unknown_actor"
+        },
+        {
+          "request_id": "RBAC-01-BLANK",
+          "actor": "",
+          "verb": "create_sample",
+          "resource_id": null,
+          "site": "WEST",
+          "expect_decision": "DENY",
+          "expect_reason": "unknown_actor"
+        },
+        {
+          "request_id": "RBAC-01-DISABLED",
+          "actor": "SYN-DISABLED",
+          "verb": "create_sample",
+          "resource_id": null,
+          "site": "WEST",
+          "expect_decision": "DENY",
+          "expect_reason": "disabled_actor"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-02",
+      "title": "Field collector stays in approved site scope and cannot release results",
+      "package_item": 2,
+      "attempts": [
+        {
+          "request_id": "RBAC-02-SITE",
+          "actor": "SYN-FIELD-WEST",
+          "verb": "create_sample",
+          "resource_id": null,
+          "site": "EAST",
+          "expect_decision": "DENY",
+          "expect_reason": "site_scope"
+        },
+        {
+          "request_id": "RBAC-02-TRANSFER",
+          "actor": "SYN-FIELD-WEST",
+          "verb": "transfer_sample",
+          "resource_id": "SAMPLE-EAST",
+          "expect_decision": "DENY",
+          "expect_reason": "site_scope"
+        },
+        {
+          "request_id": "RBAC-02-RELEASE",
+          "actor": "SYN-FIELD-WEST",
+          "verb": "release_result",
+          "resource_id": "RESULT-PH-1",
+          "expect_decision": "DENY",
+          "expect_reason": "release_refused"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-03",
+      "title": "Analyst can act only on currently authorized methods",
+      "package_item": 3,
+      "attempts": [
+        {
+          "request_id": "RBAC-03-OTHER-METHOD",
+          "actor": "SYN-ANALYST-PH",
+          "verb": "enter_result",
+          "resource_id": "RESULT-TOC-1",
+          "method_id": "SM-5310-B",
+          "expect_decision": "DENY",
+          "expect_reason": "method_not_current"
+        },
+        {
+          "request_id": "RBAC-03-EXPIRED",
+          "actor": "SYN-ANALYST-EXPIRED",
+          "verb": "enter_result",
+          "resource_id": "RESULT-PH-1",
+          "method_id": "SM-4500-H+",
+          "expect_decision": "DENY",
+          "expect_reason": "method_expired"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-04",
+      "title": "QA reviewer can hold or review and cannot erase audit history",
+      "package_item": 4,
+      "attempts": [
+        {
+          "request_id": "RBAC-04-ERASE",
+          "actor": "SYN-QA-1",
+          "verb": "erase_audit",
+          "resource_id": "AUDIT-LOG",
+          "expect_decision": "DENY",
+          "expect_reason": "erase_audit_refused"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-05",
+      "title": "Reporting approver can release only reconciled, approved reports",
+      "package_item": 5,
+      "attempts": [
+        {
+          "request_id": "RBAC-05-DRAFT",
+          "actor": "SYN-REPORTER-1",
+          "verb": "release_report",
+          "resource_id": "REPORT-DRAFT-1",
+          "expect_decision": "DENY",
+          "expect_reason": "report_not_ready"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-06",
+      "title": "Integration actor stays in named adapter scope and cannot administer users",
+      "package_item": 6,
+      "attempts": [
+        {
+          "request_id": "RBAC-06-ADAPTER",
+          "actor": "SYN-INTEG-PH",
+          "verb": "ingest_adapter",
+          "resource_id": null,
+          "adapter_id": "fixture-toc-1",
+          "expect_decision": "DENY",
+          "expect_reason": "adapter_scope"
+        },
+        {
+          "request_id": "RBAC-06-ADMIN",
+          "actor": "SYN-INTEG-PH",
+          "verb": "administer_users",
+          "resource_id": null,
+          "expect_decision": "DENY",
+          "expect_reason": "role_cannot_use_verb"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-07",
+      "title": "Support actor is time-bounded, logged, and cannot silently elevate",
+      "package_item": 7,
+      "attempts": [
+        {
+          "request_id": "RBAC-07-EXPIRED",
+          "actor": "SYN-SUPPORT-EXPIRED",
+          "verb": "read_ticket",
+          "resource_id": "TICKET-1",
+          "expect_decision": "DENY",
+          "expect_reason": "support_window_closed"
+        },
+        {
+          "request_id": "RBAC-07-ELEVATE",
+          "actor": "SYN-SUPPORT-ACTIVE",
+          "verb": "elevate_role",
+          "resource_id": null,
+          "expect_decision": "DENY",
+          "expect_reason": "silent_elevate_refused"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-08",
+      "title": "Same actor cannot approve a controlled change they proposed",
+      "package_item": 8,
+      "attempts": [
+        {
+          "request_id": "RBAC-08-SOD",
+          "actor": "SYN-PROPOSER-1",
+          "verb": "approve_change",
+          "resource_id": "CHANGE-001",
+          "expect_decision": "DENY",
+          "expect_reason": "separation_of_duties"
+        }
+      ]
+    },
+    {
+      "id": "RBAC-09",
+      "title": "Every refusal and privileged action emits an attributable audit event",
+      "package_item": 9,
+      "kind": "audit_coverage"
+    },
+    {
+      "id": "RBAC-10",
+      "title": "Duplicate replayed privileged request produces at most one effect",
+      "package_item": 10,
+      "attempts": [
+        {
+          "request_id": "RBAC-10-REPLAY",
+          "actor": "SYN-REPORTER-1",
+          "verb": "release_report",
+          "resource_id": "REPORT-READY-REPLAY",
+          "expect_decision": "ALLOW",
+          "expect_reason": "applied",
+          "expect_effects": 1
+        },
+        {
+          "request_id": "RBAC-10-REPLAY",
+          "actor": "SYN-REPORTER-1",
+          "verb": "release_report",
+          "resource_id": "REPORT-READY-REPLAY",
+          "expect_decision": "DENY",
+          "expect_reason": "replay_suppressed",
+          "expect_effects": 1
+        }
+      ]
+    }
+  ]
+}

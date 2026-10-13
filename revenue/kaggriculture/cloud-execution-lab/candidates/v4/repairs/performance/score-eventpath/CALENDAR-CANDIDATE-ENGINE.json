@@ -1,0 +1,143 @@
+{
+  "candidate_package": "candidates/v4/repairs/performance/score-eventpath",
+  "candidate_surfaces": {
+    "scheduler": {
+      "bytes": 23856,
+      "composer_idempotent": true,
+      "exact_predecessor_restored_when_only_score_composition_removed": true,
+      "git_blob": "6709517c869af192615317d6aadbdabb927ec248",
+      "py_compile": "PASS",
+      "sha256": "c45a15730aac80e9f9c210164a32bbd6b9003edca4dc3c2b3f9f6a352c784105"
+    },
+    "selected_sell_core": {
+      "bytes": 17871,
+      "composer_idempotent": true,
+      "exact_predecessor_restored_when_only_score_composition_removed": true,
+      "git_blob": "1ff055f145310da4e6e51c2e9997441ec737b363",
+      "py_compile": "PASS",
+      "sha256": "c84f0a09bbc181cfcf0105b334d03dc79f3f3d6ec3b8a20d405f0239dbc9cee8"
+    }
+  },
+  "canonical_branch": "main",
+  "claims": {
+    "all_four_processes_exit_zero": true,
+    "all_tests_pass": true,
+    "candidate_code_independently_recovered_and_executed": true,
+    "no_second_score_implementation": true,
+    "production_or_default_changed": false,
+    "whole_agent_timing_measured_here": false,
+    "whole_game_strength_claim": false
+  },
+  "commands": [
+    "python build_score_eventpath.py \"$R/scheduler.py\" \"$OUT/scheduler.py\"",
+    "python build_score_eventpath.py \"$R/selected_sell_core.py\" \"$OUT/selected_sell_core.py\"",
+    "python ../test_eventpath_engine.py --runtime-root \"$R\" --surface SURFACE --candidate \"$OUT/SURFACE.py\" --candidate-sha256 EXACT_SURFACE_SHA256 --output normal.json",
+    "python -O ../test_eventpath_engine.py --runtime-root \"$R\" --surface SURFACE --candidate \"$OUT/SURFACE.py\" --candidate-sha256 EXACT_SURFACE_SHA256 --output optimized.json"
+  ],
+  "composer": {
+    "git_blob": "f7ae150bc47058393552fd1d7600b7f5d5aaa84c",
+    "path": "build_score_eventpath.py",
+    "sha256": "6313b7bf31199a20b9c4c52f4a1d79b0d7c21faedfd92d67003edad71fe40ef7"
+  },
+  "executor": "ASTRA-CALENDAR",
+  "independent_execution_slack": "1789181630.178409",
+  "input_custody": {
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "existing_artifact_id": 10175943272,
+    "runtime_files_verified_before_each_run": 109,
+    "source_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2"
+  },
+  "limits": [
+    "Controlled actual official market/town transitions, not complete matches.",
+    "Both existing baselines and one actual candidate were checked in each independent process.",
+    "Original baseline-only CALENDAR receipt remains a historical snapshot; this closes the actual candidate gate.",
+    "No score, production runtime, config, archive or workflow changes by CALENDAR."
+  ],
+  "oracle": {
+    "git_blob": "7779873e04a0e3af5651ef9a9230f391dc51761f",
+    "relative_path": "../test_eventpath_engine.py",
+    "sha256": "c71f706c2bd693c42fd17510a1524a86508f5e4254bd4e463197346a463a62a6"
+  },
+  "runs": {
+    "scheduler-normal": {
+      "counts": {
+        "market_calls": 8554,
+        "mutation_rejections": 4,
+        "optimizer_pairs": 36,
+        "score_comparisons": 1944,
+        "town_calls": 8307,
+        "worlds": 930
+      },
+      "exit_code": 0,
+      "stderr_sha256": "96b5a691d1453bcd3660b14220cdd7494925d2ec9fa542c2d4f83ed25cce8810",
+      "stdout_sha256": "18916107e128af283479e6696ddbba49ef0bf212661d2b16fa12479b3a408a5a",
+      "unittest": {
+        "errors": 0,
+        "failures": 0,
+        "run": 8,
+        "skipped": 0
+      }
+    },
+    "scheduler-optimized": {
+      "counts": {
+        "market_calls": 8554,
+        "mutation_rejections": 4,
+        "optimizer_pairs": 36,
+        "score_comparisons": 1944,
+        "town_calls": 8307,
+        "worlds": 930
+      },
+      "exit_code": 0,
+      "stderr_sha256": "cda409820fee4d948b4b3b9fed56f8bf8884fb85429fb8271be57613729d8dc8",
+      "stdout_sha256": "5553e799e806c7faa9dc0e6ad7df816fc1ab22ea10f85907bb83e7c6923fc6e2",
+      "unittest": {
+        "errors": 0,
+        "failures": 0,
+        "run": 8,
+        "skipped": 0
+      }
+    },
+    "selected_sell_core-normal": {
+      "counts": {
+        "market_calls": 8554,
+        "mutation_rejections": 4,
+        "optimizer_pairs": 36,
+        "score_comparisons": 1944,
+        "town_calls": 8307,
+        "worlds": 930
+      },
+      "exit_code": 0,
+      "stderr_sha256": "5e0c10086e2221e32e8efc7c71cac86c223715bed50ce66aaa73b7c62e7da5d4",
+      "stdout_sha256": "88ac81694b1585ac42208d28742df019aaf6e30143cdaf76e92e66e6ae093950",
+      "unittest": {
+        "errors": 0,
+        "failures": 0,
+        "run": 8,
+        "skipped": 0
+      }
+    },
+    "selected_sell_core-optimized": {
+      "counts": {
+        "market_calls": 8554,
+        "mutation_rejections": 4,
+        "optimizer_pairs": 36,
+        "score_comparisons": 1944,
+        "town_calls": 8307,
+        "worlds": 930
+      },
+      "exit_code": 0,
+      "stderr_sha256": "2877eb5c6fabefa4b056e2b80a419e45fb09bfc6e4c5c9cef3c8648f09b9da19",
+      "stdout_sha256": "a1d12a9ac1140ccfec94d3512f29327391663efc7ba269d350054ce5b8cbb806",
+      "unittest": {
+        "errors": 0,
+        "failures": 0,
+        "run": 8,
+        "skipped": 0
+      }
+    }
+  },
+  "schema": "titan-v4-calendar-independent-candidate-engine-v1",
+  "source_owner": "ASTRA-EVENTPATH",
+  "source_owner_claim": "1789180316.683269",
+  "state": "COMPLETE"
+}

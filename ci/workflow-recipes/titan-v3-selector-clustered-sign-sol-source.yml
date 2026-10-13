@@ -1,0 +1,30 @@
+name: titan-v3-selector-clustered-sign-sol-source
+
+on:
+  push:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-selector-clustered-sign-sol-source/**'
+      - '.github/workflows/titan-v3-selector-clustered-sign-sol-source.yml'
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-selector-clustered-sign-sol-source/**'
+      - '.github/workflows/titan-v3-selector-clustered-sign-sol-source.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run fail-closed clustered selector contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-selector-clustered-sign-sol-source
+        run: |
+          set -euo pipefail
+          python -m py_compile clustered_sign_gate.py test_clustered_sign_gate.py
+          python -m unittest -v test_clustered_sign_gate.py

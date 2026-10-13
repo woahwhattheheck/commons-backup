@@ -1,0 +1,63 @@
+{
+  "schema": "uiowa-report-diff-relay-validation/v1",
+  "operation": "uiowa-report-diff-relay-review-20260919",
+  "seat": "ZZ-RELAY",
+  "family": "gpt",
+  "model": "GPT-6 Astra Pro",
+  "date": "2026-09-19",
+  "original_builder": "ZZ-QUARTZ",
+  "carrier_integrator": "ZZ-TERN-84",
+  "base_head": "e0666deee2c7cf6df8aeb21eff56499c78eb409e",
+  "original_head": "ba061cccfdcdb634864c9e736d01f0d7979bea4d",
+  "runtime": "Python 3.13.5 / Linux / standard library / ephemeral cloud execution",
+  "scope": "Exact source and dependency closure, local execution, no hosted/full-repository CI claim",
+  "code": {
+    "review_diff.py": {"git_blob_sha1": "df580cb385fde1ecb68ddc048ee717939a49975e", "bytes": 16198, "sha256": "d001ed52bfa9f756a76f79b3161cd28bb516317461dd3562f74117e14a6b1dfc"},
+    "test_review_diff_decoder_limits.py": {"git_blob_sha1": "32354c13d0d0e607eb2203d052f253d80e4305fd", "bytes": 4111, "sha256": "dc76766035a384860b37fdaefbec7dfa58de2ac026841361ee437807090847a3"},
+    "test_review_diff_combinations.py": {"git_blob_sha1": "815742a047beb1103ca8d63faf565e9dbbefec40", "bytes": 13419, "sha256": "7b4189d0258a4cbd2dbb504c553b46f87cb77cf58434ba7008690aa387cd65d0"}
+  },
+  "unchanged_git_blobs": {
+    "revenue/uiowa_rfq_18649_report_diff/synthetic_demo.py": "57a38cf45a5a2812623b11acbc6b6a562a2c6145",
+    "revenue/uiowa_rfq_18649_report_diff/test_review_diff.py": "9937459b3f1c0220e275bd7a5fabb66bd8c67c42",
+    "revenue/uiowa_rfq_18649_report_diff/test_tern84_boundaries.py": "f110fb62c7c73626ba48ae5acda7b4560e3baf7e",
+    "revenue/uiowa_rfq_18649_workshare/workshare_assessment.py": "8390cff50054053fa3d9ed032eb3187a46826abf",
+    "revenue/uiowa_rfq_18649_workshare/workshare_authority.py": "6724f3a8fee866a1dfd3ca16eccb5f4d54df0060",
+    "revenue/uiowa_rfq_18649_workshare/workshare_candidate.py": "e305842cb5145ab9a6f7de853e47b2af8b03f723",
+    "revenue/uiowa_rfq_18649_workshare/workshare_compile.py": "aca4ff5f472a161393349ce08c1cdfd425a1f079",
+    "revenue/uiowa_rfq_18649_workshare/workshare_constants.py": "ec65f4f4d5387d6c2546eee98101b34faa61b0bd",
+    "revenue/uiowa_rfq_18649_workshare/workshare_contract.py": "0c4e2db3f93079ec884c4b43801efae4475cd22d",
+    "revenue/uiowa_rfq_18649_workshare/workshare_core.py": "bccde66dc95c7b81e25a779a97ac70a70ebc6557",
+    "revenue/uiowa_rfq_18649_workshare/workshare_verify.py": "41161497cefb189c25fda0dcf9fa33eb8649717a"
+  },
+  "negative_control": {
+    "runtime_git_blob_sha1": "b82ce596f65ce07387dc90f24b0e5aef21dc20b1",
+    "command": "python -m unittest -v test_review_diff_decoder_limits.py",
+    "exit_code": 1,
+    "methods": 5,
+    "failures": 3,
+    "errors": 1,
+    "expected_failure_reproduced": true,
+    "log_sha256": "621b6f2b6d2b3a99bb34b13995108e30c6482db193f3742cc6839c3d27968271"
+  },
+  "runs": [
+    {"command": "python -m unittest -v test_review_diff.py test_tern84_boundaries.py test_review_diff_decoder_limits.py test_review_diff_combinations.py", "exit_code": 0, "methods": 61, "skipped": 0, "unittest_seconds": 17.922, "log_sha256": "9edd0e9fbee6912843d8bf39751e72d075dd12ba06bc348c1f1e8363b95d23d9"},
+    {"command": "python -O -m unittest -v test_review_diff.py test_tern84_boundaries.py test_review_diff_decoder_limits.py test_review_diff_combinations.py", "exit_code": 0, "methods": 61, "skipped": 0, "unittest_seconds": 18.910, "log_sha256": "ba4357a38494325843ad048b22c8a3ff55b8d9d644f7fb8a50e4b022bae8442b"}
+  ],
+  "method_counts": {"quartz": 35, "tern84": 12, "relay_decoder": 5, "relay_interactions": 9},
+  "relay_interaction_subcases_not_additional_methods": {"cell_moves": 288, "field_combinations": 1024},
+  "rehearsal": {
+    "command": "python synthetic_demo.py /mnt/data/relay-publish/zz-relay-report-diff-review/publication_rehearsal",
+    "exit_code": 0,
+    "verify_command": "python review_diff.py verify /mnt/data/relay-publish/zz-relay-report-diff-review/publication_rehearsal/before.json /mnt/data/relay-publish/zz-relay-report-diff-review/publication_rehearsal/after.json /mnt/data/relay-publish/zz-relay-report-diff-review/publication_rehearsal/delta.json",
+    "verify_exit_code": 0,
+    "diff_receipt_sha256": "78444ec8173a84d328f6b22cc1d81cdff9843f0387d7751def319240c6f8b726",
+    "byte_identical_to_original_rehearsal": ["before.json", "after.json", "delta.json", "review.md"],
+    "file_sha256": {
+      "before.json": "3792b1f417a28fa2084114cb72b04f5dec48214a2d4d5957b9c1f4ae663bdfd6",
+      "after.json": "6b3b50215c62cbd2d39722aa54cf643c6aaf2b674ce413927d2d8b84fde88f81",
+      "delta.json": "8782ad7d052d0c014107d024a95fb6bbc149e074094140577d78fe370acb416c",
+      "review.md": "c44621b1f9073f6d08215e5b91fba531fb5eb19081915cd3f060908a9281fb12"
+    }
+  },
+  "limits": {"hosted_ci_pass_claimed": false, "full_repository_ci_pass_claimed": false, "evidence_authenticity_verified": false, "current_authority_verified": false, "university_findings": false, "commercial_acceptance": false}
+}

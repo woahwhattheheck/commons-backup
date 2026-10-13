@@ -1,0 +1,308 @@
+{
+  "commands": [
+    "python check_funding_replay.py --runtime \"$B567\" --benchmark --output normal.json",
+    "python -O check_funding_replay.py --runtime \"$B567\" --benchmark --output optimized.json",
+    "python check_funding_cli.py --runtime \"$B567\" --output cli-normal.json",
+    "python -O check_funding_cli.py --runtime \"$B567\" --output cli-optimized.json"
+  ],
+  "executed_at_utc": "2026-09-12T02:56:43.760326+00:00",
+  "files": {
+    "INPUTS.json": {
+      "bytes": 1399,
+      "git_blob": "d5f466a364848e51c22d1bd1a62d29ee9f5379fe",
+      "sha256": "e747dbfcc92733d2b5dbd5d2b632596928cceb21e705f162f5de1cc1833c8580"
+    },
+    "README.md": {
+      "bytes": 6269,
+      "git_blob": "91d0f659a7042af536318ae0ee6dc519ac9f4f59",
+      "sha256": "27fac3ac6005203f893f989a746ac813375b7f7785fe49a5f89c84ecf1d25daa"
+    },
+    "apply_funding_replay.py": {
+      "bytes": 12454,
+      "git_blob": "d579759e8f6bd6c4649d58f220b1b193a9bda491",
+      "sha256": "ff012df6150c8add3ba021b6fad23641a256d64a84fe676644cfed364b1444f5"
+    },
+    "check_funding_cli.py": {
+      "bytes": 4297,
+      "git_blob": "c923510e8f65bf76523689524f09c347914008f0",
+      "sha256": "f5b2577c36c7370f7388e7dd3ccb896e7dc94c24e7c4960a0dc4b94ecabbcfac"
+    },
+    "check_funding_replay.py": {
+      "bytes": 29729,
+      "git_blob": "636851ef83c3844df0abc26922c71d091da6c872",
+      "sha256": "323d7313c221025dd9130e99041d94f7f862f6f4f16dc757720cd7987faff0fc"
+    }
+  },
+  "not_claimed": [
+    "whole-agent speedup",
+    "natural-game EV or rating gain",
+    "combined peer pricing/scheduler stack validation",
+    "production/default/archive activation",
+    "Kaggle submission"
+  ],
+  "owner": "ASTRA-FUNDING-PERF",
+  "python": "3.13.5",
+  "runs": {
+    "cli_normal": {
+      "changed_input_rejections": 6,
+      "missing_input_rejections": 6,
+      "optimized": false,
+      "real_cli_processes": 16,
+      "success": true,
+      "tests": 4
+    },
+    "cli_optimized": {
+      "changed_input_rejections": 6,
+      "missing_input_rejections": 6,
+      "optimized": true,
+      "real_cli_processes": 16,
+      "success": true,
+      "tests": 4
+    },
+    "normal": {
+      "behavioral_mutants_rejected": 5,
+      "composed_sha256": "ec8bed351f15603f69a899d7e2e4412603c422eb991930e2da2bd5f91da1d170",
+      "engine_pairs_with_funding_reorder": 54,
+      "errors": 0,
+      "failures": 0,
+      "fixed_buy_trace_calls": {
+        "after": 5,
+        "before": 9
+      },
+      "full_official_interpreter_calls": 144,
+      "full_official_interpreter_pairs": 72,
+      "funded_minimum_comparisons": 900,
+      "funded_minimum_fallback": 9,
+      "funded_minimum_nonzero": 91,
+      "gc_paused_retained_search_models": {
+        "after": 0,
+        "before": 40
+      },
+      "inherited_tests": 8,
+      "live_product_buy_trace_calls": {
+        "after": 9,
+        "before": 9
+      },
+      "malformed_comparisons": 160,
+      "market_model_constructions_per_search": {
+        "after": 1,
+        "before": 81
+      },
+      "microbenchmarks": [
+        {
+          "after_us": 2114.806,
+          "before_us": 2970.204,
+          "calls_per_sample": 20,
+          "case": "same_turn_floor_80_units",
+          "max_us": [
+            3063.424,
+            2180.999
+          ],
+          "min_us": [
+            2902.503,
+            2054.02
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 1.404
+        },
+        {
+          "after_us": 1697.163,
+          "before_us": 5089.482,
+          "calls_per_sample": 20,
+          "case": "repeated_sale_prefix",
+          "max_us": [
+            5806.922,
+            1864.63
+          ],
+          "min_us": [
+            4958.348,
+            1639.694
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 2.999
+        },
+        {
+          "after_us": 204.761,
+          "before_us": 357.782,
+          "calls_per_sample": 20,
+          "case": "fixed_buy_minimum",
+          "max_us": [
+            396.202,
+            215.038
+          ],
+          "min_us": [
+            342.918,
+            198.373
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 1.747
+        },
+        {
+          "after_us": 375.226,
+          "before_us": 365.432,
+          "calls_per_sample": 20,
+          "case": "live_product_buy_control",
+          "max_us": [
+            396.125,
+            407.94
+          ],
+          "min_us": [
+            358.424,
+            361.066
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 0.974
+        }
+      ],
+      "official_engine_sha256": {
+        "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+        "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+        "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+      },
+      "optimized": false,
+      "peer_composition_cases": 64,
+      "pinned_runtime_files": 109,
+      "raw_prefix_stress_controls": 48,
+      "receipt_comparisons": 1296,
+      "same_turn_comparisons": 1000,
+      "same_turn_engaged": 65,
+      "source_drift_rejections": 16,
+      "success": true,
+      "tests": 27,
+      "unmocked_frozen_transform_pairs": 32,
+      "zero_retention_paths": [
+        "search",
+        "standalone",
+        "quote_exception",
+        "callback_exception"
+      ]
+    },
+    "optimized": {
+      "behavioral_mutants_rejected": 5,
+      "composed_sha256": "ec8bed351f15603f69a899d7e2e4412603c422eb991930e2da2bd5f91da1d170",
+      "engine_pairs_with_funding_reorder": 54,
+      "errors": 0,
+      "failures": 0,
+      "fixed_buy_trace_calls": {
+        "after": 5,
+        "before": 9
+      },
+      "full_official_interpreter_calls": 144,
+      "full_official_interpreter_pairs": 72,
+      "funded_minimum_comparisons": 900,
+      "funded_minimum_fallback": 9,
+      "funded_minimum_nonzero": 91,
+      "gc_paused_retained_search_models": {
+        "after": 0,
+        "before": 40
+      },
+      "inherited_tests": 8,
+      "live_product_buy_trace_calls": {
+        "after": 9,
+        "before": 9
+      },
+      "malformed_comparisons": 160,
+      "market_model_constructions_per_search": {
+        "after": 1,
+        "before": 81
+      },
+      "microbenchmarks": [
+        {
+          "after_us": 2041.75,
+          "before_us": 2850.602,
+          "calls_per_sample": 20,
+          "case": "same_turn_floor_80_units",
+          "max_us": [
+            2982.536,
+            2114.863
+          ],
+          "min_us": [
+            2783.82,
+            2012.105
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 1.396
+        },
+        {
+          "after_us": 1638.248,
+          "before_us": 4930.173,
+          "calls_per_sample": 20,
+          "case": "repeated_sale_prefix",
+          "max_us": [
+            5142.313,
+            1713.548
+          ],
+          "min_us": [
+            4844.988,
+            1590.932
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 3.009
+        },
+        {
+          "after_us": 196.271,
+          "before_us": 345.671,
+          "calls_per_sample": 20,
+          "case": "fixed_buy_minimum",
+          "max_us": [
+            354.7,
+            199.931
+          ],
+          "min_us": [
+            333.021,
+            193.086
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 1.761
+        },
+        {
+          "after_us": 363.856,
+          "before_us": 359.158,
+          "calls_per_sample": 20,
+          "case": "live_product_buy_control",
+          "max_us": [
+            383.419,
+            377.145
+          ],
+          "min_us": [
+            350.208,
+            352.648
+          ],
+          "ordering": "alternating AB/BA",
+          "samples_per_arm": 9,
+          "speedup": 0.987
+        }
+      ],
+      "official_engine_sha256": {
+        "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+        "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+        "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+      },
+      "optimized": true,
+      "peer_composition_cases": 64,
+      "pinned_runtime_files": 109,
+      "raw_prefix_stress_controls": 48,
+      "receipt_comparisons": 1296,
+      "same_turn_comparisons": 1000,
+      "same_turn_engaged": 65,
+      "source_drift_rejections": 16,
+      "success": true,
+      "tests": 27,
+      "unmocked_frozen_transform_pairs": 32,
+      "zero_retention_paths": [
+        "search",
+        "standalone",
+        "quote_exception",
+        "callback_exception"
+      ]
+    }
+  },
+  "scope": "single main V4 candidate composition; no production activation"
+}

@@ -1,0 +1,234 @@
+{
+  "cells": {
+    "2027/0": {
+      "bank": [
+        91632.0,
+        3856.0
+      ],
+      "full_raw_action_and_state_sha256": "1d8b48a276be51b79217f0b2fdf10301cafee38df80cad0e9fe6e956a234ef4a"
+    },
+    "2027/1": {
+      "bank": [
+        3856.0,
+        91632.0
+      ],
+      "full_raw_action_and_state_sha256": "5584aedb8dd8691157cf27eab0f6b488249448b77820aeb4c84e9c35c64fa310"
+    },
+    "9922023/0": {
+      "bank": [
+        168572.0,
+        3550.0
+      ],
+      "full_raw_action_and_state_sha256": "6d0e65e08aff5bde841d67cb0b2b1060c82844e3e7ad924f6fcf822c66c3a02d"
+    },
+    "9922023/1": {
+      "bank": [
+        3550.0,
+        168572.0
+      ],
+      "full_raw_action_and_state_sha256": "ade0d013eb1c4ac43acadcd65c1a20a2662ad939b2fb60ecc0d989dd01872cdf"
+    }
+  },
+  "common_game_fields": {
+    "native_statuses": {
+      "completed": 719
+    },
+    "status": [
+      "DONE",
+      "DONE"
+    ],
+    "steps": 719
+  },
+  "game_columns": [
+    "seed/seat",
+    "variant",
+    "probe_mode",
+    "operating_stock_off_test_control"
+  ],
+  "games": [
+    [
+      "2027/0",
+      "baseline",
+      "plain",
+      false
+    ],
+    [
+      "2027/0",
+      "baseline",
+      "shadow",
+      true
+    ],
+    [
+      "2027/0",
+      "baseline",
+      "shadow",
+      false
+    ],
+    [
+      "2027/0",
+      "composed",
+      "release",
+      true
+    ],
+    [
+      "2027/0",
+      "composed",
+      "release",
+      false
+    ],
+    [
+      "2027/0",
+      "composed",
+      "shadow",
+      false
+    ],
+    [
+      "2027/1",
+      "baseline",
+      "plain",
+      false
+    ],
+    [
+      "2027/1",
+      "baseline",
+      "shadow",
+      true
+    ],
+    [
+      "2027/1",
+      "baseline",
+      "shadow",
+      false
+    ],
+    [
+      "2027/1",
+      "composed",
+      "release",
+      true
+    ],
+    [
+      "2027/1",
+      "composed",
+      "release",
+      false
+    ],
+    [
+      "2027/1",
+      "composed",
+      "shadow",
+      false
+    ],
+    [
+      "9922023/0",
+      "baseline",
+      "shadow",
+      false
+    ],
+    [
+      "9922023/0",
+      "composed",
+      "release",
+      false
+    ],
+    [
+      "9922023/0",
+      "composed",
+      "shadow",
+      false
+    ],
+    [
+      "9922023/1",
+      "baseline",
+      "shadow",
+      false
+    ],
+    [
+      "9922023/1",
+      "composed",
+      "release",
+      false
+    ],
+    [
+      "9922023/1",
+      "composed",
+      "shadow",
+      false
+    ]
+  ],
+  "mutants": [
+    {
+      "assertion_prefix": "AssertionError: Lists differ: ['SELL', 'FERTILIZER', 9] != ['SELL', 'FERTILIZER'",
+      "failure_test": "test_dead_tail_fertilizer_hire_and_sale_slots",
+      "name": "omit_prefix",
+      "normal_behaviorally_rejected": true,
+      "normal_returncode": 1,
+      "optimized_behaviorally_rejected": true,
+      "optimized_returncode": 1
+    },
+    {
+      "assertion_prefix": "AssertionError: 'terminal_feed_no_survival_or_care_payoff' != 'protected_feed_ha",
+      "failure_test": "test_harvest_rejection_does_not_erase_fertilizer",
+      "name": "omit_harvest",
+      "normal_behaviorally_rejected": true,
+      "normal_returncode": 1,
+      "optimized_behaviorally_rejected": true,
+      "optimized_returncode": 1
+    },
+    {
+      "assertion_prefix": "AssertionError: {'farmer': ['PASS'], 'hands': [['PASS'], ['PASS']], 'market': [[",
+      "failure_test": "test_terminal_restores_post_fertilizer_not_parent",
+      "name": "terminal_noop",
+      "normal_behaviorally_rejected": true,
+      "normal_returncode": 1,
+      "optimized_behaviorally_rejected": true,
+      "optimized_returncode": 1
+    },
+    {
+      "assertion_prefix": "AssertionError: 1 != 2",
+      "failure_test": "test_actual_engine_keeps_fertilizer_payoff_after_terminal_release",
+      "name": "terminal_undoes_fert",
+      "normal_behaviorally_rejected": true,
+      "normal_returncode": 1,
+      "optimized_behaviorally_rejected": true,
+      "optimized_returncode": 1
+    },
+    {
+      "assertion_prefix": "AssertionError: {'farmer': ['PASS'], 'hands': [['PASS'], ['PASS']], 'market': [[",
+      "failure_test": "test_observer_is_identity_preserving",
+      "name": "release_by_default",
+      "normal_behaviorally_rejected": true,
+      "normal_returncode": 1,
+      "optimized_behaviorally_rejected": true,
+      "optimized_returncode": 1
+    },
+    {
+      "assertion_prefix": "AssertionError: {'farmer': ['PASS'], 'hands': [['PASS'], ['PASS']], 'market': [[",
+      "failure_test": "test_observer_is_identity_preserving",
+      "name": "copy_off_objects",
+      "normal_behaviorally_rejected": true,
+      "normal_returncode": 1,
+      "optimized_behaviorally_rejected": true,
+      "optimized_returncode": 1
+    },
+    {
+      "assertion_prefix": "AssertionError: Tuples differ: (<function StockProbe.installed.<locals>.fert at ",
+      "failure_test": "test_probe_restores_callables_on_exception",
+      "name": "leak_probe",
+      "normal_behaviorally_rejected": true,
+      "normal_returncode": 1,
+      "optimized_behaviorally_rejected": true,
+      "optimized_returncode": 1
+    }
+  ],
+  "schema": "titan-stockbridge-results/v1",
+  "scope": "Compact actual output records; common fields and per-cell banks/trace digests apply to every listed game. Timing, full replay frames, complete helper telemetry and full source map omitted. Mutant assertion_prefix is at most 80 characters from actual normal-mode output; both modes required a behavioral FAIL, no ERROR, in one test. The checked-in runner reproduces complete records.",
+  "source_file_count": 110,
+  "source_map_reproduction": "check_stock_bridge_games.py computes sorted relative-file Git blobs from the exact artifact directory, excluding __pycache__ and .pyc",
+  "source_map_sha256": "23d431a0ddc440a8ee8cf15089020914dbc73652f528ff6b31b507f8fc8d51fb",
+  "unit_log_tails": {
+    "bridge-normal.log": "test_two_reservations_survive_native_finalizer_both_seats (__main__.StockBridgeTests.test_two_reservations_survive_native_finalizer_both_seats) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 1.019s\n\nOK\nSTOCKBRIDGE engine_pairs=182 interpreter_calls=4732\n",
+    "bridge-optimized.log": "test_two_reservations_survive_native_finalizer_both_seats (__main__.StockBridgeTests.test_two_reservations_survive_native_finalizer_both_seats) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 1.025s\n\nOK\nSTOCKBRIDGE engine_pairs=182 interpreter_calls=4732\n",
+    "inherited-normal.log": ".......................................................\n----------------------------------------------------------------------\nRan 55 tests in 0.076s\n\nOK\n",
+    "inherited-optimized.log": ".......................................................\n----------------------------------------------------------------------\nRan 55 tests in 0.075s\n\nOK\n"
+  }
+}

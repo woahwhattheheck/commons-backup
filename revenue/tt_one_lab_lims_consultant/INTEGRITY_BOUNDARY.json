@@ -1,0 +1,15 @@
+{
+  "schema": "tt-one-lab-lims-integrity-boundary/v1",
+  "public_api_boundary": "COOPERATIVE_IN_PROCESS_ONLY_NOT_HOSTILE_RUNTIME",
+  "resists_module_global_rebinding": true,
+  "resists_helper_symbol_rebinding": true,
+  "resists_public_compiler_symbol_rebinding_in_verifier": true,
+  "resists_cpython_closure_cell_mutation": false,
+  "hostile_same_process_python_supported": false,
+  "machine_strong_same_process_integrity_claimed": false,
+  "externally_isolated_source_verified_runner_provided": false,
+  "caller_supplied_evaluation_time": "REPLAY_ONLY_NOT_CURRENT",
+  "current_submission_authority_claimed": false,
+  "required_external_boundary_for_hostile_runtime": "Run reviewed source in a separately trusted, source-verified execution environment outside the potentially hostile Python process.",
+  "rationale": "CPython exposes writable function closure cells and mutable function/runtime objects to code already executing in the same interpreter. This carrier hardens accidental/cooperative rebinding but does not claim to defend against arbitrary reflective mutation by hostile same-process code."
+}

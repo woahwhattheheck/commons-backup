@@ -1,0 +1,103 @@
+{
+  "schema": "roadef.supervisor-abnormal-exit.v1",
+  "scope": "Synthetic checker/solver protocol, real POSIX child processes and checkpoint I/O; no official instances, score or full-budget validation.",
+  "baseline_commit": "2885d176373c33410148829fef93c310c3752c0b",
+  "baseline_supervisor": {
+    "bytes": 20348,
+    "sha256": "cb6907cbef3417bc649bc99b4764a1e7a482c9858bc2c29e8a0a75728d645a3b",
+    "git_blob": "00f958cf599ce6408f763f5a80d508d12d6508f5"
+  },
+  "candidate_supervisor": {
+    "bytes": 21112,
+    "sha256": "87d97744af1c819acc4e0a7fc79b641e934de60aef5c065d8a6f7a3332ee479b",
+    "git_blob": "00084077e9dcc33b17518a5481648219072b180c"
+  },
+  "test_abnormal_exit": {
+    "bytes": 11336,
+    "sha256": "c8e0be285a2a172c96ec414416a0b32d8aa49b6714936c678f483d16a960b4ba",
+    "git_blob": "5a3243a8669e65bfd90766691c21156148cb4525"
+  },
+  "original_test_supervisor": {
+    "bytes": 5913,
+    "sha256": "1deb7ab76b79a609bb10120ef3e9166e0fbda29af1e533cbd15f42b850777945",
+    "git_blob": "6b5bfd883260a91a3346fa34e8e077c2396befca"
+  },
+  "comparator": {
+    "bytes": 4993,
+    "sha256": "225169ef7e1e81f1006b296a186973e9b885d24dbfa5304b2695286cadf8d765",
+    "git_blob": "b4f26422e37f40f94394ada8ba735002e69b6f79"
+  },
+  "patch": {
+    "bytes": 1887,
+    "sha256": "d8719058b7cceae8240d334b1434d283781652644b9e699b6be7b24a44065e20",
+    "git_blob": "1a8235bfae0316140b7a8cfc02ad277530f0e127"
+  },
+  "environment": {
+    "system": "Linux",
+    "python": "3.13.5"
+  },
+  "baseline": {
+    "methods": 12,
+    "assertion_failures": 8,
+    "errors": 0,
+    "skips": 0,
+    "failed_methods": [
+      "test_before_first_check_error_does_not_invent_validation",
+      "test_error_receipt_identifies_original_exception_type",
+      "test_failed_failure_event_does_not_prevent_error_receipt",
+      "test_failed_final_receipt_preserves_original_error_and_old_atomic_bytes",
+      "test_keyboard_interrupt_stays_abnormal_and_propagates",
+      "test_real_checkpoint_io_failure_is_error_after_validated_baseline",
+      "test_runtime_error_preserves_better_checked_solution_and_exception",
+      "test_system_exit_keeps_original_code_and_validated_output"
+    ],
+    "log": {
+      "bytes": 9332,
+      "sha256": "e71911497dfeebebbb21c76bcebd10e3e7126377f890324f62510db019d9b40f",
+      "git_blob": "57c7d5bd09f69953b7aac16c2b78d73dc698ddac"
+    }
+  },
+  "candidate": {
+    "new_methods": 12,
+    "retained_methods": 3,
+    "methods": 15,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "log": {
+      "bytes": 4939,
+      "sha256": "790d4e5a37aa880818cc130cf7f86baa863d47dad1c697a3acc3b8e6bd7ddc2c",
+      "git_blob": "5ea9e4506e49d785e9e2ce6705e26b7d0f04f8fc"
+    }
+  },
+  "production_ast_changed_functions": [
+    "run"
+  ],
+  "production_ast_unchanged_functions": [
+    "__init__",
+    "accept",
+    "atomic_write",
+    "begin_stop",
+    "emit",
+    "enqueue",
+    "executable",
+    "launch",
+    "main",
+    "number",
+    "poll_checker",
+    "retry_check",
+    "sample_rss",
+    "save_receipt",
+    "schedule_check",
+    "signal_handler",
+    "start_lanes",
+    "stop_process"
+  ],
+  "limits": [
+    "Status handling covers abnormal exits from search/start_lanes and best-effort final reporting after existing cleanup.",
+    "If final error receipt cannot be written, prior atomic receipt is retained; no successful write is claimed.",
+    "Initial preflight and process-cleanup changes are outside this patch; cleanup integration remains SPRUCE-owned.",
+    "Handled SIGTERM/SIGINT remain normal bounded shutdown; escaping KeyboardInterrupt/SystemExit are abnormal.",
+    "Published frozen benchmark source and submission draft are untouched."
+  ]
+}

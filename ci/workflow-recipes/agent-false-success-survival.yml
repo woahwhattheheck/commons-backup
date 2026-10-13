@@ -1,0 +1,37 @@
+name: agent-false-success-survival
+on:
+  pull_request:
+    paths:
+      - "revenue/agent_false_success_survival/**"
+      - ".github/workflows/agent-false-success-survival.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/agent_false_success_survival/**"
+      - ".github/workflows/agent-false-success-survival.yml"
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile check
+        run: python -m py_compile revenue/agent_false_success_survival/*.py
+      - name: Hostile suite
+        run: python -m unittest -v revenue.agent_false_success_survival.test_proof
+      - name: Optimized hostile suite
+        run: python -O -m unittest -v revenue.agent_false_success_survival.test_proof
+      - name: Deterministic fixture proof
+        run: |
+          tmp="$(mktemp -d)"
+          python -m revenue.agent_false_success_survival compile revenue/agent_false_success_survival/fixtures/synthetic_capture.json --out "$tmp/a.json"
+          python -m revenue.agent_false_success_survival verify revenue/agent_false_success_survival/fixtures/synthetic_capture.json "$tmp/a.json"
+          python -m revenue.agent_false_success_survival compile revenue/agent_false_success_survival/fixtures/synthetic_capture.json --out "$tmp/b.json"
+          cmp "$tmp/a.json" "$tmp/b.json"

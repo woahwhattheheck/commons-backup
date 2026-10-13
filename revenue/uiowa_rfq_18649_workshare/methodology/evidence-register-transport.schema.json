@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UIOWA-023 lossless record transport v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "columns",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "uiowa-023-evidence-register/1"
+    },
+    "columns": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "required": [
+          "area",
+          "captured_at",
+          "claim",
+          "completeness_basis",
+          "confidence",
+          "conflict_group",
+          "content_digest",
+          "corroboration",
+          "custodian_or_owner",
+          "directness",
+          "enumerator_authority",
+          "evidence_id",
+          "evidence_state",
+          "finding_id",
+          "follow_up",
+          "group",
+          "observation_id",
+          "recency",
+          "representativeness",
+          "represented_period",
+          "scope_limit",
+          "source_ref",
+          "source_type",
+          "universe_definition"
+        ]
+      }
+    }
+  },
+  "$comment": "The Python validator additionally checks column/row-key equality, Unicode scalar validity and unchanged UIOWA-023 evidence semantics. Record-level preservation does not imply original CSV quoting or line-ending preservation."
+}

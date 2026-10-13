@@ -1,0 +1,45 @@
+{
+  "id": "cornell-craft-beverage-intake-lims-01",
+  "version": 1,
+  "buyer": "Cornell Craft Beverage Analytical Lab / Anna Katharine Mansfield",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788148131.767689"
+  },
+  "workflow": [
+    "one order per analysis",
+    "matrix-aware volume rules for multi-test, single-test, spirits, and kombucha",
+    "frozen-juice next-day evidence before RECEIVED",
+    "immutable accession IDs",
+    "panel routing",
+    "QC hold",
+    "human result release"
+  ],
+  "volume_rules_ml": {
+    "WINE_MULTI": 750,
+    "WINE_SINGLE": 375,
+    "CIDER_SINGLE": 375,
+    "SPIRITS_ABV": 100,
+    "KOMBUCHA_ABV": 100,
+    "JUICE_PANEL": 750
+  },
+  "acceptance": [
+    "8 input rows",
+    "exactly 6 valid submissions accession once and route to the prescribed analysis",
+    "exactly 2 reject with UNDER_VOLUME and MISSING_SAMPLE_ID",
+    "frozen juice cannot reach RECEIVED unless both frozen and next-day flags are true",
+    "replay creates zero duplicate accessions",
+    "reports remain blocked until analyst result plus QC signoff",
+    "human releaser required; autonomous release denied"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no interface marked live before golden-round-trip validation"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake, routing, QC hold, and human release receipts only; never diagnosis, certification, or live instrument/regulatory I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

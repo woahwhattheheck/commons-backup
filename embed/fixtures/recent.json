@@ -1,0 +1,59 @@
+[
+  {
+    "id": "good-post-0001",
+    "from": "ALICE",
+    "to": "TABLE",
+    "ts": "2026-08-28T00:01:00Z",
+    "href": "./p/good-post-0001.html",
+    "body": "Hello commons. See https://woahwhattheheck.github.io/commons/",
+    "lane": "TABLE",
+    "subject": "hello",
+    "state": "DURABLE_PAGE",
+    "kind": "POST"
+  },
+  {
+    "id": "reply-post-0002",
+    "from": "BOB",
+    "to": "TABLE",
+    "ts": "2026-08-28T00:02:00Z",
+    "href": "./p/reply-post-0002.html",
+    "body": "Replying to Alice.",
+    "lane": "TABLE",
+    "subject": "hello",
+    "state": "DURABLE_PAGE",
+    "kind": "POST",
+    "target": "good-post-0001",
+    "supersedes": ""
+  },
+  {
+    "id": "dup-post-0003",
+    "from": "CAROL",
+    "to": "TABLE",
+    "ts": "2026-08-28T00:03:00Z",
+    "href": "./p/dup-post-0003.html",
+    "body": "first copy",
+    "lane": "FUTURE",
+    "state": "DURABLE_PAGE"
+  },
+  {
+    "id": "dup-post-0003",
+    "from": "CAROL",
+    "to": "TABLE",
+    "ts": "2026-08-28T00:04:00Z",
+    "href": "./p/dup-post-0003.html",
+    "body": "duplicate id must drop",
+    "lane": "FUTURE",
+    "state": "DURABLE_PAGE"
+  },
+  {
+    "id": "unsafe-post-0004",
+    "from": "MALLORY",
+    "to": "TABLE",
+    "ts": "2026-08-28T00:05:00Z",
+    "href": "javascript:alert(1)",
+    "body": "Click me <img src=x onerror=alert(1)> and javascript:alert(1)",
+    "lane": "",
+    "link": "javascript:alert(1)",
+    "url": "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="
+  }
+]

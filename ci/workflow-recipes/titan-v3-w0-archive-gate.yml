@@ -1,0 +1,66 @@
+name: TITAN V3 W0 archive promotion gate
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-w0-archive-gate.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/w0-archive-gate/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  executable-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+        working-directory: revenue/kaggriculture/cloud-execution-lab/w0-archive-gate
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile gate
+        run: >-
+          python -m py_compile
+          verify_archive.py
+          runtime_probe.py
+          tests/test_verify_archive.py
+
+      - name: Run fail-closed and mutation suite
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          PYTHONHASHSEED: "0"
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Require exact current archive to classify as pre-gate HOLD
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          PYTHONHASHSEED: "0"
+        run: |
+          set +e
+          python verify_archive.py \
+            --base ../exports/titan-current.tar.gz \
+            --candidate ../exports/titan-current.tar.gz \
+            --contract contract-current-base-hold.json \
+            --receipt current-base-hold-receipt.json
+          rc=$?
+          set -e
+          test "$rc" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path("current-base-hold-receipt.json").read_text())
+          assert receipt["status"] == "HOLD", receipt
+          assert receipt["failure"]["code"] == "config.weed_continuation_missing", receipt
+          print(receipt["receipt_sha256"])
+          PY
+
+      - name: Upload deterministic current-base receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-w0-current-base-hold
+          path: revenue/kaggriculture/cloud-execution-lab/w0-archive-gate/current-base-hold-receipt.json
+          if-no-files-found: error

@@ -1,0 +1,113 @@
+name: titan-v3-source-manifest-closure-sol-pro
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-source-manifest-closure-sol-pro.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/cases/v3-source-manifest-closure-sol-pro/**'
+      - 'p/sol-pro-titan-v3-internal-source-manifest-closure-20260910-01.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  source-manifest-closure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Bind exact checkout
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          printf '%s\n' "$EXPECTED_HEAD" | tee "$RUNNER_TEMP/head.sha"
+          test -z "$(git status --porcelain)"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify authenticated builder fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab/cases/v3-source-manifest-closure-sol-pro
+          ACTUAL=$(sha256sum "$ROOT/packet_build_v3.py.txt" | awk '{print $1}')
+          test "$ACTUAL" = cfcb383e6cba811e17d687cb080fea1f55723c8aa734edbe9c37ec3743f923d0
+
+      - name: Run closure and predecessor contracts
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab/cases/v3-source-manifest-closure-sol-pro
+          cd "$ROOT"
+          python - <<'PY'
+          from pathlib import Path
+          for path in sorted(Path('.').glob('*.py')):
+              compile(path.read_text(encoding='utf-8'), str(path), 'exec')
+          PY
+          python -m unittest -v test_source_manifest_closure.py
+          python prove_predecessor.py --check PREDECESSOR.json
+
+      - name: Reproduce exact bounded patch receipt
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab/cases/v3-source-manifest-closure-sol-pro
+          TMP=$(mktemp -d)
+          trap 'rm -rf "$TMP"' EXIT
+          cp "$ROOT/packet_build_v3.py.txt" "$TMP/build_v3.py"
+          python "$ROOT/patch_packet.py" "$TMP" > "$RUNNER_TEMP/PATCH-RECEIPT.txt"
+          diff -u "$ROOT/PATCH-RECEIPT.txt" "$RUNNER_TEMP/PATCH-RECEIPT.txt"
+          test "$(sha256sum "$TMP/build_v3.py" | awk '{print $1}')" = b46b7abbd414ac6f585a6296b99d282f5ef09696771178a60b2ddf94d2e94e4f
+          test "$(sha256sum "$TMP/source_manifest_closure.py" | awk '{print $1}')" = 5885e872ffaa3889163df1ee9694a5f4656081420be471c8176ebed5793e99e9
+
+      - name: Retain exact source receipts and prove clean tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab/cases/v3-source-manifest-closure-sol-pro
+          sha256sum \
+            "$ROOT/source_manifest_closure.py" \
+            "$ROOT/patch_packet.py" \
+            "$ROOT/prove_predecessor.py" \
+            "$ROOT/test_source_manifest_closure.py" \
+            "$ROOT/packet_build_v3.py.txt" \
+            "$ROOT/PREDECESSOR.json" \
+            "$ROOT/PATCH-RECEIPT.txt" \
+            > "$RUNNER_TEMP/SOURCE-HASHES.sha256"
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain)"
+
+      - name: Upload exact receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-source-manifest-closure-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/head.sha
+            ${{ runner.temp }}/PATCH-RECEIPT.txt
+            ${{ runner.temp }}/SOURCE-HASHES.sha256
+            revenue/kaggriculture/cloud-execution-lab/cases/v3-source-manifest-closure-sol-pro/PREDECESSOR.json
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "packet_version": "1.0",
+    "change_id": "SYN-IAM-HOT-002",
+    "change_type": "urgent_maintenance",
+    "service": "Synthetic Identity Request Router",
+    "group": "IAM",
+    "summary": "Reject a malformed synthetic routing payload that caused repeated request retries.",
+    "requested_behavior": "Malformed synthetic routing payloads fail once with a diagnosable error instead of retrying repeatedly.",
+    "implementation_owner_role": "Identity platform engineer role",
+    "support_owner_role": "IAM operations lead",
+    "release_trigger": "Urgent maintenance after reproducible synthetic retry-loop evidence and targeted regression checks.",
+    "urgency_reason": "The fictional retry loop consumes worker capacity and delays unrelated synthetic requests.",
+    "synthetic": true
+  },
+  "user_facing_behavior": {
+    "before": "A malformed synthetic request can enter repeated retries and delay unrelated requests.",
+    "after": "A malformed synthetic request fails once with a traceable error category for support.",
+    "affected_users": ["synthetic application integrator persona", "synthetic IAM operations persona"],
+    "communications": "Synthetic internal operations notice records the error category and escalation path."
+  },
+  "known_limitations": [
+    {
+      "id": "LIM-01",
+      "description": "The urgent synthetic fix rejects the malformed payload but does not redesign upstream payload validation.",
+      "affected_scope": "Synthetic identity request ingestion",
+      "owner_role": "Identity architecture role",
+      "mitigation": "Retain diagnostic logging and open a separate upstream validation review.",
+      "follow_up_trigger": "Review when the urgent maintenance change is stable in the synthetic rehearsal."
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "statement": "Stop repeated retries for the reproduced malformed payload.",
+      "acceptance_criteria": "The reproduced malformed payload fails once and emits the expected diagnostic category.",
+      "acceptance_evidence": ["EVID-01"],
+      "support_readiness": ["SUP-01", "OPS-01"]
+    },
+    {
+      "id": "REQ-02",
+      "statement": "Do not alter successful routing of well-formed synthetic requests.",
+      "acceptance_criteria": "Targeted synthetic regression cases for well-formed requests retain their previous outcomes.",
+      "acceptance_evidence": ["EVID-02"],
+      "support_readiness": ["SUP-02", "OPS-02"]
+    }
+  ],
+  "acceptance_evidence": [
+    {
+      "id": "EVID-01",
+      "kind": "targeted_test",
+      "locator": "synthetic://tests/malformed-request-single-failure",
+      "result": "pass",
+      "notes": "Fictional reproduction and targeted check for the urgent-maintenance example."
+    },
+    {
+      "id": "EVID-02",
+      "kind": "regression_test",
+      "locator": "synthetic://tests/well-formed-routing-smoke",
+      "result": "pass",
+      "notes": "Fictional targeted regression evidence; broader regression depth remains an explicit follow-up decision."
+    }
+  ],
+  "support_readiness": [
+    {
+      "id": "SUP-01",
+      "item": "Operations can identify the new malformed-payload error category and escalation route.",
+      "owner_role": "IAM operations lead",
+      "status": "complete",
+      "locator": "synthetic://support/iam-error-category-note"
+    },
+    {
+      "id": "SUP-02",
+      "item": "Support has a concise distinction between malformed-request failure and unrelated routing errors.",
+      "owner_role": "IAM operations lead",
+      "status": "complete",
+      "locator": "synthetic://support/routing-triage-note"
+    }
+  ],
+  "documentation_updates": [
+    {
+      "document": "Synthetic IAM operations runbook",
+      "owner_role": "IAM operations lead",
+      "status": "deferred_with_owner",
+      "follow_up_trigger": "Update the durable runbook during the explicit post-change review; until then use the synthetic triage note locator."
+    },
+    {
+      "document": "Synthetic urgent-maintenance record",
+      "owner_role": "Identity platform engineer role",
+      "status": "updated",
+      "locator": "synthetic://docs/urgent-maintenance/SYN-IAM-HOT-002"
+    }
+  ],
+  "operational_needs": [
+    {
+      "id": "OPS-01",
+      "kind": "monitoring",
+      "need": "Observe retry counts and malformed-request errors after the synthetic change.",
+      "owner_role": "IAM operations lead",
+      "status": "complete",
+      "verification": "synthetic://ops/dashboard/request-retry-count"
+    },
+    {
+      "id": "OPS-02",
+      "kind": "capacity",
+      "need": "Confirm unrelated well-formed synthetic requests are not accumulating behind failed requests.",
+      "owner_role": "IAM operations lead",
+      "status": "complete",
+      "verification": "synthetic://ops/dashboard/request-queue-depth"
+    }
+  ],
+  "rollback_and_recovery": {
+    "rollback_trigger": "Well-formed synthetic requests begin failing or queue depth worsens after the change.",
+    "rollback_method": "Restore the prior router build and temporarily isolate the reproduced malformed synthetic input.",
+    "data_recovery_notes": "The example changes routing behavior only; no synthetic identity data migration is performed.",
+    "owner_role": "IAM operations lead"
+  },
+  "open_items": [
+    {
+      "id": "OPEN-01",
+      "severity": "non_blocking",
+      "question": "What durable upstream validation change, if any, should replace the narrow malformed-payload guard?",
+      "owner_role": "Identity architecture role",
+      "resolution_trigger": "Address in the explicit post-change review after the urgent synthetic maintenance is stable."
+    }
+  ]
+}

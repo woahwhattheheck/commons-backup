@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Supplier reorder desk</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#18302e;background:#f2f5f3;line-height:1.5}*{box-sizing:border-box}body{margin:0}header{background:#153e38;color:white;padding:25px max(24px,calc((100vw - 1280px)/2));border-bottom:5px solid #b7dfbc}header p{margin:4px 0;max-width:860px;color:#d6e8df}.eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.16em;font-weight:700}h1{font-size:1.85rem;margin:5px 0}h2{font-size:1.25rem;margin:0 0 8px}h3{font-size:1rem;margin:16px 0 6px}p{margin:7px 0 14px}main{max-width:1328px;margin:auto;padding:24px;display:grid;grid-template-columns:235px minmax(0,1fr);gap:24px}.panel{background:white;border:1px solid #dce4df;border-radius:12px;padding:22px;margin-bottom:20px;box-shadow:0 3px 10px #153e3805}aside .panel{padding:16px}label{display:block;font-weight:600;font-size:.9rem;margin:10px 0 5px}input,textarea,select,button{font:inherit}input:not([type=checkbox]),textarea,select{width:100%;border:1px solid #aebeb4;border-radius:6px;padding:9px;background:white;color:#18302e}textarea{min-height:150px;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical;white-space:pre;overflow:auto}input[type=file]{font-size:.8rem}button,.download{border:1px solid #235a4e;background:#205c4f;color:white;border-radius:7px;padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-block;font-size:.88rem;font-weight:600}button.secondary,.download{background:white;color:#205c4f}button:hover,.download:hover{filter:brightness(.94)}button:disabled{opacity:.5;cursor:wait}.actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:15px}.grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}.small{font-size:.82rem;color:#566a61}.notice{padding:12px 15px;background:#eef5e8;border-left:4px solid #759f58;border-radius:4px}.notice.warn{background:#fff5df;border-color:#be8b2b}.status{position:relative;margin:0 0 15px;padding:12px 16px;background:#e9f2f9;border:1px solid #b4cbdc;border-radius:8px;overflow-wrap:anywhere}.status.error{background:#fff0eb;border-color:#bc7664}.saved{padding:11px 8px;border-bottom:1px solid #dce4df;width:100%;text-align:left;background:transparent;color:#18302e;border-radius:0;border-width:0 0 1px;font-weight:400}.saved strong{display:block;overflow-wrap:anywhere}.saved span{font-size:.75rem;color:#627267}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.stat{background:#f2f6f4;border-radius:8px;padding:12px 18px;min-width:120px}.stat strong{display:block;font-size:1.5rem}.stat span{font-size:.8rem;color:#566a61}.table-wrap{overflow-x:auto;margin:8px 0 16px}table{border-collapse:collapse;width:100%;font-size:.86rem}th,td{text-align:left;padding:10px;border-bottom:1px solid #dce4df;vertical-align:top;overflow-wrap:anywhere}th{background:#f4f7f5;white-space:nowrap}td.num{text-align:right;white-space:nowrap}.badge{font-size:.72rem;font-weight:700;letter-spacing:.06em;background:#eef2e7;padding:5px 8px;border-radius:5px}summary{cursor:pointer;font-weight:600;padding:10px 0}details{border-top:1px solid #e1e7e2}pre{max-height:280px;overflow:auto;background:#f3f6f4;padding:15px;border-radius:6px;font-size:.78rem;white-space:pre-wrap;overflow-wrap:anywhere}.check{display:flex;gap:9px;align-items:flex-start;font-weight:400}.check input{margin-top:5px}.empty{color:#627267;padding:12px 0}.history{display:flex;gap:8px;flex-wrap:wrap}a{color:#205c4f}footer{max-width:1280px;margin:0 auto;padding:0 24px 25px;font-size:.8rem;color:#627267}main>*,.grid>*,.cols>*{min-width:0}h3,.notice,.small{overflow-wrap:anywhere}@media(max-width:850px){main{grid-template-columns:minmax(0,1fr)}aside .panel{margin:0}.saved{display:block}.cols{grid-template-columns:1fr}header{padding:20px 18px}main{padding:16px;gap:16px}.panel{padding:17px}.grid{grid-template-columns:1fr 1fr}.grid>div:first-child{grid-column:1/-1}}@media print{header,aside,#inputs-panel,#receipt-panel,.actions,.status,footer{display:none}main{display:block;padding:0}.panel{box-shadow:none;border:0}body{background:white}details{display:none}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">Commons · Inventory operations</div><h1>Supplier reorder desk</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>Turn stock and supplier CSVs into editable planning inputs, unsent purchase-order drafts, and a durable receiving record.</p></header>
+<main>
+<aside><section class="panel"><h2>Saved plans</h2><p class="small">Stored in this workspace’s SQLite database. Nothing is sent to suppliers.</p><button class="secondary" id="refresh">Refresh plans</button><div id="saved" aria-live="polite"></div></section></aside>
+<div>
+<div id="status" class="status" role="status">Connecting to local workspace…</div>
+<section class="panel" id="inputs-panel">
+<h2>1. Prepare a plan</h2><p class="small">Upload UTF-8 CSVs or edit the text below. Saving creates a new independent plan; saved source inputs remain unchanged.</p>
+<div class="grid"><div><label for="title">Plan name</label><input id="title" maxlength="200" value="New reorder plan"></div><div><label for="as_of">As-of date</label><input id="as_of" type="date"></div><div><label for="currency">Catalog currency</label><input id="currency" maxlength="3" value="USD"></div></div>
+<label class="check"><input id="pipeline" type="checkbox"><span>This imported stock’s <code>on_order</code> already includes the draft being received. Receipts should decrease that pipeline as well as increase <code>on_hand</code>.</span></label>
+<p class="small">Leave this unchecked for ordinary draft planning. This setting is fixed when a plan is saved. Currency labels do not convert or validate supplier prices.</p>
+<div class="cols"><div><label for="stock">Stock CSV</label><input id="stock-file" type="file" accept=".csv,text/csv" aria-label="Upload stock CSV"><textarea id="stock" spellcheck="false" aria-describedby="stock-hint"></textarea><p class="small" id="stock-hint">sku, name, on_hand, on_order, allocated, unit</p></div><div><label for="rules">Reorder rules CSV</label><input id="rules-file" type="file" accept=".csv,text/csv" aria-label="Upload rules CSV"><textarea id="rules" spellcheck="false"></textarea><p class="small">sku, reorder_at, target_stock, preferred_supplier</p></div></div>
+<label for="catalog">Supplier catalog CSV</label><input id="catalog-file" type="file" accept=".csv,text/csv" aria-label="Upload supplier catalog CSV"><textarea id="catalog" spellcheck="false"></textarea>
+<p class="small">supplier_id, supplier_sku, sku, description, unit_cost, available_qty, lead_days, alternative_for_sku</p>
+<div class="actions"><button id="save">Save new draft plan</button><button id="sample" class="secondary">Load fictional example</button></div>
+</section>
+<section class="panel" id="result-panel" hidden><h2 id="plan-title"></h2><p id="plan-meta" class="small"></p><div class="notice">Planning only. Drafts do not create purchases, reserve stock, change a supplier’s catalog, or send messages. Alternatives remain separate review notes.</div><div id="stats" class="stats"></div><div id="orders"></div><div id="exceptions"></div><h3>Current stock after recorded receipts</h3><div id="stock-table" class="table-wrap"></div><div id="downloads" class="actions"></div><details><summary>Source inputs, receiving log and revision history</summary><p class="small">The JSON export contains all submitted input text and receipt source uploads. Source CSV downloads match the UTF-8 text submitted to this server.</p><div id="source-links" class="actions"></div><h3>Saved revisions</h3><div id="history" class="history"></div><pre id="revision-view" hidden></pre><h3>Receiving log</h3><pre id="log"></pre></details></section>
+<section class="panel" id="receipt-panel" hidden><h2>2. Record received goods</h2><p id="receive-target" class="small"></p><p class="notice warn">Record goods actually received. Each receipt ID must be unique within this plan. Reopening or retrying an identical receipt does not add stock twice; conflicting IDs and quantities above the saved draft remain unapplied.</p><label for="receipts">Receipt CSV</label><input id="receipts-file" type="file" accept=".csv,text/csv" aria-label="Upload receipt CSV"><textarea id="receipts" spellcheck="false"></textarea><p class="small">receipt_id, received_at, supplier_id, supplier_sku, sku, quantity. Use the original saved draft’s supplier and SKU values.</p><div class="actions"><button id="receive">Apply receipts to this saved plan</button></div></section>
+</div></main><footer>Local single-workspace tool · No supplier connection or payment processing · Existing command-line engine remains available unchanged.</footer>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+let current = null;
+const retries = new Map();
+const headers = {
+ stock:'sku,name,on_hand,on_order,allocated,unit\n',
+ rules:'sku,reorder_at,target_stock,preferred_supplier\n',
+ catalog:'supplier_id,supplier_sku,sku,description,unit_cost,available_qty,lead_days,alternative_for_sku\n',
+ receipts:'receipt_id,received_at,supplier_id,supplier_sku,sku,quantity\n'
+};
+const sample = {
+ stock:headers.stock+'FILTER-A,Filter cartridge,2,3,1,each\nBELT-B,Drive belt,0,0,0,each\n',
+ rules:headers.rules+'FILTER-A,5,13,SAMPLE-SUPPLIER\nBELT-B,2,5,SAMPLE-SUPPLIER\n',
+ catalog:headers.catalog+'SAMPLE-SUPPLIER,F-A,FILTER-A,Sample filter,4.25,50,2,\nSAMPLE-SUPPLIER,B-B,BELT-B,Exact belt unavailable,8.50,0,3,\nSAMPLE-SUPPLIER,B-ALT,BELT-ALT,Fit requires human review,9.00,10,2,BELT-B\n'
+};
+for(const key of Object.keys(headers)) $(key).value=headers[key];
+$('as_of').value=new Date().toISOString().slice(0,10);
+function notify(message,error=false){$('status').textContent=message;$('status').classList.toggle('error',error);}
+function node(tag,content,cls){const el=document.createElement(tag);if(content!==undefined)el.textContent=String(content);if(cls)el.className=cls;return el;}
+async function api(path,body){
+ const opts={cache:'no-store'};
+ if(body){const key=path+'\n'+JSON.stringify(body);if(!retries.has(key))retries.set(key,crypto.randomUUID());opts.method='POST';opts.headers={'Content-Type':'application/json'};opts.body=JSON.stringify({...body,operation_id:retries.get(key)});}
+ const response=await fetch(path,opts);let data;
+ try{data=await response.json();}catch{throw new Error('No readable server response. Your editor contents remain available; retry the unchanged request.');}
+ if(!response.ok)throw new Error(data.error||'Request did not complete');return data;
+}
+async function busy(button,job){button.disabled=true;try{await job();}catch(error){notify(error.message,true);}finally{button.disabled=false;}}
+function table(columns,rows){const t=node('table');const head=node('thead'),tr=node('tr');for(const c of columns)tr.append(node('th',c));head.append(tr);t.append(head);const body=node('tbody');for(const row of rows){const r=node('tr');for(const value of row)r.append(node('td',value));body.append(r);}t.append(body);return t;}
+function link(path,label){const a=node('a',label,'download');a.href=path;a.setAttribute('download','');return a;}
+async function refresh(){const rows=await api('/api/runs');$('saved').replaceChildren();if(!rows.length)$('saved').append(node('p','No saved plans yet.','empty'));for(const row of rows){const b=node('button',undefined,'saved');b.append(node('strong',row.title),node('span','Revision '+row.revision+' · '+row.created_at.slice(0,10)));b.onclick=()=>busy(b,()=>openPlan(row.id));$('saved').append(b);}}
+function populate(doc){$('title').value=doc.title;for(const kind of ['stock','rules','catalog'])$(kind).value=doc.inputs[kind];$('as_of').value=doc.inputs.as_of;$('currency').value=doc.inputs.currency;$('pipeline').checked=doc.inputs.pipeline_includes_draft;}
+async function openPlan(id){const doc=await api('/api/runs/'+id);current=doc;populate(doc);render(doc);await showHistory(doc.id);notify('Opened '+doc.title+' · revision '+doc.revision+'. Editing inputs and saving creates a separate new plan.');}
+function render(doc){
+ current=doc;for(const p of ['result-panel','receipt-panel'])$(p).hidden=false;
+ $('plan-title').textContent=doc.title;$('plan-meta').textContent='Saved plan '+doc.id+' · revision '+doc.revision+' · as of '+doc.inputs.as_of+' · '+doc.inputs.currency;
+ $('receive-target').textContent='Receipts apply to '+doc.title+' (revision '+doc.revision+'), not to unsaved input edits above.';
+ $('stats').replaceChildren();for(const [value,label] of [[doc.plan.summary.draft_purchase_orders,'Unsent draft POs'],[doc.plan.summary.review_required,'Items needing review'],[doc.receipt_log.count,'Recorded receipt IDs'],[0,'Orders sent']]){const s=node('div',undefined,'stat');s.append(node('strong',value),node('span',label));$('stats').append(s);}
+ $('orders').replaceChildren();for(const order of doc.plan.purchase_orders){const title=node('h3',order.supplier_id+' · '+order.draft_id);const wrap=node('div',undefined,'table-wrap');wrap.append(table(['Stock SKU','Supplier SKU','Description','Quantity','Unit','Unit cost','Line total'],order.lines.map(l=>[l.sku,l.supplier_sku,l.description,l.quantity,l.unit,l.unit_cost,l.line_total])));$('orders').append(title,node('span','DRAFT · NOT SENT','badge'),wrap,node('p','Draft total: '+order.total+' '+doc.inputs.currency));}if(!doc.plan.purchase_orders.length)$('orders').append(node('p','No exact-item draft order is needed or available.','empty'));
+ $('exceptions').replaceChildren();if(doc.plan.exceptions.length)$('exceptions').append(node('h3','Alternative review · no substitute order created'));
+ for(const item of doc.plan.exceptions){const box=node('div',undefined,'notice warn');box.append(node('strong',item.sku+' · '+item.unfilled_qty+' units unfilled'));if(!item.alternative_suggestions.length)box.append(node('p','No stocked alternative appears in the supplied catalog.'));for(const a of item.alternative_suggestions)box.append(node('p',a.supplier_id+' / '+a.supplier_sku+' — '+a.description+' · '+a.available_qty+' available · '+a.unit_cost+' '+doc.inputs.currency+' · '+a.lead_days+' lead days. Fit review required.'));$('exceptions').append(box);}
+ $('stock-table').replaceChildren(node('pre',doc.updated_stock));
+ const base='/api/runs/'+doc.id;
+ $('downloads').replaceChildren(link(base+'/updated-stock.csv','Download updated stock'),link(base+'/export.json','Export complete plan'));const print=node('button','Print plan','secondary');print.onclick=()=>window.print();$('downloads').append(print);
+ $('source-links').replaceChildren(...['stock','rules','catalog'].map(k=>link(base+'/source/'+k,'Submitted '+k+' CSV')));
+ $('log').textContent=JSON.stringify(doc.receipt_log,null,2);$('revision-view').hidden=true;
+}
+async function showHistory(id){const revisions=await api('/api/runs/'+id+'/history');$('history').replaceChildren();for(const revision of revisions){const b=node('button','Revision '+revision,'secondary');b.onclick=()=>busy(b,async()=>{const old=await api('/api/runs/'+id+'/history/'+revision);$('revision-view').hidden=false;$('revision-view').textContent=JSON.stringify(old,null,2);notify('Viewing historical revision '+revision+'. The active receiving target is unchanged.');});$('history').append(b);}}
+for(const kind of Object.keys(headers)){$(kind+'-file').addEventListener('change',async event=>{try{const file=event.target.files[0];if(!file)return;if(file.size>2*1024*1024)throw new Error('CSV files must be at most 2 MiB.');const bytes=await file.arrayBuffer();$(kind).value=new TextDecoder('utf-8',{fatal:true}).decode(bytes);notify('Loaded '+file.name+' into '+kind+' editor. Save or apply to retain submitted text.');}catch(error){notify(error.message,true);}});}
+$('sample').onclick=()=>{for(const kind of Object.keys(sample))$(kind).value=sample[kind];$('title').value='Fictional retailer · sample plan';$('as_of').value='2026-09-08';$('currency').value='USD';$('pipeline').checked=false;notify('Fictional example loaded. Expected exact draft: 9 filter units / 38.25 USD; the belt alternative remains review-only.');};
+$('save').onclick=()=>busy($('save'),async()=>{const inputs={as_of:$('as_of').value,currency:$('currency').value,pipeline_includes_draft:$('pipeline').checked};for(const kind of ['stock','rules','catalog'])inputs[kind]=$(kind).value;const doc=await api('/api/runs',{title:$('title').value,inputs});await openPlan(doc.id);await refresh();notify('Saved '+doc.title+'. Drafts are unsent; source inputs are retained.');});
+$('receive').onclick=()=>busy($('receive'),async()=>{if(!current)throw new Error('Open a saved plan first.');const doc=await api('/api/runs/'+current.id+'/receipts',{expected_revision:current.revision,csv:$('receipts').value});await openPlan(doc.id);await refresh();notify('Receipts recorded. Current revision '+current.revision+'; '+current.receipt_log.count+' unique receipt IDs. Nothing sent or purchased.');});
+$('refresh').onclick=()=>busy($('refresh'),refresh);
+refresh().then(()=>notify('Local workspace ready. Load CSVs or the fictional example to start.')).catch(error=>notify(error.message,true));
+</script>
+</body></html>

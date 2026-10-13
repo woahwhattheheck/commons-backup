@@ -1,0 +1,31 @@
+name: commercial-opportunity-custody
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/commercial_opportunity_custody/**'
+      - '.github/workflows/commercial-opportunity-custody.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/commercial_opportunity_custody/**'
+      - '.github/workflows/commercial-opportunity-custody.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile revenue/commercial_opportunity_custody/custody.py revenue/commercial_opportunity_custody/test_custody.py revenue/commercial_opportunity_custody/test_repo_case_alias.py
+      - name: Focused hostiles
+        run: python -m unittest -v revenue.commercial_opportunity_custody.test_custody revenue.commercial_opportunity_custody.test_repo_case_alias
+      - name: Focused hostiles optimized
+        run: python -O -m unittest -v revenue.commercial_opportunity_custody.test_custody revenue.commercial_opportunity_custody.test_repo_case_alias

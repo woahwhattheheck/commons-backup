@@ -1,0 +1,35 @@
+name: GGUF 12k enterprise close kit
+
+on:
+  pull_request:
+    paths:
+      - "revenue/payment_ready/pack.json"
+      - "revenue/payment_ready/recovery.json"
+      - "revenue/payment_ready/gguf_enterprise_close_kit/**"
+      - ".github/workflows/gguf-12k-enterprise-close-kit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  close-kit:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: revenue/payment_ready/gguf_enterprise_close_kit
+        run: python -m py_compile close_kit.py test_close_kit.py
+      - name: Normal semantic suite
+        working-directory: revenue/payment_ready/gguf_enterprise_close_kit
+        run: python -m unittest -v test_close_kit.py
+      - name: Optimized semantic suite
+        working-directory: revenue/payment_ready/gguf_enterprise_close_kit
+        run: python -O -m unittest -v test_close_kit.py

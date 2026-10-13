@@ -1,0 +1,41 @@
+name: titan-v5-v31-v4-archive-bridge
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v5-v31-v4-archive-bridge.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/archive-version-bridge/**"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/joint-liquidity-bench/paired.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v5-v31-v4-archive-bridge-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Assert exact triggering head
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile and run archive bridge contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/archive-version-bridge
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          python -B -m py_compile bridge.py test_bridge.py
+          python -B -m unittest -v test_bridge.py
+          python -O -B -m unittest -v test_bridge.py
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --porcelain)"

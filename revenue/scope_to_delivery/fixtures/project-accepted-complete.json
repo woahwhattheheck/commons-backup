@@ -1,0 +1,369 @@
+{
+  "agreement_id": "agr-synthetic-production-survival-20260828-01",
+  "agreement_state": "ACCEPTED",
+  "catalog_funnel_truth": {
+    "accepted_scopes": 0,
+    "as_of": "2026-08-28T17:21:46Z",
+    "collected_cash_usd": "0.00",
+    "delivered_transports": 17,
+    "distinct_targets": 12,
+    "next_edge": "QUALIFIED_BUYER",
+    "paid_deliveries": 0,
+    "source": "revenue/payment_ready/current_receipt.json plus revenue/payment_ready/outreach_receipts/ through 20260828-langfuse-1a0496451e052b9d.json; unclassified response signal: p/slack-1787769698-642529.md",
+    "unclassified_response_signals": 1,
+    "verified_positive_replies": 0
+  },
+  "delivery_receipt": {
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "delivered": true,
+    "delivery_state": "DELIVERED",
+    "evidence_item_count": 4,
+    "execution_status": "PASS",
+    "honesty": [
+      "delivered is true only when every acceptance row is PASS.",
+      "Authorization, settlement, payout, or a bank credit never flips delivered.",
+      "This receipt is not a testimonial."
+    ],
+    "kind": "DELIVERY_RECEIPT",
+    "missing_rows": [],
+    "payment_does_not_prove_delivery": true,
+    "schema_version": "commons-scope-receipt/v1"
+  },
+  "evidence_bundle": {
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "complete": true,
+    "honesty": [
+      "Only observations with public_ref and sha256 enter the bundle.",
+      "Missing rows stay UNMEASURED. The composer never invents evidence."
+    ],
+    "items": [
+      {
+        "note": "Happy path recovered with one external effect.",
+        "observed_at": "2026-08-28T14:00:00-04:00",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-happy-path.txt",
+        "result": "PASS",
+        "row_id": "happy-path",
+        "sha256": "7d82130263dc884893160594a8f0fc7f12d55b07e03376e7c2f6731de7a84b69"
+      },
+      {
+        "note": "Forced crash stop path visible.",
+        "observed_at": "2026-08-28T14:20:00-04:00",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-failure-path.txt",
+        "result": "PASS",
+        "row_id": "failure-or-stop-path",
+        "sha256": "82018ee45019ff45e141f7463f22867516359abcfc749cc8fff0107d87a80280"
+      },
+      {
+        "note": "Idempotency key reused; dedupe hit recorded.",
+        "observed_at": "2026-08-28T14:40:00-04:00",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-rollback.txt",
+        "result": "PASS",
+        "row_id": "rollback-or-reset",
+        "sha256": "90ea46a12d45ba02458b8e5b6d9d368488155687094feb87a0fb1ed0e588df16"
+      },
+      {
+        "note": "Receipt links proof and states limits.",
+        "observed_at": "2026-08-28T15:00:00-04:00",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-receipt.txt",
+        "result": "PASS",
+        "row_id": "durable-receipt",
+        "sha256": "5dd3fa5c5ce97ab5dd8dc91cf82644eef78830af3ed35fd4e0780c85762333ee"
+      }
+    ],
+    "kind": "EVIDENCE_BUNDLE",
+    "schema_version": "commons-scope-evidence/v1",
+    "unmeasured_rows": []
+  },
+  "execution_status": {
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "agreement_state": "ACCEPTED",
+    "blocked": false,
+    "claimed_complete": false,
+    "honesty": [
+      "Status is projected from observations only.",
+      "PASS requires every acceptance row PASS with hashes.",
+      "A claimed complete without hashes is SUBMITTED, never PASS."
+    ],
+    "kind": "EXECUTION_STATUS",
+    "reason": "Every acceptance row is PASS with public_ref and sha256.",
+    "rows": [
+      {
+        "id": "happy-path",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-happy-path.txt",
+        "result": "PASS",
+        "sha256": "7d82130263dc884893160594a8f0fc7f12d55b07e03376e7c2f6731de7a84b69"
+      },
+      {
+        "id": "failure-or-stop-path",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-failure-path.txt",
+        "result": "PASS",
+        "sha256": "82018ee45019ff45e141f7463f22867516359abcfc749cc8fff0107d87a80280"
+      },
+      {
+        "id": "rollback-or-reset",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-rollback.txt",
+        "result": "PASS",
+        "sha256": "90ea46a12d45ba02458b8e5b6d9d368488155687094feb87a0fb1ed0e588df16"
+      },
+      {
+        "id": "durable-receipt",
+        "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-receipt.txt",
+        "result": "PASS",
+        "sha256": "5dd3fa5c5ce97ab5dd8dc91cf82644eef78830af3ed35fd4e0780c85762333ee"
+      }
+    ],
+    "schema_version": "commons-scope-status/v1",
+    "status": "PASS",
+    "work_started": true
+  },
+  "funnel_readiness": "READY_FOR_QUALIFICATION",
+  "handoff": {
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "artifacts": {
+      "cash_claimed": false,
+      "delivery_state": "DELIVERED",
+      "execution_status": "PASS",
+      "invoice_state": "ISSUED",
+      "packet_state": "ISSUED",
+      "sow_lock": "LOCKED_SOW"
+    },
+    "gaps": [
+      "Cash is not BANK_AVAILABLE; cash_claimed is false."
+    ],
+    "honesty": [
+      "No testimonial field exists.",
+      "Gaps stay listed until evidence closes them."
+    ],
+    "kind": "BUYER_HANDOFF",
+    "markdown": "# Scope-to-delivery handoff\n\n- SKU: Production Survival Sprint (production-survival-sprint)\n- Agreement: `agr-synthetic-production-survival-20260828-01` state **ACCEPTED**\n- SOW: **LOCKED_SOW**\n- Work packet: **ISSUED**\n- Execution: **PASS**\n- Delivery: **DELIVERED**\n- Invoice: **ISSUED**\n- Authorization: **CONFIRMED**\n- Settlement: **UNMEASURED**\n- Payout: **UNMEASURED**\n- Bank available: **UNMEASURED**\n- Cash claimed: **False**\n\n## Honest gaps\n- Cash is not BANK_AVAILABLE; cash_claimed is false.\n\nThis handoff is not a testimonial. Payment does not prove delivery.\nBuyer names, emails, and addresses are not on public main.",
+    "schema_version": "commons-scope-handoff/v1",
+    "sku_id": "production-survival-sprint",
+    "sku_name": "Production Survival Sprint"
+  },
+  "invoice": {
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "amount": "15000.00",
+    "currency": "USD",
+    "honesty": [
+      "ISSUED is not SETTLED and not BANK_AVAILABLE.",
+      "The public artifact carries only an opaque processor_ref."
+    ],
+    "kind": "INVOICE_STATE",
+    "processor_ref": "opaque:synthetic_processor_ref_20260828",
+    "schema_version": "commons-scope-invoice/v1",
+    "state": "ISSUED"
+  },
+  "kind": "SCOPE_TO_DELIVERY_PROJECT",
+  "markdown": "# Scope-to-delivery handoff\n\n- SKU: Production Survival Sprint (production-survival-sprint)\n- Agreement: `agr-synthetic-production-survival-20260828-01` state **ACCEPTED**\n- SOW: **LOCKED_SOW**\n- Work packet: **ISSUED**\n- Execution: **PASS**\n- Delivery: **DELIVERED**\n- Invoice: **ISSUED**\n- Authorization: **CONFIRMED**\n- Settlement: **UNMEASURED**\n- Payout: **UNMEASURED**\n- Bank available: **UNMEASURED**\n- Cash claimed: **False**\n\n## Honest gaps\n- Cash is not BANK_AVAILABLE; cash_claimed is false.\n\nThis handoff is not a testimonial. Payment does not prove delivery.\nBuyer names, emails, and addresses are not on public main.",
+  "payment_state": {
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "amount": "15000.00",
+    "cash_claimed": false,
+    "currency": "USD",
+    "honesty": [
+      "QUOTED != CHARGEABLE != INVOICED != AUTHORIZATION != SETTLEMENT != PAYOUT != BANK_AVAILABLE.",
+      "cash_claimed is true only at BANK_AVAILABLE.",
+      "Payment never proves delivery."
+    ],
+    "invoice_issued": true,
+    "kind": "PAYMENT_STATE",
+    "payment_truth": {
+      "authorization": "CONFIRMED",
+      "bank_available": "UNMEASURED",
+      "payout": "UNMEASURED",
+      "settlement": "UNMEASURED"
+    },
+    "processor_ref": "opaque:synthetic_processor_ref_20260828",
+    "schema_version": "commons-scope-payment-state/v1"
+  },
+  "routes": {
+    "human": "right-now.html",
+    "machine": "revenue/production_survival/offer.json"
+  },
+  "schema_version": "commons-scope-project/v1",
+  "sku_id": "production-survival-sprint",
+  "sku_name": "Production Survival Sprint",
+  "sow": {
+    "acceptance_rows": [
+      {
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "Synthetic file-backed input named in these public fixtures",
+        "id": "happy-path",
+        "then": "The agreed recovery outcome is observed and hashed on a public fixture file",
+        "when": "The happy path is run inside the agreed America/New_York window"
+      },
+      {
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "The same synthetic input",
+        "id": "failure-or-stop-path",
+        "then": "The stop path is visible and hashed on a public fixture file",
+        "when": "The named process crash is forced after the external effect"
+      },
+      {
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "State after the forced failure",
+        "id": "rollback-or-reset",
+        "then": "The named reset outcome is observed and hashed on a public fixture file",
+        "when": "Rollback reuses the idempotency key"
+      },
+      {
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "The completed synthetic run",
+        "id": "durable-receipt",
+        "then": "The receipt links the proof, states limits, and carries content hashes",
+        "when": "The receipt fixture is published"
+      }
+    ],
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "agreement_state": "ACCEPTED",
+    "honesty": [
+      "DRAFT_SOW is not a locked contract.",
+      "LOCKED_SOW requires written PRESENT acceptance of the exact terms digest.",
+      "Party names, emails, and addresses are never filled on public main."
+    ],
+    "in_scope": [
+      "Measured failure cycle on one buyer-owned workflow",
+      "Retry and rollback implementation",
+      "Durable receipt in the agreed sandbox"
+    ],
+    "intake_sentence": "My agent should finish one external effect after a crash, but in production it repeats the effect.",
+    "kind": "STATEMENT_OF_WORK",
+    "lock": "LOCKED_SOW",
+    "out_of_scope": [
+      "credentials",
+      "private-data",
+      "pii-phi",
+      "authentication",
+      "billing",
+      "production-migration",
+      "ongoing-hosting-or-sla",
+      "white-box-or-model-files"
+    ],
+    "parties": {
+      "addresses": "NOT_ON_PUBLIC_MAIN",
+      "buyer": "REDACTED_PUBLIC",
+      "buyer_ref": "buyer_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "emails": "NOT_ON_PUBLIC_MAIN",
+      "seller": "Commons founder (public terms only)"
+    },
+    "quote": {
+      "amount": "15000.00",
+      "currency": "USD"
+    },
+    "refund_choice": "REFUND_IF_MISS",
+    "refund_text": "UNKNOWN",
+    "schema_version": "commons-scope-sow/v1",
+    "sku_id": "production-survival-sprint",
+    "sku_name": "Production Survival Sprint",
+    "source": {
+      "blob_sha": "84b664c07d0677a92c8e79797f80ebde823da447",
+      "offer_id": "production-survival-sprint",
+      "path": "revenue/production_survival/offer.json",
+      "pointer": "/ladder/0",
+      "terms_authority": "source"
+    },
+    "window": {
+      "end": "2026-08-28T21:00:00-04:00",
+      "start": "2026-08-28T13:00:00-04:00",
+      "timezone": "America/New_York"
+    }
+  },
+  "work_packet": {
+    "acceptance_rows": [
+      {
+        "binary": true,
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "Synthetic file-backed input named in these public fixtures",
+        "id": "happy-path",
+        "then": "The agreed recovery outcome is observed and hashed on a public fixture file",
+        "when": "The happy path is run inside the agreed America/New_York window"
+      },
+      {
+        "binary": true,
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "The same synthetic input",
+        "id": "failure-or-stop-path",
+        "then": "The stop path is visible and hashed on a public fixture file",
+        "when": "The named process crash is forced after the external effect"
+      },
+      {
+        "binary": true,
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "State after the forced failure",
+        "id": "rollback-or-reset",
+        "then": "The named reset outcome is observed and hashed on a public fixture file",
+        "when": "Rollback reuses the idempotency key"
+      },
+      {
+        "binary": true,
+        "evidence_required": [
+          "public_ref",
+          "sha256"
+        ],
+        "given": "The completed synthetic run",
+        "id": "durable-receipt",
+        "then": "The receipt links the proof, states limits, and carries content hashes",
+        "when": "The receipt fixture is published"
+      }
+    ],
+    "agreement_id": "agr-synthetic-production-survival-20260828-01",
+    "deliverables": [
+      "measured-failure-cycle",
+      "retry-and-rollback",
+      "durable-receipt"
+    ],
+    "honesty": [
+      "A work packet is a bound, not a claim that work ran.",
+      "Every acceptance row is binary PASS or MISS. There is no mostly-complete."
+    ],
+    "in_scope": [
+      "Measured failure cycle on one buyer-owned workflow",
+      "Retry and rollback implementation",
+      "Durable receipt in the agreed sandbox"
+    ],
+    "kind": "WORK_PACKET",
+    "out_of_scope": [
+      "credentials",
+      "private-data",
+      "pii-phi",
+      "authentication",
+      "billing",
+      "production-migration",
+      "ongoing-hosting-or-sla",
+      "white-box-or-model-files"
+    ],
+    "required_evidence": [
+      "public_ref",
+      "sha256"
+    ],
+    "schema_version": "commons-scope-packet/v1",
+    "sku_id": "production-survival-sprint",
+    "state": "ISSUED",
+    "window": {
+      "end": "2026-08-28T21:00:00-04:00",
+      "start": "2026-08-28T13:00:00-04:00",
+      "timezone": "America/New_York"
+    }
+  }
+}

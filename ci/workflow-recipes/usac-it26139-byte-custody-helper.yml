@@ -1,0 +1,86 @@
+name: USAC IT-26-139 buyer byte custody helper
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'z-csgp5n7/usac-it26139-byte-custody-helper'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Fetch exact first-party buyer artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          fetch() {
+            local url="$1" out="$2"
+            curl --proto '=https' --tlsv1.2 --fail --location --retry 3 --retry-all-errors \
+              --connect-timeout 20 --max-time 120 \
+              --user-agent 'TokenJunkieLabs-USAC-evidence-recovery/1.0' \
+              "$url" -o "evidence/$out"
+            test -s "evidence/$out"
+          }
+          fetch 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/RFP-IT-26-139-AI-Consulting-and-Support-Services.pdf' 'RFP-IT-26-139-AI-Consulting-and-Support-Services.pdf'
+          fetch 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/IT-26-139-Attachment-1-Bid-Sheet.xlsx' 'IT-26-139-Attachment-1-Bid-Sheet.xlsx'
+          fetch 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/IT-26-139-Attachment-2-USAC-Confidentiality-Agreement.pdf' 'IT-26-139-Attachment-2-USAC-Confidentiality-Agreement.pdf'
+          fetch 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/IT-26-139-Questions-and-Answers.pdf' 'IT-26-139-Questions-and-Answers.pdf'
+
+      - name: Build raw-byte manifest
+        shell: python
+        run: |
+          import hashlib, json, mimetypes, pathlib, zipfile
+          from datetime import datetime, timezone
+
+          root = pathlib.Path('evidence')
+          expected = {
+            'RFP-IT-26-139-AI-Consulting-and-Support-Services.pdf': 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/RFP-IT-26-139-AI-Consulting-and-Support-Services.pdf',
+            'IT-26-139-Attachment-1-Bid-Sheet.xlsx': 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/IT-26-139-Attachment-1-Bid-Sheet.xlsx',
+            'IT-26-139-Attachment-2-USAC-Confidentiality-Agreement.pdf': 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/IT-26-139-Attachment-2-USAC-Confidentiality-Agreement.pdf',
+            'IT-26-139-Questions-and-Answers.pdf': 'https://www.usac.org/wp-content/uploads/about/documents/Procurement/IT-26-139-Questions-and-Answers.pdf',
+          }
+          rows = []
+          for name, url in expected.items():
+            p = root / name
+            b = p.read_bytes()
+            if name.endswith('.pdf') and not b.startswith(b'%PDF-'):
+              raise SystemExit(f'not a PDF: {name}')
+            if name.endswith('.xlsx'):
+              if not b.startswith(b'PK'):
+                raise SystemExit(f'not a ZIP/XLSX: {name}')
+              with zipfile.ZipFile(p) as z:
+                names = set(z.namelist())
+                required = {'[Content_Types].xml', 'xl/workbook.xml'}
+                if not required.issubset(names):
+                  raise SystemExit(f'invalid XLSX package: {name}')
+                if len(names) > 1000 or sum(i.file_size for i in z.infolist()) > 50_000_000:
+                  raise SystemExit('XLSX safety fence exceeded')
+            rows.append({
+              'filename': name,
+              'source_url': url,
+              'size_bytes': len(b),
+              'sha256': hashlib.sha256(b).hexdigest(),
+              'content_type_hint': mimetypes.guess_type(name)[0],
+            })
+          manifest = {
+            'schema': 'usac-it-26-139-buyer-byte-custody/v1',
+            'observed_at_utc': datetime.now(timezone.utc).isoformat(timespec='seconds').replace('+00:00','Z'),
+            'authority': 'first-party public buyer URLs only',
+            'files': rows,
+          }
+          (root / 'MANIFEST.json').write_text(json.dumps(manifest, sort_keys=True, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(manifest, sort_keys=True, indent=2))
+
+      - name: Upload retained raw buyer bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: usac-it-26-139-buyer-byte-custody
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 30

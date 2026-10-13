@@ -1,0 +1,155 @@
+{
+  "archive_changed": false,
+  "benchmark_ratios": {
+    "normal": {
+      "long": 1.7292332808790591,
+      "mixed": 1.5053348045776849,
+      "short": 1.1843864663617294
+    },
+    "optimized": {
+      "long": 1.7789504999706323,
+      "mixed": 1.4748650643934602,
+      "short": 1.144270675175351
+    }
+  },
+  "canonical_branch": "main",
+  "checks_per_mode": {
+    "cli_rejections": 7,
+    "dependency_rejections": 8,
+    "optimizer_pairs": 324,
+    "receipt_pairs": 1920,
+    "score_pairs": 1604
+  },
+  "composition": {
+    "default_change": false,
+    "output_git": "16dde00627effa5d0ae4d73a8e05a295e9534e1f",
+    "output_sha256": "6bd91f5b8132df2c10b127f69e3dc43c4b9b9fbf32b38860ce1c7517d1575256",
+    "runtime_installation": false,
+    "schema": "titan-v4-native-optimizer-stack/v1",
+    "source_git": "f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+    "stages": [
+      {
+        "component": "SIEVE",
+        "component_git": "5ade322bfdc916b7d3ac071ab2e3fc60fb1f0db0",
+        "component_path": "selected-incumbent-bound/patch_selected_incumbent.py",
+        "input_git": "f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+        "output_git": "5e6be72cda2e71a1aff6c68b13a0a934b2964a36",
+        "output_sha256": "86cfe144f2932732af8c9e6439675fdc182e912947900578a15d20e092bd2230"
+      },
+      {
+        "component": "MEADOW",
+        "component_git": "6b8a32669d75f6a239c3a2b78cafa6c92402d719",
+        "component_path": "marketpath-receipt-prefix/marketpath_receipt_prefix.py",
+        "input_git": "5e6be72cda2e71a1aff6c68b13a0a934b2964a36",
+        "output_git": "aae1c0c5a508797037757e745d946cddfc83404f",
+        "output_sha256": "caaa3179c40551d71dfd2f31cec57e2131665471503a3f16c5896d274649862d"
+      },
+      {
+        "component": "EVENTPATH",
+        "component_git": "f7ae150bc47058393552fd1d7600b7f5d5aaa84c",
+        "component_path": "score-eventpath/build_score_eventpath.py",
+        "input_git": "aae1c0c5a508797037757e745d946cddfc83404f",
+        "output_git": "23e8f02e9f50cb569556f045edfa085c67739eaf",
+        "output_sha256": "ea910f9056416a9920fffda961c9d9ff94c2306372722f1a9a5e8d75fb39bbd5"
+      },
+      {
+        "component": "CACHELIFE",
+        "component_git": "e48861b8fe186ded0337aa66ba68833b760708b3",
+        "component_path": "optimizer-cache-lifetime/repair_cache_lifetime.py",
+        "input_git": "23e8f02e9f50cb569556f045edfa085c67739eaf",
+        "output_git": "16dde00627effa5d0ae4d73a8e05a295e9534e1f",
+        "output_sha256": "6bd91f5b8132df2c10b127f69e3dc43c4b9b9fbf32b38860ce1c7517d1575256"
+      }
+    ]
+  },
+  "default_changed": false,
+  "games": {
+    "artifact_id": 10175943272,
+    "artifact_zip_sha256": "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8",
+    "compared_action_and_state_frames_per_mode": 5752,
+    "cross_mode_nontiming_evidence_equal": true,
+    "engine_sha256": {
+      "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+      "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+    },
+    "fallback_callbacks": 0,
+    "full_games": 32,
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "native_optimizer_calls_per_arm_per_mode": 6790,
+    "opponents": [
+      "starter",
+      "pass"
+    ],
+    "parent": {
+      "entrypoint_git": "4a8cf7bcda1f0fea231a144692cb84a779a9e73e",
+      "manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+      "member_map_sha256": "0c60882628e8fb29ebf4edefc0f389b5b41accfb8cb092ea4d40865ea1381268",
+      "members": 109,
+      "runtime_git": "b952c9c228ecbde592bf3d2df01638677abb0d24"
+    },
+    "seats": [
+      0,
+      1
+    ],
+    "seeds": [
+      9922999,
+      9600912
+    ],
+    "whole_result_and_horizon_tapes_equal": true
+  },
+  "kaggle_submission": false,
+  "limits": [
+    "Exact checked-artifact default entrypoint, not arbitrary current HEAD or assembled full V4",
+    "Fixed local optimizer benchmarks, not whole-agent or field-EV claims",
+    "Only four named source components included; funding replay, PORTAGE and REGRET excluded",
+    "CANOPY reports inherited construction interruption cycle before third cache; post-construction finally is not universal leak freedom",
+    "Two simple opponents; unchanged game outcomes do not demonstrate increased playing strength",
+    "Interrupted partial panel attempts excluded; only four completed PANEL.json files counted"
+  ],
+  "normal_tests": 13,
+  "optimized_tests": 13,
+  "owner": "ASTRA-WEAVE",
+  "production_changed": false,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "schema": "titan-v4-optimizer-stack-receipt/v1",
+  "source_files": {
+    "OPTIMIZER-STACK-EXECUTION.json": {
+      "bytes": 12325,
+      "git_blob": "fbc483d877b5b91e6c16cf68c7c9a1c85bf603a1",
+      "sha256": "662a0242be216875b50b97d6417ec38403183db35328826b7cfea4816e0ce7d9"
+    },
+    "OPTIMIZER-STACK.md": {
+      "bytes": 7800,
+      "git_blob": "b6aa2a6544549a33944b45acc72cac838acf54fe",
+      "sha256": "357ac06b4eca09a2de5e4d152984434c3162fc4cbfa4a551baf269ed7aa45435"
+    },
+    "benchmark_optimizer_stack.py": {
+      "bytes": 3900,
+      "git_blob": "076937b62799ff1d8c3a1e17e6989103c1ecabb6",
+      "sha256": "977d38ee35f8f429755aa0a4e598b42dafb2190b5f139854290397c641b3201a"
+    },
+    "check_optimizer_stack.py": {
+      "bytes": 12938,
+      "git_blob": "9f6b77678f24800edbfb81dbbbd5e1e930a181f3",
+      "sha256": "bc8699e5d68729c3edd99faa218bc328e418ff61abe076e92654185fe32011ca"
+    },
+    "compose_optimizer_stack.py": {
+      "bytes": 4246,
+      "git_blob": "8b65b37d93cefd2404b45f6d9808268425bab053",
+      "sha256": "02e2722a815d50d6c0096dda66718c46b57a81716120d2d3032de5a9c13ed4ce"
+    },
+    "run_optimizer_stack_games.py": {
+      "bytes": 13034,
+      "git_blob": "3fd8eb08752e017bb64baf868bbb07d42d029d05",
+      "sha256": "f96d1afa8d8a2c89de78db73b56267460a3adee66e9c3122d22e4c8675bd02f9"
+    }
+  },
+  "test_errors": 0,
+  "test_failures": 0,
+  "test_skips": 0,
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/performance"
+}

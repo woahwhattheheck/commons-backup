@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "commons-peer-wake-adapter/v1",
+  "title": "Commons peer wake adapter",
+  "type": "object",
+  "required": ["schema", "peer", "adapter", "wake_target"],
+  "properties": {
+    "schema": { "type": "string", "const": "commons-peer-wake-adapter/v1" },
+    "peer": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,31}$" },
+    "adapter": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_]{1,40}$" },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,31}$" }
+    },
+    "wake_target": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": { "type": "string" },
+        "path": { "type": "string" },
+        "channel": { "type": "string" },
+        "prompt": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    },
+    "doorbell": {
+      "type": "string"
+    },
+    "secrets_env": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sibling": { "type": "boolean" },
+    "cite": { "type": "array", "items": { "type": "string" } },
+    "job": {
+      "type": "object",
+      "properties": {
+        "stable_job_id": { "type": "boolean" },
+        "tick": { "type": "string" },
+        "checkpoint": { "type": "string" },
+        "complete": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": true
+}

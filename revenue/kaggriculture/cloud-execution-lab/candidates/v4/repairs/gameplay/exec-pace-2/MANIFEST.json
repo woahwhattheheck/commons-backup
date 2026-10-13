@@ -1,0 +1,23 @@
+{
+  "lane": "EXEC-PACE-2 adaptive execution pacing",
+  "status": "awaiting_raw_payload",
+  "integration_workspace": "main/revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "legacy_helper_name": "r04_exec_adaptive",
+  "legacy_local_tree": "~/workspace/build/v4/tree-execpace2/",
+  "default": "OFF",
+  "evidence": {
+    "original_panel": "+$377 +/-25, 16/16 positive cells",
+    "v4_port_panel": "+$369, 7/7 positive cells",
+    "combined_positive_cells": "23/23",
+    "focused_tests": 15,
+    "key_off_identity": "reported PASS"
+  },
+  "payload_state": "Latest coordination receipt still described this lane as local-only and redirected custody to main/candidates/v4. No server-backed source/test blob IDs were available in the recovered receipt, and default-branch code search found no exec_adaptive payload.",
+  "required_next_step": "Recover exact raw source/test bytes or Git blob IDs from the holder, verify hashes and key-OFF identity, then attach them here and rerun against the current V4 materialized package before any activation decision.",
+  "prohibitions": [
+    "do not revive #12643 or #12620 as an integration root",
+    "do not infer or reconstruct missing raw source bytes from this manifest",
+    "do not enable the key from panel evidence alone",
+    "do not move production/Kaggle refs from this custody record"
+  ]
+}

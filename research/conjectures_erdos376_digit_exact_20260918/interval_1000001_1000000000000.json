@@ -1,0 +1,879 @@
+{
+  "schema": "erdos376.digit_navigation_run/v1",
+  "operation_id": "ERDOS376-DIGIT-NAVIGATION-API-20261004-7CA6",
+  "date_utc": "2026-10-04",
+  "provenance": {
+    "repository": "woahwhattheheck/commons",
+    "original_carrier_pr": 16046,
+    "original_carrier_merge": "ea57ea4515c2f4b50cd1a382fd3e067e84ea0c73",
+    "original_python_blob_sha": "21979eb6838aa75ac29027cfc7699f8f726192cf",
+    "original_receipt_blob_sha": "3bd3dd4fdaae8e86856e3736d4c991eb0f5b8a4f",
+    "original_lean_candidate_blob_sha": "cba6bf01c68bda4f7610d0c494b84c513ce625f0",
+    "new_api_path": "research/conjectures_erdos376_digit_exact_20260918/restricted_digit_navigation.cjs",
+    "new_api_binding": "complete source committed alongside this result",
+    "published_contribution_id": "a05a639d5d692c2ddf81020ab928c84e6d7a04a9a71b765f8fc1dbba0e68f542",
+    "published_contribution_script_blob_sha": "17be9e23749b827c80b4613f7d9975b601068d3e",
+    "original_slack_thread": {
+      "parent_message_ts": "1789742728.512289",
+      "operation_message_ts": "1791101551.772689"
+    }
+  },
+  "mathematical_input": {
+    "predicate": "every base-3 digit <=1, every base-5 digit <=2, every base-7 digit <=3",
+    "domain": "nonnegative integers, including zero",
+    "concrete_interval": {
+      "from": "1000001",
+      "through": "1000000000000",
+      "both_endpoints_inclusive": true
+    },
+    "classical_interpretation": "by the cited Kummer digit characterization, exactly the indices with gcd(binomial(2n,n),105)=1 in this finite interval",
+    "source": {
+      "author": "Carl Pomerance",
+      "title": "Divisors of the Middle Binomial Coefficient",
+      "url": "https://math.dartmouth.edu/~carlp/amm2015.pdf",
+      "section": 4,
+      "pages": "638-639",
+      "doi": "10.4169/amer.math.monthly.122.7.636"
+    }
+  },
+  "current_target_source": {
+    "url": "https://conjectures.io/problems/erdos376-erdos-376",
+    "source_type_sha256": "83aa384e77fe25f943ed3670056017df36b3d4ba6760b2beb7b855321c36d887",
+    "task_id": "fc-6a786f99-erdos376-erdos-376-096b5d6825-formalized-v1",
+    "commitment": "3c462312565bfe7f00174bef7b592586aa579a168cdf92fad9eae8f8154aa8ca",
+    "formal_contribution_status": "the earlier Commons reverse-direction candidate remains unexecuted; this carrier adds no Lean receipt"
+  },
+  "prior_work": {
+    "original_commons_range": {
+      "from": "0",
+      "through": "1000000",
+      "including_zero_count": 13,
+      "positive_count": 12,
+      "replayed": false
+    },
+    "oeis": {
+      "url": "https://oeis.org/A030979",
+      "sequence_author": "Shawn Godin",
+      "finite_table_credit": "Christopher E. Thompson",
+      "listed_values_including_zero": 1374,
+      "reported_complete_through": "10^70",
+      "date": "2015-11-06",
+      "predecessor_credit": "Max Alekseyev, first 62 terms through 3^41, 2008-11-23",
+      "earlier_program_credit": "T. D. Noe, intersection formulation/program, 2007; Charles R. Greathouse IV, valuation program, 2015",
+      "evidence": "current primary sequence metadata; these existing computations were not rerun"
+    },
+    "working_report": {
+      "url": "https://www.erdosproblemaday.com/report/376",
+      "date_utc": "2026-07-28",
+      "credit": "Patrick White, with model assistance disclosed on the report",
+      "self_reported_positive_count": 14273,
+      "self_reported_count_including_zero": 14274,
+      "self_reported_complete_through": "10^100",
+      "method": "intersection and pruning of allowed most-significant-prefix cylinders",
+      "status": "labelled PARTIAL and not independently verified by the site; cited as prior disclosed computation, not newly certified here"
+    },
+    "new_external_frontier_claim": false,
+    "algorithm_priority_claim": false
+  },
+  "combined_result": {
+    "schema": "erdos376.digit_interval_combination/v1",
+    "status": "COMPLETE",
+    "from": "1000001",
+    "through": "1000000000000",
+    "covered_through": "1000000000000",
+    "segment_boundary": {
+      "first_segment_covered_through": "1594322",
+      "second_segment_from": "1594323",
+      "adjacent": true
+    },
+    "requested_count": "999999000000",
+    "processed_count": "999999000000",
+    "excluded_count": "999998999996",
+    "found_count": "4",
+    "ceiling_calls": "832",
+    "jump_count": "493",
+    "values": [
+      {
+        "value": "59548377",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11011001101000110"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "110221022002"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "1322103300"
+          }
+        ]
+      },
+      {
+        "value": "59548401",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11011001101001100"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "110221022101"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "1322103333"
+          }
+        ]
+      },
+      {
+        "value": "45773612811",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11101011001010110100000"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "1222221021102221"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "3210212201133"
+          }
+        ]
+      },
+      {
+        "value": "45775397187",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11101011011111010001000"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "1222222000202222"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "3210233312322"
+          }
+        ]
+      }
+    ],
+    "all_found_values_retained": true,
+    "jump_trace_complete": false,
+    "saved_jump_records": 65,
+    "trace_semantics": "initial per-segment prefix of jump records, plus each segment's last_jump; not a complete exclusion trace",
+    "rules": [
+      {
+        "base": 3,
+        "max_digit": 1
+      },
+      {
+        "base": 5,
+        "max_digit": 2
+      },
+      {
+        "base": 7,
+        "max_digit": 3
+      }
+    ],
+    "calls_by_rule": [
+      "498",
+      "265",
+      "69"
+    ],
+    "jumps_by_rule": [
+      "232",
+      "196",
+      "65"
+    ],
+    "excluded_by_rule": [
+      "466489791843",
+      "199026288125",
+      "334482920028"
+    ]
+  },
+  "initial_checkpoint": {
+    "schema": "erdos376.digit_intersection_search/v1",
+    "status": "IN_PROGRESS",
+    "from": "1000001",
+    "through": "1000000000000",
+    "rules": [
+      {
+        "base": 3,
+        "max_digit": 1
+      },
+      {
+        "base": 5,
+        "max_digit": 2
+      },
+      {
+        "base": 7,
+        "max_digit": 3
+      }
+    ],
+    "requested_count": "999999000000",
+    "processed_count": "594322",
+    "excluded_count": "594322",
+    "found_count": "0",
+    "unprocessed_count": "999998405678",
+    "covered_through": "1594322",
+    "ceiling_calls": "2",
+    "calls_by_rule": [
+      "2",
+      "0",
+      "0"
+    ],
+    "jump_count": "1",
+    "jumps_by_rule": [
+      "1",
+      "0",
+      "0"
+    ],
+    "excluded_by_rule": [
+      "594322",
+      "0",
+      "0"
+    ],
+    "first_value": null,
+    "last_value": null,
+    "values": [],
+    "max_saved_values": 4096,
+    "values_truncated": false,
+    "jump_intervals": [
+      {
+        "from": "1000001",
+        "through": "1594322",
+        "rule_index": 0,
+        "next_admissible": "1594323"
+      }
+    ],
+    "last_jump": {
+      "from": "1000001",
+      "through": "1594322",
+      "rule_index": 0,
+      "next_admissible": "1594323"
+    },
+    "max_saved_jumps": 64,
+    "jumps_truncated": false,
+    "pending_rule_index": 1,
+    "resume_options": {
+      "from": "1594323",
+      "through": "1000000000000",
+      "rules": [
+        {
+          "base": 3,
+          "max_digit": 1
+        },
+        {
+          "base": 5,
+          "max_digit": 2
+        },
+        {
+          "base": 7,
+          "max_digit": 3
+        }
+      ],
+      "max_saved_values": 4096,
+      "max_saved_jumps": 64
+    },
+    "resume_rechecks_pending_candidate": true,
+    "completion_reason": null
+  },
+  "consumed_resume": {
+    "options": {
+      "from": "1594323",
+      "through": "1000000000000",
+      "rules": [
+        {
+          "base": 3,
+          "max_digit": 1
+        },
+        {
+          "base": 5,
+          "max_digit": 2
+        },
+        {
+          "base": 7,
+          "max_digit": 3
+        }
+      ],
+      "max_saved_values": 4096,
+      "max_saved_jumps": 64
+    },
+    "consumption": "new factory constructed from serialized JSON in a fresh V8 isolate",
+    "first_unprocessed_integer": "1594323",
+    "covered_prefix_replayed": false,
+    "pending_candidate_checks_restarted": true,
+    "note": "the first segment had already checked base 3 at the pending candidate; restarting checks at that candidate is included in the actual 832-call total"
+  },
+  "resumed_result": {
+    "schema": "erdos376.digit_intersection_search/v1",
+    "status": "COMPLETE",
+    "from": "1594323",
+    "through": "1000000000000",
+    "rules": [
+      {
+        "base": 3,
+        "max_digit": 1
+      },
+      {
+        "base": 5,
+        "max_digit": 2
+      },
+      {
+        "base": 7,
+        "max_digit": 3
+      }
+    ],
+    "requested_count": "999998405678",
+    "processed_count": "999998405678",
+    "excluded_count": "999998405674",
+    "found_count": "4",
+    "unprocessed_count": "0",
+    "covered_through": "1000000000000",
+    "ceiling_calls": "830",
+    "calls_by_rule": [
+      "496",
+      "265",
+      "69"
+    ],
+    "jump_count": "492",
+    "jumps_by_rule": [
+      "231",
+      "196",
+      "65"
+    ],
+    "excluded_by_rule": [
+      "466489197521",
+      "199026288125",
+      "334482920028"
+    ],
+    "first_value": "59548377",
+    "last_value": "45775397187",
+    "values": [
+      {
+        "value": "59548377",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11011001101000110"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "110221022002"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "1322103300"
+          }
+        ]
+      },
+      {
+        "value": "59548401",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11011001101001100"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "110221022101"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "1322103333"
+          }
+        ]
+      },
+      {
+        "value": "45773612811",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11101011001010110100000"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "1222221021102221"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "3210212201133"
+          }
+        ]
+      },
+      {
+        "value": "45775397187",
+        "representations": [
+          {
+            "base": 3,
+            "max_digit": 1,
+            "digits_msd": "11101011011111010001000"
+          },
+          {
+            "base": 5,
+            "max_digit": 2,
+            "digits_msd": "1222222000202222"
+          },
+          {
+            "base": 7,
+            "max_digit": 3,
+            "digits_msd": "3210233312322"
+          }
+        ]
+      }
+    ],
+    "max_saved_values": 4096,
+    "values_truncated": false,
+    "jump_intervals": [
+      {
+        "from": "1594323",
+        "through": "1953124",
+        "rule_index": 1,
+        "next_admissible": "1953125"
+      },
+      {
+        "from": "1953125",
+        "through": "2125763",
+        "rule_index": 0,
+        "next_admissible": "2125764"
+      },
+      {
+        "from": "2125764",
+        "through": "2125774",
+        "rule_index": 1,
+        "next_admissible": "2125775"
+      },
+      {
+        "from": "2125775",
+        "through": "2125775",
+        "rule_index": 0,
+        "next_admissible": "2125776"
+      },
+      {
+        "from": "2125776",
+        "through": "2470628",
+        "rule_index": 2,
+        "next_admissible": "2470629"
+      },
+      {
+        "from": "2470629",
+        "through": "4782968",
+        "rule_index": 0,
+        "next_admissible": "4782969"
+      },
+      {
+        "from": "4782969",
+        "through": "4784374",
+        "rule_index": 1,
+        "next_admissible": "4784375"
+      },
+      {
+        "from": "4784375",
+        "through": "4785155",
+        "rule_index": 0,
+        "next_admissible": "4785156"
+      },
+      {
+        "from": "4785156",
+        "through": "5764800",
+        "rule_index": 2,
+        "next_admissible": "5764801"
+      },
+      {
+        "from": "5764801",
+        "through": "6377291",
+        "rule_index": 0,
+        "next_admissible": "6377292"
+      },
+      {
+        "from": "6377292",
+        "through": "9765624",
+        "rule_index": 1,
+        "next_admissible": "9765625"
+      },
+      {
+        "from": "9765625",
+        "through": "14348906",
+        "rule_index": 0,
+        "next_admissible": "14348907"
+      },
+      {
+        "from": "14348907",
+        "through": "14453124",
+        "rule_index": 1,
+        "next_admissible": "14453125"
+      },
+      {
+        "from": "14453125",
+        "through": "14526053",
+        "rule_index": 0,
+        "next_admissible": "14526054"
+      },
+      {
+        "from": "14526054",
+        "through": "14531249",
+        "rule_index": 1,
+        "next_admissible": "14531250"
+      },
+      {
+        "from": "14531250",
+        "through": "14532614",
+        "rule_index": 0,
+        "next_admissible": "14532615"
+      },
+      {
+        "from": "14532615",
+        "through": "14532624",
+        "rule_index": 1,
+        "next_admissible": "14532625"
+      },
+      {
+        "from": "14532625",
+        "through": "17294402",
+        "rule_index": 2,
+        "next_admissible": "17294403"
+      },
+      {
+        "from": "17294403",
+        "through": "19131875",
+        "rule_index": 0,
+        "next_admissible": "19131876"
+      },
+      {
+        "from": "19131876",
+        "through": "19531249",
+        "rule_index": 1,
+        "next_admissible": "19531250"
+      },
+      {
+        "from": "19531250",
+        "through": "19663316",
+        "rule_index": 0,
+        "next_admissible": "19663317"
+      },
+      {
+        "from": "19663317",
+        "through": "19687499",
+        "rule_index": 1,
+        "next_admissible": "19687500"
+      },
+      {
+        "from": "19687500",
+        "through": "19689560",
+        "rule_index": 0,
+        "next_admissible": "19689561"
+      },
+      {
+        "from": "19689561",
+        "through": "19690624",
+        "rule_index": 1,
+        "next_admissible": "19690625"
+      },
+      {
+        "from": "19690625",
+        "through": "19690625",
+        "rule_index": 0,
+        "next_admissible": "19690626"
+      },
+      {
+        "from": "19690626",
+        "through": "19765031",
+        "rule_index": 2,
+        "next_admissible": "19765032"
+      },
+      {
+        "from": "19765032",
+        "through": "19840463",
+        "rule_index": 0,
+        "next_admissible": "19840464"
+      },
+      {
+        "from": "19840464",
+        "through": "19921874",
+        "rule_index": 1,
+        "next_admissible": "19921875"
+      },
+      {
+        "from": "19921875",
+        "through": "19922111",
+        "rule_index": 0,
+        "next_admissible": "19922112"
+      },
+      {
+        "from": "19922112",
+        "through": "19922124",
+        "rule_index": 1,
+        "next_admissible": "19922125"
+      },
+      {
+        "from": "19922125",
+        "through": "19922125",
+        "rule_index": 2,
+        "next_admissible": "19922126"
+      },
+      {
+        "from": "19922126",
+        "through": "19922138",
+        "rule_index": 0,
+        "next_admissible": "19922139"
+      },
+      {
+        "from": "19922139",
+        "through": "19922149",
+        "rule_index": 1,
+        "next_admissible": "19922150"
+      },
+      {
+        "from": "19922150",
+        "through": "19922150",
+        "rule_index": 0,
+        "next_admissible": "19922151"
+      },
+      {
+        "from": "19922151",
+        "through": "19922174",
+        "rule_index": 2,
+        "next_admissible": "19922175"
+      },
+      {
+        "from": "19922175",
+        "through": "19922192",
+        "rule_index": 0,
+        "next_admissible": "19922193"
+      },
+      {
+        "from": "19922193",
+        "through": "19922499",
+        "rule_index": 1,
+        "next_admissible": "19922500"
+      },
+      {
+        "from": "19922500",
+        "through": "19925756",
+        "rule_index": 0,
+        "next_admissible": "19925757"
+      },
+      {
+        "from": "19925757",
+        "through": "19933101",
+        "rule_index": 2,
+        "next_admissible": "19933102"
+      },
+      {
+        "from": "19933102",
+        "through": "20726198",
+        "rule_index": 0,
+        "next_admissible": "20726199"
+      },
+      {
+        "from": "20726199",
+        "through": "21484374",
+        "rule_index": 1,
+        "next_admissible": "21484375"
+      },
+      {
+        "from": "21484375",
+        "through": "21493835",
+        "rule_index": 0,
+        "next_admissible": "21493836"
+      },
+      {
+        "from": "21493836",
+        "through": "21499999",
+        "rule_index": 1,
+        "next_admissible": "21500000"
+      },
+      {
+        "from": "21500000",
+        "through": "21500396",
+        "rule_index": 0,
+        "next_admissible": "21500397"
+      },
+      {
+        "from": "21500397",
+        "through": "21500624",
+        "rule_index": 1,
+        "next_admissible": "21500625"
+      },
+      {
+        "from": "21500625",
+        "through": "21500639",
+        "rule_index": 0,
+        "next_admissible": "21500640"
+      },
+      {
+        "from": "21500640",
+        "through": "21500649",
+        "rule_index": 1,
+        "next_admissible": "21500650"
+      },
+      {
+        "from": "21500650",
+        "through": "40353606",
+        "rule_index": 2,
+        "next_admissible": "40353607"
+      },
+      {
+        "from": "40353607",
+        "through": "43046720",
+        "rule_index": 0,
+        "next_admissible": "43046721"
+      },
+      {
+        "from": "43046721",
+        "through": "48828124",
+        "rule_index": 1,
+        "next_admissible": "48828125"
+      },
+      {
+        "from": "48828125",
+        "through": "49424012",
+        "rule_index": 0,
+        "next_admissible": "49424013"
+      },
+      {
+        "from": "49424013",
+        "through": "49609374",
+        "rule_index": 1,
+        "next_admissible": "49609375"
+      },
+      {
+        "from": "49609375",
+        "through": "49609907",
+        "rule_index": 0,
+        "next_admissible": "49609908"
+      },
+      {
+        "from": "49609908",
+        "through": "49609999",
+        "rule_index": 1,
+        "next_admissible": "49610000"
+      },
+      {
+        "from": "49610000",
+        "through": "49610000",
+        "rule_index": 0,
+        "next_admissible": "49610001"
+      },
+      {
+        "from": "49610001",
+        "through": "51883208",
+        "rule_index": 2,
+        "next_admissible": "51883209"
+      },
+      {
+        "from": "51883209",
+        "through": "57395627",
+        "rule_index": 0,
+        "next_admissible": "57395628"
+      },
+      {
+        "from": "57395628",
+        "through": "58593749",
+        "rule_index": 1,
+        "next_admissible": "58593750"
+      },
+      {
+        "from": "58593750",
+        "through": "58989950",
+        "rule_index": 0,
+        "next_admissible": "58989951"
+      },
+      {
+        "from": "58989951",
+        "through": "58990624",
+        "rule_index": 1,
+        "next_admissible": "58990625"
+      },
+      {
+        "from": "58990625",
+        "through": "58990679",
+        "rule_index": 0,
+        "next_admissible": "58990680"
+      },
+      {
+        "from": "58990680",
+        "through": "59295095",
+        "rule_index": 2,
+        "next_admissible": "59295096"
+      },
+      {
+        "from": "59295096",
+        "through": "59521391",
+        "rule_index": 0,
+        "next_admissible": "59521392"
+      },
+      {
+        "from": "59521392",
+        "through": "59531249",
+        "rule_index": 1,
+        "next_admissible": "59531250"
+      }
+    ],
+    "last_jump": {
+      "from": "988769531250",
+      "through": "1000000000000",
+      "rule_index": 0,
+      "next_admissible": "1129718145924"
+    },
+    "max_saved_jumps": 64,
+    "jumps_truncated": true,
+    "pending_rule_index": null,
+    "resume_options": null,
+    "resume_rechecks_pending_candidate": false,
+    "completion_reason": "remaining_range_excluded_by_rule"
+  },
+  "execution": {
+    "runtime": "connected V8",
+    "initial_advance_budget": 2,
+    "resumed_advance_budget": 10000,
+    "resumed_maximum_advances": 512,
+    "resumed_actual_advances": 1,
+    "total_actual_ceiling_calls": "832",
+    "total_actual_jump_count": "493",
+    "original_integer_count": "999999000000",
+    "exact_count_arithmetic": "BigInt",
+    "accepted_values_retained_in_full": true,
+    "jump_trace_limit_per_segment": 64,
+    "complete_jump_trace_retained": false,
+    "complete_coverage_status": "both adjacent covered pieces together account for the entire requested interval",
+    "native_execution": false,
+    "prior_arithmetic_or_witness_ranges_replayed": false
+  },
+  "evidence_scope": {
+    "completed_new_commons_input": true,
+    "all_four_values_and_digit_representations_retained": true,
+    "complete_digit_predicate_enumeration_for_stated_interval": true,
+    "jump_trace": "capped initial records plus each segment's final jump; counters and interval coverage remain complete",
+    "infinitude_proved": false,
+    "new_lean_elaboration": false,
+    "sponsor_submission_made": false,
+    "original_authorship_and_submission_ownership_preserved": true
+  }
+}

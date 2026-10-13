@@ -1,0 +1,269 @@
+[
+  {
+    "argv": [
+      "git",
+      "init",
+      "--initial-branch=main"
+    ],
+    "exit_code": 0,
+    "stdout": "Initialized empty Git repository in /workspace/scratch/94a2632f4359/source-control-workflows-run2/short-lived-repo/.git/\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "config",
+      "core.hooksPath",
+      "/workspace/scratch/94a2632f4359/source-control-workflows-run2/short-lived-repo/unused-hooks"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "config",
+      "commit.gpgsign",
+      "false"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "config",
+      "tag.gpgsign",
+      "false"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-101 establish baseline"
+    ],
+    "exit_code": 0,
+    "stdout": "[main (root-commit) 5438dbe] SC-101 establish baseline\n 1 file changed, 1 insertion(+)\n create mode 100644 service.txt\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "5438dbe42ce4d7df9d6c76fadcb3cad92b4a741b\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "switch",
+      "-c",
+      "change/response"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Switched to a new branch 'change/response'\n"
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-102 improve response"
+    ],
+    "exit_code": 0,
+    "stdout": "[change/response 1aee91e] SC-102 improve response\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "1aee91e6b507ae401e2c6a3a4de61e26cd5a2895\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "switch",
+      "main"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Switched to branch 'main'\n"
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-103 retain compatibility"
+    ],
+    "exit_code": 0,
+    "stdout": "[main 9427d9b] SC-103 retain compatibility\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "9427d9b3d34058c7173cc87a9fea5264d310673c\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "merge",
+      "--no-ff",
+      "change/response",
+      "-m",
+      "SC-104 integrate response"
+    ],
+    "exit_code": 1,
+    "stdout": "Auto-merging service.txt\nCONFLICT (content): Merge conflict in service.txt\nAutomatic merge failed; fix conflicts and then commit the result.\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--name-only",
+      "--diff-filter=U"
+    ],
+    "exit_code": 0,
+    "stdout": "service.txt\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-104 resolve behavior with both requirements"
+    ],
+    "exit_code": 0,
+    "stdout": "[main 58fce4e] SC-104 resolve behavior with both requirements\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "58fce4e9185832d2e619126e96306207c18954f4\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-list",
+      "--parents",
+      "-n",
+      "1",
+      "58fce4e9185832d2e619126e96306207c18954f4"
+    ],
+    "exit_code": 0,
+    "stdout": "58fce4e9185832d2e619126e96306207c18954f4 9427d9b3d34058c7173cc87a9fea5264d310673c 1aee91e6b507ae401e2c6a3a4de61e26cd5a2895\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-105 recorded unsuccessful change"
+    ],
+    "exit_code": 0,
+    "stdout": "[main 2dd9157] SC-105 recorded unsuccessful change\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "2dd9157ac39ab5b6d2028519a5e7bd60927c9ca8\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "revert",
+      "--no-edit",
+      "2dd9157ac39ab5b6d2028519a5e7bd60927c9ca8"
+    ],
+    "exit_code": 0,
+    "stdout": "[main 9a97aab] Revert \"SC-105 recorded unsuccessful change\"\n Date: Thu Jan 1 12:00:25 2026 +0000\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+    "stderr": ""
+  }
+]

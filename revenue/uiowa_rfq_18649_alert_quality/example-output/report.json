@@ -1,0 +1,369 @@
+{
+  "schema": "uiowa.alert-quality-report/v1",
+  "evidence_class": "SYNTHETIC",
+  "input_sha256": "b62eb7b642c4939084e2e3a6a33f3d7760cd7a26bfbc5bc33e3d4fdd118a9d9a",
+  "window": {
+    "start": "2026-09-14T00:00:00Z",
+    "end": "2026-09-16T00:00:00Z"
+  },
+  "coverage": [
+    {
+      "id": "ESS",
+      "notifications": "complete",
+      "responses": "complete",
+      "rationale_ref": "C-ESS"
+    },
+    {
+      "id": "IAM",
+      "notifications": "complete",
+      "responses": "complete",
+      "rationale_ref": "C-IAM"
+    },
+    {
+      "id": "RIS",
+      "notifications": "partial",
+      "responses": "partial",
+      "rationale_ref": "C-RIS"
+    }
+  ],
+  "summary": {
+    "notifications": 12,
+    "observed_episodes": 6,
+    "confirmed_duplicates": 4,
+    "reviewed_redundant": 5,
+    "reviewed_useful": 5,
+    "unreviewed": 2,
+    "redundant_share_of_reviewed": 0.5,
+    "explicitly_unowned_episodes": 1,
+    "unknown_owner_episodes": 1,
+    "impacting_episodes": 4,
+    "completed_response_sample_n": 3,
+    "median_action_minutes_completed_only": 4.0
+  },
+  "limitations": [
+    "Synthetic preparation, not University evidence or findings.",
+    "Explicit episode IDs and retained review establish grouping, never rule fingerprints alone.",
+    "Missing response records are not zero latency; incomplete exports do not prove absence.",
+    "Completed-only response median excludes partial notification history and censored/unknown episodes.",
+    "No incident census: alert recall, fleet reliability and avoided staff costs are not calculated."
+  ],
+  "episodes": [
+    {
+      "episode_id": "ESS-101",
+      "service": "ESS",
+      "incident_id": "incident-101",
+      "impact": "yes",
+      "notifications": 4,
+      "confirmed_duplicates": 2,
+      "reviewed_redundant": 2,
+      "escalation_notifications": 1,
+      "first_observed_at": "2026-09-14T09:00:00+00:00",
+      "ack_minutes": 1.0,
+      "action_minutes": 12.0,
+      "response_state": "observed",
+      "latency_basis": "observed_notification_window",
+      "owner_status": "assigned",
+      "owner": "service operations",
+      "runbook_status": "useful",
+      "escalation_status": "tested",
+      "notification_ids": [
+        "N01",
+        "N02",
+        "N03",
+        "N04"
+      ]
+    },
+    {
+      "episode_id": "ESS-102",
+      "service": "ESS",
+      "incident_id": "incident-102",
+      "impact": "yes",
+      "notifications": 1,
+      "confirmed_duplicates": 0,
+      "reviewed_redundant": 0,
+      "escalation_notifications": 0,
+      "first_observed_at": "2026-09-15T09:00:00+00:00",
+      "ack_minutes": 2.0,
+      "action_minutes": 4.0,
+      "response_state": "observed",
+      "latency_basis": "observed_notification_window",
+      "owner_status": "assigned",
+      "owner": "service operations",
+      "runbook_status": "useful",
+      "escalation_status": "tested",
+      "notification_ids": [
+        "N05"
+      ]
+    },
+    {
+      "episode_id": "IAM-301",
+      "service": "IAM",
+      "incident_id": "cache-301",
+      "impact": "no",
+      "notifications": 3,
+      "confirmed_duplicates": 2,
+      "reviewed_redundant": 3,
+      "escalation_notifications": 0,
+      "first_observed_at": "2026-09-14T10:00:00+00:00",
+      "ack_minutes": 1.0,
+      "action_minutes": null,
+      "response_state": "not_observed_by_window_end",
+      "latency_basis": "observed_notification_window",
+      "owner_status": "unowned",
+      "owner": null,
+      "runbook_status": "unhelpful",
+      "escalation_status": "missing",
+      "notification_ids": [
+        "N06",
+        "N07",
+        "N08"
+      ]
+    },
+    {
+      "episode_id": "IAM-302",
+      "service": "IAM",
+      "incident_id": "incident-302",
+      "impact": "yes",
+      "notifications": 1,
+      "confirmed_duplicates": 0,
+      "reviewed_redundant": 0,
+      "escalation_notifications": 0,
+      "first_observed_at": "2026-09-14T12:00:00+00:00",
+      "ack_minutes": 5.0,
+      "action_minutes": 3.0,
+      "response_state": "observed",
+      "latency_basis": "observed_notification_window",
+      "owner_status": "assigned",
+      "owner": "identity operations",
+      "runbook_status": "useful",
+      "escalation_status": "tested",
+      "notification_ids": [
+        "N11"
+      ]
+    },
+    {
+      "episode_id": "RIS-201",
+      "service": "RIS",
+      "incident_id": "transfer-201",
+      "impact": "yes",
+      "notifications": 2,
+      "confirmed_duplicates": 0,
+      "reviewed_redundant": 0,
+      "escalation_notifications": 1,
+      "first_observed_at": "2026-09-14T11:00:00+00:00",
+      "ack_minutes": 10.0,
+      "action_minutes": null,
+      "response_state": "unknown_missing_response_coverage",
+      "latency_basis": "partial_notification_lower_bound",
+      "owner_status": "unknown",
+      "owner": null,
+      "runbook_status": "unknown",
+      "escalation_status": "documented",
+      "notification_ids": [
+        "N09",
+        "N10"
+      ]
+    },
+    {
+      "episode_id": "RIS-fragment",
+      "service": "RIS",
+      "incident_id": null,
+      "impact": "unknown",
+      "notifications": 1,
+      "confirmed_duplicates": 0,
+      "reviewed_redundant": 0,
+      "escalation_notifications": 0,
+      "first_observed_at": "2026-09-14T13:00:00+00:00",
+      "ack_minutes": null,
+      "action_minutes": null,
+      "response_state": "unknown_missing_response_coverage",
+      "latency_basis": "partial_notification_lower_bound",
+      "owner_status": "assigned",
+      "owner": "research platform",
+      "runbook_status": "untested",
+      "escalation_status": "documented",
+      "notification_ids": [
+        "N12"
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "AQ-ESS-101-duplicate_review",
+      "episode_id": "ESS-101",
+      "reason": "duplicate_review",
+      "proposed_change": "Review same-episode repeat policy without suppressing escalation or separate incidents.",
+      "outcome_check": "Compare confirmed redundant deliveries per episode and incident-detection coverage before/after a reviewed trial.",
+      "evidence_ids": [
+        "E-ESS-1"
+      ]
+    },
+    {
+      "id": "AQ-IAM-301-duplicate_review",
+      "episode_id": "IAM-301",
+      "reason": "duplicate_review",
+      "proposed_change": "Review same-episode repeat policy without suppressing escalation or separate incidents.",
+      "outcome_check": "Compare confirmed redundant deliveries per episode and incident-detection coverage before/after a reviewed trial.",
+      "evidence_ids": [
+        "E-IAM-1"
+      ]
+    },
+    {
+      "id": "AQ-IAM-301-routing",
+      "episode_id": "IAM-301",
+      "reason": "routing",
+      "proposed_change": "Resolve missing or unknown response ownership with an evidenced routing rehearsal.",
+      "outcome_check": "Measure unowned episodes and time from observed page to first useful action.",
+      "evidence_ids": [
+        "E-IAM-1"
+      ]
+    },
+    {
+      "id": "AQ-IAM-301-runbook",
+      "episode_id": "IAM-301",
+      "reason": "runbook",
+      "proposed_change": "Walk through the actual diagnostic task; record useful steps, stale instructions and missing context.",
+      "outcome_check": "Compare completion of the same rehearsal task, repair effort and useful-response latency.",
+      "evidence_ids": [
+        "E-IAM-1"
+      ]
+    },
+    {
+      "id": "AQ-IAM-301-escalation",
+      "episode_id": "IAM-301",
+      "reason": "escalation",
+      "proposed_change": "Rehearse escalation with accountable service roles; a document alone is not a tested route.",
+      "outcome_check": "Record successful handoff and useful action, not just notification delivery.",
+      "evidence_ids": [
+        "E-IAM-1"
+      ]
+    },
+    {
+      "id": "AQ-IAM-301-response_evidence",
+      "episode_id": "IAM-301",
+      "reason": "response_evidence",
+      "proposed_change": "Reconcile action records with the episode; acknowledgement alone does not establish response.",
+      "outcome_check": "Retain action evidence and report incomplete/censored episodes beside any latency summary.",
+      "evidence_ids": [
+        "E-IAM-1"
+      ]
+    },
+    {
+      "id": "AQ-RIS-201-routing",
+      "episode_id": "RIS-201",
+      "reason": "routing",
+      "proposed_change": "Resolve missing or unknown response ownership with an evidenced routing rehearsal.",
+      "outcome_check": "Measure unowned episodes and time from observed page to first useful action.",
+      "evidence_ids": [
+        "E-RIS-1"
+      ]
+    },
+    {
+      "id": "AQ-RIS-201-runbook",
+      "episode_id": "RIS-201",
+      "reason": "runbook",
+      "proposed_change": "Walk through the actual diagnostic task; record useful steps, stale instructions and missing context.",
+      "outcome_check": "Compare completion of the same rehearsal task, repair effort and useful-response latency.",
+      "evidence_ids": [
+        "E-RIS-1"
+      ]
+    },
+    {
+      "id": "AQ-RIS-201-escalation",
+      "episode_id": "RIS-201",
+      "reason": "escalation",
+      "proposed_change": "Rehearse escalation with accountable service roles; a document alone is not a tested route.",
+      "outcome_check": "Record successful handoff and useful action, not just notification delivery.",
+      "evidence_ids": [
+        "E-RIS-1"
+      ]
+    },
+    {
+      "id": "AQ-RIS-201-response_evidence",
+      "episode_id": "RIS-201",
+      "reason": "response_evidence",
+      "proposed_change": "Reconcile action records with the episode; acknowledgement alone does not establish response.",
+      "outcome_check": "Retain action evidence and report incomplete/censored episodes beside any latency summary.",
+      "evidence_ids": [
+        "E-RIS-1"
+      ]
+    },
+    {
+      "id": "AQ-RIS-fragment-runbook",
+      "episode_id": "RIS-fragment",
+      "reason": "runbook",
+      "proposed_change": "Walk through the actual diagnostic task; record useful steps, stale instructions and missing context.",
+      "outcome_check": "Compare completion of the same rehearsal task, repair effort and useful-response latency.",
+      "evidence_ids": [
+        "E-RIS-2"
+      ]
+    },
+    {
+      "id": "AQ-RIS-fragment-escalation",
+      "episode_id": "RIS-fragment",
+      "reason": "escalation",
+      "proposed_change": "Rehearse escalation with accountable service roles; a document alone is not a tested route.",
+      "outcome_check": "Record successful handoff and useful action, not just notification delivery.",
+      "evidence_ids": [
+        "E-RIS-2"
+      ]
+    },
+    {
+      "id": "AQ-RIS-fragment-response_evidence",
+      "episode_id": "RIS-fragment",
+      "reason": "response_evidence",
+      "proposed_change": "Reconcile action records with the episode; acknowledgement alone does not establish response.",
+      "outcome_check": "Retain action evidence and report incomplete/censored episodes beside any latency summary.",
+      "evidence_ids": [
+        "E-RIS-2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "C-ESS",
+      "locator": "fictional/export/manifest.md#ess",
+      "excerpt": "SYNTHETIC: complete notifications and response records for registration for the declared window; sample selection is not an institutional incident census."
+    },
+    {
+      "id": "C-IAM",
+      "locator": "fictional/export/manifest.md#iam",
+      "excerpt": "SYNTHETIC: complete notification and response export for the declared sign-in window."
+    },
+    {
+      "id": "C-RIS",
+      "locator": "fictional/export/manifest.md#ris",
+      "excerpt": "SYNTHETIC: research notification export begins mid-episode and response records are partial; absence cannot be concluded."
+    },
+    {
+      "id": "E-ESS-1",
+      "locator": "fictional/registration/incident-101.md#timeline",
+      "excerpt": "SYNTHETIC: registration queue delay affected submissions. First page 09:00, acknowledged 09:01, query diagnosis at 09:12. Repeat pages at 09:02 and 09:04 carried no new context. 09:06 escalation successfully reached the database support role. Tested runbook isolated a queue lock."
+    },
+    {
+      "id": "E-ESS-2",
+      "locator": "fictional/registration/incident-102.md#timeline",
+      "excerpt": "SYNTHETIC: next-day queue delay is a separate incident, despite the same rule. First page 09:00, acknowledgement 09:02, diagnostic query 09:04. Service operations owned response and followed the tested runbook."
+    },
+    {
+      "id": "E-IAM-1",
+      "locator": "fictional/sign-in/cache-warning.md#review",
+      "excerpt": "SYNTHETIC: cache warning had no observed user impact. The reviewed route had no accountable role and no escalation destination. First warning and its two repeats supplied no actionable decision. Acknowledged 10:01, but complete retained response log has no useful action before window end. Runbook named an obsolete endpoint."
+    },
+    {
+      "id": "E-IAM-2",
+      "locator": "fictional/sign-in/incident-302.md#timeline",
+      "excerpt": "SYNTHETIC: sign-in errors triggered a page at 12:00. Identity operations diagnosed a dependency fault at 12:03, before pressing acknowledgement at 12:05. The runbook and escalation route were exercised successfully."
+    },
+    {
+      "id": "E-RIS-1",
+      "locator": "fictional/research/transfer-201.md#retained-notes",
+      "excerpt": "SYNTHETIC: delayed research transfers affected submission. Retained pages start 11:00; earlier notifications may be missing. Escalation at 11:15 added a dependency diagnosis. An acknowledgement at 11:10 is retained, but response export is incomplete. Ownership and runbook usefulness have not been established."
+    },
+    {
+      "id": "E-RIS-2",
+      "locator": "fictional/research/unlinked-warning.md#fragment",
+      "excerpt": "SYNTHETIC: 13:00 fragment lacks an incident ticket and impact review. Research platform role is the documented owner. Runbook exists but has not been exercised, escalation is documented but untested, and response records are incomplete."
+    }
+  ]
+}

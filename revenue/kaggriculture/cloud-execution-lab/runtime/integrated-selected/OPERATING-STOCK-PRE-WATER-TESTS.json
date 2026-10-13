@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "operation": "titan-v2-operating-stock-active-20260909",
+  "status": "bounded_behavior_enabled_source_contract_checked",
+  "archive": {
+    "path": "exports/titan-current.tar.gz",
+    "entrypoint": "main.py::agent",
+    "config": "TITAN-CONFIG.json",
+    "sha256": "73ae010923cb66198b837baade34f273dff25e2fd4c8318d8bb61adcef31be0e",
+    "bytes": 357431,
+    "runtime_files": 98,
+    "source_manifest": "runtime/integrated-selected/CURRENT-SOURCE.json",
+    "source_manifest_sha256": "a0b9eda9fd8ccf532c3a1a4e5f2872e68086161ecba0170ec23f29dba9db73b0"
+  },
+  "predecessor_archive_sha256": "abfc78cdfeb7e9ca15343931ca14110a76b9534d4bab2c20adc68a976abaa88e",
+  "submission_status": "not_submitted",
+  "default_operating_stock": true,
+  "source_sha256": {
+    "operating_stock.py": "ca1f57be0a05b4be1fcae5c8490ae716f5f949cef3e115cf1438d7edae2b1f4c",
+    "test_operating_stock.py": "aa876714b8eb519963567a229ef0f64a47eab87df0107bf809401c9d2a666178",
+    "titan_runtime.py": "70245afcc4a544e671f5b9d591238bcf3fb935a076352de273ea5d87fc090958",
+    "frozen_selected.py": "afeaab24b23e4c50a40c345d51bc97186f859da91914e2f50b77cbb9e137480a",
+    "TITAN-CONFIG.json": "0a56ba29d6806c798a318c4c1c7214df0836b5ee47c9358bdf1d82ec05c464ca",
+    "build_integrated.py": "63761f8e456b284cbbf75fa49d7e14034b084fce0a490e33dace793e03f5067b"
+  },
+  "test_evidence": [
+    {
+      "command": "PYTHONPATH=../cloud-runtime-pulse:../cloud-quickstep python -m unittest -q test_operating_stock",
+      "tests": 24,
+      "passed": 24,
+      "scope": "stateless proposals, funding, capacity, runtime boundary and canonical configuration; no state advancement"
+    },
+    {
+      "command": "python -m unittest -q checks.test_operating_stock",
+      "tests": 24,
+      "passed": 24,
+      "scope": "the same 24 contracts from this exact extracted archive; not 24 additional cases"
+    }
+  ],
+  "game_evidence": {
+    "new_full_games": 0,
+    "new_simulation_panels": 0,
+    "new_interpreter_transitions": 0,
+    "new_agent_act_calls": 0,
+    "playing_strength_measured": false
+  },
+  "activation_changes": [
+    "Canonical operating_stock=true; frozen consumer captures the completed selected-unit state.",
+    "At most two withheld fertilizer units for an existing actor and existing ongoing crops.",
+    "Value only final otherwise-unfunded consumption; incumbent carried/unsold stock is excluded from incremental benefit.",
+    "Reject unresolved same-day branch and include funding commitments through the full current day, even after a shorter service rejoin.",
+    "Require actual cash covering all same-day fixed spending plus 100 times the input-price scenario; no future sale credit.",
+    "Preserve all unit actions and market slot ordering; decline shared-allocation/capacity ambiguities."
+  ],
+  "limits": [
+    "100-unit rival-supply value and 100-times-input cash cushion are explicit policy heuristics.",
+    "Future watering, harvest/deposit execution, multiday operating cash, opponent behavior and final score remain unmeasured.",
+    "Historical input proposals are not newly executed candidate games."
+  ],
+  "retained_predecessor_evidence": {
+    "disabled_stock": "OPERATING-STOCK-DISABLED-TESTS.json",
+    "weed_continuation": "WEED-CONTINUATION-TESTS.json",
+    "exact_db34_archive_checks": "WEED-ARCHIVE-TESTS.json"
+  }
+}

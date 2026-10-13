@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/ci/federated/schema/reconciliation.v1.json",
+  "title": "Commons federated reconciliation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "engine_version",
+    "job_id",
+    "source_sha",
+    "status",
+    "planned_shards",
+    "accepted_receipts",
+    "findings",
+    "providers_seen",
+    "providers_measured",
+    "providers_supported_by_contract_only",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": { "const": "commons-federated-reconciliation/v1" },
+    "kind": { "const": "FEDERATED_RECONCILIATION" },
+    "engine_version": { "const": "commons-federated-ci/v1" },
+    "job_id": { "type": "string" },
+    "source_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "status": { "enum": ["RECONCILED", "DIVERGED"] },
+    "planned_shards": { "type": "integer", "minimum": 0 },
+    "accepted_receipts": { "type": "integer", "minimum": 0 },
+    "findings": { "type": "array" },
+    "providers_seen": { "type": "array", "items": { "type": "string" } },
+    "providers_measured": { "type": "array", "items": { "type": "string" } },
+    "providers_supported_by_contract_only": { "type": "array", "items": { "type": "string" } },
+    "claim_boundary": { "type": "object" }
+  }
+}

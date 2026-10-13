@@ -1,0 +1,47 @@
+name: GOSIM Agentic Factory readiness
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/gosim-agentic-factory-2026/**'
+      - '.github/workflows/gosim-agentic-factory-readiness.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'competitions/gosim-agentic-factory-2026/**'
+      - '.github/workflows/gosim-agentic-factory-readiness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run hostile suite
+        working-directory: competitions/gosim-agentic-factory-2026
+        run: python -m unittest -v
+      - name: Run hostile suite with assertions optimized away
+        working-directory: competitions/gosim-agentic-factory-2026
+        run: python -O -m unittest -v
+      - name: Compile synthetic fixture
+        working-directory: competitions/gosim-agentic-factory-2026
+        run: |
+          python harness_score.py compile \
+            --runs example_runs.json \
+            --policy score_policy.json \
+            --output-json /tmp/gosim-report.json \
+            --output-md /tmp/gosim-report.md
+      - name: Verify synthetic fixture receipt
+        working-directory: competitions/gosim-agentic-factory-2026
+        run: |
+          python harness_score.py verify \
+            --runs example_runs.json \
+            --policy score_policy.json \
+            --report /tmp/gosim-report.json

@@ -1,0 +1,1129 @@
+{
+ "model": {
+  "path": "/home/user/work/model/gemma-4-E4B-it.litertlm",
+  "sha256": "0b2a8980ce155fd97673d8e820b4d29d9c7d99b8fa6806f425d969b145bd52e0",
+  "bytes": 3659530240
+ },
+ "settings": {
+  "backend": "CPU",
+  "max_num_tokens": 4096,
+  "temperature": 0.0,
+  "top_k": 1,
+  "sampler_seed": 0,
+  "thinking": false,
+  "max_output_tokens": 192,
+  "model_sha256": "0b2a8980ce155fd97673d8e820b4d29d9c7d99b8fa6806f425d969b145bd52e0"
+ },
+ "engine_pin": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+ "provenance": {
+  "derivation_seeds": [
+   4242001
+  ],
+  "evaluation_seeds": [
+   7700001,
+   8800001,
+   9900017
+  ],
+  "derivation_cards": [
+   "s4242001-t130-p0",
+   "s4242001-t300-p0"
+  ],
+  "exemplars": {
+   "ADMIT": [
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST",
+     "output": {
+      "farmer": [
+       "EAST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "STOCK": [
+    {
+     "situation": "farmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "PLANT",
+       "WHEAT"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [empty]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     }
+    }
+   ],
+   "ONCE": [
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "EAST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "RIPE": [
+    {
+     "situation": "farmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "HARVEST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "KEEP": [
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered",
+     "output": {
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way",
+     "output": {
+      "farmer": [
+       "EAST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "VENT": [
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     }
+    },
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "SELL",
+        "WHEAT",
+        5
+       ]
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "summary": {
+  "baseline": {
+   "n": 5,
+   "syntax_ok": 1,
+   "legal": 1,
+   "mean_wall_s": 9.278,
+   "median_wall_s": 9.814,
+   "mean_prompt_tokens": 596.4,
+   "mean_non_no_op_units": 1.0,
+   "mean_money_delta": 0.0
+  },
+  "formal": {
+   "n": 5,
+   "syntax_ok": 3,
+   "legal": 3,
+   "mean_wall_s": 17.987,
+   "median_wall_s": 16.394,
+   "mean_prompt_tokens": 2083.4,
+   "mean_non_no_op_units": 1.0,
+   "mean_money_delta": 0.0
+  },
+  "pattern": {
+   "n": 5,
+   "syntax_ok": 5,
+   "legal": 3,
+   "mean_wall_s": 15.987,
+   "median_wall_s": 13.629,
+   "mean_prompt_tokens": 1208.4,
+   "mean_non_no_op_units": 0.4,
+   "mean_money_delta": -6.0
+  },
+  "codec": {
+   "n": 5,
+   "syntax_ok": 5,
+   "legal": 4,
+   "mean_wall_s": 8.45,
+   "median_wall_s": 8.449,
+   "mean_prompt_tokens": 1208.4,
+   "mean_non_no_op_units": 0.0,
+   "mean_money_delta": 0.0
+  }
+ },
+ "records": [
+  {
+   "card_id": "s7700001-t150-p0",
+   "arm": "baseline",
+   "prompt": "You are playing Kaggriculture. Read the state and the list of actions the engine will accept, then choose this turn's actions. Reply with a JSON object with keys farmer, hands and market: farmer is one action list, hands is a list of action lists (one per hand), market is a list of order lists. Only use actions from the accepted list.\n\nSTATE\nday 6 hour 6 money 2990\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON268,MILK183,STRAWBERRY142,TOMATO61,WHEAT28,WOOL234\ntown shops YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 569 (last is step 718); 18 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=93 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 1862,
+   "prompt_tokens": 594,
+   "raw_output": "```json\n{\n  \"farmer\": [\n    \"PLACE CARROT 1\"\n  ],\n  \"hands\": [],\n  \"market\": []\n}\n```",
+   "error": null,
+   "syntax_ok": false,
+   "syntax_reject_reason": "farmer: unknown unit op 'PLACE CARROT 1'",
+   "decoded_action": null,
+   "legality": null,
+   "effect": null,
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0183,
+    "prompt_build": 0.0001,
+    "model_wall": 10.443,
+    "prefill_ttft": 4.187,
+    "decode": 6.256,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086519216,
+    "time_to_first_token_in_second": 4.18692327675,
+    "last_prefill_token_count": 602,
+    "last_prefill_tokens_per_second": 149.66345023321514,
+    "last_decode_token_count": 39,
+    "last_decode_tokens_per_second": 6.076621870558648
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s7700001-t150-p0",
+   "arm": "formal",
+   "prompt": "Sigma:ADMIT -- output-contract binding for one Kaggriculture turn.\nDefinitions: Turn := {farmer:[op,...], hands:[[op,...],...], market:[[op,...],...]}. A := the admissible set supplied for this observation. U(i) := admissible ops for unit i. M := admissible market orders.\nAdmissible set: forall a in emitted turn: a in A. farmer in U(0). hands[i] in U(i+1). |hands| <= number of hands. market[j] in M. |market| <= maxMarketOrdersPerTurn.\nOptimize: min(tokens emitted); min(keys outside {farmer,hands,market}).\nPriority: well-formedness of the object > membership of each entry > length.\nConditional: If no op advances the goal, PASS is in U(0) and is a valid emission.\nProhibitions: Never emit an op absent from A. Never emit an op name outside the grammar. Never emit prose, keys, or fields outside the turn object.\nOutput := one turn object, nothing before or after it.\n\nSigma:STOCK -- resource-precondition binding.\nDefinitions: req(op) := the engine's consumed resource: PLANT c needs seeds[c] >= 1; FEED needs unit inventory WHEAT >= 1; FERTILIZE needs unit inventory FERTILIZER >= 1; PICKUP x needs shed[x] >= 1; PLACE x needs unit inventory x >= 1; BUY_* needs money >= price.\nAdmissible set: forall op emitted: req(op) is satisfied in THIS observation. If req(op) is unsatisfied, op is not in A and is not emitted.\nOptimize: min(ops emitted whose resource is absent).\nPriority: an op whose resource is present ranks above one whose resource is absent. Which present-resource op to take is not ordered here -- that is the plan's to choose.\nConditional: If the intended op's resource is absent, that op is not admissible this turn. An acquiring order (BUY_SEED for a seed, PICKUP for a shed item) is AVAILABLE, not required: buying a seed is only worth its cost if the plan actually plants it, and a seed bought this turn cannot be planted until the next one.\nProhibitions: Never emit an op whose resource count is zero. Never assume a resource not present in this observation.\nOutput := one turn object whose every op has its resource present.\n\nSigma:ONCE -- per-day idempotence binding (negation).\nDefinitions: The engine sets watered_today, fed_today, cared_today, and clears fertilizer_available on use. done(tile,op) := the flag for op is already set.\nAdmissible set: forall op in {WATER, FEED, CARE, COLLECT_FERTILIZER}: op emitted => not done(tile_under_unit, op).\nOptimize: min(no-op turns).\nPriority: an op with an unconsumed flag > movement to a tile with one > PASS.\nConditional: If the op is already done on this tile today, emit a different admissible op or a move; the flag clears at the end-of-day refresh, not before.\nProhibitions: Never re-emit a daily op whose flag is already set on this tile.\nOutput := one turn object with no already-consumed daily op.\n\nSigma:RIPE -- maturity and production-window binding.\nDefinitions: age := day - planted_day. first := CROPS[crop].first_yield_day. y := tile.yield_units. mature(tile) := age >= first and y > 0. An ongoing crop produces when (next_day - planted_day - first) is a non-negative multiple of interval, for at most max_yield events: TOMATO (first 8, interval 1) at ages 8,9,10,11 and STRAWBERRY (first 10, interval 2) at ages 10,12,14,16 -- four events each, held at cap 4, after which the plant goes on a lifespan clock and decays 1 unit every 2 steps.\nAdmissible set: HARVEST on a PLANT emitted => mature(tile). HARVEST on an animal tile emitted => y > 0.\nOptimize: min(units lost to decay after the final production event).\nPriority: no ordering between harvesting now and leaving a plant to keep producing. An ongoing plant with events left keeps producing whether or not it is harvested, and harvesting early is not preferred; the remaining production days and the decay step are given so the plan can choose.\nConditional: If age < first, HARVEST is not admissible on that tile at all. If the plant has produced its last event, its yield decays from decay_starts_step onward, so units left on it are lost over time rather than held.\nProhibitions: Never emit HARVEST on a tile below first_yield_day or with yield_units 0.\nOutput := one turn object whose HARVEST, if present, is on a mature tile.\n\nSigma:KEEP -- plant survival binding.\nDefinitions: u := tile.consecutive_unwatered. The daily refresh sets u := 0 if the tile was watered today, else u := u + 1, and any plant reaching u >= 2 becomes a WEED. A newly planted tile starts at u = 1, so its planting day is already one unwatered day.\nAdmissible set: For every owned plant: u + 1 >= 2 and not watered_today => the plant is removed at this day's refresh. A plant planted this day and not watered this day dies at that refresh.\nOptimize: min(plants lost to the weed conversion).\nPriority: a plant that dies at this refresh unless watered ranks above one that does not. No ordering is imposed between watering and any unrelated op.\nConditional: A surviving ongoing plant still gains its base yield on an unwatered day; only the fertilizer bonus requires the day to have been watered. So watering is a survival precondition, not a per-day yield requirement.\nProhibitions: Never treat watering as optional for a tile flagged dies_at_refresh_unless_watered. Never treat it as required for a tile that is not.\nOutput := one turn object that does not strand a dying plant unwatered.\n\nSigma:VENT -- shed-capacity binding.\nDefinitions: used := sum(shed.values()). cap := shedCapacity. full := used >= cap. Seeds are NOT held in the shed: BUY_SEED bypasses cap entirely.\nAdmissible set: BUY_PRODUCT or BUY_ANIMAL emitted => not full. DROP / PLACE-to-shed move at most cap - used units. BUY_SEED admissibility is independent of full.\nOptimize: min(units discarded at the end-of-day drop); max(shed room before a deposit).\nPriority: SELL when full > deposit when full > buy into a full shed.\nConditional: If full and a deposit or product purchase is intended, emit an admissible SELL first; BUY_SEED remains available while full.\nProhibitions: Never emit BUY_PRODUCT or BUY_ANIMAL while the shed is at capacity.\nOutput := one turn object that does not deposit into a full shed.\n\nSTATE\nday 6 hour 6 money 2990\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON268,MILK183,STRAWBERRY142,TOMATO61,WHEAT28,WOOL234\ntown shops YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 569 (last is step 718); 18 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=93 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 7628,
+   "prompt_tokens": 2081,
+   "raw_output": "{\n  \"farmer\": [\n    \"DIG\"\n  ],\n  \"hands\": [],\n  \"market\": []\n}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "DIG"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 1,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0183,
+    "prompt_build": 0.0002,
+    "model_wall": 21.606,
+    "prefill_ttft": 18.838,
+    "decode": 2.767,
+    "decode_validation": 0.0011
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.0865082620000002,
+    "time_to_first_token_in_second": 18.8381395965,
+    "last_prefill_token_count": 2089,
+    "last_prefill_tokens_per_second": 111.45575061602656,
+    "last_decode_token_count": 30,
+    "last_decode_tokens_per_second": 10.49589100404001
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s7700001-t150-p0",
+   "arm": "pattern",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 6 hour 6 money 2990\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON268,MILK183,STRAWBERRY142,TOMATO61,WHEAT28,WOOL234\ntown shops YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 569 (last is step 718); 18 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=93 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 3558,
+   "prompt_tokens": 1206,
+   "raw_output": "Sigma:ONCE\nfarmer on [PLANT CARROT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying CARROT2; shed - (0/100 used, 100 room) -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "EAST"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 1,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0183,
+    "prompt_build": 0.0001,
+    "model_wall": 13.613,
+    "prefill_ttft": 7.313,
+    "decode": 6.3,
+    "decode_validation": 0.0011
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086508844,
+    "time_to_first_token_in_second": 7.3128284675,
+    "last_prefill_token_count": 1214,
+    "last_prefill_tokens_per_second": 168.27398752217252,
+    "last_decode_token_count": 65,
+    "last_decode_tokens_per_second": 10.162205188795266
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s7700001-t150-p0",
+   "arm": "codec",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 6 hour 6 money 2990\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON268,MILK183,STRAWBERRY142,TOMATO61,WHEAT28,WOOL234\ntown shops YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 569 (last is step 718); 18 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=93 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 3558,
+   "prompt_tokens": 1206,
+   "raw_output": "{\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "WATER"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [
+     "farmer ['WATER'] not admissible"
+    ],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": false
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0183,
+    "prompt_build": 0.0001,
+    "model_wall": 8.532,
+    "prefill_ttft": 7.49,
+    "decode": 1.042,
+    "decode_validation": 0.001
+   },
+   "engine_counters": {
+    "init_time_in_second": 4.776346715,
+    "time_to_first_token_in_second": 7.489540215,
+    "last_prefill_token_count": 1214,
+    "last_prefill_tokens_per_second": 164.15988338319875,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.60324060728145
+   },
+   "constrained": "regex"
+  },
+  {
+   "card_id": "s7700001-t300-p0",
+   "arm": "baseline",
+   "prompt": "You are playing Kaggriculture. Read the state and the list of actions the engine will accept, then choose this turn's actions. Reply with a JSON object with keys farmer, hands and market: farmer is one action list, hands is a list of action lists (one per hand), market is a list of order lists. Only use actions from the accepted list.\n\nSTATE\nday 12 hour 12 money 3090\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG51,FERTILIZER100,MELON273,MILK191,STRAWBERRY150,TOMATO62,WHEAT29,WOOL247\ntown shops YARN_STORE,YARN_STORE,YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 419 (last is step 718); 12 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step384 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 12 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=154 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=309 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 1888,
+   "prompt_tokens": 608,
+   "raw_output": "```json\n{\n  \"farmer\": [\n    \"DIG\"\n  ],\n  \"hands\": [],\n  \"market\": [\n    {\n      \"action\": \"SELL CARROT\",\n      \"n\": 2\n    }\n  ]\n}\n```",
+   "error": null,
+   "syntax_ok": false,
+   "syntax_reject_reason": "market[0]: not a non-empty list",
+   "decoded_action": null,
+   "legality": null,
+   "effect": null,
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0182,
+    "prompt_build": 0.0001,
+    "model_wall": 9.561,
+    "prefill_ttft": 3.606,
+    "decode": 5.956,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086525029,
+    "time_to_first_token_in_second": 3.6056134185,
+    "last_prefill_token_count": 616,
+    "last_prefill_tokens_per_second": 175.67928476655607,
+    "last_decode_token_count": 61,
+    "last_decode_tokens_per_second": 10.078215460631817
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s7700001-t300-p0",
+   "arm": "formal",
+   "prompt": "Sigma:ADMIT -- output-contract binding for one Kaggriculture turn.\nDefinitions: Turn := {farmer:[op,...], hands:[[op,...],...], market:[[op,...],...]}. A := the admissible set supplied for this observation. U(i) := admissible ops for unit i. M := admissible market orders.\nAdmissible set: forall a in emitted turn: a in A. farmer in U(0). hands[i] in U(i+1). |hands| <= number of hands. market[j] in M. |market| <= maxMarketOrdersPerTurn.\nOptimize: min(tokens emitted); min(keys outside {farmer,hands,market}).\nPriority: well-formedness of the object > membership of each entry > length.\nConditional: If no op advances the goal, PASS is in U(0) and is a valid emission.\nProhibitions: Never emit an op absent from A. Never emit an op name outside the grammar. Never emit prose, keys, or fields outside the turn object.\nOutput := one turn object, nothing before or after it.\n\nSigma:STOCK -- resource-precondition binding.\nDefinitions: req(op) := the engine's consumed resource: PLANT c needs seeds[c] >= 1; FEED needs unit inventory WHEAT >= 1; FERTILIZE needs unit inventory FERTILIZER >= 1; PICKUP x needs shed[x] >= 1; PLACE x needs unit inventory x >= 1; BUY_* needs money >= price.\nAdmissible set: forall op emitted: req(op) is satisfied in THIS observation. If req(op) is unsatisfied, op is not in A and is not emitted.\nOptimize: min(ops emitted whose resource is absent).\nPriority: an op whose resource is present ranks above one whose resource is absent. Which present-resource op to take is not ordered here -- that is the plan's to choose.\nConditional: If the intended op's resource is absent, that op is not admissible this turn. An acquiring order (BUY_SEED for a seed, PICKUP for a shed item) is AVAILABLE, not required: buying a seed is only worth its cost if the plan actually plants it, and a seed bought this turn cannot be planted until the next one.\nProhibitions: Never emit an op whose resource count is zero. Never assume a resource not present in this observation.\nOutput := one turn object whose every op has its resource present.\n\nSigma:ONCE -- per-day idempotence binding (negation).\nDefinitions: The engine sets watered_today, fed_today, cared_today, and clears fertilizer_available on use. done(tile,op) := the flag for op is already set.\nAdmissible set: forall op in {WATER, FEED, CARE, COLLECT_FERTILIZER}: op emitted => not done(tile_under_unit, op).\nOptimize: min(no-op turns).\nPriority: an op with an unconsumed flag > movement to a tile with one > PASS.\nConditional: If the op is already done on this tile today, emit a different admissible op or a move; the flag clears at the end-of-day refresh, not before.\nProhibitions: Never re-emit a daily op whose flag is already set on this tile.\nOutput := one turn object with no already-consumed daily op.\n\nSigma:RIPE -- maturity and production-window binding.\nDefinitions: age := day - planted_day. first := CROPS[crop].first_yield_day. y := tile.yield_units. mature(tile) := age >= first and y > 0. An ongoing crop produces when (next_day - planted_day - first) is a non-negative multiple of interval, for at most max_yield events: TOMATO (first 8, interval 1) at ages 8,9,10,11 and STRAWBERRY (first 10, interval 2) at ages 10,12,14,16 -- four events each, held at cap 4, after which the plant goes on a lifespan clock and decays 1 unit every 2 steps.\nAdmissible set: HARVEST on a PLANT emitted => mature(tile). HARVEST on an animal tile emitted => y > 0.\nOptimize: min(units lost to decay after the final production event).\nPriority: no ordering between harvesting now and leaving a plant to keep producing. An ongoing plant with events left keeps producing whether or not it is harvested, and harvesting early is not preferred; the remaining production days and the decay step are given so the plan can choose.\nConditional: If age < first, HARVEST is not admissible on that tile at all. If the plant has produced its last event, its yield decays from decay_starts_step onward, so units left on it are lost over time rather than held.\nProhibitions: Never emit HARVEST on a tile below first_yield_day or with yield_units 0.\nOutput := one turn object whose HARVEST, if present, is on a mature tile.\n\nSigma:KEEP -- plant survival binding.\nDefinitions: u := tile.consecutive_unwatered. The daily refresh sets u := 0 if the tile was watered today, else u := u + 1, and any plant reaching u >= 2 becomes a WEED. A newly planted tile starts at u = 1, so its planting day is already one unwatered day.\nAdmissible set: For every owned plant: u + 1 >= 2 and not watered_today => the plant is removed at this day's refresh. A plant planted this day and not watered this day dies at that refresh.\nOptimize: min(plants lost to the weed conversion).\nPriority: a plant that dies at this refresh unless watered ranks above one that does not. No ordering is imposed between watering and any unrelated op.\nConditional: A surviving ongoing plant still gains its base yield on an unwatered day; only the fertilizer bonus requires the day to have been watered. So watering is a survival precondition, not a per-day yield requirement.\nProhibitions: Never treat watering as optional for a tile flagged dies_at_refresh_unless_watered. Never treat it as required for a tile that is not.\nOutput := one turn object that does not strand a dying plant unwatered.\n\nSigma:VENT -- shed-capacity binding.\nDefinitions: used := sum(shed.values()). cap := shedCapacity. full := used >= cap. Seeds are NOT held in the shed: BUY_SEED bypasses cap entirely.\nAdmissible set: BUY_PRODUCT or BUY_ANIMAL emitted => not full. DROP / PLACE-to-shed move at most cap - used units. BUY_SEED admissibility is independent of full.\nOptimize: min(units discarded at the end-of-day drop); max(shed room before a deposit).\nPriority: SELL when full > deposit when full > buy into a full shed.\nConditional: If full and a deposit or product purchase is intended, emit an admissible SELL first; BUY_SEED remains available while full.\nProhibitions: Never emit BUY_PRODUCT or BUY_ANIMAL while the shed is at capacity.\nOutput := one turn object that does not deposit into a full shed.\n\nSTATE\nday 12 hour 12 money 3090\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG51,FERTILIZER100,MELON273,MILK191,STRAWBERRY150,TOMATO62,WHEAT29,WOOL247\ntown shops YARN_STORE,YARN_STORE,YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 419 (last is step 718); 12 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step384 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 12 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=154 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=309 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 7654,
+   "prompt_tokens": 2095,
+   "raw_output": "{\n  \"farmer\": [\n    \"DIG\"\n  ],\n  \"hands\": [],\n  \"market\": []\n}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "DIG"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 1,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0182,
+    "prompt_build": 0.0002,
+    "model_wall": 16.194,
+    "prefill_ttft": 13.358,
+    "decode": 2.836,
+    "decode_validation": 0.001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.0865488540000001,
+    "time_to_first_token_in_second": 13.3579955765,
+    "last_prefill_token_count": 2103,
+    "last_prefill_tokens_per_second": 158.59307650277776,
+    "last_decode_token_count": 30,
+    "last_decode_tokens_per_second": 10.241316376749394
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s7700001-t300-p0",
+   "arm": "pattern",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 12 hour 12 money 3090\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG51,FERTILIZER100,MELON273,MILK191,STRAWBERRY150,TOMATO62,WHEAT29,WOOL247\ntown shops YARN_STORE,YARN_STORE,YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 419 (last is step 718); 12 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step384 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 12 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=154 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=309 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 3584,
+   "prompt_tokens": 1220,
+   "raw_output": "Sigma:ONCE\nfarmer on [PLANT CARROT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying CARROT2; shed - (0/100 used, 100 room) -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "EAST"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 1,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0182,
+    "prompt_build": 0.0001,
+    "model_wall": 13.629,
+    "prefill_ttft": 7.635,
+    "decode": 5.994,
+    "decode_validation": 0.0009
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086510209,
+    "time_to_first_token_in_second": 7.63521969225,
+    "last_prefill_token_count": 1228,
+    "last_prefill_tokens_per_second": 162.83008191215802,
+    "last_decode_token_count": 65,
+    "last_decode_tokens_per_second": 10.681971876606662
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s7700001-t300-p0",
+   "arm": "codec",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 12 hour 12 money 3090\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG51,FERTILIZER100,MELON273,MILK191,STRAWBERRY150,TOMATO62,WHEAT29,WOOL247\ntown shops YARN_STORE,YARN_STORE,YARN_STORE,YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 419 (last is step 718); 12 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step384 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 12 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=154 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=309 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "prompt_chars": 3584,
+   "prompt_tokens": 1220,
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0182,
+    "prompt_build": 0.0001,
+    "model_wall": 8.395,
+    "prefill_ttft": 7.36,
+    "decode": 1.034,
+    "decode_validation": 0.0009
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.7212009119999996,
+    "time_to_first_token_in_second": 7.36020907475,
+    "last_prefill_token_count": 1228,
+    "last_prefill_tokens_per_second": 168.99263380072767,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.68146041338215
+   },
+   "constrained": "regex"
+  },
+  {
+   "card_id": "s9900017-t200-p1",
+   "arm": "baseline",
+   "prompt": "You are playing Kaggriculture. Read the state and the list of actions the engine will accept, then choose this turn's actions. Reply with a JSON object with keys farmer, hands and market: farmer is one action list, hands is a list of action lists (one per hand), market is a list of order lists. Only use actions from the accepted list.\n\nSTATE\nday 8 hour 8 money 3070\nfarmer at (4,4) on [PLANT CARROT age2d ripe_at2d yield2 watered_today] carrying -\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT41,EGG51,FERTILIZER100,MELON270,MILK186,STRAWBERRY160,TOMATO63,WHEAT30,WOOL220\ntown shops FARMERS_MARKET,PET_CAFE\n\nPLANTS AND HORIZON\ndecisions left this episode: 719 (last is step 718); 16 turn(s) left today\n  (4,4) CARROT age2d yield2/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak0\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 8 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | EAST | HARVEST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=92 | BUY_SEED CARROT n<=153 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=307 | HIRE\n",
+   "prompt_chars": 1766,
+   "prompt_tokens": 571,
+   "raw_output": "```json\n{\n  \"farmer\": [\n    \"HARVEST\"\n  ],\n  \"hands\": [],\n  \"market\": []\n}\n```",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "HARVEST"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 1,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0187,
+    "prompt_build": 0.0001,
+    "model_wall": 6.696,
+    "prefill_ttft": 3.472,
+    "decode": 3.223,
+    "decode_validation": 0.0009
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086514419,
+    "time_to_first_token_in_second": 3.4724307535,
+    "last_prefill_token_count": 579,
+    "last_prefill_tokens_per_second": 171.2818686475345,
+    "last_decode_token_count": 36,
+    "last_decode_tokens_per_second": 10.865086016789938
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s9900017-t200-p1",
+   "arm": "formal",
+   "prompt": "Sigma:ADMIT -- output-contract binding for one Kaggriculture turn.\nDefinitions: Turn := {farmer:[op,...], hands:[[op,...],...], market:[[op,...],...]}. A := the admissible set supplied for this observation. U(i) := admissible ops for unit i. M := admissible market orders.\nAdmissible set: forall a in emitted turn: a in A. farmer in U(0). hands[i] in U(i+1). |hands| <= number of hands. market[j] in M. |market| <= maxMarketOrdersPerTurn.\nOptimize: min(tokens emitted); min(keys outside {farmer,hands,market}).\nPriority: well-formedness of the object > membership of each entry > length.\nConditional: If no op advances the goal, PASS is in U(0) and is a valid emission.\nProhibitions: Never emit an op absent from A. Never emit an op name outside the grammar. Never emit prose, keys, or fields outside the turn object.\nOutput := one turn object, nothing before or after it.\n\nSigma:STOCK -- resource-precondition binding.\nDefinitions: req(op) := the engine's consumed resource: PLANT c needs seeds[c] >= 1; FEED needs unit inventory WHEAT >= 1; FERTILIZE needs unit inventory FERTILIZER >= 1; PICKUP x needs shed[x] >= 1; PLACE x needs unit inventory x >= 1; BUY_* needs money >= price.\nAdmissible set: forall op emitted: req(op) is satisfied in THIS observation. If req(op) is unsatisfied, op is not in A and is not emitted.\nOptimize: min(ops emitted whose resource is absent).\nPriority: an op whose resource is present ranks above one whose resource is absent. Which present-resource op to take is not ordered here -- that is the plan's to choose.\nConditional: If the intended op's resource is absent, that op is not admissible this turn. An acquiring order (BUY_SEED for a seed, PICKUP for a shed item) is AVAILABLE, not required: buying a seed is only worth its cost if the plan actually plants it, and a seed bought this turn cannot be planted until the next one.\nProhibitions: Never emit an op whose resource count is zero. Never assume a resource not present in this observation.\nOutput := one turn object whose every op has its resource present.\n\nSigma:ONCE -- per-day idempotence binding (negation).\nDefinitions: The engine sets watered_today, fed_today, cared_today, and clears fertilizer_available on use. done(tile,op) := the flag for op is already set.\nAdmissible set: forall op in {WATER, FEED, CARE, COLLECT_FERTILIZER}: op emitted => not done(tile_under_unit, op).\nOptimize: min(no-op turns).\nPriority: an op with an unconsumed flag > movement to a tile with one > PASS.\nConditional: If the op is already done on this tile today, emit a different admissible op or a move; the flag clears at the end-of-day refresh, not before.\nProhibitions: Never re-emit a daily op whose flag is already set on this tile.\nOutput := one turn object with no already-consumed daily op.\n\nSigma:RIPE -- maturity and production-window binding.\nDefinitions: age := day - planted_day. first := CROPS[crop].first_yield_day. y := tile.yield_units. mature(tile) := age >= first and y > 0. An ongoing crop produces when (next_day - planted_day - first) is a non-negative multiple of interval, for at most max_yield events: TOMATO (first 8, interval 1) at ages 8,9,10,11 and STRAWBERRY (first 10, interval 2) at ages 10,12,14,16 -- four events each, held at cap 4, after which the plant goes on a lifespan clock and decays 1 unit every 2 steps.\nAdmissible set: HARVEST on a PLANT emitted => mature(tile). HARVEST on an animal tile emitted => y > 0.\nOptimize: min(units lost to decay after the final production event).\nPriority: no ordering between harvesting now and leaving a plant to keep producing. An ongoing plant with events left keeps producing whether or not it is harvested, and harvesting early is not preferred; the remaining production days and the decay step are given so the plan can choose.\nConditional: If age < first, HARVEST is not admissible on that tile at all. If the plant has produced its last event, its yield decays from decay_starts_step onward, so units left on it are lost over time rather than held.\nProhibitions: Never emit HARVEST on a tile below first_yield_day or with yield_units 0.\nOutput := one turn object whose HARVEST, if present, is on a mature tile.\n\nSigma:KEEP -- plant survival binding.\nDefinitions: u := tile.consecutive_unwatered. The daily refresh sets u := 0 if the tile was watered today, else u := u + 1, and any plant reaching u >= 2 becomes a WEED. A newly planted tile starts at u = 1, so its planting day is already one unwatered day.\nAdmissible set: For every owned plant: u + 1 >= 2 and not watered_today => the plant is removed at this day's refresh. A plant planted this day and not watered this day dies at that refresh.\nOptimize: min(plants lost to the weed conversion).\nPriority: a plant that dies at this refresh unless watered ranks above one that does not. No ordering is imposed between watering and any unrelated op.\nConditional: A surviving ongoing plant still gains its base yield on an unwatered day; only the fertilizer bonus requires the day to have been watered. So watering is a survival precondition, not a per-day yield requirement.\nProhibitions: Never treat watering as optional for a tile flagged dies_at_refresh_unless_watered. Never treat it as required for a tile that is not.\nOutput := one turn object that does not strand a dying plant unwatered.\n\nSigma:VENT -- shed-capacity binding.\nDefinitions: used := sum(shed.values()). cap := shedCapacity. full := used >= cap. Seeds are NOT held in the shed: BUY_SEED bypasses cap entirely.\nAdmissible set: BUY_PRODUCT or BUY_ANIMAL emitted => not full. DROP / PLACE-to-shed move at most cap - used units. BUY_SEED admissibility is independent of full.\nOptimize: min(units discarded at the end-of-day drop); max(shed room before a deposit).\nPriority: SELL when full > deposit when full > buy into a full shed.\nConditional: If full and a deposit or product purchase is intended, emit an admissible SELL first; BUY_SEED remains available while full.\nProhibitions: Never emit BUY_PRODUCT or BUY_ANIMAL while the shed is at capacity.\nOutput := one turn object that does not deposit into a full shed.\n\nSTATE\nday 8 hour 8 money 3070\nfarmer at (4,4) on [PLANT CARROT age2d ripe_at2d yield2 watered_today] carrying -\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT41,EGG51,FERTILIZER100,MELON270,MILK186,STRAWBERRY160,TOMATO63,WHEAT30,WOOL220\ntown shops FARMERS_MARKET,PET_CAFE\n\nPLANTS AND HORIZON\ndecisions left this episode: 719 (last is step 718); 16 turn(s) left today\n  (4,4) CARROT age2d yield2/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak0\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 8 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | EAST | HARVEST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=92 | BUY_SEED CARROT n<=153 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=307 | HIRE\n",
+   "prompt_chars": 7532,
+   "prompt_tokens": 2058,
+   "raw_output": "{\n  \"farmer\": [\n    \"HARVEST\"\n  ],\n  \"hands\": [],\n  \"market\": []\n}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "HARVEST"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 1,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0187,
+    "prompt_build": 0.0001,
+    "model_wall": 15.544,
+    "prefill_ttft": 12.614,
+    "decode": 2.93,
+    "decode_validation": 0.001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086500033,
+    "time_to_first_token_in_second": 12.614217443249998,
+    "last_prefill_token_count": 2066,
+    "last_prefill_tokens_per_second": 165.05956193826455,
+    "last_decode_token_count": 31,
+    "last_decode_tokens_per_second": 10.253926560326782
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s9900017-t200-p1",
+   "arm": "pattern",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 8 hour 8 money 3070\nfarmer at (4,4) on [PLANT CARROT age2d ripe_at2d yield2 watered_today] carrying -\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT41,EGG51,FERTILIZER100,MELON270,MILK186,STRAWBERRY160,TOMATO63,WHEAT30,WOOL220\ntown shops FARMERS_MARKET,PET_CAFE\n\nPLANTS AND HORIZON\ndecisions left this episode: 719 (last is step 718); 16 turn(s) left today\n  (4,4) CARROT age2d yield2/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak0\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 8 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | EAST | HARVEST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=92 | BUY_SEED CARROT n<=153 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=307 | HIRE\n",
+   "prompt_chars": 3462,
+   "prompt_tokens": 1183,
+   "raw_output": "Sigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\n->\nSigma:PASS\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:PASS\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": [
+     [
+      "BUY_PRODUCT",
+      "WHEAT",
+      1
+     ]
+    ]
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": -30.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0187,
+    "prompt_build": 0.0001,
+    "model_wall": 25.761,
+    "prefill_ttft": 7.686,
+    "decode": 18.075,
+    "decode_validation": 0.001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.08649397,
+    "time_to_first_token_in_second": 7.68642202225,
+    "last_prefill_token_count": 1191,
+    "last_prefill_tokens_per_second": 156.89005124566663,
+    "last_decode_token_count": 191,
+    "last_decode_tokens_per_second": 10.513202894282731
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s9900017-t200-p1",
+   "arm": "codec",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 8 hour 8 money 3070\nfarmer at (4,4) on [PLANT CARROT age2d ripe_at2d yield2 watered_today] carrying -\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT41,EGG51,FERTILIZER100,MELON270,MILK186,STRAWBERRY160,TOMATO63,WHEAT30,WOOL220\ntown shops FARMERS_MARKET,PET_CAFE\n\nPLANTS AND HORIZON\ndecisions left this episode: 719 (last is step 718); 16 turn(s) left today\n  (4,4) CARROT age2d yield2/4 ripe at age2d watering raises yield at age2-3d decays from step240 unwatered_streak0\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 8 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | EAST | HARVEST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=92 | BUY_SEED CARROT n<=153 | BUY_SEED MELON n<=38 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=61 | BUY_SEED WHEAT n<=307 | HIRE\n",
+   "prompt_chars": 3462,
+   "prompt_tokens": 1183,
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 0
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0187,
+    "prompt_build": 0.0001,
+    "model_wall": 8.464,
+    "prefill_ttft": 7.443,
+    "decode": 1.021,
+    "decode_validation": 0.001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.5794888370000004,
+    "time_to_first_token_in_second": 7.44283451025,
+    "last_prefill_token_count": 1191,
+    "last_prefill_tokens_per_second": 162.03108976554984,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.82329595072439
+   },
+   "constrained": "regex"
+  },
+  {
+   "card_id": "s8800001-t30-p0",
+   "arm": "baseline",
+   "prompt": "You are playing Kaggriculture. Read the state and the list of actions the engine will accept, then choose this turn's actions. Reply with a JSON object with keys farmer, hands and market: farmer is one action list, hands is a list of action lists (one per hand), market is a list of order lists. Only use actions from the accepted list.\n\nSTATE\nday 1 hour 6 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 689 (last is step 718); 18 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 1863,
+   "prompt_tokens": 604,
+   "raw_output": "```json\n{\n  \"farmer\": \"PASS\",\n  \"hands\": [\n    [\n      \"PASS\"\n    ],\n    [\n      \"PASS\"\n    ],\n    [\n      \"PASS\"\n    ]\n  ],\n  \"market\": []\n}\n```",
+   "error": null,
+   "syntax_ok": false,
+   "syntax_reject_reason": "farmer: not a non-empty list",
+   "decoded_action": null,
+   "legality": null,
+   "effect": null,
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0238,
+    "prompt_build": 0.0001,
+    "model_wall": 9.814,
+    "prefill_ttft": 3.644,
+    "decode": 6.17,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086518985,
+    "time_to_first_token_in_second": 3.6437619395,
+    "last_prefill_token_count": 612,
+    "last_prefill_tokens_per_second": 172.5210704338632,
+    "last_decode_token_count": 65,
+    "last_decode_tokens_per_second": 10.376763940095627
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s8800001-t30-p0",
+   "arm": "formal",
+   "prompt": "Sigma:ADMIT -- output-contract binding for one Kaggriculture turn.\nDefinitions: Turn := {farmer:[op,...], hands:[[op,...],...], market:[[op,...],...]}. A := the admissible set supplied for this observation. U(i) := admissible ops for unit i. M := admissible market orders.\nAdmissible set: forall a in emitted turn: a in A. farmer in U(0). hands[i] in U(i+1). |hands| <= number of hands. market[j] in M. |market| <= maxMarketOrdersPerTurn.\nOptimize: min(tokens emitted); min(keys outside {farmer,hands,market}).\nPriority: well-formedness of the object > membership of each entry > length.\nConditional: If no op advances the goal, PASS is in U(0) and is a valid emission.\nProhibitions: Never emit an op absent from A. Never emit an op name outside the grammar. Never emit prose, keys, or fields outside the turn object.\nOutput := one turn object, nothing before or after it.\n\nSigma:STOCK -- resource-precondition binding.\nDefinitions: req(op) := the engine's consumed resource: PLANT c needs seeds[c] >= 1; FEED needs unit inventory WHEAT >= 1; FERTILIZE needs unit inventory FERTILIZER >= 1; PICKUP x needs shed[x] >= 1; PLACE x needs unit inventory x >= 1; BUY_* needs money >= price.\nAdmissible set: forall op emitted: req(op) is satisfied in THIS observation. If req(op) is unsatisfied, op is not in A and is not emitted.\nOptimize: min(ops emitted whose resource is absent).\nPriority: an op whose resource is present ranks above one whose resource is absent. Which present-resource op to take is not ordered here -- that is the plan's to choose.\nConditional: If the intended op's resource is absent, that op is not admissible this turn. An acquiring order (BUY_SEED for a seed, PICKUP for a shed item) is AVAILABLE, not required: buying a seed is only worth its cost if the plan actually plants it, and a seed bought this turn cannot be planted until the next one.\nProhibitions: Never emit an op whose resource count is zero. Never assume a resource not present in this observation.\nOutput := one turn object whose every op has its resource present.\n\nSigma:ONCE -- per-day idempotence binding (negation).\nDefinitions: The engine sets watered_today, fed_today, cared_today, and clears fertilizer_available on use. done(tile,op) := the flag for op is already set.\nAdmissible set: forall op in {WATER, FEED, CARE, COLLECT_FERTILIZER}: op emitted => not done(tile_under_unit, op).\nOptimize: min(no-op turns).\nPriority: an op with an unconsumed flag > movement to a tile with one > PASS.\nConditional: If the op is already done on this tile today, emit a different admissible op or a move; the flag clears at the end-of-day refresh, not before.\nProhibitions: Never re-emit a daily op whose flag is already set on this tile.\nOutput := one turn object with no already-consumed daily op.\n\nSigma:RIPE -- maturity and production-window binding.\nDefinitions: age := day - planted_day. first := CROPS[crop].first_yield_day. y := tile.yield_units. mature(tile) := age >= first and y > 0. An ongoing crop produces when (next_day - planted_day - first) is a non-negative multiple of interval, for at most max_yield events: TOMATO (first 8, interval 1) at ages 8,9,10,11 and STRAWBERRY (first 10, interval 2) at ages 10,12,14,16 -- four events each, held at cap 4, after which the plant goes on a lifespan clock and decays 1 unit every 2 steps.\nAdmissible set: HARVEST on a PLANT emitted => mature(tile). HARVEST on an animal tile emitted => y > 0.\nOptimize: min(units lost to decay after the final production event).\nPriority: no ordering between harvesting now and leaving a plant to keep producing. An ongoing plant with events left keeps producing whether or not it is harvested, and harvesting early is not preferred; the remaining production days and the decay step are given so the plan can choose.\nConditional: If age < first, HARVEST is not admissible on that tile at all. If the plant has produced its last event, its yield decays from decay_starts_step onward, so units left on it are lost over time rather than held.\nProhibitions: Never emit HARVEST on a tile below first_yield_day or with yield_units 0.\nOutput := one turn object whose HARVEST, if present, is on a mature tile.\n\nSigma:KEEP -- plant survival binding.\nDefinitions: u := tile.consecutive_unwatered. The daily refresh sets u := 0 if the tile was watered today, else u := u + 1, and any plant reaching u >= 2 becomes a WEED. A newly planted tile starts at u = 1, so its planting day is already one unwatered day.\nAdmissible set: For every owned plant: u + 1 >= 2 and not watered_today => the plant is removed at this day's refresh. A plant planted this day and not watered this day dies at that refresh.\nOptimize: min(plants lost to the weed conversion).\nPriority: a plant that dies at this refresh unless watered ranks above one that does not. No ordering is imposed between watering and any unrelated op.\nConditional: A surviving ongoing plant still gains its base yield on an unwatered day; only the fertilizer bonus requires the day to have been watered. So watering is a survival precondition, not a per-day yield requirement.\nProhibitions: Never treat watering as optional for a tile flagged dies_at_refresh_unless_watered. Never treat it as required for a tile that is not.\nOutput := one turn object that does not strand a dying plant unwatered.\n\nSigma:VENT -- shed-capacity binding.\nDefinitions: used := sum(shed.values()). cap := shedCapacity. full := used >= cap. Seeds are NOT held in the shed: BUY_SEED bypasses cap entirely.\nAdmissible set: BUY_PRODUCT or BUY_ANIMAL emitted => not full. DROP / PLACE-to-shed move at most cap - used units. BUY_SEED admissibility is independent of full.\nOptimize: min(units discarded at the end-of-day drop); max(shed room before a deposit).\nPriority: SELL when full > deposit when full > buy into a full shed.\nConditional: If full and a deposit or product purchase is intended, emit an admissible SELL first; BUY_SEED remains available while full.\nProhibitions: Never emit BUY_PRODUCT or BUY_ANIMAL while the shed is at capacity.\nOutput := one turn object that does not deposit into a full shed.\n\nSTATE\nday 1 hour 6 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 689 (last is step 718); 18 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 7629,
+   "prompt_tokens": 2091,
+   "raw_output": "{\n  \"farmer\": \"EAST\",\n  \"hands\": [\n    \"EAST\",\n    \"EAST\",\n    \"EAST\"\n  ],\n  \"market\": []\n}",
+   "error": null,
+   "syntax_ok": false,
+   "syntax_reject_reason": "farmer: not a non-empty list",
+   "decoded_action": null,
+   "legality": null,
+   "effect": null,
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0238,
+    "prompt_build": 0.0002,
+    "model_wall": 16.394,
+    "prefill_ttft": 12.596,
+    "decode": 3.798,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086529151,
+    "time_to_first_token_in_second": 12.596299517,
+    "last_prefill_token_count": 2099,
+    "last_prefill_tokens_per_second": 167.86881698571412,
+    "last_decode_token_count": 42,
+    "last_decode_tokens_per_second": 10.812180620863028
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s8800001-t30-p0",
+   "arm": "pattern",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 1 hour 6 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 689 (last is step 718); 18 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 3559,
+   "prompt_tokens": 1216,
+   "raw_output": "Sigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "PLANT",
+     "WHEAT"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [
+     "farmer ['PLANT', 'WHEAT'] not admissible"
+    ],
+    "joint_blocks": [
+     "PLANT WHEAT requested 1x across units but only 0 seed(s): the engine drops ALL 1 to PASS"
+    ],
+    "clamped": [],
+    "legal": false
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [
+     "WHEAT"
+    ],
+    "money_delta": 0.0,
+    "hands_after": 3
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0238,
+    "prompt_build": 0.0001,
+    "model_wall": 11.632,
+    "prefill_ttft": 7.479,
+    "decode": 4.153,
+    "decode_validation": 0.001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086491739,
+    "time_to_first_token_in_second": 7.47929922,
+    "last_prefill_token_count": 1224,
+    "last_prefill_tokens_per_second": 165.7419145741988,
+    "last_decode_token_count": 45,
+    "last_decode_tokens_per_second": 10.601801711317812
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s8800001-t30-p0",
+   "arm": "codec",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 1 hour 6 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 689 (last is step 718); 18 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 3559,
+   "prompt_tokens": 1216,
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 3
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0238,
+    "prompt_build": 0.0001,
+    "model_wall": 8.449,
+    "prefill_ttft": 7.359,
+    "decode": 1.089,
+    "decode_validation": 0.001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.626247976,
+    "time_to_first_token_in_second": 7.3591980865,
+    "last_prefill_token_count": 1224,
+    "last_prefill_tokens_per_second": 168.58136972153824,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.141029711435614
+   },
+   "constrained": "regex"
+  },
+  {
+   "card_id": "s8800001-t45-p0",
+   "arm": "baseline",
+   "prompt": "You are playing Kaggriculture. Read the state and the list of actions the engine will accept, then choose this turn's actions. Reply with a JSON object with keys farmer, hands and market: farmer is one action list, hands is a list of action lists (one per hand), market is a list of order lists. Only use actions from the accepted list.\n\nSTATE\nday 1 hour 21 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 674 (last is step 718); 3 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 21 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 1864,
+   "prompt_tokens": 605,
+   "raw_output": "```json\n{\n  \"farmer\": \"PASS\",\n  \"hands\": [\n    [\n      \"PASS\"\n    ],\n    [\n      \"PASS\"\n    ],\n    [\n      \"PASS\"\n    ]\n  ],\n  \"market\": []\n}\n```",
+   "error": null,
+   "syntax_ok": false,
+   "syntax_reject_reason": "farmer: not a non-empty list",
+   "decoded_action": null,
+   "legality": null,
+   "effect": null,
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0244,
+    "prompt_build": 0.0001,
+    "model_wall": 9.874,
+    "prefill_ttft": 3.723,
+    "decode": 6.151,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086522502,
+    "time_to_first_token_in_second": 3.7229078285,
+    "last_prefill_token_count": 613,
+    "last_prefill_tokens_per_second": 169.0177858190797,
+    "last_decode_token_count": 65,
+    "last_decode_tokens_per_second": 10.409013047817158
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s8800001-t45-p0",
+   "arm": "formal",
+   "prompt": "Sigma:ADMIT -- output-contract binding for one Kaggriculture turn.\nDefinitions: Turn := {farmer:[op,...], hands:[[op,...],...], market:[[op,...],...]}. A := the admissible set supplied for this observation. U(i) := admissible ops for unit i. M := admissible market orders.\nAdmissible set: forall a in emitted turn: a in A. farmer in U(0). hands[i] in U(i+1). |hands| <= number of hands. market[j] in M. |market| <= maxMarketOrdersPerTurn.\nOptimize: min(tokens emitted); min(keys outside {farmer,hands,market}).\nPriority: well-formedness of the object > membership of each entry > length.\nConditional: If no op advances the goal, PASS is in U(0) and is a valid emission.\nProhibitions: Never emit an op absent from A. Never emit an op name outside the grammar. Never emit prose, keys, or fields outside the turn object.\nOutput := one turn object, nothing before or after it.\n\nSigma:STOCK -- resource-precondition binding.\nDefinitions: req(op) := the engine's consumed resource: PLANT c needs seeds[c] >= 1; FEED needs unit inventory WHEAT >= 1; FERTILIZE needs unit inventory FERTILIZER >= 1; PICKUP x needs shed[x] >= 1; PLACE x needs unit inventory x >= 1; BUY_* needs money >= price.\nAdmissible set: forall op emitted: req(op) is satisfied in THIS observation. If req(op) is unsatisfied, op is not in A and is not emitted.\nOptimize: min(ops emitted whose resource is absent).\nPriority: an op whose resource is present ranks above one whose resource is absent. Which present-resource op to take is not ordered here -- that is the plan's to choose.\nConditional: If the intended op's resource is absent, that op is not admissible this turn. An acquiring order (BUY_SEED for a seed, PICKUP for a shed item) is AVAILABLE, not required: buying a seed is only worth its cost if the plan actually plants it, and a seed bought this turn cannot be planted until the next one.\nProhibitions: Never emit an op whose resource count is zero. Never assume a resource not present in this observation.\nOutput := one turn object whose every op has its resource present.\n\nSigma:ONCE -- per-day idempotence binding (negation).\nDefinitions: The engine sets watered_today, fed_today, cared_today, and clears fertilizer_available on use. done(tile,op) := the flag for op is already set.\nAdmissible set: forall op in {WATER, FEED, CARE, COLLECT_FERTILIZER}: op emitted => not done(tile_under_unit, op).\nOptimize: min(no-op turns).\nPriority: an op with an unconsumed flag > movement to a tile with one > PASS.\nConditional: If the op is already done on this tile today, emit a different admissible op or a move; the flag clears at the end-of-day refresh, not before.\nProhibitions: Never re-emit a daily op whose flag is already set on this tile.\nOutput := one turn object with no already-consumed daily op.\n\nSigma:RIPE -- maturity and production-window binding.\nDefinitions: age := day - planted_day. first := CROPS[crop].first_yield_day. y := tile.yield_units. mature(tile) := age >= first and y > 0. An ongoing crop produces when (next_day - planted_day - first) is a non-negative multiple of interval, for at most max_yield events: TOMATO (first 8, interval 1) at ages 8,9,10,11 and STRAWBERRY (first 10, interval 2) at ages 10,12,14,16 -- four events each, held at cap 4, after which the plant goes on a lifespan clock and decays 1 unit every 2 steps.\nAdmissible set: HARVEST on a PLANT emitted => mature(tile). HARVEST on an animal tile emitted => y > 0.\nOptimize: min(units lost to decay after the final production event).\nPriority: no ordering between harvesting now and leaving a plant to keep producing. An ongoing plant with events left keeps producing whether or not it is harvested, and harvesting early is not preferred; the remaining production days and the decay step are given so the plan can choose.\nConditional: If age < first, HARVEST is not admissible on that tile at all. If the plant has produced its last event, its yield decays from decay_starts_step onward, so units left on it are lost over time rather than held.\nProhibitions: Never emit HARVEST on a tile below first_yield_day or with yield_units 0.\nOutput := one turn object whose HARVEST, if present, is on a mature tile.\n\nSigma:KEEP -- plant survival binding.\nDefinitions: u := tile.consecutive_unwatered. The daily refresh sets u := 0 if the tile was watered today, else u := u + 1, and any plant reaching u >= 2 becomes a WEED. A newly planted tile starts at u = 1, so its planting day is already one unwatered day.\nAdmissible set: For every owned plant: u + 1 >= 2 and not watered_today => the plant is removed at this day's refresh. A plant planted this day and not watered this day dies at that refresh.\nOptimize: min(plants lost to the weed conversion).\nPriority: a plant that dies at this refresh unless watered ranks above one that does not. No ordering is imposed between watering and any unrelated op.\nConditional: A surviving ongoing plant still gains its base yield on an unwatered day; only the fertilizer bonus requires the day to have been watered. So watering is a survival precondition, not a per-day yield requirement.\nProhibitions: Never treat watering as optional for a tile flagged dies_at_refresh_unless_watered. Never treat it as required for a tile that is not.\nOutput := one turn object that does not strand a dying plant unwatered.\n\nSigma:VENT -- shed-capacity binding.\nDefinitions: used := sum(shed.values()). cap := shedCapacity. full := used >= cap. Seeds are NOT held in the shed: BUY_SEED bypasses cap entirely.\nAdmissible set: BUY_PRODUCT or BUY_ANIMAL emitted => not full. DROP / PLACE-to-shed move at most cap - used units. BUY_SEED admissibility is independent of full.\nOptimize: min(units discarded at the end-of-day drop); max(shed room before a deposit).\nPriority: SELL when full > deposit when full > buy into a full shed.\nConditional: If full and a deposit or product purchase is intended, emit an admissible SELL first; BUY_SEED remains available while full.\nProhibitions: Never emit BUY_PRODUCT or BUY_ANIMAL while the shed is at capacity.\nOutput := one turn object that does not deposit into a full shed.\n\nSTATE\nday 1 hour 21 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 674 (last is step 718); 3 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 21 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 7630,
+   "prompt_tokens": 2092,
+   "raw_output": "{\n  \"farmer\": {\n    \"op\": \"EAST\"\n  },\n  \"hands\": [\n    {\n      \"op\": \"EAST\"\n    },\n    {\n      \"op\": \"EAST\"\n    },\n    {\n      \"op\": \"EAST\"\n    }\n  ],\n  \"market\": []\n}",
+   "error": null,
+   "syntax_ok": false,
+   "syntax_reject_reason": "farmer: not a non-empty list",
+   "decoded_action": null,
+   "legality": null,
+   "effect": null,
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0244,
+    "prompt_build": 0.0002,
+    "model_wall": 20.199,
+    "prefill_ttft": 13.033,
+    "decode": 7.166,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086508263,
+    "time_to_first_token_in_second": 13.03266281675,
+    "last_prefill_token_count": 2100,
+    "last_prefill_tokens_per_second": 162.29176193423328,
+    "last_decode_token_count": 78,
+    "last_decode_tokens_per_second": 10.752205600486224
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s8800001-t45-p0",
+   "arm": "pattern",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 1 hour 21 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 674 (last is step 718); 3 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 21 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 3560,
+   "prompt_tokens": 1217,
+   "raw_output": "Sigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "PLANT",
+     "WHEAT"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [
+     "farmer ['PLANT', 'WHEAT'] not admissible"
+    ],
+    "joint_blocks": [
+     "PLANT WHEAT requested 1x across units but only 0 seed(s): the engine drops ALL 1 to PASS"
+    ],
+    "clamped": [],
+    "legal": false
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [
+     "WHEAT"
+    ],
+    "money_delta": 0.0,
+    "hands_after": 3
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0244,
+    "prompt_build": 0.0002,
+    "model_wall": 15.3,
+    "prefill_ttft": 7.199,
+    "decode": 8.101,
+    "decode_validation": 0.0009
+   },
+   "engine_counters": {
+    "init_time_in_second": 1.086487918,
+    "time_to_first_token_in_second": 7.1986318065,
+    "last_prefill_token_count": 1225,
+    "last_prefill_tokens_per_second": 172.40059362385378,
+    "last_decode_token_count": 88,
+    "last_decode_tokens_per_second": 10.742543089716111
+   },
+   "constrained": false
+  },
+  {
+   "card_id": "s8800001-t45-p0",
+   "arm": "codec",
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 1 hour 21 money 2992\nfarmer at (4,4) on [empty] carrying -\nhand0 at (5,4) on [LOCKED] carrying -\nhand1 at (4,5) on [LOCKED] carrying -\nhand2 at (5,5) on [LOCKED] carrying -\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON260,MILK172,STRAWBERRY132,TOMATO60,WHEAT26,WOOL209\ntown shops none\n\nPLANTS AND HORIZON\ndecisions left this episode: 674 (last is step 718); 3 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 21 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]: EAST | NORTH | PASS | SOUTH | WEST\nhands[1]: EAST | NORTH | PASS | SOUTH | WEST\nhands[2]: EAST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=9 | BUY_ANIMAL SHEEP n<=5 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=149 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=29 | BUY_SEED TOMATO n<=59 | BUY_SEED WHEAT n<=299 | HIRE\n",
+   "prompt_chars": 3560,
+   "prompt_tokens": 1217,
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "syntax_ok": true,
+   "syntax_reject_reason": null,
+   "decoded_action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legality": {
+    "violations": [],
+    "joint_blocks": [],
+    "clamped": [],
+    "legal": true
+   },
+   "effect": {
+    "non_no_op_units": 0,
+    "emitted_units": 1,
+    "plant_blocked": [],
+    "money_delta": 0.0,
+    "hands_after": 3
+   },
+   "timing_s": {
+    "state_projection": 0.0001,
+    "constraint_calculation": 0.0244,
+    "prompt_build": 0.0001,
+    "model_wall": 8.408,
+    "prefill_ttft": 7.328,
+    "decode": 1.08,
+    "decode_validation": 0.0009
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.466228106,
+    "time_to_first_token_in_second": 7.327654785749999,
+    "last_prefill_token_count": 1225,
+    "last_prefill_tokens_per_second": 169.43524031454706,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.22977456395164
+   },
+   "constrained": "regex"
+  }
+ ]
+}

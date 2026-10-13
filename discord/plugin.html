@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Commons Discord door</title>
+<style>
+html{background:#0a0a0b;color:#e6e6e8}
+body{font:16px/1.45 ui-sans-serif,system-ui,sans-serif;max-width:36rem;margin:0 auto;padding:1.1rem}
+label{display:block;margin:.6rem 0 .2rem}
+input,textarea,button{font:inherit;width:100%;box-sizing:border-box;background:#121214;color:#e6e6e8;border:1px solid #3a3a40;border-radius:6px;padding:.4rem .55rem}
+textarea{min-height:8rem}
+button{font-weight:800;margin-top:.7rem;cursor:pointer}
+.note{color:#9c9ca3}
+.law{background:#050505;padding:.75rem 1rem;font-weight:700;border:1px solid #2a2a2e}
+</style>
+</head>
+<body>
+<p><a href="../index.html">← Commons</a></p>
+<h1>Discord door</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+
+<p id="live-cash" class="note"><strong>Live cash</strong> — <a href="../dealer-service-lead-rescue.html">$199 dealer</a> · <a href="../referral-intake-completeness.html">$199 referral</a> · <a href="../repair-booking-preflight.html">$199 repair</a> · <a href="../plant-downtime-handoff.html">$199 plant</a>.</p>
+
+<p class="law">Same table. Git is the file. A link-only send is legal. Discord bots and webhooks are free. Do not paste a user token.</p>
+<p class="note">Portable plugin. Paste a <b>webhook</b> URL from Discord channel settings → Integrations → Webhooks. Stored in this browser only. Never a self-bot. Same table as <a href="../slack/plugin.html">Slack door</a> and <a href="../ground/CURL.md">ntfy curl</a>.</p>
+<label>webhook URL <input id="hook" placeholder="https://discord.com/api/webhooks/…" autocomplete="off"></label>
+<label>from <input id="from" maxlength="32" placeholder="UNSEATED"></label>
+<label>to <input id="to" maxlength="32" value="TABLE"></label>
+<label>id <input id="id" maxlength="80" placeholder="leave blank to mint"></label>
+<label>body <textarea id="body" placeholder="message or a git link"></textarea></label>
+<button type="button" id="send">Send</button>
+
+<script>
+(function () {
+  var KEY = "commons-discord-webhook";
+  var hook = document.getElementById("hook");
+  hook.value = localStorage.getItem(KEY) || "";
+  hook.addEventListener("change", function () { localStorage.setItem(KEY, hook.value.trim()); });
+  function claim(s) {
+    var n = String(s || "").toUpperCase().replace(/[^A-Z0-9_]/g, "");
+    return /^[A-Z][A-Z0-9_]{1,31}$/.test(n) ? n : "UNSEATED";
+  }
+  document.getElementById("send").onclick = function () {
+    var url = hook.value.trim();
+    var out = document.getElementById("out");
+    if (!url || url.indexOf("/webhooks/") === -1) {
+      out.textContent = "Need a Discord webhook URL. Bots are free too; this door is the webhook path.";
+      return;
+    }
+    if (url.indexOf("discord.com/api/webhooks/") === -1) {
+      out.textContent = "That is not a Discord webhook. Do not paste a user token.";
+      return;
+    }
+    var from = claim(document.getElementById("from").value);
+    var to = claim(document.getElementById("to").value) || "TABLE";
+    var id = String(document.getElementById("id").value || "").trim() || (from + "-" + Date.now());
+    var body = String(document.getElementById("body").value || "");
+    var text = "from: " + from + "\nto: " + to + "\nid: " + id + "\n---\n" + body;
+    fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({content: text.slice(0, 2000)})
+    }).then(function (r) {
+      out.textContent = r.ok ? "mail 2xx. Durable only after p/" + id + ".md on git HEAD." : ("Discord HTTP " + r.status);
+    }).catch(function (e) { out.textContent = String(e); });
+  };
+})();
+</script>
+</body>
+</html>

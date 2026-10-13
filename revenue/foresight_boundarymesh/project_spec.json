@@ -1,0 +1,50 @@
+{
+  "project_title": "BoundaryMesh: Open Boundary-Respecting Coordination and Verification for Many-Agent Systems",
+  "one_sentence": "An open protocol, reference verifier, and adversarial benchmark for multi-agent systems to coordinate on machine-readable boundaries around resources, authority, information, and irreversible actions without relying on a single central governor.",
+  "primary_hypothesis": "Explicit boundary contracts plus independent cross-checking can reduce multi-agent coordination failures and unsafe action propagation while preserving useful parallelism better than either unstructured delegation or a single central approval bottleneck.",
+  "research_questions": [
+    "Which boundary primitives are sufficient for heterogeneous agents to coordinate safely across shared resources?",
+    "How much do mutual monitoring and independent transcript verification reduce stale-state, duplicate-custody, forged-receipt, and unauthorized-action failures?",
+    "When does retaining human control measurably improve outcomes, and when does it become hollow or throughput-destroying oversight?",
+    "How robust is the protocol when some agents are faulty, strategic, partially informed, or colluding?"
+  ],
+  "boundary_primitives": [
+    "actor_scope",
+    "resource_scope",
+    "action_authority",
+    "state_fence",
+    "expiry",
+    "handoff_rules",
+    "irreversibility_class",
+    "evidence_root",
+    "human_control_policy"
+  ],
+  "event_types": ["CLAIM", "PROPOSE", "ATTEST", "APPROVE", "ACT_RECEIPT", "CHALLENGE", "RELEASE"],
+  "deliverables": [
+    {"id": "D1", "month": 2, "name": "BoundaryMesh protocol v0.1 + threat model", "open_source": true},
+    {"id": "D2", "month": 4, "name": "Reference verifier, simulator, adapter SDK, and 60-scenario benchmark", "open_source": true},
+    {"id": "D3", "month": 7, "name": "150+ adversarial scenarios and baseline comparison across multiple coordination topologies", "open_source": true},
+    {"id": "D4", "month": 9, "name": "Multi-model empirical study including human-control allocation experiments", "open_source": true},
+    {"id": "D5", "month": 12, "name": "Protocol v1.0, 200+ scenario benchmark, reproducibility bundle, and technical report", "open_source": true}
+  ],
+  "evaluation_metrics": [
+    "boundary_violation_rate",
+    "unsafe_action_accept_rate",
+    "benign_action_false_hold_rate",
+    "duplicate_work_rate",
+    "stale_state_commit_rate",
+    "forged_or_unverifiable_receipt_accept_rate",
+    "coordination_throughput",
+    "recovery_time_after_conflict",
+    "human_intervention_utility_delta",
+    "single_point_control_dependence"
+  ],
+  "success_criteria": {
+    "engineering": "Zero false acceptance in the deterministic hostile conformance suite; deterministic transcript receipts; every HOLD/ALLOW decision source-traceable.",
+    "empirical_target": "At least 50% lower boundary-violation rate than the no-protocol baseline across at least three model families/topologies without more than 25% median throughput loss; if missed, publish the negative result and failure taxonomy.",
+    "decentralization": "Protected actions cannot be authorized solely by the actor proposing the action; verification can be independently recomputed from the public transcript without trusting a privileged coordinator.",
+    "human_control": "Pre-register decision classes where human approval is retained, delegated, or experimentally varied; report outcome and latency deltas rather than assuming more human approval is safer."
+  },
+  "background_ip_boundary": "Existing Commons/TitanMCP/customer/internal systems are evidence of capability and sources of lessons only. They are not charged to the grant and are not grant deliverables. All new code, benchmark data, protocol specifications, and reports funded by the grant are intended to be open-sourced.",
+  "license_proposal": "Apache-2.0 for code/spec where compatible; CC-BY-4.0 for reports/data where appropriate. Final license selection is OWNER_CONFIRM and must satisfy sponsor terms."
+}

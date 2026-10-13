@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "lane": "KAG-COMPOSE",
+  "declared_before_development": true,
+  "development_seeds": [9100009, 9100033, 9100069],
+  "reserved_validation_seeds": [9100103, 9100121],
+  "compositions": ["dispatch_pipeline", "dispatch_balanced"],
+  "components": {
+    "structural": "ROWAN dispatch_sales",
+    "economic": ["SORREL pipeline", "SORREL balanced"]
+  },
+  "promotion_gate": "A composition must have positive mean margins in both-seat development games against ROWAN and its matching SORREL component. Its worse mean margin against pinned Kaito v43 and Igor MultiRoute must be at least ROWAN's worse public-panel mean. Among eligible compositions, maximize that worse public-panel mean; tie-break by mean margin versus lean20.",
+  "validation_access": "Do not run reserved validation unless development selects exactly one composition."
+}

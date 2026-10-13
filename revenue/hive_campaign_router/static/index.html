@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Stable campaign links, editable destinations, QR exports, offer routing, and source attribution.">
+  <title>RouteFoundry · Campaign links</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Campaign routing workspace</p>
+      <h1>RouteFoundry</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+
+      <p class="lede">Keep the short link and QR stable while destinations, offers, and campaign tags evolve.</p>
+    </div>
+    <div class="header-actions">
+      <a class="secondary-button" href="/api/export">Export workspace</a>
+      <button class="secondary-button" id="refresh-button" type="button">Refresh</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="notice" class="notice" role="status" aria-live="polite">Loading workspace…</div>
+
+    <section class="metrics" aria-label="Workspace totals">
+      <article><strong id="metric-products">0</strong><span>Products</span></article>
+      <article><strong id="metric-links">0</strong><span>Campaign links</span></article>
+      <article><strong id="metric-clicks">0</strong><span>Clicks</span></article>
+      <article><strong id="metric-conversions">0</strong><span>Conversions</span></article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Build the routing stack</p>
+          <h2>Workspace setup</h2>
+        </div>
+        <p>Create a product, its offer page, a reusable UTM preset, then one or more stable links.</p>
+      </div>
+
+      <div class="form-grid">
+        <form id="product-form" class="card-form">
+          <h3>1 · Product</h3>
+          <label>Name<input name="name" required maxlength="120" placeholder="Creator Launch Kit"></label>
+          <label>Brand<input name="brand" required maxlength="80" placeholder="Northstar Studio"></label>
+          <button class="primary-button" type="submit">Create product</button>
+        </form>
+
+        <form id="offer-form" class="card-form">
+          <h3>2 · Offer page</h3>
+          <label>Product<select name="product_id" data-products required></select></label>
+          <label>Internal offer name<input name="name" required maxlength="120" placeholder="Agency starter"></label>
+          <label>Headline<input name="headline" required maxlength="180" placeholder="Launch the campaign without rebuilding the link"></label>
+          <label>Offer copy<textarea name="body" required maxlength="2000" rows="4" placeholder="A concise promise and what the visitor receives."></textarea></label>
+          <label>CTA label<input name="cta_label" required maxlength="80" value="See the offer"></label>
+          <button class="primary-button" type="submit">Create offer</button>
+        </form>
+
+        <form id="preset-form" class="card-form">
+          <h3>3 · UTM preset</h3>
+          <label>Preset name<input name="name" required maxlength="80" placeholder="YouTube launch"></label>
+          <label>Source<input name="utm_source" required maxlength="120" placeholder="youtube"></label>
+          <label>Medium<input name="utm_medium" required maxlength="120" placeholder="video"></label>
+          <label>Campaign<input name="utm_campaign" required maxlength="160" placeholder="creator-kit-launch"></label>
+          <label>Content<input name="utm_content" maxlength="160" placeholder="description-link"></label>
+          <label>Term<input name="utm_term" maxlength="160" placeholder="optional"></label>
+          <button class="primary-button" type="submit">Save preset</button>
+        </form>
+
+        <form id="link-form" class="card-form">
+          <h3>4 · Stable link</h3>
+          <label>Slug<input name="slug" required minlength="3" maxlength="50" pattern="[a-z0-9][a-z0-9_-]{1,48}[a-z0-9]" placeholder="creator-youtube"></label>
+          <label>Product<select name="product_id" data-products required></select></label>
+          <label>Offer<select name="offer_id" data-offers></select></label>
+          <label>UTM preset<select name="preset_id" data-presets></select></label>
+          <label>Destination<input name="destination" type="url" required maxlength="2048" placeholder="https://example.com/checkout"></label>
+          <label>Route mode<select name="route_mode"><option value="offer">Show offer page</option><option value="redirect">Direct redirect</option></select></label>
+          <button class="primary-button" type="submit">Create campaign link</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Stable URLs</p>
+          <h2>Campaign links</h2>
+        </div>
+        <p>Edit a destination without changing the short URL or QR payload.</p>
+      </div>
+      <div id="links-empty" class="empty-state">Create a product and link to begin.</div>
+      <div id="links-list" class="link-list"></div>
+    </section>
+
+    <section class="panel report-grid">
+      <div>
+        <div class="panel-heading compact"><div><p class="eyebrow">Attribution</p><h2>Campaign report</h2></div></div>
+        <form id="report-filters" class="card-form" aria-label="Report dates in UTC">
+          <label>First UTC date (optional)<input name="start" type="date" max="9999-12-31"></label>
+          <label>Last UTC date (optional)<input name="end" type="date" max="9999-12-31"></label>
+          <div class="header-actions">
+            <button class="primary-button" type="submit">Apply dates</button>
+            <button class="secondary-button" type="button" id="report-all-time">All time</button>
+          </div>
+        </form>
+        <p id="report-status" class="muted" role="status" aria-live="polite">Loading report…</p>
+        <div class="header-actions">
+          <a class="secondary-button" data-report-csv="campaigns" aria-disabled="true">Download campaign CSV</a>
+          <a class="secondary-button" data-report-csv="links" aria-disabled="true">Download link CSV</a>
+        </div>
+        <p class="muted">Dates filter report events only. Workspace totals and the recent event trail remain all-time. Link CSV includes zero-event links and their current preset labels.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Campaign</th><th>Source</th><th>Medium</th><th>Links</th><th>Clicks</th><th>Conversions</th></tr></thead>
+            <tbody id="campaign-report"></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="panel-heading compact"><div><p class="eyebrow">Recent activity</p><h2>Event trail</h2></div></div>
+        <ol id="recent-events" class="events"></ol>
+      </div>
+    </section>
+
+    <section class="panel guidance">
+      <p class="eyebrow">Customer workflow</p>
+      <h2>Go live without replacing old QR codes</h2>
+      <p>Set the public base URL to your branded HTTPS domain, create one slug per channel, and print or publish its QR once. Future destination edits happen in this workspace. RouteFoundry stores no visitor IP address; reporting uses the link’s campaign preset and a referrer hostname when supplied.</p>
+      <p class="muted">Redirect destinations must be public HTTPS URLs. The app never fetches them. Run behind your existing HTTPS reverse proxy for public use.</p>
+    </section>
+  </main>
+
+  <footer>RouteFoundry · A working first version for <code>bm-hive-20260908-001</code></footer>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

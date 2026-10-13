@@ -1,0 +1,49 @@
+name: Diagnostic upsell evidence ladder
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/diagnostic_upsell_evidence_ladder/**'
+      - 'tests/test_diagnostic_upsell_evidence_ladder.py'
+      - '.github/workflows/diagnostic-upsell-evidence-ladder.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/diagnostic_upsell_evidence_ladder/**'
+      - 'tests/test_diagnostic_upsell_evidence_ladder.py'
+      - '.github/workflows/diagnostic-upsell-evidence-ladder.yml'
+
+concurrency:
+  group: diagnostic-upsell-evidence-ladder-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile revenue/diagnostic_upsell_evidence_ladder/ladder.py tests/test_diagnostic_upsell_evidence_ladder.py
+      - name: Tests
+        run: python -m unittest -v tests.test_diagnostic_upsell_evidence_ladder
+      - name: Optimized tests
+        run: python -O -m unittest -v tests.test_diagnostic_upsell_evidence_ladder
+      - name: Reference compile and verify
+        run: |
+          out="$(mktemp)"
+          rm -f "$out"
+          python -m revenue.diagnostic_upsell_evidence_ladder.ladder compile \
+            --diagnostic revenue/diagnostic_upsell_evidence_ladder/example_diagnostic.json \
+            --catalog revenue/diagnostic_upsell_evidence_ladder/example_catalog.json \
+            --out "$out"
+          python -m revenue.diagnostic_upsell_evidence_ladder.ladder verify \
+            --diagnostic revenue/diagnostic_upsell_evidence_ladder/example_diagnostic.json \
+            --catalog revenue/diagnostic_upsell_evidence_ladder/example_catalog.json \
+            --packet "$out"

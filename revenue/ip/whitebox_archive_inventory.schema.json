@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/whitebox_archive_inventory.schema.json",
+  "title": "Commons White Box archive inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "inventory_date",
+    "archive",
+    "scope",
+    "public_evidence",
+    "provenance",
+    "license",
+    "sensitive_data",
+    "reproducibility",
+    "commercial_readiness",
+    "groups",
+    "formats",
+    "files"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "commons-whitebox-archive-inventory/v1"
+    },
+    "inventory_date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "archive": {
+      "$ref": "#/$defs/archive"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "public_evidence": {
+      "$ref": "#/$defs/public_evidence"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "license": {
+      "$ref": "#/$defs/license"
+    },
+    "sensitive_data": {
+      "$ref": "#/$defs/sensitive_data"
+    },
+    "reproducibility": {
+      "$ref": "#/$defs/reproducibility"
+    },
+    "commercial_readiness": {
+      "$ref": "#/$defs/commercial_readiness"
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/summary"
+      }
+    },
+    "formats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/summary"
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/file"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_blob": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "archive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public_label",
+        "root_basename",
+        "file_count",
+        "directory_count",
+        "total_bytes",
+        "tree_sha256"
+      ],
+      "properties": {
+        "public_label": {
+          "const": "White Box Research Archive"
+        },
+        "root_basename": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "directory_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "tree_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_location_class",
+        "source_absolute_path_published",
+        "payload_files_published",
+        "hash_algorithm",
+        "file_order",
+        "leaf_encoding"
+      ],
+      "properties": {
+        "source_location_class": {
+          "const": "OWNER_LOCAL_ARCHIVE"
+        },
+        "source_absolute_path_published": {
+          "const": false
+        },
+        "payload_files_published": {
+          "const": false
+        },
+        "hash_algorithm": {
+          "const": "SHA-256"
+        },
+        "file_order": {
+          "const": "POSIX_RELATIVE_PATH_CODEPOINT_ASCENDING"
+        },
+        "leaf_encoding": {
+          "const": "commons-whitebox-archive-file/v1\\0PATH\\0SIZE\\0SHA256\\n"
+        }
+      }
+    },
+    "public_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index_path", "index_blob_sha", "readme_path", "readme_blob_sha"],
+      "properties": {
+        "index_path": {
+          "const": "muhl/whitebox-data/_INDEX.json"
+        },
+        "index_blob_sha": {
+          "$ref": "#/$defs/git_blob"
+        },
+        "readme_path": {
+          "const": "muhl/whitebox-data/WhiteBox_Research_Archive_README.md"
+        },
+        "readme_blob_sha": {
+          "$ref": "#/$defs/git_blob"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "public_index_model_ids",
+        "expected_model_groups",
+        "observed_model_groups",
+        "model_groups_match_public_index",
+        "source_model_download_receipts_verified"
+      ],
+      "properties": {
+        "status": {
+          "const": "PARTIAL_OWNER_LOCAL_PLUS_PUBLIC_INDEX"
+        },
+        "public_index_model_ids": {
+          "$ref": "#/$defs/string_list"
+        },
+        "expected_model_groups": {
+          "$ref": "#/$defs/string_list"
+        },
+        "observed_model_groups": {
+          "$ref": "#/$defs/string_list"
+        },
+        "model_groups_match_public_index": {
+          "const": true
+        },
+        "source_model_download_receipts_verified": {
+          "const": false
+        }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "license_like_files", "transfer_cleared"],
+      "properties": {
+        "status": {
+          "enum": ["FOUND_REVIEW_REQUIRED", "NOT_LOCATED_REVIEW_REQUIRED"]
+        },
+        "license_like_files": {
+          "$ref": "#/$defs/string_list"
+        },
+        "transfer_cleared": {
+          "const": false
+        }
+      }
+    },
+    "sensitive_data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "scanner_version",
+        "secret_patterns_scope",
+        "scanned_files",
+        "scanned_bytes",
+        "secret_patterns_scanned_files",
+        "secret_patterns_scanned_bytes",
+        "personal_patterns_scope",
+        "personal_patterns_scanned_files",
+        "personal_patterns_scanned_bytes",
+        "findings",
+        "matched_values_published",
+        "sampled_manual_review_completed",
+        "public_sample_release_cleared",
+        "absence_claimed"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "NO_HIGH_CONFIDENCE_PATTERN_MATCHES",
+            "POTENTIAL_PERSONAL_DATA_REVIEW_REQUIRED",
+            "POTENTIAL_SECRET_REVIEW_REQUIRED"
+          ]
+        },
+        "scanner_version": {
+          "const": "commons-high-confidence-byte-patterns/v1"
+        },
+        "secret_patterns_scope": {
+          "const": "NON_NUMERIC_ARTIFACT_BYTES"
+        },
+        "scanned_files": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scanned_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "secret_patterns_scanned_files": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "secret_patterns_scanned_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "personal_patterns_scope": {
+          "const": "TEXT_LIKE_FILE_BYTES"
+        },
+        "personal_patterns_scanned_files": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "personal_patterns_scanned_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "matched_values_published": {
+          "const": false
+        },
+        "sampled_manual_review_completed": {
+          "const": false
+        },
+        "public_sample_release_cleared": {
+          "const": false
+        },
+        "absence_claimed": {
+          "const": false
+        }
+      }
+    },
+    "reproducibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_integrity", "generation_replay", "source_models_pinned"],
+      "properties": {
+        "content_integrity": {
+          "const": "EXACT_TREE_CHECKSUMMED"
+        },
+        "generation_replay": {
+          "const": "NOT_VERIFIED"
+        },
+        "source_models_pinned": {
+          "const": false
+        }
+      }
+    },
+    "commercial_readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archive_license_offer_ready", "pricing_ready", "remaining_evidence"],
+      "properties": {
+        "archive_license_offer_ready": {
+          "const": false
+        },
+        "pricing_ready": {
+          "const": false
+        },
+        "remaining_evidence": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "LICENSE_REVIEW",
+              "SAMPLED_MANUAL_SENSITIVITY_REVIEW",
+              "SOURCE_MODEL_PROVENANCE"
+            ]
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "file_count", "total_bytes", "tree_sha256"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tree_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "size_bytes", "sha256", "format", "group"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^:/\\\\]+(?:/[^:/\\\\]+)*$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "group": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "matches", "affected_files"],
+      "properties": {
+        "category": {
+          "enum": [
+            "AWS_ACCESS_KEY",
+            "GITHUB_TOKEN",
+            "GOOGLE_API_KEY",
+            "OPENAI_API_KEY",
+            "PEM_PRIVATE_KEY",
+            "POTENTIAL_EMAIL",
+            "SLACK_TOKEN",
+            "STRIPE_LIVE_SECRET",
+            "WINDOWS_USER_PATH"
+          ]
+        },
+        "matches": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "affected_files": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "string_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

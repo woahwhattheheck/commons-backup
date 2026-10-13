@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Supply Planner</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#172f36;background:#f3f6f4}*{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:auto;padding:28px}header{border-bottom:3px solid #b1cbad;margin-bottom:24px}h1{font-size:clamp(28px,5vw,44px);margin:.3em 0}h2{font-size:22px}p{line-height:1.6}.eyebrow{font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:2px}section{background:white;border:1px solid #dce4df;border-radius:12px;padding:22px;margin:18px 0}label{display:block;font-size:14px;font-weight:600}input,select,button{font:inherit;border-radius:6px;border:1px solid #a9b8b0;padding:10px}input,select{width:100%;background:white;color:#172f36}button{cursor:pointer;background:#244e43;color:white}button.secondary{background:#edf3ef;color:#244e43}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #d59429;outline-offset:2px}.grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px;border-bottom:1px solid #dde5e0;vertical-align:top}td input{min-width:90px}td:first-child input{min-width:130px}caption{text-align:left;margin:10px 0;color:#50615b}.hint{font-size:13px;color:#51635b}.status{padding:10px;border-left:4px solid #659373;min-height:42px;white-space:pre-wrap}.error{border-color:#a64135;color:#8b3026}details{margin:12px 0}summary{cursor:pointer;font-weight:600}a{color:#1d6151}footer{font-size:13px;line-height:1.5;color:#52645c}@media(max-width:600px){main{padding:16px}.grid{grid-template-columns:1fr}section{padding:16px}}
+td select{min-width:185px}
+</style></head><body><main>
+<header><p class="eyebrow">Creator app / local-first planning</p><h1 id="name"></h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p id="audience"></p><p class="hint" id="creator"></p></header>
+<section><h2>Prepare your next workshop</h2><p id="problem"></p><details open><summary>How to use this planner</summary><p id="onboarding"></p></details>
+<div class="grid"><label>Plan name<input id="plan-name" maxlength="100" value="My workshop"></label><label>Attendees<input id="attendees" type="number" min="1" max="1000000" step="1" value="12"></label></div>
+<div class="grid"><label>Demonstration kits<input id="demo-kits" type="number" min="0" max="1000000" step="1" value="0"></label><label>Spare kits<input id="spare-kits" type="number" min="0" max="1000000" step="1" value="0"></label></div>
+<p id="kit-summary" class="hint">Each attendee uses one kit. Add separate demonstration and spare kits, then calculate the total.</p>
+<p id="quantity-help" class="hint">Choose Per kit for each complete kit, or Once per workshop for a fixed shared supply quantity. Reserve applies to the resulting quantity in either mode; purchase rounds up to whole packs.</p>
+<div class="scroll"><table aria-describedby="quantity-help"><caption>Material quantities</caption><thead><tr><th>Material</th><th>Unit</th><th>Quantity basis</th><th>Quantity</th><th>Pack size</th><th>Reserve %</th><th>Remove</th></tr></thead><tbody id="materials"></tbody></table></div>
+<div class="actions"><button type="button" id="add" class="secondary">Add material</button><button type="button" id="calculate">Calculate</button><button type="button" id="save">Save plan</button><button type="button" id="new" class="secondary">New plan</button></div>
+<p id="status" class="status" role="status" aria-live="polite">Ready. Nothing is sent to a server.</p>
+<div class="scroll"><table id="results"><caption>Calculated quantities</caption><thead><tr><th>Material</th><th>Quantity basis</th><th>Required with reserve</th><th>Packs</th><th>Purchase quantity</th></tr></thead><tbody></tbody></table></div>
+<div class="actions"><button id="csv" class="secondary">Export current plan CSV</button><button id="backup" class="secondary">Export all saved plans JSON</button><label>Restore JSON backup<input type="file" id="restore" accept="application/json,.json"></label></div></section>
+<section><h2>Saved plans</h2><label>Select a saved plan<select id="saved"><option value="">Choose a plan</option></select></label><div class="actions"><button id="load" class="secondary">Open selected plan</button><button id="delete" class="secondary">Delete selected plan</button></div><p id="usage" class="hint"></p></section>
+<section><h2>Offer and support</h2><p id="pricing"></p><p id="support"></p><details><summary>Creator's audience-demand notes</summary><p id="evidence"></p></details></section>
+<footer>This app performs arithmetic, not image recognition or AI inference. No unit conversion is performed. Saved plans stay in this browser and may not follow a moved file; keep JSON backups. Usage targets are advisory, not a payment lock. No checkout, messages or tracking are connected.</footer>
+</main><script id="brief-data" type="application/json">__BRIEF_JSON__</script><script>
+'use strict';
+const config=JSON.parse(document.getElementById('brief-data').textContent);
+const $=id=>document.getElementById(id);
+const clone=value=>JSON.parse(JSON.stringify(value));
+const SCALE=1000000n;
+function decimal(value,label,minimum=0n,maximum=1000000n*SCALE){
+  const s=String(value).trim();
+  if(!/^(?:\d+(?:\.\d{0,6})?|\.\d{1,6})$/.test(s))throw Error(label+' needs a nonnegative number with at most six decimal places.');
+  const [a,b='']=s.split('.'); const n=BigInt(a||'0')*SCALE+BigInt(b.padEnd(6,'0'));
+  if(n<minimum||n>maximum)throw Error(label+' is outside the supported range.');
+  return n;
+}
+function fixed(n,places){
+  let s=n.toString().padStart(places+1,'0');
+  return places ? (s.slice(0,-places)+'.'+s.slice(-places)).replace(/\.?0+$/,'') : s;
+}
+function validatePlan(plan,requireKitCounts=false,requireQuantityBasis=false){
+  if(!plan||typeof plan!=='object'||Array.isArray(plan))throw Error('Plan must be an object.');
+  if(typeof plan.name!=='string'||!plan.name.trim()||plan.name.length>100)throw Error('Enter a plan name of 1–100 characters.');
+  if(!Number.isInteger(plan.attendees)||plan.attendees<1||plan.attendees>1000000)throw Error('Attendees must be a whole number from 1 to 1,000,000.');
+  const kitCounts={};
+  for(const [key,label] of [['demo_kits','Demonstration kits'],['spare_kits','Spare kits']]){
+    const value=!Object.prototype.hasOwnProperty.call(plan,key)&&!requireKitCounts?0:plan[key];
+    if(!Number.isInteger(value)||value<0||value>1000000)throw Error(label+' must be a whole number from 0 to 1,000,000.');
+    kitCounts[key]=value;
+  }
+  if(!Array.isArray(plan.materials)||plan.materials.length<1||plan.materials.length>50)throw Error('Use 1–50 materials.');
+  return {name:plan.name.trim(),attendees:plan.attendees,...kitCounts,materials:plan.materials.map(row=>{
+    if(!row||typeof row!=='object')throw Error('Invalid material.');
+    if(typeof row.name!=='string'||!row.name.trim()||row.name.length>100||typeof row.unit!=='string'||!row.unit.trim()||row.unit.length>40)throw Error('Every material needs a name and unit.');
+    const basis=Object.prototype.hasOwnProperty.call(row,'quantity_basis')?row.quantity_basis:(requireQuantityBasis?undefined:'per_kit');
+    if(!['per_kit','per_workshop'].includes(basis))throw Error('Every material needs a quantity basis: per kit or once per workshop.');
+    decimal(row.per_attendee,'Quantity');decimal(row.pack_size,'Pack size',1n);decimal(row.buffer_percent,'Reserve',0n,100n*SCALE);
+    return {name:row.name.trim(),unit:row.unit.trim(),quantity_basis:basis,per_attendee:String(row.per_attendee),pack_size:String(row.pack_size),buffer_percent:String(row.buffer_percent)};
+  })};
+}
+function calculate(plan){
+  const p=validatePlan(plan);
+  return p.materials.map(row=>{
+    const per=decimal(row.per_attendee,'Quantity'),pack=decimal(row.pack_size,'Pack size',1n),buffer=decimal(row.buffer_percent,'Reserve',0n,100n*SCALE);
+    const totalKits=BigInt(p.attendees)+BigInt(p.demo_kits)+BigInt(p.spare_kits);
+    const multiplier=row.quantity_basis==='per_workshop'?1n:totalKits;
+    const numerator=per*multiplier*(100n*SCALE+buffer);
+    const packDenominator=pack*100n*SCALE;
+    const packs=(numerator+packDenominator-1n)/packDenominator;
+    return {name:row.name,unit:row.unit,required:fixed(numerator,14),packs:packs.toString(),purchase:fixed(packs*pack,6)};
+  });
+}
+const csvCell=value=>{let s=String(value);if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};
+const basisLabel=basis=>basis==='per_workshop'?'Once per workshop':'Per kit';
+const storageKey='creator-planner-v1:'+config.id;
+let plans=[],activeId=null,storageHealthy=true;
+function status(message,error=false){$('status').textContent=message;$('status').classList.toggle('error',error);}
+function validateBackup(data){
+  if(!data||![1,2,3].includes(data.schema)||data.project_id!==config.id||!Array.isArray(data.plans)||data.plans.length>10000)throw Error('Use a version-1, version-2 or version-3 backup from this creator project (up to 10,000 plans).');
+  const seen=new Set();
+  return data.plans.map(p=>{if(!p||typeof p.id!=='string'||!/^[a-zA-Z0-9_-]{1,100}$/.test(p.id)||seen.has(p.id))throw Error('Invalid or duplicate plan ID.');seen.add(p.id);return {id:p.id,...validatePlan(p,data.schema>=2,data.schema===3)};});
+}
+function packagePlans(rows){return {schema:3,project_id:config.id,plans:rows};}
+function readStorage(){
+  try{const raw=localStorage.getItem(storageKey);plans=raw?validateBackup(JSON.parse(raw)):[];}
+  catch(e){storageHealthy=false;plans=[];status('Saved storage could not be read. It has NOT been overwritten. Export or recover it before saving: '+e.message,true);}
+}
+function writeStorage(rows){
+  if(!storageHealthy)throw Error('Existing storage needs recovery; it has not been overwritten. Restore a known backup or use another browser.');
+  localStorage.setItem(storageKey,JSON.stringify(packagePlans(rows))); // Commit state only after the real storage write succeeds.
+  plans=rows;
+}
+function refreshSaved(){
+  const select=$('saved');select.replaceChildren(new Option('Choose a plan',''));
+  plans.forEach(p=>select.add(new Option(p.name+' · '+p.attendees+' attendees + '+p.demo_kits+' demo + '+p.spare_kits+' spare',p.id)));
+  if(activeId)select.value=activeId;
+  $('usage').textContent=plans.length+' saved plans / '+config.usage_target+' suggested usage target. '+(plans.length>=config.usage_target?'Target reached; saving remains available.':'No payment or account required.');
+}
+function renderMaterials(rows){
+  const body=$('materials');body.replaceChildren();
+  rows.forEach((row,index)=>{
+    const tr=document.createElement('tr');
+    for(const key of ['name','unit','quantity_basis','per_attendee','pack_size','buffer_percent']){
+      const td=document.createElement('td'),input=document.createElement(key==='quantity_basis'?'select':'input');
+      if(key==='quantity_basis'){
+        input.add(new Option('Per kit','per_kit'));input.add(new Option('Once per workshop','per_workshop'));input.value=row[key]??'per_kit';
+      }else{
+        input.value=row[key];input.maxLength=key==='name'?100:key==='unit'?40:30;if(!['name','unit'].includes(key))input.inputMode='decimal';
+      }
+      input.dataset.key=key;input.setAttribute('aria-label',(key==='per_attendee'?'quantity':key.replaceAll('_',' '))+' '+(index+1));td.append(input);tr.append(td);
+    }
+    const td=document.createElement('td'),button=document.createElement('button');button.textContent='Remove';button.className='secondary';button.setAttribute('aria-label','Remove material '+(index+1));button.onclick=()=>{tr.remove();clearResults();};td.append(button);tr.append(td);body.append(tr);
+  });
+}
+function clearResults(){$('results').querySelector('tbody').replaceChildren();$('kit-summary').textContent='Each attendee uses one kit. Add separate demonstration and spare kits, then calculate the total.';}
+function rawMaterials(){return [...$('materials').children].map(tr=>Object.fromEntries([...tr.querySelectorAll('input,select')].map(i=>[i.dataset.key,i.value])));}
+function countInput(id){return $(id).value.trim()===''?NaN:Number($(id).value);}
+function current(){return validatePlan({name:$('plan-name').value,attendees:countInput('attendees'),demo_kits:countInput('demo-kits'),spare_kits:countInput('spare-kits'),materials:rawMaterials()});}
+function showPlan(plan){$('plan-name').value=plan.name;$('attendees').value=plan.attendees;$('demo-kits').value=plan.demo_kits??0;$('spare-kits').value=plan.spare_kits??0;renderMaterials(plan.materials);clearResults();}
+function showResults(plan){
+  const p=validatePlan(plan);
+  const tbody=$('results').querySelector('tbody');tbody.replaceChildren();
+  calculate(p).forEach((r,i)=>{const tr=document.createElement('tr');[r.name,basisLabel(p.materials[i].quantity_basis),r.required+' '+r.unit,r.packs,r.purchase+' '+r.unit].forEach(value=>{const td=document.createElement('td');td.textContent=value;tr.append(td);});tbody.append(tr);});
+  $('kit-summary').textContent=p.attendees+' attendee kits + '+p.demo_kits+' demonstration '+(p.demo_kits===1?'kit':'kits')+' + '+p.spare_kits+' spare '+(p.spare_kits===1?'kit':'kits')+' = '+(p.attendees+p.demo_kits+p.spare_kits)+' total kits.';
+}
+function run(action){try{action();}catch(e){status(e.message,true);}}
+function download(name,body,type){const url=URL.createObjectURL(new Blob([body],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+for(const key of ['name','audience','creator','problem','onboarding','pricing','support'])$(key).textContent=config[key];
+$('evidence').textContent=config.demand_evidence||'No audience-demand evidence recorded. No customer validation is implied.';
+document.title=config.name;
+readStorage();showPlan({name:'My workshop',attendees:12,materials:clone(config.materials)});refreshSaved();
+$('materials').addEventListener('input',clearResults);$('materials').addEventListener('change',clearResults);for(const id of ['attendees','demo-kits','spare-kits'])$(id).addEventListener('input',clearResults);
+$('add').onclick=()=>run(()=>{const rows=rawMaterials();if(rows.length>=50)throw Error('Up to 50 materials per plan.');rows.push({name:'New material',unit:'items',quantity_basis:'per_kit',per_attendee:'1',pack_size:'1',buffer_percent:'0'});renderMaterials(rows);clearResults();});
+$('calculate').onclick=()=>run(()=>{showResults(current());status('Calculated from your entered quantities.');});
+$('save').onclick=()=>run(()=>{const p=current(),id=activeId||(globalThis.crypto?.randomUUID?.()||'plan-'+Date.now()+'-'+Math.random().toString(36).slice(2));const rows=plans.filter(p=>p.id!==id);if(rows.length>=10000)throw Error('Export a backup and remove an old plan before exceeding 10,000 saved plans.');rows.push({id,...p});writeStorage(rows);activeId=id;refreshSaved();showResults(p);status('Saved in this browser. Export JSON for a portable backup.');});
+$('new').onclick=()=>{activeId=null;showPlan({name:'New workshop',attendees:12,materials:clone(config.materials)});refreshSaved();status('New unsaved plan. Existing saved plans are unchanged.');};
+$('load').onclick=()=>run(()=>{const p=plans.find(p=>p.id===$('saved').value);if(!p)throw Error('Select a saved plan.');activeId=p.id;showPlan(p);showResults(p);status('Opened saved plan.');});
+$('delete').onclick=()=>run(()=>{const id=$('saved').value;if(!id)throw Error('Select a saved plan.');if(!confirm('Delete this saved plan from this browser? Export a backup first to preserve it.'))return;writeStorage(plans.filter(p=>p.id!==id));if(activeId===id)activeId=null;refreshSaved();status('Selected plan deleted.');});
+$('csv').onclick=()=>run(()=>{const p=current(),rows=[['Plan','Attendees','Demo kits','Spare kits','Total kits','Material','Unit','Quantity basis','Quantity','Reserve %','Pack size','Required','Packs','Purchase']];calculate(p).forEach((r,i)=>rows.push([p.name,p.attendees,p.demo_kits,p.spare_kits,p.attendees+p.demo_kits+p.spare_kits,r.name,r.unit,basisLabel(p.materials[i].quantity_basis),p.materials[i].per_attendee,p.materials[i].buffer_percent,p.materials[i].pack_size,r.required,r.packs,r.purchase]));download('workshop-plan.csv',rows.map(r=>r.map(csvCell).join(',')).join('\r\n')+'\r\n','text/csv;charset=utf-8');status('Exported the current editable plan as CSV.');});
+$('backup').onclick=()=>run(()=>{if(!storageHealthy)throw Error('Storage could not be read; refusing to export an empty replacement.');download('workshop-plans.json',JSON.stringify(packagePlans(plans),null,2)+'\n','application/json');status('Exported '+plans.length+' saved plans. Unsaved edits are not included.');});
+$('restore').onchange=async()=>{try{const file=$('restore').files[0];if(!file)return;if(file.size>5*1024*1024)throw Error('Backup must be at most 5 MiB.');const incoming=validateBackup(JSON.parse(await file.text()));if(!storageHealthy)throw Error('Existing storage is unreadable; use a fresh browser to restore this backup without overwriting it.');const merged=new Map(plans.map(p=>[p.id,p]));for(const p of incoming){if(merged.has(p.id)&&JSON.stringify(merged.get(p.id))!==JSON.stringify(p))throw Error('Backup conflicts with an existing plan; no plans were changed.');merged.set(p.id,p);}if(merged.size>10000)throw Error('Combined backup exceeds 10,000 saved plans.');writeStorage([...merged.values()]);refreshSaved();status('Restored '+incoming.length+' plans without duplicates.');}catch(e){status(e.message,true);}finally{$('restore').value='';}};
+// Expose arithmetic for the optional offline Node regression runner, not as a provider integration.
+globalThis.CreatorPlanner={calculate,validatePlan,validateBackup,csvCell,fixed};
+</script></body></html>

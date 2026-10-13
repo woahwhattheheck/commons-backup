@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "organization": {
+    "name": "Synthetic Municipal Water Utility",
+    "sector": "public wastewater"
+  },
+  "vendors": [
+    {
+      "id": "vendor-internal",
+      "name": "Internal Analytics Team",
+      "evidence_refs": ["ev-model-registry"]
+    },
+    {
+      "id": "vendor-genai",
+      "name": "Example GenAI Vendor",
+      "evidence_refs": ["ev-vendor-page"]
+    }
+  ],
+  "models": [
+    {
+      "id": "model-anomaly-v1",
+      "name": "Synthetic Plant Anomaly Model",
+      "vendor_id": "vendor-internal",
+      "version": "1.0",
+      "evidence_refs": ["ev-model-registry"]
+    },
+    {
+      "id": "model-drafting",
+      "name": "Example Drafting Model",
+      "vendor_id": "vendor-genai",
+      "version": "example-2026",
+      "evidence_refs": ["ev-vendor-page"]
+    },
+    {
+      "id": "model-meeting",
+      "name": "Example Meeting Model",
+      "vendor_id": "vendor-genai",
+      "version": "example-2026",
+      "evidence_refs": ["ev-vendor-page"]
+    }
+  ],
+  "use_cases": [
+    {
+      "id": "uc-drafting",
+      "name": "Internal administrative drafting assistance",
+      "kind": "generative",
+      "stage": "evaluation",
+      "decision_authority": "advisory",
+      "operational_impact": "administrative",
+      "recoverability": "easy",
+      "external_publication": false,
+      "shadow_ai": false,
+      "data_classes": ["internal", "public_record"],
+      "vendor_id": "vendor-genai",
+      "model_id": "model-drafting"
+    },
+    {
+      "id": "uc-plant-anomaly",
+      "name": "Plant telemetry anomaly recommendation",
+      "kind": "operational",
+      "stage": "pilot",
+      "decision_authority": "recommendation",
+      "operational_impact": "infrastructure",
+      "recoverability": "bounded",
+      "external_publication": false,
+      "shadow_ai": false,
+      "data_classes": ["operational_critical", "public_record"],
+      "vendor_id": "vendor-internal",
+      "model_id": "model-anomaly-v1"
+    },
+    {
+      "id": "uc-shadow-meeting",
+      "name": "Discovered meeting summarization tool",
+      "kind": "generative",
+      "stage": "discovered",
+      "decision_authority": "advisory",
+      "operational_impact": "administrative",
+      "recoverability": "easy",
+      "external_publication": false,
+      "shadow_ai": true,
+      "data_classes": ["sensitive_personal", "public_record"],
+      "vendor_id": "vendor-genai",
+      "model_id": "model-meeting"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-vendor-page",
+      "status": "verified",
+      "authority": "public_source",
+      "reference": "synthetic://vendor-public-product-page",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "use_case_ids": ["uc-drafting", "uc-shadow-meeting"],
+      "control_ids": ["VENDOR_MODEL_PROVENANCE"]
+    },
+    {
+      "id": "ev-model-registry",
+      "status": "verified",
+      "authority": "internal_record",
+      "reference": "synthetic://internal-model-registry/model-anomaly-v1",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "use_case_ids": ["uc-plant-anomaly"],
+      "control_ids": ["VENDOR_MODEL_PROVENANCE", "INVENTORY_RECORD"]
+    },
+    {
+      "id": "ev-ai-inventory",
+      "status": "verified",
+      "authority": "internal_record",
+      "reference": "synthetic://ai-inventory/2026-q3",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "use_case_ids": ["*"],
+      "control_ids": ["INVENTORY_RECORD", "PURPOSE_LIMIT", "DATA_CLASSIFICATION"]
+    },
+    {
+      "id": "ev-public-records-pending",
+      "status": "pending",
+      "authority": "legal_approved",
+      "reference": "synthetic://legal/public-records-review",
+      "use_case_ids": ["*"],
+      "control_ids": ["PUBLIC_RECORDS_REVIEW", "RECORDS_RETENTION"]
+    },
+    {
+      "id": "ev-shadow-disposition-pending",
+      "status": "pending",
+      "authority": "owner_approved",
+      "reference": "synthetic://owner/shadow-ai-disposition",
+      "use_case_ids": ["uc-shadow-meeting"],
+      "control_ids": ["SHADOW_AI_DISPOSITION"]
+    }
+  ]
+}

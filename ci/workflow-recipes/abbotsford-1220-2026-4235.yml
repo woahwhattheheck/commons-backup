@@ -1,0 +1,33 @@
+name: Abbotsford 1220-2026-4235 carrier
+
+on:
+  pull_request:
+    paths:
+      - "revenue/opportunities/abbotsford_1220_2026_4235/**"
+      - ".github/workflows/abbotsford-1220-2026-4235.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: revenue/opportunities/abbotsford_1220_2026_4235
+        run: python -m py_compile abbotsford_1220.py test_abbotsford_1220.py
+      - name: Normal semantic suite
+        working-directory: revenue/opportunities/abbotsford_1220_2026_4235
+        run: python -m unittest -v test_abbotsford_1220.py
+      - name: Optimized semantic suite
+        working-directory: revenue/opportunities/abbotsford_1220_2026_4235
+        run: python -O -m unittest -v test_abbotsford_1220.py

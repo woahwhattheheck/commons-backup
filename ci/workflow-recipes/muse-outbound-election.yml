@@ -1,0 +1,33 @@
+name: Muse outbound election
+
+on:
+  pull_request:
+    paths:
+      - 'tools/outbound_send_guard/muse_election.py'
+      - 'tools/outbound_send_guard/test_muse_election.py'
+      - 'tools/outbound_send_guard/MUSE_ELECTION.md'
+      - '.github/workflows/muse-outbound-election.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/outbound_send_guard/muse_election.py'
+      - 'tools/outbound_send_guard/test_muse_election.py'
+      - 'tools/outbound_send_guard/MUSE_ELECTION.md'
+      - '.github/workflows/muse-outbound-election.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Normal Python hostile corpus
+        run: python -m unittest -v tools.outbound_send_guard.test_muse_election
+      - name: Optimized Python hostile corpus
+        run: python -O -m unittest -v tools.outbound_send_guard.test_muse_election

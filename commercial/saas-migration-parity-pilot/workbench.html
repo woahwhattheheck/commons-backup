@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="workbench-token" content="__WORKBENCH_TOKEN__">
+<title>Migration parity · Export workbench</title>
+<style>
+:root{color-scheme:light;--ink:#132c3a;--muted:#526574;--line:#cfdae0;--paper:#fff;--wash:#f0f4f5;--accent:#075e54;--error:#9b2c20}
+*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.5 system-ui,-apple-system,sans-serif}a{color:var(--accent)}button,input,select{font:inherit}button,.download{border:1px solid var(--line);border-radius:6px;background:white;color:var(--ink);padding:.55rem .85rem;cursor:pointer;text-decoration:none;display:inline-block}button:disabled{opacity:.48;cursor:not-allowed}button.primary{background:var(--accent);color:white;border-color:var(--accent);font-weight:700}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #db931b;outline-offset:3px}header{background:var(--ink);color:white;padding:2rem max(1rem,calc((100vw - 1180px)/2))}header p{max-width:780px;color:#d4e1e6;margin:.4rem 0 1rem}h1{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1;margin:.4rem 0 1rem;letter-spacing:-.03em}h2{font-size:1.35rem;margin:0 0 .5rem}h3{font-size:1rem;margin:.5rem 0}.eyebrow{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700}.header-row{display:flex;align-items:center;justify-content:space-between;gap:1rem}.pill{font-size:.8rem;border:1px solid #607787;border-radius:20px;padding:.25rem .7rem;white-space:nowrap}main{max-width:1180px;margin:auto;padding:1.5rem 1rem 4rem}.notice{padding:1rem;border:1px solid var(--line);border-left:4px solid var(--accent);background:white;border-radius:6px;margin:0 0 1.5rem}.private{border-left-color:var(--error);background:#fff6f2}.muted,.help{color:var(--muted)}.help{font-size:.88rem;margin:.4rem 0;overflow-wrap:anywhere}.section{margin:1.4rem 0;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:1.4rem}.step{font-size:.82rem;font-weight:700;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}.two-up{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}fieldset{min-width:0;margin:0;border:1px solid var(--line);border-radius:8px;padding:1rem}legend{padding:0 .4rem;font-weight:700}label{display:block;font-size:.9rem;font-weight:600;margin:.8rem 0 .3rem}input:not([type=checkbox]),select{display:block;width:100%;border:1px solid #9aafb9;border-radius:5px;padding:.5rem;background:white;color:var(--ink);min-height:43px}input[type=file]{font-size:.9rem}input[type=checkbox]{width:19px;height:19px;flex:none;margin:.2rem .55rem 0 0}.check{display:flex;align-items:flex-start;font-weight:400}.fields{display:flex;flex-wrap:wrap;gap:.3rem;max-height:100px;overflow:auto;margin-top:.6rem}.field-chip{font:.78rem ui-monospace,monospace;background:var(--wash);border-radius:4px;padding:.2rem .4rem;overflow-wrap:anywhere}.mapping-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 110px auto;gap:.55rem;align-items:end;margin:.6rem 0}.mapping-row label{margin:0;font-size:.78rem}.mapping-row button{height:43px}.mapping-head{display:flex;justify-content:space-between;align-items:center;gap:1rem}.actions{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap}.run-bar{padding:1rem 0}.status{min-height:1.6rem;overflow-wrap:anywhere}.status.error{color:var(--error);font-weight:600}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:1.2rem 0}.metric{background:var(--wash);border-radius:6px;padding:1rem}.metric strong{display:block;font-size:1.9rem;line-height:1.2}.metric span{font-size:.82rem;color:var(--muted)}.filters{display:grid;grid-template-columns:250px 1fr;gap:1rem;margin:1rem 0}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.88rem;text-align:left}th{background:var(--wash);white-space:nowrap}th,td{padding:.75rem;border-bottom:1px solid var(--line);vertical-align:top}td:nth-child(2){max-width:260px}code,pre{font:.8rem ui-monospace,monospace;overflow-wrap:anywhere}pre{white-space:pre-wrap;max-height:380px;overflow:auto;background:var(--wash);padding:1rem}td code{display:block}summary{cursor:pointer}details p{margin:.4rem 0}.tag{font-size:.75rem;font-weight:700;white-space:nowrap}.tag.parity{color:var(--accent)}.tag.attention{color:var(--error)}.pager{display:flex;gap:.8rem;justify-content:space-between;align-items:center;margin-top:1rem}.downloads{margin:1rem 0}.sr-only{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}[hidden]{display:none!important}footer{margin-top:2rem;font-size:.85rem;color:var(--muted)}
+@media(max-width:760px){.two-up,.filters{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.section{padding:1rem}.mapping-row{grid-template-columns:1fr 1fr}.mapping-row button{width:100%}.header-row{align-items:flex-start}.pill{white-space:normal}.pager{flex-wrap:wrap}}
+</style>
+<script src="/workbench.js" defer></script>
+</head>
+<body>
+<header>
+<div class="header-row"><span class="eyebrow">Export workbench</span><span class="pill">Local operator tool · No external services</span></div>
+<h1>Migration parity, without the guesswork.</h1>
+<p>Bring two sanitized exports, declare their scope, and map the fields that matter. One browser, two explicit intake contracts, and the existing comparison engine.</p>
+<button id="clear-session" type="button">Clear session</button>
+</header>
+<main>
+<noscript><p class="notice">JavaScript is required for this workbench. The existing parity.py and csv_intake.py command-line routes remain available.</p></noscript>
+<p class="notice">Use only sanitized, authorized exports. Files are sent to this loopback process, not an external service. Nothing is saved automatically. Download the outputs you need before clearing or closing the page.</p>
+<form id="intake">
+<section class="section" aria-labelledby="mode-heading">
+<p class="step">01 / Choose the intake contract</p><h2 id="mode-heading">Format and reusable plan</h2>
+<label for="intake-mode">Mapping mode</label><select id="intake-mode"><option value="general">General CSV/JSON · Original field names</option><option value="csv-plan">Reusable CSV plan · Batch-compatible aliases</option></select>
+<p id="mode-description" class="help">General CSV/JSON retains original field names. Reusable CSV plans retain the batch adapter's explicit aliases.</p>
+<div class="two-up"><div><label for="plan-file">Load a saved plan (optional)</label><input id="plan-file" type="file" accept=".json,application/json"><p class="help">Recognizes saas-migration-csv-intake/v1 and saas-migration-workbench-plan/v1; other formats are rejected.</p></div><div><label>Reuse the current contract</label><button id="save-plan" type="button" disabled>Save current plan</button><p id="plan-notice" class="help">Plans save explicit mappings and metadata, never the source files. Formats are not silently translated.</p></div></div>
+<p class="help">Importing a plan selects its adapter and reinspects already selected files. Reconfirm its snapshot facts. Selecting a different file clears that side's capture time and completeness; mappings never imply source approval.</p>
+</section>
+<section class="section" aria-labelledby="exports-heading">
+<p class="step">02 / Bring the exports</p><h2 id="exports-heading">Source and target</h2>
+<p class="help">UTF-8 CSV with a header, or a JSON array of flat objects. At most 500 records and 4,000,000 bytes per export. JSON integer values are preserved exactly, including 64-bit identifiers.</p>
+<div class="two-up">
+<fieldset><legend>Source export</legend>
+<label for="source-file">Sanitized file</label><input id="source-file" type="file" accept=".csv,.json,text/csv,application/json" required>
+<label for="source-format">Format</label><select id="source-format"><option value="csv">CSV</option><option value="json">JSON array</option></select>
+<div id="source-delimiter-wrap" hidden><label for="source-delimiter">CSV delimiter</label><select id="source-delimiter"><option value=",">Comma</option><option value=";">Semicolon</option><option value="tab">Tab</option></select></div>
+<p id="source-preview" class="help" role="status">No export loaded.</p><div id="source-columns" class="fields" aria-label="Source field names"></div>
+<label for="source-id">Snapshot ID</label><input id="source-id" value="source" maxlength="96" required>
+<label for="source-revision">Schema revision</label><input id="source-revision" value="v1" maxlength="96" required>
+<label for="source-captured">Captured at (UTC)</label><input id="source-captured" placeholder="2026-09-23T12:00:00Z" maxlength="20" required autocomplete="off">
+<label class="check"><input id="source-complete" type="checkbox"><span>I declare this export complete for the agreed scope.</span></label>
+</fieldset>
+<fieldset><legend>Target export</legend>
+<label for="target-file">Sanitized file</label><input id="target-file" type="file" accept=".csv,.json,text/csv,application/json" required>
+<label for="target-format">Format</label><select id="target-format"><option value="csv">CSV</option><option value="json">JSON array</option></select>
+<div id="target-delimiter-wrap" hidden><label for="target-delimiter">CSV delimiter</label><select id="target-delimiter"><option value=",">Comma</option><option value=";">Semicolon</option><option value="tab">Tab</option></select></div>
+<p id="target-preview" class="help" role="status">No export loaded.</p><div id="target-columns" class="fields" aria-label="Target field names"></div>
+<label for="target-id">Snapshot ID</label><input id="target-id" value="target" maxlength="96" required>
+<label for="target-revision">Schema revision</label><input id="target-revision" value="v1" maxlength="96" required>
+<label for="target-captured">Captured at (UTC)</label><input id="target-captured" placeholder="2026-09-23T12:00:00Z" maxlength="20" required autocomplete="off">
+<label class="check"><input id="target-complete" type="checkbox"><span>I declare this export complete for the agreed scope.</span></label>
+</fieldset>
+</div>
+</section>
+<section class="section" aria-labelledby="policy-heading">
+<p class="step">03 / Declare the comparison point</p><h2 id="policy-heading">Snapshot freshness</h2>
+<div class="two-up"><div><label for="cutover">Cutover instant (UTC)</label><input id="cutover" placeholder="2026-09-23T12:30:00Z" maxlength="20" required autocomplete="off"><button id="use-now" type="button">Use current UTC for cutover</button></div><div><label for="max-age">Maximum snapshot age (seconds)</label><input id="max-age" type="number" min="0" max="31536000" step="1" value="86400" required><p class="help">86,400 seconds = 24 hours. Capture times are never inferred from filenames, upload time, or file modification time.</p></div></div>
+<p class="help">Unchecked completeness, stale exports, or exports captured after the cutover remain visible as issues; they are not treated as parity.</p>
+</section>
+<section class="section" aria-labelledby="mapping-heading">
+<p class="step">04 / Choose the contract</p><h2 id="mapping-heading">Explicit field mapping</h2>
+<p class="help">Choose the record key and compared fields yourself. String values are not trimmed or converted. CSV integers require decimal digits; booleans require exactly true or false. JSON values keep their existing types. Use string for identifiers with leading zeros.</p>
+<div class="mapping-head"><h3>Record key · 1–4 fields</h3><button id="add-key" type="button" disabled>Add key field</button></div><div id="key-map"></div>
+<div class="mapping-head"><h3>Compared fields · 1–32 fields</h3><button id="add-field" type="button" disabled>Add compared field</button></div><div id="field-map"></div>
+</section>
+<div class="run-bar"><div class="actions"><button id="compare" class="primary" type="submit" disabled>Compare exports</button><span class="muted">No production changes. No automatic downloads.</span></div><p id="status" class="status" role="status" aria-live="polite">Load both exports to begin.</p></div>
+</form>
+<section id="results" class="section" aria-labelledby="report-title" hidden>
+<p class="step">05 / Inspect and export</p><h2 id="report-title" tabindex="-1">Comparison result</h2><p id="result-state"></p><p id="report-meta" class="help"></p>
+<div id="metrics" class="metrics"></div>
+<h3>Report-only downloads</h3>
+<div class="downloads actions"><a id="download-report" class="download">Report JSON</a><a id="download-markdown" class="download">Report Markdown</a><a id="download-html" class="download">Printable HTML</a></div>
+<p class="help">Reports omit raw row values, but metadata, field names and unsalted commitments are not an anonymization guarantee. Printable HTML remains available without Python or a running server.</p>
+<h3>Mapping and original-file provenance</h3>
+<div class="downloads actions"><a id="download-plan" class="download">Reusable plan</a><a id="download-intake" class="download">Column map and source hashes</a></div>
+<details><summary>Original byte hashes, mapping mode, aliases and exclusions</summary><pre id="provenance"></pre></details>
+<p class="help">Original-file hashes describe the selected UTF-8 export bytes, including BOM and line endings. The generated-manifest digest is separate. Neither hash authenticates an export or proves completeness.</p>
+<div class="notice private"><h3>Private replay material</h3><p id="private-notice"></p><div class="actions"><a id="download-manifest" class="download">Private input JSON</a><a id="download-bundle" class="download">Private replay ZIP · Contains raw values</a></div><p class="help">Keep these files private. The ZIP contains the manifest, exact report JSON/Markdown, its format-labeled plan and the column map. It does not contain the original export files or this source checkout.</p></div>
+<div class="filters"><div><label for="classification-filter">Classification</label><select id="classification-filter"><option value="">All classifications</option></select></div><div><label for="key-filter">Find a result</label><input id="key-filter" type="search" placeholder="Opaque key prefix, original field name or reason"></div></div>
+<div class="table-wrap"><table><caption class="sr-only">Parity comparison rows</caption><thead><tr><th scope="col">Classification</th><th scope="col">Opaque key</th><th scope="col">Differences / reason</th></tr></thead><tbody id="row-body"></tbody></table></div>
+<div class="pager"><button id="prev-page" type="button">Previous</button><span id="page-info" role="status"></span><button id="next-page" type="button">Next</button></div>
+</section>
+<footer>Point-in-time evidence for supplied exports and explicit mappings only. This workbench does not certify a production cutover, prove unseen records are absent, or authorize customer contact, contracts, payment, or migration writes.</footer>
+</main>
+</body>
+</html>

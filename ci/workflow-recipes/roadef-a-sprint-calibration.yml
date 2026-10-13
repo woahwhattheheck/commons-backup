@@ -1,0 +1,99 @@
+name: roadef-a-sprint-calibration
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/roadef-a-sprint-calibration.yml'
+      - 'revenue/roadef2026/fleet-candidate/reference-calibration/run_calibration.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: roadef-a-sprint-calibration-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  calibration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout calibration harness
+        uses: actions/checkout@v4
+        with:
+          path: harness
+      - name: Checkout frozen portfolio source
+        uses: actions/checkout@v4
+        with:
+          ref: 6feb9c0566b8f203c5d1a2ffdfbf1cb6d11be055
+          path: frozen
+      - name: Verify frozen source and prepare native context
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/frozen/revenue/roadef2026/fleet-candidate"
+          baseline_commit=2885d176373c33410148829fef93c310c3752c0b
+          git -C "$GITHUB_WORKSPACE/frozen" fetch --no-tags --depth=1 origin "$baseline_commit"
+          git -C "$GITHUB_WORKSPACE/frozen" show FETCH_HEAD:revenue/roadef2026/fleet-candidate/main.cpp > "$root/main.cpp"
+          test "$(sha256sum "$root/main.cpp" | cut -d' ' -f1)" = 322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1
+          patch_file="$GITHUB_WORKSPACE/frozen/revenue/roadef2026/cloud-kernel-composition/combined.patch"
+          test "$(git hash-object "$patch_file")" = 0ff8d2ee7c4df1022c50484a89e7424329cce0ec
+          (cd "$root" && patch --batch --fuzz=0 -p1 < "$patch_file")
+          test "$(sha256sum "$root/main.cpp" | cut -d' ' -f1)" = 758977095f8f34263bbcd9ed043ac4ab7943f04f65fae530c78ee64787c34f8f
+          test "$(sha256sum "$root/supervisor.py" | cut -d' ' -f1)" = 182371658e82f9037716e90ea8cd115622d089d02512916c7a7bf3b39fca1c63
+          test "$(sha256sum "$root/compare_checker.py" | cut -d' ' -f1)" = a402a0166b1e52c95dd181e15b8a124504ac78ddea7e815944c754569b323cb8
+          test "$(sha256sum "$root/prepare_context.py" | cut -d' ' -f1)" = b4ccca899888e40dcf44bb6867eb98bc6b3571c2ffc795c762f5884382fcd9a7
+          python3 "$root/prepare_context.py" --candidate "$root/main.cpp" --output "$RUNNER_TEMP/context"
+          sh "$RUNNER_TEMP/context/build.sh"
+      - name: Fetch exact official set-A corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/official"
+          git -C "$RUNNER_TEMP/official" init -q
+          git -C "$RUNNER_TEMP/official" remote add origin https://gitlab.com/Orange-OpenSource/network-optimization-tools/challenge-roadef-2026.git
+          git -C "$RUNNER_TEMP/official" fetch --depth=1 origin d84d319a7fdb8de3b1866830d2eaa2937871e5ae
+          git -C "$RUNNER_TEMP/official" checkout -q FETCH_HEAD -- setA sprint_results/loads_vector.csv
+          test "$(sha256sum "$RUNNER_TEMP/official/sprint_results/loads_vector.csv" | cut -d' ' -f1)" = b6218e41ac204e73c4688aa9e0e56825c1f5b864440675c4f7ffba27a75f45ca
+          test "$(find "$RUNNER_TEMP/official/setA" -maxdepth 1 -type f -name 'setA-*.json' | wc -l)" -eq 60
+      - name: Run serial set-A calibration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 harness/revenue/roadef2026/fleet-candidate/reference-calibration/run_calibration.py \
+            --frozen-root frozen/revenue/roadef2026/fleet-candidate \
+            --context "$RUNNER_TEMP/context" \
+            --official-root "$RUNNER_TEMP/official" \
+            --reference "$RUNNER_TEMP/official/sprint_results/loads_vector.csv" \
+            --output "$RUNNER_TEMP/results" \
+            --seconds 30 --case-timeout 75
+      - name: Package evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/export"
+          if test -d "$RUNNER_TEMP/results"; then
+            cp -a "$RUNNER_TEMP/results/." "$RUNNER_TEMP/export/"
+          fi
+          {
+            for path in \
+              frozen/revenue/roadef2026/fleet-candidate/main.cpp \
+              frozen/revenue/roadef2026/fleet-candidate/supervisor.py \
+              frozen/revenue/roadef2026/fleet-candidate/compare_checker.py \
+              "$RUNNER_TEMP/context/bin/candidate" \
+              "$RUNNER_TEMP/context/bin/sedge" \
+              "$RUNNER_TEMP/context/bin/flora" \
+              "$RUNNER_TEMP/context/bin/checker"; do
+              if test -f "$path"; then sha256sum "$path"; else printf 'MISSING  %s\n' "$path"; fi
+            done
+          } > "$RUNNER_TEMP/export/SOURCE-HASHES.txt"
+      - name: Upload exact results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roadef-a-sprint-calibration
+          path: ${{ runner.temp }}/export
+          if-no-files-found: error
+          retention-days: 90

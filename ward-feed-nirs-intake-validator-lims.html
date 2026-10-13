@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <title>Ward feed/forage → NIRS intake validator</title>
+  <style>
+    :root {
+      --ink: #1c2416;
+      --paper: #f4efe4;
+      --field: #2f5d3a;
+      --hold: #8a3b12;
+      --line: #cbbfA8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, #e7f0d8 0%, transparent 40%),
+        linear-gradient(160deg, #f7f2e8, #ebe4d4 55%, #e3ddd0);
+      min-height: 100vh;
+    }
+    main {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    h1 {
+      font-family: "IBM Plex Serif", Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      line-height: 1.15;
+      margin: 0 0 0.5rem;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      color: var(--field);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .lede { font-size: 1.05rem; max-width: 40rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.55);
+      padding: 0.9rem 1rem;
+    }
+    .stat b { display: block; font-size: 1.4rem; }
+    .stat span { font-size: 0.8rem; color: #4d5644; }
+    code, pre {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.85rem;
+    }
+    pre {
+      background: #1c2416;
+      color: #e8f0dc;
+      padding: 1rem;
+      overflow: auto;
+    }
+    .hold { color: var(--hold); font-weight: 700; }
+    a { color: var(--field); }
+    ul { padding-left: 1.2rem; }
+  .cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style>
+</head>
+<body>
+  <main>
+    <nav><a href="./index.html">← Commons</a></nav>
+    <div class="eyebrow">HOLD / BUILD-AND-VERIFY · pre-sale transport none</div>
+    <h1>Ward feed/forage form → NIRS intake validator</h1>
+
+    
+
+
+
+<p class="lede">
+      Demand <code>ward-feed-nirs-intake-validator-lims-01</code> for
+      Ward Laboratories / Nikki Kuhr. Synthetic intake only: bag-label
+      reconcile, description→NIRS calibration, NIRS vs wet-chem routing,
+      prep and time gates, worksheets for READY rows only, staged reports
+      pending named-human release.
+    </p>
+
+    <div class="grid">
+      <div class="stat"><b>400</b><span>synthetic submissions</span></div>
+      <div class="stat"><b>320</b><span>READY / accessioned</span></div>
+      <div class="stat"><b class="hold">80</b><span>HOLD exact codes</span></div>
+      <div class="stat"><b>240 / 80</b><span>NIRS / wet-chem routes</span></div>
+    </div>
+
+    <h2>Official command</h2>
+    <pre>python3 ward_feed_nirs_intake_validator.py
+python3 test_ward_feed_nirs_intake_validator.py</pre>
+
+    <h2>Gates</h2>
+    <ul>
+      <li>Replay adds zero accessions and zero worksheets.</li>
+      <li>No HOLD receives a worksheet.</li>
+      <li>Source coordinates and hashes persist on every READY row.</li>
+      <li>Autonomous release denied; named releaser <code>NIKKI-KUHR-RELEASER</code> only.</li>
+      <li>Adapters stay simulated / read-only. cash_usd=0.</li>
+    </ul>
+
+    <p>
+      Pack:
+      <a href="revenue/ward_feed_nirs_intake_validator/contract.json">contract.json</a> ·
+      <a href="revenue/ward_feed_nirs_intake_validator/receipt.md">receipt.md</a> ·
+      
+    </p>
+  </main>
+</body>
+</html>

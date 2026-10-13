@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/smart_outreach/plan.schema.json",
+  "title": "Commons smart outreach plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "generated_at", "offer", "truth", "items"],
+  "properties": {
+    "schema_version": {"const": "commons-smart-outreach/v1"},
+    "kind": {"const": "SMART_OUTREACH_PLAN"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "offer": {"type": "object"},
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prospects_evaluated", "decision_counts", "drafts_created", "transport_actions", "contacts_claimed", "cash_usd"],
+      "properties": {
+        "prospects_evaluated": {"type": "integer", "minimum": 0},
+        "decision_counts": {"type": "object"},
+        "drafts_created": {"type": "integer", "minimum": 0},
+        "transport_actions": {"const": 0},
+        "contacts_claimed": {"const": 0},
+        "cash_usd": {"const": 0}
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rank", "prospect_id", "organization", "score", "decision", "evidence", "draft", "next_action"],
+        "properties": {
+          "rank": {"type": "integer", "minimum": 1},
+          "prospect_id": {"type": "string"},
+          "organization": {"type": "string"},
+          "score": {"type": "integer", "minimum": 0, "maximum": 100},
+          "decision": {
+            "enum": ["READY_TO_DRAFT", "RESEARCH_REQUIRED", "HOLD_OCCUPIED", "HOLD_DO_NOT_RESEND", "HOLD_DO_NOT_CONTACT", "DISQUALIFIED"]
+          },
+          "evidence": {"type": "object"},
+          "draft": {"type": ["object", "null"]},
+          "next_action": {"type": "string"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "results": [
+    {
+      "name": "native maximum minus reserve and one stroop",
+      "input": {
+        "asset_type": "native",
+        "balance": "922337203685.4775807",
+        "selling_liabilities": "0.0000001"
+      },
+      "expected": {
+        "availableBalance": "922337203684.4775806",
+        "reservedBalance": "1.0000001",
+        "state": "available",
+        "formattedDisplay": "922337203684.48 XLM"
+      },
+      "actual": {
+        "availableBalance": "922337203684.4775806",
+        "reservedBalance": "1.0000001",
+        "state": "available",
+        "formattedDisplay": "922337203684.48 XLM"
+      },
+      "passed": true
+    },
+    {
+      "name": "issued single remaining stroop near maximum",
+      "input": {
+        "asset_type": "credit_alphanum4",
+        "asset_code": "USDC",
+        "asset_issuer": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "balance": "922337203685.4775807",
+        "selling_liabilities": "922337203685.4775806"
+      },
+      "expected": {
+        "availableBalance": "0.0000001",
+        "reservedBalance": "922337203685.4775806",
+        "state": "available",
+        "formattedDisplay": "0.00 USDC"
+      },
+      "actual": {
+        "availableBalance": "0.0000001",
+        "reservedBalance": "922337203685.4775806",
+        "state": "available",
+        "formattedDisplay": "0.00 USDC"
+      },
+      "passed": true
+    },
+    {
+      "name": "issued rounding after one-stroop liability",
+      "input": {
+        "asset_type": "credit_alphanum4",
+        "asset_code": "USDC",
+        "asset_issuer": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "balance": "922337203685.0050000",
+        "selling_liabilities": "0.0000001"
+      },
+      "expected": {
+        "availableBalance": "922337203685.0049999",
+        "reservedBalance": "0.0000001",
+        "state": "available",
+        "formattedDisplay": "922337203685.00 USDC"
+      },
+      "actual": {
+        "availableBalance": "922337203685.0049999",
+        "reservedBalance": "0.0000001",
+        "state": "available",
+        "formattedDisplay": "922337203685.00 USDC"
+      },
+      "passed": true
+    }
+  ],
+  "passed": 3,
+  "total": 3
+}

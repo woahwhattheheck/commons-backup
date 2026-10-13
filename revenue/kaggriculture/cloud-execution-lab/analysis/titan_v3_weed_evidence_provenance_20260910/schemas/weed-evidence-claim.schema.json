@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:titan:schema:weed-evidence-claim:v1",
+  "title": "TITAN weed evidence claim v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "claim_id",
+    "declared_weed_semantics",
+    "labels",
+    "receipt_id",
+    "artifact_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "titan.weed-evidence-claim.v1"
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_weed_semantics": {
+      "enum": [
+        "W0",
+        "W1",
+        "LEGACY_PRE_GATE_W1"
+      ]
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "receipt_id": {
+      "$ref": "#/$defs/sha256"
+    },
+    "artifact_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spatial_source",
+        "runtime_source",
+        "entrypoint_source",
+        "runtime_config"
+      ],
+      "properties": {
+        "spatial_source": {
+          "$ref": "#/$defs/sha256"
+        },
+        "runtime_source": {
+          "$ref": "#/$defs/sha256"
+        },
+        "runtime_config": {
+          "$ref": "#/$defs/sha256"
+        },
+        "entrypoint_source": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "sc-labs-multistate-coa-rule-version-gate-01",
+  "version": 2,
+  "buyer": "SC Labs / Ryan DeCurtis",
+  "extends": "../contract.json",
+  "engine": "sc_labs_multistate_coa_gate.py",
+  "evaluation_time": "2026-09-01T00:00:00Z",
+  "composition": [
+    "rule-pack expiration is evaluated against an explicit UTC clock",
+    "COLLECTED, TRANSFERRED, and RECEIVED custody events require valid ordered UTC timestamps",
+    "result SHA-256 values require 64 lowercase hexadecimal characters",
+    "existing evidence history must be an immutable prefix before any output changes",
+    "override and release metadata rejects reserved automated reviewer labels and malformed timestamps"
+  ],
+  "acceptance": {
+    "input_records": 150,
+    "releaseable": 120,
+    "held": 30,
+    "hold_reason_count_each": 5,
+    "autonomous_releases": 0,
+    "result_alterations": 0
+  },
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

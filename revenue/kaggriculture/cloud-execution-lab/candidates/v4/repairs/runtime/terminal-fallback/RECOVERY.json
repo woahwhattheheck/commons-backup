@@ -1,0 +1,66 @@
+{
+  "schema": "titan-v4-terminal-recovery/v1",
+  "operation": "V4-TERMINAL-RECOVERY-COMPOSITION-20260911-ASTRA",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "repair_path": "repairs/runtime/terminal-fallback",
+  "disposition": "canonical source candidate; not production activation",
+  "reviewed_main_commit": "c42f8bea0604ef4a37ced51105ffb9e6f3c84a32",
+  "source_blobs": {
+    "main.py": "4a8cf7bcda1f0fea231a144692cb84a779a9e73e",
+    "titan_runtime.py": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+    "reference/titan-current/deadline_adapter.py": "664aa4f8a21368c388dfa6714406519b6535ef7f"
+  },
+  "tested_postimages": {
+    "main.py": "8d98b16bb0e9dd7dd8bafd8c47d0d67ecac85114",
+    "deadline_adapter.py": "8f36fbe5d05fb71731ef4b799a664189a6dae153"
+  },
+  "recovered_patch_sha256": "c138c5aeca2c09476d127d81bc23ce1e4679c9951739945fc177729da46fe549",
+  "preserved_code_blobs": {
+    "repair_terminal_fallback.py": "0ee0294016224d952adc813bb6b035fe7e4d5be0",
+    "test_terminal_fallback.py": "26e4b30ecdc67721b9101ff2ed559ed4a992a227",
+    "legacy/terminal_deadline_patch.py": "3cbbef93fbb84e6f08aac2713a02dab1dd3a685d",
+    "legacy/test_outer_entrypoint_deadline.py": "efea449b491e32e3b7cc4daba5e38b7192270317"
+  },
+  "new_composition_test_blob": "de82c152a52e76574a3d4300a0c99aa60f02b731",
+  "donor_prs": [
+    {"number": 11913, "head": "321cc0d3016c0fe7c77503b1e2d665c56b2b72e5", "state_at_recovery": "closed_unmerged"},
+    {"number": 11927, "head": "529a609dc2d146c7fc4dbbc7ac4fb7c4491dcb99", "state_at_recovery": "closed_unmerged"}
+  ],
+  "artifact": {
+    "id": 10285621024,
+    "sha256": "5ff92183fedce1ff8071b35e8e97dc23dc1ea7762ee47260c7ff2be2d0d2bc94",
+    "scope": "exact current adapter and pinned engine; other runtime files older"
+  },
+  "engine_blobs": {
+    "kaggriculture.py": "3c202c7ee921da239356789e266b694635103fc4",
+    "kaggriculture.json": "b354d06b742fe48402513792253f1a5c29366b20",
+    "utils.py": "91c8822ee6201ba4a5a8416c7dbe34f95dd61c87"
+  },
+  "fresh_tests": {
+    "python": "3.13.5",
+    "focused": {"normal": 25, "optimized": 25, "failures": 0, "errors": 0, "randomized_cells_per_mode": 704},
+    "composition": {"normal": 6, "optimized": 6, "failures": 0, "errors": 0, "entrypoint_invocations_per_mode": 80, "recorded_rows_per_mode": 72, "foreign_sentinel_cases_per_mode": 8},
+    "older_runtime_compatibility": {"normal": 11, "optimized": 11, "failures": 0, "errors": 0},
+    "normal_total": 42,
+    "optimized_total": 42,
+    "independent_ladder_games": 0
+  },
+  "validation_archive": {
+    "path": "validation.json.gz",
+    "git_blob": "64d19b4df62822d22faf014da4a2b195b5966009",
+    "sha256": "739036806321c5f0e8b46ecf744bcb37044445e5751408df40614388e5840f57",
+    "bytes": 2927,
+    "decoded_json_bytes": 50826,
+    "contains": "six fresh logs, two focused receipts, two full composition receipts"
+  },
+  "composition_boundary": "exact current main.agent, real signal and worker-trace timers, exact engine; producer is a test double",
+  "full_current_titan_runtime_and_package": "NOT_RUN",
+  "natural_hosted_activation": "NOT_MEASURED",
+  "production_files_changed": false,
+  "feature_defaults_changed": false,
+  "archive_changed": false,
+  "new_actions_dispatched": false,
+  "kaggle_submitted": false,
+  "score_or_promotion_claim": false
+}

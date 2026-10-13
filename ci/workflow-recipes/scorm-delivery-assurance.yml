@@ -1,0 +1,30 @@
+name: SCORM Delivery Assurance
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/scorm_delivery_assurance/**'
+      - '.github/workflows/scorm-delivery-assurance.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/scorm_delivery_assurance/**'
+      - '.github/workflows/scorm-delivery-assurance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile
+        run: python -m py_compile revenue/scorm_delivery_assurance/*.py
+      - name: Focused tests
+        run: python -m unittest revenue.scorm_delivery_assurance.test_assurance -v
+      - name: Optimized focused tests
+        run: python -O -m unittest revenue.scorm_delivery_assurance.test_assurance -v

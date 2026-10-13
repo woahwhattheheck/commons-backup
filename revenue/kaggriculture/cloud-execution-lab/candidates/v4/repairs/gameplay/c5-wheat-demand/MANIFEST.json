@@ -1,0 +1,38 @@
+{
+  "lane": "C5 public WHEAT demand rider composition custody",
+  "status": "donor_only_default_off",
+  "source_pr": 12611,
+  "reviewed_source_head": "dfa047cf27a64490ee0be976eb09a780a3f7badc",
+  "canonical_donor": {
+    "helper_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r04_c5_wheat_demand.py",
+    "helper_blob": "d5ea1757975099409a00a32e9c7eb6d40bf51926",
+    "focused_test_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/checks/test_v4_c5_wheat_demand.py",
+    "focused_test_blob": "0431869d6b12515ce8564ee4b9e32d264a1117b1"
+  },
+  "composition_authority": {
+    "order": ["M1", "EOD_CAPACITY_RESCUE", "B10", "C5"],
+    "c5_test_transformer_blob": "bc9e4bfda1ff54547bdd64ba177388560077c02f",
+    "cross_lane_order_test_blob": "edb0be08c27d6eee10856815c4c31d9441b24d7c",
+    "eod_composition_donor_commit": "841785612fcc154f4184ffb71f8ced37572da281",
+    "eod_composition_receipt_comment": 5642208415,
+    "c5_correction_comment": 5642624189
+  },
+  "theorem": [
+    "M1 must run before EOD capacity rescue so EOD sees any synthetic WHEAT BUY and fails closed rather than reasoning from a stale pre-buy shed snapshot",
+    "EOD capacity rescue must run before B10 so B10 records any synthetic rescue SELL in its persisted own-sell upper bound",
+    "C5 must run after M1/EOD/B10 so its persisted own-WHEAT-buy upper bound sees the completed parent action and cannot self-certify our own WHEAT demand as rival demand",
+    "C5 may only relocate one already-authored executable WHEAT SELL and remains default OFF"
+  ],
+  "retired": {
+    "raw_donor_blobs": ["73a2182c6161af50209f7a4e31c6026d89f6b890"],
+    "reason": "wrong composition order; superseded by source-proven M1 -> EOD -> B10 -> C5 custody"
+  },
+  "excluded": [
+    "legacy shared apply_v4.py execution",
+    "feature activation or default-ON",
+    "gameplay/helper rewrite",
+    "production/Kaggle/provider promotion",
+    "paired economics claim"
+  ],
+  "integration_rule": "Preserve these source/proof bytes on main only. Any future semantic port must recompose the four market-facing lanes against then-current canonical source in the frozen causal order and revalidate before activation."
+}

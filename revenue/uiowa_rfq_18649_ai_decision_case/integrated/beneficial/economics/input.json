@@ -1,0 +1,172 @@
+{
+  "schema_version": "1.0",
+  "input_basis": "SYNTHETIC",
+  "currency": "USD",
+  "horizon_months": 12,
+  "scenarios": [
+    {
+      "id": "CASE-SYN-ESS-CHANGE-MEMO",
+      "group": "cross-group",
+      "label": "Drafting a service-change memo from an approved change ticket (SYNTHETIC)",
+      "notes": "Fictional effort records mapped to canonical economics. Per-document repair includes post-acceptance maintenance; recurring maintenance_hours excludes that effort.",
+      "inputs": {
+        "monthly_tasks": {
+          "range": {
+            "low": "18.0",
+            "base": "24.0",
+            "high": "30.0"
+          },
+          "unit": "tasks/month",
+          "basis": "synthetic",
+          "source": "case-sha256:046775440ad930505ae1b440404924f8bb5836f8cdd49bf9f3ad518f89c9dead; ASM-B-002"
+        },
+        "adoption_fraction": {
+          "range": {
+            "low": "1",
+            "base": "1",
+            "high": "1"
+          },
+          "unit": "fraction",
+          "basis": "synthetic",
+          "source": "Fictional full adoption of the stated eligible document volume; not an observed rate."
+        },
+        "baseline_minutes": {
+          "range": {
+            "low": "118.0",
+            "base": "123.75",
+            "high": "128.0"
+          },
+          "unit": "minutes/task",
+          "basis": "synthetic",
+          "source": "case-sha256:046775440ad930505ae1b440404924f8bb5836f8cdd49bf9f3ad518f89c9dead; DOC-B-B1, DOC-B-B2, DOC-B-B3, DOC-B-B4"
+        },
+        "author_minutes": {
+          "range": {
+            "low": "5.0",
+            "base": "6.0",
+            "high": "7.0"
+          },
+          "unit": "minutes/assisted task",
+          "basis": "synthetic",
+          "source": "case-sha256:046775440ad930505ae1b440404924f8bb5836f8cdd49bf9f3ad518f89c9dead; DOC-B-A1, DOC-B-A2, DOC-B-A3, DOC-B-A4"
+        },
+        "checking_minutes": {
+          "range": {
+            "low": "21.0",
+            "base": "24.25",
+            "high": "27.0"
+          },
+          "unit": "minutes/assisted task",
+          "basis": "synthetic",
+          "source": "case-sha256:046775440ad930505ae1b440404924f8bb5836f8cdd49bf9f3ad518f89c9dead; DOC-B-A1, DOC-B-A2, DOC-B-A3, DOC-B-A4"
+        },
+        "rework_fraction": {
+          "range": {
+            "low": "1.0",
+            "base": "1.0",
+            "high": "1.0"
+          },
+          "unit": "fraction",
+          "basis": "synthetic",
+          "source": "case-sha256:046775440ad930505ae1b440404924f8bb5836f8cdd49bf9f3ad518f89c9dead; DOC-B-A1, DOC-B-A2, DOC-B-A3, DOC-B-A4"
+        },
+        "rework_minutes": {
+          "range": {
+            "low": "8.0",
+            "base": "11.25",
+            "high": "16.0"
+          },
+          "unit": "minutes/reworked task",
+          "basis": "synthetic",
+          "source": "case-sha256:046775440ad930505ae1b440404924f8bb5836f8cdd49bf9f3ad518f89c9dead; DOC-B-A1, DOC-B-A2, DOC-B-A3, DOC-B-A4"
+        },
+        "attempts_per_task": {
+          "range": {
+            "low": "1",
+            "base": "1",
+            "high": "1"
+          },
+          "unit": "generation attempts/task",
+          "basis": "synthetic",
+          "source": "Fictional one billable generation attempt per assisted document; replace with metered attempts."
+        },
+        "generation_cash_per_attempt": {
+          "range": {
+            "low": "0.05",
+            "base": "0.08",
+            "high": "0.12"
+          },
+          "unit": "currency/attempt",
+          "basis": "synthetic",
+          "source": "Fictional service-cost range; not a provider quote or price."
+        },
+        "loaded_hourly_rate": {
+          "range": {
+            "low": "70.0",
+            "base": "85.0",
+            "high": "110.0"
+          },
+          "unit": "currency/hour",
+          "basis": "synthetic",
+          "source": "case-sha256:046775440ad930505ae1b440404924f8bb5836f8cdd49bf9f3ad518f89c9dead; ASM-B-001"
+        },
+        "integration_hours": {
+          "range": {
+            "low": "6",
+            "base": "8",
+            "high": "12"
+          },
+          "unit": "hours one-time",
+          "basis": "synthetic",
+          "source": "Fictional initial integration and training effort, excluded from document event ledgers."
+        },
+        "setup_cash": {
+          "range": {
+            "low": "100",
+            "base": "200",
+            "high": "300"
+          },
+          "unit": "currency one-time",
+          "basis": "synthetic",
+          "source": "Fictional external setup cost, excluding already valued integration labor."
+        },
+        "support_hours": {
+          "range": {
+            "low": "0.5",
+            "base": "1",
+            "high": "2"
+          },
+          "unit": "hours/month",
+          "basis": "synthetic",
+          "source": "Fictional shared operating support; excludes document checking and repair."
+        },
+        "maintenance_hours": {
+          "range": {
+            "low": "0.5",
+            "base": "1",
+            "high": "2"
+          },
+          "unit": "hours/month",
+          "basis": "synthetic",
+          "source": "Fictional workflow upkeep; excludes MAINTENANCE_EDIT already charged per document."
+        },
+        "platform_cash": {
+          "range": {
+            "low": "5",
+            "base": "10",
+            "high": "20"
+          },
+          "unit": "currency/month",
+          "basis": "synthetic",
+          "source": "Fictional recurring platform cost, excluding generation cost; not a price quote."
+        },
+        "cash_conversion_fraction": {
+          "range": null,
+          "unit": "fraction",
+          "basis": "unknown",
+          "source": "No mechanism for converting staff capacity into changed payroll or contractor cash was supplied."
+        }
+      }
+    }
+  ]
+}

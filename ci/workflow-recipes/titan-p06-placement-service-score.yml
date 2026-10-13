@@ -1,0 +1,31 @@
+name: titan-p06-placement-service-score
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/placement_service_score.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/placement_service_score_test_support.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_placement_service_score.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_placement_service_score_engine.py'
+      - '.github/workflows/titan-p06-placement-service-score.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Verify exact PR head checkout
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile and run P06 placement score contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          python -m py_compile placement_service_score.py placement_service_score_test_support.py test_placement_service_score.py test_placement_service_score_engine.py
+          python -m unittest -v test_placement_service_score test_placement_service_score_engine

@@ -1,0 +1,180 @@
+{
+  "authority": {
+    "auto_accept": false,
+    "auto_scope_expand": false,
+    "buyer_contact": false,
+    "invoice": false,
+    "payment": false,
+    "product_vendor_recommendation": false,
+    "revenue": false,
+    "scheduling": false,
+    "submission": false,
+    "travel": false
+  },
+  "baseline": {
+    "currency": "USD",
+    "dimensions": [
+      "software",
+      "security",
+      "deployment",
+      "ai_readiness"
+    ],
+    "groups": [
+      "ESS",
+      "RIS",
+      "IAM"
+    ],
+    "rfq_id": "18649",
+    "roles": {
+      "principal": "prime",
+      "specialist": "subcontract"
+    },
+    "status": "PROPOSED_NOT_ACCEPTED",
+    "travel_treatment": "excluded_from_base",
+    "workshare_base_usd": 24000,
+    "workshare_option_usd": 4000
+  },
+  "case": {
+    "artifact": {
+      "after": "ESS / security / F-03: HOLD \u2014 citation SRC-404 is not present in the delivered evidence register. No substitute observation is invented. Cell remains HOLD until a register source ID is supplied.",
+      "after_state": "hold",
+      "before": "ESS / security / F-03: Privileged-access reviews are performed annually. [SRC-404]",
+      "before_state": "supported",
+      "cell": "ESS/security",
+      "id": "ESS-SEC-F03",
+      "phase": "draft",
+      "technical_conclusion_changed": true
+    },
+    "commercial_triggers_preserved": true,
+    "disposition": "ARTIFACT_CURE_IN_SCOPE",
+    "effort": {
+      "class": "in_scope_defect_correction",
+      "hours_hypothetical": 1,
+      "label": "HYPOTHETICAL / NOT ACCEPTED",
+      "usd_incremental": 0
+    },
+    "id": "CASE-01",
+    "payment_effect": "NONE_SECTION_2_UNCHANGED",
+    "rationale": "Section 5.2.1 requires every populated technical conclusion to trace to a source ID in the delivered register. SRC-404 is absent, so the populated conclusion is genuine TJLabs artifact nonconformance. Section 7 says a small correction of that kind is not new scope. Section 2 is unchanged: draft remains delivery-triggered; this cure is not a payment event.",
+    "request": {
+      "class": "broken_citation",
+      "exact_edit": "Replace `[SRC-404]` on ESS-SEC-F03 with an explicit HOLD. Do not invent a substitute observation.",
+      "from": "prospective_prime",
+      "summary": "Draft finding ESS-SEC-F03 cites SRC-404, which is not in the delivered evidence register."
+    },
+    "schema": "uiowa-139-scope-cases/1",
+    "source_clauses": [
+      "S5_2_1_TRACE",
+      "S5_2_3_NO_PROMOTE",
+      "S7_CURE_NOT_SCOPE",
+      "S2_TRIGGERS"
+    ],
+    "title": "Broken citation in a draft finding"
+  },
+  "clauses": [
+    {
+      "key": "S5_2_1_TRACE",
+      "rule": "Every populated technical conclusion traces to one or more source IDs.",
+      "section": "5.2.1",
+      "title": "Draft traceability"
+    },
+    {
+      "key": "S5_2_3_NO_PROMOTE",
+      "rule": "Missing, stale, conflicting, or untrusted evidence is visibly bounded and cannot silently promote a cell to a supported state.",
+      "section": "5.2.3",
+      "title": "No silent promotion"
+    },
+    {
+      "key": "S7_CURE_NOT_SCOPE",
+      "rule": "A small correction to a TJLabs-authored artifact that fails an agreed acceptance criterion is not treated as a new scope item.",
+      "section": "7",
+      "title": "Cure is not new scope"
+    },
+    {
+      "key": "S2_TRIGGERS",
+      "rule": "Kickoff is written-authorization triggered; draft is delivery triggered; only the final base milestone is acceptance-triggered. Artifact cure does not rewrite those triggers.",
+      "section": "2",
+      "title": "Commercial milestones"
+    }
+  ],
+  "disposition_spec": {
+    "authority": {
+      "auto_accept": false,
+      "auto_scope_expand": false,
+      "buyer_contact": false,
+      "invoice": false,
+      "payment": false,
+      "product_vendor_recommendation": false,
+      "revenue": false,
+      "scheduling": false,
+      "submission": false,
+      "travel": false
+    },
+    "code": "ARTIFACT_CURE_IN_SCOPE",
+    "defect": true,
+    "kind": "cure",
+    "new_scope": false,
+    "payment_effect": "NONE_SECTION_2_UNCHANGED",
+    "section_2": [
+      {
+        "acceptance_triggered": false,
+        "amount_usd": 9600,
+        "milestone": "kickoff",
+        "share_pct": 40,
+        "trigger": "written_authorization"
+      },
+      {
+        "acceptance_triggered": false,
+        "amount_usd": 9600,
+        "milestone": "draft_technical_work_package",
+        "share_pct": 40,
+        "trigger": "delivery"
+      },
+      {
+        "acceptance_triggered": true,
+        "amount_usd": 4800,
+        "milestone": "final_technical_work_package",
+        "share_pct": 20,
+        "trigger": "acceptance"
+      }
+    ],
+    "summary": "Genuine TJLabs artifact nonconformance is cured in-scope at $0 incremental."
+  },
+  "exhibit": {
+    "blob": "48465060fff1402af966871352e894686fffe05e",
+    "path": "revenue/uiowa_rfq_18649_workshare/ACCEPTANCE_EXHIBIT.md"
+  },
+  "notes": [
+    "$24000 is TJLabs subcontract workshare, not the prime all-inclusive bid fee.",
+    "Artifact cure is not a payment trigger rewrite (Section 2).",
+    "Unknown evidence is never promoted to a supported state.",
+    "Technical disagreement is not automatically a defect.",
+    "New work is proposed, not silently added.",
+    "Effort figures are HYPOTHETICAL / NOT ACCEPTED.",
+    "This packet is not an invoice, acceptance, submission, or schedule."
+  ],
+  "schema": "uiowa-139-scope-cases/1",
+  "section_2_triggers": [
+    {
+      "acceptance_triggered": false,
+      "amount_usd": 9600,
+      "milestone": "kickoff",
+      "share_pct": 40,
+      "trigger": "written_authorization"
+    },
+    {
+      "acceptance_triggered": false,
+      "amount_usd": 9600,
+      "milestone": "draft_technical_work_package",
+      "share_pct": 40,
+      "trigger": "delivery"
+    },
+    {
+      "acceptance_triggered": true,
+      "amount_usd": 4800,
+      "milestone": "final_technical_work_package",
+      "share_pct": 20,
+      "trigger": "acceptance"
+    }
+  ]
+}

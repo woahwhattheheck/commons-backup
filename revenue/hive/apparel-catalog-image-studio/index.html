@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apparel Catalog Image Studio</title>
+<style>
+:root{font-family:ui-sans-serif,system-ui,sans-serif;color:#181818;background:#f2f0ea}body{margin:0}.wrap{max-width:1040px;margin:auto;padding:28px}.hero,.card{background:#fff;border:1px solid #d9d5ca;border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 6px 24px #0000000c}.hero h1{margin:.2em 0;font-size:clamp(28px,5vw,50px)}.badge{font:700 12px ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.field{display:grid;gap:6px;margin:10px 0}label{font-weight:650}input,select,textarea,button{font:inherit;border:1px solid #bbb5a8;border-radius:10px;padding:10px 12px;background:#fff}textarea{min-height:96px}button{background:#1c3458;color:white;border-color:#1c3458;font-weight:700;cursor:pointer}button.secondary{background:white;color:#1c3458}.status{white-space:pre-wrap;background:#151515;color:#e8e8e8;padding:14px;border-radius:10px;min-height:72px;overflow:auto}.truth{font-size:14px;color:#555}.swatches{display:flex;gap:8px;flex-wrap:wrap}.swatch{width:34px;height:34px;border:1px solid #777;border-radius:50%}@media(max-width:600px){.wrap{padding:14px}.hero,.card{padding:16px}}input[type="file"]{box-sizing:border-box;min-width:0;width:100%}</style>
+</head>
+<body><main class="wrap">
+<section class="hero"><div class="badge">local • source-audited • no external generation</div><h1>Apparel Catalog Image Studio</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>Turn an authorized RGBA garment PNG into a consistent ten-image catalog without redrawing the item. Mannequin and background pixels are generated behind the exact source garment; opaque garment pixels stay byte-exact.</p></section>
+<section class="grid">
+<div class="card"><h2>1. Intake</h2><div class="field"><label>Garment PNG</label><input id="file" type="file" accept="image/png"></div><button id="upload">Import exact source</button><p class="truth">The original file is retained by SHA-256. This desk accepts PNG only so the shipped renderer can audit every pixel without hidden codec dependencies.</p></div>
+<div class="card"><h2>2. Item facts</h2><div class="field"><label>Project ID</label><input id="project" value="catalog-001"></div><div class="field"><label>SKU</label><input id="sku" value="SKU-001"></div><div class="field"><label>Name</label><input id="name" value="Catalog garment"></div><div class="field"><label>Actual size</label><input id="size" value="M"></div><div class="field"><label>Declared colors JSON</label><textarea id="colors">[]</textarea></div><div class="field"><label>Detail checks JSON</label><textarea id="checks">[]</textarea></div><button id="create">Create audited project</button></div>
+</section>
+<section class="grid">
+<div class="card"><h2>3. Revision</h2><div class="field"><label>Background</label><select id="background"></select></div><div class="field"><label>Generated mannequin</label><select id="model"></select></div><div class="field"><label>Revision note</label><input id="note" value="catalog direction"></div><button id="revise">Save revision</button> <button class="secondary" id="render">Render latest</button></div>
+<div class="card"><h2>4. Ten-image delivery</h2><p>Five background treatments × two mannequin treatments. Each output carries the same source hash, garment size, and source-detail audit.</p><div class="swatches"><span class="swatch" style="background:#f7f7f4"></span><span class="swatch" style="background:#e2d7c3"></span><span class="swatch" style="background:#cfdbE0"></span><span class="swatch" style="background:#c3d3c1"></span><span class="swatch" style="background:#303338"></span></div><button id="catalog">Build ten-image catalog + ZIP</button><p class="truth">Outputs are local. No platform upload, scheduling, customer approval, or photorealistic-person claim is made.</p></div>
+</section>
+<section class="card"><h2>Activity</h2><div id="status" class="status">Ready.</div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);let imported=null,currentRevision=0;
+const backgrounds=['studio-white','sand','mist','sage','charcoal'];const models=['none','neutral','warm','cool','deep'];
+for(const v of backgrounds){$('background').add(new Option(v,v))}for(const v of models){$('model').add(new Option(v,v))}
+const log=(v)=>$('status').textContent=typeof v==='string'?v:JSON.stringify(v,null,2);
+async function json(url,options={}){const r=await fetch(url,options);const body=await r.json();if(!r.ok||body.ok===false)throw new Error(body.error||`HTTP ${r.status}`);return body}
+$('upload').onclick=async()=>{try{const f=$('file').files[0];if(!f)throw new Error('Choose a PNG first.');const raw=await f.arrayBuffer();const r=await json('/api/import',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Filename':f.name},body:raw});imported=r.file;log(r)}catch(e){log(String(e))}};
+function preset(){return {id:'operator-catalog',brand:'Local Catalog',accent:'#F2C237',canvas:[720,720],scenes:[
+{background:'studio-white',model:'neutral'},{background:'studio-white',model:'warm'},{background:'sand',model:'neutral'},{background:'sand',model:'deep'},{background:'mist',model:'cool'},{background:'mist',model:'none'},{background:'sage',model:'warm'},{background:'sage',model:'deep'},{background:'charcoal',model:'neutral'},{background:'charcoal',model:'none'}]}}
+$('create').onclick=async()=>{try{if(!imported)throw new Error('Import a garment first.');const body={id:$('project').value,source:imported,sku:$('sku').value,name:$('name').value,size:$('size').value,declared_colors:JSON.parse($('colors').value),detail_checks:JSON.parse($('checks').value),rights:'operator-attested-authorized',preset:preset()};const r=await json('/api/projects',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});currentRevision=r.project.revisions.at(-1).revision;log(r)}catch(e){log(String(e))}};
+$('revise').onclick=async()=>{try{const id=$('project').value;const r=await json(`/api/projects/${encodeURIComponent(id)}/revisions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expected_revision:currentRevision,background:$('background').value,model:$('model').value,note:$('note').value})});currentRevision=r.project.revisions.at(-1).revision;log(r)}catch(e){log(String(e))}};
+$('render').onclick=async()=>{try{const id=$('project').value;log(await json(`/api/projects/${encodeURIComponent(id)}/render`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}))}catch(e){log(String(e))}};
+$('catalog').onclick=async()=>{try{const id=$('project').value;log(await json(`/api/projects/${encodeURIComponent(id)}/catalog`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}))}catch(e){log(String(e))}};
+</script></body></html>

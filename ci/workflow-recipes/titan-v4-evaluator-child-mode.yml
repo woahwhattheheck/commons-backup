@@ -1,0 +1,47 @@
+name: TITAN V4 evaluator child mode
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/evaluate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/test_child_mode_inheritance.py"
+      - ".github/workflows/titan-v4-evaluator-child-mode.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/evaluate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/test_child_mode_inheritance.py"
+      - ".github/workflows/titan-v4-evaluator-child-mode.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  child-mode:
+    name: parent optimize ${{ matrix.optimize }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        optimize: [0, 1, 2]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Compile evaluator and regression gate
+        run: |
+          python -m py_compile \
+            revenue/kaggriculture/cloud-execution-lab/reference/evaluator/evaluate.py \
+            revenue/kaggriculture/cloud-execution-lab/reference/evaluator/test_child_mode_inheritance.py
+      - name: Verify child inherits parent optimization mode
+        shell: bash
+        run: |
+          test_file="revenue/kaggriculture/cloud-execution-lab/reference/evaluator/test_child_mode_inheritance.py"
+          case "${{ matrix.optimize }}" in
+            0) python "$test_file" ;;
+            1) python -O "$test_file" ;;
+            2) python -OO "$test_file" ;;
+            *) exit 2 ;;
+          esac

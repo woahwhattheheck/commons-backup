@@ -1,0 +1,34 @@
+name: SigNoz Right Now research evidence
+
+on:
+  pull_request:
+    paths:
+      - "revenue/right_now/research/signoz_zolv4k9_20260913/**"
+      - ".github/workflows/signoz-rightnow-evidence-zolv4k9.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "revenue/right_now/research/signoz_zolv4k9_20260913/**"
+      - ".github/workflows/signoz-rightnow-evidence-zolv4k9.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify evidence and authority ceiling
+        working-directory: revenue/right_now/research/signoz_zolv4k9_20260913
+        run: |
+          python3 verify.py
+          python3 -m unittest -v test_verify.py
+          python3 -O verify.py
+          python3 -O -m unittest -v test_verify.py
+          python3 -m py_compile verify.py test_verify.py

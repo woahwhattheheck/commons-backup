@@ -1,0 +1,150 @@
+{
+  "schema": "case-study-reference-consent-vault/v1",
+  "as_of": "2026-09-16T20:55:00-04:00",
+  "counterparties": [
+    {
+      "id": "CLIENT-A",
+      "internal_name": "Synthetic Client Alpha",
+      "default_public_label": "An enterprise client"
+    },
+    {
+      "id": "PROJECT-B",
+      "internal_name": "Synthetic Open Project",
+      "default_public_label": "An open-source project"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EV-DELIVERY",
+      "subject_id": "CLIENT-A",
+      "kind": "DELIVERY",
+      "generation": "delivery-v1",
+      "source": "evidence/private/delivery.json",
+      "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "observed_at": "2026-09-15T12:00:00Z",
+      "visibility": "PRIVATE",
+      "category": "DELIVERY",
+      "claim_text": "Delivered a deterministic evidence workflow."
+    },
+    {
+      "id": "EV-MERGE",
+      "subject_id": "PROJECT-B",
+      "kind": "MERGED_WORK",
+      "generation": "merge-v1",
+      "source": "https://example.invalid/project/pr/42",
+      "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "observed_at": "2026-09-15T13:00:00Z",
+      "visibility": "PUBLIC",
+      "category": "RELIABILITY",
+      "claim_text": "Contributed an upstream reliability fix."
+    },
+    {
+      "id": "EV-PAYMENT",
+      "subject_id": "CLIENT-A",
+      "kind": "PAYMENT",
+      "generation": "payment-v1",
+      "source": "evidence/private/payment.json",
+      "source_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "observed_at": "2026-09-15T14:00:00Z",
+      "visibility": "PRIVATE",
+      "category": "PAYMENT",
+      "claim_text": "A payment receipt exists."
+    }
+  ],
+  "permissions": [
+    {
+      "id": "PERM-PUBLIC-A",
+      "subject_id": "CLIENT-A",
+      "source": "evidence/private/permission-a.json",
+      "source_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "observed_at": "2026-09-16T15:00:00Z",
+      "granted_at": "2026-09-16T15:00:00Z",
+      "valid_through": "2026-12-31T23:59:59Z",
+      "revoked_at": null,
+      "modes": [
+        "PUBLIC_CASE_STUDY"
+      ],
+      "categories": [
+        "DELIVERY"
+      ],
+      "exact_claims": [
+        "Delivered a deterministic evidence workflow."
+      ],
+      "allow_named_use": false,
+      "public_name": null,
+      "evidence_bindings": [
+        {
+          "evidence_id": "EV-DELIVERY",
+          "generation": "delivery-v1",
+          "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        }
+      ]
+    },
+    {
+      "id": "PERM-REF-B",
+      "subject_id": "PROJECT-B",
+      "source": "https://example.invalid/project/permission",
+      "source_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "observed_at": "2026-09-16T15:05:00Z",
+      "granted_at": "2026-09-16T15:05:00Z",
+      "valid_through": null,
+      "revoked_at": null,
+      "modes": [
+        "REFERENCE"
+      ],
+      "categories": [
+        "RELIABILITY"
+      ],
+      "exact_claims": [
+        "Contributed an upstream reliability fix."
+      ],
+      "allow_named_use": true,
+      "public_name": "Example Project",
+      "evidence_bindings": [
+        {
+          "evidence_id": "EV-MERGE",
+          "generation": "merge-v1",
+          "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "id": "REQ-PUBLIC",
+      "subject_id": "CLIENT-A",
+      "desired_use": "PUBLIC_CASE_STUDY",
+      "category": "DELIVERY",
+      "claim_text": "Delivered a deterministic evidence workflow.",
+      "named_use": false,
+      "evidence_ids": [
+        "EV-DELIVERY"
+      ],
+      "permission_id": "PERM-PUBLIC-A"
+    },
+    {
+      "id": "REQ-REF",
+      "subject_id": "PROJECT-B",
+      "desired_use": "REFERENCE",
+      "category": "RELIABILITY",
+      "claim_text": "Contributed an upstream reliability fix.",
+      "named_use": true,
+      "evidence_ids": [
+        "EV-MERGE"
+      ],
+      "permission_id": "PERM-REF-B"
+    },
+    {
+      "id": "REQ-PAYMENT-INTERNAL",
+      "subject_id": "CLIENT-A",
+      "desired_use": "PUBLIC_CASE_STUDY",
+      "category": "PAYMENT",
+      "claim_text": "A payment receipt exists.",
+      "named_use": false,
+      "evidence_ids": [
+        "EV-PAYMENT"
+      ],
+      "permission_id": null
+    }
+  ]
+}

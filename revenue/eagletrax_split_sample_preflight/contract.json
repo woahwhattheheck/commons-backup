@@ -1,0 +1,58 @@
+{
+  "id": "eagletrax-split-sample-preflight-lims-01",
+  "version": 1,
+  "buyer": "Eagle Analytical / Ross A. Caputo, PhD",
+  "lead": {
+    "channel": "C0BTURDA3PW",
+    "ts": "1788150810.175219"
+  },
+  "demand": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788150838.561389"
+  },
+  "workflow": [
+    "one Sample Submission Form per sample",
+    "parent accession with chemistry and/or microbiology aliquot children",
+    "two separate containers when potency and microbiology are both requested",
+    "formula worksheet / manufacturing batch record bound to every chemical test",
+    "special-handling data bound to every preparation",
+    "client re-engagement when last submission is older than six months (clock 2026-08-31; stale before 2026-03-01)",
+    "retry-safe portal preflight",
+    "results attach only to the matching child aliquot",
+    "named-human release"
+  ],
+  "hold_codes": {
+    "ABSENT_WORKBOOK": 8,
+    "INSUFFICIENT_CONTAINER": 8,
+    "UNSPLIT_CONTAINER": 8,
+    "MISSING_HANDLING": 8,
+    "STALE_CLIENT": 4,
+    "FORM_CONTAINER_MISMATCH": 4
+  },
+  "min_volume_ml": {
+    "CHEM": 5.0,
+    "MICRO": 5.0
+  },
+  "acceptance": [
+    "240 synthetic rows",
+    "exactly 200 valid requests accession one parent each with the exact expected CHEM/MICRO children",
+    "exactly 40 remain HOLD with the predetermined codes",
+    "results can never attach to the wrong child",
+    "retries are idempotent",
+    "every source record and field is traceable",
+    "release requires named human review"
+  ],
+  "exclusions": [
+    "no production writes",
+    "no outreach",
+    "no prospect-facing demo",
+    "no automatic release",
+    "no interface marked live before buyer/vendor golden round trip"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "portal preflight, parent/aliquot linkage, hold codes, provenance, and human release receipts only; never live EagleTrax I/O, diagnosis, or certification",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

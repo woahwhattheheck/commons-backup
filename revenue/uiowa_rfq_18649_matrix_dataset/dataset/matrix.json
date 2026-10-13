@@ -1,0 +1,305 @@
+{
+  "status": "SYNTHETIC ASSESSMENT DATASET / NOT A UNIVERSITY FINDING",
+  "schema": {
+    "groups": [
+      "ESS",
+      "RIS",
+      "IAM"
+    ],
+    "areas": [
+      "development",
+      "security",
+      "deployment",
+      "ai_readiness"
+    ],
+    "cell_fields": [
+      "group",
+      "area",
+      "assessment_status",
+      "maturity_rank",
+      "maturity_label",
+      "strengths",
+      "gaps",
+      "rationale",
+      "next_steps",
+      "evidence_refs",
+      "scope_limit",
+      "follow_up_question"
+    ],
+    "assessment_statuses": [
+      "assessed",
+      "unassessed",
+      "not_applicable",
+      "insufficient_evidence"
+    ],
+    "non_rank_statuses": [
+      "unassessed",
+      "not_applicable",
+      "insufficient_evidence"
+    ],
+    "level_labels": {
+      "1": "Absent",
+      "2": "Defined on paper",
+      "3": "Practised",
+      "4": "Repeatable practice",
+      "5": "Managed and improved"
+    },
+    "note": "maturity_rank is null for every non-assessed status. A blank rank is not a zero and must never be coerced to one."
+  },
+  "cells": [
+    {
+      "group": "ESS",
+      "area": "development",
+      "assessment_status": "assessed",
+      "maturity_rank": 4,
+      "maturity_label": "Repeatable practice",
+      "strengths": [
+        "Merges to the two sampled repositories require a passing check and a non-author review",
+        "The requirement is enforced by platform configuration, not convention"
+      ],
+      "gaps": [
+        "Repository population was never enumerated, so coverage is a sample statement"
+      ],
+      "rationale": "A configuration export and a 22-merge sample agree, and an interview describes the same practice. Repeatable across the window sampled.",
+      "next_steps": [
+        "Obtain an authoritative repository inventory",
+        "Re-sample after the inventory to state coverage for the group"
+      ],
+      "evidence_refs": [
+        "EV-SYN-ESS-SD-POL-001",
+        "EV-SYN-ESS-SD-INT-002"
+      ],
+      "scope_limit": "Two ESS repositories over one quarter.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "ESS",
+      "area": "security",
+      "assessment_status": "assessed",
+      "maturity_rank": 2,
+      "maturity_label": "Defined on paper",
+      "strengths": [
+        "A dependency-scanning stage is defined in the sampled pipeline"
+      ],
+      "gaps": [
+        "No record was observed of how scanner findings are triaged or closed",
+        "No owner is named for the queue"
+      ],
+      "rationale": "The stage exists and can be produced on request. Nothing supplied shows findings being worked, which is what separates a defined practice from a practised one.",
+      "next_steps": [
+        "Supply six months of scanner findings with their disposition",
+        "Name the owner of the triage queue"
+      ],
+      "evidence_refs": [
+        "EV-SYN-ESS-SEC-CFG-004"
+      ],
+      "scope_limit": "Pipeline definition only; no triage records reviewed.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "ESS",
+      "area": "deployment",
+      "assessment_status": "assessed",
+      "maturity_rank": 4,
+      "maturity_label": "Repeatable practice",
+      "strengths": [
+        "All nine production deployments in the sampled month carry a change reference, an approver and a rollback note",
+        "The one rolled-back change carries the same record as the successful ones"
+      ],
+      "gaps": [
+        "The window contains no emergency change, so the exception path is untested"
+      ],
+      "rationale": "A complete month of records for one application, consistent across every row including the rollback.",
+      "next_steps": [
+        "Extend the sample across a window containing an emergency change"
+      ],
+      "evidence_refs": [
+        "EV-SYN-ESS-DEP-CHG-003"
+      ],
+      "scope_limit": "One month, one application.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "ESS",
+      "area": "ai_readiness",
+      "assessment_status": "assessed",
+      "maturity_rank": 1,
+      "maturity_label": "Absent",
+      "strengths": [],
+      "gaps": [
+        "Assisted coding tools are in individual use with no group-level guidance",
+        "No owner is named for guidance on reviewing generated code"
+      ],
+      "rationale": "Participants describe what they personally do and the descriptions do not agree. No written guidance was produced on request.",
+      "next_steps": [
+        "Decide and write down how generated code is reviewed before it reaches a production branch, and name the owner of that guidance"
+      ],
+      "evidence_refs": [
+        "EV-SYN-ESS-AI-INT-008"
+      ],
+      "scope_limit": "Two interview statements; no policy or usage record reviewed.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "RIS",
+      "area": "development",
+      "assessment_status": "assessed",
+      "maturity_rank": 3,
+      "maturity_label": "Practised",
+      "strengths": [
+        "A documented intake-to-release path exists and the one traced change followed it"
+      ],
+      "gaps": [
+        "Review sign-off was recorded after deployment rather than before",
+        "A single traced change cannot establish whether that ordering is typical"
+      ],
+      "rationale": "One real instance of the practice, with records that are not the procedure document itself. Whether it repeats is not established.",
+      "next_steps": [
+        "Trace five further RIS changes, including at least one urgent change"
+      ],
+      "evidence_refs": [
+        "EV-SYN-RIS-SD-CHG-007"
+      ],
+      "scope_limit": "A single traced change.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "RIS",
+      "area": "security",
+      "assessment_status": "assessed",
+      "maturity_rank": 2,
+      "maturity_label": "Defined on paper",
+      "strengths": [
+        "A published standard requires an annual privileged-access review"
+      ],
+      "gaps": [
+        "No completed review record was observed for any in-scope system",
+        "The standard names no system of record in which outcomes are retained"
+      ],
+      "rationale": "The standard exists and can be produced. Nothing supplied shows a review being carried out, and absence of a record in the material supplied is not evidence the review did not happen.",
+      "next_steps": [
+        "Establish where completed reviews are retained and make that part of the standard",
+        "Provide the most recent completed review for two systems"
+      ],
+      "evidence_refs": [
+        "EV-SYN-RIS-SEC-POL-004"
+      ],
+      "scope_limit": "Policy intent only.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "RIS",
+      "area": "deployment",
+      "assessment_status": "not_applicable",
+      "maturity_rank": null,
+      "maturity_label": "",
+      "strengths": [],
+      "gaps": [],
+      "rationale": "",
+      "next_steps": [],
+      "evidence_refs": [],
+      "scope_limit": "This group's in-scope systems are vendor-hosted and the group does not perform deployments. Nothing is missing; the practice does not apply to how it operates.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "RIS",
+      "area": "ai_readiness",
+      "assessment_status": "unassessed",
+      "maturity_rank": null,
+      "maturity_label": "",
+      "strengths": [],
+      "gaps": [],
+      "rationale": "",
+      "next_steps": [],
+      "evidence_refs": [],
+      "scope_limit": "No session was held and no evidence of any kind was supplied. This is a statement about the evidence collected, not about the group.",
+      "follow_up_question": "Schedule the AI-readiness session with RIS, or record the cell as out of scope by agreement."
+    },
+    {
+      "group": "IAM",
+      "area": "development",
+      "assessment_status": "assessed",
+      "maturity_rank": 4,
+      "maturity_label": "Repeatable practice",
+      "strengths": [
+        "Connector changes are developed in version control with peer review recorded"
+      ],
+      "gaps": [
+        "Configuration changes made directly in the vendor console are outside version control"
+      ],
+      "rationale": "Every merge in the quarter carries an approving review, over a documented population of one repository.",
+      "next_steps": [
+        "Establish how direct console configuration changes are reviewed"
+      ],
+      "evidence_refs": [
+        "EV-SYN-IAM-SD-CFG-012"
+      ],
+      "scope_limit": "One connector repository over one quarter.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "IAM",
+      "area": "security",
+      "assessment_status": "assessed",
+      "maturity_rank": 5,
+      "maturity_label": "Managed and improved",
+      "strengths": [
+        "All 14 accounts in the enumerated privileged population had a second factor at capture time",
+        "The query definition and its completeness basis are both recorded"
+      ],
+      "gaps": [
+        "The enumeration is a point in time and the population may change"
+      ],
+      "rationale": "An authoritative bounded query whose completeness is itself documented, corroborated by the platform policy export. The strongest evidence in this engagement.",
+      "next_steps": [
+        "Re-run the enumeration at engagement close to confirm the population is unchanged"
+      ],
+      "evidence_refs": [
+        "EV-SYN-IAM-SEC-INV-005",
+        "EV-SYN-IAM-SEC-DOC-007"
+      ],
+      "scope_limit": "Point-in-time enumeration, 2026-09-12.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "IAM",
+      "area": "deployment",
+      "assessment_status": "assessed",
+      "maturity_rank": 2,
+      "maturity_label": "Defined on paper",
+      "strengths": [
+        "A memo places deployment access under the identity platform's privileged review"
+      ],
+      "gaps": [
+        "Interviews and the change export disagree: 3 of 14 emergency changes carry no linked record",
+        "The conflict is unresolved and the evidence cannot distinguish an incomplete export from an undocumented exception path"
+      ],
+      "rationale": "The intended practice is stated and recognised. The records contradict it for emergency changes, so nothing here shows the practice running.",
+      "next_steps": [
+        "Identify the system of record for emergency identity changes and confirm whether the supplied export is complete for that path - investigate before changing the process"
+      ],
+      "evidence_refs": [
+        "EV-SYN-IAM-DEP-INT-015",
+        "EV-SYN-IAM-DEP-CHG-016"
+      ],
+      "scope_limit": "The conflict is open.",
+      "follow_up_question": ""
+    },
+    {
+      "group": "IAM",
+      "area": "ai_readiness",
+      "assessment_status": "insufficient_evidence",
+      "maturity_rank": null,
+      "maturity_label": "",
+      "strengths": [],
+      "gaps": [],
+      "rationale": "",
+      "next_steps": [],
+      "evidence_refs": [
+        "EV-SYN-IAM-AI-SEARCH-017"
+      ],
+      "scope_limit": "A session was held and a document search was run. Neither produced material that supports any level. This is not a low level; it is an absence of evidence.",
+      "follow_up_question": "Ask whether any AI use, planned or informal, exists in IAM and who would know."
+    }
+  ]
+}

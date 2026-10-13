@@ -1,0 +1,64 @@
+{
+  "schema": "titan-v5-source-admission/v1",
+  "operation": "ASTRA-V5-FUNDING-CASH-RANK-CONVERGENCE",
+  "status": "source_candidate_exact_current_v5_not_activated",
+  "canonical_source": {
+    "main_at_claim": "8885489fe4ae596fb3a2fdcf4a8dafd74f2c710a",
+    "path": "revenue/kaggriculture/cloud-execution-lab/frozen_selected.py",
+    "git_blob": "f9636734692a8b02e3bcfc0feb8cdc1c24bec48f",
+    "function": "fund_same_turn_acquisition",
+    "raw_function_sha256": "2cb97c04c171cd72e57cb2487e6500f5f3dcf10a3cb0ec2cb6c5f6410e359751",
+    "post_function_sha256": "d5cafdaf614e423279af36adfa5011db9b8ecee81ef8c970b363b369b4569987"
+  },
+  "provenance": {
+    "merged_source_theorem_pr": 13081,
+    "rule": "consume the theorem and deterministic witness only; the V4 carrier was intentionally not composed",
+    "current_v5_confirmation": "the production helper still contains the predecessor positive remaining-cash rank term"
+  },
+  "defect": {
+    "predecessor_rank": "(moved, +remaining_cash, source_distance, destination_distance, item) selected by min()",
+    "problem": "after minimizing moved units, the selector prefers less certified own cash",
+    "v5_consequence": "a lower-cash equal-movement donor can rescue the first failing fixed order yet strand a later same-turn fixed acquisition, causing a downstream feasibility false negative",
+    "repair": "negate only the remaining_cash tuple term; moved units remain the primary objective and all later deterministic tie breaks are preserved"
+  },
+  "witnesses": {
+    "cash_frontier": {
+      "orders": [[], ["HIRE"], ["SELL", "CARROT", 1], ["SELL", "WOOL", 1]],
+      "hire_cost": 10,
+      "predecessor_item": "CARROT",
+      "candidate_item": "WOOL",
+      "predecessor_remaining_cash": 25,
+      "candidate_remaining_cash": 190,
+      "delta": 165,
+      "moved_quantity_both": 1
+    },
+    "downstream_fixed_acquisition": {
+      "orders": [[], ["HIRE"], ["BUY_SEED", "STRAWBERRY", 1], ["SELL", "CARROT", 1], ["SELL", "WOOL", 1]],
+      "first_target": "HIRE",
+      "later_fixed_acquisition": "BUY_SEED STRAWBERRY x1",
+      "later_cost": 100,
+      "predecessor_later_completed": 0,
+      "candidate_later_completed": 1,
+      "sale_quantities_preserved": {"CARROT": 1, "WOOL": 1}
+    }
+  },
+  "materializer": {
+    "path": "apply_cash_rank.py",
+    "focused_test": "test_cash_rank.py",
+    "fail_closed": true,
+    "source_delta_bytes": 1,
+    "activation": false,
+    "production_promotion": false
+  },
+  "gates": [
+    "focused regression under normal Python",
+    "focused regression under PYTHONOPTIMIZE=1",
+    "py_compile adapter and focused regression",
+    "refresh current main and source blob immediately before any production promotion"
+  ],
+  "forbidden": [
+    "silent rebase across a changed funding function",
+    "activation from a stale frozen_selected.py blob",
+    "mutation of unrelated V5 owner surfaces"
+  ]
+}

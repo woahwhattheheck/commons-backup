@@ -1,0 +1,76 @@
+name: Conversation Desk standalone release
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/hive/conversation-desk/**'
+      - '.github/workflows/conversation-desk-release.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/hive/conversation-desk/**'
+      - '.github/workflows/conversation-desk-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: conversation-desk-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  standalone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+        working-directory: revenue/hive/conversation-desk
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: |
+            /revenue/hive/conversation-desk/
+            /.github/workflows/conversation-desk-release.yml
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.11'
+      - name: Test builder and real extracted Conversation Desk
+        env:
+          PYTHONWARNINGS: error::ResourceWarning
+        run: |
+          python -B -m unittest -v test_release_package 2>&1 | tee "$RUNNER_TEMP/conversation-release-tests.log"
+      - name: Recheck existing application suite and JavaScript syntax
+        env:
+          PYTHONWARNINGS: error::ResourceWarning
+        run: |
+          python -B -m unittest -v test_app 2>&1 | tee "$RUNNER_TEMP/conversation-app-tests.log"
+          node --check desk.js
+      - name: Build curated standalone distribution
+        run: |
+          mkdir -p "$RUNNER_TEMP/conversation-desk-release"
+          python -B build_release.py --out "$RUNNER_TEMP/conversation-desk-release/conversation-desk.zip" > "$RUNNER_TEMP/conversation-desk-release/build.json"
+          git rev-parse HEAD > "$RUNNER_TEMP/conversation-desk-release/source-commit.txt"
+          python --version > "$RUNNER_TEMP/conversation-desk-release/python-version.txt"
+          sha256sum "$RUNNER_TEMP/conversation-desk-release/conversation-desk.zip" > "$RUNNER_TEMP/conversation-desk-release/archive.sha256"
+      - name: Upload runnable package only after extracted-product tests
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: conversation-desk-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/conversation-desk-release/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain focused test output
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: conversation-desk-release-tests-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/conversation-release-tests.log
+            ${{ runner.temp }}/conversation-app-tests.log
+          if-no-files-found: warn
+          retention-days: 7

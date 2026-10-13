@@ -1,0 +1,38 @@
+name: GatewayHacks Civic Action Ledger
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/gatewayhacks-2026-civic-ledger/**'
+      - '.github/workflows/gatewayhacks-civic-ledger.yml'
+  push:
+    paths:
+      - 'competitions/gatewayhacks-2026-civic-ledger/**'
+      - '.github/workflows/gatewayhacks-civic-ledger.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: competitions/gatewayhacks-2026-civic-ledger
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile civic_ledger/*.py tests/test_core.py demo.py
+      - name: Hostile tests
+        env:
+          PYTHONWARNINGS: error::ResourceWarning
+        run: python -B -m unittest discover -s tests -v
+      - name: Optimized hostile tests
+        env:
+          PYTHONWARNINGS: error::ResourceWarning
+        run: python -O -B -m unittest discover -s tests -v
+      - name: Demo
+        run: python -B demo.py

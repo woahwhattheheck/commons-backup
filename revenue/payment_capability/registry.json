@@ -1,0 +1,557 @@
+{
+  "schema_version": "commons-payment-capability/v1",
+  "kind": "PAYMENT_CAPABILITY_REGISTRY",
+  "observed_at": "2026-08-28T16:43:00Z",
+  "observer": "GROK_BUILD",
+  "harness": "Grok Build / grok.com SuperGrok Heavy",
+  "base_main_sha": "3087b1f88094bae180d1ec9ea4d23152652dcbc7",
+  "note": "Provider-neutral registry. A rail is public only when capability_state is CHARGEABLE and public_presentation is EXPOSE. Owner-dashboard chargeability is not a public checkout. Inert rails stay unpublished. Cash stays USD 0 without BANK_AVAILABLE evidence.",
+  "failover_policy": "First CHARGEABLE+EXPOSE rail in rails order becomes the public storefront. If none exist, public surfaces stay inert, owner one-click EXTERNAL_OWNER_ACTION URLs remain, and mailto intake stays. Never invent a checkout URL, PayPal.me, Sponsors profile, KYC result, or cash.",
+  "composes": [
+    "revenue/checkout_capability/snapshot.json",
+    "revenue/outcome_commerce/catalog.json",
+    "revenue/payment_ready/pack.json",
+    "revenue/reply_to_revenue/funnel.json",
+    "revenue/scope_to_delivery/catalog_bindings.json",
+    "ground/CHECKOUT_CAPABILITY.md",
+    "ground/PAY.md",
+    "ground/STRIPE.md",
+    "ground/COMMERCE.md",
+    "ground/SCOPE_TO_DELIVERY.md",
+    "ground/RESOURCE_LEDGER.json",
+    "ground/PROFITABILITY_BUILD_MAP.md",
+    "ground/FEATURES.md"
+  ],
+  "cash": {
+    "collected_usd": 0,
+    "charges_count": 0,
+    "payouts_count": 0,
+    "authorization": "NOT_LANDED",
+    "settlement": "NOT_LANDED",
+    "payout": "NOT_LANDED",
+    "bank_available": "NOT_LANDED"
+  },
+  "intake_fallback": {
+    "kind": "PROVIDER_NEUTRAL_INTAKE",
+    "url": "mailto:tokenjunkielabs@gmail.com",
+    "label": "Email Token Junkie Labs",
+    "public": true,
+    "chargeable": false
+  },
+  "rails": [
+    {
+      "id": "stripe-livemode-acct_1U6HI9ATH4EDE7XD",
+      "provider": "stripe",
+      "priority": 1,
+      "account_provenance": {
+        "account_id": "acct_1U6HI9ATH4EDE7XD",
+        "display_name": "Token Junkie Labs",
+        "livemode": true,
+        "country": "US",
+        "default_currency": "usd",
+        "business_type": "individual",
+        "statement_descriptor": "TOKEN JUNKIE LABS",
+        "dashboard": "https://dashboard.stripe.com"
+      },
+      "capability_state": "CHARGEABLE",
+      "charges_enabled": true,
+      "payouts_enabled": true,
+      "details_submitted": true,
+      "currently_due": [],
+      "card_payments": "active",
+      "transfers": "active",
+      "required_owner_actions": [],
+      "optional_owner_actions": [
+        {
+          "id": "stripe-vat-id-eventually-due",
+          "blocking": false,
+          "kind": "EXTERNAL_OWNER_ACTION",
+          "label": "Optional company.vat_id inside Stripe dashboard",
+          "url": "https://dashboard.stripe.com/settings/update",
+          "note": "eventually_due only. Not currently_due. Does not block charges or payouts."
+        }
+      ],
+      "evidence": {
+        "observed_at": "2026-08-28T16:43:00Z",
+        "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links+GET-v1-charges+GET-balance",
+        "checkout_snapshot": "revenue/checkout_capability/snapshot.json",
+        "checkout_snapshot_observed_at": "2026-08-28T16:10:00Z",
+        "operations": [
+          "GET /v1/accounts/acct_1U6HI9ATH4EDE7XD",
+          "GET /v1/payment_links?active=true",
+          "GET /v1/charges?limit=10",
+          "GET /v1/products?active=true",
+          "balance summary livemode"
+        ]
+      },
+      "supported_skus": [
+        "sku-tip-20260826",
+        "sku-seat-20260826",
+        "sku-unlock-20260826",
+        "sku-monthly-tip-20260826",
+        "sku-boost-20260826",
+        "sku-whitebox-hour-20260826",
+        "sku-muhlnickel-titan-20260826",
+        "dealer-service-lead-rescue",
+        "plant-downtime-handoff",
+        "referral-intake-completeness",
+        "repair-booking-exactly-once-v1",
+        "salesforce-contact-preflight",
+        "permit-intake-receipt",
+        "catering-deposit-rescue",
+        "invoice-exception-pack",
+        "open-model-release-receipt",
+        "fleet-work-order-exactly-once",
+        "mcp-conformance-receipt-run",
+        "mcp-conformance-same-day-repair"
+      ],
+      "currencies": [
+        "usd"
+      ],
+      "settlement_destination": {
+        "kind": "stripe_external_account",
+        "status": "verified",
+        "currency": "usd",
+        "bank_name": "THE BANCORP BANK",
+        "last4": "7243",
+        "country": "US",
+        "payout_methods": [
+          "standard"
+        ],
+        "schedule_interval": "daily",
+        "delay_days": 2,
+        "default_for_currency": true,
+        "note": "Verified Stripe external account. Routing numbers, full account numbers, tax IDs, and credentials are not stored."
+      },
+      "public_presentation": "EXPOSE",
+      "public_checkout_kind": "STRIPE_PAYMENT_LINK",
+      "canonical_links": [
+        {
+          "sku": "sku-tip-20260826",
+          "plink": "plink_1U8lgOATH4EDE7XDZobVyXvE",
+          "url": "https://donate.stripe.com/fZucN40Ch9fj7mxgJs43S08",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+            "observed_at": "2026-08-28T16:10:00Z"
+          }
+        },
+        {
+          "sku": "sku-seat-20260826",
+          "plink": "plink_1U8lgDATH4EDE7XDHtJcyv60",
+          "url": "https://buy.stripe.com/3cIeVc5WB1MRgX7al443S03",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "INTAKE_FIRST",
+          "evidence": {
+            "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+            "observed_at": "2026-08-28T16:10:00Z"
+          }
+        },
+        {
+          "sku": "sku-unlock-20260826",
+          "plink": "plink_1U8lgEATH4EDE7XDB4w8xZu5",
+          "url": "https://buy.stripe.com/3cIbJ0ckZgHL36h8cW43S04",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "INTAKE_FIRST",
+          "evidence": {
+            "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+            "observed_at": "2026-08-28T16:10:00Z"
+          }
+        },
+        {
+          "sku": "sku-monthly-tip-20260826",
+          "plink": "plink_1U8lgFATH4EDE7XDGfz9Ax3S",
+          "url": "https://buy.stripe.com/bJe28qacR4Z3gX7bp843S05",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+            "observed_at": "2026-08-28T16:10:00Z"
+          }
+        },
+        {
+          "sku": "sku-boost-20260826",
+          "plink": "plink_1U8lgFATH4EDE7XD1Ho7KkA2",
+          "url": "https://buy.stripe.com/3cIfZgacRezDfT39h043S06",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "INTAKE_FIRST",
+          "evidence": {
+            "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+            "observed_at": "2026-08-28T16:10:00Z"
+          }
+        },
+        {
+          "sku": "sku-whitebox-hour-20260826",
+          "plink": "plink_1U8lgGATH4EDE7XDlrVYTWhu",
+          "url": "https://buy.stripe.com/8x27sK2Kp3UZ9uF2SC43S07",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "INTAKE_FIRST",
+          "evidence": {
+            "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+            "observed_at": "2026-08-28T16:10:00Z"
+          }
+        },
+        {
+          "sku": "sku-muhlnickel-titan-20260826",
+          "plink": "plink_1U8lrlATH4EDE7XDjSe2LqEc",
+          "url": "https://buy.stripe.com/7sYbJ02Kpcrv9uF0Ku43S09",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "INTAKE_FIRST",
+          "evidence": {
+            "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+            "observed_at": "2026-08-28T16:10:00Z"
+          }
+        },
+        {
+          "sku": "dealer-service-lead-rescue",
+          "product": "prod_VBEOgKb8rvlt0i",
+          "price": "price_1UArw8ATH4EDE7XDenkhMfO5",
+          "plink": "plink_1UArwVATH4EDE7XDQJprRcM2",
+          "url": "https://buy.stripe.com/3cIdR8gBf6379uF1Oy43S0b",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-05T11:29:50.741356+00:00",
+            "receipt_sha256": "727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01"
+          }
+        },
+        {
+          "sku": "plant-downtime-handoff",
+          "product": "prod_VBEPKBbm82VRup",
+          "price": "price_1UArwuATH4EDE7XD2F2xPvIn",
+          "plink": "plink_1UArxFATH4EDE7XD0Fwah6Ib",
+          "url": "https://buy.stripe.com/14AfZgckZ0IN0Y99h043S0e",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-05T11:29:50.741356+00:00",
+            "receipt_sha256": "727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01"
+          }
+        },
+        {
+          "sku": "referral-intake-completeness",
+          "product": "prod_VBEPsfvtmzL1vk",
+          "price": "price_1UArwrATH4EDE7XD2COCVmJ5",
+          "plink": "plink_1UArxCATH4EDE7XDM9RJRXCv",
+          "url": "https://buy.stripe.com/9B600i98N77b9uFeBk43S0c",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-05T11:29:50.741356+00:00",
+            "receipt_sha256": "727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01"
+          }
+        },
+        {
+          "sku": "repair-booking-exactly-once-v1",
+          "product": "prod_VBEPWEKQSZtg9X",
+          "price": "price_1UArwsATH4EDE7XD7VajGLjJ",
+          "plink": "plink_1UArxDATH4EDE7XDFJmHaUtl",
+          "url": "https://buy.stripe.com/9B66oGacR2QVdKVeBk43S0d",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-05T11:29:50.741356+00:00",
+            "receipt_sha256": "727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01"
+          }
+        },
+        {
+          "sku": "salesforce-contact-preflight",
+          "plink": "plink_1UEGTQATH4EDE7XDkFP2PPsF",
+          "url": "https://buy.stripe.com/4gM8wO4SxbnrdKV9h043S0m",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        },
+        {
+          "sku": "permit-intake-receipt",
+          "plink": "plink_1UEGUOATH4EDE7XDFIif4d4O",
+          "url": "https://buy.stripe.com/8x2cN42Kp8bf8qBgJs43S0n",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        },
+        {
+          "sku": "catering-deposit-rescue",
+          "plink": "plink_1UEGVoATH4EDE7XDglYAlRRs",
+          "url": "https://buy.stripe.com/dRmdR8acR4Z36it2SC43S0q",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        },
+        {
+          "sku": "invoice-exception-pack",
+          "plink": "plink_1UEGT5ATH4EDE7XDA7WFJthA",
+          "url": "https://buy.stripe.com/14A00i84Jdvz36hdxg43S0l",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        },
+        {
+          "sku": "open-model-release-receipt",
+          "plink": "plink_1UEGUgATH4EDE7XD1fhfWxzw",
+          "url": "https://buy.stripe.com/dRmfZgdp34Z322d0Ku43S0o",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        },
+        {
+          "sku": "fleet-work-order-exactly-once",
+          "plink": "plink_1UEGV0ATH4EDE7XD8vmj5Afc",
+          "url": "https://buy.stripe.com/7sY9AS98NdvzdKVbp843S0p",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        },
+        {
+          "sku": "mcp-conformance-receipt-run",
+          "plink": "plink_1UEGWVATH4EDE7XDNPUXHid5",
+          "url": "https://buy.stripe.com/fZudR8bgV637fT3ctc43S0r",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        },
+        {
+          "sku": "mcp-conformance-same-day-repair",
+          "plink": "plink_1UEGWqATH4EDE7XDatjbiRHb",
+          "url": "https://buy.stripe.com/14AeVcgBf2QV5epbp843S0s",
+          "link_active": true,
+          "livemode": true,
+          "exposure": "CHECKOUT_FIRST",
+          "evidence": {
+            "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+            "observed_at": "2026-09-10T23:05:24.713000+00:00",
+            "receipt_sha256": "24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad",
+            "note": "TYPE battery repair: bind catalog-proven active checkout to registry canonical_links / supported_skus"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stripe-hosted-invoice-owner-dashboard",
+      "provider": "stripe",
+      "priority": 2,
+      "account_provenance": {
+        "account_id": "acct_1U6HI9ATH4EDE7XD",
+        "display_name": "Token Junkie Labs",
+        "livemode": true,
+        "dashboard_invoices": "https://dashboard.stripe.com/invoices"
+      },
+      "capability_state": "CHARGEABLE_ACCOUNT_OWNER_DASHBOARD",
+      "charges_enabled": true,
+      "payouts_enabled": true,
+      "required_owner_actions": [
+        {
+          "id": "open-stripe-invoice",
+          "blocking": false,
+          "kind": "EXTERNAL_OWNER_ACTION",
+          "label": "Create a buyer-specific hosted invoice in Stripe",
+          "url": "https://dashboard.stripe.com/invoices",
+          "note": "Invoices name one customer. They are not a public storefront URL. Owner completes this inside Stripe."
+        }
+      ],
+      "optional_owner_actions": [],
+      "evidence": {
+        "observed_at": "2026-08-28T16:43:00Z",
+        "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD",
+        "note": "Same account is charges_enabled. No public invoice URL is published because invoices are buyer-specific."
+      },
+      "supported_skus": [
+        "production-survival-sprint",
+        "gguf-diagnostic-10d",
+        "white-box-gguf-pilot-30d"
+      ],
+      "currencies": [
+        "usd"
+      ],
+      "settlement_destination": {
+        "kind": "stripe_external_account",
+        "status": "verified",
+        "currency": "usd",
+        "bank_name": "THE BANCORP BANK",
+        "last4": "7243",
+        "note": "Same verified Stripe destination as the Payment Link rail."
+      },
+      "public_presentation": "INERT",
+      "public_checkout_kind": "NONE"
+    },
+    {
+      "id": "paypal-wallet-unmeasured",
+      "provider": "paypal",
+      "priority": 3,
+      "account_provenance": {
+        "account_id": null,
+        "display_name": null,
+        "merchant_id": null,
+        "note": "No connected PayPal account, PayPal.me, or merchant ID is evidenced in this session's connectors or on Commons."
+      },
+      "capability_state": "INERT_NEEDS_OWNER_KYC",
+      "charges_enabled": false,
+      "payouts_enabled": false,
+      "required_owner_actions": [
+        {
+          "id": "paypal-business-signup",
+          "blocking": true,
+          "kind": "EXTERNAL_OWNER_ACTION",
+          "label": "Open PayPal business signup (owner KYC, bank, OTP inside PayPal)",
+          "url": "https://www.paypal.com/bizsignup",
+          "note": "Agents do not enter credentials, KYC, bank, or OTP. This URL is the one-click owner path. The rail stays inert until a later evidence pass proves a chargeable PayPal merchant."
+        }
+      ],
+      "optional_owner_actions": [],
+      "evidence": {
+        "observed_at": "2026-08-28T16:43:00Z",
+        "reference": "session-connectors-no-paypal+commons-no-paypal-me",
+        "note": "Absence of a connected PayPal connector and absence of a published PayPal.me is the evidence. Do not invent a checkout."
+      },
+      "supported_skus": [],
+      "currencies": [
+        "usd"
+      ],
+      "settlement_destination": {
+        "kind": "unmeasured",
+        "status": "NONE",
+        "note": "No PayPal withdrawal destination is published."
+      },
+      "public_presentation": "INERT",
+      "public_checkout_kind": "NONE"
+    },
+    {
+      "id": "github-sponsors-woahwhattheheck",
+      "provider": "github_sponsors",
+      "priority": 4,
+      "account_provenance": {
+        "login": "woahwhattheheck",
+        "sponsors_url": "https://github.com/sponsors/woahwhattheheck",
+        "note": "Unauthenticated GET of the Sponsors URL did not prove an enabled Sponsors profile. The URL is an owner onboarding target, not a chargeable checkout."
+      },
+      "capability_state": "INERT_NEEDS_OWNER_ONBOARDING",
+      "charges_enabled": false,
+      "payouts_enabled": false,
+      "required_owner_actions": [
+        {
+          "id": "github-sponsors-setup",
+          "blocking": true,
+          "kind": "EXTERNAL_OWNER_ACTION",
+          "label": "Open GitHub Sponsors setup (owner identity and payout inside GitHub)",
+          "url": "https://github.com/sponsors",
+          "note": "Do not treat github.com/sponsors/woahwhattheheck as live until a later evidence pass proves an enabled profile."
+        }
+      ],
+      "optional_owner_actions": [],
+      "evidence": {
+        "observed_at": "2026-08-28T16:43:00Z",
+        "reference": "unauthenticated-GET-github.com/sponsors/woahwhattheheck-no-enabled-profile",
+        "note": "Page did not prove Sponsors is enabled. Rail stays inert."
+      },
+      "supported_skus": [],
+      "currencies": [
+        "usd"
+      ],
+      "settlement_destination": {
+        "kind": "unmeasured",
+        "status": "NONE",
+        "note": "GitHub Sponsors payout destination is not evidenced."
+      },
+      "public_presentation": "INERT",
+      "public_checkout_kind": "NONE"
+    },
+    {
+      "id": "square-unmeasured",
+      "provider": "square",
+      "priority": 5,
+      "account_provenance": {
+        "account_id": null,
+        "display_name": null,
+        "note": "No connected Square account is evidenced in this session's connectors or on Commons."
+      },
+      "capability_state": "INERT_NEEDS_OWNER_KYC",
+      "charges_enabled": false,
+      "payouts_enabled": false,
+      "required_owner_actions": [
+        {
+          "id": "square-signup",
+          "blocking": true,
+          "kind": "EXTERNAL_OWNER_ACTION",
+          "label": "Open Square signup (owner KYC, bank, OTP inside Square)",
+          "url": "https://squareup.com/signup",
+          "note": "Agents do not enter credentials. Rail stays inert until a later evidence pass."
+        }
+      ],
+      "optional_owner_actions": [],
+      "evidence": {
+        "observed_at": "2026-08-28T16:43:00Z",
+        "reference": "session-connectors-no-square",
+        "note": "Absence of a Square connector is the evidence."
+      },
+      "supported_skus": [],
+      "currencies": [
+        "usd"
+      ],
+      "settlement_destination": {
+        "kind": "unmeasured",
+        "status": "NONE",
+        "note": "No Square bank destination is published."
+      },
+      "public_presentation": "INERT",
+      "public_checkout_kind": "NONE"
+    }
+  ]
+}

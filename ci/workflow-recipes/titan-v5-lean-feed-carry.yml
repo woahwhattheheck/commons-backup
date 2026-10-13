@@ -1,0 +1,41 @@
+name: TITAN V5 lean feed carry economics
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/lean-feed-carry-economics/**'
+      - '.github/workflows/titan-v5-lean-feed-carry.yml'
+  push:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/lean-feed-carry-economics/**'
+      - '.github/workflows/titan-v5-lean-feed-carry.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact head
+        if: github.event_name == 'pull_request'
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/lean-feed-carry-economics
+        run: python -m py_compile feed_carry_oracle.py lean_feed_core.py lean_feed_run.py lean_feed_gate.py test_feed_carry_oracle.py test_cli_smoke.py
+      - name: Tests
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/lean-feed-carry-economics
+        run: python -m unittest -v test_feed_carry_oracle.py test_cli_smoke.py
+      - name: Tests optimized
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/lean-feed-carry-economics
+        run: python -O -m unittest -v test_feed_carry_oracle.py test_cli_smoke.py

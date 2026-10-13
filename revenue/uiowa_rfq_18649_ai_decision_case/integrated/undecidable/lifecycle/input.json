@@ -1,0 +1,484 @@
+{
+  "schema_version": "1.0",
+  "synthetic": true,
+  "workflow_id": "CASE-SYN-IAM-RUNBOOK",
+  "group": "cross-group",
+  "description": "Producing an access-review runbook section (SYNTHETIC); synthetic ordinal-day projection",
+  "artifacts": [
+    {
+      "id": "source-records",
+      "kind": "input_snapshot",
+      "text": "{\"documents\": [{\"events\": [{\"day\": 1, \"id\": \"EVT-D-B1-1\", \"kind\": \"AUTHOR\", \"minutes\": 120.0}, {\"day\": 2, \"id\": \"EVT-D-B1-2\", \"kind\": \"CHECK\", \"minutes\": 25.0}, {\"day\": 3, \"id\": \"EVT-D-B1-3\", \"kind\": \"ACCEPT\", \"minutes\": 0.0}], \"id\": \"DOC-D-B1\", \"variant\": \"BASELINE\"}, {\"events\": [{\"day\": 1, \"id\": \"EVT-D-B2-1\", \"kind\": \"AUTHOR\", \"minutes\": 115.0}, {\"day\": 2, \"id\": \"EVT-D-B2-2\", \"kind\": \"CHECK\", \"minutes\": 28.0}, {\"day\": 3, \"id\": \"EVT-D-B2-3\", \"kind\": \"ACCEPT\", \"minutes\": 0.0}], \"id\": \"DOC-D-B2\", \"variant\": \"BASELINE\"}, {\"events\": [{\"day\": 1, \"id\": \"EVT-D-A1-1\", \"kind\": \"GENERATE\", \"minutes\": 8.0}, {\"day\": 1, \"id\": \"EVT-D-A1-2\", \"kind\": \"CHECK\", \"minutes\": null}, {\"day\": 2, \"id\": \"EVT-D-A1-3\", \"kind\": \"ACCEPT\", \"minutes\": 0.0}], \"id\": \"DOC-D-A1\", \"variant\": \"ASSISTED\"}, {\"events\": [{\"day\": 1, \"id\": \"EVT-D-A2-1\", \"kind\": \"GENERATE\", \"minutes\": 9.0}, {\"day\": 1, \"id\": \"EVT-D-A2-2\", \"kind\": \"CHECK\", \"minutes\": 33.0}], \"id\": \"DOC-D-A2\", \"variant\": \"ASSISTED\"}], \"quality_measurements\": [{\"correct_elements\": 7, \"document_id\": \"DOC-D-A1\", \"fabricated_references\": 1, \"id\": \"QM-D-A1\", \"required_elements\": 10}]}",
+      "sha256": "f16547fd0386cb4ac693f0c1e4d98ad59629c8e5854589859dd6a87c39492866",
+      "locator": "synthetic://decision-case/source-records",
+      "retained": true
+    },
+    {
+      "id": "record-projection-rubric",
+      "kind": "rubric",
+      "text": "{\"completeness\": \"Source correct_elements / required_elements; no output was rescored.\", \"repair_minutes\": \"Sum REPAIR, REWORK_AFTER_ACCEPT and MAINTENANCE_EDIT events.\", \"unknown\": \"Correctness, usefulness, latency and missing source metrics remain null.\"}",
+      "sha256": "0a45364e1e959d1da2c87779bf0d83fac1bbe357d85646926c5483e36d6f9509",
+      "locator": "synthetic://decision-case/record-projection-rubric",
+      "retained": true
+    },
+    {
+      "id": "DOC-D-B1-input",
+      "kind": "case_input",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-B1-input",
+      "retained": false
+    },
+    {
+      "id": "DOC-D-B1-expectation",
+      "kind": "expectation",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-B1-expectation",
+      "retained": false
+    },
+    {
+      "id": "DOC-D-B2-input",
+      "kind": "case_input",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-B2-input",
+      "retained": false
+    },
+    {
+      "id": "DOC-D-B2-expectation",
+      "kind": "expectation",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-B2-expectation",
+      "retained": false
+    },
+    {
+      "id": "DOC-D-A1-input",
+      "kind": "case_input",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-A1-input",
+      "retained": false
+    },
+    {
+      "id": "DOC-D-A1-expectation",
+      "kind": "expectation",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-A1-expectation",
+      "retained": false
+    },
+    {
+      "id": "DOC-D-A2-input",
+      "kind": "case_input",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-A2-input",
+      "retained": false
+    },
+    {
+      "id": "DOC-D-A2-expectation",
+      "kind": "expectation",
+      "text": null,
+      "sha256": null,
+      "locator": "synthetic://decision-case/DOC-D-A2-expectation",
+      "retained": false
+    },
+    {
+      "id": "BASELINE-evaluation",
+      "kind": "evaluation_set",
+      "text": "{\"cases\": [{\"expectation_sha256\": null, \"id\": \"DOC-D-B1\", \"input_sha256\": null}, {\"expectation_sha256\": null, \"id\": \"DOC-D-B2\", \"input_sha256\": null}], \"protocol_id\": \"source-records\"}",
+      "sha256": "b34346c8b83a27e2f8d919a391899dbc813211705eb02f70f20a67579141cedb",
+      "locator": "synthetic://decision-case/BASELINE-evaluation",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-B1-1-record",
+      "kind": "investigation",
+      "text": "{\"day\": 1, \"document_id\": \"DOC-D-B1\", \"id\": \"EVT-D-B1-1\", \"kind\": \"AUTHOR\", \"minutes\": 120.0}",
+      "sha256": "550a24902e9eb75ffa5d88b27fe64c9b5d91bfd949efeb4d93867b0c9ce4ffdc",
+      "locator": "synthetic://decision-case/EVT-D-B1-1-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-B1-2-record",
+      "kind": "investigation",
+      "text": "{\"day\": 2, \"document_id\": \"DOC-D-B1\", \"id\": \"EVT-D-B1-2\", \"kind\": \"CHECK\", \"minutes\": 25.0}",
+      "sha256": "3ebcba7fd1681fde1138bbb5e897dcb9888af370ab0f7a8f224f00d1b4e66566",
+      "locator": "synthetic://decision-case/EVT-D-B1-2-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-B1-3-record",
+      "kind": "investigation",
+      "text": "{\"day\": 3, \"document_id\": \"DOC-D-B1\", \"id\": \"EVT-D-B1-3\", \"kind\": \"ACCEPT\", \"minutes\": 0.0}",
+      "sha256": "081c4190c7e2e2974dcae06e53980b300b4e0173e03d672a4ac984195b3de38c",
+      "locator": "synthetic://decision-case/EVT-D-B1-3-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-B2-1-record",
+      "kind": "investigation",
+      "text": "{\"day\": 1, \"document_id\": \"DOC-D-B2\", \"id\": \"EVT-D-B2-1\", \"kind\": \"AUTHOR\", \"minutes\": 115.0}",
+      "sha256": "97ac542540f44badf8bbd3f6542b55fe953d8f8ba3b5747976715a77bcc7b876",
+      "locator": "synthetic://decision-case/EVT-D-B2-1-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-B2-2-record",
+      "kind": "investigation",
+      "text": "{\"day\": 2, \"document_id\": \"DOC-D-B2\", \"id\": \"EVT-D-B2-2\", \"kind\": \"CHECK\", \"minutes\": 28.0}",
+      "sha256": "da46c37d1c8dd19febb61684c9af53a7122a9b74f582b6eab3d35786e8a26d8f",
+      "locator": "synthetic://decision-case/EVT-D-B2-2-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-B2-3-record",
+      "kind": "investigation",
+      "text": "{\"day\": 3, \"document_id\": \"DOC-D-B2\", \"id\": \"EVT-D-B2-3\", \"kind\": \"ACCEPT\", \"minutes\": 0.0}",
+      "sha256": "3fcfea4813be50cf104b9e66781c5265e885b2a5ea09290974ab4d27ce117a1d",
+      "locator": "synthetic://decision-case/EVT-D-B2-3-record",
+      "retained": true
+    },
+    {
+      "id": "ASSISTED-evaluation",
+      "kind": "evaluation_set",
+      "text": "{\"cases\": [{\"expectation_sha256\": null, \"id\": \"DOC-D-A1\", \"input_sha256\": null}, {\"expectation_sha256\": null, \"id\": \"DOC-D-A2\", \"input_sha256\": null}], \"protocol_id\": \"source-records\"}",
+      "sha256": "a3a3b3f06d4253402320b29068da858c618cb8c58251b7ac984c3836a7396a45",
+      "locator": "synthetic://decision-case/ASSISTED-evaluation",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-A1-1-record",
+      "kind": "investigation",
+      "text": "{\"day\": 1, \"document_id\": \"DOC-D-A1\", \"id\": \"EVT-D-A1-1\", \"kind\": \"GENERATE\", \"minutes\": 8.0}",
+      "sha256": "aaa9e84957abd51bff197c14e2e8ad5dbb7acaadc51a2e36dd09effdb5262b5c",
+      "locator": "synthetic://decision-case/EVT-D-A1-1-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-A1-2-record",
+      "kind": "investigation",
+      "text": "{\"day\": 1, \"document_id\": \"DOC-D-A1\", \"id\": \"EVT-D-A1-2\", \"kind\": \"CHECK\", \"minutes\": null}",
+      "sha256": "176981f9d6de8d85ed2ded90b6d8ae128018b2f5d995724b20f84e1510b01094",
+      "locator": "synthetic://decision-case/EVT-D-A1-2-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-A1-3-record",
+      "kind": "investigation",
+      "text": "{\"day\": 2, \"document_id\": \"DOC-D-A1\", \"id\": \"EVT-D-A1-3\", \"kind\": \"ACCEPT\", \"minutes\": 0.0}",
+      "sha256": "a67e26cf379e4e8ec15c0550aaa43369a62ab8a9217efca6fdcea778f9e803fd",
+      "locator": "synthetic://decision-case/EVT-D-A1-3-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-A2-1-record",
+      "kind": "investigation",
+      "text": "{\"day\": 1, \"document_id\": \"DOC-D-A2\", \"id\": \"EVT-D-A2-1\", \"kind\": \"GENERATE\", \"minutes\": 9.0}",
+      "sha256": "d866576affbe2579f44498ba79c32ca77f8985252bd1a9a8d72c72c042a7f1c0",
+      "locator": "synthetic://decision-case/EVT-D-A2-1-record",
+      "retained": true
+    },
+    {
+      "id": "EVT-D-A2-2-record",
+      "kind": "investigation",
+      "text": "{\"day\": 1, \"document_id\": \"DOC-D-A2\", \"id\": \"EVT-D-A2-2\", \"kind\": \"CHECK\", \"minutes\": 33.0}",
+      "sha256": "ac2d7aecef61a42e0c0fbc094e40a9804b33ca3f2afc2404543c15f16ad24ce7",
+      "locator": "synthetic://decision-case/EVT-D-A2-2-record",
+      "retained": true
+    }
+  ],
+  "cases": [
+    {
+      "id": "DOC-D-B1",
+      "input_ref": "DOC-D-B1-input",
+      "expectation_ref": "DOC-D-B1-expectation",
+      "stratum": "ordinary"
+    },
+    {
+      "id": "DOC-D-B2",
+      "input_ref": "DOC-D-B2-input",
+      "expectation_ref": "DOC-D-B2-expectation",
+      "stratum": "ordinary"
+    },
+    {
+      "id": "DOC-D-A1",
+      "input_ref": "DOC-D-A1-input",
+      "expectation_ref": "DOC-D-A1-expectation",
+      "stratum": "ordinary"
+    },
+    {
+      "id": "DOC-D-A2",
+      "input_ref": "DOC-D-A2-input",
+      "expectation_ref": "DOC-D-A2-expectation",
+      "stratum": "ordinary"
+    }
+  ],
+  "evaluation_sets": [
+    {
+      "artifact_ref": "BASELINE-evaluation",
+      "protocol_id": "source-records",
+      "case_ids": [
+        "DOC-D-B1",
+        "DOC-D-B2"
+      ]
+    },
+    {
+      "artifact_ref": "ASSISTED-evaluation",
+      "protocol_id": "source-records",
+      "case_ids": [
+        "DOC-D-A1",
+        "DOC-D-A2"
+      ]
+    }
+  ],
+  "versions": [
+    {
+      "id": "BASELINE",
+      "parent_id": null,
+      "changed_at": "1999-12-31T00:00:00Z",
+      "reason": "Source variant projection; model revision and parent history were not recorded.",
+      "support_owner": null,
+      "model_revision": null,
+      "model_alias_is_mutable": true,
+      "seed": null,
+      "components": {
+        "model": null,
+        "prompt": null,
+        "input_snapshot": "source-records",
+        "evaluation_set": "BASELINE-evaluation",
+        "rubric": "record-projection-rubric",
+        "code": null,
+        "environment": null,
+        "configuration": null
+      }
+    },
+    {
+      "id": "ASSISTED",
+      "parent_id": null,
+      "changed_at": "1999-12-31T00:00:00Z",
+      "reason": "Source variant projection; model revision and parent history were not recorded.",
+      "support_owner": null,
+      "model_revision": null,
+      "model_alias_is_mutable": true,
+      "seed": null,
+      "components": {
+        "model": null,
+        "prompt": null,
+        "input_snapshot": "source-records",
+        "evaluation_set": "ASSISTED-evaluation",
+        "rubric": "record-projection-rubric",
+        "code": null,
+        "environment": null,
+        "configuration": null
+      }
+    }
+  ],
+  "runs": [
+    {
+      "id": "BASELINE-records",
+      "version_id": "BASELINE",
+      "started_at": "2000-01-01T00:00:00Z",
+      "finished_at": "2000-01-04T00:00:00Z",
+      "observations": [
+        {
+          "case_id": "DOC-D-B1",
+          "output_ref": null,
+          "error": null,
+          "correctness": null,
+          "completeness": null,
+          "usefulness": null,
+          "repair_minutes": 0,
+          "latency_ms": null
+        },
+        {
+          "case_id": "DOC-D-B2",
+          "output_ref": null,
+          "error": null,
+          "correctness": null,
+          "completeness": null,
+          "usefulness": null,
+          "repair_minutes": 0,
+          "latency_ms": null
+        }
+      ]
+    },
+    {
+      "id": "ASSISTED-records",
+      "version_id": "ASSISTED",
+      "started_at": "2000-01-01T00:00:00Z",
+      "finished_at": "2000-01-03T00:00:00Z",
+      "observations": [
+        {
+          "case_id": "DOC-D-A1",
+          "output_ref": null,
+          "error": null,
+          "correctness": null,
+          "completeness": 0.7,
+          "usefulness": null,
+          "repair_minutes": 0,
+          "latency_ms": null
+        },
+        {
+          "case_id": "DOC-D-A2",
+          "output_ref": null,
+          "error": null,
+          "correctness": null,
+          "completeness": null,
+          "usefulness": null,
+          "repair_minutes": 0,
+          "latency_ms": null
+        }
+      ]
+    }
+  ],
+  "comparisons": [],
+  "replays": [],
+  "events": [
+    {
+      "id": "EVT-D-B1-1",
+      "version_id": "BASELINE",
+      "occurred_at": "2000-01-02T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-B1: AUTHOR",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-B1-1-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-B1-2",
+      "version_id": "BASELINE",
+      "occurred_at": "2000-01-03T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-B1: CHECK",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-B1-2-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-B1-3",
+      "version_id": "BASELINE",
+      "occurred_at": "2000-01-04T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-B1: ACCEPT",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-B1-3-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-B2-1",
+      "version_id": "BASELINE",
+      "occurred_at": "2000-01-02T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-B2: AUTHOR",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-B2-1-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-B2-2",
+      "version_id": "BASELINE",
+      "occurred_at": "2000-01-03T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-B2: CHECK",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-B2-2-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-B2-3",
+      "version_id": "BASELINE",
+      "occurred_at": "2000-01-04T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-B2: ACCEPT",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-B2-3-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-A1-1",
+      "version_id": "ASSISTED",
+      "occurred_at": "2000-01-02T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-A1: GENERATE",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-A1-1-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-A1-2",
+      "version_id": "ASSISTED",
+      "occurred_at": "2000-01-02T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-A1: CHECK",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-A1-2-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-A1-3",
+      "version_id": "ASSISTED",
+      "occurred_at": "2000-01-03T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-A1: ACCEPT",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-A1-3-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-A2-1",
+      "version_id": "ASSISTED",
+      "occurred_at": "2000-01-02T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-A2: GENERATE",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-A2-1-record"
+      ],
+      "resolves_event_id": null
+    },
+    {
+      "id": "EVT-D-A2-2",
+      "version_id": "ASSISTED",
+      "occurred_at": "2000-01-02T00:00:00Z",
+      "kind": "observation",
+      "summary": "DOC-D-A2: CHECK",
+      "owner": null,
+      "related_run_ids": [],
+      "evidence_refs": [
+        "EVT-D-A2-2-record"
+      ],
+      "resolves_event_id": null
+    }
+  ]
+}

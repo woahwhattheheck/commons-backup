@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+  <title>Discount Leakage Preflight — local browser demo</title>
+  <meta name="description" content="A zero-upload browser preflight for discount and concession classification. Data stays in your browser.">
+  <style>
+    :root { color-scheme: light dark; --ink:#17202a; --muted:#59636d; --paper:#f7f9f8; --card:#fff; --line:#d6dcd9; --accent:#0b6e4f; --hold:#7a4b00; }
+    @media (prefers-color-scheme:dark){:root{--ink:#f1f5f3;--muted:#b7c0bc;--paper:#0f1512;--card:#171f1b;--line:#34433b;--accent:#6ee7b7;--hold:#f6c177}}
+    *{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif} main{max-width:900px;margin:auto;padding:24px 18px 64px} nav{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px} a{color:var(--accent)} h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:.25em 0}.lede{font-size:1.15rem;max-width:760px}.notice{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--card);border-radius:10px;padding:14px 16px;margin:22px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:6px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}label{font-weight:700}input,select,button{font:inherit;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}button{cursor:pointer;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:750}.result{margin-top:18px}.state{font:800 1.35rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}.metric{border-top:1px solid var(--line);padding-top:10px}.metric strong{display:block;font-size:1.2rem}.muted{color:var(--muted)}code{overflow-wrap:anywhere}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.cta{display:inline-block;background:var(--accent);color:#fff;padding:11px 15px;border-radius:8px;text-decoration:none;font-weight:750}.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}.hidden{display:none!important}
+  </style>
+</head>
+<body>
+<main>
+  <nav><a href="./">Commons</a><a href="discount-concession-leakage.html">$3,500 full desk</a><a href="commerce.html">Commerce</a></nav>
+  <p class="muted"><strong>Free preflight · zero upload</strong></p>
+  <h1>Discount leakage preflight</h1>
+  <p class="lede">Change four numbers and see the same core line-level state machine used by the paid diagnostic. This page makes no network request and does not upload the values you enter.</p>
+
+  <div class="notice"><strong>Scope boundary:</strong> this demo evaluates one simplified line only. The paid desk additionally validates closed-period scope, complete snapshots, evidence digests, duplicate/replay rules, stale/future evidence, conflicting authorities, and safe package verification. A demo result is not a conclusion that money is owed or recoverable.</div>
+
+  <section class="card" aria-labelledby="inputs-title">
+    <h2 id="inputs-title">Try a billed line</h2>
+    <div class="grid">
+      <div class="field"><label for="reference">Reference unit price (USD)</label><input id="reference" inputmode="decimal" value="100.00" autocomplete="off"></div>
+      <div class="field"><label for="billed">Billed unit price (USD)</label><input id="billed" inputmode="decimal" value="90.00" autocomplete="off"></div>
+      <div class="field"><label for="quantity">Quantity</label><input id="quantity" inputmode="numeric" value="5" autocomplete="off"></div>
+      <div class="field"><label for="authority">Discount authority</label><select id="authority"><option value="none">No active authority</option><option value="exact">Authority exactly matches observed discount</option><option value="custom">Authority specifies another reduction</option></select></div>
+      <div id="custom-wrap" class="field hidden"><label for="custom-authority">Authorized unit reduction (USD)</label><input id="custom-authority" inputmode="decimal" value="5.00" autocomplete="off"></div>
+    </div>
+    <div class="actions"><button id="evaluate" type="button">Evaluate line</button><button id="reset" type="button" class="secondary" style="color:var(--accent);background:transparent">Reset example</button></div>
+  </section>
+
+  <section class="card result" aria-live="polite" aria-labelledby="result-title">
+    <h2 id="result-title">Preflight result</h2>
+    <div id="state" class="state">—</div>
+    <p id="explanation" class="muted">Enter values and evaluate.</p>
+    <div class="metrics">
+      <div class="metric"><span>Reference total</span><strong id="expected">—</strong></div>
+      <div class="metric"><span>Billed total</span><strong id="observed">—</strong></div>
+      <div class="metric"><span>Observed unit reduction</span><strong id="unit-reduction">—</strong></div>
+      <div class="metric"><span>Discount reference amount</span><strong id="discount">—</strong></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How to read the states</h2>
+    <ul>
+      <li><code>FULL_PRICE</code>: billed unit price equals the supplied reference price.</li>
+      <li><code>AUTHORIZED_DISCOUNT</code>: a supplied authority matches the observed per-unit reduction.</li>
+      <li><code>UNAUTHORIZED_DISCOUNT_REVIEW</code>: a discount exists and this simplified line has no active authority.</li>
+      <li><code>DISCOUNT_VARIANCE_REVIEW</code>: an authority exists but its reduction differs from the observed reduction.</li>
+      <li><code>PRICE_UPLIFT_OBSERVED</code>: billed price is above reference price; visible, but not counted as leakage.</li>
+      <li><code>HOLD</code>: the local values cannot be evaluated safely.</li>
+    </ul>
+  </section>
+
+  <div class="actions"><a class="cta" href="discount-concession-leakage.html">See full $3,500 engagement</a><a class="cta secondary" href="mailto:tokenjunkielabs@gmail.com?subject=Discount%20%26%20Concession%20Leakage%20Desk%20%E2%80%94%20purchase%20intent&body=OFFER_ID%3A%20discount-concession-leakage-desk-3500-v1%0ANONCONFIDENTIAL_OBJECTIVE%3A%20">Email purchase intent</a></div>
+  <p class="muted">An inquiry is not acceptance, payment, recovered cash, savings, profit, or recognized revenue.</p>
+</main>
+<script type="module">
+  import { classifyDiscount, parseMoneyToMinor, formatMinor, STATES } from './discount-concession-leakage-demo.js';
+
+  const $ = (id) => document.getElementById(id);
+  const explanations = {
+    [STATES.FULL_PRICE]: 'The billed unit price matches the supplied reference price.',
+    [STATES.AUTHORIZED_DISCOUNT]: 'The observed discount matches the supplied authority in this simplified preflight.',
+    [STATES.UNAUTHORIZED_DISCOUNT_REVIEW]: 'A positive discount is present and no active authority was supplied. Review evidence before drawing any commercial conclusion.',
+    [STATES.DISCOUNT_VARIANCE_REVIEW]: 'An authority was supplied, but its authorized reduction does not match the observed reduction.',
+    [STATES.PRICE_UPLIFT_OBSERVED]: 'The billed unit price is above the supplied reference price. This is visible but is not treated as discount leakage.',
+    [STATES.HOLD]: 'The values cannot be evaluated safely. Correct the input before relying on the preflight.',
+  };
+
+  function show() {
+    const referenceUnitMinor = parseMoneyToMinor($('reference').value);
+    const billedUnitMinor = parseMoneyToMinor($('billed').value);
+    const quantityText = $('quantity').value.trim();
+    const quantity = /^(?:[1-9]\d{0,6})$/.test(quantityText) ? Number(quantityText) : null;
+    const authorityMode = $('authority').value;
+    const authorizedUnitReductionMinor = authorityMode === 'custom' ? parseMoneyToMinor($('custom-authority').value) : null;
+    const result = classifyDiscount({ referenceUnitMinor, billedUnitMinor, quantity, authorityMode, authorizedUnitReductionMinor });
+    $('state').textContent = result.state;
+    $('explanation').textContent = `${explanations[result.state]}${result.reasons.length ? ` Reason: ${result.reasons.join(', ')}.` : ''}`;
+    $('expected').textContent = formatMinor(result.expectedReferenceMinor);
+    $('observed').textContent = formatMinor(result.observedReferenceMinor);
+    $('unit-reduction').textContent = result.unitReductionMinor === null ? '—' : formatMinor(result.unitReductionMinor);
+    $('discount').textContent = formatMinor(result.discountReferenceMinor);
+  }
+
+  $('authority').addEventListener('change', () => {
+    $('custom-wrap').classList.toggle('hidden', $('authority').value !== 'custom');
+    show();
+  });
+  $('evaluate').addEventListener('click', show);
+  $('reset').addEventListener('click', () => {
+    $('reference').value = '100.00'; $('billed').value = '90.00'; $('quantity').value = '5'; $('authority').value = 'none'; $('custom-authority').value = '5.00'; $('custom-wrap').classList.add('hidden'); show();
+  });
+  for (const id of ['reference','billed','quantity','custom-authority']) $(id).addEventListener('input', show);
+  show();
+</script>
+</body>
+</html>

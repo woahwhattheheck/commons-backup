@@ -1,0 +1,33 @@
+{
+  "schema": "turnbench-scenario/v1",
+  "scenario_id": "barge-in-ticket-01",
+  "title": "Barge-in cancels speech while ticket tool remains transcript-grounded",
+  "session_contract": {
+    "resolved_config_sha256": "7d0a516ae2c2b0cd861b9141aa82b9afbefe62e6491ab8520188a2f129b0b48b",
+    "min_silence_ms": 300,
+    "max_silence_ms": 1200
+  },
+  "assertions": {
+    "max_turn_start_latency_ms": 500,
+    "max_interrupt_cancel_latency_ms": 150,
+    "max_tool_call_latency_ms": 500,
+    "min_user_turns": 2,
+    "require_clean_session_end": true,
+    "required_tool_calls": [
+      {
+        "name": "open_ticket",
+        "required_argument_keys": [
+          "severity",
+          "summary"
+        ],
+        "must_follow_user_text": "sev one"
+      }
+    ],
+    "forbidden_error_codes": [
+      "invalid_config",
+      "server_error",
+      "agent_timeout"
+    ],
+    "min_interruptions": 1
+  }
+}

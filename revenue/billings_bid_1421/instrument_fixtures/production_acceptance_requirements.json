@@ -1,0 +1,574 @@
+{
+  "schema_version": "1.0.0",
+  "requirements_id": "billings-bid-1421-instrument-production-acceptance-20260831-01",
+  "target": "AquaTrace instrument interfaces and their production dependencies",
+  "release_rule": "PRODUCTION_READY only when every required gate is SATISFIED with complete evidence; otherwise NOT_READY.",
+  "evidence_boundary": "References and hashes only. Never store credentials, tokens, private keys, connection strings, live regulated data, or production secrets in this package.",
+  "official_targets": {
+    "deployment": "Cloud; Big Bang; two laboratory locations; shared instance; no migration",
+    "load": "5000 samples/year; 6 named users; 2-3 concurrent; 6 field samplers",
+    "offline_mobile": [
+      "iOS",
+      "Android"
+    ],
+    "instrument_models": [
+      "Metrohm Eco IC",
+      "Seivers M5310C",
+      "Seal Analytical AQ300",
+      "Perkin Elmer PinAAcle 900Z"
+    ],
+    "reporting": "CMDP 5-10 unique uploads/week; NetDMR one plant and one DMR/month; PowerBI interface"
+  },
+  "requirements": [
+    {
+      "gate_id": "official-source-traceability",
+      "title": "Official source traceability",
+      "scope": "source",
+      "required": true,
+      "acceptance_assertions": [
+        "official_files_hashed",
+        "source_requirements_normalized"
+      ],
+      "source_refs": [
+        "RFP Section 3",
+        "Attachment F",
+        "Addenda 1, 2, 4, and 5"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "device-inventory-identity",
+      "title": "Device inventory and identity",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "every_device_has_make_model_version",
+        "installed_configuration_captured"
+      ],
+      "source_refs": [
+        "Attachment F",
+        "Addendum 1 question 7"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "interface-transport-contract",
+      "title": "Interface and transport contract",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "transport_mechanism_documented",
+        "vendor_contract_version_pinned",
+        "failure_codes_mapped"
+      ],
+      "source_refs": [
+        "RFP Section 3 instrument integration"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "deidentified-sample-payloads",
+      "title": "Representative de-identified payloads",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "normal_payload_captured",
+        "error_payload_captured",
+        "payloads_contain_no_live_data"
+      ],
+      "source_refs": [
+        "Addendum 1 question 7"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "schema-field-unit-mapping",
+      "title": "Schema, field, and unit mapping",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "all_fields_mapped",
+        "units_and_qualifiers_mapped",
+        "unknown_fields_fail_closed"
+      ],
+      "source_refs": [
+        "Attachment F analysis list"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "method-analyte-mapping-approval",
+      "title": "Method/analyte mapping approval",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "lab_owner_approved_mapping",
+        "blank_source_methods_resolved",
+        "mapping_version_pinned"
+      ],
+      "source_refs": [
+        "Attachment F analysis list"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "qc-calibration-error-semantics",
+      "title": "QC, calibration, and error semantics",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "qc_flags_mapped",
+        "calibration_states_mapped",
+        "bad_qc_quarantines",
+        "instrument_errors_preserved"
+      ],
+      "source_refs": [
+        "RFP Section 3 QC/QA",
+        "Addendum 2 question 8"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "idempotency-duplicate-proof",
+      "title": "Idempotency and duplicate proof",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "stable_dedupe_key_defined",
+        "duplicate_replay_creates_no_second_result",
+        "original_receipt_returned"
+      ],
+      "source_refs": [
+        "Synthetic fixture scenario duplicate"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "ordering-replay-proof",
+      "title": "Ordering and replay proof",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "sequence_semantics_defined",
+        "out_of_order_is_detected",
+        "replay_is_deterministic"
+      ],
+      "source_refs": [
+        "Synthetic fixture scenario out_of_order"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "timeout-after-commit-proof",
+      "title": "Timeout-after-commit proof",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "durable_commit_precedes_ack",
+        "retry_deduplicates",
+        "receipt_reconciles_after_timeout"
+      ],
+      "source_refs": [
+        "Synthetic fixture scenario timeout_after_commit"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "result-amendment-and-quarantine",
+      "title": "Result amendment and quarantine",
+      "scope": "instrument_adapter",
+      "required": true,
+      "acceptance_assertions": [
+        "bad_results_quarantine",
+        "amendments_preserve_prior_value",
+        "no_automatic_regulatory_release"
+      ],
+      "source_refs": [
+        "RFP lifecycle traceability",
+        "RFP audit trail"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "analyst-rbac-separation",
+      "title": "Analyst RBAC and release separation",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "least_privilege_roles_tested",
+        "collector_cannot_release",
+        "release_requires_authorized_lab_role",
+        "denials_are_audited"
+      ],
+      "source_refs": [
+        "RFP role-based access control"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "audit-immutability-export",
+      "title": "Audit integrity and export",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "every_change_has_actor_time_before_after",
+        "audit_export_reconciles",
+        "tamper_attempt_detected"
+      ],
+      "source_refs": [
+        "RFP real-time audit trails"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "secret-handling-and-encryption",
+      "title": "Secret handling and encryption",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "no_secret_in_fixture_or_log",
+        "secrets_use_managed_runtime_store",
+        "encryption_in_transit_verified",
+        "encryption_at_rest_verified"
+      ],
+      "source_refs": [
+        "RFP system security"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "negative-security-assessment",
+      "title": "Negative security assessment",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "threat_model_reviewed",
+        "authorized_scan_report_present",
+        "critical_findings_closed",
+        "annual_assurance_plan_evidenced"
+      ],
+      "source_refs": [
+        "RFP System Security",
+        "NIST SP 800-53/FIPS 199/SAR evidence request"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "monitoring-alerting-slos",
+      "title": "Monitoring, alerting, and service objectives",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "ingest_failures_alert",
+        "queue_lag_alert",
+        "receipt_reconciliation_alert",
+        "slo_dashboard_and_runbook_verified"
+      ],
+      "source_refs": [
+        "RFP ongoing support"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "cloud-deployment-reproducibility",
+      "title": "Cloud deployment reproducibility",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "infrastructure_reproducible",
+        "two_lab_shared_instance_verified",
+        "rollback_tested",
+        "environment_config_versioned"
+      ],
+      "source_refs": [
+        "Addendum 1 questions 1-3",
+        "Addendum 2 question 7"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "backup-restore-integrity",
+      "title": "Backup and restore integrity",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "backup_completed",
+        "isolated_restore_completed",
+        "restored_hashes_reconcile",
+        "restore_evidence_signed"
+      ],
+      "source_refs": [
+        "RFP redundancy and disaster recovery"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "disaster-recovery-test",
+      "title": "Disaster recovery test",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "buyer_rto_rpo_defined",
+        "failover_exercised",
+        "data_loss_measured",
+        "return_to_primary_tested"
+      ],
+      "source_refs": [
+        "RFP redundancy and disaster recovery"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "mobile-offline-sync-reconciliation",
+      "title": "Mobile offline reliability",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "ios_offline_flow_tested",
+        "android_offline_flow_tested",
+        "six_sampler_concurrency_tested",
+        "conflict_and_retry_reconcile"
+      ],
+      "source_refs": [
+        "RFP offline field application",
+        "Addendum 1 question 11",
+        "Addendum 2 question 5"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "reporting-cmdp-static-schema",
+      "title": "CMDP static schema validation",
+      "scope": "report_interface",
+      "required": true,
+      "acceptance_assertions": [
+        "macro_free_schema_extracted",
+        "field_mapping_approved",
+        "five_to_ten_weekly_uploads_tested",
+        "draft_never_auto_submitted"
+      ],
+      "source_refs": [
+        "Addendum 3",
+        "Addendum 5 question 1"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "reporting-netdmr-template-validation",
+      "title": "NetDMR template validation",
+      "scope": "report_interface",
+      "required": true,
+      "acceptance_assertions": [
+        "all_35_fields_mapped",
+        "code_lists_and_required_fields_validated",
+        "one_monthly_dmr_reconciles",
+        "draft_never_auto_submitted"
+      ],
+      "source_refs": [
+        "Addendum 4",
+        "Addendum 5 question 2"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "capacity-concurrency-performance",
+      "title": "Capacity and concurrency performance",
+      "scope": "cross_system_dependency",
+      "required": true,
+      "acceptance_assertions": [
+        "five_thousand_annual_sample_profile_tested",
+        "six_named_users_tested",
+        "three_concurrent_users_tested",
+        "backpressure_and_recovery_measured"
+      ],
+      "source_refs": [
+        "Addendum 1 questions 5-6"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    },
+    {
+      "gate_id": "production-release-signoff",
+      "title": "Production release evidence",
+      "scope": "release",
+      "required": true,
+      "acceptance_assertions": [
+        "all_required_gates_satisfied",
+        "known_gaps_empty",
+        "rollback_owner_named",
+        "authorized_release_recorded"
+      ],
+      "source_refs": [
+        "Production target correction from Bryce"
+      ],
+      "evidence_requirements": [
+        "immutable_artifact_reference",
+        "sha256",
+        "verification_method",
+        "verified_by",
+        "verified_at"
+      ],
+      "failure_behavior": "NOT_READY"
+    }
+  ]
+}

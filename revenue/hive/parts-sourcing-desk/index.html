@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parts Desk · Repair sourcing workspace</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#17252b;background:#f2f4f1;line-height:1.5}*{box-sizing:border-box}body{margin:0}header{background:#153e3b;color:white;padding:24px max(24px,4vw);display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}h1,h2,h3,p{margin:0 0 12px}h1{font-size:28px;letter-spacing:-.8px}h2{font-size:22px}h3{font-size:17px}header p{color:#cbded5;max-width:700px;margin:0}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c8d6a9}header a{color:#fff}main{display:grid;grid-template-columns:265px minmax(0,1fr);gap:24px;padding:24px;max-width:1520px;margin:auto}aside,.panel,.card{background:white;border:1px solid #d7e0d9;border-radius:10px;padding:20px;min-width:0}aside{align-self:start;position:sticky;top:16px}.panel{margin-bottom:20px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid .wide{grid-column:1/-1}label{display:flex;flex-direction:column;font-size:13px;font-weight:650;gap:5px}input,textarea,select,button{font:inherit}input,textarea,select{padding:10px;border:1px solid #adbbb0;border-radius:5px;width:100%;background:#fff;color:#17252b}textarea{min-height:80px;resize:vertical}button,.button{border:1px solid #386658;background:#245547;color:white;padding:10px 14px;border-radius:5px;cursor:pointer;font-weight:650;text-decoration:none;display:inline-block}button.secondary,.button.secondary{background:white;color:#245547}button:disabled{opacity:.55;cursor:progress}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #ba8224;outline-offset:3px}.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px}.muted{color:#506561;font-size:13px}.notice{background:#f4eddd;border-left:4px solid #bf8631;padding:12px;font-size:13px;margin:12px 0;overflow-wrap:anywhere}.success{background:#e2f1e9;border-color:#36855d}.error{background:#ffe9e5;border-color:#b54b37}.jobs{display:flex;flex-direction:column;gap:8px;margin:18px 0}.job{background:#f5f7f4;color:#153e3b;border-color:#d7e0d9;text-align:left}.job.active{border:2px solid #245547}.job small{display:block;font-weight:400}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px}.card{padding:16px}.card p{font-size:14px;overflow-wrap:anywhere}.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 8px;border-radius:20px;background:#f0e5c5;color:#655115;margin:0 5px 8px 0}.badge.good{background:#daeee4;color:#245547}.link{color:#245547;overflow-wrap:anywhere}details{margin-top:12px}summary{cursor:pointer;font-weight:650}ul{padding-left:20px}.empty{border:1px dashed #a4b6a8;padding:30px;text-align:center;color:#506561;border-radius:8px}#message{max-width:1472px;margin:16px auto 0;padding-left:20px;padding-right:20px}#message:empty{display:none}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.toolbar h2{margin:0;flex:1}.catalog-search{display:flex;gap:10px;margin:15px 0}.catalog-search input{flex:1}.data{font-variant-numeric:tabular-nums}.order-total{font-size:23px;font-weight:700;color:#245547}footer{text-align:center;font-size:12px;padding:20px;color:#506561}.timeline li{margin:6px 0}.hidden{display:none!important}@media(max-width:850px){main{grid-template-columns:1fr;padding:14px}aside{position:static}.jobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}.grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}header{padding:20px}.toolbar h2{flex-basis:100%}.catalog-search{flex-wrap:wrap}.catalog-search input{min-width:0;flex-basis:100%}}@media print{header{background:white;color:black}header p{color:black}aside,#intake,#catalog,#message,.actions,.no-print,details{display:none!important}main{display:block;padding:0}.panel,.card{break-inside:avoid;border:1px solid #999}.cards{display:block}.card{margin-bottom:18px}footer{display:none}}
+.enquiry-choice{flex-direction:row;align-items:center;gap:8px;margin-top:16px;font-weight:600}.enquiry-choice input{width:auto}.enquiry-settings{max-width:600px;margin-top:14px}#enquiry-count{font-weight:600}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">Repair operations / Hive</div><h1>Parts Desk</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>Find the right reference. Keep uncertainty visible. Hand off one order.</p></div><nav><a href="/api/export" download>Export workspace</a> &nbsp; · &nbsp; <a href="/api/backup" download>Database backup</a></nav></header>
+<div id="message" role="status" aria-live="polite"></div>
+<main>
+<aside><h2>Workshop jobs</h2><p class="muted">Saved in SQLite. All supplier actions remain manual.</p><button id="new-job" type="button">+ New sourcing request</button><div id="jobs" class="jobs"></div><p id="counts" class="muted"></p><details><summary>Try the workflow</summary><p class="muted">Loads fictitious catalog entries and a workshop request. These are not real fit or stock claims.</p><button id="demo" class="secondary" type="button">Load fictitious example</button></details></aside>
+<div>
+<section id="intake" class="panel"><div class="toolbar"><h2 id="form-title">New sourcing request</h2><span id="request-revision" class="muted"></span></div><form id="request-form" class="grid">
+<label>Unique workshop job reference<input name="job_ref" required maxlength="200" placeholder="JOB-104"></label><label>Equipment manufacturer<input name="make" required placeholder="Manufacturer"></label>
+<label>Exact model<input name="model" placeholder="Copy the model label"></label><label>Serial number / revision<input name="serial" placeholder="Not supplied"></label>
+<label>Requested part number<input name="part_number" placeholder="Leave blank when unknown"></label><label>Quantity<input name="quantity" type="number" min="1" max="1000000" value="1" required></label>
+<label class="wide">Part description<input name="description" required placeholder="What needs replacing?"></label><label class="wide">Shop notes<textarea name="notes" placeholder="Measurements, serial limits, or missing details"></textarea></label>
+<div class="actions wide"><button type="submit">Save request</button><button type="button" id="reload" class="secondary">Reload saved version</button></div></form></section>
+<section id="detail" class="panel hidden"><div class="toolbar"><h2>Source-linked options</h2><button id="print" class="secondary no-print">Print job summary</button></div><p class="muted">A part-number or alias match is a search result, not confirmation of physical compatibility. Record the exact source and technician's findings.</p><div id="options" class="cards"></div>
+<section class="no-print" aria-labelledby="enquiry-heading" style="margin-top:24px">
+<h2 id="enquiry-heading">Supplier enquiry drafts</h2>
+<p class="muted">Choose saved options above to prepare one unsent draft per supplier. Review each supplier's own text file before sharing; the combined summary stays internal.</p>
+<div class="grid enquiry-settings"><label>As-of date<input id="enquiry-as-of" type="date"></label><label>Source-age reminder, days<input id="enquiry-max-age" type="number" min="0" max="36500" value="7"></label></div>
+<div class="actions"><button id="download-enquiries" type="button">Download selected enquiries</button><span id="enquiry-count" class="muted" aria-live="polite">0 options selected</span></div>
+</section>
+<h2 style="margin-top:24px">Order handoffs</h2><p class="muted">Creating a draft never makes a purchase. Record a supplier reference only after an actual external order. One active handoff per job prevents duplicate local orders.</p><div id="orders" class="cards"></div><details><summary>Saved activity</summary><ol id="timeline" class="timeline"></ol></details></section>
+<section id="catalog" class="panel"><h2>Catalog & cross-reference desk</h2><p class="muted">Import permitted supplier or manufacturer exports, or enter a cited option. The desk does not scrape catalogs, infer fit, contact suppliers, or check live availability.</p><form id="search-form" class="catalog-search"><input id="search" aria-label="Search catalog" placeholder="Part number, cross-reference, model or supplier"><button>Search catalog</button></form><div id="catalog-results" class="cards"></div>
+<details><summary>Add a source-referenced catalog option</summary><form id="catalog-form" class="grid" style="margin-top:14px">
+<label>Stable catalog entry ID<input name="id" required placeholder="supplier-part-001"></label><label>Supplier<input name="supplier" required></label><label>Supplier SKU<input name="supplier_sku" required></label><label>Offered part number<input name="part_number" required></label>
+<label>Manufacturer<input name="make"></label><label>Catalog model<input name="model"></label><label>Cross-reference aliases, separated by ;<input name="aliases"></label><label>Serial / revision applicability<input name="serial_scope"></label><label class="wide">Description<input name="description" required></label>
+<label>Unit price; blank = unknown<input name="unit_price" inputmode="decimal" placeholder="12.50"></label><label>Shipping; blank = unknown<input name="shipping" inputmode="decimal" placeholder="Unknown"></label><label>Currency; no conversion<input name="currency" value="USD" pattern="[A-Z]{3}" required></label><label>Observed stock<select name="stock_status"><option value="unknown">Unknown</option><option value="in_stock">In stock</option><option value="out_of_stock">Out of stock</option></select></label><label>Stock quantity; blank = unknown<input name="stock_qty" type="number" min="0"></label><label>Lead time / shipping notes<input name="lead_time"></label>
+<label class="wide">Manufacturer or supplier source URL<input name="source_url" type="url" required placeholder="https://..."></label><label>Observed on<input name="checked_on" type="date" required></label><label>Source page / section note<input name="source_note"></label><div class="actions wide"><button>Save catalog option</button></div></form></details>
+<details><summary>Import catalog CSV or JSON</summary><p class="muted">Required: id, supplier, supplier_sku, part_number, description, source_url, checked_on, currency. Optional: make, model, aliases, serial_scope, unit_price, shipping, stock_status, stock_qty, lead_time, source_note. CSV aliases use semicolons; JSON is an array. Matching IDs update entries and visibly stale prior reviews. No rows change when validation fails.</p><label>Catalog file<input id="import-file" type="file" accept=".csv,.json"></label><button id="import" type="button" class="secondary" style="margin-top:12px">Import selected file</button></details>
+</section>
+</div></main><footer>Parts Desk · Local workspace · No purchase, payment, email or supplier API is performed by this application.</footer>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let current = null;
+let enquiryJob = null;
+let enquiryOptions = new Set();
+let pending = new Map();
+const uid = () => crypto.randomUUID();
+function message(s, error=false){$('message').innerHTML = `<div class="notice ${error?'error':'success'}">${esc(s)}</div>`;}
+async function api(url, body){
+  const options = body ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)} : {};
+  const response = await fetch(url, options);
+  const result = await response.json();
+  if(!response.ok) throw new Error(result.error || `Request failed (${response.status})`);
+  return result;
+}
+async function write(url, data){
+  const key = url + JSON.stringify(data);
+  const operation_id = pending.get(key) || uid();
+  pending.set(key, operation_id);
+  try {const result = await api(url, {...data, operation_id}); pending.delete(key); return result;}
+  catch(error){throw error;}
+}
+async function run(action){
+  try {await action();} catch(error){message(error.message, true);}
+}
+function fields(form){return Object.fromEntries(new FormData(form));}
+function fitBadge(fit){return `<span class="badge ${fit==='compatible'?'good':''}">${esc(fit)}</span>`;}
+function price(value,currency){return value === null || value === '' || value === undefined ? 'Unknown' : `${esc(currency)} ${esc(value)}`;}
+function source(offer){return `<p><a class="link" href="${esc(offer.source_url)}" target="_blank" rel="noopener noreferrer">Open source reference ↗</a><br><span class="muted">Observed ${esc(offer.checked_on)} · ${esc(offer.source_note)}</span></p>`;}
+async function loadState(){
+  const state = await api('/api/state');
+  $('counts').textContent = `${state.requests.length} saved jobs · ${state.catalog_count} catalog entries`;
+  $('jobs').innerHTML = state.requests.map(r=>`<button class="job ${current?.id===r.id?'active':''}" data-job="${esc(r.id)}"><strong>${esc(r.job_ref)}</strong><small>${esc(r.make)} ${esc(r.model)} · ${esc(r.part_number||'Part unknown')}</small></button>`).join('') || '<p class="muted">No saved requests yet.</p>';
+}
+function fillRequest(){
+  const form = $('request-form'); form.reset();
+  if(current) for(const [key,value] of Object.entries(current.data)){if(form.elements.namedItem(key)) form.elements.namedItem(key).value=value;}
+  $('form-title').textContent = current ? `Job ${current.data.job_ref}` : 'New sourcing request';
+  $('request-revision').textContent = current ? `Saved revision ${current.revision}` : '';
+}
+async function selectJob(id){current = await api('/api/requests/'+id); fillRequest(); render(); await loadState();}
+function updateEnquiryCount(){
+  $('enquiry-count').textContent = `${enquiryOptions.size} option${enquiryOptions.size===1?'':'s'} selected`;
+}
+function render(){
+  const job = current?.id || null;
+  if(enquiryJob!==job){enquiryOptions.clear();enquiryJob=job;}
+  $('detail').classList.toggle('hidden', !current);
+  if(!current) return;
+  const available = new Set(current.options.map(o=>o.id));
+  enquiryOptions = new Set([...enquiryOptions].filter(id=>available.has(id)));
+  updateEnquiryCount();
+  $('options').innerHTML = current.options.map(o=>{
+    const s=o.snapshot,r=o.review;
+    return `<article class="card"><h3>${esc(s.supplier)} · ${esc(s.supplier_sku)}</h3>${fitBadge(o.effective_fit)}<p>${esc(s.part_number)} / ${esc(s.description)}<br>Catalog: ${esc(s.make)} ${esc(s.model)}<br>Serial scope: ${esc(s.serial_scope||'Not supplied')}</p><p>${price(s.unit_price,s.currency)} · Stock: ${esc(s.stock_status.replaceAll('_',' '))}${s.stock_qty!==null?' ('+esc(s.stock_qty)+')':''}<br>Shipping: ${price(s.shipping,s.currency)} · ${esc(s.lead_time||'Lead time unknown')}</p>${source(s)}${o.catalog_changed||o.request_changed?'<div class="notice">Saved review is stale: '+(o.catalog_changed?'catalog changed. ':'')+(o.request_changed?'request changed.':'')+' Review the current details.</div>':''}<details><summary>Technician fit review</summary><form data-review="${esc(o.id)}" class="grid" style="margin-top:12px"><label class="wide">Fit finding<select name="fit">${['unreviewed','compatible','uncertain','incompatible'].map(v=>`<option value="${v}" ${r.fit===v?'selected':''}>${v}</option>`).join('')}</select></label><label class="wide">Technician<input name="technician" value="${esc(r.technician||'')}"></label><label class="wide">Source, measurement and serial findings<textarea name="note">${esc(r.note||'')}</textarea></label><button class="wide">Save fit finding</button></form></details><div class="actions"><button data-draft="${esc(o.id)}">Create handoff draft</button><button class="secondary" data-refresh="${esc(o.id)}">Refresh source snapshot</button></div><label class="enquiry-choice no-print"><input type="checkbox" data-enquiry-option="${esc(o.id)}" ${enquiryOptions.has(o.id)?'checked':''}>Include in supplier enquiry pack</label></article>`;
+  }).join('') || '<div class="empty">Search the catalog below, then attach an option to this job.</div>';
+  $('orders').innerHTML = current.orders.map(o=>{
+    const d=o.document,s=d.option.snapshot;
+    return `<article class="card"><h3>${esc(s.supplier)} · ${esc(o.status)}</h3><p class="muted">Handoff ${esc(o.id.slice(0,10))} · revision ${o.revision}</p><div class="order-total">${price(d.total_before_tax,d.currency)}</div><p class="muted">Total before tax; unknown inputs stay unknown.</p><p>${esc(d.quantity)} × ${price(d.unit_price,d.currency)} · shipping ${price(d.shipping,d.currency)}<br>Supplier reference: ${esc(d.supplier_reference||'None recorded')}</p><div class="notice">${o.warnings.map(w=>esc(w)).join('<br>')}</div><p>${esc(d.notes)}</p><div class="actions"><a class="button secondary" href="/api/orders/${esc(o.id)}/handoff.txt" download>Download handoff</a></div>${o.status==='draft'?`<details><summary>Edit draft amounts and notes</summary><form data-edit="${esc(o.id)}" data-revision="${o.revision}" class="grid" style="margin-top:12px"><label>Quantity<input name="quantity" type="number" min="1" value="${d.quantity}" required></label><label>Unit price<input name="unit_price" inputmode="decimal" value="${esc(d.unit_price??'')}"></label><label>Shipping<input name="shipping" inputmode="decimal" value="${esc(d.shipping??'')}"></label><label class="wide">Handoff notes<textarea name="notes">${esc(d.notes)}</textarea></label><button>Save draft</button></form></details><details><summary>Record an order already placed externally</summary><p class="muted">This records your actual supplier confirmation. It does not send an order.</p><form data-placed="${esc(o.id)}" data-revision="${o.revision}"><label>Actual supplier order reference<input name="supplier_reference" required></label><button style="margin-top:10px">Record external order</button></form></details>`:''}${o.status!=='cancelled'?`<details><summary>${o.status==='draft'?'Cancel local draft':'Record confirmed supplier cancellation'}</summary><form data-cancel="${esc(o.id)}" data-revision="${o.revision}"><label>Reason / cancellation note<textarea name="note" required></textarea></label>${o.status==='placed'?'<label>Supplier cancellation confirmation<input name="supplier_confirmation" required></label>':''}<button class="secondary" style="margin-top:10px">Save cancellation record</button></form></details>`:'<p class="muted">Cancellation retained in activity history.</p>'}</article>`;
+  }).join('') || '<div class="empty">No handoff yet. Attach an option, review its fit and create a draft.</div>';
+  $('timeline').innerHTML=current.events.map(e=>`<li><strong>${esc(e.action.replaceAll('_',' '))}</strong> <span class="muted">${esc(e.at)}</span></li>`).join('');
+}
+async function update(result, notice){current=result; fillRequest(); render(); await loadState(); message(notice);}
+async function search(){
+  const rows=await api('/api/catalog?q='+encodeURIComponent($('search').value));
+  $('catalog-results').innerHTML=rows.map(s=>`<article class="card"><h3>${esc(s.part_number)} · ${esc(s.supplier)}</h3><span class="badge">${esc(s.match)} — fit not inferred</span><p>${esc(s.description)}<br>${esc(s.make)} ${esc(s.model)} · SKU ${esc(s.supplier_sku)}<br>Aliases: ${esc(s.aliases.join('; ')||'None')}</p><p>${price(s.unit_price,s.currency)} · ${esc(s.stock_status.replaceAll('_',' '))}</p>${source(s)}<button data-attach="${esc(s.id)}">Attach to selected job</button></article>`).join('') || '<div class="empty">No matches. Add a cited catalog option or import a supplier export.</div>';
+}
+$('new-job').onclick=()=>run(async()=>{current=null;fillRequest();render();await loadState();$('intake').scrollIntoView();});
+$('reload').onclick=()=>run(async()=>{if(current)await selectJob(current.id);message('Saved version loaded.');});
+$('print').onclick=()=>window.print();
+$('enquiry-as-of').value=new Date().toISOString().slice(0,10);
+document.addEventListener('change',e=>{
+  const id=e.target.dataset.enquiryOption;
+  if(!id)return;
+  if(e.target.checked)enquiryOptions.add(id);else enquiryOptions.delete(id);
+  updateEnquiryCount();
+});
+$('download-enquiries').onclick=()=>run(async()=>{
+  if(!current)throw new Error('Save or select a workshop job first.');
+  if(!enquiryOptions.size)throw new Error('Select at least one saved option for an enquiry.');
+  const requestId=current.id, jobRef=current.data.job_ref;
+  const parameters={option_ids:[...enquiryOptions],max_age_days:$('enquiry-max-age').value||'7'};
+  if($('enquiry-as-of').value)parameters.as_of=$('enquiry-as-of').value;
+  const button=$('download-enquiries');button.disabled=true;button.textContent='Preparing enquiries…';
+  try{
+    const response=await fetch(`/api/requests/${encodeURIComponent(requestId)}/enquiries.zip`,{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(parameters)
+    });
+    if(!response.ok){const result=await response.json();throw new Error(result.error||`Export failed (${response.status})`);}
+    const objectUrl=URL.createObjectURL(await response.blob());
+    const link=document.createElement('a');link.href=objectUrl;link.download='parts-supplier-enquiries.zip';
+    document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(objectUrl),0);
+    message(`Enquiry pack downloaded for ${jobRef}. Review the supplier drafts before sharing; no message or order was sent.`);
+  }finally{button.disabled=false;button.textContent='Download selected enquiries';}
+});
+$('request-form').onsubmit=e=>{e.preventDefault();run(async()=>{const data=fields(e.target);await update(await write('/api/requests'+(current?'/'+current.id:''),{data,...(current?{revision:current.revision}:{})}),'Request saved. Existing fit findings stay visibly stale when the job details change.');});};
+$('search-form').onsubmit=e=>{e.preventDefault();run(search);};
+$('catalog-form').onsubmit=e=>{e.preventDefault();run(async()=>{const result=await write('/api/catalog/import',{items:[fields(e.target)]});await loadState();await search();if(current)await selectJob(current.id);message(`${result.changed} catalog entry updated.`);});};
+$('import').onclick=()=>run(async()=>{const file=$('import-file').files[0];if(!file)throw new Error('Choose a CSV or JSON file.');if(file.size>1500000)throw new Error('Use a catalog file smaller than 1.5 MB.');const content=await file.text();const body=file.name.toLowerCase().endsWith('.csv')?{format:'csv',content}:{items:JSON.parse(content)};const result=await write('/api/catalog/import',body);await loadState();await search();if(current)await selectJob(current.id);message(`Imported ${result.rows} rows; ${result.changed} changed.`);});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.job)run(()=>selectJob(b.dataset.job));
+  if(b.dataset.attach)run(async()=>{if(!current)throw new Error('Save or select a workshop job first.');await update(await write(`/api/requests/${current.id}/options`,{revision:current.revision,catalog_id:b.dataset.attach}),'Source snapshot attached. Fit is unreviewed.');});
+  if(b.dataset.refresh)run(async()=>{await update(await write(`/api/options/${b.dataset.refresh}/refresh`,{revision:current.revision}),'Source refreshed. Record a new finding against these details.');});
+  if(b.dataset.draft)run(async()=>{await update(await write(`/api/requests/${current.id}/orders`,{revision:current.revision,option_id:b.dataset.draft}),'Local handoff draft created. No supplier action was performed.');});
+});
+document.addEventListener('submit',e=>{
+  const form=e.target;let url,notice;
+  if(form.dataset.review){url=`/api/options/${form.dataset.review}/review`;notice='Fit finding saved with source snapshot and request details.';}
+  else if(form.dataset.edit){url=`/api/orders/${form.dataset.edit}`;notice='Handoff updated. No supplier action was performed.';}
+  else if(form.dataset.placed){url=`/api/orders/${form.dataset.placed}/placed`;notice='Your external order reference was recorded.';}
+  else if(form.dataset.cancel){url=`/api/orders/${form.dataset.cancel}/cancel`;notice='Cancellation record saved; the earlier handoff remains in history.';}
+  else return;
+  e.preventDefault();run(async()=>{await update(await write(url,{...fields(form),revision:form.dataset.revision||current.revision}),notice);});
+});
+$('demo').onclick=()=>run(async()=>{
+  const item={id:'DEMO-FILTER-01',supplier:'Fictitious Workshop Supply',supplier_sku:'DEMO-SKU-01',part_number:'DEMO-F100',make:'ExampleWorks',model:'DEMO-PUMP',aliases:['DEMO-OLD100'],serial_scope:'Fictitious example only; not a fit claim',description:'Fictitious intake filter',unit_price:'12.50',shipping:'4.00',currency:'USD',stock_status:'in_stock',stock_qty:8,lead_time:'Fictitious: 2 days',source_url:'https://example.invalid/fictitious-catalog',source_note:'Synthetic example — replace with a legitimate catalog reference',checked_on:new Date().toISOString().slice(0,10)};
+  await write('/api/catalog/import',{items:[item]});
+  const state=await api('/api/state');const existing=state.requests.find(r=>r.job_ref==='DEMO-JOB');
+  if(existing)await selectJob(existing.id);else await update(await write('/api/requests',{data:{job_ref:'DEMO-JOB',make:'ExampleWorks',model:'DEMO-PUMP',serial:'DEMO-0001',part_number:'DEMO-OLD100',description:'Fictitious filter sourcing exercise',quantity:2,notes:'Synthetic workflow only; no actual compatible part or supplier is represented.'}}),'Fictitious example loaded.');
+  $('search').value='DEMO-OLD100';await search();await loadState();message('Fictitious example loaded. Attach the catalog result to start the workflow.');
+});
+run(async()=>{await loadState();await search();});
+</script>
+</body></html>

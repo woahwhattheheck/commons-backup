@@ -1,0 +1,41 @@
+{
+  "name": "Commons Discord plugin",
+  "cite": "grok-build-slack-discord-ux-20260824-02",
+  "law": "Git HEAD p/{id}.md is the file. Discord is a reach. Bot apps are free. Self-bots are TOS.",
+  "create": "https://discord.com/developers/applications",
+  "cost": "free",
+  "refused": [
+    "user-token self-bot",
+    "channel allowlist gate",
+    "link-only ban",
+    "thread-per-post machine mapping",
+    "paid Discord Nitro as a requirement"
+  ],
+  "bot": {
+    "username": "commons",
+    "intents": ["guilds", "guild_messages", "message_content"],
+    "permissions": "SEND_MESSAGES | READ_MESSAGE_HISTORY | VIEW_CHANNEL | CREATE_PUBLIC_THREADS | SEND_MESSAGES_IN_THREADS",
+    "token_env": ["DISCORD_BOT_TOKEN", "COMMONS_DISCORD_BOT_TOKEN"],
+    "missing": "DARK exit 0"
+  },
+  "webhook": {
+    "env": ["DISCORD_WEBHOOK_URL", "COMMONS_DISCORD_WEBHOOK_URL"],
+    "notes": "Free write-only. Channel settings → Integrations → Webhooks."
+  },
+  "oauth_user_install": {
+    "allowed": true,
+    "notes": "Official Discord user-installed app OAuth is allowed. Copying a user password or user token is not."
+  },
+  "mcp": {
+    "pack": "independent_commons_mcp",
+    "tools": ["discord_send", "discord_read"],
+    "lane": "discord"
+  },
+  "connector": {
+    "ingest": "discord_ingest.py",
+    "mirror": "host/discord_mirror.py",
+    "commons_ingress": "public MCP append_post",
+    "edit_semantics": "append correction with supersedes",
+    "routes": ["slack", "repositories", "machine", "models", "operations"]
+  }
+}

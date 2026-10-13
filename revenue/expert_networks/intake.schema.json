@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/expert_networks/intake.schema.json",
+  "title": "Commons expert-network metadata intake",
+  "description": "Public, metadata-only record. Identity, contact details, raw project material, rates, financial data, provider secrets, and receipt bodies stay in official provider systems or an owner-private store.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "provider",
+    "route_type",
+    "status",
+    "metadata_only",
+    "public_profile",
+    "owner_private_fields_present",
+    "compliance",
+    "timeline",
+    "receipt_metadata",
+    "source_evidence",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "commons-expert-network-intake/v1"
+    },
+    "record_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{7,79}$",
+      "description": "Opaque, non-identifying ID. Do not include a name, email, employer, client, or provider project ID."
+    },
+    "provider": {
+      "enum": [
+        "glg",
+        "guidepoint",
+        "third_bridge"
+      ]
+    },
+    "route_type": {
+      "enum": [
+        "public_apply",
+        "public_interest_form",
+        "invite_only"
+      ]
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "eligible",
+        "interest_registered",
+        "invited",
+        "screening",
+        "scheduled",
+        "completed",
+        "payment_requested",
+        "paid",
+        "declined",
+        "closed"
+      ]
+    },
+    "metadata_only": {
+      "const": true
+    },
+    "public_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expertise_tags",
+        "experience_band"
+      ],
+      "properties": {
+        "expertise_tags": {
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9+._ -]{1,63}$"
+          },
+          "description": "Broad, non-identifying expertise only; never paste a CV, employer history, project topic, or screening response."
+        },
+        "experience_band": {
+          "enum": [
+            "under_10_years",
+            "10_plus_years",
+            "not_recorded"
+          ]
+        }
+      }
+    },
+    "owner_private_fields_present": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "identity",
+          "contact",
+          "address",
+          "cv_or_professional_history",
+          "employment_and_affiliations",
+          "availability",
+          "conflicts_and_permissions",
+          "screening_responses",
+          "background_check",
+          "rate_and_compensation",
+          "tax_and_regulatory_ids",
+          "bank_and_payment",
+          "project_material",
+          "provider_receipt"
+        ]
+      },
+      "description": "Inventory only. The values themselves must remain outside the public repository."
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_accuracy",
+        "terms",
+        "training",
+        "identity_verification",
+        "conflict_screen",
+        "confidentiality_acknowledged",
+        "employer_permission"
+      ],
+      "properties": {
+        "profile_accuracy": {
+          "enum": [
+            "not_checked",
+            "current",
+            "update_required"
+          ]
+        },
+        "terms": {
+          "enum": [
+            "not_reviewed",
+            "reviewed",
+            "accepted_in_provider_ui"
+          ]
+        },
+        "training": {
+          "enum": [
+            "not_started",
+            "not_yet_required",
+            "complete",
+            "renewal_required"
+          ]
+        },
+        "identity_verification": {
+          "enum": [
+            "not_started",
+            "not_yet_required",
+            "in_progress",
+            "provider_confirmed",
+            "provider_rejected"
+          ]
+        },
+        "conflict_screen": {
+          "enum": [
+            "not_started",
+            "clear",
+            "review_required",
+            "declined"
+          ]
+        },
+        "confidentiality_acknowledged": {
+          "type": "boolean"
+        },
+        "employer_permission": {
+          "enum": [
+            "not_checked",
+            "not_applicable",
+            "confirmed",
+            "restricted"
+          ]
+        }
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interest_registered_at",
+        "invitation_received_at",
+        "invitation_decided_at",
+        "scheduled_at",
+        "completed_at",
+        "payment_requested_at",
+        "payment_received_at"
+      ],
+      "properties": {
+        "interest_registered_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "invitation_received_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "invitation_decided_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "scheduled_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "completed_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "payment_requested_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "payment_received_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        }
+      }
+    },
+    "receipt_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "private_receipt_present",
+        "private_receipt_sha256"
+      ],
+      "properties": {
+        "private_receipt_present": {
+          "type": "boolean"
+        },
+        "private_receipt_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Hash only. Never put a receipt body, provider reference, URL with a token, or request payload here."
+        }
+      }
+    },
+    "source_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checked_at",
+        "official_urls",
+        "terms_version"
+      ],
+      "properties": {
+        "checked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "official_urls": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/public_https_url"
+          }
+        },
+        "terms_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 80
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "nullable_datetime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "public_https_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "provider": {
+            "const": "glg"
+          }
+        },
+        "required": [
+          "provider"
+        ]
+      },
+      "then": {
+        "properties": {
+          "route_type": {
+            "const": "public_apply"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "provider": {
+            "const": "guidepoint"
+          }
+        },
+        "required": [
+          "provider"
+        ]
+      },
+      "then": {
+        "properties": {
+          "route_type": {
+            "const": "public_interest_form"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "provider": {
+            "const": "third_bridge"
+          }
+        },
+        "required": [
+          "provider"
+        ]
+      },
+      "then": {
+        "properties": {
+          "route_type": {
+            "const": "invite_only"
+          }
+        }
+      }
+    }
+  ]
+}

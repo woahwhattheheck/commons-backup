@@ -1,0 +1,1414 @@
+{
+  "commercial_blob": "b6e9ca58984c15d96b497f3bb51000992fdb9b5f",
+  "dashboard_md": "# RFQ 18649 TJLabs cash-flow dashboard (PROPOSED / NOT ACCEPTED)\n\nPinned COMMERCIAL.md blob `b6e9ca58984c15d96b497f3bb51000992fdb9b5f`.\nRelative weeks only. Events, invoices, and cash receipts are distinct.\nOptional $4,000 readout is excluded from base unless separately enabled.\nPrime-to-University amounts never fund this model.\n\n| Scenario | Trough (pre-receipt) | Peak funding before opening | Incremental need after opening | Closing |\n|---|---:|---:|---:|---:|\n| prompt | $3,400.00 (w1) | $1,600.00 | $0.00 | $22,600.00 |\n| delayed_collection | $1,800.00 (w3) | $3,200.00 | $0.00 | $22,600.00 |\n| extended_final_review | $3,400.00 (w1) | $1,600.00 | $0.00 | $22,600.00 |\n\n## Assumptions\n\n- Opening liquidity: $5,000.00\n- Weekly cash cost (weeks 0-7): $800.00\n- Weekly imputed effort (noncash): $2,000.00\n- Base receipts: $9,600 + $9,600 + $4,800 = $24,000\n- Optional readout enabled: False\n\n## Notes\n\n- $24,000 is TJLabs subcontract workshare, not the prime bid fee.\n- Hypothetical milestone dates are relative weeks, not a schedule commitment.\n- This pack is not an invoice, payment request, or revenue event.\n",
+  "formulas": {
+    "delayed_collection": {
+      "opening": "5000.00",
+      "rows": [
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "4200.00",
+          "D_pre_receipt_formula": "opening-B0",
+          "E_closing_formula": "D0+C0",
+          "E_engine": "4200.00",
+          "week": 0
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "3400.00",
+          "D_pre_receipt_formula": "E0-B1",
+          "E_closing_formula": "D1+C1",
+          "E_engine": "3400.00",
+          "week": 1
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "2600.00",
+          "D_pre_receipt_formula": "E1-B2",
+          "E_closing_formula": "D2+C2",
+          "E_engine": "2600.00",
+          "week": 2
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "9600.00",
+          "D_engine": "1800.00",
+          "D_pre_receipt_formula": "E2-B3",
+          "E_closing_formula": "D3+C3",
+          "E_engine": "11400.00",
+          "week": 3
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "10600.00",
+          "D_pre_receipt_formula": "E3-B4",
+          "E_closing_formula": "D4+C4",
+          "E_engine": "10600.00",
+          "week": 4
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "9800.00",
+          "D_pre_receipt_formula": "E4-B5",
+          "E_closing_formula": "D5+C5",
+          "E_engine": "9800.00",
+          "week": 5
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "9000.00",
+          "D_pre_receipt_formula": "E5-B6",
+          "E_closing_formula": "D6+C6",
+          "E_engine": "9000.00",
+          "week": 6
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "9600.00",
+          "D_engine": "8200.00",
+          "D_pre_receipt_formula": "E6-B7",
+          "E_closing_formula": "D7+C7",
+          "E_engine": "17800.00",
+          "week": 7
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E7-B8",
+          "E_closing_formula": "D8+C8",
+          "E_engine": "17800.00",
+          "week": 8
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E8-B9",
+          "E_closing_formula": "D9+C9",
+          "E_engine": "17800.00",
+          "week": 9
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "4800.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E9-B10",
+          "E_closing_formula": "D10+C10",
+          "E_engine": "22600.00",
+          "week": 10
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E10-B11",
+          "E_closing_formula": "D11+C11",
+          "E_engine": "22600.00",
+          "week": 11
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E11-B12",
+          "E_closing_formula": "D12+C12",
+          "E_engine": "22600.00",
+          "week": 12
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E12-B13",
+          "E_closing_formula": "D13+C13",
+          "E_engine": "22600.00",
+          "week": 13
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E13-B14",
+          "E_closing_formula": "D14+C14",
+          "E_engine": "22600.00",
+          "week": 14
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E14-B15",
+          "E_closing_formula": "D15+C15",
+          "E_engine": "22600.00",
+          "week": 15
+        }
+      ]
+    },
+    "extended_final_review": {
+      "opening": "5000.00",
+      "rows": [
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "4200.00",
+          "D_pre_receipt_formula": "opening-B0",
+          "E_closing_formula": "D0+C0",
+          "E_engine": "4200.00",
+          "week": 0
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "9600.00",
+          "D_engine": "3400.00",
+          "D_pre_receipt_formula": "E0-B1",
+          "E_closing_formula": "D1+C1",
+          "E_engine": "13000.00",
+          "week": 1
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "12200.00",
+          "D_pre_receipt_formula": "E1-B2",
+          "E_closing_formula": "D2+C2",
+          "E_engine": "12200.00",
+          "week": 2
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "11400.00",
+          "D_pre_receipt_formula": "E2-B3",
+          "E_closing_formula": "D3+C3",
+          "E_engine": "11400.00",
+          "week": 3
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "10600.00",
+          "D_pre_receipt_formula": "E3-B4",
+          "E_closing_formula": "D4+C4",
+          "E_engine": "10600.00",
+          "week": 4
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "9600.00",
+          "D_engine": "9800.00",
+          "D_pre_receipt_formula": "E4-B5",
+          "E_closing_formula": "D5+C5",
+          "E_engine": "19400.00",
+          "week": 5
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "18600.00",
+          "D_pre_receipt_formula": "E5-B6",
+          "E_closing_formula": "D6+C6",
+          "E_engine": "18600.00",
+          "week": 6
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E6-B7",
+          "E_closing_formula": "D7+C7",
+          "E_engine": "17800.00",
+          "week": 7
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E7-B8",
+          "E_closing_formula": "D8+C8",
+          "E_engine": "17800.00",
+          "week": 8
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E8-B9",
+          "E_closing_formula": "D9+C9",
+          "E_engine": "17800.00",
+          "week": 9
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E9-B10",
+          "E_closing_formula": "D10+C10",
+          "E_engine": "17800.00",
+          "week": 10
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "4800.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E10-B11",
+          "E_closing_formula": "D11+C11",
+          "E_engine": "22600.00",
+          "week": 11
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E11-B12",
+          "E_closing_formula": "D12+C12",
+          "E_engine": "22600.00",
+          "week": 12
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E12-B13",
+          "E_closing_formula": "D13+C13",
+          "E_engine": "22600.00",
+          "week": 13
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E13-B14",
+          "E_closing_formula": "D14+C14",
+          "E_engine": "22600.00",
+          "week": 14
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E14-B15",
+          "E_closing_formula": "D15+C15",
+          "E_engine": "22600.00",
+          "week": 15
+        }
+      ]
+    },
+    "prompt": {
+      "opening": "5000.00",
+      "rows": [
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "4200.00",
+          "D_pre_receipt_formula": "opening-B0",
+          "E_closing_formula": "D0+C0",
+          "E_engine": "4200.00",
+          "week": 0
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "9600.00",
+          "D_engine": "3400.00",
+          "D_pre_receipt_formula": "E0-B1",
+          "E_closing_formula": "D1+C1",
+          "E_engine": "13000.00",
+          "week": 1
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "12200.00",
+          "D_pre_receipt_formula": "E1-B2",
+          "E_closing_formula": "D2+C2",
+          "E_engine": "12200.00",
+          "week": 2
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "11400.00",
+          "D_pre_receipt_formula": "E2-B3",
+          "E_closing_formula": "D3+C3",
+          "E_engine": "11400.00",
+          "week": 3
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "10600.00",
+          "D_pre_receipt_formula": "E3-B4",
+          "E_closing_formula": "D4+C4",
+          "E_engine": "10600.00",
+          "week": 4
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "9600.00",
+          "D_engine": "9800.00",
+          "D_pre_receipt_formula": "E4-B5",
+          "E_closing_formula": "D5+C5",
+          "E_engine": "19400.00",
+          "week": 5
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "18600.00",
+          "D_pre_receipt_formula": "E5-B6",
+          "E_closing_formula": "D6+C6",
+          "E_engine": "18600.00",
+          "week": 6
+        },
+        {
+          "B_cash_cost": "800.00",
+          "C_receipts": "0.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E6-B7",
+          "E_closing_formula": "D7+C7",
+          "E_engine": "17800.00",
+          "week": 7
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "4800.00",
+          "D_engine": "17800.00",
+          "D_pre_receipt_formula": "E7-B8",
+          "E_closing_formula": "D8+C8",
+          "E_engine": "22600.00",
+          "week": 8
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E8-B9",
+          "E_closing_formula": "D9+C9",
+          "E_engine": "22600.00",
+          "week": 9
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E9-B10",
+          "E_closing_formula": "D10+C10",
+          "E_engine": "22600.00",
+          "week": 10
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E10-B11",
+          "E_closing_formula": "D11+C11",
+          "E_engine": "22600.00",
+          "week": 11
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E11-B12",
+          "E_closing_formula": "D12+C12",
+          "E_engine": "22600.00",
+          "week": 12
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E12-B13",
+          "E_closing_formula": "D13+C13",
+          "E_engine": "22600.00",
+          "week": 13
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E13-B14",
+          "E_closing_formula": "D14+C14",
+          "E_engine": "22600.00",
+          "week": 14
+        },
+        {
+          "B_cash_cost": "0.00",
+          "C_receipts": "0.00",
+          "D_engine": "22600.00",
+          "D_pre_receipt_formula": "E14-B15",
+          "E_closing_formula": "D15+C15",
+          "E_engine": "22600.00",
+          "week": 15
+        }
+      ]
+    }
+  },
+  "invoices": {
+    "delayed_collection": [
+      {
+        "amount_usd": "9600.00",
+        "cash_week": 3,
+        "description": "TJLabs technical assessment workshare \u2014 written authorization / kickoff (40% / $9,600). PROPOSED / NOT ACCEPTED. Not a payment request.",
+        "event": "written_authorization",
+        "event_week": 0,
+        "id": "DRAFT-KICKOFF",
+        "in_base": true,
+        "invoice_week": 0,
+        "live_invoice": false,
+        "milestone": "kickoff"
+      },
+      {
+        "amount_usd": "9600.00",
+        "cash_week": 7,
+        "description": "TJLabs technical assessment workshare \u2014 delivery of the draft technical work package (40% / $9,600). PROPOSED / NOT ACCEPTED. Delivery-triggered; not an acceptance trigger.",
+        "event": "draft_delivery",
+        "event_week": 4,
+        "id": "DRAFT-DRAFT",
+        "in_base": true,
+        "invoice_week": 4,
+        "live_invoice": false,
+        "milestone": "draft"
+      },
+      {
+        "amount_usd": "4800.00",
+        "cash_week": 10,
+        "description": "TJLabs technical assessment workshare \u2014 written acceptance of the final technical work package (20% / $4,800). PROPOSED / NOT ACCEPTED. Only this base milestone is acceptance-triggered.",
+        "event": "written_final_acceptance",
+        "event_week": 7,
+        "id": "DRAFT-FINAL",
+        "in_base": true,
+        "invoice_week": 7,
+        "live_invoice": false,
+        "milestone": "final"
+      }
+    ],
+    "extended_final_review": [
+      {
+        "amount_usd": "9600.00",
+        "cash_week": 1,
+        "description": "TJLabs technical assessment workshare \u2014 written authorization / kickoff (40% / $9,600). PROPOSED / NOT ACCEPTED. Not a payment request.",
+        "event": "written_authorization",
+        "event_week": 0,
+        "id": "DRAFT-KICKOFF",
+        "in_base": true,
+        "invoice_week": 0,
+        "live_invoice": false,
+        "milestone": "kickoff"
+      },
+      {
+        "amount_usd": "9600.00",
+        "cash_week": 5,
+        "description": "TJLabs technical assessment workshare \u2014 delivery of the draft technical work package (40% / $9,600). PROPOSED / NOT ACCEPTED. Delivery-triggered; not an acceptance trigger.",
+        "event": "draft_delivery",
+        "event_week": 4,
+        "id": "DRAFT-DRAFT",
+        "in_base": true,
+        "invoice_week": 4,
+        "live_invoice": false,
+        "milestone": "draft"
+      },
+      {
+        "amount_usd": "4800.00",
+        "cash_week": 11,
+        "description": "TJLabs technical assessment workshare \u2014 written acceptance of the final technical work package (20% / $4,800). PROPOSED / NOT ACCEPTED. Only this base milestone is acceptance-triggered.",
+        "event": "written_final_acceptance",
+        "event_week": 10,
+        "id": "DRAFT-FINAL",
+        "in_base": true,
+        "invoice_week": 10,
+        "live_invoice": false,
+        "milestone": "final"
+      }
+    ],
+    "prompt": [
+      {
+        "amount_usd": "9600.00",
+        "cash_week": 1,
+        "description": "TJLabs technical assessment workshare \u2014 written authorization / kickoff (40% / $9,600). PROPOSED / NOT ACCEPTED. Not a payment request.",
+        "event": "written_authorization",
+        "event_week": 0,
+        "id": "DRAFT-KICKOFF",
+        "in_base": true,
+        "invoice_week": 0,
+        "live_invoice": false,
+        "milestone": "kickoff"
+      },
+      {
+        "amount_usd": "9600.00",
+        "cash_week": 5,
+        "description": "TJLabs technical assessment workshare \u2014 delivery of the draft technical work package (40% / $9,600). PROPOSED / NOT ACCEPTED. Delivery-triggered; not an acceptance trigger.",
+        "event": "draft_delivery",
+        "event_week": 4,
+        "id": "DRAFT-DRAFT",
+        "in_base": true,
+        "invoice_week": 4,
+        "live_invoice": false,
+        "milestone": "draft"
+      },
+      {
+        "amount_usd": "4800.00",
+        "cash_week": 8,
+        "description": "TJLabs technical assessment workshare \u2014 written acceptance of the final technical work package (20% / $4,800). PROPOSED / NOT ACCEPTED. Only this base milestone is acceptance-triggered.",
+        "event": "written_final_acceptance",
+        "event_week": 7,
+        "id": "DRAFT-FINAL",
+        "in_base": true,
+        "invoice_week": 7,
+        "live_invoice": false,
+        "milestone": "final"
+      }
+    ]
+  },
+  "prime_university_register": {
+    "funds_tjlabs_cash_model": false,
+    "isolated": true,
+    "note": "Prime-to-University invoices are a separate planning register. They are not Attribute 9's all-inclusive prime fee, not a TJLabs receipt, and not a guarantee that a subcontract will be paid.",
+    "rows": [
+      {
+        "amount_usd": null,
+        "description": "Prime University-facing assessment invoice (PLACEHOLDER)",
+        "id": "PU-PLAN-01",
+        "status": "UNKNOWN_NOT_USED_IN_TJLABS_MODEL"
+      }
+    ],
+    "tjlabs_base_workshare_usd": "24000.00"
+  },
+  "projections": {
+    "delayed_collection": {
+      "authority": {
+        "bank_access": false,
+        "buyer_contact": false,
+        "invoice_live": false,
+        "payment": false,
+        "revenue": false,
+        "scheduling": false,
+        "submission": false,
+        "travel": false
+      },
+      "funding": {
+        "incremental_need_after_opening_liquidity": "0.00",
+        "peak_funding_before_opening_liquidity": "3200.00"
+      },
+      "horizon_weeks": 16,
+      "milestones": [
+        {
+          "amount": "9600.00",
+          "cash_week": 3,
+          "event": "written_authorization",
+          "event_week": 0,
+          "id": "kickoff",
+          "in_base": true,
+          "invoice_week": 0
+        },
+        {
+          "amount": "9600.00",
+          "cash_week": 7,
+          "event": "draft_delivery",
+          "event_week": 4,
+          "id": "draft",
+          "in_base": true,
+          "invoice_week": 4
+        },
+        {
+          "amount": "4800.00",
+          "cash_week": 10,
+          "event": "written_final_acceptance",
+          "event_week": 7,
+          "id": "final",
+          "in_base": true,
+          "invoice_week": 7
+        }
+      ],
+      "opening_liquidity_usd": "5000.00",
+      "optional_in_base": false,
+      "roles": {
+        "principal": "prime",
+        "specialist": "subcontract"
+      },
+      "scenario": "delayed_collection",
+      "totals": {
+        "base_receipts_usd": "24000.00",
+        "cash_cost_usd": "6400.00",
+        "closing_cash_usd": "22600.00",
+        "imputed_effort_noncash_usd": "16000.00",
+        "optional_receipts_usd": "0.00"
+      },
+      "trough": {
+        "pre_receipt_cash": "1800.00",
+        "week": 3
+      },
+      "weekly": [
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "4200.00",
+          "events": [
+            "kickoff:written_authorization"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "kickoff"
+          ],
+          "invoices_issued": "9600.00",
+          "pre_receipt_cash": "4200.00",
+          "receipts": "0.00",
+          "week": 0
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "3400.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "3400.00",
+          "receipts": "0.00",
+          "week": 1
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "2600.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "2600.00",
+          "receipts": "0.00",
+          "week": 2
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [
+            "kickoff"
+          ],
+          "closing_cash": "11400.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "1800.00",
+          "receipts": "9600.00",
+          "week": 3
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "10600.00",
+          "events": [
+            "draft:draft_delivery"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "draft"
+          ],
+          "invoices_issued": "9600.00",
+          "pre_receipt_cash": "10600.00",
+          "receipts": "0.00",
+          "week": 4
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "9800.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "9800.00",
+          "receipts": "0.00",
+          "week": 5
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "9000.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "9000.00",
+          "receipts": "0.00",
+          "week": 6
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [
+            "draft"
+          ],
+          "closing_cash": "17800.00",
+          "events": [
+            "final:written_final_acceptance"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "final"
+          ],
+          "invoices_issued": "4800.00",
+          "pre_receipt_cash": "8200.00",
+          "receipts": "9600.00",
+          "week": 7
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "17800.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "0.00",
+          "week": 8
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "17800.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "0.00",
+          "week": 9
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [
+            "final"
+          ],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "4800.00",
+          "week": 10
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 11
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 12
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 13
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 14
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 15
+        }
+      ]
+    },
+    "extended_final_review": {
+      "authority": {
+        "bank_access": false,
+        "buyer_contact": false,
+        "invoice_live": false,
+        "payment": false,
+        "revenue": false,
+        "scheduling": false,
+        "submission": false,
+        "travel": false
+      },
+      "funding": {
+        "incremental_need_after_opening_liquidity": "0.00",
+        "peak_funding_before_opening_liquidity": "1600.00"
+      },
+      "horizon_weeks": 16,
+      "milestones": [
+        {
+          "amount": "9600.00",
+          "cash_week": 1,
+          "event": "written_authorization",
+          "event_week": 0,
+          "id": "kickoff",
+          "in_base": true,
+          "invoice_week": 0
+        },
+        {
+          "amount": "9600.00",
+          "cash_week": 5,
+          "event": "draft_delivery",
+          "event_week": 4,
+          "id": "draft",
+          "in_base": true,
+          "invoice_week": 4
+        },
+        {
+          "amount": "4800.00",
+          "cash_week": 11,
+          "event": "written_final_acceptance",
+          "event_week": 10,
+          "id": "final",
+          "in_base": true,
+          "invoice_week": 10
+        }
+      ],
+      "opening_liquidity_usd": "5000.00",
+      "optional_in_base": false,
+      "roles": {
+        "principal": "prime",
+        "specialist": "subcontract"
+      },
+      "scenario": "extended_final_review",
+      "totals": {
+        "base_receipts_usd": "24000.00",
+        "cash_cost_usd": "6400.00",
+        "closing_cash_usd": "22600.00",
+        "imputed_effort_noncash_usd": "16000.00",
+        "optional_receipts_usd": "0.00"
+      },
+      "trough": {
+        "pre_receipt_cash": "3400.00",
+        "week": 1
+      },
+      "weekly": [
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "4200.00",
+          "events": [
+            "kickoff:written_authorization"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "kickoff"
+          ],
+          "invoices_issued": "9600.00",
+          "pre_receipt_cash": "4200.00",
+          "receipts": "0.00",
+          "week": 0
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [
+            "kickoff"
+          ],
+          "closing_cash": "13000.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "3400.00",
+          "receipts": "9600.00",
+          "week": 1
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "12200.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "12200.00",
+          "receipts": "0.00",
+          "week": 2
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "11400.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "11400.00",
+          "receipts": "0.00",
+          "week": 3
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "10600.00",
+          "events": [
+            "draft:draft_delivery"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "draft"
+          ],
+          "invoices_issued": "9600.00",
+          "pre_receipt_cash": "10600.00",
+          "receipts": "0.00",
+          "week": 4
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [
+            "draft"
+          ],
+          "closing_cash": "19400.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "9800.00",
+          "receipts": "9600.00",
+          "week": 5
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "18600.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "18600.00",
+          "receipts": "0.00",
+          "week": 6
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "17800.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "0.00",
+          "week": 7
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "17800.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "0.00",
+          "week": 8
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "17800.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "0.00",
+          "week": 9
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "17800.00",
+          "events": [
+            "final:written_final_acceptance"
+          ],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [
+            "final"
+          ],
+          "invoices_issued": "4800.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "0.00",
+          "week": 10
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [
+            "final"
+          ],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "4800.00",
+          "week": 11
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 12
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 13
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 14
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 15
+        }
+      ]
+    },
+    "prompt": {
+      "authority": {
+        "bank_access": false,
+        "buyer_contact": false,
+        "invoice_live": false,
+        "payment": false,
+        "revenue": false,
+        "scheduling": false,
+        "submission": false,
+        "travel": false
+      },
+      "funding": {
+        "incremental_need_after_opening_liquidity": "0.00",
+        "peak_funding_before_opening_liquidity": "1600.00"
+      },
+      "horizon_weeks": 16,
+      "milestones": [
+        {
+          "amount": "9600.00",
+          "cash_week": 1,
+          "event": "written_authorization",
+          "event_week": 0,
+          "id": "kickoff",
+          "in_base": true,
+          "invoice_week": 0
+        },
+        {
+          "amount": "9600.00",
+          "cash_week": 5,
+          "event": "draft_delivery",
+          "event_week": 4,
+          "id": "draft",
+          "in_base": true,
+          "invoice_week": 4
+        },
+        {
+          "amount": "4800.00",
+          "cash_week": 8,
+          "event": "written_final_acceptance",
+          "event_week": 7,
+          "id": "final",
+          "in_base": true,
+          "invoice_week": 7
+        }
+      ],
+      "opening_liquidity_usd": "5000.00",
+      "optional_in_base": false,
+      "roles": {
+        "principal": "prime",
+        "specialist": "subcontract"
+      },
+      "scenario": "prompt",
+      "totals": {
+        "base_receipts_usd": "24000.00",
+        "cash_cost_usd": "6400.00",
+        "closing_cash_usd": "22600.00",
+        "imputed_effort_noncash_usd": "16000.00",
+        "optional_receipts_usd": "0.00"
+      },
+      "trough": {
+        "pre_receipt_cash": "3400.00",
+        "week": 1
+      },
+      "weekly": [
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "4200.00",
+          "events": [
+            "kickoff:written_authorization"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "kickoff"
+          ],
+          "invoices_issued": "9600.00",
+          "pre_receipt_cash": "4200.00",
+          "receipts": "0.00",
+          "week": 0
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [
+            "kickoff"
+          ],
+          "closing_cash": "13000.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "3400.00",
+          "receipts": "9600.00",
+          "week": 1
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "12200.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "12200.00",
+          "receipts": "0.00",
+          "week": 2
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "11400.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "11400.00",
+          "receipts": "0.00",
+          "week": 3
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "10600.00",
+          "events": [
+            "draft:draft_delivery"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "draft"
+          ],
+          "invoices_issued": "9600.00",
+          "pre_receipt_cash": "10600.00",
+          "receipts": "0.00",
+          "week": 4
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [
+            "draft"
+          ],
+          "closing_cash": "19400.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "9800.00",
+          "receipts": "9600.00",
+          "week": 5
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "18600.00",
+          "events": [],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "18600.00",
+          "receipts": "0.00",
+          "week": 6
+        },
+        {
+          "cash_cost": "800.00",
+          "cash_ids": [],
+          "closing_cash": "17800.00",
+          "events": [
+            "final:written_final_acceptance"
+          ],
+          "imputed_effort_noncash": "2000.00",
+          "invoice_ids": [
+            "final"
+          ],
+          "invoices_issued": "4800.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "0.00",
+          "week": 7
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [
+            "final"
+          ],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "17800.00",
+          "receipts": "4800.00",
+          "week": 8
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 9
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 10
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 11
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 12
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 13
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 14
+        },
+        {
+          "cash_cost": "0.00",
+          "cash_ids": [],
+          "closing_cash": "22600.00",
+          "events": [],
+          "imputed_effort_noncash": "0.00",
+          "invoice_ids": [],
+          "invoices_issued": "0.00",
+          "pre_receipt_cash": "22600.00",
+          "receipts": "0.00",
+          "week": 15
+        }
+      ]
+    }
+  },
+  "schema": "uiowa-009-cashflow/1"
+}

@@ -1,0 +1,44 @@
+{
+  "id": "rosecity-olcc-metrc-sampling-lims-01",
+  "version": 1,
+  "buyer": "Rose City Laboratories / Chris Griffey",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "demand_id": "rosecity-olcc-metrc-sampling-lims-01"
+  },
+  "workflow": [
+    "web request",
+    "confirmed appointment and batch count",
+    "read-only Metrc transfer lookup",
+    "field pickup and immutable custody chain",
+    "one accession per valid pickup",
+    "result-email destination linked, never sent"
+  ],
+  "acceptance": [
+    "100 synthetic requests",
+    "exactly 75 DISPATCH_READY",
+    "exactly 25 HOLD",
+    "8 missing Metrc transfer",
+    "7 request/Metrc batch-count mismatches",
+    "5 duplicate package IDs",
+    "5 unconfirmed appointments",
+    "holds produce zero dispatches",
+    "every valid pickup has one immutable custody chain and one accession",
+    "replay is idempotent",
+    "email destination is linked; nothing is sent or released automatically"
+  ],
+  "exclusions": [
+    "no Metrc or state write",
+    "no compliance decision",
+    "no outreach",
+    "no prospect-facing demo",
+    "no email send",
+    "no automatic result or CoA release"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "read-only operations ledger and hold/dispatch receipts only; never Metrc write, compliance, outreach, email send, or automatic release",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

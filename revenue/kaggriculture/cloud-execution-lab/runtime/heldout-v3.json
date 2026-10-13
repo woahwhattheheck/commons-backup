@@ -1,0 +1,6992 @@
+{
+  "engine_reference": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "engine_sha256": {
+    "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+  },
+  "evaluator_sha256": "e30b3108e0027477ab7ddbc057892a241c41a1f2b38f72caf267477877c4333c",
+  "benchmark_sha256": "30c8f056d766e14af3ffba9638364358c812b5e3764749d63b12e6f70cd3d99d",
+  "runtime_manifest": {
+    "commons_reference": "8329e78768906dc6e75ca3712e1690adc1ab2148",
+    "engine_reference": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+    "engine_sha256": {
+      "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+    },
+    "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "compile_command": [
+      "g++",
+      "-O3",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-shared",
+      "-fPIC",
+      "-Isource/include",
+      "-o",
+      "agent.so",
+      "source/policy.cpp",
+      "submission_bridge.cpp"
+    ],
+    "targets": {
+      "baseline": {
+        "path": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/reference/next-panel/vendor/arlene.py",
+        "sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4"
+      },
+      "arlene": {
+        "path": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/reference/next-panel/vendor/arlene.py",
+        "sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4"
+      },
+      "apex": {
+        "path": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/apex/main.py",
+        "sha256": "1f7cd5fb8a16585936d2562a3667f85bb6661688718ef58f73006de66148354a"
+      },
+      "candidate": {
+        "path": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/variants/v3/candidate.py",
+        "sha256": "2e4897fb3aa8b0bee3e97709808c3aa25fa5055bcf5ce7d433b493eb334870f2"
+      },
+      "naive": {
+        "path": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/variants/v1/naive.py",
+        "sha256": "56de2de846e4443be84482d7e137381aba577a10c5aa5742c3126c2fa2e2401c"
+      }
+    },
+    "lane_python_sources": {
+      "test_engine_semantics.py": {
+        "sha256": "fc0a65f98fc78e4dc0cc5e1b553a53d514276fe83fb3106d4ed55f028b0305f6",
+        "bytes": 15070
+      },
+      "benchmark.py": {
+        "sha256": "30c8f056d766e14af3ffba9638364358c812b5e3764749d63b12e6f70cd3d99d",
+        "bytes": 14515
+      },
+      "candidate.py": {
+        "sha256": "2e4897fb3aa8b0bee3e97709808c3aa25fa5055bcf5ce7d433b493eb334870f2",
+        "bytes": 66
+      },
+      "prepare_runtime.py": {
+        "sha256": "d9a1cc78ecf8a2e2d2322d143ef3ffdfe28794d7a7664fee47b9ae3ed7531e94",
+        "bytes": 5186
+      },
+      "build_mechanics.py": {
+        "sha256": "77259a62cb0fe8912d385f69e72b03d103b46e97f67a7afa4c234d4723526e5e",
+        "bytes": 1963
+      },
+      "scheduler.py": {
+        "sha256": "32c8610c9827d1686a6f831e2c4b6af4c00d32d2aa04dcf25699d976d6d97dd9",
+        "bytes": 19766
+      },
+      "naive.py": {
+        "sha256": "56de2de846e4443be84482d7e137381aba577a10c5aa5742c3126c2fa2e2401c",
+        "bytes": 81
+      },
+      "mechanics.py": {
+        "sha256": "579965e589237d1e5bbcc8b8448188f91b173d4480430d34b3a7f0e07e0c48d3",
+        "bytes": 22526
+      },
+      "test_scheduler.py": {
+        "sha256": "bb0b237b394a9bc85b4ac8068303818aa86a2a9aee93b56304048216994f3b82",
+        "bytes": 13906
+      }
+    },
+    "first_call": "Existing official file-loader initialization, source compilation, imports and policy initialization occur inside first timed action.",
+    "isolation": "Existing evaluator: fresh persistent process per actor/game, private cwd and scrubbed environment, only seat observation. Existing next-panel Linux seccomp restriction loaded before policy.",
+    "files": {
+      "reference/evaluator/pack.py": {
+        "sha256": "57894917a17e47f5c786d732cbb99426de422470e59c533e982759d1e2286a61",
+        "bytes": 18274
+      },
+      "reference/evaluator/LICENSE-CC-BY-4.0.txt": {
+        "sha256": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
+        "bytes": 18656
+      },
+      "reference/evaluator/LOADER-LICENSE": {
+        "sha256": "7fa3844d996c3a4589efcefce21c780d0748dfc4cac0515d306933d52a6eb8b9",
+        "bytes": 1788
+      },
+      "reference/evaluator/SOURCES.json": {
+        "sha256": "6e84159d0f9772110915c057493ab08f41ff455c0b842267e69e23a7b4c755fc",
+        "bytes": 4771
+      },
+      "reference/evaluator/loader.py": {
+        "sha256": "cd113a94ae99b03492502e425bdcf09c3db17a2aa2a8fd866f0d78caec9e311e",
+        "bytes": 8203
+      },
+      "reference/evaluator/evaluate.py": {
+        "sha256": "e30b3108e0027477ab7ddbc057892a241c41a1f2b38f72caf267477877c4333c",
+        "bytes": 24190
+      },
+      "reference/evaluator/README.md": {
+        "sha256": "66aaa0dfe6444b2c49f58faa3b13b69391665272ccbac1279d74b24b4e427426",
+        "bytes": 6312
+      },
+      "reference/evaluator/PACK-LICENSE": {
+        "sha256": "34457ff9f6c8e456724abfe48ad944bb3e55c8db47219639ce2ec95600c2181e",
+        "bytes": 890
+      },
+      "reference/evaluator/LICENSE-MIT.txt": {
+        "sha256": "d124eb5e3916597a9835307ad56334d403bc7e4b642f83216ffc4086e8c8df9b",
+        "bytes": 1098
+      },
+      "reference/evaluator/official.py": {
+        "sha256": "83e53481e3f71be30062a87a15439aa06380f6a917d066e8c1807b1eaefb6b23",
+        "bytes": 2371
+      },
+      "reference/evaluator/upstream/LICENSE": {
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "bytes": 11357
+      },
+      "reference/evaluator/upstream/agent.py": {
+        "sha256": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+        "bytes": 8090
+      },
+      "reference/evaluator/upstream/utils.py": {
+        "sha256": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+        "bytes": 8634
+      },
+      "reference/evaluator/upstream/errors.py": {
+        "sha256": "957836cef36d5a37f02f53c62081435e24cc08d67be832989e3a01ef2347c4a8",
+        "bytes": 3625
+      },
+      "reference/evaluator/upstream/status_codes.json": {
+        "sha256": "e9af07b92fd5b61f795b47f67e8bf6d502dd45f03729b8b352f8ca989858b417",
+        "bytes": 995
+      },
+      "reference/apex/main.py": {
+        "sha256": "1f7cd5fb8a16585936d2562a3667f85bb6661688718ef58f73006de66148354a",
+        "bytes": 24996
+      },
+      "reference/apex/submission_bridge.cpp": {
+        "sha256": "a92ca5b78cae850987a7262122eb83ec9f9a313430e906e1ac08bfe1fd887ff1",
+        "bytes": 5117
+      },
+      "reference/apex/source/policy.cpp": {
+        "sha256": "74b5d7e778c0f4a6e2f0e0725077943dbc319b7d0f5ace4c9070a4ae69db51b3",
+        "bytes": 4633
+      },
+      "reference/apex/source/tape.inc": {
+        "sha256": "30b724c3c905d0c03e4ef38d36f96fb7acbd6abef5371abbedee36ea3717e09f",
+        "bytes": 108478
+      },
+      "reference/apex/source/include/policy_plugin_abi.hpp": {
+        "sha256": "4eb7647da3660688685a8ff032bd1ada6558605a27ae6b86fc338a91f8b45476",
+        "bytes": 509
+      },
+      "reference/apex/source/include/six_day_budget_guard.hpp": {
+        "sha256": "6835d614131c6ca6c57d86e941891d1fea3fa44237f61fd1ab9ac876dd4ebc25",
+        "bytes": 8052
+      },
+      "reference/apex/source/include/runtime_types.hpp": {
+        "sha256": "0010c15079e2114e36b5de8b281375db83f202e769e30b27cc437fc0e3ad11f1",
+        "bytes": 2914
+      },
+      "runtime/development-v1.json": {
+        "sha256": "a958cea37ceb524e1afb659a316931c99bac58c58524c48209d6fee5f29a7f3b",
+        "bytes": 242064
+      },
+      "runtime/baseline-panel.json": {
+        "sha256": "991c82722000b1eff326a678672e7f97027f71c4abaf30dd6a778817891d7b92",
+        "bytes": 117055
+      },
+      "runtime/apex-adapter.py": {
+        "sha256": "6e5728c8dd632381fabcf4701de10bf0683a60b2d015ffefbe5543df7354b443",
+        "bytes": 788
+      },
+      "runtime/baseline-rest.json": {
+        "sha256": "1a6eb43385ff3593b5d4559b10d7c4f4b34a3fa3b5955733c7f14679bd6aa9e3",
+        "bytes": 80826
+      },
+      "runtime/baseline-adapter.py": {
+        "sha256": "b8f804c442ae950450a33f10321a5c91b98ea919b18a994f86ff442f53c3b142",
+        "bytes": 805
+      },
+      "runtime/candidate-adapter.py": {
+        "sha256": "eb3362d50f7d82e040ff208aa3c262168a75a9bb297a51b378fcdc31028fab1f",
+        "bytes": 800
+      },
+      "runtime/naive-adapter.py": {
+        "sha256": "db3e2092d5fc164f825d0878f811434664976162f1abdf511a0370858674e309",
+        "bytes": 796
+      },
+      "runtime/compile.txt": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "runtime/v1-naive-loss-analysis.json": {
+        "sha256": "f6c21551c4a23b662a0c8ef959959d72213a477fdd88ebbbf5530f01edf1b9f8",
+        "bytes": 22373
+      },
+      "runtime/baseline-first.json": {
+        "sha256": "76eab3866e33fc35d71c7bb5ad9050934f7c0e98100446c4b98dcf556bcbe48f",
+        "bytes": 27285
+      },
+      "runtime/arlene-adapter.py": {
+        "sha256": "b8f804c442ae950450a33f10321a5c91b98ea919b18a994f86ff442f53c3b142",
+        "bytes": 805
+      },
+      "runtime/development-v1-paired.json": {
+        "sha256": "a7aeaa61097f60105ea06d48dcaba4db3f4815d821991f0ccae86a857a2e6630",
+        "bytes": 356140
+      },
+      "runtime/development-v2-paired.json": {
+        "sha256": "dd578df6956e4d0f89f0f4a0fa062cc1e13c0fedfdb97409899dc9afcb7d3cee",
+        "bytes": 365554
+      },
+      "runtime/development-v2.json": {
+        "sha256": "8c34b8ebd0837522fef51f85df6f5bb4609a51962df4145b5ea2ce4fc443ea0f",
+        "bytes": 139686
+      },
+      "runtime/initial-passive-profile.json": {
+        "sha256": "d85d87cfc3547ff12d77be446493556f3b75f84b3e3289d368dc7979e819a7ec",
+        "bytes": 23157
+      },
+      "runtime/baseline-seat1.json": {
+        "sha256": "589c246dbe2e1daa667b4a1000ea39c37a06f642e48af887b00a19c208b09666",
+        "bytes": 27295
+      },
+      "runtime/baseline-rest-traces/baseline-arlene-9600821-seat1.jsonl.gz": {
+        "sha256": "e1565a266d3d50d343763e1bf3c1afbdf969e22e2aa66f6444df08e03e84dd53",
+        "bytes": 206423
+      },
+      "runtime/baseline-rest-traces/baseline-apex-9600821-seat0.jsonl.gz": {
+        "sha256": "531632a348299ce69a286120493be8f7a823fd5f16e556f72939a7bbe5357eca",
+        "bytes": 212263
+      },
+      "runtime/baseline-rest-traces/baseline-apex-9600821-seat1.jsonl.gz": {
+        "sha256": "1c907e474840f20b44f928686fc84bbdb8eb29df9ee499482c9f28f134971859",
+        "bytes": 212376
+      },
+      "runtime/baseline-rest-traces/baseline-arlene-9600839-seat0.jsonl.gz": {
+        "sha256": "c2d66e3e4545c2113bea3cb64cddeeb9541e0d1e51d0c1ea7e105ee82dfaa114",
+        "bytes": 204690
+      },
+      "runtime/baseline-rest-traces/baseline-arlene-9600839-seat1.jsonl.gz": {
+        "sha256": "5bfee258cd68bb4b39d554806406b2ccfc77b6e8c03d89349a69826c2100bb89",
+        "bytes": 204914
+      },
+      "runtime/baseline-rest-traces/baseline-apex-9600839-seat1.jsonl.gz": {
+        "sha256": "d40aef95b7921ff80eefc93eba417d906001d18a57dcd7371e5153788823ab45",
+        "bytes": 210451
+      },
+      "runtime/baseline-rest-traces/baseline-apex-9600839-seat0.jsonl.gz": {
+        "sha256": "4cfe7c1405d3dfc33fe5d831d162a86aaa7e1b1e90ba5dafac3a6fa92c0a8358",
+        "bytes": 210329
+      },
+      "runtime/baseline-rest-traces/baseline-arlene-9600821-seat0.jsonl.gz": {
+        "sha256": "b5d3d98176c67411debc677b85b47ad6f512e402c8fd4c49ba91a1afff20b981",
+        "bytes": 206152
+      },
+      "runtime/baseline-first-traces/baseline-arlene-9600803-seat0.jsonl.gz": {
+        "sha256": "19116ea19778349c0ba6368877b3bef6959ed30715261b004b27829698070a0d",
+        "bytes": 206249
+      },
+      "runtime/baseline-first-traces/baseline-apex-9600803-seat0.jsonl.gz": {
+        "sha256": "aad58be37ffdf6691d5ab89b43a1484181f358b2e653fc1a0d8b87c7e0ca1c85",
+        "bytes": 212186
+      },
+      "runtime/baseline-seat1-traces/baseline-arlene-9600803-seat1.jsonl.gz": {
+        "sha256": "5d3545142d73cd9b99e09ad8cd1f92ebdc79244d97bec4f2511da22585e0b683",
+        "bytes": 206532
+      },
+      "runtime/baseline-seat1-traces/baseline-apex-9600803-seat1.jsonl.gz": {
+        "sha256": "9200671efea84c21c587f4b72e0e680d4960e5a6e1eb84f3a99df6fd8cafcf26",
+        "bytes": 212250
+      },
+      "runtime/apex/UPSTREAM.json": {
+        "sha256": "617e055107bf0fed5ae4ba55e9468398debdc09aa7c304a3e18cadbc283f251b",
+        "bytes": 3131
+      },
+      "runtime/apex/NEXT-DISTRIBUTION-NOTICE.txt": {
+        "sha256": "2c32238779169ecf5e673b58d50c94573e3128dda27d2ba5496459477132b02e",
+        "bytes": 836
+      },
+      "runtime/apex/LICENSE": {
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "bytes": 11358
+      },
+      "runtime/apex/main.py": {
+        "sha256": "1f7cd5fb8a16585936d2562a3667f85bb6661688718ef58f73006de66148354a",
+        "bytes": 24996
+      },
+      "runtime/apex/agent.so": {
+        "sha256": "d132de713c1ae77ee1498c055deb864d942b101b670c35125636cc66e4e6deae",
+        "bytes": 157576
+      },
+      "runtime/apex/submission_bridge.cpp": {
+        "sha256": "a92ca5b78cae850987a7262122eb83ec9f9a313430e906e1ac08bfe1fd887ff1",
+        "bytes": 5117
+      },
+      "runtime/development-v2-traces/candidate-apex-9600839-seat0.jsonl.gz": {
+        "sha256": "1e5b10d0f21dacc97713941ba6c592906083d420e989a4be8adc4719e9e2e404",
+        "bytes": 210985
+      },
+      "runtime/development-v2-traces/candidate-apex-9600839-seat1.jsonl.gz": {
+        "sha256": "6cd6df3799eaf6d6a85e8c5d4c5ffba51d10ab6335bdc2809db1878098943243",
+        "bytes": 211047
+      },
+      "runtime/development-v2-traces/candidate-arlene-9600803-seat1.jsonl.gz": {
+        "sha256": "bb062b87c6139544c720b2d222522f182f9689c96d4191dd837defce6029e405",
+        "bytes": 207910
+      },
+      "runtime/development-v2-traces/candidate-apex-9600803-seat0.jsonl.gz": {
+        "sha256": "d12c2574249a68d09738162e19d51d107cf7e1e9453186ef3ffc7d89ffaea6ae",
+        "bytes": 212977
+      },
+      "runtime/development-v2-traces/candidate-apex-9600803-seat1.jsonl.gz": {
+        "sha256": "74d069f8aad4bd4f0a4744a979acdda0146b12e7cafeeff3df6b9a3ed2e2e505",
+        "bytes": 213023
+      },
+      "runtime/development-v2-traces/candidate-arlene-9600839-seat0.jsonl.gz": {
+        "sha256": "6963c9b4a0979c975ad3f2c4686203b410c4fdea0563fb19b560a75d26dfdd59",
+        "bytes": 205906
+      },
+      "runtime/development-v2-traces/candidate-apex-9600821-seat1.jsonl.gz": {
+        "sha256": "363536f833599e95fcfa51a2d090d31dfe3997b9c0df5b4e235daa693abb4d4c",
+        "bytes": 212966
+      },
+      "runtime/development-v2-traces/candidate-arlene-9600839-seat1.jsonl.gz": {
+        "sha256": "fd502a77e92eb987ece9c42e2494d6fd0783373795773d7232cae1260332aecb",
+        "bytes": 206096
+      },
+      "runtime/development-v2-traces/candidate-arlene-9600821-seat0.jsonl.gz": {
+        "sha256": "b12b761f23a9bfefabab6ebe8bc86466c28680be56590f646a4b48a1884f98da",
+        "bytes": 207056
+      },
+      "runtime/development-v2-traces/candidate-apex-9600821-seat0.jsonl.gz": {
+        "sha256": "71f02efb5ed603de150accbd97be70650218bd6af64544f176797035e5cd50a7",
+        "bytes": 212913
+      },
+      "runtime/development-v2-traces/candidate-arlene-9600803-seat0.jsonl.gz": {
+        "sha256": "f5f341e17f183fc547f97680558624fa00b92f2029e1759e1be51878c75b39e8",
+        "bytes": 207692
+      },
+      "runtime/development-v2-traces/candidate-arlene-9600821-seat1.jsonl.gz": {
+        "sha256": "cd272c4820c51b141e292f921f96ea772215a3ecb44556058097d75003e34d2a",
+        "bytes": 207304
+      },
+      "runtime/development-v1-traces/candidate-apex-9600839-seat0.jsonl.gz": {
+        "sha256": "2baf6172d3009019975dcb85a2ad7f6901a1f5b4012c2cfb576ef47b91835667",
+        "bytes": 210722
+      },
+      "runtime/development-v1-traces/naive-arlene-9600839-seat1.jsonl.gz": {
+        "sha256": "b4ac3cf87f06bf7b0eaf206506ef23654c34e9452dcb4e5d5dba457fb0a1d3bb",
+        "bytes": 207530
+      },
+      "runtime/development-v1-traces/naive-arlene-9600821-seat0.jsonl.gz": {
+        "sha256": "8380c16498decf12980776c5484e638ff810d9a8d42031df38190f2fba0141dc",
+        "bytes": 208967
+      },
+      "runtime/development-v1-traces/candidate-apex-9600839-seat1.jsonl.gz": {
+        "sha256": "2f07c488b953e2ad2e13b568c640f8ba73aa55ac51ce97b67af07d8ac110d720",
+        "bytes": 210819
+      },
+      "runtime/development-v1-traces/candidate-arlene-9600803-seat1.jsonl.gz": {
+        "sha256": "6491f090c82a7aa9089dde6f68631d206632145f386e31f1be5956dbcf0ca0d4",
+        "bytes": 207301
+      },
+      "runtime/development-v1-traces/naive-apex-9600839-seat0.jsonl.gz": {
+        "sha256": "45e21b30ebf1051d5fa71eed5b59d465be2fb6ddbd5a6cf14af2e68de14f938c",
+        "bytes": 212233
+      },
+      "runtime/development-v1-traces/naive-apex-9600839-seat1.jsonl.gz": {
+        "sha256": "99b4d661f38068f650bcf01e794bc6dc848452b0764255d0ccd57ba65f7690e1",
+        "bytes": 212322
+      },
+      "runtime/development-v1-traces/candidate-apex-9600803-seat0.jsonl.gz": {
+        "sha256": "b485dd447e5bbfa485ae63a008349a187a3c63252d6ce4bd5386d9280843e33f",
+        "bytes": 212503
+      },
+      "runtime/development-v1-traces/naive-arlene-9600803-seat1.jsonl.gz": {
+        "sha256": "ad7c9deb2cd6fe616631a88c4e444441052a0593c8b4559abff66676687ff81b",
+        "bytes": 209259
+      },
+      "runtime/development-v1-traces/candidate-apex-9600803-seat1.jsonl.gz": {
+        "sha256": "eda46cb8ed6184cff26eb0210ad6a1d7d0674b7449321a4ea0fe4b7d7e605578",
+        "bytes": 212595
+      },
+      "runtime/development-v1-traces/naive-apex-9600803-seat0.jsonl.gz": {
+        "sha256": "dfcff38d9c667a0a501b0b86d9ef3aa5ec8f10494e42c9f1a6accfb8f0fb79da",
+        "bytes": 214217
+      },
+      "runtime/development-v1-traces/naive-apex-9600821-seat1.jsonl.gz": {
+        "sha256": "b704477f9b4067d3a9a469c2f393bc8dbaf373a39ff2680318b7957c82640d29",
+        "bytes": 214364
+      },
+      "runtime/development-v1-traces/candidate-arlene-9600839-seat0.jsonl.gz": {
+        "sha256": "80218e7b8cd8204fedcf47749db38e0b330898709152e894cc28e079fafe43c4",
+        "bytes": 205567
+      },
+      "runtime/development-v1-traces/candidate-apex-9600821-seat1.jsonl.gz": {
+        "sha256": "adaf2e2e7e67aefc798961e67eef2bfd41af8951ac611937342ad21b33df6c37",
+        "bytes": 212701
+      },
+      "runtime/development-v1-traces/naive-apex-9600821-seat0.jsonl.gz": {
+        "sha256": "7a0d395cb8dbfb12310c0b965b68ea469b311e3b7f4ee3c37bef70b908e795fd",
+        "bytes": 214296
+      },
+      "runtime/development-v1-traces/naive-arlene-9600803-seat0.jsonl.gz": {
+        "sha256": "447280d1eaf8be41130989248aae8af0540ee7d209f6fdd92eb10c90c9b6ee0f",
+        "bytes": 209007
+      },
+      "runtime/development-v1-traces/naive-apex-9600803-seat1.jsonl.gz": {
+        "sha256": "4a0e028d0825d4c9d4578420889feb6b0f5a2dbd95d6009d11632dfded018b41",
+        "bytes": 214252
+      },
+      "runtime/development-v1-traces/naive-arlene-9600821-seat1.jsonl.gz": {
+        "sha256": "54d221e31ab29b61c638bcf82c7178faba044a57879281e63f79799d66df95f3",
+        "bytes": 209226
+      },
+      "runtime/development-v1-traces/candidate-arlene-9600839-seat1.jsonl.gz": {
+        "sha256": "72f162f7f8a953e455ce92a0b15b7e135ece5cd187f141013018b0ef885d7698",
+        "bytes": 205796
+      },
+      "runtime/development-v1-traces/candidate-arlene-9600821-seat0.jsonl.gz": {
+        "sha256": "68913c1016c9f614ad693c4aa6fec31d59675cd66702444d226ca7e39b6b8773",
+        "bytes": 206582
+      },
+      "runtime/development-v1-traces/candidate-apex-9600821-seat0.jsonl.gz": {
+        "sha256": "5b99d427894cfdad449e7c1f38b52ab81e482342cad4bff824d8dabd4035db25",
+        "bytes": 212606
+      },
+      "runtime/development-v1-traces/candidate-arlene-9600803-seat0.jsonl.gz": {
+        "sha256": "073cdbd6ad1cb2ba7311eac036ca8ea44da8ac2dd94be7f73ee492051dd509da",
+        "bytes": 207047
+      },
+      "runtime/development-v1-traces/naive-arlene-9600839-seat0.jsonl.gz": {
+        "sha256": "b9699af27f4301e124a766b308aed83f008fc3af4cf0c1fd166cce55926fcdd4",
+        "bytes": 207242
+      },
+      "runtime/development-v1-traces/candidate-arlene-9600821-seat1.jsonl.gz": {
+        "sha256": "53d837ea2456741f8d68fda8cadd233988be4e813e5841876663da228f8168d8",
+        "bytes": 206849
+      },
+      "runtime/variants/v1/candidate.py": {
+        "sha256": "2e4897fb3aa8b0bee3e97709808c3aa25fa5055bcf5ce7d433b493eb334870f2",
+        "bytes": 66
+      },
+      "runtime/variants/v1/scheduler.py": {
+        "sha256": "a4eef6065f79cf73a977b7c9f7913cc054f203c27660c4d780f780735ffcfd2f",
+        "bytes": 17663
+      },
+      "runtime/variants/v1/naive.py": {
+        "sha256": "56de2de846e4443be84482d7e137381aba577a10c5aa5742c3126c2fa2e2401c",
+        "bytes": 81
+      },
+      "runtime/variants/v1/FREEZE.json": {
+        "sha256": "b31860daad9da6b46509f79f820139080743f07d43f61aad14ce1dd272d71d41",
+        "bytes": 1945
+      },
+      "runtime/variants/v1/mechanics.py": {
+        "sha256": "579965e589237d1e5bbcc8b8448188f91b173d4480430d34b3a7f0e07e0c48d3",
+        "bytes": 22526
+      },
+      "runtime/variants/v2/candidate.py": {
+        "sha256": "2e4897fb3aa8b0bee3e97709808c3aa25fa5055bcf5ce7d433b493eb334870f2",
+        "bytes": 66
+      },
+      "runtime/variants/v2/scheduler.py": {
+        "sha256": "72865b83e66d0c1ed27ddc35e5ab428f8212872e8e8e918f2826eb7665fbe7f8",
+        "bytes": 19483
+      },
+      "runtime/variants/v2/naive.py": {
+        "sha256": "56de2de846e4443be84482d7e137381aba577a10c5aa5742c3126c2fa2e2401c",
+        "bytes": 81
+      },
+      "runtime/variants/v2/FREEZE.json": {
+        "sha256": "7319b06ddf9fc45bd18feb7b512a922e541a37b70a643483ee1e6a8e7492ac23",
+        "bytes": 1945
+      },
+      "runtime/variants/v2/mechanics.py": {
+        "sha256": "579965e589237d1e5bbcc8b8448188f91b173d4480430d34b3a7f0e07e0c48d3",
+        "bytes": 22526
+      },
+      "runtime/variants/v3/candidate.py": {
+        "sha256": "2e4897fb3aa8b0bee3e97709808c3aa25fa5055bcf5ce7d433b493eb334870f2",
+        "bytes": 66
+      },
+      "runtime/variants/v3/scheduler.py": {
+        "sha256": "32c8610c9827d1686a6f831e2c4b6af4c00d32d2aa04dcf25699d976d6d97dd9",
+        "bytes": 19766
+      },
+      "runtime/variants/v3/naive.py": {
+        "sha256": "56de2de846e4443be84482d7e137381aba577a10c5aa5742c3126c2fa2e2401c",
+        "bytes": 81
+      },
+      "runtime/variants/v3/FREEZE.json": {
+        "sha256": "110271518d9af9c4827e4bd64a555f8057ab58f79ea7d5859d92ec2c9e97bf82",
+        "bytes": 2051
+      },
+      "runtime/variants/v3/mechanics.py": {
+        "sha256": "579965e589237d1e5bbcc8b8448188f91b173d4480430d34b3a7f0e07e0c48d3",
+        "bytes": 22526
+      },
+      "runtime/variants/v1/reference/decision/decision.py": {
+        "sha256": "9d78406668c927785b29f5bf2b5a67f0263bfcd63f626c881a60bad5f8293c52",
+        "bytes": 7759
+      },
+      "runtime/variants/v1/reference/decision/README.md": {
+        "sha256": "98c3c233192c83042c80c275cabe2d0ae382baab01ed04e69266ed90042c5bb2",
+        "bytes": 9410
+      },
+      "runtime/variants/v1/reference/engine/LICENSE": {
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "bytes": 11357
+      },
+      "runtime/variants/v1/reference/next-panel/UPSTREAM.json": {
+        "sha256": "617e055107bf0fed5ae4ba55e9468398debdc09aa7c304a3e18cadbc283f251b",
+        "bytes": 3131
+      },
+      "runtime/variants/v1/reference/next-panel/NEXT-DISTRIBUTION-NOTICE.txt": {
+        "sha256": "2c32238779169ecf5e673b58d50c94573e3128dda27d2ba5496459477132b02e",
+        "bytes": 836
+      },
+      "runtime/variants/v1/reference/next-panel/LICENSE": {
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "bytes": 11358
+      },
+      "runtime/variants/v1/reference/next-panel/vendor/arlene.py": {
+        "sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4",
+        "bytes": 46342
+      },
+      "runtime/variants/v2/reference/decision/decision.py": {
+        "sha256": "9d78406668c927785b29f5bf2b5a67f0263bfcd63f626c881a60bad5f8293c52",
+        "bytes": 7759
+      },
+      "runtime/variants/v2/reference/decision/README.md": {
+        "sha256": "98c3c233192c83042c80c275cabe2d0ae382baab01ed04e69266ed90042c5bb2",
+        "bytes": 9410
+      },
+      "runtime/variants/v2/reference/engine/LICENSE": {
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "bytes": 11357
+      },
+      "runtime/variants/v2/reference/next-panel/UPSTREAM.json": {
+        "sha256": "617e055107bf0fed5ae4ba55e9468398debdc09aa7c304a3e18cadbc283f251b",
+        "bytes": 3131
+      },
+      "runtime/variants/v2/reference/next-panel/NEXT-DISTRIBUTION-NOTICE.txt": {
+        "sha256": "2c32238779169ecf5e673b58d50c94573e3128dda27d2ba5496459477132b02e",
+        "bytes": 836
+      },
+      "runtime/variants/v2/reference/next-panel/LICENSE": {
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "bytes": 11358
+      },
+      "runtime/variants/v2/reference/next-panel/vendor/arlene.py": {
+        "sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4",
+        "bytes": 46342
+      },
+      "runtime/variants/v3/reference/decision/decision.py": {
+        "sha256": "9d78406668c927785b29f5bf2b5a67f0263bfcd63f626c881a60bad5f8293c52",
+        "bytes": 7759
+      },
+      "runtime/variants/v3/reference/decision/README.md": {
+        "sha256": "98c3c233192c83042c80c275cabe2d0ae382baab01ed04e69266ed90042c5bb2",
+        "bytes": 9410
+      },
+      "runtime/variants/v3/reference/engine/LICENSE": {
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "bytes": 11357
+      },
+      "runtime/variants/v3/reference/next-panel/UPSTREAM.json": {
+        "sha256": "617e055107bf0fed5ae4ba55e9468398debdc09aa7c304a3e18cadbc283f251b",
+        "bytes": 3131
+      },
+      "runtime/variants/v3/reference/next-panel/NEXT-DISTRIBUTION-NOTICE.txt": {
+        "sha256": "2c32238779169ecf5e673b58d50c94573e3128dda27d2ba5496459477132b02e",
+        "bytes": 836
+      },
+      "runtime/variants/v3/reference/next-panel/LICENSE": {
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "bytes": 11358
+      },
+      "runtime/variants/v3/reference/next-panel/vendor/arlene.py": {
+        "sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4",
+        "bytes": 46342
+      },
+      "runtime/apex/source/policy.cpp": {
+        "sha256": "74b5d7e778c0f4a6e2f0e0725077943dbc319b7d0f5ace4c9070a4ae69db51b3",
+        "bytes": 4633
+      },
+      "runtime/apex/source/tape.inc": {
+        "sha256": "30b724c3c905d0c03e4ef38d36f96fb7acbd6abef5371abbedee36ea3717e09f",
+        "bytes": 108478
+      },
+      "runtime/apex/source/include/policy_plugin_abi.hpp": {
+        "sha256": "4eb7647da3660688685a8ff032bd1ada6558605a27ae6b86fc338a91f8b45476",
+        "bytes": 509
+      },
+      "runtime/apex/source/include/six_day_budget_guard.hpp": {
+        "sha256": "6835d614131c6ca6c57d86e941891d1fea3fa44237f61fd1ab9ac876dd4ebc25",
+        "bytes": 8052
+      },
+      "runtime/apex/source/include/runtime_types.hpp": {
+        "sha256": "0010c15079e2114e36b5de8b281375db83f202e769e30b27cc437fc0e3ad11f1",
+        "bytes": 2914
+      }
+    }
+  },
+  "method": "Unmodified existing process-isolated evaluator and official pinned interpreter; passive receipt/spill/trace hooks. Full720-state configuration, 719actions, last decision718. Local-test W/T/L, not leaderboard rating.",
+  "limits": {
+    "action_rpc_seconds": 1,
+    "startup_seconds": 1,
+    "game_wall_seconds_including_cold": 120,
+    "overage_seconds": 0,
+    "first_action": "Source loading and policy initialization occur in first timed action; process startup also measured and added to strict cold maximum."
+  },
+  "freeze": {
+    "version": "finite-horizon-v3",
+    "utc": "2026-09-07T18:32:00.283117+00:00",
+    "files": {
+      "scheduler.py": "32c8610c9827d1686a6f831e2c4b6af4c00d32d2aa04dcf25699d976d6d97dd9",
+      "mechanics.py": "579965e589237d1e5bbcc8b8448188f91b173d4480430d34b3a7f0e07e0c48d3",
+      "candidate.py": "2e4897fb3aa8b0bee3e97709808c3aa25fa5055bcf5ce7d433b493eb334870f2",
+      "naive.py": "56de2de846e4443be84482d7e137381aba577a10c5aa5742c3126c2fa2e2401c",
+      "reference/next-panel/vendor/arlene.py": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4",
+      "reference/decision/decision.py": "9d78406668c927785b29f5bf2b5a67f0263bfcd63f626c881a60bad5f8293c52"
+    },
+    "development_seeds": [
+      9600803,
+      9600821,
+      9600839
+    ],
+    "held_out_seeds": [
+      9600901,
+      9600919
+    ],
+    "held_out_status": "not_run_at_freeze",
+    "v3_change": "Fix accumulated successive BUY_LAND reserve; all other v2 logic unchanged."
+  },
+  "games": [
+    {
+      "seed": 9600901,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        98762.0,
+        98762.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            610.0,
+            610.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            298.0,
+            298.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            677.0,
+            677.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1727.0,
+            1727.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14676.0,
+            14676.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13352.0,
+            13352.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16688.0,
+            16688.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            18502.0,
+            18502.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            21044.0,
+            21044.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            22255.0,
+            22255.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            29024.0,
+            29024.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            33693.0,
+            33693.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            39425.0,
+            39425.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            43303.0,
+            43303.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            49261.0,
+            49261.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            56532.0,
+            56532.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            65708.0,
+            65708.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            68770.0,
+            68770.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            73279.0,
+            73279.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            76083.0,
+            76083.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            81747.0,
+            81747.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            84169.0,
+            84169.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            91387.0,
+            91387.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            98762.0,
+            98762.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.3280091669999985,
+          "cpu_seconds": 0.738202,
+          "peak_rss_kib": 21216,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.08048200899793301,
+          "first_call_seconds": 0.028389790997607633,
+          "max_call_seconds": 0.028389790997607633,
+          "mean_call_seconds": 0.00046006984993861083,
+          "max_rpc_seconds": 0.03247203299542889,
+          "mean_rpc_seconds": 0.0013047114088660188,
+          "cold_start_plus_first_call_seconds": 0.10887179999554064,
+          "measured_episode_agent_seconds": 1.0185695119726006,
+          "max_action_including_cold_seconds": 0.10887179999554064,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.2894372709999986,
+          "cpu_seconds": 0.63139,
+          "peak_rss_kib": 21036,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07227665800019167,
+          "first_call_seconds": 0.021347767004044726,
+          "max_call_seconds": 0.021347767004044726,
+          "mean_call_seconds": 0.00040277411953334975,
+          "max_rpc_seconds": 0.021924348999164067,
+          "mean_rpc_seconds": 0.0010998196828467105,
+          "cold_start_plus_first_call_seconds": 0.0936244250042364,
+          "measured_episode_agent_seconds": 0.8630470099669765,
+          "max_action_including_cold_seconds": 0.0936244250042364,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 2.739538153000467,
+      "driver_cpu_seconds": 1.211124006,
+      "bank_snapshot": [
+        98762.0,
+        98762.0
+      ],
+      "trace_sha256": "307e1b4138b49e3cbd532d7932f1f4f71b2dde14edcd4288a8ad6ae459d03a00",
+      "variant": "baseline",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14366,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 9740,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9275,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53388,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14366,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 9740,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9275,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53388,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-arlene-9600901-seat0.jsonl.gz",
+      "observation_trace_sha256": "d930d39595ed979d3f72b22a3938082844b6242cd4d3438e70230b5a1cf2293b",
+      "own_final_cash": 98762.0,
+      "rival_final_cash": 98762.0,
+      "outcome": "T"
+    },
+    {
+      "seed": 9600901,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        99240.0,
+        99163.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            610.0,
+            610.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            298.0,
+            298.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            677.0,
+            677.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1727.0,
+            1727.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14676.0,
+            14676.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13352.0,
+            13352.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16688.0,
+            16688.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            18502.0,
+            18502.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            21044.0,
+            21044.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            22255.0,
+            22255.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            29024.0,
+            29024.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            33691.0,
+            33693.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            39583.0,
+            39425.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            43296.0,
+            43142.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            49254.0,
+            49100.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            56525.0,
+            56371.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            64936.0,
+            65916.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            67998.0,
+            68978.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            73911.0,
+            74089.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            76840.0,
+            76802.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            82865.0,
+            82226.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            85044.0,
+            84429.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            91865.0,
+            91788.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            99240.0,
+            99163.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 3.4279351550000006,
+          "cpu_seconds": 3.853189,
+          "peak_rss_kib": 23020,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07911802099988563,
+          "first_call_seconds": 0.06729624799481826,
+          "max_call_seconds": 0.08383435800351435,
+          "mean_call_seconds": 0.004772667036263398,
+          "max_rpc_seconds": 0.08465085000352701,
+          "mean_rpc_seconds": 0.0056179474145140835,
+          "cold_start_plus_first_call_seconds": 0.1464142689947039,
+          "measured_episode_agent_seconds": 4.118422212035512,
+          "max_action_including_cold_seconds": 0.1464142689947039,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.48049220100000156,
+          "cpu_seconds": 0.951268,
+          "peak_rss_kib": 21032,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.08400171899847919,
+          "first_call_seconds": 0.0448333009990165,
+          "max_call_seconds": 0.07356208399869502,
+          "mean_call_seconds": 0.0006689261112081875,
+          "max_rpc_seconds": 0.11671147599554388,
+          "mean_rpc_seconds": 0.0015967925536692056,
+          "cold_start_plus_first_call_seconds": 0.1288350199974957,
+          "measured_episode_agent_seconds": 1.232095565086638,
+          "max_action_including_cold_seconds": 0.1288350199974957,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 6.24397382800089,
+      "driver_cpu_seconds": 1.3677300929999998,
+      "bank_snapshot": [
+        99240.0,
+        99163.0
+      ],
+      "trace_sha256": "93086e7a1519dfcb19322faf5af62bc7899e57a69f47fff24f5e766fd7fc0b6c",
+      "variant": "candidate",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14364,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 10019,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9392,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53472,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14360,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 10007,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9282,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53521,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-arlene-9600901-seat0.jsonl.gz",
+      "observation_trace_sha256": "08121ceadb19d83f3498b0d55c13bd0a29ac46157d3656f277678405aefc03d2",
+      "own_final_cash": 99240.0,
+      "rival_final_cash": 99163.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    },
+    {
+      "seed": 9600901,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        98762.0,
+        98762.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            610.0,
+            610.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            298.0,
+            298.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            677.0,
+            677.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1727.0,
+            1727.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14676.0,
+            14676.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13352.0,
+            13352.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16688.0,
+            16688.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            18502.0,
+            18502.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            21044.0,
+            21044.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            22255.0,
+            22255.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            29024.0,
+            29024.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            33693.0,
+            33693.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            39425.0,
+            39425.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            43303.0,
+            43303.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            49261.0,
+            49261.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            56532.0,
+            56532.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            65708.0,
+            65708.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            68770.0,
+            68770.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            73279.0,
+            73279.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            76083.0,
+            76083.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            81747.0,
+            81747.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            84169.0,
+            84169.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            91387.0,
+            91387.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            98762.0,
+            98762.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.35147932199999954,
+          "cpu_seconds": 0.8360049999999999,
+          "peak_rss_kib": 22600,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.06476525399921229,
+          "first_call_seconds": 0.03893736399913905,
+          "max_call_seconds": 0.03893736399913905,
+          "mean_call_seconds": 0.0004894081529362486,
+          "max_rpc_seconds": 0.10735753900371492,
+          "mean_rpc_seconds": 0.0016230138986298112,
+          "cold_start_plus_first_call_seconds": 0.10370261799835134,
+          "measured_episode_agent_seconds": 1.2317122471140465,
+          "max_action_including_cold_seconds": 0.10370261799835134,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.38987673999999956,
+          "cpu_seconds": 0.808097,
+          "peak_rss_kib": 22600,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07311795999703463,
+          "first_call_seconds": 0.0217621740011964,
+          "max_call_seconds": 0.05101681100495625,
+          "mean_call_seconds": 0.0005435475381880562,
+          "max_rpc_seconds": 0.0794144090032205,
+          "mean_rpc_seconds": 0.0014478539849477833,
+          "cold_start_plus_first_call_seconds": 0.09488013399823103,
+          "measured_episode_agent_seconds": 1.1141249751744908,
+          "max_action_including_cold_seconds": 0.09488013399823103,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 3.473006827000063,
+      "driver_cpu_seconds": 1.6097281069999996,
+      "bank_snapshot": [
+        98762.0,
+        98762.0
+      ],
+      "trace_sha256": "307e1b4138b49e3cbd532d7932f1f4f71b2dde14edcd4288a8ad6ae459d03a00",
+      "variant": "baseline",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14366,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 9740,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9275,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53388,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14366,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 9740,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9275,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53388,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-arlene-9600901-seat1.jsonl.gz",
+      "observation_trace_sha256": "b3f931e792b79de63248eaf4c69c0e1fe3b7acead2be844ce17c26a0b41b0ac8",
+      "own_final_cash": 98762.0,
+      "rival_final_cash": 98762.0,
+      "outcome": "T"
+    },
+    {
+      "seed": 9600901,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        99163.0,
+        99240.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            610.0,
+            610.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            298.0,
+            298.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            677.0,
+            677.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1727.0,
+            1727.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14676.0,
+            14676.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13352.0,
+            13352.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16688.0,
+            16688.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            18502.0,
+            18502.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            21044.0,
+            21044.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            22255.0,
+            22255.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            29024.0,
+            29024.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            33693.0,
+            33691.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            39425.0,
+            39583.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            43142.0,
+            43296.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            49100.0,
+            49254.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            56371.0,
+            56525.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            65916.0,
+            64936.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            68978.0,
+            67998.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            74089.0,
+            73911.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            76802.0,
+            76840.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            82226.0,
+            82865.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            84429.0,
+            85044.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            91788.0,
+            91865.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            99163.0,
+            99240.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.3371755109999995,
+          "cpu_seconds": 0.8363309999999999,
+          "peak_rss_kib": 22784,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.16509124699950917,
+          "first_call_seconds": 0.03251420699962182,
+          "max_call_seconds": 0.03251420699962182,
+          "mean_call_seconds": 0.0004696645994148682,
+          "max_rpc_seconds": 0.03480544599733548,
+          "mean_rpc_seconds": 0.0012817247510856595,
+          "cold_start_plus_first_call_seconds": 0.197605453999131,
+          "measured_episode_agent_seconds": 1.0866513430300984,
+          "max_action_including_cold_seconds": 0.197605453999131,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 3.271714606999997,
+          "cpu_seconds": 3.696688,
+          "peak_rss_kib": 23024,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.10819917900516884,
+          "first_call_seconds": 0.03255421399808256,
+          "max_call_seconds": 0.07159679300093558,
+          "mean_call_seconds": 0.004550163463050398,
+          "max_rpc_seconds": 0.07245134800177766,
+          "mean_rpc_seconds": 0.005304322719039014,
+          "cold_start_plus_first_call_seconds": 0.1407533930032514,
+          "measured_episode_agent_seconds": 3.9220072139942204,
+          "max_action_including_cold_seconds": 0.1407533930032514,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 5.951166864993866,
+      "driver_cpu_seconds": 1.191655377,
+      "bank_snapshot": [
+        99163.0,
+        99240.0
+      ],
+      "trace_sha256": "10b937dfbf527d0b363e5be0c0d8b05075772ffd389ae3fdc4d44c7013cf71f7",
+      "variant": "candidate",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14360,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 10007,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9282,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53521,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14364,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14495,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 10019,
+            "BUY_PRODUCT:FERTILIZER": 2011,
+            "SELL:MILK": 9392,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4204,
+            "SELL:STRAWBERRY": 53472,
+            "SELL:CARROT": 5254
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-arlene-9600901-seat1.jsonl.gz",
+      "observation_trace_sha256": "5d28ad972f1264e572f60e1a283f3835475dbf2d35ec3f5bb8dda8f301f6a236",
+      "own_final_cash": 99240.0,
+      "rival_final_cash": 99163.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    },
+    {
+      "seed": 9600901,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        96924.0,
+        89837.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            50.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            143.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            126.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            143.0,
+            48.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            213.0,
+            211.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            613.0,
+            607.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            301.0,
+            295.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            680.0,
+            674.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1732.0,
+            1521.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14675.0,
+            14075.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13355.0,
+            12891.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16688.0,
+            16021.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            18505.0,
+            17930.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            21047.0,
+            20686.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            22146.0,
+            23889.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            28807.0,
+            28110.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            33492.0,
+            31899.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            39235.0,
+            37724.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            43007.0,
+            41794.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            48979.0,
+            47416.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            55594.0,
+            53873.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            64357.0,
+            62268.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            67445.0,
+            65011.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            71537.0,
+            68553.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            74363.0,
+            70801.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            79647.0,
+            76141.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            81763.0,
+            78045.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            89186.0,
+            84183.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            96924.0,
+            89837.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.3167121789999997,
+          "cpu_seconds": 0.772473,
+          "peak_rss_kib": 26880,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.15606894200027455,
+          "first_call_seconds": 0.03241935899859527,
+          "max_call_seconds": 0.03241935899859527,
+          "mean_call_seconds": 0.0004406515159866817,
+          "max_rpc_seconds": 0.03301649300556164,
+          "mean_rpc_seconds": 0.001187048887406746,
+          "cold_start_plus_first_call_seconds": 0.18848830099886982,
+          "measured_episode_agent_seconds": 1.0095570920457249,
+          "max_action_including_cold_seconds": 0.18848830099886982,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.5046207510000007,
+          "cpu_seconds": 1.07016,
+          "peak_rss_kib": 26880,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.21475791099510388,
+          "first_call_seconds": 0.022201238003617618,
+          "max_call_seconds": 0.022201238003617618,
+          "mean_call_seconds": 0.0007021567496125909,
+          "max_rpc_seconds": 0.022672291997878347,
+          "mean_rpc_seconds": 0.001527757973620109,
+          "cold_start_plus_first_call_seconds": 0.2369591489987215,
+          "measured_episode_agent_seconds": 1.3132158940279623,
+          "max_action_including_cold_seconds": 0.2369591489987215,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 3.2283095349994255,
+      "driver_cpu_seconds": 1.1886594659999998,
+      "bank_snapshot": [
+        96924.0,
+        89837.0
+      ],
+      "trace_sha256": "6f7fcd936fa47a3c373b959766a2a7c28c5536e62b3cf7ad17c975f3a00874e6",
+      "variant": "baseline",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4968,
+            "SELL:WHEAT": 14544,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14459,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 7090,
+            "BUY_PRODUCT:FERTILIZER": 1992,
+            "SELL:MILK": 8975,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4396,
+            "SELL:STRAWBERRY": 53904,
+            "SELL:CARROT": 5498
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 357,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14647,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14789,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 9570,
+            "BUY_PRODUCT:FERTILIZER": 2141,
+            "SELL:MILK": 9973,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 52932,
+            "SELL:CARROT": 797
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-apex-9600901-seat0.jsonl.gz",
+      "observation_trace_sha256": "b93e428316e9e9567b1c7989a0b2bc634decc9719a6e862303a6c015b333a4ae",
+      "own_final_cash": 96924.0,
+      "rival_final_cash": 89837.0,
+      "outcome": "W"
+    },
+    {
+      "seed": 9600901,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        97379.0,
+        89282.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            50.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            143.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            126.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            143.0,
+            48.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            213.0,
+            211.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            613.0,
+            607.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            301.0,
+            295.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            680.0,
+            674.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1732.0,
+            1521.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14675.0,
+            14075.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13355.0,
+            12891.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16688.0,
+            16021.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            18505.0,
+            17930.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            21047.0,
+            20686.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            22146.0,
+            23889.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            28703.0,
+            28110.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            33398.0,
+            31899.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            39280.0,
+            37725.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            43033.0,
+            41544.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            49021.0,
+            47017.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            55531.0,
+            53335.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            64296.0,
+            61730.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            67388.0,
+            64467.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            71500.0,
+            67995.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            74633.0,
+            70157.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            75948.0,
+            75358.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            82744.0,
+            77293.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            89634.0,
+            83639.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            97379.0,
+            89282.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 3.892093563000002,
+          "cpu_seconds": 4.317788,
+          "peak_rss_kib": 26880,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.10398655699827941,
+          "first_call_seconds": 0.0363285610001185,
+          "max_call_seconds": 0.13588946199888596,
+          "mean_call_seconds": 0.005436053577408901,
+          "max_rpc_seconds": 0.13683904099889332,
+          "mean_rpc_seconds": 0.006250387603358831,
+          "cold_start_plus_first_call_seconds": 0.1403151179983979,
+          "measured_episode_agent_seconds": 4.598015243813279,
+          "max_action_including_cold_seconds": 0.1403151179983979,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.4562492900000002,
+          "cpu_seconds": 0.9225829999999999,
+          "peak_rss_kib": 26880,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.13639212899579434,
+          "first_call_seconds": 0.027128542998980265,
+          "max_call_seconds": 0.027128542998980265,
+          "mean_call_seconds": 0.0006348157871842595,
+          "max_rpc_seconds": 0.027520365998498164,
+          "mean_rpc_seconds": 0.0014409815994035795,
+          "cold_start_plus_first_call_seconds": 0.1635206719947746,
+          "measured_episode_agent_seconds": 1.172457898966968,
+          "max_action_including_cold_seconds": 0.1635206719947746,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 6.697114468996006,
+      "driver_cpu_seconds": 1.2168130820000007,
+      "bank_snapshot": [
+        97379.0,
+        89282.0
+      ],
+      "trace_sha256": "f496c5afdba7855fa353e09a584f9447f7a5082ca7843d3162aa60c51dc776a9",
+      "variant": "candidate",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4968,
+            "SELL:WHEAT": 14544,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14459,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 7238,
+            "BUY_PRODUCT:FERTILIZER": 1992,
+            "SELL:MILK": 8941,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4418,
+            "SELL:STRAWBERRY": 54223,
+            "SELL:CARROT": 5498
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 357,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14647,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14789,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 8521,
+            "BUY_PRODUCT:FERTILIZER": 2141,
+            "SELL:MILK": 9820,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 53579,
+            "SELL:CARROT": 797
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-apex-9600901-seat0.jsonl.gz",
+      "observation_trace_sha256": "623df2b1ea47b4b8f5177d37001f643bffda60651c461268c9e5762d9f5bde9a",
+      "own_final_cash": 97379.0,
+      "rival_final_cash": 89282.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    },
+    {
+      "seed": 9600901,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        89837.0,
+        96924.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            50.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            143.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            126.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            48.0,
+            143.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            211.0,
+            213.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            607.0,
+            613.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            295.0,
+            301.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            674.0,
+            680.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1521.0,
+            1732.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14075.0,
+            14675.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            12891.0,
+            13355.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16021.0,
+            16688.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            17930.0,
+            18505.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            20686.0,
+            21047.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            23889.0,
+            22146.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            28110.0,
+            28807.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            31899.0,
+            33492.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            37724.0,
+            39235.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            41794.0,
+            43007.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            47416.0,
+            48979.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            53873.0,
+            55594.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            62268.0,
+            64357.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            65011.0,
+            67445.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            68553.0,
+            71537.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            70801.0,
+            74363.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            76141.0,
+            79647.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            78045.0,
+            81763.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            84183.0,
+            89186.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            89837.0,
+            96924.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.4809301059999999,
+          "cpu_seconds": 0.863227,
+          "peak_rss_kib": 30352,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.06609500200283946,
+          "first_call_seconds": 0.019168587001331616,
+          "max_call_seconds": 0.019168587001331616,
+          "mean_call_seconds": 0.0006693669709215725,
+          "max_rpc_seconds": 0.0241102670042892,
+          "mean_rpc_seconds": 0.001556961674619902,
+          "cold_start_plus_first_call_seconds": 0.08526358900417108,
+          "measured_episode_agent_seconds": 1.185550446054549,
+          "max_action_including_cold_seconds": 0.08526358900417108,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.38941644200000053,
+          "cpu_seconds": 0.8453269999999999,
+          "peak_rss_kib": 30352,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07130076400062535,
+          "first_call_seconds": 0.02090083600342041,
+          "max_call_seconds": 0.02090083600342041,
+          "mean_call_seconds": 0.0005425901809519142,
+          "max_rpc_seconds": 0.033891151993884705,
+          "mean_rpc_seconds": 0.0016117714086212496,
+          "cold_start_plus_first_call_seconds": 0.09220160000404576,
+          "measured_episode_agent_seconds": 1.2301644067993038,
+          "max_action_including_cold_seconds": 0.09220160000404576,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 3.4525393309959327,
+      "driver_cpu_seconds": 1.4314345189999997,
+      "bank_snapshot": [
+        89837.0,
+        96924.0
+      ],
+      "trace_sha256": "1bd06eb0a75ae21715038127dbdf37704cd2e78e60672f0fb135cd88df98bfe2",
+      "variant": "baseline",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 357,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14647,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14789,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 9570,
+            "BUY_PRODUCT:FERTILIZER": 2141,
+            "SELL:MILK": 9973,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 52932,
+            "SELL:CARROT": 797
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4968,
+            "SELL:WHEAT": 14544,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14459,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 7090,
+            "BUY_PRODUCT:FERTILIZER": 1992,
+            "SELL:MILK": 8975,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4396,
+            "SELL:STRAWBERRY": 53904,
+            "SELL:CARROT": 5498
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-apex-9600901-seat1.jsonl.gz",
+      "observation_trace_sha256": "caa2b289762d023c16c04269dd1e810a158bdea5bf29bd82a798f08081eabd6c",
+      "own_final_cash": 96924.0,
+      "rival_final_cash": 89837.0,
+      "outcome": "W"
+    },
+    {
+      "seed": 9600901,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        89282.0,
+        97379.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            50.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            143.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            126.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            48.0,
+            143.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            211.0,
+            213.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            607.0,
+            613.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            295.0,
+            301.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            674.0,
+            680.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1521.0,
+            1732.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14075.0,
+            14675.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            12891.0,
+            13355.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16021.0,
+            16688.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            17930.0,
+            18505.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            20686.0,
+            21047.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            23889.0,
+            22146.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            28110.0,
+            28703.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            31899.0,
+            33398.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            37725.0,
+            39280.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            41544.0,
+            43033.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            47017.0,
+            49021.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            53335.0,
+            55531.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            61730.0,
+            64296.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            64467.0,
+            67388.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            67995.0,
+            71500.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            70157.0,
+            74633.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            75358.0,
+            75948.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            77293.0,
+            82744.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            83639.0,
+            89634.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            89282.0,
+            97379.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.43487677300000166,
+          "cpu_seconds": 0.899763,
+          "peak_rss_kib": 30632,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.06441121300304076,
+          "first_call_seconds": 0.02138806199945975,
+          "max_call_seconds": 0.02138806199945975,
+          "mean_call_seconds": 0.0006063434742377347,
+          "max_rpc_seconds": 0.10178873399854638,
+          "mean_rpc_seconds": 0.0015619295229350044,
+          "cold_start_plus_first_call_seconds": 0.08579927500250051,
+          "measured_episode_agent_seconds": 1.187438539993309,
+          "max_action_including_cold_seconds": 0.08579927500250051,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 3.830158340999993,
+          "cpu_seconds": 4.257675,
+          "peak_rss_kib": 30632,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07525253900530515,
+          "first_call_seconds": 0.038683951999701094,
+          "max_call_seconds": 0.14893728400056716,
+          "mean_call_seconds": 0.005344471723265151,
+          "max_rpc_seconds": 0.1512023390023387,
+          "mean_rpc_seconds": 0.006219032401975872,
+          "cold_start_plus_first_call_seconds": 0.11393649100500625,
+          "measured_episode_agent_seconds": 4.546736836025957,
+          "max_action_including_cold_seconds": 0.14893728400056716,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 6.750661750003928,
+      "driver_cpu_seconds": 1.298352972,
+      "bank_snapshot": [
+        89282.0,
+        97379.0
+      ],
+      "trace_sha256": "a5f455a66c4c554f97635ead2b2f87dfae1f0f9266b0ca1849501d459719f1ac",
+      "variant": "candidate",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 357,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4967,
+            "SELL:WHEAT": 14647,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14789,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 8521,
+            "BUY_PRODUCT:FERTILIZER": 2141,
+            "SELL:MILK": 9820,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 53579,
+            "SELL:CARROT": 797
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 141,
+            "SELL:WHEAT": 348,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 323,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 122,
+            "BUY_PRODUCT:FERTILIZER": 76,
+            "SELL:MILK": 207,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 4968,
+            "SELL:WHEAT": 14544,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14459,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 7238,
+            "BUY_PRODUCT:FERTILIZER": 1992,
+            "SELL:MILK": 8941,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4418,
+            "SELL:STRAWBERRY": 54223,
+            "SELL:CARROT": 5498
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-apex-9600901-seat1.jsonl.gz",
+      "observation_trace_sha256": "c1916964ecb026208163f20ff4b4d2896f59860a33eaf8fe9e5bacca072b0f66",
+      "own_final_cash": 97379.0,
+      "rival_final_cash": 89282.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        84826.0,
+        84907.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            147.0,
+            147.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            215.0,
+            215.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            580.0,
+            580.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            268.0,
+            268.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            803.0,
+            803.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1616.0,
+            1616.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14500.0,
+            14500.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13447.0,
+            13447.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17705.0,
+            17705.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19761.0,
+            19761.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23866.0,
+            23866.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            30888.0,
+            30888.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            38691.0,
+            38691.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            43865.0,
+            43865.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            49605.0,
+            49605.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            54219.0,
+            54219.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            59642.0,
+            59642.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            65662.0,
+            65702.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            70277.0,
+            70317.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            71049.0,
+            71089.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            71634.0,
+            71674.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            72915.0,
+            72955.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            74413.0,
+            74453.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            76231.0,
+            76312.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            79913.0,
+            79994.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            84826.0,
+            84907.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.3819731569999986,
+          "cpu_seconds": 0.806356,
+          "peak_rss_kib": 34344,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.11270646000048146,
+          "first_call_seconds": 0.028016399999614805,
+          "max_call_seconds": 0.0379721619974589,
+          "mean_call_seconds": 0.0005315864853626014,
+          "max_rpc_seconds": 0.039523537998320535,
+          "mean_rpc_seconds": 0.0014383592059653964,
+          "cold_start_plus_first_call_seconds": 0.14072286000009626,
+          "measured_episode_agent_seconds": 1.1468867290896014,
+          "max_action_including_cold_seconds": 0.14072286000009626,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.32409127,
+          "cpu_seconds": 0.6954659999999999,
+          "peak_rss_kib": 34344,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.08200841199868592,
+          "first_call_seconds": 0.01912841400189791,
+          "max_call_seconds": 0.01912841400189791,
+          "mean_call_seconds": 0.0004510807552422178,
+          "max_rpc_seconds": 0.06615250300092157,
+          "mean_rpc_seconds": 0.0012904987496121332,
+          "cold_start_plus_first_call_seconds": 0.10113682600058382,
+          "measured_episode_agent_seconds": 1.0098770129698096,
+          "max_action_including_cold_seconds": 0.10113682600058382,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 3.239548637000553,
+      "driver_cpu_seconds": 1.4629077390000003,
+      "bank_snapshot": [
+        84826.0,
+        84907.0
+      ],
+      "trace_sha256": "3216f200057265f0b5586d1ea2e473be11f69723697576c55175b41b78d15010",
+      "variant": "baseline",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 384,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14278,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22724,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15307,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30116,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 386,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14359,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22724,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15307,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30116,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-arlene-9600919-seat0.jsonl.gz",
+      "observation_trace_sha256": "41c10ef014ce572de15c19c308fe2c266b690143868e61bb595126ceb7505fca",
+      "own_final_cash": 84826.0,
+      "rival_final_cash": 84907.0,
+      "outcome": "L"
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        85023.0,
+        84461.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            147.0,
+            147.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            215.0,
+            215.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            580.0,
+            580.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            268.0,
+            268.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            803.0,
+            803.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1616.0,
+            1616.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14500.0,
+            14500.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13447.0,
+            13447.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17705.0,
+            17705.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19761.0,
+            19761.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23866.0,
+            23866.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            30888.0,
+            30888.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            38691.0,
+            38691.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            43895.0,
+            43865.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            49664.0,
+            49579.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            54253.0,
+            54168.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            59724.0,
+            59591.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            65840.0,
+            65612.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            70385.0,
+            70157.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            71200.0,
+            70929.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            71987.0,
+            71460.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            73050.0,
+            72455.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            74283.0,
+            73648.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            76129.0,
+            75481.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            80097.0,
+            79535.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            85023.0,
+            84461.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 2.9719165780000023,
+          "cpu_seconds": 3.450746,
+          "peak_rss_kib": 34464,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.149443459995382,
+          "first_call_seconds": 0.039472136995755136,
+          "max_call_seconds": 0.13418118999834405,
+          "mean_call_seconds": 0.004134484612012897,
+          "max_rpc_seconds": 0.13591077599994605,
+          "mean_rpc_seconds": 0.005148704248855812,
+          "cold_start_plus_first_call_seconds": 0.18891559699113714,
+          "measured_episode_agent_seconds": 3.8513618149227113,
+          "max_action_including_cold_seconds": 0.18891559699113714,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.361238870999999,
+          "cpu_seconds": 0.937596,
+          "peak_rss_kib": 34464,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.10913656799675664,
+          "first_call_seconds": 0.02562842300540069,
+          "max_call_seconds": 0.02562842300540069,
+          "mean_call_seconds": 0.0005030735801318945,
+          "max_rpc_seconds": 0.06600390600215178,
+          "mean_rpc_seconds": 0.0016816864172471118,
+          "cold_start_plus_first_call_seconds": 0.13476499100215733,
+          "measured_episode_agent_seconds": 1.31826910199743,
+          "max_action_including_cold_seconds": 0.13476499100215733,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 6.313488435000181,
+      "driver_cpu_seconds": 1.6353292929999999,
+      "bank_snapshot": [
+        85023.0,
+        84461.0
+      ],
+      "trace_sha256": "31dd26ad42258a4758e9b151c68a2740a1e670026648a153fc807ed1c440fcda",
+      "variant": "candidate",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 384,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14278,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22483,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15481,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30380,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 386,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14359,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22233,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15170,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30298,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-arlene-9600919-seat0.jsonl.gz",
+      "observation_trace_sha256": "61e31a7505f78126460ccdee0bb6f85178e6b22c599bc934e4f6ab3a778b02e0",
+      "own_final_cash": 85023.0,
+      "rival_final_cash": 84461.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        84826.0,
+        84907.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            147.0,
+            147.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            215.0,
+            215.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            580.0,
+            580.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            268.0,
+            268.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            803.0,
+            803.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1616.0,
+            1616.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14500.0,
+            14500.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13447.0,
+            13447.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17705.0,
+            17705.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19761.0,
+            19761.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23866.0,
+            23866.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            30888.0,
+            30888.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            38691.0,
+            38691.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            43865.0,
+            43865.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            49605.0,
+            49605.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            54219.0,
+            54219.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            59642.0,
+            59642.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            65662.0,
+            65702.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            70277.0,
+            70317.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            71049.0,
+            71089.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            71634.0,
+            71674.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            72915.0,
+            72955.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            74413.0,
+            74453.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            76231.0,
+            76312.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            79913.0,
+            79994.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            84826.0,
+            84907.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.31953253000000026,
+          "cpu_seconds": 0.785137,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.13210973599780118,
+          "first_call_seconds": 0.027775167000072543,
+          "max_call_seconds": 0.027775167000072543,
+          "mean_call_seconds": 0.0004450937830141139,
+          "max_rpc_seconds": 0.028379748000588734,
+          "mean_rpc_seconds": 0.0012593759234322873,
+          "cold_start_plus_first_call_seconds": 0.15988490299787372,
+          "measured_episode_agent_seconds": 1.0376010249456158,
+          "max_action_including_cold_seconds": 0.15988490299787372,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.350229753,
+          "cpu_seconds": 0.75849,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.09665852900070604,
+          "first_call_seconds": 0.027341886998328846,
+          "max_call_seconds": 0.027341886998328846,
+          "mean_call_seconds": 0.00048741092909450004,
+          "max_rpc_seconds": 0.02781230599794071,
+          "mean_rpc_seconds": 0.001262263969520835,
+          "cold_start_plus_first_call_seconds": 0.12400041599903489,
+          "measured_episode_agent_seconds": 1.0042263230861863,
+          "max_action_including_cold_seconds": 0.12400041599903489,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 2.945340419995773,
+      "driver_cpu_seconds": 1.1790034909999996,
+      "bank_snapshot": [
+        84826.0,
+        84907.0
+      ],
+      "trace_sha256": "3216f200057265f0b5586d1ea2e473be11f69723697576c55175b41b78d15010",
+      "variant": "baseline",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 384,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14278,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22724,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15307,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30116,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 386,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14359,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22724,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15307,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30116,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-arlene-9600919-seat1.jsonl.gz",
+      "observation_trace_sha256": "d26224413085a21a6fcf7b423b95494041ca08b32c6d36bf5159a557f6dfd33c",
+      "own_final_cash": 84907.0,
+      "rival_final_cash": 84826.0,
+      "outcome": "W"
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        84380.0,
+        85104.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            147.0,
+            147.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            215.0,
+            215.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            580.0,
+            580.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            268.0,
+            268.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            803.0,
+            803.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1616.0,
+            1616.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14500.0,
+            14500.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13447.0,
+            13447.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17705.0,
+            17705.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19761.0,
+            19761.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23866.0,
+            23866.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            30888.0,
+            30888.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            38691.0,
+            38691.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            43865.0,
+            43895.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            49579.0,
+            49664.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            54168.0,
+            54253.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            59591.0,
+            59724.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            65572.0,
+            65880.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            70117.0,
+            70425.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            70889.0,
+            71240.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            71420.0,
+            72027.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            72415.0,
+            73090.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            73608.0,
+            74323.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            75400.0,
+            76210.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            79454.0,
+            80178.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            84380.0,
+            85104.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.34511989899999984,
+          "cpu_seconds": 0.7429539999999999,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.05804513100156328,
+          "first_call_seconds": 0.023582531001011375,
+          "max_call_seconds": 0.023582531001011375,
+          "mean_call_seconds": 0.0004829213867196813,
+          "max_rpc_seconds": 0.02401009799359599,
+          "mean_rpc_seconds": 0.001358948386618262,
+          "cold_start_plus_first_call_seconds": 0.08162766200257465,
+          "measured_episode_agent_seconds": 1.0351290209800936,
+          "max_action_including_cold_seconds": 0.08162766200257465,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 2.864797090999999,
+          "cpu_seconds": 3.265889,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.0602209899952868,
+          "first_call_seconds": 0.026984554002410732,
+          "max_call_seconds": 0.13042773000051966,
+          "mean_call_seconds": 0.003989799700921721,
+          "max_rpc_seconds": 0.13129424300132087,
+          "mean_rpc_seconds": 0.004855699687124724,
+          "cold_start_plus_first_call_seconds": 0.08720554399769753,
+          "measured_episode_agent_seconds": 3.5514690650379634,
+          "max_action_including_cold_seconds": 0.13042773000051966,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 5.542637960999855,
+      "driver_cpu_seconds": 1.2651674240000013,
+      "bank_snapshot": [
+        84380.0,
+        85104.0
+      ],
+      "trace_sha256": "5152e313accd199e55aa757b0f86643acae9389c2bafe49e98436dba6c2f8619",
+      "variant": "candidate",
+      "opponent": "arlene",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 384,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14278,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22233,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15170,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30298,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 386,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5182,
+            "SELL:WHEAT": 14359,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14760,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22483,
+            "BUY_PRODUCT:FERTILIZER": 2162,
+            "SELL:MILK": 15481,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30380,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-arlene-9600919-seat1.jsonl.gz",
+      "observation_trace_sha256": "69d2bef75c887e1ac397f75368dba8a38387e5b8e698cec5dc7ad87695fd8136",
+      "own_final_cash": 85104.0,
+      "rival_final_cash": 84380.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        85139.0,
+        81511.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            50.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            143.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            126.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            147.0,
+            53.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            215.0,
+            214.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            583.0,
+            577.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            271.0,
+            265.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            806.0,
+            799.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1622.0,
+            1608.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14503.0,
+            14574.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13451.0,
+            13664.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17702.0,
+            17716.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19761.0,
+            19865.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23864.0,
+            24180.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            30877.0,
+            30976.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            38683.0,
+            38762.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            43881.0,
+            43892.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            49609.0,
+            49872.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            54189.0,
+            54541.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            59698.0,
+            59731.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            65618.0,
+            65532.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            70608.0,
+            69490.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            71145.0,
+            70254.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            71855.0,
+            70574.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            73354.0,
+            71566.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            75180.0,
+            72289.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            76774.0,
+            74001.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            80409.0,
+            76331.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            85139.0,
+            81511.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.36253276599999895,
+          "cpu_seconds": 0.803798,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.0733228600001894,
+          "first_call_seconds": 0.02386778000072809,
+          "max_call_seconds": 0.02386778000072809,
+          "mean_call_seconds": 0.0005054888719268939,
+          "max_rpc_seconds": 0.02440637400286505,
+          "mean_rpc_seconds": 0.001436932390697494,
+          "cold_start_plus_first_call_seconds": 0.09719064000091748,
+          "measured_episode_agent_seconds": 1.1064772489116876,
+          "max_action_including_cold_seconds": 0.09719064000091748,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.4818957799999993,
+          "cpu_seconds": 0.898241,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.06284785200114129,
+          "first_call_seconds": 0.020667481003329158,
+          "max_call_seconds": 0.020667481003329158,
+          "mean_call_seconds": 0.0006709600013022742,
+          "max_rpc_seconds": 0.021197850997850765,
+          "mean_rpc_seconds": 0.0015439368955630216,
+          "cold_start_plus_first_call_seconds": 0.08351533300447045,
+          "measured_episode_agent_seconds": 1.172938479910954,
+          "max_action_including_cold_seconds": 0.08351533300447045,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 3.224771398003213,
+      "driver_cpu_seconds": 1.2776239420000017,
+      "bank_snapshot": [
+        85139.0,
+        81511.0
+      ],
+      "trace_sha256": "9a1b6d2283f0bdf53367c4793b6cd019d4802a33282643416580a823592ec986",
+      "variant": "baseline",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 384,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5178,
+            "SELL:WHEAT": 14214,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14703,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22728,
+            "BUY_PRODUCT:FERTILIZER": 2171,
+            "SELL:MILK": 15017,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30841,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 365,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5178,
+            "SELL:WHEAT": 13891,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14768,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22288,
+            "BUY_PRODUCT:FERTILIZER": 2140,
+            "SELL:MILK": 14493,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 28576,
+            "SELL:CARROT": 576
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-apex-9600919-seat0.jsonl.gz",
+      "observation_trace_sha256": "e72487db3af91e6ca814123f4d50584bd47ebdf1b1d378cb96de3e980de5f7a3",
+      "own_final_cash": 85139.0,
+      "rival_final_cash": 81511.0,
+      "outcome": "W"
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        84108.0,
+        81180.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            50.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            143.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            126.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            147.0,
+            53.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            215.0,
+            214.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            583.0,
+            577.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            271.0,
+            265.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            806.0,
+            799.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1622.0,
+            1608.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14503.0,
+            14574.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13451.0,
+            13664.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17702.0,
+            17716.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19761.0,
+            19865.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23864.0,
+            24180.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            30877.0,
+            30976.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            38683.0,
+            38762.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            43911.0,
+            43892.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            49663.0,
+            49842.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            54203.0,
+            54503.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            59734.0,
+            59693.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            65607.0,
+            65494.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            70633.0,
+            69452.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            71251.0,
+            70172.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            72035.0,
+            70302.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            73141.0,
+            70919.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            74457.0,
+            71547.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            76173.0,
+            73098.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            79394.0,
+            76011.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            84108.0,
+            81180.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 4.036337192999996,
+          "cpu_seconds": 4.6462769999999995,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.10573449999355944,
+          "first_call_seconds": 0.05754892600089079,
+          "max_call_seconds": 0.10196327100129565,
+          "mean_call_seconds": 0.005629044725832556,
+          "max_rpc_seconds": 0.12986279599863337,
+          "mean_rpc_seconds": 0.00684883451742055,
+          "cold_start_plus_first_call_seconds": 0.16328342599445023,
+          "measured_episode_agent_seconds": 5.030046518018935,
+          "max_action_including_cold_seconds": 0.16328342599445023,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.4831141940000012,
+          "cpu_seconds": 0.9652489999999999,
+          "peak_rss_kib": 34492,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07240369000646751,
+          "first_call_seconds": 0.022178514998813625,
+          "max_call_seconds": 0.022178514998813625,
+          "mean_call_seconds": 0.0006746336468131125,
+          "max_rpc_seconds": 0.045169672994234134,
+          "mean_rpc_seconds": 0.0016678142948499531,
+          "cold_start_plus_first_call_seconds": 0.09458220500528114,
+          "measured_episode_agent_seconds": 1.2715621680035838,
+          "max_action_including_cold_seconds": 0.09458220500528114,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 7.40343907699571,
+      "driver_cpu_seconds": 1.5032929609999997,
+      "bank_snapshot": [
+        84108.0,
+        81180.0
+      ],
+      "trace_sha256": "abfebd09a9d33e5f9acafb09880c5ea61de9ee23c7bc909277229073674ba75b",
+      "variant": "candidate",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 384,
+            "BUY_SEED:WHEAT": 189,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 5,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 196,
+            "BUY_PRODUCT:FERTILIZER": 65,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 9
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5178,
+            "SELL:WHEAT": 14214,
+            "BUY_SEED:WHEAT": 1890,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14703,
+            "BUY_SEED:CARROT": 100,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 22308,
+            "BUY_PRODUCT:FERTILIZER": 2171,
+            "SELL:MILK": 14782,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 30465,
+            "SELL:CARROT": 400
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 365,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5178,
+            "SELL:WHEAT": 13891,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14768,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 21708,
+            "BUY_PRODUCT:FERTILIZER": 2140,
+            "SELL:MILK": 14180,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 29138,
+            "SELL:CARROT": 576
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-apex-9600919-seat0.jsonl.gz",
+      "observation_trace_sha256": "fff54da22b68793018f41589e80ec9c9935665167d3d0508bd86e4aac31bb7a6",
+      "own_final_cash": 84108.0,
+      "rival_final_cash": 81180.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        101968.0,
+        111482.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            50.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            143.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            126.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            53.0,
+            147.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            214.0,
+            215.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            577.0,
+            583.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            265.0,
+            271.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            799.0,
+            806.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1508.0,
+            1722.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14659.0,
+            15114.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13847.0,
+            14160.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17399.0,
+            17913.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19792.0,
+            20217.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            24403.0,
+            24614.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            29854.0,
+            26894.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            35667.0,
+            34561.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            40460.0,
+            40313.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            47495.0,
+            48020.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            51883.0,
+            53274.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            57957.0,
+            60663.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            64661.0,
+            68251.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            73067.0,
+            77284.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            76211.0,
+            81255.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            79499.0,
+            84960.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            82078.0,
+            88568.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            86683.0,
+            93980.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            89932.0,
+            96913.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            96644.0,
+            104517.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            101968.0,
+            111482.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.4956210709999995,
+          "cpu_seconds": 0.903013,
+          "peak_rss_kib": 35036,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07423721100349212,
+          "first_call_seconds": 0.024838454999553505,
+          "max_call_seconds": 0.024838454999553505,
+          "mean_call_seconds": 0.0006928451029718685,
+          "max_rpc_seconds": 0.025482319004368037,
+          "mean_rpc_seconds": 0.0015259845592364085,
+          "cold_start_plus_first_call_seconds": 0.09907566600304563,
+          "measured_episode_agent_seconds": 1.1714201090944698,
+          "max_action_including_cold_seconds": 0.09907566600304563,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.5200181890000032,
+          "cpu_seconds": 1.165645,
+          "peak_rss_kib": 35036,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.19068994499684777,
+          "first_call_seconds": 0.022387543998775072,
+          "max_call_seconds": 0.04471888099942589,
+          "mean_call_seconds": 0.0007259875896686503,
+          "max_rpc_seconds": 0.052860987998428755,
+          "mean_rpc_seconds": 0.0017917294465105784,
+          "cold_start_plus_first_call_seconds": 0.21307748899562284,
+          "measured_episode_agent_seconds": 1.4789434170379536,
+          "max_action_including_cold_seconds": 0.21307748899562284,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 3.545511850003095,
+      "driver_cpu_seconds": 1.2765286310000015,
+      "bank_snapshot": [
+        101968.0,
+        111482.0
+      ],
+      "trace_sha256": "1f81b416545057300e10d0fc3b15a8afbcb34dfa775db12b1d7fac728008a09a",
+      "variant": "baseline",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 345,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5174,
+            "SELL:WHEAT": 13260,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14751,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 5503,
+            "BUY_PRODUCT:FERTILIZER": 2137,
+            "SELL:MILK": 31010,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 49944,
+            "SELL:CARROT": 574
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 310,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 131,
+            "BUY_PRODUCT:FERTILIZER": 64,
+            "SELL:MILK": 261,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5174,
+            "SELL:WHEAT": 12120,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14471,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 5599,
+            "BUY_PRODUCT:FERTILIZER": 1932,
+            "SELL:MILK": 31905,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4486,
+            "SELL:STRAWBERRY": 51251,
+            "SELL:CARROT": 3827
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/baseline-apex-9600919-seat1.jsonl.gz",
+      "observation_trace_sha256": "00556b6bbc87ec3e8d5915a83ab58bd057c825374399924c8f2faff18157d94f",
+      "own_final_cash": 111482.0,
+      "rival_final_cash": 101968.0,
+      "outcome": "W"
+    },
+    {
+      "seed": 9600919,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        102836.0,
+        111570.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            50.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            143.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            126.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            53.0,
+            147.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            214.0,
+            215.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            577.0,
+            583.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            265.0,
+            271.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            799.0,
+            806.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1508.0,
+            1722.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14659.0,
+            15114.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13847.0,
+            14160.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17399.0,
+            17913.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19792.0,
+            20217.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            24403.0,
+            24614.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            29854.0,
+            26894.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            35667.0,
+            34237.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            40460.0,
+            39941.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            47495.0,
+            48034.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            51883.0,
+            53288.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            57957.0,
+            60681.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            64661.0,
+            68269.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            73067.0,
+            77302.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            76211.0,
+            81273.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            79499.0,
+            84864.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            82078.0,
+            88588.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            87199.0,
+            94018.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            90448.0,
+            96951.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            97512.0,
+            104597.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            102836.0,
+            111570.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.6004586959999991,
+          "cpu_seconds": 1.1009870000000002,
+          "peak_rss_kib": 35292,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07576845299627166,
+          "first_call_seconds": 0.02912990900222212,
+          "max_call_seconds": 0.02912990900222212,
+          "mean_call_seconds": 0.000838531965107067,
+          "max_rpc_seconds": 0.14102350200118963,
+          "mean_rpc_seconds": 0.0020898852127833943,
+          "cold_start_plus_first_call_seconds": 0.10489836199849378,
+          "measured_episode_agent_seconds": 1.578395920987532,
+          "max_action_including_cold_seconds": 0.10489836199849378,
+          "under_one_second_including_cold": true
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 4.972878958000008,
+          "cpu_seconds": 5.628233,
+          "peak_rss_kib": 35292,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.12157092900451971,
+          "first_call_seconds": 0.054105724004330114,
+          "max_call_seconds": 0.14691093099827413,
+          "mean_call_seconds": 0.006927523137540514,
+          "max_rpc_seconds": 0.14839611800562125,
+          "mean_rpc_seconds": 0.008138768673213915,
+          "cold_start_plus_first_call_seconds": 0.17567665300884983,
+          "measured_episode_agent_seconds": 5.973345605045324,
+          "max_action_including_cold_seconds": 0.17567665300884983,
+          "under_one_second_including_cold": true
+        }
+      ],
+      "wall_seconds": 8.538961411002674,
+      "driver_cpu_seconds": 1.4878293989999989,
+      "bank_snapshot": [
+        102836.0,
+        111570.0
+      ],
+      "trace_sha256": "820dc12f8a54fd8883c808bfab87045674a8fb0c7849774e7017ca42680fb45e",
+      "variant": "candidate",
+      "opponent": "apex",
+      "diagnostics": [
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 345,
+            "BUY_SEED:WHEAT": 198,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 8,
+            "SELL:FERTILIZER": 357,
+            "BUY_SEED:CARROT": 9,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 195,
+            "BUY_PRODUCT:FERTILIZER": 61,
+            "SELL:MILK": 261,
+            "SELL:MELON": 72,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 13
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5174,
+            "SELL:WHEAT": 13260,
+            "BUY_SEED:WHEAT": 1980,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 4000,
+            "SELL:FERTILIZER": 14751,
+            "BUY_SEED:CARROT": 180,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 5503,
+            "BUY_PRODUCT:FERTILIZER": 2137,
+            "SELL:MILK": 31010,
+            "SELL:MELON": 14267,
+            "SELL:STRAWBERRY": 50812,
+            "SELL:CARROT": 574
+          },
+          "eod_spill_units": {}
+        },
+        {
+          "units": {
+            "BUY_PRODUCT:WHEAT": 149,
+            "SELL:WHEAT": 310,
+            "BUY_SEED:WHEAT": 188,
+            "BUY_SEED:MELON": 12,
+            "BUY_ANIMAL:COW": 9,
+            "BUY_ANIMAL:SHEEP": 5,
+            "SELL:FERTILIZER": 348,
+            "BUY_SEED:CARROT": 31,
+            "BUY_SEED:STRAWBERRY": 33,
+            "SELL:WOOL": 131,
+            "BUY_PRODUCT:FERTILIZER": 64,
+            "SELL:MILK": 261,
+            "BUY_ANIMAL:GOOSE": 3,
+            "SELL:MELON": 72,
+            "SELL:EGG": 79,
+            "SELL:STRAWBERRY": 262,
+            "SELL:CARROT": 93
+          },
+          "receipts": {
+            "BUY_PRODUCT:WHEAT": 5174,
+            "SELL:WHEAT": 12120,
+            "BUY_SEED:WHEAT": 1880,
+            "BUY_SEED:MELON": 960,
+            "BUY_ANIMAL:COW": 3600,
+            "BUY_ANIMAL:SHEEP": 2500,
+            "SELL:FERTILIZER": 14471,
+            "BUY_SEED:CARROT": 620,
+            "BUY_SEED:STRAWBERRY": 3300,
+            "SELL:WOOL": 5599,
+            "BUY_PRODUCT:FERTILIZER": 1932,
+            "SELL:MILK": 31905,
+            "BUY_ANIMAL:GOOSE": 900,
+            "SELL:MELON": 14267,
+            "SELL:EGG": 4514,
+            "SELL:STRAWBERRY": 51311,
+            "SELL:CARROT": 3827
+          },
+          "eod_spill_units": {}
+        }
+      ],
+      "terminal": {
+        "last_decision": 718,
+        "own_shed": {
+          "WHEAT": 0,
+          "CARROT": 0,
+          "TOMATO": 0,
+          "STRAWBERRY": 0,
+          "MELON": 0,
+          "EGG": 0,
+          "MILK": 0,
+          "WOOL": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "COW": 0,
+          "SHEEP": 0
+        },
+        "own_inventory": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "observation_trace": "/workspace/scratch/bde1b9d3651e/commons-work/revenue/kaggriculture/cloud-execution-lab/runtime/heldout-v3-traces/candidate-apex-9600919-seat1.jsonl.gz",
+      "observation_trace_sha256": "029f6df6afe004a7ccf51ba0b69580b8c69c3322bbce52ae4d112e5d591644ef",
+      "own_final_cash": 111570.0,
+      "rival_final_cash": 102836.0,
+      "outcome": "W",
+      "parent_preservation": {
+        "method": "Post-game replay of the candidate's observation sequence through a fresh unchanged Arlene instance; excluded from episode timing and never a runtime input. Nonempty non-SELL orders must preserve both values and original market-order indices; empty no-op slots are ignored.",
+        "checked_actions": 719,
+        "unit_mismatches": 0,
+        "non_sell_order_mismatches": 0,
+        "non_sell_index_mismatches": 0,
+        "examples": [],
+        "passed": true
+      }
+    }
+  ],
+  "summary": {
+    "W_T_L_first": {
+      "baseline": {
+        "W": 5,
+        "T": 2,
+        "L": 1,
+        "failed": 0,
+        "games": 8,
+        "max_action_including_cold_seconds": 0.21307748899562284
+      },
+      "candidate": {
+        "W": 8,
+        "T": 0,
+        "L": 0,
+        "failed": 0,
+        "games": 8,
+        "max_action_including_cold_seconds": 0.18891559699113714
+      }
+    },
+    "paired_outcomes": [
+      {
+        "variant": "candidate",
+        "seed": 9600901,
+        "opponent": "arlene",
+        "seat": 0,
+        "baseline": "T",
+        "candidate": "W",
+        "flipped": true,
+        "own_cash_delta": 478.0,
+        "rival_cash_delta": 401.0
+      },
+      {
+        "variant": "candidate",
+        "seed": 9600901,
+        "opponent": "arlene",
+        "seat": 1,
+        "baseline": "T",
+        "candidate": "W",
+        "flipped": true,
+        "own_cash_delta": 478.0,
+        "rival_cash_delta": 401.0
+      },
+      {
+        "variant": "candidate",
+        "seed": 9600901,
+        "opponent": "apex",
+        "seat": 0,
+        "baseline": "W",
+        "candidate": "W",
+        "flipped": false,
+        "own_cash_delta": 455.0,
+        "rival_cash_delta": -555.0
+      },
+      {
+        "variant": "candidate",
+        "seed": 9600901,
+        "opponent": "apex",
+        "seat": 1,
+        "baseline": "W",
+        "candidate": "W",
+        "flipped": false,
+        "own_cash_delta": 455.0,
+        "rival_cash_delta": -555.0
+      },
+      {
+        "variant": "candidate",
+        "seed": 9600919,
+        "opponent": "arlene",
+        "seat": 0,
+        "baseline": "L",
+        "candidate": "W",
+        "flipped": true,
+        "own_cash_delta": 197.0,
+        "rival_cash_delta": -446.0
+      },
+      {
+        "variant": "candidate",
+        "seed": 9600919,
+        "opponent": "arlene",
+        "seat": 1,
+        "baseline": "W",
+        "candidate": "W",
+        "flipped": false,
+        "own_cash_delta": 197.0,
+        "rival_cash_delta": -446.0
+      },
+      {
+        "variant": "candidate",
+        "seed": 9600919,
+        "opponent": "apex",
+        "seat": 0,
+        "baseline": "W",
+        "candidate": "W",
+        "flipped": false,
+        "own_cash_delta": -1031.0,
+        "rival_cash_delta": -331.0
+      },
+      {
+        "variant": "candidate",
+        "seed": 9600919,
+        "opponent": "apex",
+        "seat": 1,
+        "baseline": "W",
+        "candidate": "W",
+        "flipped": false,
+        "own_cash_delta": 88.0,
+        "rival_cash_delta": 868.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "titan-v4-funding-unit-capacity-admission/v1",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "authority": "funding-capacity-stack / repairs/performance/funding-replay",
+  "status": "source_candidate_tested_not_composed",
+  "source": {
+    "path": "revenue/kaggriculture/cloud-execution-lab/frozen_selected.py",
+    "git_blob": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+    "function": "_funding_trace",
+    "function_sha256": "d9ca4d0737b5ab3344c0df588014a83a5c634464327fdd175b8ec862c2d7beb9"
+  },
+  "defect": {
+    "predecessor": "m._apply_unit_action(f, p, i, a, len(f['tiles']), t // 24, 24, 10**6)",
+    "repair": "m._apply_unit_action(f, p, i, a, len(f['tiles']), t // 24, 24, cap)",
+    "reason": "funding replay must use the configured physical shedCapacity for represented unit deposits; the predecessor can retain goods the official engine discards and then spend phantom sale cash"
+  },
+  "executed_evidence": {
+    "artifact_id": 10175943272,
+    "run_id": 34537404363,
+    "runtime_archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "source_manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+    "official_engine_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "runtime_files_verified": 109,
+    "normal": "19/19 PASS",
+    "optimized": "19/19 PASS",
+    "official_interpreter_callbacks_per_mode": 656,
+    "capacity_matrix_cases_per_mode": 192,
+    "non_overflow_controls_per_mode": 64,
+    "inherited_funding_tests_per_arm_per_mode": 8,
+    "negative_controls": {
+      "predecessor_failures_per_mode": 187,
+      "constant_100_failures_per_mode": 120,
+      "off_by_one_failures_per_mode": 187
+    }
+  },
+  "witnesses": [
+    "full shed + represented DROP + SELL + HIRE: predecessor invents $59 and one HIRE; repaired replay and official engine both end $0/no HIRE in both seats",
+    "current MILK sale before represented transfers and two GOOSE buys: predecessor minimum_now=0; repaired minimum_now=1, matching official capacity requirement in both seats across capacities 2,3,7,100"
+  ],
+  "boundaries": {
+    "production_activation": false,
+    "composition_activation": false,
+    "default_change": false,
+    "archive_change": false,
+    "workflow_change": false,
+    "kaggle_change": false,
+    "strength_claim": false
+  },
+  "next_gate": "compose this fail-closed transform after the current authenticated funding-replay chain, bind exact pre/post image, then run the existing funding-capacity composition gate"
+}

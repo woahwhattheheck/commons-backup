@@ -1,0 +1,362 @@
+{
+  "fiction_notice": "FICTION. Ten invented unresolved observations for UIOWA-18649 preparation. None is a University of Iowa finding. Group names ESS/RIS/IAM are this engagement's fictional services.",
+  "observations": [
+    {
+      "ask_role": "change_manager",
+      "assessment_area": "deployment",
+      "decision_informed": "whether the two-approval control is operating, is documented-only, or has a standing exception we have not been shown",
+      "example_request": "the change records for CR-411 through CR-413 including their approval entries, and any standing exception that applies to them",
+      "fields": {
+        "reading_a": "two approvals are required",
+        "reading_b": "only one approval appears on 7 of 12 sampled changes",
+        "source_a_label": "the ESS change procedure",
+        "source_b_label": "the sampled ESS change records",
+        "subject": "approvals on standard ESS changes"
+      },
+      "group": "ESS",
+      "observation_id": "OBS-ESS-DEP-01",
+      "open_findings": [
+        "FIND-ESS-03"
+      ],
+      "outcome_map": [
+        {
+          "answer": "A documented standing exception covers those seven changes",
+          "resulting_finding": "Control operates as written, with a scoped exception; finding becomes a validated strength with the exception noted"
+        },
+        {
+          "answer": "No exception exists; single approval is the normal practice",
+          "resulting_finding": "Documented control is not the operating control; finding becomes a policy-versus-practice gap"
+        },
+        {
+          "answer": "The sampled records are incomplete and the second approval lives elsewhere",
+          "resulting_finding": "Evidence-location gap rather than a control gap; request the second system's records"
+        }
+      ],
+      "source_ids": [
+        "SRC-ESS-CHG-PROC",
+        "SRC-ESS-CHG-REC"
+      ],
+      "summary": "Written two-approval rule vs. one approval on 7 of 12 sampled changes.",
+      "uncertainty_type": "CONFLICT"
+    },
+    {
+      "ask_role": "ris_data_lead",
+      "assessment_area": "software",
+      "decision_informed": "whether peer review can be stated as observed practice or must stay attributed to one account",
+      "example_request": "a merge history export for the RIS reporting repository covering any four-week period, showing reviewer and approval state per change",
+      "fields": {
+        "claim": "every RIS change is peer reviewed before merge",
+        "only_source_label": "the RIS team lead interview"
+      },
+      "group": "RIS",
+      "observation_id": "OBS-RIS-SW-02",
+      "open_findings": [
+        "FIND-RIS-01"
+      ],
+      "outcome_map": [
+        {
+          "answer": "A merge history export is available",
+          "resulting_finding": "Claim moves from attributed to evidenced; strength can be stated directly"
+        },
+        {
+          "answer": "No tool record exists because review happens verbally",
+          "resulting_finding": "Practice is real but unevidenced; finding notes the corroboration limit rather than a gap in the practice"
+        },
+        {
+          "answer": "Review is applied to some repositories only",
+          "resulting_finding": "Scope becomes the finding; request the repository list and its basis"
+        }
+      ],
+      "source_ids": [
+        "SRC-RIS-INT-LEAD"
+      ],
+      "summary": "Peer review described in interview only; no tool record supplied.",
+      "uncertainty_type": "SINGLE_SOURCE"
+    },
+    {
+      "absence_caveat": "Absence in the material supplied to us is not evidence that the review did not happen.",
+      "ask_role": "iam_administrator",
+      "assessment_area": "security",
+      "decision_informed": "whether the annual review is performed and simply not in the supplied material, or is not currently performed",
+      "example_request": "the most recent completed access review for one application of your choosing, including its date, reviewer, and the accounts it covered",
+      "fields": {
+        "expected_by": "the IAM access standard",
+        "expected_record": "completed access-review record"
+      },
+      "group": "IAM",
+      "observation_id": "OBS-IAM-SEC-03",
+      "open_findings": [
+        "FIND-IAM-02"
+      ],
+      "outcome_map": [
+        {
+          "answer": "A completed review exists and can be produced",
+          "resulting_finding": "Control evidenced; finding becomes a validated strength for the reviewed scope"
+        },
+        {
+          "answer": "Reviews happen informally without a retained record",
+          "resulting_finding": "Practice exists without durable evidence; finding addresses record retention, not the control"
+        },
+        {
+          "answer": "No review has been performed in the current cycle",
+          "resulting_finding": "Gap against the organisation's own standard; becomes a priority finding"
+        }
+      ],
+      "source_ids": [
+        "SRC-IAM-STD-ACC"
+      ],
+      "summary": "Standard requires annual access review; no completed review supplied.",
+      "uncertainty_type": "ABSENT_EVIDENCE"
+    },
+    {
+      "ask_role": "ess_release_engineer",
+      "assessment_area": "software",
+      "decision_informed": "whether the coverage figure we hold still describes the current codebase",
+      "example_request": "a coverage report generated after the March 2026 migration, from the same tool if it is still in use",
+      "fields": {
+        "evidence_date": "2025-12-18",
+        "evidence_label": "the ESS test-coverage report",
+        "intervening_change": "the March 2026 platform migration",
+        "subject": "ESS automated test coverage"
+      },
+      "group": "ESS",
+      "observation_id": "OBS-ESS-SW-04",
+      "open_findings": [
+        "FIND-ESS-05"
+      ],
+      "outcome_map": [
+        {
+          "answer": "A post-migration report exists",
+          "resulting_finding": "Current figure replaces the stale one; finding states observed coverage"
+        },
+        {
+          "answer": "Coverage tooling was not carried through the migration",
+          "resulting_finding": "Measurement continuity gap; finding addresses the loss of the signal, not the coverage level"
+        },
+        {
+          "answer": "The codebase was unchanged by the migration",
+          "resulting_finding": "Stale report remains applicable; finding records the basis for accepting it"
+        }
+      ],
+      "source_ids": [
+        "SRC-ESS-COV-RPT",
+        "SRC-ESS-MIG-NOTE"
+      ],
+      "summary": "Only coverage report predates the March platform migration.",
+      "uncertainty_type": "STALE_EVIDENCE"
+    },
+    {
+      "ask_role": "ris_data_lead",
+      "assessment_area": "deployment",
+      "decision_informed": "whether the observed deployment rate can be described as ordinary operation",
+      "example_request": "the deployment log for a twelve-week period that does not include a freeze, or confirmation of which weeks were frozen",
+      "fields": {
+        "representativeness_concern": "two of those weeks fall inside a published change freeze",
+        "sample_description": "three weeks in February 2026",
+        "subject": "RIS deployment frequency"
+      },
+      "group": "RIS",
+      "observation_id": "OBS-RIS-DEP-05",
+      "open_findings": [
+        "FIND-RIS-04"
+      ],
+      "outcome_map": [
+        {
+          "answer": "A longer log is available",
+          "resulting_finding": "Rate is measured over a representative window and can be stated"
+        },
+        {
+          "answer": "The three weeks are typical; the freeze affected other teams",
+          "resulting_finding": "Sample accepted with the basis recorded"
+        },
+        {
+          "answer": "Longer history is not retained",
+          "resulting_finding": "Measurement window becomes a stated limitation on the finding, not a performance claim"
+        }
+      ],
+      "source_ids": [
+        "SRC-RIS-DEP-LOG"
+      ],
+      "summary": "Deployment log covers three weeks that include a change freeze.",
+      "uncertainty_type": "UNREPRESENTATIVE_SAMPLE"
+    },
+    {
+      "ask_role": "iam_administrator",
+      "assessment_area": "ai_readiness",
+      "decision_informed": "whether the AI-use inventory records zero use or unknown use for this group",
+      "example_request": "a list of any AI-assisted tools currently in use by anyone on the team, however they were obtained, or confirmation that there are none",
+      "fields": {
+        "practice": "the team reports not using AI tools in its work",
+        "stated_in": "the IAM administrator interview",
+        "unclear_boundary": "assistants an individual engineer might have adopted without a departmental decision"
+      },
+      "group": "IAM",
+      "observation_id": "OBS-IAM-AI-06",
+      "open_findings": [
+        "FIND-IAM-07"
+      ],
+      "outcome_map": [
+        {
+          "answer": "Nobody uses any such tool",
+          "resulting_finding": "Inventory records a true zero for this group, which is a finding, not a blank"
+        },
+        {
+          "answer": "Some individual use exists outside a departmental decision",
+          "resulting_finding": "Inventory records informal use; separate from active and planned use"
+        },
+        {
+          "answer": "Nobody has asked, so it isn't known",
+          "resulting_finding": "Stays UNKNOWN in the inventory rather than becoming a zero"
+        }
+      ],
+      "source_ids": [
+        "SRC-IAM-INT-ADMIN"
+      ],
+      "summary": "'We don't use AI tools' - unclear whether individually adopted assistants are included.",
+      "uncertainty_type": "AMBIGUOUS_SCOPE"
+    },
+    {
+      "ask_role": "ess_incident_commander",
+      "assessment_area": "security",
+      "decision_informed": "whether INC-0412 is representative of paging practice or a single-incident exception",
+      "example_request": "the paging records for INC-0412, and the two most recent severity-1 incidents for comparison",
+      "fields": {
+        "reading_a": "a 15-minute paging target",
+        "reading_b": "47 minutes elapsed between detection and the page",
+        "source_a_label": "the ESS incident runbook",
+        "source_b_label": "the INC-0412 incident timeline",
+        "subject": "time to page the on-call engineer for a severity-1 incident"
+      },
+      "group": "ESS",
+      "observation_id": "OBS-ESS-SEC-07",
+      "open_findings": [
+        "FIND-ESS-08"
+      ],
+      "outcome_map": [
+        {
+          "answer": "INC-0412 had a known alerting failure since corrected",
+          "resulting_finding": "Single-incident exception with a completed corrective action; strengthens the follow-through finding"
+        },
+        {
+          "answer": "Recent incidents show similar delays",
+          "resulting_finding": "Paging target is not being met in practice; becomes a priority finding"
+        },
+        {
+          "answer": "The timeline records detection later than actual detection",
+          "resulting_finding": "Timeline-accuracy issue; the finding is about incident record quality"
+        }
+      ],
+      "source_ids": [
+        "SRC-ESS-RUNBOOK",
+        "SRC-ESS-INC-0412"
+      ],
+      "summary": "Runbook states a 15-minute page target; INC-0412 shows 47 minutes with no exception recorded.",
+      "uncertainty_type": "CONFLICT"
+    },
+    {
+      "absence_caveat": "Absence in the material supplied to us is not evidence that no inventory exists.",
+      "ask_role": "ris_data_lead",
+      "assessment_area": "ai_readiness",
+      "decision_informed": "whether data readiness can be assessed at all for this group, or stays unassessed",
+      "example_request": "the data inventory or catalogue the questionnaire refers to, in whatever form it exists, even a spreadsheet",
+      "fields": {
+        "expected_by": "the RIS AI-readiness questionnaire, which refers to one",
+        "expected_record": "data inventory for the reporting warehouse"
+      },
+      "group": "RIS",
+      "observation_id": "OBS-RIS-AI-08",
+      "open_findings": [
+        "FIND-RIS-09"
+      ],
+      "outcome_map": [
+        {
+          "answer": "An inventory exists in some form",
+          "resulting_finding": "Data readiness becomes assessable; coverage and freshness can be examined"
+        },
+        {
+          "answer": "No inventory exists",
+          "resulting_finding": "Absence of a data inventory is itself the finding for AI readiness"
+        },
+        {
+          "answer": "An inventory exists but is maintained by another department",
+          "resulting_finding": "Ownership becomes the finding; request routed to the owning group"
+        }
+      ],
+      "source_ids": [
+        "SRC-RIS-AI-QUES"
+      ],
+      "summary": "No data inventory supplied for the reporting warehouse.",
+      "uncertainty_type": "ABSENT_EVIDENCE"
+    },
+    {
+      "ask_role": "iam_administrator",
+      "assessment_area": "software",
+      "decision_informed": "whether the review control's scope includes the repositories that carry access configuration",
+      "example_request": "the list of repositories the review standard applies to, or the setting that enforces it, for one infrastructure repository",
+      "fields": {
+        "practice": "code review is mandatory before merge",
+        "stated_in": "the IAM review standard",
+        "unclear_boundary": "infrastructure and configuration repositories as well as application code"
+      },
+      "group": "IAM",
+      "observation_id": "OBS-IAM-SW-09",
+      "open_findings": [
+        "FIND-IAM-10"
+      ],
+      "outcome_map": [
+        {
+          "answer": "All repositories including infrastructure are covered",
+          "resulting_finding": "Scope confirmed; strength stated across both code and configuration"
+        },
+        {
+          "answer": "Application repositories only",
+          "resulting_finding": "Scope gap on the repositories that carry access configuration; becomes a specific, actionable finding"
+        },
+        {
+          "answer": "It varies by repository and is not centrally set",
+          "resulting_finding": "Consistency rather than existence is the finding"
+        }
+      ],
+      "source_ids": [
+        "SRC-IAM-REV-STD"
+      ],
+      "summary": "'Code review is mandatory' - unclear whether infrastructure config repositories are covered.",
+      "uncertainty_type": "AMBIGUOUS_SCOPE"
+    },
+    {
+      "ask_role": "ess_release_engineer",
+      "assessment_area": "ai_readiness",
+      "decision_informed": "whether this is recorded as active departmental use or informal individual experimentation",
+      "example_request": "the licence or subscription record for that assistant, or confirmation of how it was obtained if there isn't one",
+      "fields": {
+        "claim": "an AI coding assistant is in daily use on the ESS team",
+        "only_source_label": "the ESS engineer interview"
+      },
+      "group": "ESS",
+      "observation_id": "OBS-ESS-AI-10",
+      "open_findings": [
+        "FIND-ESS-11"
+      ],
+      "outcome_map": [
+        {
+          "answer": "A departmental licence exists",
+          "resulting_finding": "Recorded as active use with a known procurement path"
+        },
+        {
+          "answer": "Obtained individually with no departmental record",
+          "resulting_finding": "Recorded as informal experimentation, kept separate from active use"
+        },
+        {
+          "answer": "It was trialled and discontinued",
+          "resulting_finding": "Neither active nor informal; recorded with its end date"
+        }
+      ],
+      "source_ids": [
+        "SRC-ESS-INT-ENG"
+      ],
+      "summary": "One engineer reports daily AI assistant use; no procurement or licence record supplied.",
+      "uncertainty_type": "SINGLE_SOURCE"
+    }
+  ],
+  "register_id": "UIOWA-114-OBS-v1"
+}

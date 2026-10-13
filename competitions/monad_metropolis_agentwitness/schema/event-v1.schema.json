@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentwitness.example/schema/event-v1.schema.json",
+  "title": "AgentWitness event descriptor v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "network", "namespace", "provider", "event_id"],
+  "properties": {
+    "version": {"const": "agentwitness-event-v1"},
+    "network": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]{0,95}$"},
+    "namespace": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]{0,95}$"},
+    "provider": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]{0,95}$"},
+    "event_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:,+-]{0,191}$"}
+  }
+}

@@ -1,0 +1,195 @@
+name: TITAN V3 executable frozen slot reservation SOL-PRO
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-cross-product-slot-frozen-port-sol-pro.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-frozen-port-sol-pro/**"
+      - "p/sol-pro-titan-v3-cross-product-slot-executable-frozen-port-20260910-01.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-cross-product-slot-frozen-port-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-active-consumer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      DONOR_HEAD: 47aa401c647f330cdd7acae31515e1351f557fad
+      LAB: revenue/kaggriculture/cloud-execution-lab
+      CASE: revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-frozen-port-sol-pro
+      DONOR_CASE: revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-reservation-sol-pro
+      OBSERVED_CLONE: revenue/kaggriculture/cloud-runtime-pulse/observed_clone.py
+      EXPECTED_OBSERVED_CLONE_BLOB: f810d53193d3035655a36c21021e18ba1d415916
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+
+    steps:
+      - name: Checkout immutable triggering head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Bind exact stack, additive scope, and transitive import
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git rev-parse HEAD^)" = "$DONOR_HEAD"
+          git cat-file -e "$DONOR_HEAD^{commit}"
+          expected="$({
+            printf '%s\n' \
+              '.github/workflows/titan-v3-cross-product-slot-frozen-port-sol-pro.yml' \
+              'p/sol-pro-titan-v3-cross-product-slot-executable-frozen-port-20260910-01.md' \
+              'revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-frozen-port-sol-pro/README.md' \
+              'revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-frozen-port-sol-pro/materialize.py' \
+              'revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-frozen-port-sol-pro/runtime_probe.py' \
+              'revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-frozen-port-sol-pro/test_port.py'
+          } | sort)"
+          actual="$(git diff --name-only "$DONOR_HEAD" HEAD | sort)"
+          test "$actual" = "$expected"
+          test "$(git hash-object "$OBSERVED_CLONE")" = "$EXPECTED_OBSERVED_CLONE_BLOB"
+          git diff --check "$DONOR_HEAD" HEAD
+
+      - name: Compile and run carrier contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m py_compile "$CASE"/*.py "$OBSERVED_CLONE"
+          PYTHONPATH="$CASE" python -B -m unittest discover -s "$CASE" -p 'test_*.py' -v
+
+      - name: Materialize authenticated scheduler and frozen postimages twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          for arm in a b; do
+            mkdir -p "$RUNNER_TEMP/materialized-$arm"
+            python -B "$CASE/materialize.py" \
+              --scheduler-source "$LAB/scheduler.py" \
+              --frozen-source "$LAB/frozen_selected.py" \
+              --donor-materializer "$DONOR_CASE/materialize.py" \
+              --runtime "$LAB/titan_runtime.py" \
+              --config "$LAB/TITAN-CONFIG.json" \
+              --scheduler-output "$RUNNER_TEMP/materialized-$arm/scheduler.py" \
+              --frozen-output "$RUNNER_TEMP/materialized-$arm/frozen_selected.py" \
+              --receipt "$RUNNER_TEMP/materialized-$arm/RECEIPT.json"
+          done
+          cmp "$RUNNER_TEMP/materialized-a/scheduler.py" "$RUNNER_TEMP/materialized-b/scheduler.py"
+          cmp "$RUNNER_TEMP/materialized-a/frozen_selected.py" "$RUNNER_TEMP/materialized-b/frozen_selected.py"
+          cmp "$RUNNER_TEMP/materialized-a/RECEIPT.json" "$RUNNER_TEMP/materialized-b/RECEIPT.json"
+          python -B -m py_compile \
+            "$RUNNER_TEMP/materialized-a/scheduler.py" \
+            "$RUNNER_TEMP/materialized-a/frozen_selected.py"
+
+      - name: Execute predecessor and repaired selected consumers
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pre" "$RUNNER_TEMP/post" "$RUNNER_TEMP/probes"
+          cp -a "$LAB/." "$RUNNER_TEMP/pre/"
+          cp -a "$LAB/." "$RUNNER_TEMP/post/"
+          cp "$RUNNER_TEMP/materialized-a/scheduler.py" "$RUNNER_TEMP/post/scheduler.py"
+          cp "$RUNNER_TEMP/materialized-a/frozen_selected.py" "$RUNNER_TEMP/post/frozen_selected.py"
+          cp "$OBSERVED_CLONE" "$RUNNER_TEMP/pre/observed_clone.py"
+          cp "$OBSERVED_CLONE" "$RUNNER_TEMP/post/observed_clone.py"
+          test "$(git hash-object "$RUNNER_TEMP/pre/observed_clone.py")" = "$EXPECTED_OBSERVED_CLONE_BLOB"
+          test "$(git hash-object "$RUNNER_TEMP/post/observed_clone.py")" = "$EXPECTED_OBSERVED_CLONE_BLOB"
+
+          for arm in pre post; do
+            LAB_ROOT="$RUNNER_TEMP/$arm" PYTHONPATH="$RUNNER_TEMP/$arm" python -B - <<'PY'
+          import inspect
+          import os
+          from pathlib import Path
+          import scheduler
+          root = Path(os.environ["LAB_ROOT"]).resolve()
+          source = Path(inspect.getsourcefile(scheduler.detached_json_value) or "").resolve()
+          assert source == root / "observed_clone.py", (source, root)
+          PY
+          done
+
+          for run in 1 2; do
+            python -B "$CASE/runtime_probe.py" \
+              --lab "$RUNNER_TEMP/pre" \
+              --expect predecessor \
+              --output "$RUNNER_TEMP/probes/pre-$run.json"
+            python -B "$CASE/runtime_probe.py" \
+              --lab "$RUNNER_TEMP/post" \
+              --expect successor \
+              --output "$RUNNER_TEMP/probes/post-$run.json"
+          done
+          cmp "$RUNNER_TEMP/probes/pre-1.json" "$RUNNER_TEMP/probes/pre-2.json"
+          cmp "$RUNNER_TEMP/probes/post-1.json" "$RUNNER_TEMP/probes/post-2.json"
+
+      - name: Bind active-path causal differential to receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - \
+            "$RUNNER_TEMP/probes/pre-1.json" \
+            "$RUNNER_TEMP/probes/post-1.json" \
+            "$RUNNER_TEMP/materialized-a/RECEIPT.json" <<'PY'
+          import json, sys
+          pre=json.load(open(sys.argv[1], encoding='utf-8'))
+          post=json.load(open(sys.argv[2], encoding='utf-8'))
+          receipt=json.load(open(sys.argv[3], encoding='utf-8'))
+          assert pre['consumer_config']==post['consumer_config']=='frozen'
+          assert pre['selected_class'].endswith('.FrozenSelected')
+          assert post['selected_class'].endswith('.FrozenSelected')
+          a=pre['scenarios']['saturated_current']
+          b=post['scenarios']['saturated_current']
+          assert a['milk_capacity_accepted'] is True
+          assert a['chosen_item']=='MILK'
+          assert a['detached_current_certificate'] is True
+          assert 'MILK' not in a['emitted_products']
+          assert b['milk_capacity_accepted'] is False
+          assert b['chosen_item'] is None
+          assert b['detached_current_certificate'] is False
+          assert a['returned_market']==b['returned_market']
+          assert pre['scenarios']['overdue_future']['milk_capacity_accepted'] is True
+          assert post['scenarios']['overdue_future']['milk_capacity_accepted'] is False
+          for name in ('two_free_rows','inherited_milk_row'):
+              assert pre['scenarios'][name]['milk_capacity_accepted'] is True
+              assert post['scenarios'][name]['milk_capacity_accepted'] is True
+              assert pre['scenarios'][name]['returned_market']==post['scenarios'][name]['returned_market']
+          assert pre['helper_present'] is False
+          assert post['helper_present'] is True
+          assert post['helper_controls']=={
+              'malformed':None,
+              'overdue_future':1,
+              'same_item_replacement':0,
+          }
+          assert post['scheduler_sha256']==receipt['outputs']['scheduler']['sha256']
+          assert post['frozen_sha256']==receipt['outputs']['frozen_selected']['sha256']
+          assert receipt['donor']['head']=='47aa401c647f330cdd7acae31515e1351f557fad'
+          PY
+
+      - name: Require repository nonmutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain)"
+
+      - name: Retain exact materialization and active-path evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-cross-product-slot-frozen-port-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/materialized-a/
+            ${{ runner.temp }}/materialized-b/
+            ${{ runner.temp }}/probes/
+          if-no-files-found: error
+          retention-days: 30

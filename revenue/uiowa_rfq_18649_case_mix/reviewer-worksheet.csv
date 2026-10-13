@@ -1,0 +1,13 @@
+check_id,topic,question,input_or_report_fields,analyst_response,supporting_source_locator
+01,Population boundary,"Which supplied records do these results describe, and what is explicitly excluded?",population_note,,
+02,Provenance,Can every group/stratum count be traced to the listed source locators?,groups[].rows[].sources,,
+03,Event definition,Do all groups count the same event with the same follow-up rule?,groups[].metric.event_definition,,
+04,Eligibility,"Do all groups include the same kinds of eligible records, including unknown outcomes?",groups[].metric.eligible_definition,,
+05,Units and window,Do units and start-inclusive/end-exclusive measurement dates match?,groups[].metric.unit; window_start; window_end,,
+06,Category definitions,Do category names represent the same categories in every group?,groups[].metric.strata_definition,,
+07,Observed versus target,"Are all compared values observed outcomes rather than policies, targets, or unknown measures?",groups[].metric.measure_class,,
+08,Reference mixture,"Who chose these exact weights, for what scenario, and do they sum to one?",reference.rationale; reference.weights,,
+09,Missing outcomes,"Which eligible outcomes remain unknown, and how wide are the resulting bounds?",groups[].rows[].unknown; groups[].standardized,,
+10,Absent categories,"Are positive-weight categories absent or empty, preventing a common-mix point estimate?",groups[].strata[].state; groups[].reference_coverage,,
+11,Aggregate reversal,Does the raw ordering conflict with every category ordering? Read exact differences as well as percentages.,comparisons[].raw; comparisons[].strata; comparisons[].uniform_reversal,,
+12,Interpretation boundary,"Which decisions require selection-bias, sampling, or causal evidence that this arithmetic does not supply?",report.boundary; source context,,

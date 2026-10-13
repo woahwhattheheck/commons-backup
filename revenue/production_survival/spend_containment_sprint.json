@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "kind": "PRODUCTION_SURVIVAL_LADDER_OFFER",
+  "status": "CANDIDATE",
+  "status_note": "R&D recommendation for Astra's 2026-09-05 00:25 EDT demand; not a public offer until source review; no page, no checkout, no buyer contacted.",
+  "written_by": "CAPSTAN (Claude Fable 5.1, Claude Code desktop, owner PC)",
+  "written_at": "2026-09-05",
+  "brief": "revenue/production_survival/spend_containment_sprint.md",
+  "ladder_position": {
+    "above": "same-day-agent-survival-proof ($2,500)",
+    "below": "production-survival-sprint ($15,000)",
+    "source": "revenue/production_survival/offer.json"
+  },
+  "offer": {
+    "id": "agent-spend-containment-sprint",
+    "name": "Agent Spend Containment Sprint",
+    "currency": "USD",
+    "fixed_amount": 9500,
+    "term_business_days": 5,
+    "payment_collection": "CUSTOMER_SPECIFIC_INVOICE (invoice rail already recorded in revenue/outcome_commerce/catalog.json); NOT_PROVIDED_ON_THIS_PAGE",
+    "milestones": [
+      {"id": "M1_SCOPE_ACCEPTED", "amount": 4750, "due": "on the buyer's written acceptance of the scope: trigger evidence seen, workflow and provider named, ceilings agreed, staging confirmed"},
+      {"id": "M2_ACCEPTANCE_PASS", "amount": 4750, "due": "on acceptance PASS; on MISS by window end, refunded or one free repair attempt in the next five business days, buyer's written choice"}
+    ],
+    "qualifying_trigger": "one provider bill for one agent workflow up at least 3x month over month, or one incident of at least $1,000 inside seven days, shown as the provider's own cost report with amounts only",
+    "buyer": "engineering lead who owns one production agent workflow at a company of roughly 5 to 200 engineers, paying OpenAI or Anthropic directly or through a gateway they run, with a staging copy they can execute",
+    "boundary": {
+      "providers": ["OpenAI", "Anthropic"],
+      "one_provider": true,
+      "one_workflow": true,
+      "one_harness": true,
+      "languages": ["Python", "TypeScript"],
+      "buyer_runs_everything": true,
+      "provider_keys_never_leave_buyer": true,
+      "delivery_form": "pull request into the buyer's repository or a tarball; staging only; no production writes",
+      "evidence_received": "traces and logs with secrets redacted; cost reports as amounts; no production data, PII or PHI"
+    },
+    "delivery": [
+      "cost meter: provider usage fields to USD per call from a pinned price table; one append-only usage event per call (metering-event.schema.json USAGE_RECORDED shape) with idempotency_key and correlation_id",
+      "per-run and rolling dollar and token ledger with ceilings agreed in writing",
+      "predicates evaluated before the next provider call: step cap, wall-clock deadline, token ceiling, dollar ceiling (per run and rolling), per-tool quota with mutating tools counted separately, no-progress and oscillation detection, external abort flag",
+      "clean abort: incident record (run id, spend at halt, predicate, last N calls, resumable state pointer) and one alert to the buyer's channel",
+      "idempotency wrapper for every mutating external effect (survival_canary.py pattern)",
+      "staged runaway regression test and normal-run test, receipts hash-stable on re-run",
+      "handoff: source snapshot at an exact commit, one-command run, versions, both receipts with hashes, walkthrough, keep/change/stop note"
+    ],
+    "staged_runaway_shapes": [
+      "mutual recursion between two agents",
+      "structural error retried as transient",
+      "healthy-looking iteration with no progress until the turn cap",
+      "timeout cascade consuming the budget"
+    ],
+    "acceptance": "Given the buyer's staging harness with the controls installed and per-run ceiling C and rolling daily ceiling D agreed in writing, when the staged runaway is started, the run halts before cumulative spend reaches C and its incident record names run id, spend at halt, the predicate that fired and a resumable state, and every mutating external effect fired at most once; and when a normal run of the same workflow is started, it completes, its receipt attributes cost per run and per model, and the receipt is byte-identical on a second run of the same input. PASS only if all of it holds inside the agreed window.",
+    "exclusions": [
+      "credentials, production migration, hosting, SLA, ongoing monitoring, multi-tenant chargeback, model-file or White Box work"
+    ],
+    "disqualifiers": [
+      "no staging harness the buyer can run, or the failure only reproduces on production data",
+      "workflow already behind a gateway with tested per-session budgets and iteration caps (LiteLLM max_budget_per_session / max_iterations); then only the $2,500 staged proof applies",
+      "more than one provider or an unpinnable model router",
+      "PHI or regulated data in the traces we would receive",
+      "buyer wants us to hold keys, host anything, or sign an SLA",
+      "buyer wants a dashboard product"
+    ]
+  },
+  "price_justification": {
+    "fulfilment_scope_hours": 40,
+    "labour_band_source": "land/sku-whitebox-hour-20260826.md (Aristek 2026 senior specialist $250-$350/hour)",
+    "labour_band_usd": [10000, 14000],
+    "why_bottom_of_band": "predicates, idempotency wrapper, receipt schemas and acceptance tooling already landed on main are reused",
+    "buyer_economics": [
+      "$4,200 in three days (one developer's autonomous weekend, jatinbansal.com)",
+      "$47,000 in eleven days (mutual recursion, jatinbansal.com)",
+      "$87,000 April 2026 bill at a 35-engineer SaaS company (jatinbansal.com)",
+      "$2,140 to $13,890 monthly OpenAI bill in five months (Upwork listing recorded in revenue/muhlnickel_inference/offer.json)"
+    ],
+    "payback_rule": "for a workflow whose baseline exceeds roughly $300 a day, one prevented weekend covers the sprint",
+    "band_requested_by_astra_usd": [5000, 15000]
+  },
+  "fulfilment_roles_proposed": {
+    "intake_trigger_check_and_terms": {"holder": "SEXTANT", "backup": "WELD"},
+    "build_and_staged_proofs": {"holder": "TENON or SEXTANT (owner-PC runner)", "backup": "CLEAT"},
+    "invoices": {"holder": "SURETY (Stripe) or Bryce", "backup": "Bryce"},
+    "crm_row": {"holder": "LEDGER", "offer_sku": "agent-spend-containment-sprint"},
+    "buyer_research_and_acquisition_page": {"holder": "CAPSTAN"},
+    "rule": "roles are transferable; each holder confirms in the hub; silence does not transfer a row (INTAKE.md pattern)"
+  },
+  "buyer_native_controls_measured_20260905": [
+    {"control": "OpenAI project/organization spend limits", "granularity": "monthly, per project or organization", "enforces": "optional hard limit -> 429 project_spend_limit_exceeded; 'Enforcement is not instantaneous'", "gap": "not per run, not per workflow, propagation lag", "source": "https://developers.openai.com/api/docs/guides/spend-limits"},
+    {"control": "Anthropic Console workspace spend limits", "granularity": "monthly, per workspace (per user only in the Claude Code workspace)", "enforces": "cap and threshold alerts", "gap": "one workflow shares the workspace with everything else", "source": "https://platform.claude.com/docs/en/manage-claude/workspaces"},
+    {"control": "Anthropic Usage & Cost Admin API", "granularity": "1m/1h/1d buckets by key, workspace, model; cost daily", "enforces": "nothing; reporting", "gap": "data 'typically appears within 5 minutes'; polling once a minute", "source": "https://platform.claude.com/docs/en/manage-claude/usage-cost-api"},
+    {"control": "LLM gateway (Claude Code guidance)", "granularity": "per credential / team", "enforces": "budgets and rate limits in one place", "gap": "the loop inside the workflow is invisible to it", "source": "https://code.claude.com/docs/en/llm-gateway"},
+    {"control": "LangSmith cost tracking", "granularity": "per run and per trace", "enforces": "evaluator spend cap only", "gap": "tracks, does not stop", "source": "https://docs.langchain.com/langsmith/cost-tracking"},
+    {"control": "LiteLLM proxy", "granularity": "per key, user, team, model, customer, global; agents per session", "enforces": "hard stop at max_budget; max_budget_per_session, max_iterations", "gap": "nearest substitute; no per-tool quota, no no-progress detection, no idempotency for the buyer's own mutating tools; must be adopted and proven by the buyer", "source": "https://docs.litellm.ai/docs/proxy/users"},
+    {"control": "Portkey budget limits", "granularity": "per key, weekly/monthly reset", "enforces": "key expiry on breach, alerts; enterprise-only", "gap": "no per-run limit documented", "source": "https://portkey.ai/docs/product/ai-gateway/virtual-keys/budget-limits"}
+  ],
+  "demand": {
+    "observed": "public incident reports, hiring posts and catalogued pain signals in the brief; strangers' public text; no interest expressed to us",
+    "hypothesis": "an engineering lead with a bill number pays $9,500 for controls installed and proven in five days rather than adopting a gateway's key budgets themselves; the first three intakes decide it",
+    "forecast": "NONE"
+  },
+  "acquisition_path_draft": {
+    "kind": "one indexable Commons page, no pixel, no paid social",
+    "working_title": "Your monthly cap did not stop the $47,000 loop. Seven checks that run before the next call.",
+    "intake": "failure sentence plus a screenshot of the provider cost report with amounts only; free",
+    "intents_unmeasured": ["openai spend limit not enforced", "project_spend_limit_exceeded", "anthropic workspace spend limit per run", "agent stuck in loop cost", "langgraph budget limit per run", "crewai infinite loop tokens", "litellm max_budget_per_session", "agent circuit breaker cost"],
+    "measurement": "page views -> intake mails -> written scopes (M1) -> M2 PASS",
+    "kill_criterion": "30 days or 200 organic visits with zero intake mails: rewrite or drop",
+    "owner_decisions_not_in_this_draft": ["bid the recorded Upwork listing at the buyer's stated budget", "answer in the catalogued public threads (AutoGen #7409, CrewAI freeze issues); cold pitching there is spam-adjacent"]
+  },
+  "reuses": [
+    "revenue/production_survival/acceptance.py",
+    "revenue/production_survival/survival_canary.py",
+    "revenue/production_survival/receipt.schema.json",
+    "revenue/production_survival/proof-v1.schema.json",
+    "revenue/production_survival/INTAKE.md",
+    "revenue/production_survival/crm.md",
+    "revenue/outcome_commerce/metering-event.schema.json",
+    "revenue/outcome_commerce/catalog.json (production-survival-sprint invoice rail)"
+  ],
+  "truth": {
+    "buyer_contacted": false,
+    "interest_expressed": false,
+    "price_published": false,
+    "checkout_exists": false,
+    "cash_usd": 0,
+    "paid_social_spend_usd": 0
+  }
+}

@@ -1,0 +1,39 @@
+name: Kaggriculture economic comparisons
+on:
+  push:
+    branches: [main, build/kaggriculture-economics-20260907]
+    paths:
+      - revenue/kaggriculture/20260907-offline-agent/**
+      - .github/workflows/kaggriculture-economics.yml
+  workflow_dispatch:
+    inputs:
+      seeds:
+        default: "23,83,449,2027,65537"
+      variants:
+        default: "compact_capacity"
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: revenue/kaggriculture/20260907-offline-agent
+      - name: Compare unchanged incumbent and candidates
+        working-directory: revenue/kaggriculture/20260907-offline-agent
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          SEEDS: ${{ inputs.seeds || '23,83,449,2027,65537' }}
+          VARIANTS: ${{ inputs.variants || 'compact_capacity' }}
+        run: |
+          python -m unittest -v test_agent.py
+          KAG_AGENT_PATH=candidate.py python -m unittest -v test_agent.py
+          python compare.py --seeds "$SEEDS" --variants "$VARIANTS" --output "$RUNNER_TEMP/comparison.json"
+          test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kaggriculture-economic-comparison
+          path: ${{ runner.temp }}/comparison.json
+          retention-days: 30

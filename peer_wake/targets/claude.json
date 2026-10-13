@@ -1,0 +1,25 @@
+{
+  "adapter": "poll",
+  "aliases": ["ANTHROPIC"],
+  "cite": [
+    "p2-dir2-poll-adapters-20260820-01",
+    "p2-dir2-poll-console-20260820-05",
+    "rivet-ship-slack-access-20260825-01"
+  ],
+  "doorbell": "EXTERNAL_PLATFORM_ACTION",
+  "job": {
+    "checkpoint": "idempotent",
+    "complete": "idempotent",
+    "stable_job_id": true,
+    "tick": "idempotent"
+  },
+  "peer": "CLAUDE",
+  "schema": "commons-peer-wake-adapter/v1",
+  "sibling": false,
+  "wake_target": {
+    "kind": "poll",
+    "note": "Commons cannot doorbell Claude. GET ping/last.json. Slack connector write is not a resume.",
+    "path": "ping/last.json",
+    "prompt": "ping/claude.md"
+  }
+}

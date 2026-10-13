@@ -1,0 +1,818 @@
+{
+ "seed": 6060013,
+ "seat": 0,
+ "from_step": 3,
+ "model_turns": 8,
+ "warmup": "main.py::agent",
+ "opponent": "main.py::agent",
+ "wall_total_s": 188.0,
+ "money": 464.0,
+ "opponent_money": 541.0,
+ "margin": -77.0,
+ "settings": {
+  "backend": "CPU",
+  "max_num_tokens": 4096,
+  "temperature": 0.0,
+  "top_k": 1,
+  "sampler_seed": 0,
+  "thinking": false,
+  "max_output_tokens": 192,
+  "model_sha256": "0b2a8980ce155fd97673d8e820b4d29d9c7d99b8fa6806f425d969b145bd52e0"
+ },
+ "provenance": {
+  "derivation_seeds": [
+   4242001
+  ],
+  "evaluation_seeds": [
+   7700001,
+   8800001,
+   9900017
+  ],
+  "derivation_cards": [
+   "s4242001-t130-p0",
+   "s4242001-t300-p0"
+  ],
+  "exemplars": {
+   "ADMIT": [
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; 1 unit",
+     "output": {
+      "plan": "one turn object, one op per unit",
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; 2 units",
+     "output": {
+      "plan": "one turn object, an op for the farmer and each hand",
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [
+       [
+        "PASS"
+       ]
+      ],
+      "market": []
+     }
+    }
+   ],
+   "STOCK": [
+    {
+     "situation": "farmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100",
+     "output": {
+      "plan": "plant the wheat I have a seed for",
+      "farmer": [
+       "PLANT",
+       "WHEAT"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [empty]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "plan": "no wheat seed, so PLANT WHEAT is not available this turn",
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "ONCE": [
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "plan": "water this tile today",
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "plan": "this tile is already watered today",
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "RIPE": [
+    {
+     "situation": "farmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "plan": "harvest this ripe plant",
+      "farmer": [
+       "HARVEST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "plan": "not ripe yet, HARVEST is not available on this tile",
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "KEEP": [
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, dies at this refresh unless watered",
+     "output": {
+      "plan": "water so this plant survives the refresh",
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100; watered today, safe for this refresh",
+     "output": {
+      "plan": "this plant is already safe for this refresh",
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "VENT": [
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying CARROT2; shed 0/100; on a shed access tile, shed has room",
+     "output": {
+      "plan": "move the carried goods into the shed",
+      "farmer": [
+       "DROP"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying CARROT2; shed 100/100; on a shed access tile, shed is full",
+     "output": {
+      "plan": "the shed is full, DROP would move nothing",
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ]
+  }
+ },
+ "turns": [
+  {
+   "day": 0,
+   "hour": 3,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nDEMONSTRATIONS on this kind of turn from teacher:../cloud-dispatch/candidate.py::agent (state -> the action that advanced it). These are a teacher's turns, not your own past wins:\nfarm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (4,4); hand0 at (4,3); hand1 at (3,4); hand2 at (4,2) . empty plantable tiles (22): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),( -> {\"plan\":\"north: cash +29\",\"farmer\":[\"NORTH\"],\"hands\":[[\"SOUTH\"],[\"EAST\"],[\"BUILD_PASTURE\"]],\"market\":[[\"SELL\",\"WHEAT\",1]]}\nfarm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (4,4); hand0 at (4,3); hand1 at (3,4); hand2 at (4,3) . empty plantable tiles (22): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),( -> {\"plan\":\"feed: productive tile/unit work\",\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"SHEEP\"],[\"PLACE\",\"SHEEP\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",3]]}\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,4); hand0 at (4,4); hand1 at (3,5); hand2 at (4,5)\nempty plantable tiles (24): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),(0,3),(1,3),(2,3),(3,3),(4,3),(0,4),(1,4),(2,4),(3,4)\npens:\n  (4,4) PASTURE (empty)\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 3 money 624\nfarmer at (4,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand0 at (4,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand1 at (3,5); TILE UNDER IT = [LOCKED]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand2 at (4,5); TILE UNDER IT = [LOCKED]; CARRIED IN HAND (not on the tile) = SHEEP1\nseeds MELON4\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT27,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 716 (last is step 718); 21 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 624; opponent cash 624; you are level by 0.\nunsold: 2 unit(s) in the shed, 4 carried by units.\n716 decision(s) left (last is step 718); 21 turn(s) left today.\n\nYOUR PLAN SO FAR: none yet -- set one in the plan field.\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON4. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 3 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,4) PASTURE] DIG (acts on (4,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | DROP | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[0]:  [standing on (4,4) PASTURE] DIG (acts on (4,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | DROP | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[1]:  [standing on (3,5) LOCKED] EAST | NORTH | PASS | SOUTH | WEST\nhands[2]:  [standing on (4,5) LOCKED] DROP | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | PLACE SHEEP n<=1 (not standing on an empty PASTURE, so this DEPOSITS the SHEEP into the shed as stock, not onto a pasture) | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE n<=2 | BUY_ANIMAL SHEEP | BUY_PRODUCT FERTILIZER n<=6 | BUY_PRODUCT WHEAT n<=21 | BUY_SEED CARROT n<=31 | BUY_SEED MELON n<=7 | BUY_SEED STRAWBERRY n<=6 | BUY_SEED TOMATO n<=12 | BUY_SEED WHEAT n<=62 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\"acquire_pasture_and_seed_melons\",\"farmer\":[\"NORTH\"],\"hands\":[[\"NORTH\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[[\"BUY_SEED\",\"MELON\",2]]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "NORTH"
+    ],
+    "hands": [
+     [
+      "NORTH"
+     ],
+     [
+      "NORTH"
+     ],
+     [
+      "NORTH"
+     ]
+    ],
+    "market": [
+     [
+      "BUY_SEED",
+      "MELON",
+      2
+     ]
+    ],
+    "plan": "acquire_pasture_and_seed_melons"
+   },
+   "plan": "acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0231,
+    "prompt_build": 0.0006,
+    "model_inference": 32.874,
+    "prefill_ttft": 21.610061297,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.839380712,
+    "time_to_first_token_in_second": 21.610061297,
+    "last_prefill_token_count": 2437,
+    "last_prefill_tokens_per_second": 114.12260564706052,
+    "last_decode_token_count": 45,
+    "last_decode_tokens_per_second": 3.9087764729608634
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PICKUP WHEAT 1",
+    "PLACE SHEEP 1",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:-|carry|access|safe|unripe|shedroom",
+   "examples_used": [
+    {
+     "provenance": "teacher:../cloud-dispatch/candidate.py::agent",
+     "action": "{\"plan\":\"north: cash +29\",\"farmer\":[\"NORTH\"],\"hands\":[[\"SOUTH\"],[\"EAST\"],[\"BUILD_PASTURE\"]],\"market\":[[\"SELL\",\"WHEAT\",1]]}"
+    },
+    {
+     "provenance": "teacher:../cloud-dispatch/candidate.py::agent",
+     "action": "{\"plan\":\"feed: productive tile/unit work\",\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"SHEEP\"],[\"PLACE\",\"SHEEP\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",3]]}"
+    }
+   ],
+   "outcome": {
+    "bankable": false,
+    "label": "duplicate_on_tile",
+    "detail": "2 units at (4, 4) both emitted NORTH; only the first can have the intended effect"
+   },
+   "before_after": {
+    "money_before": 624.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  },
+  {
+   "day": 0,
+   "hour": 4,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nDEMONSTRATIONS on this kind of turn from teacher:../cloud-dispatch/candidate.py::agent (state -> the action that advanced it). These are a teacher's turns, not your own past wins:\nfarm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (3,2); hand0 at (2,4); hand1 at (4,2); hand2 at (4,0) . empty plantable tiles (17): (0,0),(1,0),(2,0),(3,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),(2,3),( -> {\"plan\":\"plant melon: productive tile/unit work\",\"farmer\":[\"PLANT\",\"MELON\"],\"hands\":[[\"NORTH\"],[\"WEST\"],[\"WEST\"]],\"market\":[]}\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,3); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4)\nempty plantable tiles (24): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),(0,3),(1,3),(2,3),(3,3),(4,3),(0,4),(1,4),(2,4),(3,4)\npens:\n  (4,4) PASTURE (empty)\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 4 money 464\nfarmer at (4,3); TILE UNDER IT = [empty]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand0 at (4,3); TILE UNDER IT = [empty]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand1 at (3,4); TILE UNDER IT = [empty]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand2 at (4,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nseeds MELON6\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT28,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 715 (last is step 718); 20 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 464; opponent cash 541; you are behind by 77.\nunsold: 2 unit(s) in the shed, 4 carried by units.\n715 decision(s) left (last is step 718); 20 turn(s) left today.\n\nYOUR PLAN SO FAR: acquire_pasture_and_seed_melons\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON6. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 4 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,3) empty] BUILD_COOP (acts on (4,3) empty) | BUILD_PASTURE (acts on (4,3) empty) | EAST | NORTH | PASS | PLANT MELON (acts on (4,3) empty) | SOUTH | WEST\nhands[0]:  [standing on (4,3) empty] BUILD_COOP (acts on (4,3) empty) | BUILD_PASTURE (acts on (4,3) empty) | EAST | NORTH | PASS | PLANT MELON (acts on (4,3) empty) | SOUTH | WEST\nhands[1]:  [standing on (3,4) empty] BUILD_COOP (acts on (3,4) empty) | BUILD_PASTURE (acts on (3,4) empty) | EAST | NORTH | PASS | PLANT MELON (acts on (3,4) empty) | SOUTH | WEST\nhands[2]:  [standing on (4,4) PASTURE] DIG (acts on (4,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | DROP | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE | BUY_PRODUCT FERTILIZER n<=4 | BUY_PRODUCT WHEAT n<=16 | BUY_SEED CARROT n<=23 | BUY_SEED MELON n<=5 | BUY_SEED STRAWBERRY n<=4 | BUY_SEED TOMATO n<=9 | BUY_SEED WHEAT n<=46 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\"acquire_pasture_and_seed_melons\",\"farmer\":[\"BUILD_PASTURE\"],\"hands\":[[\"PASS\"],[\"PASS\"],[\"PASS\"]],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "BUILD_PASTURE"
+    ],
+    "hands": [
+     [
+      "PASS"
+     ],
+     [
+      "PASS"
+     ],
+     [
+      "PASS"
+     ]
+    ],
+    "market": [],
+    "plan": "acquire_pasture_and_seed_melons"
+   },
+   "plan": "acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0263,
+    "prompt_build": 0.0008,
+    "model_inference": 17.839,
+    "prefill_ttft": 13.947592376249998,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 4.0557903930000005,
+    "time_to_first_token_in_second": 13.947592376249998,
+    "last_prefill_token_count": 2251,
+    "last_prefill_tokens_per_second": 162.58146141235014,
+    "last_decode_token_count": 39,
+    "last_decode_tokens_per_second": 9.78230648045415
+   },
+   "admissible_farmer_ops": [
+    "BUILD_COOP",
+    "BUILD_PASTURE",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLANT MELON",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:P|carry|field|safe|unripe|shedroom",
+   "examples_used": [
+    {
+     "provenance": "teacher:../cloud-dispatch/candidate.py::agent",
+     "action": "{\"plan\":\"plant melon: productive tile/unit work\",\"farmer\":[\"PLANT\",\"MELON\"],\"hands\":[[\"NORTH\"],[\"WEST\"],[\"WEST\"]],\"market\":[]}"
+    }
+   ],
+   "outcome": {
+    "bankable": true,
+    "label": "production",
+    "detail": "productive tile work: BUILD_PASTURE"
+   },
+   "before_after": {
+    "money_before": 464.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  },
+  {
+   "day": 0,
+   "hour": 5,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nDEMONSTRATIONS on this kind of turn from teacher:../cloud-dispatch/candidate.py::agent (state -> the action that advanced it). These are a teacher's turns, not your own past wins:\nfarm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (3,3); hand0 at (2,4); hand1 at (4,2); hand2 at (4,0) . empty plantable tiles (19): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),( -> {\"plan\":\"north: productive tile/unit work\",\"farmer\":[\"NORTH\"],\"hands\":[[\"PLANT\",\"MELON\"],[\"CARE\"],[\"PLANT\",\"MELON\"]],\"market\":[]}\nfarm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (4,3); hand0 at (3,4); hand1 at (4,4); hand2 at (4,1) . empty plantable tiles (21): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(0,3),( -> {\"plan\":\"west: productive tile/unit work\",\"farmer\":[\"WEST\"],\"hands\":[[\"FEED\"],[\"NORTH\"],[\"PLANT\",\"MELON\"]],\"market\":[]}\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,3); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4)\nempty plantable tiles (23): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),(0,3),(1,3),(2,3),(3,3),(0,4),(1,4),(2,4),(3,4)\npens:\n  (4,3) PASTURE (empty)\n  (4,4) PASTURE (empty)\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 5 money 464\nfarmer at (4,3); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand0 at (4,3); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand1 at (3,4); TILE UNDER IT = [empty]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand2 at (4,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nseeds MELON6\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT27,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 714 (last is step 718); 19 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 464; opponent cash 597; you are behind by 133.\nunsold: 2 unit(s) in the shed, 4 carried by units.\n714 decision(s) left (last is step 718); 19 turn(s) left today.\n\nYOUR PLAN SO FAR: acquire_pasture_and_seed_melons\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON6. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 5 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,3) PASTURE] DIG (acts on (4,3) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | EAST | NORTH | PASS | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[0]:  [standing on (4,3) PASTURE] DIG (acts on (4,3) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | EAST | NORTH | PASS | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[1]:  [standing on (3,4) empty] BUILD_COOP (acts on (3,4) empty) | BUILD_PASTURE (acts on (3,4) empty) | EAST | NORTH | PASS | PLANT MELON (acts on (3,4) empty) | SOUTH | WEST\nhands[2]:  [standing on (4,4) PASTURE] DIG (acts on (4,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | DROP | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE | BUY_PRODUCT FERTILIZER n<=4 | BUY_PRODUCT WHEAT n<=16 | BUY_SEED CARROT n<=23 | BUY_SEED MELON n<=5 | BUY_SEED STRAWBERRY n<=4 | BUY_SEED TOMATO n<=9 | BUY_SEED WHEAT n<=46 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\"acquire_pasture_and_seed_melons\",\"farmer\":[\"NORTH\"],\"hands\":[[\"PASS\"],[\"BUILD_PASTURE\"],[\"PASS\"]],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "NORTH"
+    ],
+    "hands": [
+     [
+      "PASS"
+     ],
+     [
+      "BUILD_PASTURE"
+     ],
+     [
+      "PASS"
+     ]
+    ],
+    "market": [],
+    "plan": "acquire_pasture_and_seed_melons"
+   },
+   "plan": "acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0261,
+    "prompt_build": 0.0006,
+    "model_inference": 19.359,
+    "prefill_ttft": 15.580910993749999,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.889003085,
+    "time_to_first_token_in_second": 15.580910993749999,
+    "last_prefill_token_count": 2459,
+    "last_prefill_tokens_per_second": 158.83316306732604,
+    "last_decode_token_count": 39,
+    "last_decode_tokens_per_second": 10.074809300399421
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE SHEEP 1",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:-|carry|field|safe|unripe|shedroom",
+   "examples_used": [
+    {
+     "provenance": "teacher:../cloud-dispatch/candidate.py::agent",
+     "action": "{\"plan\":\"north: productive tile/unit work\",\"farmer\":[\"NORTH\"],\"hands\":[[\"PLANT\",\"MELON\"],[\"CARE\"],[\"PLANT\",\"MELON\"]],\"market\":[]}"
+    },
+    {
+     "provenance": "teacher:../cloud-dispatch/candidate.py::agent",
+     "action": "{\"plan\":\"west: productive tile/unit work\",\"farmer\":[\"WEST\"],\"hands\":[[\"FEED\"],[\"NORTH\"],[\"PLANT\",\"MELON\"]],\"market\":[]}"
+    }
+   ],
+   "outcome": {
+    "bankable": true,
+    "label": "production",
+    "detail": "productive tile work: BUILD_PASTURE"
+   },
+   "before_after": {
+    "money_before": 464.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  },
+  {
+   "day": 0,
+   "hour": 6,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nPAST ADVANCING TURNS of this kind (state -> the action that advanced it); each line is labelled with whose turn it was:\n[model] farm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (4,3); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4) . empty plantable tiles (24): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),( -> {\"farmer\":[\"BUILD_PASTURE\"],\"hands\":[[\"PASS\"],[\"PASS\"],[\"PASS\"]],\"market\":[],\"plan\":\"acquire_pasture_and_seed_melons\"}\n[teacher:../cloud-dispatch/candidate.py::agent] farm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (3,2); hand0 at (2,4); hand1 at (4,2); hand2 at (4,0) . empty plantable tiles (17): (0,0),(1,0),(2,0),(3,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),(2,3),( -> {\"plan\":\"plant melon: productive tile/unit work\",\"farmer\":[\"PLANT\",\"MELON\"],\"hands\":[[\"NORTH\"],[\"WEST\"],[\"WEST\"]],\"market\":[]}\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,2); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4)\nempty plantable tiles (22): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),(0,3),(1,3),(2,3),(3,3),(0,4),(1,4),(2,4)\npens:\n  (4,3) PASTURE (empty)\n  (3,4) PASTURE (empty)\n  (4,4) PASTURE (empty)\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 6 money 464\nfarmer at (4,2); TILE UNDER IT = [empty]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand0 at (4,3); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand1 at (3,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand2 at (4,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nseeds MELON6\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT28,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 713 (last is step 718); 18 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 464; opponent cash 513; you are behind by 49.\nunsold: 2 unit(s) in the shed, 4 carried by units.\n713 decision(s) left (last is step 718); 18 turn(s) left today.\n\nYOUR PLAN SO FAR: acquire_pasture_and_seed_melons\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON6. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,2) empty] BUILD_COOP (acts on (4,2) empty) | BUILD_PASTURE (acts on (4,2) empty) | EAST | NORTH | PASS | PLANT MELON (acts on (4,2) empty) | SOUTH | WEST\nhands[0]:  [standing on (4,3) PASTURE] DIG (acts on (4,3) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | EAST | NORTH | PASS | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[1]:  [standing on (3,4) PASTURE] DIG (acts on (3,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | EAST | NORTH | PASS | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[2]:  [standing on (4,4) PASTURE] DIG (acts on (4,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | DROP | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE | BUY_PRODUCT FERTILIZER n<=4 | BUY_PRODUCT WHEAT n<=15 | BUY_SEED CARROT n<=23 | BUY_SEED MELON n<=5 | BUY_SEED STRAWBERRY n<=4 | BUY_SEED TOMATO n<=9 | BUY_SEED WHEAT n<=46 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\"acquire_pasture_and_seed_melons\",\"farmer\":[\"BUILD_PASTURE\"],\"hands\":[[\"PASS\"],[\"PASS\"],[\"PASS\"]],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "BUILD_PASTURE"
+    ],
+    "hands": [
+     [
+      "PASS"
+     ],
+     [
+      "PASS"
+     ],
+     [
+      "PASS"
+     ]
+    ],
+    "market": [],
+    "plan": "acquire_pasture_and_seed_melons"
+   },
+   "plan": "acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.024,
+    "prompt_build": 0.0005,
+    "model_inference": 19.587,
+    "prefill_ttft": 15.579373455250002,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.7526999859999997,
+    "time_to_first_token_in_second": 15.579373455250002,
+    "last_prefill_token_count": 2468,
+    "last_prefill_tokens_per_second": 159.49238078207233,
+    "last_decode_token_count": 39,
+    "last_decode_tokens_per_second": 9.498477062289094
+   },
+   "admissible_farmer_ops": [
+    "BUILD_COOP",
+    "BUILD_PASTURE",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLANT MELON",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:P|carry|field|safe|unripe|shedroom",
+   "examples_used": [
+    {
+     "provenance": "model",
+     "action": "{\"farmer\":[\"BUILD_PASTURE\"],\"hands\":[[\"PASS\"],[\"PASS\"],[\"PASS\"]],\"market\":[],\"plan\":\"acquire_pasture_and_seed_melons\"}"
+    },
+    {
+     "provenance": "teacher:../cloud-dispatch/candidate.py::agent",
+     "action": "{\"plan\":\"plant melon: productive tile/unit work\",\"farmer\":[\"PLANT\",\"MELON\"],\"hands\":[[\"NORTH\"],[\"WEST\"],[\"WEST\"]],\"market\":[]}"
+    }
+   ],
+   "outcome": {
+    "bankable": true,
+    "label": "production",
+    "detail": "productive tile work: BUILD_PASTURE"
+   },
+   "before_after": {
+    "money_before": 464.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  },
+  {
+   "day": 0,
+   "hour": 7,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nPAST ADVANCING TURNS of this kind (state -> the action that advanced it); each line is labelled with whose turn it was:\n[model] farm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (4,3); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4) . empty plantable tiles (23): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(4,2),( -> {\"farmer\":[\"NORTH\"],\"hands\":[[\"PASS\"],[\"BUILD_PASTURE\"],[\"PASS\"]],\"market\":[],\"plan\":\"acquire_pasture_and_seed_melons\"}\n[teacher:../cloud-dispatch/candidate.py::agent] farm 10x10, quadrants unlocked: NW; locked tiles 75 . shed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5) . units: farmer at (3,3); hand0 at (2,4); hand1 at (4,2); hand2 at (4,0) . empty plantable tiles (19): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),( -> {\"plan\":\"north: productive tile/unit work\",\"farmer\":[\"NORTH\"],\"hands\":[[\"PLANT\",\"MELON\"],[\"CARE\"],[\"PLANT\",\"MELON\"]],\"market\":[]}\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,2); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4)\nempty plantable tiles (21): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),(2,3),(3,3),(0,4),(1,4),(2,4)\npens:\n  (4,2) PASTURE (empty)\n  (4,3) PASTURE (empty)\n  (3,4) PASTURE (empty)\n  (4,4) PASTURE (empty)\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 7 money 464\nfarmer at (4,2); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand0 at (4,3); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand1 at (3,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nhand2 at (4,4); TILE UNDER IT = [PASTURE]; CARRIED IN HAND (not on the tile) = SHEEP1\nseeds MELON6\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT28,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 712 (last is step 718); 17 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 464; opponent cash 541; you are behind by 77.\nunsold: 2 unit(s) in the shed, 4 carried by units.\n712 decision(s) left (last is step 718); 17 turn(s) left today.\n\nYOUR PLAN SO FAR: acquire_pasture_and_seed_melons\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON6. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 7 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,2) PASTURE] DIG (acts on (4,2) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | EAST | NORTH | PASS | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[0]:  [standing on (4,3) PASTURE] DIG (acts on (4,3) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | EAST | NORTH | PASS | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[1]:  [standing on (3,4) PASTURE] DIG (acts on (3,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | EAST | NORTH | PASS | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nhands[2]:  [standing on (4,4) PASTURE] DIG (acts on (4,4) PASTURE; REMOVES whatever is on this tile, including a healthy plant) | DROP | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | PLACE SHEEP n<=1 (INSTALLS the SHEEP on this empty PASTURE) | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE | BUY_PRODUCT FERTILIZER n<=4 | BUY_PRODUCT WHEAT n<=16 | BUY_SEED CARROT n<=23 | BUY_SEED MELON n<=5 | BUY_SEED STRAWBERRY n<=4 | BUY_SEED TOMATO n<=9 | BUY_SEED WHEAT n<=46 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\"acquire_pasture_and_seed_melons\",\"farmer\":[\"PLACE\",\"SHEEP\",1],\"hands\":[[\"PLACE\",\"SHEEP\",1],[\"PLACE\",\"SHEEP\",1],[\"PLACE\",\"SHEEP\",1]],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PLACE",
+     "SHEEP",
+     1
+    ],
+    "hands": [
+     [
+      "PLACE",
+      "SHEEP",
+      1
+     ],
+     [
+      "PLACE",
+      "SHEEP",
+      1
+     ],
+     [
+      "PLACE",
+      "SHEEP",
+      1
+     ]
+    ],
+    "market": [],
+    "plan": "acquire_pasture_and_seed_melons"
+   },
+   "plan": "acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0282,
+    "prompt_build": 0.0005,
+    "model_inference": 20.957,
+    "prefill_ttft": 15.527940656750001,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.799321038,
+    "time_to_first_token_in_second": 15.527940656750001,
+    "last_prefill_token_count": 2483,
+    "last_prefill_tokens_per_second": 160.94628919753046,
+    "last_decode_token_count": 55,
+    "last_decode_tokens_per_second": 9.956819572633643
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE SHEEP 1",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:-|carry|field|safe|unripe|shedroom",
+   "examples_used": [
+    {
+     "provenance": "model",
+     "action": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PASS\"],[\"BUILD_PASTURE\"],[\"PASS\"]],\"market\":[],\"plan\":\"acquire_pasture_and_seed_melons\"}"
+    },
+    {
+     "provenance": "teacher:../cloud-dispatch/candidate.py::agent",
+     "action": "{\"plan\":\"north: productive tile/unit work\",\"farmer\":[\"NORTH\"],\"hands\":[[\"PLANT\",\"MELON\"],[\"CARE\"],[\"PLANT\",\"MELON\"]],\"market\":[]}"
+    }
+   ],
+   "outcome": {
+    "bankable": true,
+    "label": "investment",
+    "detail": "animal installed, cash +0"
+   },
+   "before_after": {
+    "money_before": 464.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  },
+  {
+   "day": 0,
+   "hour": 8,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,2); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4)\nempty plantable tiles (21): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),(2,3),(3,3),(0,4),(1,4),(2,4)\npens:\n  (4,2) SHEEP on PASTURE yield0 not_fed_today not_cared_today\n  (4,3) SHEEP on PASTURE yield0 not_fed_today not_cared_today\n  (3,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today\n  (4,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 8 money 464\nfarmer at (4,2); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand0 at (4,3); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand1 at (3,4); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand2 at (4,4); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nseeds MELON6\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT28,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 711 (last is step 718); 16 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 464; opponent cash 541; you are behind by 77.\nunsold: 2 unit(s) in the shed, 0 carried by units.\n711 decision(s) left (last is step 718); 16 turn(s) left today.\n\nYOUR PLAN SO FAR: acquire_pasture_and_seed_melons\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON6. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 8 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,2) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (4,2) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]:  [standing on (4,3) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (4,3) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | SOUTH | WEST\nhands[1]:  [standing on (3,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (3,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | SOUTH | WEST\nhands[2]:  [standing on (4,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (4,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE | BUY_PRODUCT FERTILIZER n<=4 | BUY_PRODUCT WHEAT n<=16 | BUY_SEED CARROT n<=23 | BUY_SEED MELON n<=5 | BUY_SEED STRAWBERRY n<=4 | BUY_SEED TOMATO n<=9 | BUY_SEED WHEAT n<=46 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\",\n  farmer: [CARE (acts on (4,2) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | \",\"farmer\":[\"CARE\"],\"hands\":[[\"CARE\"],[\"CARE\"],[\"CARE\"]],\"market\":[]}",
+   "error": null,
+   "rejected": "not valid JSON: Invalid control character at: line 1 column 11 (char 10)",
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "plan": "acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0298,
+    "prompt_build": 0.0007,
+    "model_inference": 22.384,
+    "prefill_ttft": 13.8638442675,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.94045967,
+    "time_to_first_token_in_second": 13.8638442675,
+    "last_prefill_token_count": 2246,
+    "last_prefill_tokens_per_second": 163.21165058373188,
+    "last_decode_token_count": 84,
+    "last_decode_tokens_per_second": 9.749272058241088
+   },
+   "admissible_farmer_ops": [
+    "CARE",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:-|nocarry|field|safe|unripe|shedroom",
+   "examples_used": [],
+   "outcome": {
+    "bankable": false,
+    "label": "neutral",
+    "detail": "movement or storage only"
+   },
+   "before_after": {
+    "money_before": 464.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  },
+  {
+   "day": 0,
+   "hour": 9,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,2); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4)\nempty plantable tiles (21): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),(2,3),(3,3),(0,4),(1,4),(2,4)\npens:\n  (4,2) SHEEP on PASTURE yield0 not_fed_today not_cared_today\n  (4,3) SHEEP on PASTURE yield0 not_fed_today not_cared_today\n  (3,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today\n  (4,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 9 money 464\nfarmer at (4,2); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand0 at (4,3); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand1 at (3,4); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand2 at (4,4); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today not_cared_today]; CARRIED IN HAND (not on the tile) = nothing\nseeds MELON6\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT28,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 710 (last is step 718); 15 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 464; opponent cash 541; you are behind by 77.\nunsold: 2 unit(s) in the shed, 0 carried by units.\n710 decision(s) left (last is step 718); 15 turn(s) left today.\n\nYOUR PLAN SO FAR: acquire_pasture_and_seed_melons\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON6. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 9 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,2) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (4,2) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | SOUTH | WEST\nhands[0]:  [standing on (4,3) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (4,3) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | SOUTH | WEST\nhands[1]:  [standing on (3,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (3,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | SOUTH | WEST\nhands[2]:  [standing on (4,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today] CARE (acts on (4,4) SHEEP on PASTURE yield0 not_fed_today not_cared_today; sets cared_today only; the care bonus is granted at the daily refresh ONLY if this animal was ALSO fed today) | EAST | NORTH | PASS | PICKUP WHEAT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE | BUY_PRODUCT FERTILIZER n<=4 | BUY_PRODUCT WHEAT n<=16 | BUY_SEED CARROT n<=23 | BUY_SEED MELON n<=5 | BUY_SEED STRAWBERRY n<=4 | BUY_SEED TOMATO n<=9 | BUY_SEED WHEAT n<=46 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\">acquire_pasture_and_seed_melons\",\"farmer\":[\"CARE\"],\"hands\":[[\"CARE\"],[\"CARE\"],[\"CARE\"]],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "CARE"
+    ],
+    "hands": [
+     [
+      "CARE"
+     ],
+     [
+      "CARE"
+     ],
+     [
+      "CARE"
+     ]
+    ],
+    "market": [],
+    "plan": ">acquire_pasture_and_seed_melons"
+   },
+   "plan": ">acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.032,
+    "prompt_build": 0.0008,
+    "model_inference": 17.395,
+    "prefill_ttft": 13.8211035265,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.8455230990000002,
+    "time_to_first_token_in_second": 13.8211035265,
+    "last_prefill_token_count": 2246,
+    "last_prefill_tokens_per_second": 163.67871593407793,
+    "last_decode_token_count": 37,
+    "last_decode_tokens_per_second": 10.090868813664896
+   },
+   "admissible_farmer_ops": [
+    "CARE",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:-|nocarry|field|safe|unripe|shedroom",
+   "examples_used": [],
+   "outcome": {
+    "bankable": false,
+    "label": "care_without_feed",
+    "detail": "CARE without FEED on the same animal this turn grants no bonus at the refresh; FEED consumes 1 WHEAT carried by that unit, and BUY_SEED cannot supply it"
+   },
+   "before_after": {
+    "money_before": 464.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  },
+  {
+   "day": 0,
+   "hour": 10,
+   "prompt": "KAGGRICULTURE STATIC RULES AND ECONOMY (same every turn)\nscore = your CASH at the end. Stock left in the shed scores 0. 719 decisions per episode, 24 turns per day, shed holds 100, at most 10 market orders per turn.\ncrops (seed cost | first yield | max yield | ongoing):\n  WHEAT       seed $ 10  first yield age 2d  cap 6  one harvest, best watered age2-4d\n  CARROT      seed $ 20  first yield age 2d  cap 4  one harvest, best watered age2-3d\n  TOMATO      seed $ 50  first yield age 8d  cap 4  ongoing, +1 every 1d for 4 events\n  STRAWBERRY  seed $100  first yield age10d  cap 4  ongoing, +1 every 2d for 4 events\n  MELON       seed $ 80  first yield age10d  cap 6  one harvest, best watered age6-12d\nanimals (cost | structure | product | first yield | every):\n  GOOSE  $300  needs COOP     gives EGG    first age4d  every 1d  hold 4\n  COW    $400  needs PASTURE  gives MILK   first age8d  every 2d  hold 6\n  SHEEP  $500  needs PASTURE  gives WOOL   first age6d  every 3d  hold 6\n  an animal produces at the daily refresh. FEED costs 1 WHEAT carried by the unit standing on it. CARE alone does nothing: the care bonus is only granted if the animal was FED that same day. Buying a seed is not feed -- seeds are planted, never eaten.\n  PLACE <animal> INSTALLS it only when the unit stands on an empty matching structure; otherwise it just deposits the animal into the shed as stock. Two units on the same structure cannot both install.\nbase sell prices: WHEAT 25, CARROT 35, TOMATO 60, STRAWBERRY 120, MELON 250, EGG 50, MILK 160, WOOL 200, FERTILIZER 100\nprice moves with market inventory: selling a lot pushes a price down, and only WHEAT and FERTILIZER can be bought back from the market.\ntown shops and what each unlocked copy consumes every 4 turns:\n  BAKERY          EGG, WHEAT\n  PIZZA_SHOP      MILK, TOMATO, WHEAT\n  BRUNCH_SPOT     EGG, WHEAT, STRAWBERRY\n  YARN_STORE      WOOL  (single-product shops pull 2x)\n  ICE_CREAM_SHOP  STRAWBERRY, MILK, WHEAT\n  PET_CAFE        CARROT  (single-product shops pull 2x)\n  SMOOTHIE_SHOP   STRAWBERRY, MILK\n  FARMERS_MARKET  WHEAT, CARROT, TOMATO, STRAWBERRY\nland: NW is free; then NE, SW, SE at $1000, $2000, $4000. HIRE costs 1,1,2,3,5,... per extra hand that day and hands are released at the end of every day.\na plant dies at the daily refresh once it has gone 2 days unwatered, and a newly planted tile already counts its planting day as unwatered.\n\nLIVE FARM\nfarm 10x10, quadrants unlocked: NW; locked tiles 75\nshed access tiles (DROP/PICKUP work only here): (4,4),(5,4),(4,5),(5,5)\nunits: farmer at (4,2); hand0 at (4,3); hand1 at (3,4); hand2 at (4,4)\nempty plantable tiles (21): (0,0),(1,0),(2,0),(3,0),(4,0),(0,1),(1,1),(2,1),(3,1),(4,1),(0,2),(1,2),(2,2),(3,2),(0,3),(1,3),(2,3),(3,3),(0,4),(1,4),(2,4)\npens:\n  (4,2) SHEEP on PASTURE yield0 not_fed_today cared_today\n  (4,3) SHEEP on PASTURE yield0 not_fed_today cared_today\n  (3,4) SHEEP on PASTURE yield0 not_fed_today cared_today\n  (4,4) SHEEP on PASTURE yield0 not_fed_today cared_today\nlocked tiles: (5,0),(6,0),(7,0),(8,0),(9,0),(5,1),(6,1),(7,1),(8,1),(9,1),(5,2),(6,2) +63 more\n\nHOLDINGS AND MARKET\nday 0 hour 10 money 464\nfarmer at (4,2); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand0 at (4,3); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand1 at (3,4); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today cared_today]; CARRIED IN HAND (not on the tile) = nothing\nhand2 at (4,4); TILE UNDER IT = [SHEEP on PASTURE yield0 not_fed_today cared_today]; CARRIED IN HAND (not on the tile) = nothing\nseeds MELON6\nshed WHEAT2 (2/100 used, 98 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON256,MILK169,STRAWBERRY128,TOMATO60,WHEAT28,WOOL206\ntown shops none\n\nPRODUCTION AND HORIZON\ndecisions left this episode: 709 (last is step 718); 14 turn(s) left today\nno plants owned\n\nOBJECTIVE: end the episode with more CASH than the opponent. Only cash is scored -- goods in the shed or carried by a unit are worth 0 at the end, so every unit you grow or buy has to be SOLD to count.\nyour cash 464; opponent cash 541; you are behind by 77.\nunsold: 2 unit(s) in the shed, 0 carried by units.\n709 decision(s) left (last is step 718); 14 turn(s) left today.\n\nYOUR PLAN SO FAR: >acquire_pasture_and_seed_melons\n\nTURN RULES\nunits this turn: 4 (farmer + 3 hand(s))\nPLANT budget is JOINT across farmer and hands: seeds MELON6. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 98 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 10 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer:  [standing on (4,2) SHEEP on PASTURE yield0 not_fed_today cared_today] EAST | NORTH | PASS | SOUTH | WEST\nhands[0]:  [standing on (4,3) SHEEP on PASTURE yield0 not_fed_today cared_today] EAST | NORTH | PASS | SOUTH | WEST\nhands[1]:  [standing on (3,4) SHEEP on PASTURE yield0 not_fed_today cared_today] EAST | NORTH | PASS | SOUTH | WEST\nhands[2]:  [standing on (4,4) SHEEP on PASTURE yield0 not_fed_today cared_today] EAST | NORTH | PASS | PICKUP WHEAT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW | BUY_ANIMAL GOOSE | BUY_PRODUCT FERTILIZER n<=4 | BUY_PRODUCT WHEAT n<=16 | BUY_SEED CARROT n<=23 | BUY_SEED MELON n<=5 | BUY_SEED STRAWBERRY n<=4 | BUY_SEED TOMATO n<=9 | BUY_SEED WHEAT n<=46 | HIRE | SELL WHEAT n<=2\n",
+   "raw_output": "{\"plan\":\">acquire_pasture_and_seed_melons\",\"farmer\":[\"EAST\"],\"hands\":[[\"EAST\"],[\"EAST\"],[\"EAST\"]],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "EAST"
+    ],
+    "hands": [
+     [
+      "EAST"
+     ],
+     [
+      "EAST"
+     ],
+     [
+      "EAST"
+     ]
+    ],
+    "market": [],
+    "plan": ">acquire_pasture_and_seed_melons"
+   },
+   "plan": ">acquire_pasture_and_seed_melons",
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0408,
+    "prompt_build": 0.0009,
+    "model_inference": 15.711,
+    "prefill_ttft": 12.108017636249999,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.8836612350000004,
+    "time_to_first_token_in_second": 12.108017636249999,
+    "last_prefill_token_count": 2001,
+    "last_prefill_tokens_per_second": 166.6374135145266,
+    "last_decode_token_count": 37,
+    "last_decode_tokens_per_second": 10.00900946108382
+   },
+   "admissible_farmer_ops": [
+    "EAST",
+    "NORTH",
+    "PASS",
+    "SOUTH",
+    "WEST"
+   ],
+   "examples_mode": "bank",
+   "situation_class": "u4|can:-|nocarry|field|safe|unripe|shedroom",
+   "examples_used": [],
+   "outcome": {
+    "bankable": false,
+    "label": "neutral",
+    "detail": "movement or storage only"
+   },
+   "before_after": {
+    "money_before": 464.0,
+    "money_after": 464.0,
+    "shed_before": {
+     "WHEAT": 2
+    },
+    "shed_after": {
+     "WHEAT": 2
+    }
+   }
+  }
+ ],
+ "summary": {
+  "model_turns": 8,
+  "legal": 8,
+  "syntax_rejections": 1,
+  "non_pass_farmer": 7,
+  "market_orders_authored": 1,
+  "mean_inference_s": 20.76,
+  "total_inference_s": 166.1
+ }
+}

@@ -1,0 +1,610 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/dio/customer_job.schema.json",
+  "title": "DIO customer job",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "job_id",
+    "status",
+    "created_at",
+    "customer_reference",
+    "service",
+    "objective",
+    "inputs",
+    "deliverables",
+    "acceptance_conditions",
+    "result_address",
+    "substrate",
+    "bazaar",
+    "payment"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "dio-revenue/v1"
+    },
+    "kind": {
+      "const": "CUSTOMER_JOB"
+    },
+    "job_id": {
+      "$ref": "#/$defs/id"
+    },
+    "status": {
+      "const": "REQUESTED"
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "customer_reference": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional correlation label. It is not identity proof."
+    },
+    "service": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/inputArtifact"
+      }
+    },
+    "deliverables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "deliverable_id",
+          "description",
+          "address"
+        ],
+        "properties": {
+          "deliverable_id": {
+            "$ref": "#/$defs/id"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "acceptance_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/condition"
+      }
+    },
+    "result_address": {
+      "type": "string",
+      "minLength": 1
+    },
+    "substrate": {
+      "$ref": "#/$defs/substrate"
+    },
+    "bazaar": {
+      "$ref": "#/$defs/bazaarLink"
+    },
+    "payment": {
+      "$ref": "#/$defs/payment"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "nullableId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "inputArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "availability",
+        "path",
+        "sha256",
+        "bytes",
+        "note"
+      ],
+      "properties": {
+        "artifact_id": {
+          "$ref": "#/$defs/id"
+        },
+        "availability": {
+          "type": "string",
+          "enum": [
+            "PUBLIC_REPOSITORY",
+            "CUSTOMER_PREMISES_ONLY",
+            "NOT_SUPPLIED"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "condition_id",
+        "measure",
+        "comparator",
+        "expected"
+      ],
+      "properties": {
+        "condition_id": {
+          "$ref": "#/$defs/id"
+        },
+        "measure": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected": {}
+      }
+    },
+    "payment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference",
+        "status"
+      ],
+      "properties": {
+        "reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "NOT_REQUESTED",
+            "REFERENCE_ONLY",
+            "SETTLEMENT_REPORTED",
+            "REFUND_REPORTED",
+            "DISPUTED"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "NOT_REQUESTED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "reference": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "bazaarLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offer_id",
+        "action_id",
+        "result_id",
+        "note"
+      ],
+      "properties": {
+        "offer_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "action_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "result_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "substrate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "bytes",
+        "format",
+        "header",
+        "output_addresses",
+        "wire_plane",
+        "gates"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "\\.mno$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 8
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "magic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "header": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bytes",
+            "sha256"
+          ],
+          "properties": {
+            "offset": {
+              "const": 0
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 8
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "magic_ascii": {
+              "type": "string",
+              "minLength": 1
+            },
+            "magic_hex": {
+              "type": "string",
+              "pattern": "^[0-9a-f]+$"
+            },
+            "layout": {
+              "type": "string",
+              "minLength": 1
+            },
+            "base_bytes": {
+              "type": "integer",
+              "minimum": 8
+            },
+            "n_gate": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "n_wires": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "n_in": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "n_out": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "depth": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "output_addresses_offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "output_addresses_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "output_addresses_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "output_addresses": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "unique_output_addresses": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "output_addresses_in_wire_plane": {
+              "type": "boolean"
+            }
+          }
+        },
+        "output_addresses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "address",
+                  "value_hex",
+                  "value_uint"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "address": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "value_hex": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{2}$"
+                  },
+                  "value_uint": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "wire_plane": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "offset",
+            "bytes",
+            "sha256"
+          ],
+          "properties": {
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "levels": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              "uniqueItems": true
+            },
+            "zero_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "one_bytes": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "record_bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "region_offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "region_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "region_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "body_offset": {
+              "type": "integer",
+              "minimum": 8
+            },
+            "body_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "body_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "record_format": {
+              "type": "string",
+              "minLength": 1
+            },
+            "records": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "opcode_histogram": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "unique_input_addresses": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unique_output_addresses": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "repeated_output_writes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "self_output_inputs": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "addresses_in_wire_plane": {
+              "type": "boolean"
+            },
+            "expected_file_bytes": {
+              "type": "integer",
+              "minimum": 8
+            },
+            "body_length_exact": {
+              "type": "boolean"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "count",
+                "record_bytes",
+                "region_offset",
+                "region_bytes",
+                "region_sha256",
+                "body_offset",
+                "body_bytes",
+                "body_sha256"
+              ]
+            },
+            {
+              "required": [
+                "offset",
+                "bytes",
+                "sha256",
+                "record_format",
+                "record_bytes",
+                "records"
+              ]
+            }
+          ]
+        },
+        "expected_file_bytes": {
+          "type": "integer",
+          "minimum": 8
+        },
+        "body_length_exact": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

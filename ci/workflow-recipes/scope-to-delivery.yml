@@ -1,0 +1,44 @@
+name: scope-to-delivery
+
+on:
+  push:
+    branches:
+      - main
+    paths: &pipeline_paths
+      - '.github/workflows/scope-to-delivery.yml'
+      - 'test_scope_to_delivery.py'
+      - 'host/scope_to_delivery.py'
+      - 'scope-to-delivery.html'
+      - 'scope-to-delivery.js'
+      - 'ground/SCOPE_TO_DELIVERY.md'
+      - 'revenue/scope_to_delivery/**'
+      - 'revenue/outcome_commerce/catalog.json'
+  pull_request:
+    paths: *pipeline_paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: dependency-free scope-to-delivery contracts
+        run: python -W error -m unittest -q test_scope_to_delivery.py
+      - name: syntax and JSON checks
+        run: |
+          python -m py_compile host/scope_to_delivery.py test_scope_to_delivery.py
+          python -c "import json,pathlib; [json.loads(path.read_text(encoding='utf-8')) for path in pathlib.Path('revenue/scope_to_delivery').rglob('*.json')]"
+      - name: CLI project fixture
+        run: python3 host/scope_to_delivery.py project --agreement revenue/scope_to_delivery/fixtures/accepted_agreement.json --observations revenue/scope_to_delivery/fixtures/accepted_observations.json --payment revenue/scope_to_delivery/fixtures/payment_authorized.json
+      - name: open-door anti-regression
+        run: git show --format= --no-ext-diff HEAD | python open_door_guard.py --diff-file -
+      - name: whitespace guard
+        run: git diff --check HEAD^

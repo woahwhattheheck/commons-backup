@@ -1,0 +1,109 @@
+name: ROADEF fleet container
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/roadef-fleet-container.yml'
+      - 'revenue/roadef2026/container-validation/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  container:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /revenue/roadef2026/container-validation/
+            /.github/workflows/roadef-fleet-container.yml
+      - name: Stage exact source and official B01, B11 and B12 inputs
+        run: python3 -B revenue/roadef2026/container-validation/bootstrap.py --output "$RUNNER_TEMP/roadef-fleet-work"
+      - name: Build the Ubuntu image with enforced 4 GiB memory
+        shell: bash
+        run: |
+          python3 -B revenue/roadef2026/container-validation/build_with_limit.py \
+            --context "$RUNNER_TEMP/roadef-fleet-work/context" \
+            --image roadef-fleet \
+            --output "$RUNNER_TEMP/roadef-fleet-work/build-evidence"
+      - name: Run normal and signalled portfolio containers with independent official checks
+        run: >-
+          sudo python3 -B revenue/roadef2026/container-validation/validate.py
+          --image roadef-fleet
+          --data "${{ runner.temp }}/roadef-fleet-work/data"
+          --preparation "${{ runner.temp }}/roadef-fleet-work/PREPARATION.json"
+          --output "${{ runner.temp }}/roadef-fleet-results"
+      - name: Generate the exact frozen two-page method PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/roadef-method-venv"
+          "$RUNNER_TEMP/roadef-method-venv/bin/python" -m pip install --disable-pip-version-check reportlab==4.4.9 pypdf==6.10.0
+          "$RUNNER_TEMP/roadef-method-venv/bin/python" -m pip freeze > "$RUNNER_TEMP/roadef-fleet-work/METHOD-DEPENDENCIES.txt"
+          "$RUNNER_TEMP/roadef-method-venv/bin/python" -B "$RUNNER_TEMP/roadef-fleet-work/build_method_pdf.py" \
+            "$RUNNER_TEMP/roadef-fleet-work/S139-method.md" "$RUNNER_TEMP/roadef-fleet-work/method.pdf"
+      - name: Prepare retained runtime evidence for artifact assembly
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          if [ -d "$RUNNER_TEMP/roadef-fleet-results" ]; then
+            sudo chown -R "$(id -u):$(id -g)" "$RUNNER_TEMP/roadef-fleet-results"
+            sudo chmod -R a+rX "$RUNNER_TEMP/roadef-fleet-results"
+          fi
+      - name: Package tested context and method as a held candidate
+        shell: bash
+        run: |
+          "$RUNNER_TEMP/roadef-method-venv/bin/python" -B revenue/roadef2026/container-validation/package_held.py \
+            --work "$RUNNER_TEMP/roadef-fleet-work" \
+            --results "$RUNNER_TEMP/roadef-fleet-results" \
+            --output "$RUNNER_TEMP/roadef-fleet-work/held-candidate"
+      - name: Bind execution evidence to workflow and validation source
+        if: ${{ always() }}
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, shutil, subprocess
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'roadef-fleet-results'
+          out.mkdir(exist_ok=True)
+          source = pathlib.Path('revenue/roadef2026/container-validation')
+          shutil.copytree(source, out / 'validation-source', dirs_exist_ok=True)
+          work = pathlib.Path(os.environ['RUNNER_TEMP']) / 'roadef-fleet-work'
+          for name in ('PREPARATION.json', 'PREPARER.py', 'CANDIDATE.cpp', 'CANDIDATE.patch',
+                       'CANDIDATE-PATCH.stdout', 'CANDIDATE-PATCH.stderr',
+                       'FROZEN-CANDIDATE-20260908.json', 'S139-method.md', 'build_method_pdf.py',
+                       'method.pdf', 'METHOD-DEPENDENCIES.txt'):
+              if (work / name).is_file():
+                  shutil.copyfile(work / name, out / name)
+          if (work / 'runtime-source').is_dir():
+              shutil.copytree(work / 'runtime-source', out / 'runtime-source', dirs_exist_ok=True)
+          if (work / 'build-evidence').is_dir():
+              shutil.copytree(work / 'build-evidence', out / 'build-evidence', dirs_exist_ok=True)
+          if (work / 'held-candidate').is_dir():
+              shutil.copytree(work / 'held-candidate', out / 'held-candidate', dirs_exist_ok=True)
+          if (work / 'source/PUBLIC-SOURCE-MANIFEST.json').is_file():
+              shutil.copyfile(work / 'source/PUBLIC-SOURCE-MANIFEST.json', out / 'ORIGINAL-PUBLIC-SOURCE-MANIFEST.json')
+          if (work / 'context/source-manifest.json').is_file():
+              shutil.copyfile(work / 'context/source-manifest.json', out / 'BUILD-SOURCE-MANIFEST.json')
+          workflow = pathlib.Path('.github/workflows/roadef-fleet-container.yml')
+          shutil.copyfile(workflow, out / 'WORKFLOW.yml')
+          receipt = {'run_id': os.environ['GITHUB_RUN_ID'], 'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                     'workflow_sha': os.environ['GITHUB_SHA'],
+                     'validation_checkout': subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip(),
+                     'portfolio_source_commit': '2885d176373c33410148829fef93c310c3752c0b',
+                     'requested_build_memory_bytes': 4294967296, 'requested_term_deadline_seconds': 10,
+                     'instances': ['B01', 'B11', 'B12'],
+                     'files': [{'path': str(p.relative_to(out)), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
+                                'bytes': p.stat().st_size} for p in sorted(out.rglob('*')) if p.is_file()]}
+          (out / 'RUN.json').write_text(json.dumps(receipt, indent=2) + '\n')
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: roadef-fleet-container-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/roadef-fleet-results/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14

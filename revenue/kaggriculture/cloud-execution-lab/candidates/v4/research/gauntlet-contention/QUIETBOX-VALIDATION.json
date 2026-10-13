@@ -1,0 +1,38 @@
+{
+  "commands": [
+    "python3 -m unittest -v test_quietbox_gate.py",
+    "python3 -O -m unittest -v test_quietbox_gate.py",
+    "python3 -m py_compile quietbox_gate.py test_quietbox_gate.py",
+    "python3 quietbox_gate.py --quiet quiet.jsonl --loaded loaded.jsonl --out published-contention-negative.json  # expected exit 2 for embedded -6/-561 control"
+  ],
+  "normal": {
+    "returncode": 0,
+    "stderr_tail": "----------------------------------------------------------------------\nRan 10 tests in 6.143s\n\nOK\n",
+    "stdout_tail": "",
+    "tests": 10
+  },
+  "optimized": {
+    "returncode": 0,
+    "stderr_tail": "----------------------------------------------------------------------\nRan 10 tests in 6.213s\n\nOK\n",
+    "stdout_tail": "",
+    "tests": 10
+  },
+  "published_contention_control": {
+    "aligned_pairs": 2,
+    "certified": false,
+    "expected_exit": 2,
+    "failures": [
+      "max contention drift 555 exceeds 100",
+      "mean absolute contention drift 555 exceeds 50"
+    ],
+    "max_abs_drift": 555.0,
+    "mean_abs_drift": 555.0,
+    "mean_signed_bias": 0.0
+  },
+  "py_compile": true,
+  "readme_sha256": "7b45cbc87b7c47f50734dec4da6e14bfda6299c0dc7a9384338541bece01434b",
+  "schema": "titan-v4-gauntlet-contention-validation-v1",
+  "scope": "synthetic schema/decision validation only; no new gauntlet games and no competitive-strength claim",
+  "source_sha256": "ade9aff42c3a38f3f2c03f389b5bb34e15e3c0956c8aa4d6480bf900c87b3cd9",
+  "tests_sha256": "43c329cdfeb75605a68be69a6035c62faf7fda0057381669bc2ceba650df05b2"
+}

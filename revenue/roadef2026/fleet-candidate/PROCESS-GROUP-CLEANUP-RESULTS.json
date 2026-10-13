@@ -1,0 +1,72 @@
+{
+  "operation": "larch-roadef-process-groups-20260908-01",
+  "baseline_main": "66611be93afc3e5ee1231da9a2d5e31c2295cd62",
+  "source": {
+    "supervisor.original.py": {
+      "bytes": 20348,
+      "git_blob": "00f958cf599ce6408f763f5a80d508d12d6508f5",
+      "sha256": "cb6907cbef3417bc649bc99b4764a1e7a482c9858bc2c29e8a0a75728d645a3b"
+    },
+    "supervisor.py": {
+      "bytes": 20595,
+      "git_blob": "212cfa20488bd68e10a9b159966cdcadd580f25c",
+      "sha256": "1d6eeda2b6614f90c854ec2680f5d11a4ef6a186957b84f1498afcd5dd31a8b9"
+    },
+    "compare_checker.py": {
+      "bytes": 4993,
+      "git_blob": "b4f26422e37f40f94394ada8ba735002e69b6f79",
+      "sha256": "225169ef7e1e81f1006b296a186973e9b885d24dbfa5304b2695286cadf8d765"
+    },
+    "test_supervisor.py": {
+      "bytes": 5913,
+      "git_blob": "6b5bfd883260a91a3346fa34e8e077c2396befca",
+      "sha256": "1deb7ab76b79a609bb10120ef3e9166e0fbda29af1e533cbd15f42b850777945"
+    },
+    "test_supervisor_process_groups.py": {
+      "bytes": 12427,
+      "git_blob": "11ab26216178d81db60fa98edfac50356badea3e",
+      "sha256": "8809ddce864d3196ece3f60a6ada0c717ed3f6d8fb1ad7460d4abb886e260756"
+    }
+  },
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux",
+    "machine": "x86_64"
+  },
+  "baseline": {
+    "command": "python -B test_supervisor_process_groups.py -v",
+    "methods": 11,
+    "failures": 7,
+    "errors": 0,
+    "skipped": 0,
+    "log": {
+      "bytes": 12536,
+      "git_blob": "08b815d8e2072d1bbd288073871ee445efb5d250",
+      "sha256": "ff22f3e28395ecf2f1d2424403fd4b1b36f80f09e19bcbaada57f08b3172da58"
+    }
+  },
+  "candidate": {
+    "command": "python -B -m unittest test_supervisor_process_groups test_supervisor -v",
+    "methods": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "log": {
+      "bytes": 4610,
+      "git_blob": "0d7872956ac064de14de3691b2b990d59c7f9846",
+      "sha256": "2a720454e17d52280392640a4070e3cb626f1562daf6acc260f601726b5f86ac"
+    }
+  },
+  "new_methods": 11,
+  "unchanged_existing_methods": 3,
+  "changed_runtime_definitions": [
+    "stop_process"
+  ],
+  "limits": [
+    "Nine native Linux process-group controls; two non-POSIX mocked compatibility controls.",
+    "Full-run tests use synthetic solver/checker executables, not official instance feasibility.",
+    "No public benchmark, deadline certification, solver-strength or Docker-build claim.",
+    "Only processes remaining in the launch-created group are covered; independently detached sessions are outside this behavior."
+  ],
+  "submission": "S139 draft and attachment remain untouched and unsent"
+}

@@ -1,0 +1,16 @@
+name: pilot-renewal-expansion-gate
+on:
+  pull_request:
+    paths:
+      - 'revenue/pilot_renewal_expansion_gate/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile revenue/pilot_renewal_expansion_gate/gate.py revenue/pilot_renewal_expansion_gate/test_gate.py
+      - run: python -m unittest -v revenue.pilot_renewal_expansion_gate.test_gate
+      - run: python -O -m unittest -v revenue.pilot_renewal_expansion_gate.test_gate

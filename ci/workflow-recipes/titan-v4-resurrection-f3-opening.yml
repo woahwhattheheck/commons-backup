@@ -1,0 +1,41 @@
+name: titan-v4-resurrection-f3-opening
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/opening-book-rebound/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/price-path-seed-budget/seed_budget.py'
+      - '.github/workflows/titan-v4-resurrection-f3-opening.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile exact owned sources
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/materialize_engaged_variant.py \
+            revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/test_materialize_engaged_variant.py \
+            revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/opening-book-rebound/opening_book_rebound.py \
+            revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/opening-book-rebound/test_opening_book_rebound.py
+      - name: Run focused contracts normal and optimized
+        run: |
+          set -euo pipefail
+          python revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/test_materialize_engaged_variant.py
+          python -O revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/test_materialize_engaged_variant.py
+          python revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/opening-book-rebound/test_opening_book_rebound.py
+          python -O revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/opening-book-rebound/test_opening_book_rebound.py
+      - name: Refuse generated repository mutations
+        run: git diff --exit-code

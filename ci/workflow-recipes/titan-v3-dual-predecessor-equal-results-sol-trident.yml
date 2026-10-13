@@ -1,0 +1,87 @@
+name: titan-v3-dual-predecessor-equal-results-sol-trident
+
+on:
+  push:
+    paths:
+      - '.github/workflows/titan-v3-dual-predecessor-equal-results-sol-trident.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/dual_predecessor_gate.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/test_dual_predecessor_gate.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/test_equal_result_bytes.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/DUAL-PREDECESSOR.md'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/EQUAL-RESULTS.md'
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-dual-predecessor-equal-results-sol-trident.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/dual_predecessor_gate.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/test_dual_predecessor_gate.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/test_equal_result_bytes.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/DUAL-PREDECESSOR.md'
+      - 'revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate/EQUAL-RESULTS.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  exact-gate-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Bind exact checkout
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run complete custody gate suite and equal-result regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate
+          PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 python -m unittest -v \
+            test_validation.py \
+            test_policy_cli.py \
+            test_numeric_closure.py \
+            test_derived_numeric_closure.py \
+            test_dual_predecessor_gate.py \
+            test_equal_result_bytes.py
+          python -m py_compile \
+            dual_predecessor_gate.py \
+            test_dual_predecessor_gate.py \
+            test_equal_result_bytes.py
+
+      - name: Verify equal-byte theorem without dropping reserialization alias
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path('revenue/kaggriculture/cloud-execution-lab/titan-v3-paired-game-gate')
+          text = (root / 'dual_predecessor_gate.py').read_text(encoding='utf-8')
+          if 'panels must be byte-distinct' in text or 'drift["baseline_games_sha256"]' in text:
+              raise SystemExit('unsound result-byte inequality survived in public gate')
+          if 'semantically identical' not in text:
+              raise SystemExit('reserialization semantic alias check missing')
+          if 'first_baseline_games != second_baseline_games' not in text:
+              raise SystemExit('semantic alias check must require distinct file bytes')
+          if (root / '_dual_predecessor_gate_core.py').exists():
+              raise SystemExit('frozen pre-11743 core must not land; it erases later hardening')
+          print('PASS: equal-byte admission composed with reserialization alias rejection')
+          PY

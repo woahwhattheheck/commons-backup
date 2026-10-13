@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/payment_ready/outreach_receipt.schema.json",
+  "title": "GGUF diagnostic outreach transport receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "packet_id",
+    "target_id",
+    "airtable_record_id",
+    "offer_id",
+    "terms_sha256",
+    "sender_email",
+    "channel",
+    "route_url",
+    "recipient_email",
+    "subject",
+    "message_sha256",
+    "transport_state",
+    "provider_reference",
+    "sent_at",
+    "observed_at",
+    "response_state",
+    "response_reference",
+    "facts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "gguf-outreach-receipt/v1"
+    },
+    "kind": {
+      "const": "GGUF_OUTREACH_RECEIPT"
+    },
+    "receipt_id": {
+      "$ref": "#/$defs/id"
+    },
+    "packet_id": {
+      "const": "branded-dissident-gguf-launch-edge-20260825-01"
+    },
+    "target_id": {
+      "enum": [
+        "parallel-wireless",
+        "nextgen-federal",
+        "lyceum-technology"
+      ]
+    },
+    "airtable_record_id": {
+      "enum": [
+        "rec2m84ASLg7eKDFd",
+        "recxfhMevKAHsnYql",
+        "recRImaMH45FwtiJS"
+      ]
+    },
+    "offer_id": {
+      "const": "gguf-diagnostic-10d-12k"
+    },
+    "terms_sha256": {
+      "const": "1c0756062563415e551587a5f1ab22147366d406135de6c45ccbd3a562985730"
+    },
+    "sender_email": {
+      "const": "tokenjunkielabs@gmail.com"
+    },
+    "channel": {
+      "enum": [
+        "EMAIL",
+        "WEB_FORM"
+      ]
+    },
+    "route_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "recipient_email": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "email"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "message_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "transport_state": {
+      "enum": [
+        "UNSENT",
+        "SENT",
+        "DELIVERED",
+        "BOUNCED",
+        "FORM_ACCEPTED",
+        "FORM_REJECTED"
+      ]
+    },
+    "provider_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sent_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "response_state": {
+      "enum": [
+        "UNKNOWN",
+        "NO_RESPONSE",
+        "REFUSED",
+        "REDIRECTED",
+        "INTEREST"
+      ]
+    },
+    "response_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "buyer_authorization",
+        "legal_acceptance",
+        "cash_claimed",
+        "collected_cash_usd"
+      ],
+      "properties": {
+        "buyer_authorization": {
+          "enum": [
+            "UNKNOWN",
+            "YES",
+            "NO"
+          ]
+        },
+        "legal_acceptance": {
+          "enum": [
+            "NOT_LANDED",
+            "OWNER_REPORTED"
+          ]
+        },
+        "cash_claimed": {
+          "const": false
+        },
+        "collected_cash_usd": {
+          "const": 0
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "channel": {
+            "const": "EMAIL"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "recipient_email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transport_state": {
+            "enum": [
+              "SENT",
+              "DELIVERED",
+              "FORM_ACCEPTED"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "provider_reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sent_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "response_state": {
+            "enum": [
+              "REFUSED",
+              "REDIRECTED",
+              "INTEREST"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "response_reference": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

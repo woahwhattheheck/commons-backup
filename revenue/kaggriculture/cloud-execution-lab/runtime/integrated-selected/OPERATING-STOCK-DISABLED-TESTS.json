@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "operation": "titan-v2-operating-stock-20260909",
+  "status": "integrated_candidate_source_checked_default_disabled",
+  "archive": {
+    "path": "exports/titan-current.tar.gz",
+    "entrypoint": "main.py::agent",
+    "config": "TITAN-CONFIG.json",
+    "sha256": "abfc78cdfeb7e9ca15343931ca14110a76b9534d4bab2c20adc68a976abaa88e",
+    "bytes": 356580,
+    "runtime_files": 98,
+    "source_manifest": "runtime/integrated-selected/CURRENT-SOURCE.json",
+    "source_manifest_sha256": "c8d0ee7a6710b089e1fd3e41669614ebbba6caa718e249d2ad9c2bd56da5b42a"
+  },
+  "predecessor_archive_sha256": "db34f9d2ce0ecf4c88e0a0ed5a9966a7ef18484a5efb53f20ba24162c543599d",
+  "submission_status": "not_submitted",
+  "default_operating_stock": false,
+  "source_sha256": {
+    "operating_stock.py": "cc403727b3ea31f9590f37e8eb784f1798b2c50a42bd3ba83d321eba6e6c4b78",
+    "test_operating_stock.py": "98eaea62f59c72c519778632508d65bf477d5cdd9f4d456f9a194819fdcb66b6",
+    "titan_runtime.py": "70245afcc4a544e671f5b9d591238bcf3fb935a076352de273ea5d87fc090958",
+    "frozen_selected.py": "afeaab24b23e4c50a40c345d51bc97186f859da91914e2f50b77cbb9e137480a",
+    "TITAN-CONFIG.json": "1e96fc1d9e80e69d273e0466fa71e794bd269b3e67b7ab81c28b27845bfe052e",
+    "build_integrated.py": "63761f8e456b284cbbf75fa49d7e14034b084fce0a490e33dace793e03f5067b"
+  },
+  "test_evidence": [
+    {
+      "command": "PYTHONPATH=../cloud-runtime-pulse:../cloud-quickstep python -m unittest -q test_operating_stock",
+      "tests": 20,
+      "passed": 20,
+      "scope": "stateless source proposals and final runtime callback; no game-state advancement"
+    },
+    {
+      "command": "python -m unittest -q checks.test_operating_stock",
+      "tests": 20,
+      "passed": 20,
+      "scope": "the same 20 contracts from the exact extracted standalone archive; not 20 additional distinct cases"
+    },
+    {
+      "command": "python -m unittest -q test_release_consistency",
+      "tests": 1,
+      "passed": 1,
+      "scope": "new canonical source mapping, deterministic publication and retained historical archive"
+    }
+  ],
+  "game_evidence": {
+    "new_full_games": 0,
+    "new_simulation_panels": 0,
+    "new_interpreter_transitions": 0,
+    "new_agent_act_calls": 0,
+    "playing_strength_measured": false
+  },
+  "mechanism": [
+    "Use the completed selected-unit snapshot and the same current controller route.",
+    "Apply after final SELL ordering; preserve all non-fertilizer slots and every unit action.",
+    "Derive same-day useful consumption from existing actors/assets; distinguish carried fertilizer from shed stock.",
+    "Do not cross pickup allocation, hiring, branch or reset ambiguities; preserve capacity without credit for later sales.",
+    "Release reservations after the pickup and decline obsolete or low-value target service.",
+    "Use actual saved cash; never credit unfilled input purchases."
+  ],
+  "limits": [
+    "The 100-unit rival-supply stress value and 20-times-input liquidity cushion are explicit policy heuristics.",
+    "Future watering, output, operating purchases and final cash are not certified by these source checks.",
+    "Recorded-input review is separate retrospective evidence; no later candidate action was executed.",
+    "The option remains false until its coupled economic behavior is validated; no score promotion is claimed."
+  ],
+  "retained_predecessor_evidence": {
+    "weed_continuation": "WEED-CONTINUATION-TESTS.json",
+    "exact_db34_archive_checks": "WEED-ARCHIVE-TESTS.json"
+  }
+}

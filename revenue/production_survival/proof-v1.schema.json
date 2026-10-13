@@ -1,0 +1,542 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/production_survival/proof-v1.schema.json",
+  "title": "Production Survival synthetic self-proof receipt",
+  "description": "A strict, public receipt for one synthetic pre-state, mutation, expected bounded stop, rollback, and exact post-state verification. Validation does not imply a buyer, demand, acceptance, delivery, or cash.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "proof_id",
+    "proof_status",
+    "scope",
+    "data_classification",
+    "synthetic_input_sentence",
+    "source",
+    "execution",
+    "states",
+    "steps",
+    "rollback",
+    "assertions",
+    "commercial_truth",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "production-survival-proof/v1"
+    },
+    "kind": {
+      "const": "PRODUCTION_SURVIVAL_SELF_PROOF"
+    },
+    "proof_id": {
+      "$ref": "#/$defs/id"
+    },
+    "proof_status": {
+      "const": "PASS"
+    },
+    "scope": {
+      "const": "LOCAL_SYNTHETIC_SELF_PROOF"
+    },
+    "data_classification": {
+      "const": "PUBLIC_SYNTHETIC"
+    },
+    "synthetic_input_sentence": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "audit_head",
+        "audit_head_commit_time",
+        "offer_path",
+        "offer_blob_sha",
+        "schema_path",
+        "transaction_run_id"
+      ],
+      "properties": {
+        "repository": {
+          "const": "woahwhattheheck/commons"
+        },
+        "audit_head": {
+          "$ref": "#/$defs/gitSha"
+        },
+        "audit_head_commit_time": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "offer_path": {
+          "const": "revenue/production_survival/offer.json"
+        },
+        "offer_blob_sha": {
+          "$ref": "#/$defs/gitSha"
+        },
+        "schema_path": {
+          "const": "revenue/production_survival/proof-v1.schema.json"
+        },
+        "transaction_run_id": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executed_at",
+        "driver_exit_code",
+        "runtime",
+        "workspace"
+      ],
+      "properties": {
+        "executed_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "driver_exit_code": {
+          "const": 0
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "implementation",
+            "version",
+            "platform"
+          ],
+          "properties": {
+            "implementation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "platform": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "workspace": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "path_disclosed",
+            "persistence_claimed"
+          ],
+          "properties": {
+            "kind": {
+              "const": "isolated_temporary_directory"
+            },
+            "path_disclosed": {
+              "const": false
+            },
+            "persistence_claimed": {
+              "const": false
+            }
+          }
+        }
+      }
+    },
+    "states": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pre",
+        "mutated",
+        "post"
+      ],
+      "properties": {
+        "pre": {
+          "$ref": "#/$defs/state"
+        },
+        "mutated": {
+          "$ref": "#/$defs/state"
+        },
+        "post": {
+          "$ref": "#/$defs/state"
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/step"
+            },
+            {
+              "properties": {
+                "step_id": {
+                  "const": "prepare-pre-state"
+                },
+                "expected_exit_code": {
+                  "const": 0
+                },
+                "actual_exit_code": {
+                  "const": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/step"
+            },
+            {
+              "properties": {
+                "step_id": {
+                  "const": "snapshot-pre-state"
+                },
+                "expected_exit_code": {
+                  "const": 0
+                },
+                "actual_exit_code": {
+                  "const": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/step"
+            },
+            {
+              "properties": {
+                "step_id": {
+                  "const": "happy-path-mutation"
+                },
+                "expected_exit_code": {
+                  "const": 0
+                },
+                "actual_exit_code": {
+                  "const": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/step"
+            },
+            {
+              "properties": {
+                "step_id": {
+                  "const": "bounded-invariant-failure"
+                },
+                "expected_exit_code": {
+                  "const": 23
+                },
+                "actual_exit_code": {
+                  "const": 23
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/step"
+            },
+            {
+              "properties": {
+                "step_id": {
+                  "const": "rollback"
+                },
+                "expected_exit_code": {
+                  "const": 0
+                },
+                "actual_exit_code": {
+                  "const": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/step"
+            },
+            {
+              "properties": {
+                "step_id": {
+                  "const": "verify-post-equals-pre"
+                },
+                "expected_exit_code": {
+                  "const": 0
+                },
+                "actual_exit_code": {
+                  "const": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "items": false
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trigger_step_id",
+        "rollback_step_id",
+        "verification_step_id",
+        "trigger_exit_code",
+        "rollback_exit_code",
+        "verification_exit_code",
+        "pre_sha256",
+        "mutated_sha256",
+        "post_sha256",
+        "mutated_differs_from_pre",
+        "post_equals_pre"
+      ],
+      "properties": {
+        "trigger_step_id": {
+          "const": "bounded-invariant-failure"
+        },
+        "rollback_step_id": {
+          "const": "rollback"
+        },
+        "verification_step_id": {
+          "const": "verify-post-equals-pre"
+        },
+        "trigger_exit_code": {
+          "const": 23
+        },
+        "rollback_exit_code": {
+          "const": 0
+        },
+        "verification_exit_code": {
+          "const": 0
+        },
+        "pre_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "mutated_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "post_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "mutated_differs_from_pre": {
+          "const": true
+        },
+        "post_equals_pre": {
+          "const": true
+        }
+      }
+    },
+    "assertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_exit_codes_expected",
+        "failure_exit_code_observed",
+        "mutation_changed_bytes",
+        "pre_sha256_equals_post_sha256",
+        "rollback_restored_exact_bytes"
+      ],
+      "properties": {
+        "all_exit_codes_expected": {
+          "const": true
+        },
+        "failure_exit_code_observed": {
+          "const": true
+        },
+        "mutation_changed_bytes": {
+          "const": true
+        },
+        "pre_sha256_equals_post_sha256": {
+          "const": true
+        },
+        "rollback_restored_exact_bytes": {
+          "const": true
+        }
+      }
+    },
+    "commercial_truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commercial_state",
+        "buyer_claimed",
+        "demand_claimed",
+        "acceptance_claimed",
+        "delivery_claimed",
+        "cash_claimed",
+        "collected_cash_usd"
+      ],
+      "properties": {
+        "commercial_state": {
+          "const": "NO_COMMERCIAL_CLAIM"
+        },
+        "buyer_claimed": {
+          "const": false
+        },
+        "demand_claimed": {
+          "const": false
+        },
+        "acceptance_claimed": {
+          "const": false
+        },
+        "delivery_claimed": {
+          "const": false
+        },
+        "cash_claimed": {
+          "const": false
+        },
+        "collected_cash_usd": {
+          "const": 0
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "gitSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logical_path",
+        "bytes",
+        "sha256",
+        "content_base64"
+      ],
+      "properties": {
+        "logical_path": {
+          "const": "state.json"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "content_base64": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^[A-Za-z0-9+/]*={0,2}$"
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "argv",
+        "expected_exit_code",
+        "actual_exit_code",
+        "matched_expected",
+        "stdout",
+        "stdout_sha256",
+        "stderr",
+        "stderr_sha256",
+        "started_at",
+        "finished_at"
+      ],
+      "properties": {
+        "step_id": {
+          "$ref": "#/$defs/id"
+        },
+        "argv": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "const": "python"
+            },
+            {
+              "const": "-c"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          ],
+          "items": false
+        },
+        "expected_exit_code": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "actual_exit_code": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "matched_expected": {
+          "const": true
+        },
+        "stdout": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "stdout_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "stderr": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "stderr_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "started_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "finished_at": {
+          "$ref": "#/$defs/timestamp"
+        }
+      }
+    }
+  }
+}

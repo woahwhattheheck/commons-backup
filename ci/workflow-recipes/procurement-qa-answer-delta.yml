@@ -1,0 +1,59 @@
+name: Procurement Q&A answer delta
+
+on:
+  pull_request:
+    paths:
+      - "revenue/procurement_qa_answer_delta/**"
+      - ".github/workflows/procurement-qa-answer-delta.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/procurement_qa_answer_delta/**"
+      - ".github/workflows/procurement-qa-answer-delta.yml"
+
+concurrency:
+  group: procurement-qa-answer-delta-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: >-
+          python -m py_compile
+          revenue/procurement_qa_answer_delta/schema.py
+          revenue/procurement_qa_answer_delta/upstream.py
+          revenue/procurement_qa_answer_delta/qa.py
+          revenue/procurement_qa_answer_delta/classify.py
+          revenue/procurement_qa_answer_delta/compiler.py
+          revenue/procurement_qa_answer_delta/cli.py
+          revenue/procurement_qa_answer_delta/test_support.py
+          revenue/procurement_qa_answer_delta/test_compiler_a.py
+          revenue/procurement_qa_answer_delta/test_compiler_b.py
+      - name: Focused tests
+        run: python -m unittest -v revenue.procurement_qa_answer_delta.test_compiler_a revenue.procurement_qa_answer_delta.test_compiler_b
+      - name: Optimized focused tests
+        run: python -O -m unittest -v revenue.procurement_qa_answer_delta.test_compiler_a revenue.procurement_qa_answer_delta.test_compiler_b
+      - name: Synthetic CLI compile and verify
+        run: |
+          OUT="$(mktemp -d)/qa-delta"
+          python -m revenue.procurement_qa_answer_delta compile \
+            --input revenue/procurement_qa_answer_delta/fixtures/synthetic_pack.json \
+            --out-dir "$OUT"
+          python -m revenue.procurement_qa_answer_delta verify \
+            --input revenue/procurement_qa_answer_delta/fixtures/synthetic_pack.json \
+            --delta "$OUT/delta.json" \
+            --markdown "$OUT/delta.md" \
+            --receipt "$OUT/receipt.json"

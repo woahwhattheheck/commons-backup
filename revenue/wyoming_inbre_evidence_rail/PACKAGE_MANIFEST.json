@@ -1,0 +1,23 @@
+{
+  "package": "wyoming_inbre_evidence_rail",
+  "schema_version": 1,
+  "status": "SYNTHETIC_INTERNAL_DELIVERY_CORE_ONLY",
+  "product": "Wyoming INBRE Campus Award, Trainee & Compute Evidence Rail",
+  "fixture_contract": {
+    "input_records": 500,
+    "synthetic_campuses": 10,
+    "unique_events": 495,
+    "exact_retry_replays": 5,
+    "expected_quarantines": 10
+  },
+  "commands": [
+    "python -m unittest revenue.wyoming_inbre_evidence_rail.test_rail -v",
+    "python -O -m unittest revenue.wyoming_inbre_evidence_rail.test_rail -v",
+    "python -m revenue.wyoming_inbre_evidence_rail.acceptance"
+  ],
+  "external_effects": false,
+  "buyer_data": false,
+  "pii_allowed": false,
+  "compliance_decision_authority": false,
+  "fund_disbursement_authority": false
+}

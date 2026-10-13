@@ -1,0 +1,128 @@
+name: titan-v3-own-value-causal-ledger-gpt56
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-own-value-causal-ledger-gpt56/**'
+      - '.github/workflows/titan-v3-own-value-causal-ledger-gpt56.yml'
+      - 'p/gpt56-titan-v3-own-value-causal-ledger-20260910.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-own-value-causal-ledger-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+
+jobs:
+  exact-head-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      LANE: revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-own-value-causal-ledger-gpt56
+      EXPECTED_TESTS: '34'
+    steps:
+      - name: Checkout immutable pull-request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+
+      - name: Assert event and exact head
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ github.event_name }}" = pull_request
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          test "${{ github.run_attempt }}" = 1
+          git diff --quiet
+          git diff --cached --quiet
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify content-addressed source contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          contract_path = Path('${{ env.LANE }}') / 'CONTRACT.json'
+          contract = json.loads(contract_path.read_text(encoding='utf-8'))
+          assert contract['schema'] == 'titan-v3-own-value-causal-ledger-source-receipt/v1'
+          assert contract['version'] == 'titan-v3-own-value-causal-ledger-gpt56-v1'
+          assert contract['focused_tests'] == int('${{ env.EXPECTED_TESTS }}')
+          for relative, expected in contract['files'].items():
+              data = Path(relative).read_bytes()
+              actual = hashlib.sha256(data).hexdigest()
+              assert actual == expected['sha256'], (relative, actual, expected['sha256'])
+              assert len(data) == expected['bytes'], (relative, len(data), expected['bytes'])
+          print('SOURCE_CONTRACT_OK', len(contract['files']))
+          PY
+
+      - name: Parse source without writing bytecode
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          root = Path('${{ env.LANE }}')
+          paths = sorted(root.rglob('*.py'))
+          for path in paths:
+              source = path.read_text(encoding='utf-8')
+              ast.parse(source, filename=str(path))
+          assert len(paths) == 15, len(paths)
+          print('AST_PARSE_OK', len(paths))
+          PY
+
+      - name: Run all predecessor contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          log="$RUNNER_TEMP/causal-ledger-tests.log"
+          (
+            cd "$LANE"
+            PYTHONDONTWRITEBYTECODE=1 python -m unittest -v
+          ) 2>&1 | tee "$log"
+          grep -F "Ran $EXPECTED_TESTS tests" "$log"
+          grep -Fx 'OK' "$log"
+          test "$(grep -cE '^test_.* \.\.\. ok$' "$log")" = "$EXPECTED_TESTS"
+          ! grep -E 'FAILED|ERROR|skipped=' "$log"
+
+      - name: Re-run deterministically and bind evidence bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          first="$RUNNER_TEMP/causal-ledger-tests-first.log"
+          second="$RUNNER_TEMP/causal-ledger-tests-second.log"
+          (
+            cd "$LANE"
+            PYTHONDONTWRITEBYTECODE=1 python -m unittest -v
+          ) >"$first" 2>&1
+          (
+            cd "$LANE"
+            PYTHONDONTWRITEBYTECODE=1 python -m unittest -v
+          ) >"$second" 2>&1
+          sed -E 's/(Ran [0-9]+ tests) in [0-9.]+s/\1 in <elapsed>/' "$first" > "$first.normalized"
+          sed -E 's/(Ran [0-9]+ tests) in [0-9.]+s/\1 in <elapsed>/' "$second" > "$second.normalized"
+          cmp "$first.normalized" "$second.normalized"
+          {
+            find "$LANE" -type f -print0 | sort -z | xargs -0 sha256sum
+            sha256sum "$first"
+          } > "$RUNNER_TEMP/SHA256SUMS"
+          cat "$RUNNER_TEMP/SHA256SUMS"
+
+      - name: Prove checkout remained clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          git diff --exit-code
+          git diff --cached --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"

@@ -1,0 +1,38 @@
+name: relationship-census
+
+on:
+  pull_request:
+    paths:
+      - 'tools/outbound_send_guard/relationship_census.py'
+      - 'tools/outbound_send_guard/test_relationship_census.py'
+      - 'tools/outbound_send_guard/RELATIONSHIP_CENSUS.md'
+      - '.github/workflows/relationship-census.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/outbound_send_guard/relationship_census.py'
+      - 'tools/outbound_send_guard/test_relationship_census.py'
+      - 'tools/outbound_send_guard/RELATIONSHIP_CENSUS.md'
+      - '.github/workflows/relationship-census.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hostile:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile tools/outbound_send_guard/relationship_census.py tools/outbound_send_guard/test_relationship_census.py
+      - name: Hostile tests
+        run: python -m unittest tools.outbound_send_guard.test_relationship_census -v
+      - name: Hostile tests optimized
+        run: python -O -m unittest tools.outbound_send_guard.test_relationship_census -v

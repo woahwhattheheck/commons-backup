@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Warranty & RMA Operations Desk</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light dark}
+body{max-width:1180px;margin:0 auto;padding:24px;line-height:1.4}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.tab{padding:10px 14px;border:1px solid #888;border-radius:8px;background:transparent;cursor:pointer}
+section[hidden]{display:none}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.card{border:1px solid #777;border-radius:12px;padding:16px;margin:10px 0}
+label{display:block;margin:9px 0 3px}input,textarea,select,button{font:inherit}input,textarea,select{box-sizing:border-box;width:100%;padding:8px;border:1px solid #888;border-radius:6px}textarea{min-height:90px}button{padding:9px 13px;border-radius:8px;border:1px solid #777;cursor:pointer}.muted{opacity:.72}.ok{font-weight:700}.err{white-space:pre-wrap;border-left:4px solid currentColor;padding-left:10px}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 180px}code{word-break:break-all}.pill{display:inline-block;border:1px solid #888;border-radius:999px;padding:2px 8px;font-size:.85em}.events{max-height:300px;overflow:auto}.danger{font-weight:700}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+.grid>*{min-width:0}.card{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<h1>Warranty &amp; RMA Operations Desk</h1>
+<p class="muted">Local workflow software. Customer intake does not authorize warranty coverage, shipping, replacement, refund, or any external provider action.</p>
+<nav>
+<button class="tab" data-tab="intake">Customer intake</button>
+<button class="tab" data-tab="status">Customer status</button>
+<button class="tab" data-tab="operator">Operator desk</button>
+<button class="tab" data-tab="catalog">Catalog &amp; policy</button>
+</nav>
+
+<section id="intake">
+<h2>Submit a case</h2>
+<form id="intakeForm" class="card">
+<div class="row">
+<div><label>Product</label><select name="sku" id="intakeSku" required></select></div>
+<div><label>Serial</label><input name="serial" autocomplete="off"></div>
+</div>
+<div class="row">
+<div><label>Purchase reference</label><input name="purchase_ref" required></div>
+<div><label>Purchase date</label><input name="purchase_date" type="date" required></div>
+</div>
+<label>Issue description</label><textarea name="issue" required></textarea>
+<label>Evidence SHA-256 (optional)</label><input name="evidence_sha" pattern="[0-9a-fA-F]{64}">
+<label>Evidence filename (optional)</label><input name="evidence_filename">
+<input name="idempotency_key" type="hidden">
+<button type="submit">Submit for merchant review</button>
+</form>
+<div id="intakeResult" class="card" hidden></div>
+</section>
+
+<section id="status" hidden>
+<h2>Customer status</h2>
+<form id="statusForm" class="card">
+<label>Case ID</label><input name="case_id" required autocomplete="off">
+<label>Status capability</label><input name="token" required autocomplete="off">
+<button type="submit">Load status</button>
+</form>
+<div id="statusResult"></div>
+<div id="supplementBox" class="card" hidden>
+<h3>Add requested information</h3>
+<form id="supplementForm">
+<input name="case_id" type="hidden"><input name="token" type="hidden"><input name="expected_revision" type="hidden">
+<label>Message</label><textarea name="message" required></textarea>
+<label>Evidence SHA-256 (optional)</label><input name="evidence_sha" pattern="[0-9a-fA-F]{64}">
+<label>Evidence filename (optional)</label><input name="evidence_filename">
+<button type="submit">Add information</button>
+</form>
+</div>
+</section>
+
+<section id="operator" hidden>
+<h2>Operator desk</h2>
+<div class="card">
+<label>Operator capability</label><input id="operatorToken" type="password" autocomplete="off">
+<button id="loadCases" type="button">Load cases</button>
+</div>
+<div class="grid"><div id="caseList"></div><div id="caseDetail"></div></div>
+</section>
+
+<section id="catalog" hidden>
+<h2>Catalog &amp; policy</h2>
+<div class="card">
+<label>Operator capability</label><input id="catalogToken" type="password" autocomplete="off">
+</div>
+<form id="productForm" class="card">
+<h3>Add product</h3>
+<div class="row"><div><label>SKU</label><input name="sku" required></div><div><label>Model</label><input name="model" required></div></div>
+<div class="row"><div><label>Serial required</label><select name="serial_required"><option value="true">Yes</option><option value="false">No</option></select></div><div><label>Policy days</label><input name="warranty_days" type="number" min="0" max="3650" value="365" required></div></div>
+<label>Merchant-authored instructions</label><textarea name="instructions" required></textarea>
+<button type="submit">Create product + policy v1</button>
+</form>
+<form id="policyForm" class="card">
+<h3>Revise product policy</h3>
+<label>SKU</label><input name="sku" required>
+<div class="row"><div><label>Policy days</label><input name="warranty_days" type="number" min="0" max="3650" value="365" required></div></div>
+<label>Merchant-authored instructions</label><textarea name="instructions" required></textarea>
+<button type="submit">Create next policy revision</button>
+</form>
+<div id="catalogResult"></div>
+</section>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const all=s=>Array.from(document.querySelectorAll(s));
+const randKey=prefix=>prefix+"-"+crypto.getRandomValues(new Uint32Array(2)).join("-");
+function showTab(id){all("section").forEach(x=>x.hidden=x.id!==id); all(".tab").forEach(x=>x.disabled=x.dataset.tab===id)}
+all(".tab").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+function clear(el){while(el.firstChild)el.removeChild(el.firstChild)}
+function add(parent,tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=String(text);if(cls)e.className=cls;parent.appendChild(e);return e}
+function cardError(parent,e){clear(parent);parent.hidden=false;add(parent,"div",(e&&e.message)||String(e),"err")}
+async function api(path,{method="GET",body=null,token=null}={}){
+  const h={"Accept":"application/json"};if(body!==null)h["Content-Type"]="application/json";if(token)h["Authorization"]="Bearer "+token;
+  const r=await fetch(path,{method,headers:h,body:body===null?undefined:JSON.stringify(body),cache:"no-store"});
+  let data=null;try{data=await r.json()}catch(_){data={error:"NON_JSON_RESPONSE"}}
+  if(!r.ok){const err=new Error((data.error||"HTTP_"+r.status)+": "+(data.message||"request failed"));err.status=r.status;throw err}
+  return data;
+}
+async function loadProducts(){
+  const data=await api("/api/products");const s=$("#intakeSku");clear(s);
+  data.products.forEach(p=>{const o=document.createElement("option");o.value=p.sku;o.textContent=p.sku+" — "+p.model;s.appendChild(o)});
+}
+function evidenceFrom(form,evidenceId){
+  const sha=form.evidence_sha?.value.trim().toLowerCase();if(!sha)return [];
+  return [{evidence_id:evidenceId||randKey("ev"),filename:(form.evidence_filename?.value.trim()||"evidence.bin"),sha256:sha,mime:"application/octet-stream"}];
+}
+$("#intakeForm").addEventListener("submit",async ev=>{
+  ev.preventDefault();const f=ev.currentTarget.elements;const box=$("#intakeResult");box.hidden=false;
+  try{
+    const key=f.idempotency_key.value||randKey("intake");
+    const body={idempotency_key:key,sku:f.sku.value,serial:f.serial.value.trim(),purchase_ref:f.purchase_ref.value.trim(),purchase_date:f.purchase_date.value,issue:f.issue.value.trim(),evidence:evidenceFrom(f,key+"-evidence")};
+    f.idempotency_key.value=body.idempotency_key;
+    const d=await api("/api/customer/cases",{method:"POST",body});clear(box);
+    add(box,"h3",d.created?"Case created":"Existing identical case");
+    add(box,"p","Case ID: "+d.case.case_id,"mono");
+    if(d.status_token){add(box,"p","Save this status capability now; the server stores only its hash.","danger");add(box,"p",d.status_token,"mono")}
+    add(box,"p","State: "+d.case.status+" · revision "+d.case.revision);
+  }catch(e){cardError(box,e)}
+});
+function renderCustomer(d){
+  const box=$("#statusResult");clear(box);const c=add(box,"div",undefined,"card");
+  add(c,"h3",d.case_id);add(c,"span",d.status,"pill");add(c,"p","Product: "+d.sku+(d.serial?" · serial "+d.serial:""));
+  add(c,"p","Revision "+d.revision+" · purchase "+d.purchase_date); if(d.rma_ref)add(c,"p","RMA: "+d.rma_ref,"mono");
+  if(d.resolution)add(c,"p","Resolution workflow: "+d.resolution);add(c,"h4","Timeline");
+  (d.timeline||[]).forEach(e=>{const row=add(c,"div",undefined,"card");add(row,"strong",e.kind);add(row,"p",e.message);add(row,"small",e.created_at,"muted")});
+  const sup=$("#supplementBox");sup.hidden=d.status!=="NEEDS_INFO";
+  if(!sup.hidden){const f=$("#supplementForm").elements;f.case_id.value=d.case_id;f.expected_revision.value=d.revision}
+}
+$("#statusForm").addEventListener("submit",async ev=>{
+  ev.preventDefault();const f=ev.currentTarget.elements;try{const d=await api("/api/customer/cases/"+encodeURIComponent(f.case_id.value.trim()),{token:f.token.value});$("#supplementForm").elements.token.value=f.token.value;renderCustomer(d)}catch(e){cardError($("#statusResult"),e)}
+});
+$("#supplementForm").addEventListener("submit",async ev=>{
+  ev.preventDefault();const f=ev.currentTarget.elements;try{
+    const body={idempotency_key:randKey("supp"),expected_revision:Number(f.expected_revision.value),message:f.message.value.trim(),evidence:evidenceFrom(f)};
+    const d=await api("/api/customer/cases/"+encodeURIComponent(f.case_id.value)+"/supplement",{method:"POST",token:f.token.value,body});renderCustomer(d.case)
+  }catch(e){cardError($("#statusResult"),e)}
+});
+function operatorToken(){return $("#operatorToken").value}
+function renderCaseList(rows){
+ const box=$("#caseList");clear(box);rows.forEach(r=>{const c=add(box,"button",undefined,"card");c.type="button";add(c,"strong",r.case_id);add(c,"div",r.sku+" · "+r.status);c.addEventListener("click",()=>loadCase(r.case_id))})
+}
+async function loadCase(id){try{renderOperatorCase(await api("/api/operator/cases/"+encodeURIComponent(id),{token:operatorToken()}))}catch(e){cardError($("#caseDetail"),e)}}
+function field(parent,label,value){const p=add(parent,"p");add(p,"strong",label+": ");add(p,"span",value??"")}
+function renderOperatorCase(d){
+ const box=$("#caseDetail");clear(box);const c=add(box,"div",undefined,"card");add(c,"h3",d.case_id);add(c,"span",d.status,"pill");
+ field(c,"Product",d.sku+" — "+d.model);field(c,"Serial",d.serial||"—");field(c,"Purchase",d.purchase_ref+" · "+d.purchase_date);field(c,"Issue",d.issue);
+ field(c,"Policy",d.policy.policy_id+" · "+d.policy.warranty_days+" days");field(c,"Policy instructions",d.policy.instructions);
+ if(d.rma_ref)field(c,"RMA",d.rma_ref);if(d.receive_ref)field(c,"Receive",d.receive_ref);if(d.inspection)field(c,"Inspection",d.inspection);if(d.resolution)field(c,"Resolution",d.resolution);
+ add(c,"h4","Operator action");const form=add(c,"form");const select=add(form,"select");["REQUEST_INFO","APPROVE_RMA","DENY","RECEIVE","INSPECT_FAULT_CONFIRMED","INSPECT_NO_FAULT_FOUND","INSPECT_DAMAGE_REVIEW","INSPECT_UNDETERMINED","RESOLVE_REPAIR","RESOLVE_REPLACEMENT","RESOLVE_REFUND","RESOLVE_RETURN_AS_IS","CLOSE"].forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;select.appendChild(o)});
+ const pub=add(form,"textarea");pub.placeholder="Public-safe message";pub.required=true;const note=add(form,"textarea");note.placeholder="Internal note (never exposed to customer)";
+ const extra=add(form,"input");extra.placeholder="Receive/completion reference when required";const btn=add(form,"button","Apply operator action");btn.type="submit";
+ form.addEventListener("submit",async ev=>{ev.preventDefault();try{
+   const common={idempotency_key:randKey("op"),expected_revision:d.revision,public_message:pub.value.trim(),internal_note:note.value.trim()};let path,body;
+   if(["REQUEST_INFO","APPROVE_RMA","DENY"].includes(select.value)){path="decision";body={...common,policy_id:d.policy.policy_id,decision:select.value}}
+   else if(select.value==="RECEIVE"){path="receive";body={...common,rma_ref:d.rma_ref,receive_ref:extra.value.trim()}}
+   else if(select.value.startsWith("INSPECT_")){path="inspect";body={...common,inspection:select.value.slice(8)}}
+   else if(select.value.startsWith("RESOLVE_")){path="resolve";body={...common,resolution:select.value.slice(8)}}
+   else {path="close";body={...common,completion_ref:extra.value.trim()}}
+   const out=await api("/api/operator/cases/"+encodeURIComponent(d.case_id)+"/"+path,{method:"POST",token:operatorToken(),body});renderOperatorCase(out.case);await refreshCases();
+ }catch(e){add(c,"p",e.message,"err")}}); 
+ add(c,"h4","Evidence");(d.evidence||[]).forEach(e=>field(c,e.evidence_id,e.filename+" · "+e.sha256));
+ add(c,"h4","Audit events");const evbox=add(c,"div",undefined,"events");(d.events||[]).forEach(e=>{const x=add(evbox,"div",undefined,"card");add(x,"strong",e.kind);add(x,"p",e.public_message);if(e.internal_note)add(x,"p","Internal: "+e.internal_note,"muted")});
+}
+async function refreshCases(){renderCaseList((await api("/api/operator/cases",{token:operatorToken()})).cases)}
+$("#loadCases").addEventListener("click",()=>refreshCases().catch(e=>cardError($("#caseList"),e)));
+$("#productForm").addEventListener("submit",async ev=>{
+ ev.preventDefault();const f=ev.currentTarget.elements;const box=$("#catalogResult");
+ try{const d=await api("/api/operator/products",{method:"POST",token:$("#catalogToken").value,body:{sku:f.sku.value.trim(),model:f.model.value.trim(),serial_required:f.serial_required.value==="true",warranty_days:Number(f.warranty_days.value),instructions:f.instructions.value.trim()}});clear(box);const c=add(box,"div",undefined,"card");add(c,"p","Created "+d.sku+" · "+d.active_policy_id);await loadProducts()}catch(e){cardError(box,e)}
+});
+$("#policyForm").addEventListener("submit",async ev=>{
+ ev.preventDefault();const f=ev.currentTarget.elements;const box=$("#catalogResult");
+ try{const d=await api("/api/operator/products/"+encodeURIComponent(f.sku.value.trim())+"/policy",{method:"POST",token:$("#catalogToken").value,body:{warranty_days:Number(f.warranty_days.value),instructions:f.instructions.value.trim()}});clear(box);const c=add(box,"div",undefined,"card");add(c,"p","Created "+d.policy_id+" for "+d.sku);await loadProducts()}catch(e){cardError(box,e)}
+});
+loadProducts().catch(()=>{});
+showTab("intake");
+</script>
+</body>
+</html>

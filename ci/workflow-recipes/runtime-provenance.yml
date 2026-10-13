@@ -1,0 +1,42 @@
+name: runtime-provenance
+
+on:
+  pull_request:
+    paths:
+      - 'tools/runtime_provenance/**'
+      - 'runtime/agent_runtime_registry.json'
+      - 'ground/AGENT_RUNTIME_PROVENANCE.md'
+      - '.github/workflows/runtime-provenance.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/runtime_provenance/**'
+      - 'runtime/agent_runtime_registry.json'
+      - 'ground/AGENT_RUNTIME_PROVENANCE.md'
+      - '.github/workflows/runtime-provenance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile package
+        run: python -m compileall -q tools/runtime_provenance
+      - name: Unit tests
+        run: python -m unittest discover -s tools/runtime_provenance -p 'test_*.py'
+      - name: Optimized unit tests
+        run: python -O -m unittest discover -s tools/runtime_provenance -p 'test_*.py'
+      - name: Verify fail-closed seed registry
+        run: python -m tools.runtime_provenance.runtime_registry verify runtime/agent_runtime_registry.json --now 2026-09-15T08:00:00Z
+      - name: Canonical digest
+        run: python -m tools.runtime_provenance.runtime_registry digest runtime/agent_runtime_registry.json

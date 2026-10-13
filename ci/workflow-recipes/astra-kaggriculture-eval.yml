@@ -1,0 +1,61 @@
+name: ASTRA Kaggriculture independent evaluation
+on:
+  push:
+    branches: [main, build/astra-kag-eval-20260907]
+    paths:
+      - revenue/kaggriculture/cloud-eval/**
+      - .github/workflows/astra-kaggriculture-eval.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tournament:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
+          persist-credentials: false
+          sparse-checkout: |
+            revenue/kaggriculture
+            .github/scripts
+      - name: Prepare pinned public engine and runtime
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          mkdir -p "$RUNNER_TEMP/astra-sources" "$RUNNER_TEMP/astra-results"
+          python -B revenue/kaggriculture/cloud-eval/evaluate.py --prepare-engine "$RUNNER_TEMP/astra-sources" > "$RUNNER_TEMP/astra-results/engine-source.json"
+          docker pull python:3.11-slim
+          docker image inspect python:3.11-slim --format '{{.Id}}' > "$RUNNER_TEMP/astra-results/runtime-image.txt"
+          git rev-parse HEAD > "$RUNNER_TEMP/astra-results/checkout-commit.txt"
+      - name: Real-engine tests and tournament with no network
+        run: |
+          docker run --rm --network none --read-only --cpus 1.6 --memory 6656m \
+            --pids-limit 128 --cap-drop ALL --security-opt no-new-privileges \
+            --user "$(id -u):$(id -g)" \
+            --tmpfs /tmp:rw,nosuid,nodev,size=128m,mode=1777 \
+            -v "$GITHUB_WORKSPACE/revenue/kaggriculture:/work:ro" \
+            -v "$RUNNER_TEMP/astra-sources:/sources:ro" \
+            -v "$RUNNER_TEMP/astra-results:/results:rw" \
+            -e KAG_EVAL_ENGINE_DIR=/sources -e PYTHONDONTWRITEBYTECODE=1 \
+            -w /work/cloud-eval python:3.11-slim sh -ec '
+              python -B test_evaluator.py > /results/tests.log 2>&1 || { cat /results/tests.log; exit 1; }
+              cat /results/tests.log
+              python -B evaluate.py --engine-dir /sources --seeds 2027,6607,104729 --recheck-first --output /results/tournament.json
+            '
+      - name: Current main readback
+        if: github.ref == 'refs/heads/main'
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: |
+          git fetch --filter=blob:none --depth=100 origin main
+          git diff --exit-code HEAD origin/main -- revenue/kaggriculture/cloud-eval .github/workflows/astra-kaggriculture-eval.yml
+          python .github/scripts/audit_git_terminal.py --target-ref origin/main --expected-commit "$EXPECTED_COMMIT" --required-path revenue/kaggriculture/cloud-eval/evaluate.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: astra-kaggriculture-evaluation-${{ github.run_id }}
+          path: ${{ runner.temp }}/astra-results/
+          retention-days: 30
+          if-no-files-found: error

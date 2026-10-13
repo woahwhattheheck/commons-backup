@@ -1,0 +1,36 @@
+name: Hutter MixerLab
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/hutter-prize-enwik9-2026/**'
+      - '.github/workflows/hutter-mixerlab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/hutter-prize-enwik9-2026/**'
+      - '.github/workflows/hutter-mixerlab.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: competitions/hutter-prize-enwik9-2026
+        run: python -m py_compile mixerlab.py readiness_gate.py tests/test_mixerlab.py
+      - name: Tests
+        working-directory: competitions/hutter-prize-enwik9-2026
+        run: python -m unittest discover -s tests -v
+      - name: Tests under optimized Python
+        working-directory: competitions/hutter-prize-enwik9-2026
+        run: python -O -m unittest discover -s tests -v

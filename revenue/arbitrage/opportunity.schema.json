@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/arbitrage/opportunity.schema.json",
+  "title": "Commons measured arbitrage opportunity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "opportunity_id",
+    "category",
+    "state",
+    "public_use_case",
+    "source_side",
+    "buyer_side",
+    "economics",
+    "evidence",
+    "execution_boundary"
+  ],
+  "properties": {
+    "opportunity_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{7,95}$"},
+    "category": {
+      "enum": [
+        "SERVICE_DELIVERY",
+        "COMPUTE_CAPACITY",
+        "DATA_LICENSE",
+        "PUBLIC_PROCUREMENT",
+        "MARKETPLACE_FULFILLMENT",
+        "EXPERTISE"
+      ]
+    },
+    "state": {
+      "enum": ["DISCOVERY", "MEASURED", "QUOTABLE", "EXECUTION_READY", "SETTLED", "REJECTED"]
+    },
+    "public_use_case": {"type": "string", "minLength": 1},
+    "source_side": {"$ref": "#/$defs/side"},
+    "buyer_side": {"$ref": "#/$defs/side"},
+    "economics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "quantity", "unit_buy_cost", "unit_sell_revenue", "unit_fees", "unit_delivery_cost", "unit_edge_before_tax", "total_edge_before_tax"],
+      "properties": {
+        "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "quantity": {"type": "number", "exclusiveMinimum": 0},
+        "unit_buy_cost": {"type": "number", "minimum": 0},
+        "unit_sell_revenue": {"type": "number", "minimum": 0},
+        "unit_fees": {"type": "number", "minimum": 0},
+        "unit_delivery_cost": {"type": "number", "minimum": 0},
+        "unit_edge_before_tax": {"type": "number"},
+        "total_edge_before_tax": {"type": "number"}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["side", "public_url", "observed_at", "establishes"],
+        "properties": {
+          "side": {"enum": ["SOURCE", "BUYER", "FEE", "DELIVERY"]},
+          "public_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+          "observed_at": {"type": "string", "format": "date-time"},
+          "establishes": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "execution_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["automatic_purchase", "automatic_trade", "rights_cleared", "provider_authorization_required", "cash_claimed"],
+      "properties": {
+        "automatic_purchase": {"const": false},
+        "automatic_trade": {"const": false},
+        "rights_cleared": {"type": "boolean"},
+        "provider_authorization_required": {"const": true},
+        "cash_claimed": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "side": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "price_status"],
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "price_status": {"enum": ["UNKNOWN", "PUBLIC_OBSERVED", "WRITTEN_QUOTE", "CONTRACTED"]}
+      }
+    }
+  }
+}

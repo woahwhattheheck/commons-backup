@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/whitebox_collaboration_offers.schema.json",
+  "title": "Commons White Box Collaboration Offers",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "assessed_at",
+    "scope",
+    "commercial_boundary",
+    "truth",
+    "sources",
+    "entry_routes",
+    "offers"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-whitebox-collaboration-offers/v1"},
+    "kind": {"const": "WHITEBOX_COLLABORATION_OFFERS"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "generated_from_main": {"$ref": "#/$defs/git_sha"},
+    "assessed_at": {"const": "2026-08-26"},
+    "scope": {"type": "string", "minLength": 1},
+    "commercial_boundary": {"type": "string", "minLength": 1},
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["buyer_interest_verified", "agreement_signed", "delivery_completed", "cash_received", "archive_transfer_cleared"],
+      "properties": {
+        "buyer_interest_verified": {"const": false},
+        "agreement_signed": {"const": false},
+        "delivery_completed": {"const": false},
+        "cash_received": {"const": false},
+        "archive_transfer_cleared": {"const": false}
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "entry_routes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {"$ref": "#/$defs/entry_route"}
+    },
+    "offers": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/offer"}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "blob_sha", "evidence_phrase"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha": {"$ref": "#/$defs/git_sha"},
+        "evidence_phrase": {"type": "string", "minLength": 8}
+      }
+    },
+    "price": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["known", "amount_usd", "basis"],
+      "properties": {
+        "known": {"type": "boolean"},
+        "amount_usd": {"type": ["integer", "null"], "minimum": 0},
+        "basis": {"enum": ["FIXED", "HOURLY", "CUSTOM_UNKNOWN", "UNKNOWN"]}
+      }
+    },
+    "entry_route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "status", "price", "checkout_url", "source_ids", "uses_owner_archive_payload"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "family": {"const": "EXPERTISE"},
+        "status": {"const": "LIVE_CHECKOUT"},
+        "price": {"$ref": "#/$defs/price"},
+        "checkout_url": {"type": "string", "pattern": "^https://buy\\.stripe\\.com/"},
+        "source_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "minItems": 1, "uniqueItems": true},
+        "uses_owner_archive_payload": {"const": false}
+      }
+    },
+    "offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "name", "family", "state", "price", "duration_days", "asset_boundary",
+        "deliverable", "customer_supplies", "source_ids", "uses_owner_archive_payload", "transfer_payload", "blocker"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"type": "string", "minLength": 1},
+        "family": {"enum": ["DATA", "SERVICES", "EXPERTISE"]},
+        "state": {"enum": ["BLOCKED_EVIDENCE_REQUIRED", "AVAILABLE_CUSTOMER_OWNED_ASSET", "SCOPING_AVAILABLE"]},
+        "price": {"$ref": "#/$defs/price"},
+        "duration_days": {"type": ["integer", "null"], "minimum": 1},
+        "asset_boundary": {"enum": ["OWNER_ARCHIVE", "CUSTOMER_OWNED_OR_INDEPENDENTLY_CLEARED"]},
+        "deliverable": {"type": "string", "minLength": 1},
+        "customer_supplies": {"type": "string", "minLength": 1},
+        "source_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "minItems": 1, "uniqueItems": true},
+        "uses_owner_archive_payload": {"const": false},
+        "transfer_payload": {"const": false},
+        "blocker": {"type": "string"}
+      }
+    }
+  }
+}

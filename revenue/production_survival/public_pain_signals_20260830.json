@@ -1,0 +1,68 @@
+{
+  "kind": "PUBLIC_PAIN_SIGNAL_BATCH",
+  "schema_version": "production-survival-signals/v1",
+  "offer_sku": "same-day-agent-survival-proof",
+  "collected_by": "KIMI (K3, Cursor seat)",
+  "collected_at": "2026-08-30T05:35:00Z",
+  "honesty": {
+    "these_are_strangers_public_posts": true,
+    "no_contact_made": true,
+    "no_interest_expressed_by_them": true,
+    "not_leads_not_customers_not_cash": true,
+    "contact_requires_owner_approval": true,
+    "verified_leads_remain": 0
+  },
+  "crm_mapping": "revenue/production_survival/crm.md stage 'Public pain captured': phrase plus source URL. Airtable base JOJO Revenue Recovery CRM is the system of record; this file is research input only, not a second CRM.",
+  "signals": [
+    {
+      "signal_id": "sig-crewai-6380-async-freeze",
+      "pain_phrase": "async tasks that silently freeze when the LLM call fails — no exception, no log, the process just hangs; cost me a full day of debugging",
+      "source_url": "https://github.com/crewAIInc/crewAI/issues/6380",
+      "observed_at": "2026-08-30T05:35:00Z",
+      "who": "Engineer running CrewAI in production for months; June 2026 Claude outages (4 in one month, 10% error rate on June 16) would each have triggered the freeze",
+      "binary_test_fit": "Given an async task whose LLM call fails, when the failure occurs, then the flow emits a visible failure and halts instead of hanging — exactly the stop-path the survival proof delivers",
+      "draft_sentence": "My agent should survive routine LLM API failures, but in production it silently freezes and downstream agents wait forever.",
+      "contact_route_status": "NONE — public GitHub issue exists; any contact is owner decision; cold pitch in a stranger's issue thread is spam-adjacent and NOT recommended"
+    },
+    {
+      "signal_id": "sig-crewai-community-7217-flow-freeze",
+      "pain_phrase": "when the LLM call throws an exception in an async task, the flow freezes instead of failing gracefully; synchronous execution fails as expected",
+      "source_url": "https://community.crewai.com/t/error-llm-call-exception-in-async-task-doesnt-stop-flow-execution/7217",
+      "observed_at": "2026-08-30T05:35:00Z",
+      "who": "Company developer behind a corporate proxy; production flow depends on async execution",
+      "binary_test_fit": "Given a litellm APIError inside an async task, when it throws, then the flow stops visibly with a receipt instead of freezing",
+      "draft_sentence": "My agent should fail loudly and roll back on provider errors, but in production the flow freezes and says nothing.",
+      "contact_route_status": "NONE — community forum account required; owner decision"
+    },
+    {
+      "signal_id": "sig-claude-code-64403-session-wipe",
+      "pain_phrase": "all my local Cowork sessions have disappeared with no migration, no warning, and no recovery option — critical ongoing work sessions, client deliverables, hours of agentic work, simply gone; paying Pro user",
+      "source_url": "https://github.com/anthropics/claude-code/issues/64403",
+      "observed_at": "2026-08-30T05:35:00Z",
+      "who": "Paying Claude Pro subscriber with client deliverables destroyed by an app update; thread has multiple affected users",
+      "binary_test_fit": "Given a crashed or wiped agent session, when recovery runs, then the work state is restored with a durable receipt — the crash-resume evidence pattern",
+      "draft_sentence": "My agent should survive the harness crashing, but in production an update wiped months of sessions with no recovery path.",
+      "contact_route_status": "NONE — public issue thread; owner decision"
+    },
+    {
+      "signal_id": "sig-agentceo-relaunch-loop",
+      "pain_phrase": "the CEO agent was relaunching a fresh headless session every two seconds — the entire organization was headless, every other agent sat idle",
+      "source_url": "https://agent.ceo/blog/debugging-ai-agent-relaunch-loop-production-incident",
+      "observed_at": "2026-08-30T05:35:00Z",
+      "who": "agent.ceo — runs an agent organization platform; publishes detailed postmortems; fixed this one in-house after significant incident cost",
+      "binary_test_fit": "Given a compound failure (bad config + premature wake), when the loop starts, then a visible stop path fires before the fleet goes idle — their own postmortem shows the class",
+      "draft_sentence": "My agent should absorb a bad config write, but in production two minor bugs compounded into a 2-second relaunch loop that idled the whole fleet.",
+      "contact_route_status": "NONE — vendor-adjacent (they sell an agent platform); better as credibility citation than prospect; owner decision"
+    },
+    {
+      "signal_id": "sig-tamiz-96-refusals",
+      "pain_phrase": "roughly 14 weeks from first deployment to production stability; the first 40 iterations were pure debugging — the agent kept failing in unpredictable ways; 30% of errors were timeout cascades",
+      "source_url": "https://tamiz.pro/insights/building-reliable-ai-agents-production-lessons",
+      "observed_at": "2026-08-30T05:35:00Z",
+      "who": "Consultancy shipping customer-support / data-extraction agents for enterprises; speaks the buyer's language",
+      "binary_test_fit": "Given a tool timeout cascade, when the budget exhausts, then the agent surfaces the fallback chain used with a receipt — their own fix list is our acceptance criteria",
+      "draft_sentence": "My agent should degrade visibly with receipts, but in production it retry-loops until the budget is gone and answers garbage.",
+      "contact_route_status": "NONE — potential channel partner more than buyer; owner decision"
+    }
+  ]
+}

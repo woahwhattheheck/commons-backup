@@ -1,0 +1,24 @@
+{
+  "package": "wayne_glioma_pet_provenance_rail",
+  "schema_version": 1,
+  "status": "SYNTHETIC_INTERNAL_PROVENANCE_ONLY",
+  "product": "Wayne State R01CA309136 Glioma PET Tracer-to-Map Provenance Rail",
+  "acceptance_contract": {
+    "complete_synthetic_episodes": 100,
+    "input_records": 646,
+    "unique_events": 640,
+    "exact_retry_replays": 6,
+    "forced_quarantines": 25
+  },
+  "commands": [
+    "python -m unittest revenue.wayne_glioma_pet_provenance_rail.test_rail -v",
+    "python -O -m unittest revenue.wayne_glioma_pet_provenance_rail.test_rail -v",
+    "python -m revenue.wayne_glioma_pet_provenance_rail.acceptance"
+  ],
+  "raw_imaging_payloads": false,
+  "phi_allowed": false,
+  "dose_quantity_fields": false,
+  "clinical_decision_authority": false,
+  "tracer_or_qc_release_authority": false,
+  "external_effects": false
+}

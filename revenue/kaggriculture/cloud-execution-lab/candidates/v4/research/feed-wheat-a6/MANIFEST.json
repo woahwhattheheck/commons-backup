@@ -1,0 +1,37 @@
+{
+  "kind": "titan-v4-research-custody",
+  "lane": "A6 feed-WHEAT",
+  "mechanism": "r04_feed_wheat",
+  "status": "OVERLAP_DEFER_UNIQUE_OBLIGATION_REQUIRED",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "legacy_source": {
+    "branch": "riot/v3.1-lane-a6",
+    "head": "06cbe819efd49d6d871aec020abcef565c1129d3",
+    "parent": "508b342fc46fa91e3d7cdc3f0b7e44934a187c14",
+    "helper_blob": "5ef5de8c5d208acc5e1b1f9166bbb4ffb96e1b5e",
+    "router_postimage_blob": "7356bc9146ded0686d258d45e109136f204f1b2f",
+    "apply_v3_postimage_blob": "120380c52b8062a27e9d904a6ae56266f187635c",
+    "focused_test_blob": "6439bf3833d3d421752ad14baa560086d881b287",
+    "reported_materialized_checks": "137/137 green",
+    "focused_tests": 30,
+    "default": "OFF"
+  },
+  "three_part_mechanism": [
+    "days 0-2 budget/market-slot checked BUY_SEED WHEAT front-load (legacy default 26, spread 9/9/8)",
+    "idle PASS crew opportunistically plant extra WHEAT on empty tiles, water tracked plants inside the yield window, harvest from day 5, and PLACE carried WHEAT at the shed without redirecting busy units",
+    "from day 5, cap legacy v226 topup/v234 sheep-rescue emergency WHEAT buys using the legacy r04_feed_wheat_buy_cap (default 1.2/day); pre-day-5 buys remain untouched"
+  ],
+  "overlap_context": [
+    "current F2 feed-prebuy owns WHEAT funding/prebuy behavior",
+    "current H3e cow-feed-recycle family overlaps WHEAT/feed/service behavior",
+    "current engine-faithful guards and PLANT demand handling may supersede some legacy safety assumptions"
+  ],
+  "required_next_step": "Against literal current main, perform an exact trigger/action/obligation diff between A6 and current F2/H3e plus current WHEAT/PLANT correctness guards. Recompose only a proven unique obligation or correctness theorem; if every A6 trigger is consumed or dominated, mark A6 consumed-by-overlap and retire it.",
+  "prohibitions": [
+    "do not execute or copy the stale legacy router/apply_v3 postimages into production",
+    "do not create a new A6 key solely because the old branch is absent",
+    "do not infer current economics from the legacy replay forensics or green source checks",
+    "do not advance the old V3.1 branch"
+  ]
+}

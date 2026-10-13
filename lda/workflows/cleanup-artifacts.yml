@@ -1,0 +1,30 @@
+name: Cleanup old artifacts
+# Deletes build artifacts older than 3 hours. The build workflow already does this on every push;
+# this scheduled job covers the gaps when no build runs for a while. NOTE: scheduled workflows only
+# run from the repository's DEFAULT branch, so this takes effect once it's merged there.
+on:
+  schedule:
+    - cron: '0 * * * *'     # hourly
+  workflow_dispatch:
+permissions:
+  actions: write
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete artifacts older than 3 hours
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const cutoff = Date.now() - 3 * 60 * 60 * 1000;   // 3 hours
+            const arts = await github.paginate(github.rest.actions.listArtifactsForRepo, {
+              owner: context.repo.owner, repo: context.repo.repo, per_page: 100 });
+            let n = 0;
+            for (const a of arts) {
+              if (new Date(a.created_at).getTime() < cutoff) {
+                await github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner, repo: context.repo.repo, artifact_id: a.id });
+                n++;
+              }
+            }
+            core.info(`Deleted ${n} artifact(s) older than 3 hours.`);

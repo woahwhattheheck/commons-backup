@@ -1,0 +1,79 @@
+{
+  "demand_id": "ddl-crosssite-method-proficiency-lims-01",
+  "schema": "commons-ddl-crosssite-method-proficiency-lims/v1",
+  "buyer": "DDL, Inc. / Suzette Glennon",
+  "build": "Cross-Site Controlled-Method + Proficiency-Comparison Module",
+  "qms": "DDL-QMS-ONE",
+  "sites": ["DDL_MN", "DDL_CA", "DDL_NJ"],
+  "site_names": {
+    "DDL_MN": "Minnesota",
+    "DDL_CA": "California",
+    "DDL_NJ": "New Jersey"
+  },
+  "programs": ["SEAL_STRENGTH", "VISUAL", "DYE_PENETRATION", "DISTRIBUTION", "AGING"],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "cash_usd": 0,
+  "pre_sale_transport": "NONE",
+  "interfaces": "SIMULATED_READ_ONLY",
+  "interface_live": false,
+  "live_lims": false,
+  "production_writes": false,
+  "automatic_release": false,
+  "accreditation_claim": false,
+  "phi": false,
+  "outreach": false,
+  "named_release_role": "NAMED_RELEASE_OFFICER",
+  "named_release_actor": "SYN-DDL-RELEASE-OFFICER",
+  "seed": 20260831,
+  "open_slack_ts": "1788149883.630329",
+  "open_slack_channel": "C0BTRNE6Y58",
+  "study_count": 160,
+  "valid_count": 120,
+  "blocked_count": 40,
+  "pair_valid": {
+    "DDL_MN|DDL_CA": 40,
+    "DDL_CA|DDL_NJ": 40,
+    "DDL_MN|DDL_NJ": 40
+  },
+  "program_valid": {
+    "SEAL_STRENGTH": 48,
+    "VISUAL": 48,
+    "DYE_PENETRATION": 8,
+    "DISTRIBUTION": 8,
+    "AGING": 8
+  },
+  "flag_valid": {
+    "MATCH": 84,
+    "FLAG_BIAS": 18,
+    "FLAG_PRECISION": 12,
+    "FLAG_OUTLIER": 6
+  },
+  "block_reason_counts": {
+    "HOLD_FACILITY_OUT_OF_SCOPE": 8,
+    "HOLD_METHOD_VERSION_MISMATCH": 8,
+    "HOLD_INSTRUMENT_NOT_LINKED": 8,
+    "HOLD_OPERATOR_NOT_QUALIFIED": 8,
+    "HOLD_PAIR_NOT_SHARED_SCOPE": 8
+  },
+  "expected": {
+    "studies": 160,
+    "valid": 120,
+    "blocked": 40,
+    "exact_method_version": 120,
+    "blocked_expected_reason": 40,
+    "paired_truth_table_match": 120,
+    "comparison_flags_expected": 120,
+    "linkage_complete": 120,
+    "released_without_named_human": 0,
+    "released_after_named_human": 120,
+    "blocked_released": 0,
+    "replay_duplicate_study_events": 0,
+    "replay_duplicate_evidence_events": 0,
+    "production_writes": 0,
+    "live_lims": 0,
+    "cash_usd": 0
+  },
+  "golden_audit_sha256": "c6259d48907f9b27477e52fedaff65558f3153f81b343de0c2d86a695fce308a",
+  "official_binary": "python3 ddl_crosssite_method_proficiency.py",
+  "official_test": "python3 test_ddl_crosssite_method_proficiency.py"
+}

@@ -1,0 +1,26 @@
+name: QuantiPhy Main Track
+on:
+  pull_request:
+    paths:
+      - 'revenue/quantiphy_main/**'
+      - 'test_quantiphy_main.py'
+      - '.github/workflows/quantiphy-main.yml'
+  push:
+    paths:
+      - 'revenue/quantiphy_main/**'
+      - 'test_quantiphy_main.py'
+      - '.github/workflows/quantiphy-main.yml'
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/quantiphy_main/*.py test_quantiphy_main.py
+      - run: python -m unittest -v test_quantiphy_main.py
+      - run: python -O -m unittest -v test_quantiphy_main.py

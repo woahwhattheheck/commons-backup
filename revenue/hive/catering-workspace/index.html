@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Catering Workspace · Hive</title>
+<style>
+:root{--ink:#172824;--muted:#5b6a64;--paper:#f5f4ed;--line:#d8ded3;--accent:#235e48;--gold:#e6bb64;--warn:#795718}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,sans-serif}header{background:var(--ink);color:white;padding:32px max(24px,calc((100vw - 1420px)/2));display:flex;align-items:center;justify-content:space-between;gap:24px}h1{font:normal 36px/1.15 Georgia,serif;margin:7px 0 10px}.eyebrow{letter-spacing:.18em;font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gold)}header p{margin:0;color:#d3dfd8;max-width:690px}.badge{border:1px solid #687d71;border-radius:24px;padding:8px 15px;white-space:nowrap;font-size:12px}main{max-width:1468px;padding:24px;margin:auto}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px;align-items:center}button,.file-button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:7px;padding:9px 13px;color:var(--ink);background:white;display:inline-block}button:hover,.file-button:hover{background:#e8eee4}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #bc7d13;outline-offset:2px}.file-button input{position:absolute;width:1px;height:1px;margin:0;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.file-button:focus-within{outline:3px solid #bc7d13;outline-offset:2px}.grid{display:grid;grid-template-columns:minmax(280px,340px) minmax(0,1fr);gap:22px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:20px}.card h2{font-size:18px;margin:0 0 16px}.step{color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}.field{display:block;margin-bottom:12px;font-size:12px;color:var(--muted);font-weight:600}input,textarea{width:100%;font:inherit;color:var(--ink);padding:9px 10px;border:1px solid #bfcbc0;border-radius:6px;background:#fff;margin-top:4px}textarea{resize:vertical;min-height:65px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.hint{font-size:12px;color:var(--muted);font-weight:400}.notice{background:#fff6de;border:1px solid #ead7aa;border-radius:8px;padding:12px 15px;font-size:13px;color:var(--warn);margin:0 0 18px}#error{background:#fff0ec;color:#8a2c20;border-color:#e7b4a7}#status{font-size:12px;color:var(--muted);margin-left:auto}table{width:100%;border-collapse:collapse;text-align:left}th{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--line);padding:10px 8px}td{padding:12px 8px;border-bottom:1px solid #e8ece5;vertical-align:top}td input{min-width:75px}input[type=checkbox]{width:18px;min-width:18px;height:18px;margin-top:8px}td small{display:block;color:var(--muted);margin-top:3px}.table-wrap{overflow-x:auto}.price{text-align:right;white-space:nowrap}.row-title{font-weight:600}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}.metric{padding:19px;background:#edf2e9;border-radius:8px}.metric small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em}.metric strong{display:block;font:normal 30px/1.4 Georgia,serif}.metric:first-child{background:var(--ink);color:white}.metric:first-child small{color:#d3dfd8}.totals{margin:15px 0 0 auto;max-width:360px}.totals div{display:flex;justify-content:space-between;padding:5px 0;gap:20px}.totals .final{border-top:2px solid var(--ink);font-weight:700;padding-top:9px;margin-top:7px}.document-head{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}.document-head h2{font:normal 26px Georgia,serif;margin:0 0 6px}.meta{font-size:12px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}.tag{display:inline-block;border-radius:4px;padding:3px 8px;background:#edf2e9;font-size:11px;white-space:nowrap}.notes{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}details summary{cursor:pointer;color:var(--accent);font-weight:600}details textarea{font:12px/1.5 ui-monospace,monospace;min-height:210px}#payment a{display:inline-block;margin-top:6px;color:var(--accent);font-weight:600;overflow-wrap:anywhere}[hidden]{display:none!important}footer{font-size:12px;color:var(--muted);padding:0 0 28px}.screen-only .hint{margin:10px 0 0}@media(max-width:1000px){.grid{grid-template-columns:1fr}.inputs{display:grid;grid-template-columns:1fr 1fr;gap:18px}.inputs .card{margin:0}.inputs .card:last-child{grid-column:1/-1}}@media(max-width:650px){header{padding:25px 20px}.badge{display:none}h1{font-size:30px}main{padding:16px}.inputs{display:block}.inputs .card{margin-bottom:16px}.summary{grid-template-columns:1fr}.metric{padding:13px 18px}.metric strong{font-size:27px}.card{padding:16px}#status{width:100%;margin:0}.document-head{flex-direction:column}}@media print{body{background:white;font-size:11pt}header,.screen-only,.inputs,.toolbar,.summary,#error,#status,footer{display:none!important}main{padding:0;max-width:none}.grid{display:block}.card{border:0;padding:0;margin:0}.card h2{margin-top:0}body[data-print=quote] #kitchen,body[data-print=kitchen] #quote{display:none!important}th,td{padding:8px 5px}tr{break-inside:avoid}.notice{background:white;color:black;border:1px solid #999}.document-head{display:flex;flex-direction:row}.tag{border:1px solid #aaa}.meta{color:#333}.totals{break-inside:avoid}a{color:black}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">Hive / Operations</div><h1>Catering Workspace</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>From guest count to a clear quote and a kitchen-ready plan. One revision, everywhere.</p></div><span class="badge">Offline · USD · No sign-in</span></header>
+<main>
+<div class="toolbar screen-only">
+<button id="download" class="primary">Download event</button>
+<label class="file-button" for="event-file">Open event<input id="event-file" type="file" accept=".json,application/json"></label>
+<button id="save">Save in this browser</button><button id="restore">Restore saved event</button><button id="sample">Load example</button><span id="status" role="status" aria-live="polite">Example data · not a customer order</span>
+</div>
+<div id="error" class="notice screen-only" role="alert" hidden></div>
+<div class="grid">
+<aside class="inputs screen-only">
+<section class="card"><div class="step">01 / Event</div><h2>The occasion</h2>
+<label class="field">Event name<input data-field="name"></label><label class="field">Customer / contact<input data-field="customer"></label>
+<div class="pair"><label class="field">Event date<input data-field="date" type="date"></label><label class="field">Headcount<input data-field="headcount" type="number" min="1" step="1"></label></div>
+<label class="field">Location / service time<input data-field="location"></label>
+<label class="field">Dietary requests<textarea data-field="dietary"></textarea><span class="hint">Requests are notes, not a suitability decision.</span></label>
+<label class="field">Service and packing notes<textarea data-field="notes"></textarea></label>
+</section>
+<section class="card"><div class="step">02 / Quote rules</div><h2>Pricing &amp; preparation</h2>
+<div class="pair"><label class="field">Preparation buffer %<input data-field="buffer" type="number" min="0" max="100" step="0.01"></label><label class="field">Service charge %<input data-field="serviceRate" type="number" min="0" max="100" step="0.01"></label></div>
+<div class="pair"><label class="field">Delivery $<input data-field="delivery" type="number" min="0" step="0.01"></label><label class="field">Discount $<input data-field="discount" type="number" min="0" step="0.01"></label></div>
+<div class="pair"><label class="field">Tax %<input data-field="taxRate" type="number" min="0" max="100" step="0.01"></label><label class="field">Deposit %<input data-field="depositRate" type="number" min="0" max="100" step="0.01"></label></div>
+<p class="hint">Whole selling units round up after the buffer. Service applies to food. Tax applies to food + service + delivery − discount. Set rates for this event; no tax rate is inferred.</p>
+</section>
+<section class="card"><div class="step">03 / Order &amp; payment handoff</div><h2>Keep the records together</h2>
+<label class="field">Received $ — manual record<input data-field="received" type="number" min="0" step="0.01"></label>
+<label class="field">Existing payment link<input data-field="paymentLink" type="url" placeholder="https://…"><span class="hint">Use your existing provider link. Check its amount separately. This workspace never charges or verifies payment.</span></label>
+<button id="confirm">Record customer confirmation</button><p class="hint">Records a reference against this exact revision. Any edit requires a new confirmation. Save or download to retain it.</p>
+</section>
+</aside>
+<div class="output">
+<section class="card screen-only"><div class="step">Menu / Editable selection</div><h2>What are we serving?</h2>
+<div class="toolbar"><label class="file-button" for="menu-file">Import menu CSV / JSON<input id="menu-file" type="file" accept=".csv,.json,text/csv,application/json"></label><button id="menu-template">Download menu CSV</button></div>
+<p class="hint">Leave Guests blank to follow the event headcount. Use a smaller count for a specific guest group. Blank Price follows the menu; 0.00 is a free item.</p>
+<div class="table-wrap"><table><thead><tr><th>Use</th><th>Menu item / portions per unit</th><th>Guests</th><th>Price $ / unit</th></tr></thead><tbody id="selection"></tbody></table></div>
+<details><summary>Edit menu names, prices and preparation notes</summary><textarea id="menu-json" aria-label="Menu JSON editor" spellcheck="false"></textarea><button id="apply-menu">Apply edited menu</button><p class="hint">Menu imports select all imported items and reset line-level overrides. Existing event details remain. Invalid imports leave the previous menu intact.</p></details>
+</section>
+<div id="preview">
+<div class="summary screen-only"><div class="metric"><small>Quote total</small><strong id="metric-total"></strong></div><div class="metric"><small>Deposit still due</small><strong id="metric-deposit"></strong></div><div class="metric"><small>Balance still due</small><strong id="metric-balance"></strong></div></div>
+<section class="card" id="quote"><div class="document-head"><div><div class="step">Customer quote</div><h2 class="event-name"></h2><div class="meta event-meta"></div></div><div><span class="tag revision"></span><div class="meta confirmation"></div></div></div>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Quantity</th><th class="price">Unit price</th><th class="price">Amount</th></tr></thead><tbody id="quote-lines"></tbody></table></div><div class="totals" id="totals"></div>
+<h3>Event requests</h3><div class="notes dietary"></div><div class="notes event-notes"></div>
+<div class="notice">Dietary requests and supplied allergen notes require the caterer's review. This quote does not determine food suitability. Received amounts are manual records, not processor-confirmed payments.</div>
+<div id="payment"></div><div class="actions screen-only"><button id="print-quote">Print / save quote PDF</button></div>
+</section>
+<section class="card" id="kitchen"><div class="document-head"><div><div class="step">Kitchen production sheet</div><h2 class="event-name"></h2><div class="meta event-meta"></div></div><div><span class="tag revision"></span><div class="meta confirmation"></div></div></div>
+<div class="notice">Review every dietary request against recipes and supplier labels. No allergy or suitability clearance is generated.</div>
+<div class="table-wrap"><table><thead><tr><th>Prepare</th><th>Guests / portions</th><th>Preparation / supplied allergen notes</th></tr></thead><tbody id="kitchen-lines"></tbody></table></div>
+<h3>Dietary &amp; service requests</h3><div class="notes dietary"></div><div class="notes event-notes"></div>
+<div class="actions screen-only"><button id="print-kitchen">Print / save kitchen PDF</button><button id="kitchen-csv">Download kitchen CSV</button></div>
+</section>
+</div>
+</div></div>
+<footer class="screen-only">Example prices are synthetic. Event data stays in this browser unless you export it or open your own payment link. “Save in this browser” uses local storage on this device; downloaded event JSON is the portable backup. Do not put customer data in a public repository.</footer>
+</main>
+<script src="catering.js"></script>
+<script>
+'use strict';
+const C = Catering, $ = id => document.getElementById(id), fields = [...document.querySelectorAll('[data-field]')];
+let doc = C.sample();
+const currency = cents => '$' + C.money(cents);
+function status(message) { $('status').textContent = message; }
+function error(e) { $('error').textContent = e.message || String(e); $('error').hidden = false; }
+function run(action) { try { action(); } catch (e) { error(e); } }
+function element(tag, text, className) { const e = document.createElement(tag); if (text != null) e.textContent = text; if (className) e.className = className; return e; }
+function changed() { doc.revision = C.integer(C.integer(doc.revision, 'Revision', 1) + 1, 'Revision', 1); doc.confirmation = null; status('Edited · download or save to retain this revision'); renderOutput(); }
+function renderSelection() {
+  $('selection').replaceChildren();
+  for (const item of doc.menu) {
+    const tr = element('tr'), selected = doc.event.lines.find(l => l.id === item.id);
+    const check = document.createElement('input'); check.type = 'checkbox'; check.checked = Boolean(selected); check.setAttribute('aria-label', 'Include ' + item.name);
+    check.addEventListener('change', () => { doc.event.lines = doc.event.lines.filter(l => l.id !== item.id); if (check.checked) doc.event.lines.push({id: item.id, guests: '', price: ''}); changed(); renderSelection(); });
+    const checkCell = element('td'); checkCell.append(check); tr.append(checkCell);
+    const title = element('td'); title.append(element('div', item.name, 'row-title'), element('small', `${item.serves} portions / ${item.unit} · ${item.id}`)); tr.append(title);
+    for (const key of ['guests', 'price']) {
+      const cell = element('td'), input = document.createElement('input'); input.type = 'number'; input.min = '0'; input.step = key === 'guests' ? '1' : '0.01'; input.disabled = !selected;
+      input.setAttribute('aria-label', item.name + ' ' + key); input.value = selected ? selected[key] : ''; input.placeholder = key === 'guests' ? 'All guests' : item.price;
+      input.addEventListener('change', () => { selected[key] = input.value; changed(); }); cell.append(input); tr.append(cell);
+    }
+    $('selection').append(tr);
+  }
+  $('menu-json').value = JSON.stringify(doc.menu, null, 2);
+}
+function renderOutput() {
+  try {
+    const q = C.quote(doc), e = doc.event, t = q.totals;
+    $('error').hidden = true; $('preview').hidden = false;
+    for (const name of ['total', 'deposit', 'balance']) $('metric-' + name).textContent = currency(t[name === 'deposit' ? 'depositDue' : name]);
+    document.querySelectorAll('.event-name').forEach(x => x.textContent = e.name || 'Untitled event');
+    document.querySelectorAll('.event-meta').forEach(x => x.textContent = `${e.customer || 'Customer not supplied'}\n${e.date || 'Date not supplied'} · ${e.location || 'Location not supplied'}\n${q.headcount} guests · ${e.buffer}% preparation buffer`);
+    document.querySelectorAll('.revision').forEach(x => x.textContent = `Revision ${q.revision} · ${q.confirmed ? 'Confirmed manually' : 'Draft'}`);
+    document.querySelectorAll('.confirmation').forEach(x => x.textContent = q.confirmed ? doc.confirmation.reference : 'Customer confirmation not recorded for this revision');
+    document.querySelectorAll('.dietary').forEach(x => x.textContent = q.dietary || 'Dietary requests not supplied — collect and review.');
+    document.querySelectorAll('.event-notes').forEach(x => x.textContent = e.notes || '');
+    $('quote-lines').replaceChildren(); $('kitchen-lines').replaceChildren();
+    q.lines.forEach(l => {
+      const tr = element('tr'); tr.append(element('td', l.name), element('td', `${l.units} ${l.unit}`), element('td', currency(l.unitCents), 'price'), element('td', currency(l.lineCents), 'price')); $('quote-lines').append(tr);
+      const kr = element('tr'), prep = element('td'); prep.append(element('div', l.prep || 'Preparation notes not supplied'), element('small', 'Allergen notes: ' + (l.allergens || 'Not supplied')));
+      kr.append(element('td', `${l.units} ${l.unit} · ${l.name}`), element('td', `${l.guests} guests / ${l.plannedPortions} portions`), prep); $('kitchen-lines').append(kr);
+    });
+    $('totals').replaceChildren();
+    const labels = [['Food', 'subtotal'], ['Service', 'service'], ['Delivery', 'delivery'], ['Discount', 'discount'], ['Tax', 'tax'], ['TOTAL USD', 'total'], ['Deposit target', 'deposit'], ['Received (manual)', 'received'], ['Deposit still due', 'depositDue'], ['Balance still due', 'balance'], ['Recorded overpayment / credit', 'credit']];
+    labels.forEach(([label, key]) => { const row = element('div', null, key === 'total' ? 'final' : ''); row.append(element('span', label), element('span', (key === 'discount' ? '−' : '') + currency(t[key]))); $('totals').append(row); });
+    $('payment').replaceChildren();
+    if (q.paymentLink) { $('payment').append(element('p', `Existing provider handoff. Deposit still due: ${currency(t.depositDue)}. Check the provider's amount before paying.`)); const link = element('a', 'Open existing payment link'); link.href = q.paymentLink; link.target = '_blank'; link.rel = 'noopener noreferrer'; $('payment').append(link); }
+  } catch (e) { $('preview').hidden = true; error(e); }
+}
+function renderAll() { fields.forEach(input => input.value = doc.event[input.dataset.field] ?? ''); renderSelection(); renderOutput(); }
+fields.forEach(input => input.addEventListener('change', () => { doc.event[input.dataset.field] = input.value; changed(); }));
+function download(name, data, type) {
+  const url = URL.createObjectURL(new Blob([data], {type})), a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+$('download').onclick = () => run(() => { C.quote(doc); download(`catering-event-r${doc.revision}.json`, JSON.stringify(doc, null, 2) + '\n', 'application/json'); status('Event downloaded · keep this file for portability'); });
+$('save').onclick = () => run(() => { C.quote(doc); localStorage.setItem('hive-catering-v1', JSON.stringify(doc)); status(`Revision ${doc.revision} saved in this browser only`); });
+$('restore').onclick = () => run(() => { const raw = localStorage.getItem('hive-catering-v1'); if (!raw) throw new Error('No event has been saved in this browser.'); const next = C.load(raw); doc = next; renderAll(); status('Saved event restored'); });
+$('sample').onclick = () => { if (!window.confirm('Replace the current workspace with the example? Download any changes first.')) return; doc = C.sample(); renderAll(); status('Example data · not a customer order'); };
+$('event-file').onchange = async event => {
+  const file = event.target.files[0]; if (!file) return;
+  try { const next = C.load(await file.text()); doc = next; renderAll(); status('Event opened: ' + file.name); } catch (e) { error(e); } finally { event.target.value = ''; }
+};
+function applyMenu(source) {
+  const next = C.copy(doc); next.menu = C.importMenu(source); next.event.lines = next.menu.map(item => ({id: item.id, guests: '', price: ''})); next.revision++; next.confirmation = null; C.quote(next); doc = next; renderAll(); status('Menu replaced · all imported items selected; review quantities and prices');
+}
+$('menu-file').onchange = async event => { const file = event.target.files[0]; if (!file) return; try { applyMenu(await file.text()); } catch (e) { error(e); } finally { event.target.value = ''; } };
+$('apply-menu').onclick = () => run(() => applyMenu($('menu-json').value));
+$('menu-template').onclick = () => { const keys = ['id', 'name', 'unit', 'serves', 'price', 'allergens', 'prep']; download('catering-menu.csv', C.csv([keys, ...doc.menu.map(item => keys.map(k => item[k]))]), 'text/csv'); };
+$('confirm').onclick = () => run(() => { C.quote(doc); const ref = window.prompt('Customer confirmation reference for this exact revision (for example, email date or order reference):'); if (!ref || !ref.trim()) return; doc.confirmation = {revision: doc.revision, reference: ref.trim()}; renderOutput(); status('Confirmation recorded manually · save or download this event'); });
+$('kitchen-csv').onclick = () => run(() => download(`kitchen-r${doc.revision}.csv`, C.kitchenCSV(doc), 'text/csv'));
+for (const mode of ['quote', 'kitchen']) $('print-' + mode).onclick = () => run(() => { C.quote(doc); document.body.dataset.print = mode; window.print(); });
+window.addEventListener('afterprint', () => delete document.body.dataset.print);
+renderAll();
+</script>
+</body></html>

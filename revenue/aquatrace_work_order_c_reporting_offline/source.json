@@ -1,0 +1,62 @@
+{
+  "demand_id": "aquatrace-work-order-c-reporting-offline-20260831-01",
+  "product": "AquaTrace reporting and offline recovery runner",
+  "lane": "C — Reporting & offline",
+  "swarm": "AquaTrace production swarm",
+  "truth_gate": "NOT_READY / HOLD / BUILD-AND-VERIFY",
+  "cite_only": {
+    "private_repo": "woahwhattheheck/aquatrace-lims",
+    "private_sha": "7a5ca7fe2856c49abf46bc248654a4d6f7af0335",
+    "private_path": "docs/validation/reporting-offline-test-contract.md",
+    "note": "unmerged private-repo docs — cite, do not inherit"
+  },
+  "devices": {
+    "SYN-DEV-A": {"kind": "FIELD_SAMPLER", "site": "SYN-SITE-NORTH"},
+    "SYN-DEV-B": {"kind": "FIELD_SAMPLER", "site": "SYN-SITE-SOUTH"},
+    "SYN-DEV-C": {"kind": "FIELD_SAMPLER", "site": "SYN-SITE-PLANT"}
+  },
+  "destinations": {
+    "CMDP": {
+      "name": "Compliance Monitoring Data Portal",
+      "schema": "SYN-CMDP-EXPORT/v1",
+      "adapter": "SYNTHETIC_READONLY",
+      "pwsid_prefix": "SYN-PWS-"
+    },
+    "NETDMR": {
+      "name": "netDMR electronic Discharge Monitoring Report",
+      "schema": "SYN-NETDMR-EXPORT/v1",
+      "adapter": "SYNTHETIC_READONLY",
+      "npdes_prefix": "SYN-NPDES-"
+    },
+    "POWER_BI": {
+      "name": "Power BI operations dataset",
+      "schema": "SYN-POWERBI-EXPORT/v1",
+      "adapter": "SYNTHETIC_READONLY",
+      "dataset": "SYN-AQUATRACE-OPS"
+    }
+  },
+  "cmdp_analytes": [
+    {"code": "1040", "name": "NITRATE", "unit": "MG_L", "method": "EPA_353.2"},
+    {"code": "1041", "name": "NITRITE", "unit": "MG_L", "method": "EPA_353.2"},
+    {"code": "1030", "name": "LEAD", "unit": "UG_L", "method": "EPA_200.8"},
+    {"code": "1022", "name": "COPPER", "unit": "MG_L", "method": "EPA_200.8"},
+    {"code": "2950", "name": "TTHM", "unit": "UG_L", "method": "EPA_524.2"}
+  ],
+  "netdmr_parameters": [
+    {"code": "00310", "name": "BOD5", "unit": "MG_L", "outfall": "001"},
+    {"code": "00530", "name": "TSS", "unit": "MG_L", "outfall": "001"},
+    {"code": "00400", "name": "PH", "unit": "SU", "outfall": "001"},
+    {"code": "00610", "name": "AMMONIA_N", "unit": "MG_L", "outfall": "002"},
+    {"code": "00665", "name": "PHOSPHORUS_T", "unit": "MG_L", "outfall": "002"}
+  ],
+  "power_bi_metrics": [
+    {"name": "RESIDUAL_CL2", "unit": "MG_L"},
+    {"name": "TURBIDITY", "unit": "NTU"},
+    {"name": "FLOW_MGD", "unit": "MGD"},
+    {"name": "TANK_LEVEL", "unit": "FT"}
+  ],
+  "human_releaser": "SYN-AQUATRACE-REPORTING-OFFICER",
+  "human_role": "RELEASE_OFFICER",
+  "exception_owner_role": "REPORTING_OFFLINE_LEAD",
+  "exception_owner_desk": "AQUATRACE_REPORTING_OFFLINE"
+}

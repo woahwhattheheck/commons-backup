@@ -1,0 +1,9 @@
+# Recurrent subsequences of quadratic Beatty sequences
+
+For every real quadratic irrational $r>1$, an explicit positive Pell unit gives a strictly increasing subsequence of $\lfloor nr\rfloor$ satisfying a homogeneous integer recurrence of order at most two. The [construction and API guide](QUADRATIC_BEATTY_API.md) proves the signed-error contraction for both square-root branches and states the source attribution and runtime limits.
+
+The [public module](quadratic_beatty_index.cjs) accepts $r=(u\pm\sqrt D)/v>1$ and a supplied positive solution of $p^2-Dq^2=1$. It validates that input, retains nine unit-power rows, and supports exact BigInt term lookup, paging, value lower bounds and rank in the constructed subsequence. The mathematical sequence is infinite; the executable index is capped at 256. Loading a saved power basis checks structure and treats its mathematical identities as source premises.
+
+The [complete actual dataset](quadratic_minus15_index.json) uses the source-listed unit $4+\sqrt{15}$ and the new slope $(7-\sqrt{15})/2$. Its Beatty indices start $2,16,126,992$ and its values start $3,25,197,1551$; both satisfy $T_{k+2}=8T_{k+1}-T_k$. The first constructed value at least $10^{200}$ has zero-based index 223. All nine powers, both seed states, all 22 touched term records, every strict integer floor witness and the full navigation outputs are retained.
+
+The original question is [Kimberling's section 23](https://faculty.evansville.edu/ck6/integer/unsolved.html). Classical Pell-unit existence is credited through [Brian Conrad's author handout](https://math.stanford.edu/~conrad/154Page/handouts/genpell.pdf); [Robert Silber's 1976 Wythoff-pair paper](https://www.fq.math.ca/Scanned/14-4/silber2.pdf) supplies prior Beatty/recurrence context. This is an explicit sufficient family and reusable finite interface, with no full characterization or novelty claim. No Pell-unit search or source example was repeated.

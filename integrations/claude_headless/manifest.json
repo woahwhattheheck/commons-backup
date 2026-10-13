@@ -1,0 +1,99 @@
+{
+  "schema": "commons-headless-model-control/v1",
+  "service": "commons-claude-headless-gateway",
+  "peer": "CLAUDE",
+  "listen": "http://127.0.0.1:8879",
+  "gateway": "integrations/claude_headless/gateway.py (CLEAT; TENON runner claude_headless.py composes with it)",
+  "client": "python integrations/claude_headless/client.py <health|submit|followup|resume|status|events|tail|session|cancel|recover>",
+  "client_env": {
+    "CLAUDE_HEADLESS_BASE": "override the gateway base URL"
+  },
+  "start": [
+    "integrations/claude_headless/run.ps1",
+    "python integrations/claude_headless/gateway.py --detach"
+  ],
+  "reuses": [
+    "claude -p --output-format stream-json --session-id <uuid>",
+    "claude -p --output-format stream-json --resume <uuid>",
+    "~/.claude/projects/<cwd-key>/<session>.jsonl (the CLI's own durable transcript)",
+    "integrations/gemini_slack/peer_tool_gateway.py (/health + /v1/events cursor shape)"
+  ],
+  "routes": {
+    "health": "GET /health",
+    "submit": "POST /v1/runs {prompt, cwd?, model?, tools?, permission_mode?, label?, peer?, partial?, session_id?, wait_ms?}",
+    "run": "GET /v1/runs/{run_id}?wait_ms=",
+    "run_events": "GET /v1/runs/{run_id}/events?after=&limit=&wait_ms=",
+    "followup": "POST /v1/runs/{run_id}/followup {prompt}",
+    "session_followup": "POST /v1/sessions/{session_id}/followup {prompt}",
+    "session": "GET /v1/sessions/{session_id}",
+    "cancel": "POST /v1/runs/{run_id}/cancel (409 when already terminal)",
+    "recover": "POST /v1/recover",
+    "journal": "GET /v1/events?after=&wait_ms=&run_id=",
+    "session_followup_alias": "POST /v1/sessions/{session_id}/runs",
+    "submit_alias": "POST /v1/message (gemini-shaped)",
+    "run_alias": "GET /v1/requests/{run_id} (gemini-shaped)",
+    "list": "GET /v1/runs?status=&session_id=&limit="
+  },
+  "identifiers": {
+    "run_id": "16 hex, one CLI invocation",
+    "session_id": "UUID, one conversation; survives runs, cancels and gateway restarts",
+    "seq": "per-run event cursor; /v1/events carries a global cursor"
+  },
+  "statuses": [
+    "queued",
+    "running",
+    "completed",
+    "error",
+    "cancelled",
+    "interrupted"
+  ],
+  "attribution": "peer and label are optional and only recorded; nothing about the caller is checked",
+  "acceptance": "integrations/claude_headless/ACCEPTANCE.md",
+  "tests": [
+    "python test_claude_headless.py",
+    "python test_client.py"
+  ],
+  "receipt": "p/cleat-c1-headless-claude-20260904-01.md",
+  "stop": "python integrations/claude_headless/gateway.py --stop (gateway only; children keep running and are adopted on the next start)",
+  "headless": {
+    "child_creationflags": [
+      "CREATE_NO_WINDOW",
+      "CREATE_NEW_PROCESS_GROUP"
+    ],
+    "child_stdio": "files under runs/<run_id>/ (prompt.txt, events.jsonl, stderr.txt)",
+    "env_scrub": [
+      "CLAUDECODE",
+      "CLAUDE_CODE_*",
+      "CLAUDE_PID",
+      "CLAUDE_EFFORT",
+      "CLAUDE_AGENT_SDK_VERSION",
+      "CLAUDE_PREVIEW_CLASSIFIER_FLOOR"
+    ],
+    "env_keep_var": "CLAUDE_HEADLESS_KEEP_ENV",
+    "gateway_process": "pythonw.exe, DETACHED_PROCESS | CREATE_NO_WINDOW",
+    "allow_reuse_address": "off on Windows"
+  },
+  "recovery": {
+    "on_start_and_POST_/v1/recover": [
+      "adopt live children",
+      "finalize finished children from events.jsonl",
+      "mark dead-without-result as interrupted",
+      "dispatch queued rows"
+    ]
+  },
+  "journal": "~/.commons/claude_headless/gateway.sqlite3 (WAL) + runs/<run_id>/",
+  "memory_guard": {
+    "default_max_concurrent": 1,
+    "default_min_free_mb": 1024,
+    "flags": [
+      "--max-concurrent",
+      "--min-free-mb"
+    ],
+    "health": "memory_guard {free_mb, min_free_mb, holding}",
+    "events": [
+      "held",
+      "released"
+    ],
+    "why": "owner PC bugcheck 0x154 under RAM pressure, 2026-09-04 22:59 EDT"
+  }
+}

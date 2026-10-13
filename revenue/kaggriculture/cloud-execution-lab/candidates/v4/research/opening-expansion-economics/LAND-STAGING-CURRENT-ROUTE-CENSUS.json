@@ -1,0 +1,53 @@
+{
+  "schema": "titan-v4-land-staging-current-route-census/v1",
+  "status": "complete",
+  "scope": "execution receipt only; no source, runtime, config, default, archive, Kaggle, EV, or policy mutation",
+  "source_authority": {
+    "merged_pr": 12897,
+    "merge_commit": "2149e596afbbaf922726eadbef4657d2e5ec3b67",
+    "oracle_path": "candidates/v4/research/opening-expansion-economics/land_staging_oracle.py",
+    "oracle_git_blob": "e99fac2a50143fc44808d2309827c6f0dfa18949"
+  },
+  "execution": {
+    "checked_main": "4e0bc87c41340b4981b09e8639c1b35fa0ae9465",
+    "engine": {
+      "path": "reference/engine/kaggriculture.py",
+      "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+      "bytes": 40356
+    },
+    "arlene": {
+      "path": "reference/next-panel/vendor/arlene.py",
+      "git_blob": "bdb9cf58148a3c7961c085f4902759537decabf6",
+      "bytes": 46342
+    },
+    "focused_tests": {
+      "normal": "9/9 pass",
+      "optimized": "9/9 pass",
+      "py_compile": "pass"
+    },
+    "output": {
+      "logical_path": "/tmp/land-staging.json",
+      "bytes": 27671,
+      "sha256": "a478db9b85b129ab03fa6a78ff6c8d4ae3cd95075400945d065ecc49f0c731df"
+    }
+  },
+  "route_summary": {
+    "routes": 4,
+    "authored_buy_land_events": 8,
+    "events_with_worker_already_in_target_quadrant": 4,
+    "events_with_staged_worker_surviving_to_next_callback": 4,
+    "events_with_same_callback_prior_hire_in_target_quadrant": 4
+  },
+  "events": [
+    {"route_id":"7015cc00acfa4922","step":150,"market_slot":4,"target_quadrant":"NE","staged_actor_ids":[],"staged_actor_ids_surviving_to_next_callback":[],"same_callback_prior_hire_actor_ids":[],"min_moves_from_any_actor_to_target_at_commit":1},
+    {"route_id":"7015cc00acfa4922","step":265,"market_slot":7,"target_quadrant":"SW","staged_actor_ids":[3,4,8],"staged_actor_ids_surviving_to_next_callback":[3,4,8],"same_callback_prior_hire_actor_ids":[8],"min_moves_from_any_actor_to_target_at_commit":0},
+    {"route_id":"a84d06f1d12add7c","step":150,"market_slot":4,"target_quadrant":"NE","staged_actor_ids":[],"staged_actor_ids_surviving_to_next_callback":[],"same_callback_prior_hire_actor_ids":[],"min_moves_from_any_actor_to_target_at_commit":1},
+    {"route_id":"a84d06f1d12add7c","step":265,"market_slot":7,"target_quadrant":"SW","staged_actor_ids":[3,4,8],"staged_actor_ids_surviving_to_next_callback":[3,4,8],"same_callback_prior_hire_actor_ids":[8],"min_moves_from_any_actor_to_target_at_commit":0},
+    {"route_id":"ab9669b9abfbea4e","step":150,"market_slot":4,"target_quadrant":"NE","staged_actor_ids":[],"staged_actor_ids_surviving_to_next_callback":[],"same_callback_prior_hire_actor_ids":[],"min_moves_from_any_actor_to_target_at_commit":1},
+    {"route_id":"ab9669b9abfbea4e","step":265,"market_slot":7,"target_quadrant":"SW","staged_actor_ids":[3,4,8],"staged_actor_ids_surviving_to_next_callback":[3,4,8],"same_callback_prior_hire_actor_ids":[8],"min_moves_from_any_actor_to_target_at_commit":0},
+    {"route_id":"dc76e4003029ac51","step":150,"market_slot":4,"target_quadrant":"NE","staged_actor_ids":[],"staged_actor_ids_surviving_to_next_callback":[],"same_callback_prior_hire_actor_ids":[],"min_moves_from_any_actor_to_target_at_commit":1},
+    {"route_id":"dc76e4003029ac51","step":265,"market_slot":7,"target_quadrant":"SW","staged_actor_ids":[3,4,8],"staged_actor_ids_surviving_to_next_callback":[3,4,8],"same_callback_prior_hire_actor_ids":[8],"min_moves_from_any_actor_to_target_at_commit":0}
+  ],
+  "disposition": "CURRENT_AUTHORED_WITNESS_PRESENT",
+  "interpretation": "All four decoded current routes contain the same witnessed SW event: at BUY_LAND step 265 / market slot 7, actors 3, 4, and 8 are already staged in SW and survive to the next callback; actor 8 was hired earlier in the same callback. This is incidence evidence only, not a claim that adding or changing staging is economically favorable."
+}

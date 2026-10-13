@@ -1,0 +1,88 @@
+{
+  "schema": "technical-capability-request/v1",
+  "buyer_id": "synthetic-buyer-001",
+  "opportunity_id": "synthetic-opportunity-001",
+  "request": {
+    "request_id": "human-reply-001",
+    "generation": 1,
+    "observed_at": "2026-09-13T20:00:00Z",
+    "expires_at": "2030-09-13T20:00:00Z",
+    "requirements": [
+      {
+        "requirement_id": "automation",
+        "title": "Show a working automation implementation",
+        "required_claims": ["python_automation"],
+        "mandatory": true
+      },
+      {
+        "requirement_id": "evidence",
+        "title": "Show deterministic evidence receipts",
+        "required_claims": ["deterministic_receipts"],
+        "mandatory": true
+      },
+      {
+        "requirement_id": "export",
+        "title": "Show a buyer-readable export path",
+        "required_claims": ["buyer_readable_export"],
+        "mandatory": true
+      },
+      {
+        "requirement_id": "production",
+        "title": "Show a production deployment at this buyer",
+        "required_claims": ["buyer_production_deployment"],
+        "mandatory": false
+      }
+    ]
+  },
+  "known_unsupported_claims": ["buyer_production_deployment"],
+  "proof_assets": [
+    {
+      "asset_id": "public-core",
+      "generation": 1,
+      "kind": "PUBLIC_REPO",
+      "uri": "https://github.com/woahwhattheheck/commons",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "observed_at": "2026-09-13T19:00:00Z",
+      "expires_at": "2030-09-13T19:00:00Z",
+      "claims": ["python_automation", "deterministic_receipts"],
+      "limitations": ["Public source proves implementation artifacts, not buyer acceptance or production deployment."],
+      "scope": "PUBLIC_REUSABLE",
+      "buyer_id": null,
+      "opportunity_id": null
+    },
+    {
+      "asset_id": "public-demo",
+      "generation": 1,
+      "kind": "PUBLIC_DEMO",
+      "uri": "https://woahwhattheheck.github.io/commons/",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "observed_at": "2026-09-13T19:00:00Z",
+      "expires_at": "2030-09-13T19:00:00Z",
+      "claims": ["buyer_readable_export"],
+      "limitations": ["Public demo is reusable proof only; it is not evidence that this buyer has deployed or accepted anything."],
+      "scope": "PUBLIC_REUSABLE",
+      "buyer_id": null,
+      "opportunity_id": null
+    }
+  ],
+  "next_step": {
+    "offer_id": "paid-discovery-001",
+    "amount_minor": 250000,
+    "currency": "USD",
+    "duration_days": 7,
+    "scope": "A bounded seven-day technical discovery that maps the buyer's current workflow to a validated implementation plan.",
+    "deliverables": [
+      "Current-to-target workflow map",
+      "Fit-gap register bound to supplied evidence",
+      "Prioritized validation queue",
+      "Written implementation recommendation"
+    ],
+    "dependencies": [
+      "Buyer supplies the current workflow and representative non-secret artifacts"
+    ],
+    "acceptance_criteria": [
+      "Every recommendation is traceable to supplied evidence or explicitly marked as an assumption",
+      "Unresolved blockers are listed instead of silently upgraded to supported capability"
+    ]
+  }
+}

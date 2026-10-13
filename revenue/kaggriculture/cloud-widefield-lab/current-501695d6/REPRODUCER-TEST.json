@@ -1,0 +1,57 @@
+{
+  "help_smoke": {
+    "exit_code": 0,
+    "stdout_bytes": 1287
+  },
+  "negative_hash_test": {
+    "command": "python -B run_continuity.py ... --expected-current-sha 0000000000000000000000000000000000000000000000000000000000000000",
+    "exit_code": 1,
+    "expected_nonzero": true,
+    "passed": true,
+    "stderr_contains": "current archive mismatch"
+  },
+  "positive_reproduction": {
+    "all_complete": true,
+    "all_scores_equal": true,
+    "all_traces_equal": true,
+    "command": "python -B run_continuity.py --current-archive <501695d archive> --prior-archive <26e19f9a archive> --seeds 9925001,9925019 --output-dir <fresh-dir>",
+    "completed_per_arm": 4,
+    "exit_code": 0,
+    "reproduction_outputs": {
+      "continuity.json": {
+        "bytes": 6999,
+        "sha256": "cc05fad13fbe0c6a562e69e2d8ceb4b8a0bdd5566e4f5d044b2de13d3cfe93c9"
+      },
+      "current.json": {
+        "bytes": 22039,
+        "sha256": "794429f3030f0dd7741131ebcee893a015f841b24a304d3f2fe3bed70531c9ed"
+      },
+      "current.log": {
+        "bytes": 692,
+        "sha256": "ac312c445642b74a2ca3fdfdc218a54bc1a1edc874592053739e0ac8764103d5"
+      },
+      "prior.json": {
+        "bytes": 22004,
+        "sha256": "52b1afa6c34eea001906b89b465cf613407e337f057d64cdf246a7d1477e6456"
+      },
+      "prior.log": {
+        "bytes": 692,
+        "sha256": "ac312c445642b74a2ca3fdfdc218a54bc1a1edc874592053739e0ac8764103d5"
+      },
+      "reproducer.stdout": {
+        "bytes": 3507,
+        "sha256": "13b71a601682cbe2a77a4ded64aa69b659009f767406c1049b3fad9769a3ba41"
+      }
+    },
+    "scheduled_per_arm": 4,
+    "stable_rows_equal_to_published_receipt": true,
+    "timing_note": "Action and RPC timings are environment measurements and are not required to match the first run."
+  },
+  "recorded_at_utc": "2026-09-08T06:38:16Z",
+  "runner": {
+    "bytes": 12917,
+    "path": "run_continuity.py",
+    "sha256": "bc67e772d706d009588f74f84161ff4dceb8cd01ab36a9d97de97a1ff841d736"
+  },
+  "schema": "titan.current501.continuity.reproducer-test.v1"
+}

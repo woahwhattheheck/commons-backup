@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <title>PTL controlled-sample order preflight</title>
+  <style>
+    :root { --ink:#18221f; --paper:#f5f1e7; --teal:#176b63; --hold:#9a3d24; --line:#c8c0b1; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:linear-gradient(150deg,#eef7f2,var(--paper) 55%,#e8e1d4); font-family:"Segoe UI",sans-serif; min-height:100vh; }
+    main { max-width:820px; margin:auto; padding:2.5rem 1.25rem 4rem; }
+    h1 { font-family:Georgia,serif; font-size:clamp(1.9rem,4vw,2.6rem); line-height:1.1; }
+    .eyebrow { color:var(--teal); font-size:.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.75rem; margin:1.5rem 0; }
+    .stat { border:1px solid var(--line); background:#ffffff99; padding:1rem; }
+    .stat b { display:block; font-size:1.5rem; }
+    .hold { color:var(--hold); }
+    code,pre { font-family:ui-monospace,"SFMono-Regular",monospace; }
+    pre { background:var(--ink); color:#eef7f2; padding:1rem; overflow:auto; }
+    a { color:var(--teal); }
+    li { margin:.45rem 0; }
+  .cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style>
+</head>
+<body>
+  <main>
+    <nav><a href="./index.html">&larr; Commons</a></nav>
+    <p class="eyebrow">HOLD / BUILD-AND-VERIFY · pre-sale transport none</p>
+    <h1>Controlled-sample order preflight</h1>
+
+    <p>Dependency-light, deterministic gate for normalized/redacted Particle Technology Labs order packets. It stages evidence for a named human; it never accesses a LIMS or makes regulatory, payment, release, or transmission decisions.</p>
+    
+
+
+
+<div class="grid">
+      <div class="stat"><b>12</b><span>synthetic packets</span></div>
+      <div class="stat"><b>7</b><span>ready for named human</span></div>
+      <div class="stat"><b class="hold">5</b><span>fail-closed holds</span></div>
+      <div class="stat"><b>0</b><span>autonomous actions</span></div>
+    </div>
+    <h2>Checks</h2>
+    <ul>
+      <li>LSO present with an order ID.</li>
+      <li>PO number or approved payment-status flag.</li>
+      <li>Conditional SDS and DEA Form 222 presence flags.</li>
+      <li>Conditional international consignee/importer/invoice/detail fields.</li>
+      <li>Requested turnaround and report-delivery route.</li>
+      <li>Stable HOLD reason and deterministic SHA-256 audit evidence.</li>
+    </ul>
+    <h2>Run</h2>
+    <pre>python3 revenue/ptl_controlled_sample_order_preflight/runner.py
+python3 -m unittest test_ptl_controlled_sample_order_preflight.py</pre>
+    <p><a href="revenue/ptl_controlled_sample_order_preflight/contract.json">Contract</a> · <a href="revenue/ptl_controlled_sample_order_preflight/README.md">Runner guide</a> · </p>
+  </main>
+</body>
+</html>

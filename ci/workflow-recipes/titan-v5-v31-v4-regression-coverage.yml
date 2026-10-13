@@ -1,0 +1,59 @@
+name: TITAN V5 package-first V3.1→V4 regression coverage
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v5-v31-v4-regression-coverage.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/regression-coverage/**'
+  push:
+    branches:
+      - 'astra/v5-v31-v4-regression-coverage-ledger-20260912'
+    paths:
+      - '.github/workflows/titan-v5-v31-v4-regression-coverage.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/regression-coverage/**'
+
+permissions:
+  contents: read
+
+jobs:
+  package-first-coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Assert exact event head
+        shell: bash
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+      - name: Download exact submitted archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 5 --retry-all-errors -o "$RUNNER_TEMP/v31.tar.gz" \
+            https://github.com/woahwhattheheck/commons/releases/download/titan-kaggriculture-gauntlet-20260912/titan-v3.1-56172377-5db3921f.tar.gz
+          curl -fL --retry 5 --retry-all-errors -o "$RUNNER_TEMP/v4.tar.gz" \
+            https://github.com/woahwhattheheck/commons/releases/download/titan-kaggriculture-gauntlet-20260912/titan-v4-56182437-4d960155.tar.gz
+      - name: Package-first theorem normal and optimized
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/regression-coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m py_compile coverage.py test_coverage.py
+          python -B -m unittest -v test_coverage.py
+          python -O -B -m unittest -v test_coverage.py
+          python -B coverage.py --v31-archive "$RUNNER_TEMP/v31.tar.gz" --v4-archive "$RUNNER_TEMP/v4.tar.gz" > "$RUNNER_TEMP/coverage-normal.json"
+          python -O -B coverage.py --v31-archive "$RUNNER_TEMP/v31.tar.gz" --v4-archive "$RUNNER_TEMP/v4.tar.gz" > "$RUNNER_TEMP/coverage-opt.json"
+          cmp "$RUNNER_TEMP/coverage-normal.json" "$RUNNER_TEMP/coverage-opt.json"
+      - name: Clean evidence tree
+        shell: bash
+        run: |
+          git diff --check
+          test -z "$(git status --porcelain)"

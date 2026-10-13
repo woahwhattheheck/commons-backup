@@ -1,0 +1,118 @@
+{
+  "authority": {
+    "bid_submission_authorized": false,
+    "buyer_acceptance_claimed": false,
+    "charge_authorized": false,
+    "contract_signed": false,
+    "external_send_authorized": false,
+    "payment_received": false,
+    "prime_participation_claimed": false,
+    "revenue_recognized": false
+  },
+  "cutover": {
+    "baseline_sha256": "8ba8496a2525ae171ffd104d632dede6ef418d9b95962a9d88e2fcdbc8d48d24",
+    "dry_run_id": "synthetic-cutover-001",
+    "dry_run_status": "PASS",
+    "post_run_sha256": "9f86e9b34b5561866103c5e76998865efa98f10d9a4a30cce0ee3bf75e93cccc",
+    "preflight_status": "PASS",
+    "reconciliation_status": "PASS",
+    "restart_test_status": "PASS",
+    "rollback_receipt_sha256": "37e02d6e005011d45c239622b4651da9c4635f6fe797e2eedb8d0a5df4f83c99",
+    "rollback_test_status": "PASS"
+  },
+  "interfaces": [
+    {
+      "contract_sha256": "f671930eb5881d7f1210cc592bd30a5d480ee6ae7899ba4e755eff4b20cbae56",
+      "direction": "INBOUND",
+      "duplicate_effect_status": "PASS",
+      "interface_id": "meter_reads",
+      "retry_idempotency_status": "PASS",
+      "rollback_status": "PASS",
+      "roundtrip_status": "PASS",
+      "source_system": "meter-data fixture",
+      "target_system": "CIS target fixture",
+      "test_receipt_sha256": "534e3e51f1da0842b843b91a28853a757b98bbb41df994bc3c1b9707dc2d73a3"
+    },
+    {
+      "contract_sha256": "94b8f5c0c3bfce4cbaf6c301ba96cdf42904c317112b2c99f8093f5887ab17e7",
+      "direction": "BIDIRECTIONAL",
+      "duplicate_effect_status": "PASS",
+      "interface_id": "payment_posting",
+      "retry_idempotency_status": "PASS",
+      "rollback_status": "PASS",
+      "roundtrip_status": "PASS",
+      "source_system": "payment fixture",
+      "target_system": "CIS target fixture",
+      "test_receipt_sha256": "a711135cd6f2970d0d6b782530dd1af1f7f9edca1a6cb13fbae970d2b5afa586"
+    }
+  ],
+  "migration": {
+    "datasets": [
+      {
+        "dataset_id": "customer_accounts",
+        "duplicate_key_count": 0,
+        "missing_key_count": 0,
+        "rejected_row_count": 0,
+        "source_control_total_microunits": 381250000000,
+        "source_key_digest": "15d05110f30c430224524b51dfeb82bf08e1c4323c3b0f9f188b1248fb1fe71a",
+        "source_rows": 60000,
+        "target_control_total_microunits": 381250000000,
+        "target_key_digest": "15d05110f30c430224524b51dfeb82bf08e1c4323c3b0f9f188b1248fb1fe71a",
+        "target_rows": 60000,
+        "transform_spec_sha256": "c6b3f708becd0835abc446028f2b2a22bc7cb5600c7c433bf183ef84a9c4e0ef",
+        "unexpected_key_count": 0
+      },
+      {
+        "dataset_id": "open_balances",
+        "duplicate_key_count": 0,
+        "missing_key_count": 0,
+        "rejected_row_count": 0,
+        "source_control_total_microunits": 90441000000,
+        "source_key_digest": "13bc9933fd68ecd8fc3e7aea87d7b451ff7a3fee3b2bd8c67f187adb45dcc01d",
+        "source_rows": 54821,
+        "target_control_total_microunits": 90441000000,
+        "target_key_digest": "13bc9933fd68ecd8fc3e7aea87d7b451ff7a3fee3b2bd8c67f187adb45dcc01d",
+        "target_rows": 54821,
+        "transform_spec_sha256": "09d02c026d4a4efb47a4e103c4bf491a2e15ed0d7903cfc0dbbb8b0fddb58e2c",
+        "unexpected_key_count": 0
+      }
+    ],
+    "required_interface_ids": [
+      "meter_reads",
+      "payment_posting"
+    ]
+  },
+  "opportunity": {
+    "buyer": "Municipality of Anchorage / Anchorage Water and Wastewater Utility",
+    "deadline": "2026-10-01T12:00:00-08:00",
+    "opportunity_id": "MOA-AWWU-2026P044",
+    "solicitation_id": "2026P044",
+    "source": {
+      "observed_at": "2026-09-14T01:00:00Z",
+      "source_kind": "PUBLIC_LISTING_METADATA",
+      "source_ref": "https://purchasing.muni.org/Web%20E-Bid/Open/rfp/",
+      "source_sha256": "5de6c659d337b37eb8506cb36252170c58253607955e1be98eba21d1525341b3"
+    },
+    "title": "Customer Information Billing System Replacement"
+  },
+  "schema": "awwu-cis-migration-workshare/v1",
+  "workshare": {
+    "acceptance_criteria": [
+      "All declared datasets reconcile row counts, key sets, and control totals with zero missing, duplicate, unexpected, or rejected rows",
+      "All declared required interfaces pass round-trip, retry-idempotency, rollback, and duplicate-effect checks",
+      "Cutover preflight, dry run, reconciliation, rollback test, and restart test all carry PASS evidence"
+    ],
+    "amount_cents": 1250000,
+    "currency": "USD",
+    "deliverables": [
+      "Source-to-target migration reconciliation packet",
+      "Required-interface retry, rollback, and duplicate-effect evidence",
+      "Cutover rehearsal and deterministic acceptance artifact index"
+    ],
+    "duration_business_days": 10,
+    "scope_exclusions": [
+      "No production credentials, buyer submission, software licensing, prime representation, operational cutover, or payment handling"
+    ],
+    "status": "PROPOSED_NOT_ACCEPTED"
+  }
+}

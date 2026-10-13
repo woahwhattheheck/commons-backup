@@ -1,0 +1,124 @@
+{
+  "schema": "tjlabs.roadmap-dependencies/v1",
+  "source_label": "SYNTHETIC ONLY - missing edge, actual cycle, and phase inversions",
+  "phases": [
+    {
+      "id": "0-90",
+      "label": "0-90 relative calendar days"
+    },
+    {
+      "id": "90-180",
+      "label": "90-180 relative calendar days"
+    },
+    {
+      "id": "180+",
+      "label": "180+ relative calendar days"
+    }
+  ],
+  "items": [
+    {
+      "id": "DEP-FOUNDATION",
+      "title": "Late fictional foundation",
+      "requires": [],
+      "phase": "180+",
+      "kind": "shared_dependency"
+    },
+    {
+      "id": "REC-BRIDGE",
+      "title": "Unassigned intermediary",
+      "requires": [
+        "DEP-FOUNDATION"
+      ],
+      "phase": null,
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-EARLY",
+      "title": "Early change blocked by the late foundation",
+      "requires": [
+        "REC-BRIDGE"
+      ],
+      "phase": "0-90",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-TAIL",
+      "title": "Downstream of phase conflict",
+      "requires": [
+        "REC-EARLY"
+      ],
+      "phase": "180+",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-CYCLE-A",
+      "title": "First item in a fictional cycle",
+      "requires": [
+        "REC-CYCLE-C"
+      ],
+      "phase": "90-180",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-CYCLE-B",
+      "title": "Second item in a fictional cycle",
+      "requires": [
+        "REC-CYCLE-A"
+      ],
+      "phase": "90-180",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-CYCLE-C",
+      "title": "Third item in a fictional cycle",
+      "requires": [
+        "REC-CYCLE-B"
+      ],
+      "phase": "90-180",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-CYCLE-TAIL",
+      "title": "Dependent on the cycle, but not a cycle member",
+      "requires": [
+        "REC-CYCLE-A"
+      ],
+      "phase": "180+",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-MISSING",
+      "title": "Fictional item with a misspelled reference",
+      "requires": [
+        "DEP-ABSENT"
+      ],
+      "phase": "0-90",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-MISSING-TAIL",
+      "title": "Dependent on the missing reference",
+      "requires": [
+        "REC-MISSING"
+      ],
+      "phase": "90-180",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-DIRECT",
+      "title": "Direct proposed-phase inversion",
+      "requires": [
+        "DEP-FOUNDATION"
+      ],
+      "phase": "0-90",
+      "kind": "recommendation"
+    },
+    {
+      "id": "REC-INDEPENDENT",
+      "title": "Unrelated valid work remains visible",
+      "requires": [],
+      "phase": "0-90",
+      "kind": "recommendation"
+    }
+  ]
+}

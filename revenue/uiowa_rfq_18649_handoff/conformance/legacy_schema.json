@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/woahwhattheheck/commons/revenue/uiowa_rfq_18649_handoff/schema.json",
+  "title": "UIOWA-050 development-to-operations handoff packet",
+  "description": "Proposed assessment data contract. Validation does not constitute release approval.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "user_facing_behavior",
+    "known_limitations",
+    "requirements",
+    "acceptance_evidence",
+    "support_readiness",
+    "documentation_updates",
+    "operational_needs",
+    "rollback_and_recovery",
+    "open_items"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "packet_version",
+        "change_id",
+        "change_type",
+        "service",
+        "group",
+        "summary",
+        "requested_behavior",
+        "implementation_owner_role",
+        "support_owner_role",
+        "release_trigger",
+        "synthetic"
+      ],
+      "properties": {
+        "packet_version": {"type": "string"},
+        "change_id": {"type": "string", "minLength": 1},
+        "change_type": {"enum": ["planned_release", "urgent_maintenance"]},
+        "service": {"type": "string", "minLength": 1},
+        "group": {"enum": ["ESS", "RIS", "IAM"]},
+        "summary": {"type": "string", "minLength": 1},
+        "requested_behavior": {"type": "string", "minLength": 1},
+        "implementation_owner_role": {"type": "string", "minLength": 1},
+        "support_owner_role": {"type": "string", "minLength": 1},
+        "release_trigger": {"type": "string", "minLength": 1},
+        "urgency_reason": {"type": "string"},
+        "synthetic": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "user_facing_behavior": {
+      "type": "object",
+      "required": ["before", "after", "affected_users", "communications"],
+      "additionalProperties": true
+    },
+    "known_limitations": {"type": "array"},
+    "requirements": {"type": "array", "minItems": 1},
+    "acceptance_evidence": {"type": "array", "minItems": 1},
+    "support_readiness": {"type": "array", "minItems": 1},
+    "documentation_updates": {"type": "array", "minItems": 1},
+    "operational_needs": {"type": "array", "minItems": 1},
+    "rollback_and_recovery": {
+      "type": "object",
+      "required": ["rollback_trigger", "rollback_method", "data_recovery_notes", "owner_role"],
+      "additionalProperties": true
+    },
+    "open_items": {"type": "array"}
+  },
+  "additionalProperties": true
+}

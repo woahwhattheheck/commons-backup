@@ -1,0 +1,21 @@
+export const demoEpisode = Object.freeze({
+  title: "The Lumen Station — synthetic demo episode",
+  durationMs: 360000,
+  cues: [
+    { id: "c01", startMs: 5000, endMs: 12000, speaker: "Mara", text: "The station lights should have come back after the solar storm." },
+    { id: "c02", startMs: 18000, endMs: 25000, speaker: "Ivo", text: "Backup power is alive, but the navigation beacon is drawing twice its normal load." },
+    { id: "c03", startMs: 35000, endMs: 44000, speaker: "Mara", text: "Then something is asking the beacon to transmit while every antenna is folded." },
+    { id: "c04", startMs: 56000, endMs: 65000, speaker: "Ivo", text: "I found a maintenance ping with our own service code, timestamped three hours from now." },
+    { id: "c05", startMs: 78000, endMs: 88000, speaker: "Mara", text: "Do not open it. First, isolate the beacon from the flight computer." },
+    { id: "c06", startMs: 104000, endMs: 114000, speaker: "Ivo", text: "Isolation complete. The phantom ping is still repeating on the maintenance bus." },
+    { id: "c07", startMs: 132000, endMs: 143000, speaker: "Mara", text: "So the flight computer was not creating it. Check the emergency probe rack." },
+    { id: "c08", startMs: 158000, endMs: 169000, speaker: "Ivo", text: "Probe seven is missing from inventory, but its bay still reports a full battery." },
+    { id: "c09", startMs: 187000, endMs: 198000, speaker: "Mara", text: "The inventory log was edited during the storm. Someone wanted the missing probe to look docked." },
+    { id: "c10", startMs: 212000, endMs: 222000, speaker: "Ivo", text: "There is a weak radio echo outside the hull, moving with us." },
+    { id: "c11", startMs: 239000, endMs: 250000, speaker: "Mara", text: "If it is probe seven, the future timestamp could be a clock fault, not a prediction." },
+    { id: "c12", startMs: 267000, endMs: 278000, speaker: "Ivo", text: "I can align the echo with the probe service channel, but I still cannot decode the payload." },
+    { id: "c13", startMs: 294000, endMs: 305000, speaker: "Mara", text: "Route it into the isolated recorder. Nothing touches navigation until we know what it is." },
+    { id: "c14", startMs: 320000, endMs: 330000, speaker: "Ivo", text: "The payload says the signal came from probe seven after it crossed the storm front ahead of us." },
+    { id: "c15", startMs: 340000, endMs: 350000, speaker: "Mara", text: "Then the timestamp is not random. The probe clock experienced the storm differently from ours." },
+  ],
+});

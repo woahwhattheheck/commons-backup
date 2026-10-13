@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>Weck COC-to-LIMS pre-accession validator — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#eef2f4;--ink:#152027;--mute:#4a5963;--line:#b7c4cc;--card:#f7fafb;--teal:#1f4f5f;--ok:#1f7a4d}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg:#d5e3ea 0%,var(--paper) 28%);color:var(--ink);font:16px/1.5 "Iowan Old Style",Georgia,serif}
+main{max-width:1080px;margin:auto;padding:28px 16px 72px}a{color:var(--teal)}
+.kicker{letter-spacing:.16em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--teal)}
+h1{font-size:clamp(2rem,6vw,3.6rem);line-height:.95;margin:.18em 0 .3em}
+.lede{font-size:1.15rem;max-width:760px;color:var(--mute)}
+.bound{border-left:5px solid var(--ok);padding:8px 0 8px 14px}
+.desk{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);padding:16px}
+table{width:100%;border-collapse:collapse;font:13px/1.4 system-ui,sans-serif}th,td{border-top:1px solid var(--line);padding:6px 4px;text-align:left}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#152027;color:#e4eef3;padding:12px;font:12px/1.4 ui-monospace,monospace}
+.stamp{display:inline-block;border:1px solid var(--ok);color:var(--ok);padding:2px 8px;font:11px/1.4 system-ui,sans-serif;letter-spacing:.08em}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+@media(max-width:820px){.desk{grid-template-columns:1fr}}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> · <a href="./baddl-eia-accession-release-lims.html">BADDL EIA pattern</a></nav>
+<p class="kicker">Commons · weck-coc-preaccession-validator-lims-01 · HOLD / BUILD-AND-VERIFY</p>
+<h1>COC in. Accession or exact HOLD. Human release only.</h1>
+
+
+
+
+
+<p class="lede">Weck Laboratories / Agustin Pierri. Complement the incumbent LIMS. Validate written and downloadable COCs, map one accession per valid submission, own every exception, acknowledge receipt, and reconcile simulated COA plus two EDD formats after a named human signs.</p>
+<p class="bound"><strong>Truth boundary:</strong> 400 synthetic de-identified COCs only. Incumbent LIMS, instruments, portal, COA/EDD, and delivery stay simulated and read-only. No replacement claim. No PHI, production write, live reporting, or automatic release. PRE-SALE TRANSPORT: NONE. cash_usd = 0. No login. No price. No outreach form.</p>
+<div class="desk">
+<section class="card">
+<h2>Buyer pairing</h2>
+<p class="small">Demand <code>weck-coc-preaccession-validator-lims-01</code>. Official binary: <code>python3 test_weck_coc_preaccession_validator.py</code> and <code>python3 revenue/weck_coc_preaccession_validator/runner.py</code>.</p>
+<h2>Binary acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>PASS</th></tr></thead>
+<tbody>
+<tr><td>Input COCs</td><td>400 = 320 valid + 80 exceptions</td></tr>
+<tr><td>Accessions</td><td>320, one per valid, field parity</td></tr>
+<tr><td>HOLD</td><td>80, eight each of ten exact codes</td></tr>
+<tr><td>Orphans / duplicates</td><td>0 / 0</td></tr>
+<tr><td>COA + EDD</td><td>GeoTracker + EPA SEDD golden digests</td></tr>
+<tr><td>Replay</td><td>identical audit hash</td></tr>
+<tr><td>Audit hash</td><td><code>75c9c6ffa53e9c6cbaa025ad63254f6134ef9f9ba239d546e758c1c15476e5f3</code></td></tr>
+</tbody>
+</table>
+<p class="small">Named human <code>SYN-RELEASE-OFFICER</code> is required before any COA or EDD is releasable. Autonomous release is denied.</p>
+</section>
+<section class="card">
+<h2>Expected vs actual <span class="stamp">LOCKED</span></h2>
+<pre>{
+  "expected": {
+    "input_cocs": 400,
+    "valid": 320,
+    "exceptions": 80,
+    "accessions": 320,
+    "holds": 80,
+    "orphan_tests": 0,
+    "duplicate_accessions": 0,
+    "autonomous_released": 0,
+    "human_released": 320,
+    "coa_releasable": 320,
+    "edd_releasable": 320,
+    "production_writes": 0
+  },
+  "actual": "same",
+  "audit_sha256": "75c9c6ffa53e9c6cbaa025ad63254f6134ef9f9ba239d546e758c1c15476e5f3",
+  "official_binary": "python3 revenue/weck_coc_preaccession_validator/runner.py"
+}</pre>
+</section>
+</div>
+<p class="small">Cite, do not remint: baddl-eia-accession-release-lims-01, trace-sila-ml-iatf-lims-01, roslinct-hopkinton-paperless-qc-lims-01, Billings Bid 1421. No outreach. No buyer contact.</p>
+</main></body></html>

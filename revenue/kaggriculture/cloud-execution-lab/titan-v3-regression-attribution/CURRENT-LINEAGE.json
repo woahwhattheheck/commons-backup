@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "operation": "titan-v3-causal-regression-attribution-20260910-sol-pro-01",
+  "purpose": "Execution plan only. This file is not game evidence, an archive receipt, or a promotion claim.",
+  "historical_prefixes": [
+    {
+      "ordinal": 0,
+      "name": "redundant-hire-checkpoint",
+      "source_commit": "b1ae926a0f4abb48cd388c969ed4d52a0a3b36eb",
+      "config_git_blob_sha1": "00ef5b6d14a35b892ab71a50a25d1c1587fe794d",
+      "enabled_delta": {
+        "redundant_hire": true
+      },
+      "evidence_boundary": "Commit describes an exact-package multi-opponent development measurement; it is not hosted rating proof."
+    },
+    {
+      "ordinal": 1,
+      "name": "market-pressure-prefix",
+      "source_commit": "ff180abbad4c5dd8cbd102d3ddb20aad29f45aa8",
+      "config_git_blob_sha1": "4037bc851c151a356abd871f933b8222fb9e10ac",
+      "enabled_delta": {
+        "market_pressure": true
+      },
+      "evidence_boundary": "Activation has focused contract/arithmetic evidence; require exact full-game attribution before promotion."
+    },
+    {
+      "ordinal": 2,
+      "name": "operating-stock-prefix",
+      "source_commit": "9811fb45b1f78fc9779246d68e776661f1f42d2e",
+      "config_git_blob_sha1": "41db678812e7b197fd658ec0352c1ea742cc6e77",
+      "enabled_delta": {
+        "operating_stock": true
+      },
+      "evidence_boundary": "Activation commit explicitly reports focused source/archive checks and no new game panel."
+    },
+    {
+      "ordinal": 3,
+      "name": "idle-fertilizer-prefix",
+      "source_commit": "1ec36ca1638e53be399d85da71506941fece6e08",
+      "config_git_blob_sha1": "18de23d2a2572a11e1fe5572b098b3f0a85a5d4a",
+      "enabled_delta": {
+        "idle_fertilizer": true
+      },
+      "evidence_boundary": "Focused action-window evidence does not transfer to full-game strength."
+    },
+    {
+      "ordinal": 4,
+      "name": "crop-release-prefix",
+      "source_commit": "25ee75280489a94e781d2779abded879b51308f5",
+      "config_git_blob_sha1": "0ca9528ea40ce986747785cb8fcb7aed9ca40346",
+      "enabled_delta": {
+        "crop_release": true
+      },
+      "evidence_boundary": "Release notes state that no new full games or measured playing-strength gain accompanied this increment."
+    },
+    {
+      "ordinal": 5,
+      "name": "early-capital-prefix",
+      "source_commit": "c1e83252491485fba9af437b511a201dd78ecd0e",
+      "config_git_blob_sha1": "3a3bef83899d3010fad623b628d9e95d9978111b",
+      "enabled_delta": {
+        "early_capital": true
+      },
+      "evidence_boundary": "Order-only path has fail-closed mechanics checks; require full-game paired evidence for strength."
+    }
+  ],
+  "suspect_flags": [
+    "market_pressure",
+    "operating_stock",
+    "idle_fertilizer",
+    "crop_release",
+    "early_capital"
+  ],
+  "invariants": {
+    "consumer": "frozen",
+    "seed": true,
+    "funding": true,
+    "terminal_route": false,
+    "committed": true,
+    "budget_seconds": 1.0,
+    "reserve_seconds": 0.01,
+    "terminal_history": false,
+    "redundant_hire": true,
+    "fourth_quadrant": false,
+    "committed_seed_retry": false
+  },
+  "current_source_ablation_matrix": [
+    {
+      "ordinal": 0,
+      "name": "neutral-current-source",
+      "overrides": {
+        "market_pressure": false,
+        "operating_stock": false,
+        "idle_fertilizer": false,
+        "crop_release": false,
+        "early_capital": false
+      }
+    },
+    {
+      "ordinal": 1,
+      "name": "market-pressure-only",
+      "overrides": {
+        "market_pressure": true,
+        "operating_stock": false,
+        "idle_fertilizer": false,
+        "crop_release": false,
+        "early_capital": false
+      }
+    },
+    {
+      "ordinal": 2,
+      "name": "operating-stock-only",
+      "overrides": {
+        "market_pressure": false,
+        "operating_stock": true,
+        "idle_fertilizer": false,
+        "crop_release": false,
+        "early_capital": false
+      }
+    },
+    {
+      "ordinal": 3,
+      "name": "idle-fertilizer-only",
+      "overrides": {
+        "market_pressure": false,
+        "operating_stock": false,
+        "idle_fertilizer": true,
+        "crop_release": false,
+        "early_capital": false
+      }
+    },
+    {
+      "ordinal": 4,
+      "name": "crop-release-only",
+      "overrides": {
+        "market_pressure": false,
+        "operating_stock": false,
+        "idle_fertilizer": false,
+        "crop_release": true,
+        "early_capital": false
+      }
+    },
+    {
+      "ordinal": 5,
+      "name": "early-capital-only",
+      "overrides": {
+        "market_pressure": false,
+        "operating_stock": false,
+        "idle_fertilizer": false,
+        "crop_release": false,
+        "early_capital": true
+      }
+    },
+    {
+      "ordinal": 6,
+      "name": "full-current",
+      "overrides": {
+        "market_pressure": true,
+        "operating_stock": true,
+        "idle_fertilizer": true,
+        "crop_release": true,
+        "early_capital": true
+      }
+    }
+  ],
+  "execution_contract": {
+    "source_identity": "Build all seven ablation arms from one immutable current source commit.",
+    "artifact_identity": "Hash each complete executable closure; entrypoint-only hashes are inadmissible.",
+    "grid_identity": "Use the same fresh development seeds, opponents, and both candidate seats for every arm.",
+    "trace_identity": "Record observation SHA-256 and exact returned action for every declared decision step.",
+    "promotion_boundary": "After attribution, use disjoint holdout seeds and the existing dual-predecessor paired gate before changing the canonical archive."
+  },
+  "recommended_comparisons": [
+    {
+      "id": "neutral-vs-market-pressure",
+      "before": "neutral-current-source",
+      "after": "market-pressure-only"
+    },
+    {
+      "id": "neutral-vs-operating-stock",
+      "before": "neutral-current-source",
+      "after": "operating-stock-only"
+    },
+    {
+      "id": "neutral-vs-idle-fertilizer",
+      "before": "neutral-current-source",
+      "after": "idle-fertilizer-only"
+    },
+    {
+      "id": "neutral-vs-crop-release",
+      "before": "neutral-current-source",
+      "after": "crop-release-only"
+    },
+    {
+      "id": "neutral-vs-early-capital",
+      "before": "neutral-current-source",
+      "after": "early-capital-only"
+    },
+    {
+      "id": "neutral-vs-full-current",
+      "before": "neutral-current-source",
+      "after": "full-current"
+    }
+  ]
+}

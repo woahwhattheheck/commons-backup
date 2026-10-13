@@ -1,0 +1,112 @@
+{
+  "schema": "roughcut-media-check-validation/1",
+  "date": "2026-09-08",
+  "harness": "ChatGPT cloud container; Python 3.13.5; FFmpeg 7.1.5-0+deb13u1",
+  "scope": "Independent synthetic-fixture and reference-render checks, not CEDAR editor integration, browser acceptance, natural-speech coherence, or customer delivery.",
+  "tests": {
+    "command": "python -m unittest -v",
+    "methods": 12,
+    "passed": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "negative_cases": [
+      "Actual 300ms audio delay rejected",
+      "Same-duration, same-marker-count wrong cut rejected",
+      "Original-source byte change rejected"
+    ]
+  },
+  "source_manifest": {
+    "schema": "roughcut-pulse-fixture/1",
+    "synthetic": true,
+    "source_sha256": "2699e6601b3b45c77b1c28a095c5d2c192e2bad121eda9e7fccb477981bbb67a",
+    "duration": 1200.0,
+    "fps": 25,
+    "pulse_seconds": 0.24,
+    "source_markers": [
+      2.0,
+      62.0,
+      122.0,
+      182.0,
+      242.0,
+      302.0,
+      362.0,
+      422.0,
+      482.0,
+      542.0,
+      602.0,
+      662.0,
+      722.0,
+      782.0,
+      842.0,
+      902.0,
+      962.0,
+      1022.0,
+      1082.0,
+      1142.0
+    ],
+    "description": "Internally generated white flashes and 997 Hz tones, not a person or customer recording."
+  },
+  "long_exercise": {
+    "edited": {
+      "keep": [
+        [
+          0,
+          300
+        ],
+        [
+          310,
+          1200
+        ]
+      ],
+      "passed": true,
+      "checks": {
+        "render_unchanged_during_check": true,
+        "source_unchanged": true,
+        "marker_counts_match": true,
+        "video_timing": true,
+        "audio_timing": true,
+        "av_alignment": true,
+        "duration": true
+      },
+      "render_sha256": "e6a21712a2ac138e3cf727e6d27e5590eaeb922108348ba50e373632d40f35b4",
+      "duration_seconds": 1190.0,
+      "video_markers": 19,
+      "audio_markers": 19,
+      "maximum_absolute_video_error_seconds": 0.0,
+      "maximum_absolute_audio_error_seconds": 0.0,
+      "maximum_absolute_av_offset_seconds": 0.0,
+      "tolerance_seconds": 0.08
+    },
+    "restored": {
+      "keep": [
+        [
+          0,
+          1200
+        ]
+      ],
+      "passed": true,
+      "checks": {
+        "render_unchanged_during_check": true,
+        "source_unchanged": true,
+        "marker_counts_match": true,
+        "video_timing": true,
+        "audio_timing": true,
+        "av_alignment": true,
+        "duration": true
+      },
+      "render_sha256": "672a68167316399d86eeb4e711163c7b0c87ae8efc4bf8df473fc31a1f1e02a8",
+      "duration_seconds": 1200.0,
+      "video_markers": 20,
+      "audio_markers": 20,
+      "maximum_absolute_video_error_seconds": 0.0,
+      "maximum_absolute_audio_error_seconds": 0.0,
+      "maximum_absolute_av_offset_seconds": 0.0,
+      "tolerance_seconds": 0.08
+    }
+  },
+  "code_sha256": {
+    "media_checks.py": "04cb3c41e87e73aa8e8208b3af004f75777433b998ee8510129901253e6e91b8",
+    "test_media_checks.py": "7999de9caf96f7d971bf6d11574a123460b3a7e58f653665b6f8340c6b0dcf62"
+  }
+}

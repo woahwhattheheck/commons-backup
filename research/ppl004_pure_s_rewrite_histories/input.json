@@ -1,0 +1,12 @@
+{
+  "schema": "ppl004.pure-s-input/v1",
+  "rootLeaves": 8,
+  "horizon": 6,
+  "leafCap": 12,
+  "grammar": "T ::= S | (T T); all fully parenthesized ordered binary trees with exactly rootLeaves leaves.",
+  "rewrite": "(((S x) y) z) -> ((x z) (y z)) at any single matching occurrence.",
+  "addresses": "Root is empty string; 0 descends left/function,1 right/argument. Preorder is the lexicographic address order.",
+  "historyIdentity": "Each ordered sequence of redex occurrence addresses is a separate history, even when states merge.",
+  "stopping": "Stop at a redex-free normal form; otherwise at zero remaining steps use horizon. An edge to more than leafCap leaves stops as leaf_limit, recording that actual successor.",
+  "scope": "Finite bounded histories only. Neither cutoff certifies divergence, non-normalization or nonuniversality."
+}

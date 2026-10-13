@@ -1,0 +1,136 @@
+{
+  "dataset_id": "synthetic-procurement-source-shapes-v1",
+  "documents": [
+    {
+      "adapter": "AWARD_NOTICE_JSON_V1",
+      "payload": {
+        "award_amount_minor": 12500000,
+        "award_date": "2026-09-01",
+        "award_id": "award-001",
+        "basis": "CONTRACT_TOTAL",
+        "currency": "USD",
+        "opportunity_id": "EXAMPLE-24-001",
+        "term_months": 12,
+        "unit": null,
+        "vendor": "Example Systems LLC"
+      },
+      "payload_sha256": "b89fbf5b63055bc640bac89ccb44747669b775c0ce017d8ba903a3cb82f3a85c",
+      "source": {
+        "authority": "SYNTHETIC_FIXTURE",
+        "observed_at": "2026-09-16T00:00:00Z",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "source_class": "AWARD_NOTICE",
+        "source_id": "synthetic-1",
+        "title": "Synthetic award notice fixture",
+        "uri": "https://buyer.example.gov/procurement/synthetic-1"
+      }
+    },
+    {
+      "adapter": "BID_TABULATION_JSON_V1",
+      "payload": {
+        "basis": "CONTRACT_TOTAL",
+        "bid_date": "2026-08-20",
+        "currency": "USD",
+        "opportunity_id": "EXAMPLE-24-001",
+        "rows": [
+          {
+            "bid_amount_minor": 12500000,
+            "responsive": true,
+            "row_id": "1",
+            "vendor": "Example Systems LLC"
+          },
+          {
+            "bid_amount_minor": 11800000,
+            "responsive": true,
+            "row_id": "2",
+            "vendor": "Alternate LLC"
+          },
+          {
+            "bid_amount_minor": null,
+            "responsive": false,
+            "row_id": "3",
+            "vendor": "Nonresponsive LLC"
+          }
+        ],
+        "tabulation_id": "tab-001",
+        "term_months": 12,
+        "unit": null
+      },
+      "payload_sha256": "eca91665df2c5668cc2ca2ae825bf9a07383bcb61506b3ca7e52e9c36d881115",
+      "source": {
+        "authority": "SYNTHETIC_FIXTURE",
+        "observed_at": "2026-09-16T00:00:00Z",
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "source_class": "BID_TABULATION",
+        "source_id": "synthetic-2",
+        "title": "Synthetic bid tabulation fixture",
+        "uri": "https://buyer.example.gov/procurement/synthetic-2"
+      }
+    },
+    {
+      "adapter": "EXECUTED_CONTRACT_JSON_V1",
+      "payload": {
+        "base_amount_minor": 12500000,
+        "basis": "CONTRACT_TOTAL",
+        "contract_id": "contract-001",
+        "currency": "USD",
+        "effective_date": "2026-09-05",
+        "opportunity_id": "EXAMPLE-24-001",
+        "option_amount_minor": 3000000,
+        "option_term_months": 6,
+        "term_months": 12,
+        "unit": null,
+        "vendor": "Example Systems LLC"
+      },
+      "payload_sha256": "e793a868aa7dca97cf81d1e4e5c324673cff45124670ff86055bd7f90c8e904c",
+      "source": {
+        "authority": "SYNTHETIC_FIXTURE",
+        "observed_at": "2026-09-16T00:00:00Z",
+        "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+        "source_class": "EXECUTED_CONTRACT",
+        "source_id": "synthetic-3",
+        "title": "Synthetic executed contract fixture",
+        "uri": "https://buyer.example.gov/procurement/synthetic-3"
+      }
+    },
+    {
+      "adapter": "AMENDMENT_OPTION_JSON_V1",
+      "payload": {
+        "amendment_id": "amend-001",
+        "amount_minor": 1500000,
+        "change_type": "AMENDMENT",
+        "contract_id": "contract-001",
+        "currency": "USD",
+        "effective_date": "2026-09-15",
+        "opportunity_id": "EXAMPLE-24-001",
+        "term_months": 3,
+        "vendor": "Example Systems LLC"
+      },
+      "payload_sha256": "5208c38f6a7a1ff2940de337f242184f201c764c6443657846e770c11c4f2c8c",
+      "source": {
+        "authority": "SYNTHETIC_FIXTURE",
+        "observed_at": "2026-09-16T00:00:00Z",
+        "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+        "source_class": "AMENDMENT",
+        "source_id": "synthetic-4",
+        "title": "Synthetic amendment fixture",
+        "uri": "https://buyer.example.gov/procurement/synthetic-4"
+      }
+    }
+  ],
+  "generated_at": "2026-09-16T01:00:00Z",
+  "max_source_age_seconds": 604800,
+  "schema": "procurement-award-source-adapter/request/v1",
+  "target": {
+    "allowed_price_kinds": [
+      "AWARD",
+      "BID"
+    ],
+    "basis": "CONTRACT_TOTAL",
+    "currency": "USD",
+    "target_id": "example-contract-total-12m",
+    "term_months": 12,
+    "unit": null
+  },
+  "truth_boundary": "CURATED_SOURCE_EXTRACTION_NOT_PROVIDER_AUTHENTICATION"
+}

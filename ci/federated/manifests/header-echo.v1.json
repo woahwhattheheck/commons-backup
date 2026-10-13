@@ -1,0 +1,40 @@
+{
+  "claim_boundary": {
+    "fabricated_url": false,
+    "measured_live_run": false,
+    "other_provider_activated": false,
+    "provider_activated_by_this_engine": false,
+    "quota_claimed": false
+  },
+  "command_template": {
+    "argv": [
+      "python3",
+      "-c",
+      "import sys; sys.stdout.write('ok-' + sys.argv[1])",
+      "{shard_id}"
+    ],
+    "cwd": ".",
+    "env": {},
+    "shell": false,
+    "timeout_s": 15
+  },
+  "job_id": "federated-echo-20260828-01",
+  "kind": "FEDERATED_JOB_MANIFEST",
+  "providers": [
+    "local-fixture",
+    "github-actions",
+    "cirrus",
+    "gitlab",
+    "woodpecker",
+    "unknown-lab"
+  ],
+  "repository": "woahwhattheheck/commons",
+  "schema_version": "commons-federated-job-manifest/v1",
+  "shard_count": 2,
+  "source_sha": "38dad71081c1dc2e458004324046cebf4008c03c",
+  "tests": [
+    "federated.echo.shard-a",
+    "federated.echo.shard-b"
+  ],
+  "timeout_s": 15
+}

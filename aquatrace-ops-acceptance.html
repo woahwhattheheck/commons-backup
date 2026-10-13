@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>AquaTrace ops acceptance — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#f4efe6;--ink:#231c16;--mute:#6a5c4f;--line:#d2c4b0;--card:#fffaf2;--clay:#8a4b24;--ok:#1f7a4d;--stop:#a33b2f}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#e4d3b8 0%,var(--paper) 32%);color:var(--ink);font:16px/1.5 Georgia,serif}
+main{max-width:860px;margin:auto;padding:28px 16px 72px}a{color:var(--clay)}
+.kicker{letter-spacing:.14em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--clay)}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:.95;margin:.2em 0 .35em}
+.lede{color:var(--mute);max-width:720px}
+.bound{border-left:5px solid var(--stop);padding:8px 0 8px 14px}
+.card{background:var(--card);border:1px solid var(--line);padding:16px;margin:16px 0}
+code,pre{font:13px/1.4 ui-monospace,monospace}pre{background:#231c16;color:#f4efe6;padding:12px;overflow:auto}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+.stamp{display:inline-block;border:1px solid var(--ok);color:var(--ok);padding:2px 8px;margin:0 6px 6px 0;font:12px/1.4 system-ui,sans-serif;letter-spacing:.04em}
+.stamp.stop{border-color:var(--stop);color:var(--stop)}
+ol{padding-left:1.2em}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> · <a href="./action.html">Action Pad</a> · </nav>
+<p class="kicker">Commons · AT-GROK-OPS-ACCEPTANCE-01 · HOLD / BUILD-AND-VERIFY</p>
+<h1>The runner is the product. This page is a window.</h1>
+
+
+
+
+
+<p class="lede">Production operations proof design. A working fail-closed acceptance matrix for identity/MFA/session, tenant/lab RBAC, encryption/secrets, monitoring, backup/restore/DR, support/incident response, accessibility, training/UAT, and buyer sign-off. No login. Missing hash or freshness stays NOT_READY. No City contact. No bid submission. No live LIMS.</p>
+<p>
+<span class="stamp stop">NOT_READY</span>
+<span class="stamp stop">HOLD / BUILD-AND-VERIFY</span>
+<span class="stamp">WORKING_RUNNER</span>
+<span class="stamp stop">NO_CITY_CONTACT</span>
+<span class="stamp stop">NO_BID_SUBMISSION</span>
+<span class="stamp">CASH_USD_0</span>
+</p>
+<p class="bound"><strong>Official command:</strong> <code>python3 aquatrace_ops_acceptance.py</code><br>
+<strong>Fail-closed unittest:</strong> <code>python3 aquatrace_ops_acceptance.py --self-test</code><br>
+<strong>Binary:</strong> <code>python3 test_aquatrace_ops_acceptance.py</code></p>
+<section class="card">
+<h2>What the runner does</h2>
+<p>Loads the candidate-bound matrix and checks each row for owner, command/procedure, artifact/hash, freshness, and rejection reason. Missing hash or freshness fails closed. A declared READY without those fields stays NOT_READY. The runner never promotes a NOT_READY row. SYSTEM, unnamed, and HELD cannot release. Replay keeps a single record. This runner never invents certification, production-ready, deployed, submitted, or buyer-accepted.</p>
+<pre>python3 aquatrace_ops_acceptance.py
+python3 aquatrace_ops_acceptance.py --json
+python3 aquatrace_ops_acceptance.py --self-test
+python3 aquatrace_ops_acceptance.py --row identity_mfa_session
+python3 test_aquatrace_ops_acceptance.py</pre>
+<p class="small">Pack: <a href="./revenue/aquatrace_ops_acceptance/source.json">source.json</a> · <a href="./revenue/aquatrace_ops_acceptance/matrix.json">matrix.json</a> · <a href="./revenue/aquatrace_ops_acceptance/unknown_ledger.json">unknown_ledger.json</a> · <a href="./revenue/aquatrace_ops_acceptance/public_sources.json">public_sources.json</a>. Cite, do not clone: private SHA <code>e380a587e1ba12a3a07b248c4054940afa3f61a9</code> (<code>e380a58</code>) and later official SHA <code>b616894fd3329c48867dba8c18376ce22e7f78a8</code>.</p>
+</section>
+<section class="card">
+<h2>The nine rows</h2>
+<ol>
+<li>identity/MFA/session</li>
+<li>tenant/lab RBAC</li>
+<li>encryption/secrets</li>
+<li>monitoring</li>
+<li>backup/restore/DR</li>
+<li>support/incident response</li>
+<li>accessibility</li>
+<li>training/UAT</li>
+<li>buyer sign-off</li>
+</ol>
+</section>
+<section class="card">
+<h2>Contract</h2>
+<ul>
+<li>Default fixture: 0 READY / 9 NOT_READY</li>
+<li>Complete runner-contract overlay: 9 READY, still not production-ready</li>
+<li>Named-human release only; SYSTEM / unnamed / HELD denied</li>
+<li>Replay = 1 record</li>
+<li>City contact and bid submission stay closed</li>
+<li>UNKNOWN where no public AquaTrace evidence exists</li>
+</ul>
+<p class="small">PRE-SALE TRANSPORT: NONE. cash_usd = 0. Off: AT-GROK-ADAPTER-EVIDENCE-01, AT-GROK-CMDP-EVIDENCE-01, corrigan, torrent, BSK, chemtechford, AquaTrace A/B/C/D/E/F receipts, sanair, westpak, ddl, wadsworth, highpower, sharp, pcl, canyon, billings-bid-1421, humans.html. Do not clone the private AquaTrace repo.</p>
+</section>
+</main></body></html>

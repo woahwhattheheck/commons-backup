@@ -1,0 +1,257 @@
+{
+  "schema": "uiowa-rfq18649-review-register/v1",
+  "synthetic": true,
+  "evidence": [
+    {
+      "id": "E-POLICY-v1",
+      "label": "Fictional release procedure v1",
+      "source_locator": "examples/evidence/release-procedure-v1.txt#L3-L4",
+      "sha256": "2e581422552a0a8e57883a83f81b2075c78f9a7e865b28290dd0bcf902e960d9"
+    },
+    {
+      "id": "E-RELEASE-v1",
+      "label": "Fictional release checklist v1",
+      "source_locator": "examples/evidence/release-checklist-v1.txt#L3-L4",
+      "sha256": "4d53b3817d3740645b848d220635b2193b04a0dac075b8387f22f7e988a87979"
+    },
+    {
+      "id": "E-RELEASE-v2",
+      "label": "Fictional release checklist v2",
+      "source_locator": "examples/evidence/release-checklist-v2.txt#L3-L4",
+      "sha256": "eea341688cf3bf58b9781f5094d8b53d0d7698b1ef72d09cfebd87a41e5c5c95"
+    },
+    {
+      "id": "E-INTERVIEW-A",
+      "label": "Fictional management interview",
+      "source_locator": "examples/evidence/interview-a.txt#L3-L4",
+      "sha256": "415724e2b018d8770e3921d9459a2d360857ae83bd76418ef2536d825aaa5d65"
+    },
+    {
+      "id": "E-INTERVIEW-B",
+      "label": "Fictional practitioner interview",
+      "source_locator": "examples/evidence/interview-b.txt#L3-L4",
+      "sha256": "da91a90809b9c0babf3c3ac69886a5bce0677c1f5dd7ada79b76445bedb52184"
+    }
+  ],
+  "reports": [
+    {
+      "version": "draft-v1",
+      "receipt_sha256": "c5088009a29570a5464c2ce19f396e4f92726363667e663d435efd54ce037d7c",
+      "supersedes": null,
+      "findings": [
+        {
+          "id": "F-ESS-RELEASE",
+          "cell": {
+            "group": "ESS",
+            "dimension": "deployment"
+          },
+          "statement": "The sampled release includes a named support handoff.",
+          "evidence_refs": [
+            "E-POLICY-v1",
+            "E-RELEASE-v1"
+          ]
+        },
+        {
+          "id": "F-RIS-REVIEW",
+          "cell": {
+            "group": "RIS",
+            "dimension": "software_development"
+          },
+          "statement": "The two fictional accounts disagree about emergency-change review.",
+          "evidence_refs": [
+            "E-INTERVIEW-A",
+            "E-INTERVIEW-B"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "draft-v2",
+      "receipt_sha256": "5d8d4ba03e87039881019caaff61d261ff29674b66448283240e1eb15bb66bf9",
+      "supersedes": "draft-v1",
+      "findings": [
+        {
+          "id": "F-ESS-RELEASE",
+          "cell": {
+            "group": "ESS",
+            "dimension": "deployment"
+          },
+          "statement": "One sampled release records a named support handoff; wider consistency is unassessed.",
+          "evidence_refs": [
+            "E-POLICY-v1",
+            "E-RELEASE-v1"
+          ]
+        },
+        {
+          "id": "F-RIS-REVIEW",
+          "cell": {
+            "group": "RIS",
+            "dimension": "software_development"
+          },
+          "statement": "The two fictional accounts disagree about emergency-change review.",
+          "evidence_refs": [
+            "E-INTERVIEW-A",
+            "E-INTERVIEW-B"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "draft-v3",
+      "receipt_sha256": "7d970145e5cfefc6612444d2ac3cf01fdd2ac3cdd0bc1976e203e97f456b4dbd",
+      "supersedes": "draft-v2",
+      "findings": [
+        {
+          "id": "F-ESS-RELEASE",
+          "cell": {
+            "group": "ESS",
+            "dimension": "deployment"
+          },
+          "statement": "The revised fictional checklist includes explicit support acknowledgement for one sampled release.",
+          "evidence_refs": [
+            "E-POLICY-v1",
+            "E-RELEASE-v2"
+          ]
+        },
+        {
+          "id": "F-RIS-REVIEW",
+          "cell": {
+            "group": "RIS",
+            "dimension": "software_development"
+          },
+          "statement": "The two fictional accounts disagree about emergency-change review.",
+          "evidence_refs": [
+            "E-INTERVIEW-A",
+            "E-INTERVIEW-B"
+          ]
+        }
+      ]
+    }
+  ],
+  "comments": [
+    {
+      "id": "C-001",
+      "reviewer": "Fictional assessor A",
+      "report_version": "draft-v1",
+      "finding_id": "F-ESS-RELEASE",
+      "kind": "WORDING",
+      "comment": "Make the sample boundary explicit; one release does not establish a general practice.",
+      "proposed_edit": "One sampled release records a named support handoff; wider consistency is unassessed.",
+      "events": [
+        {
+          "sequence": 1,
+          "at": "2026-01-01T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "OPEN",
+          "rationale": "Scope wording queried.",
+          "resulting_report_version": null
+        },
+        {
+          "sequence": 2,
+          "at": "2026-01-02T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "ACCEPTED",
+          "rationale": "The sample boundary needs clarification.",
+          "resulting_report_version": null
+        },
+        {
+          "sequence": 3,
+          "at": "2026-01-03T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "RESOLVED",
+          "rationale": "Wording changed with identical evidence references.",
+          "resulting_report_version": "draft-v2"
+        }
+      ]
+    },
+    {
+      "id": "C-002",
+      "reviewer": "Fictional assessor B",
+      "report_version": "draft-v2",
+      "finding_id": "F-ESS-RELEASE",
+      "kind": "EVIDENCE_CHANGE",
+      "comment": "Replace the superseded checklist with its revised evidence version.",
+      "proposed_edit": "The revised fictional checklist includes explicit support acknowledgement for one sampled release.",
+      "events": [
+        {
+          "sequence": 1,
+          "at": "2026-01-01T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "OPEN",
+          "rationale": "A revised fictional checklist was supplied.",
+          "resulting_report_version": null
+        },
+        {
+          "sequence": 2,
+          "at": "2026-01-02T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "ACCEPTED",
+          "rationale": "Use the explicit versioned evidence record.",
+          "resulting_report_version": null
+        },
+        {
+          "sequence": 3,
+          "at": "2026-01-03T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "RESOLVED",
+          "rationale": "Checklist v2 replaces v1; this is an evidence change, not wording-only.",
+          "resulting_report_version": "draft-v3"
+        }
+      ]
+    },
+    {
+      "id": "C-003",
+      "reviewer": "Fictional assessor A",
+      "report_version": "draft-v1",
+      "finding_id": "F-RIS-REVIEW",
+      "kind": "QUESTION",
+      "comment": "The management account and practitioner account conflict. Which periods and services do they describe?",
+      "proposed_edit": "Keep both accounts and request matching dated examples.",
+      "events": [
+        {
+          "sequence": 1,
+          "at": "2026-01-01T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "OPEN",
+          "rationale": "Competing accounts retained.",
+          "resulting_report_version": null
+        },
+        {
+          "sequence": 2,
+          "at": "2026-01-02T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "UNRESOLVED",
+          "rationale": "No dated examples yet reconcile the disagreement.",
+          "resulting_report_version": null
+        }
+      ]
+    },
+    {
+      "id": "C-004",
+      "reviewer": "Fictional assessor B",
+      "report_version": "draft-v1",
+      "finding_id": "F-RIS-REVIEW",
+      "kind": "QUESTION",
+      "comment": "Can we describe the gap as University-wide?",
+      "proposed_edit": "",
+      "events": [
+        {
+          "sequence": 1,
+          "at": "2026-01-01T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "OPEN",
+          "rationale": "Generalization proposed.",
+          "resulting_report_version": null
+        },
+        {
+          "sequence": 2,
+          "at": "2026-01-02T12:00:00Z",
+          "actor": "Fictional consolidated-review coordinator",
+          "state": "REJECTED",
+          "rationale": "The fictional evidence is local and conflicting; a University-wide conclusion is unsupported.",
+          "resulting_report_version": null
+        }
+      ]
+    }
+  ]
+}

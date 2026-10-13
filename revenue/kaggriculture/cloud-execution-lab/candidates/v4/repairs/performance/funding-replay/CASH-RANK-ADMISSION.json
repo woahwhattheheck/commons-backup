@@ -1,0 +1,56 @@
+{
+  "schema": "titan-v4-source-admission/v1",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "authority": "funding-capacity-stack / repairs/performance/funding-replay",
+  "status": "source_candidate_awaiting_exact_head_execution_not_composed",
+  "legacy_provenance": {
+    "pull_request": 12062,
+    "operation": "TITAN-V3-SAME-TURN-FUNDING-PARETO-RANK-20260910-01",
+    "rule": "consume theorem and witness only; do not revive the V3 carrier"
+  },
+  "current_source": {
+    "path": "revenue/kaggriculture/cloud-execution-lab/frozen_selected.py",
+    "git_blob": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+    "function": "fund_same_turn_acquisition",
+    "raw_function_sha256": "2cb97c04c171cd72e57cb2487e6500f5f3dcf10a3cb0ec2cb6c5f6410e359751",
+    "post_funding_replay_function_sha256": "117f150d54bd6bae75133bf6b415fdc0b12c1dc56327563965200d3499166167"
+  },
+  "defect": {
+    "predecessor_rank": "(moved, remaining_cash, source_distance, destination_distance, item) selected by min()",
+    "problem": "within an equal-minimum-movement frontier, positive remaining_cash makes the selector prefer less certified own cash",
+    "repair": "negate only the remaining_cash rank term while preserving moved units as the primary objective and all deterministic later tie breaks"
+  },
+  "source_candidate": {
+    "adapter": "apply_cash_rank.py",
+    "focused_test": "test_cash_rank.py",
+    "delta": "one added minus sign in the existing fund_same_turn_acquisition candidate rank",
+    "fail_closed": true,
+    "activation": false,
+    "composed": false,
+    "production_promotion": false
+  },
+  "deterministic_witness": {
+    "orders": [[], ["HIRE"], ["SELL", "CARROT", 1], ["SELL", "WOOL", 1]],
+    "hire_cost": 10,
+    "predecessor_item": "CARROT",
+    "candidate_item": "WOOL",
+    "predecessor_remaining_cash": 25,
+    "candidate_remaining_cash": 190,
+    "certified_remaining_cash_delta": 165,
+    "moved_quantity_both": 1,
+    "same_fixed_acquisition_completion": true,
+    "sale_quantities_preserved": {"CARROT": 1, "WOOL": 1}
+  },
+  "next_gate": [
+    "execute focused regression on the literal pull-request head under normal Python",
+    "execute the same regression with PYTHONOPTIMIZE=1",
+    "py_compile the adapter and focused regression",
+    "only after source execution, materialize the current V4 composition chain and bind the exact post-projection frozen_selected.py preimage/postimage before any COMPOSITION.json activation"
+  ],
+  "forbidden": [
+    "new V4 root or controller",
+    "direct mutation of the root frozen_selected.py from this source carrier",
+    "COMPOSITION.json activation without an authenticated materialized postimage",
+    "runtime/default/config/archive/Kaggle/submission mutation from this carrier"
+  ]
+}

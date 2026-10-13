@@ -1,0 +1,67 @@
+{
+  "schema": "ppl145-hesse-input-v1",
+  "dimension": 3,
+  "coordinate_rows": [
+    [
+      "0",
+      "-1",
+      "1",
+      "0",
+      "-1",
+      "1",
+      "0",
+      "-1",
+      "1"
+    ],
+    [
+      "1",
+      "0",
+      "-1",
+      "w",
+      "0",
+      "-w",
+      "w2",
+      "0",
+      "-w2"
+    ],
+    [
+      "-1",
+      "1",
+      "0",
+      "-w2",
+      "w2",
+      "0",
+      "-w",
+      "w",
+      "0"
+    ]
+  ],
+  "normalization": "Each successive column is divided by sqrt(2). w=exp(2*pi*i/3), w2=w^2=-1-w.",
+  "source": {
+    "authors": "Blake C. Stacey",
+    "title": "SIC-POVMs and Compatibility among Quantum States",
+    "url": "https://arxiv.org/html/1404.3774v4",
+    "version": "v4, 7 June 2016",
+    "coordinates": "Section II, Equation 14; successive columns psi_0,...,psi_8",
+    "reconstruction": "Equation 16: rho = 4 sum_i p(i) Pi_i - I",
+    "Born": "Equation 17: p(i) = tr(rho Pi_i)/3",
+    "coverage": "Literal coordinates and reconstruction definitions only; no source subset classification, probability examples, MUB examples or proof imported."
+  },
+  "premises": [
+    "These published normalized columns are the known Hesse SIC, with Pi_i=|psi_i><psi_i|. The new consumer does not reconstruct or verify the SIC overlap theorem.",
+    "The SIC projectors sum to 3I and satisfy tr(Pi_i Pi_j) = (3 delta_ij + 1)/4; used as inherited measurement premises, not a new Gram check."
+  ],
+  "consumer": {
+    "support": "Every nonempty subset S of the nine labelled outcomes; p_i = 1/|S| for i in S and zero otherwise.",
+    "visibility": "For rational 0 <= t <= 1, p_i(t) = t p_i + (1-t)/9. The corresponding rho(t) = t rho(S) + (1-t)I/3.",
+    "scope": "Compatibility of these complete probability vectors; not tomography with unknown missing observations or physical postselection.",
+    "empty_support": "Excluded; uniform distribution would be undefined."
+  },
+  "problem": {
+    "card": "https://prizeproblems.org/problems/145/",
+    "official": "https://kcik.ug.edu.pl/kcik-awards/",
+    "paper": "https://kcik.ug.edu.pl/wp-content/uploads/2021/12/2002.03233.pdf",
+    "statement": "Infinite sequence of SIC dimensions, or finiteness. This finite qutrit consumer does not address that quantifier.",
+    "award": "The current page has historical 2023 EUR / January 2024 terms plus automatic renewal. No current prize, eligibility or award claim and no contact."
+  }
+}

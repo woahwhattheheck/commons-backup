@@ -1,0 +1,74 @@
+name: warranty-rma-recovery
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/hive/warranty-rma-desk/**'
+      - '.github/workflows/warranty-rma-recovery.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/hive/warranty-rma-desk/**'
+      - '.github/workflows/warranty-rma-recovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-product:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/hive/warranty-rma-desk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile all Python surfaces
+        run: python -m py_compile app.py app_core.py test_app.py test_ui_contract.py test_boundary_hardening.py
+      - name: Full focused suite
+        run: python -m unittest -v
+      - name: Full optimized suite
+        run: python -O -m unittest -v
+      - name: Browser script syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          text = Path('index.html').read_text()
+          match = re.search(r'<script>\n(.*?)\n</script>', text, re.S)
+          if not match:
+              raise SystemExit('inline script not found')
+          Path('/tmp/warranty-rma-ui.js').write_text(match.group(1))
+          PY
+          node --check /tmp/warranty-rma-ui.js
+      - name: Synthetic lifecycle plus hardened export
+        run: |
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          python app.py demo --db "$tmp/demo.sqlite3" | tee "$tmp/demo.json"
+          cid="$(python - "$tmp/demo.json" <<'PY'
+          import json, pathlib, sys
+          doc=json.loads(pathlib.Path(sys.argv[1]).read_text())
+          assert doc['final_status']=='CLOSED'
+          assert doc['resolution']=='REPLACEMENT'
+          assert doc['external_actions_performed']==0
+          print(doc['case_id'])
+          PY
+          )"
+          python app.py export --db "$tmp/demo.sqlite3" --case-id "$cid" --out "$tmp/export.json"
+          python - "$tmp/export.json" <<'PY'
+          import hashlib, json, pathlib, sys
+          raw=pathlib.Path(sys.argv[1]).read_bytes()
+          doc=json.loads(raw)
+          assert doc['schema']=='warranty-rma-case-export/v1'
+          receipt=doc.pop('receipt_sha256')
+          canonical=json.dumps(doc,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+          assert receipt==hashlib.sha256(canonical).hexdigest()
+          assert all(value is False for value in doc['authority'].values())
+          PY
+          if python app.py export --db "$tmp/demo.sqlite3" --case-id "$cid" --out "$tmp/export.json"; then
+            echo 'overwrite unexpectedly succeeded' >&2
+            exit 1
+          fi

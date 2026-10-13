@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Catering deposit rescue — Commons</title>
+<style>
+:root{color-scheme:dark;--ink:#f5efe4;--muted:#b8aa96;--panel:#17130f;--line:#3c3126;--gold:#f0b85a;--green:#75d39b;--red:#ff7c72}
+*{box-sizing:border-box}body{margin:0;background:#0d0b09;color:var(--ink);font:16px/1.45 system-ui,sans-serif}
+main{max-width:1080px;margin:auto;padding:28px 18px 72px}.eyebrow{color:var(--gold);letter-spacing:.13em;text-transform:uppercase;font-size:.78rem}
+h1{font-size:clamp(2.2rem,7vw,5.2rem);line-height:.94;margin:.25em 0}.lede{font-size:1.2rem;max-width:760px;color:var(--muted)}
+.offer,.card{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:20px}.offer{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;margin:26px 0}
+.price{font-size:2.1rem;color:var(--gold);font-weight:800}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+label{display:grid;gap:6px;color:var(--muted);font-size:.9rem}input,select,textarea,button{font:inherit}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#0d0b09;color:var(--ink)}
+textarea{min-height:78px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.wide{grid-column:1/-1}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}button{border:1px solid var(--gold);border-radius:999px;padding:10px 15px;background:var(--gold);color:#171008;font-weight:750;cursor:pointer}
+button.secondary{background:transparent;color:var(--gold)}button.danger{border-color:var(--red);background:transparent;color:var(--red)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#080706;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:220px;color:var(--green)}
+.small{color:var(--muted);font-size:.88rem}.truth{border-left:4px solid var(--green);padding-left:14px;margin:22px 0}.status{display:inline-block;padding:4px 10px;border-radius:999px;background:#242019;color:var(--green)}
+@media(max-width:760px){.grid,.fields,.offer{grid-template-columns:1fr}.price{text-align:left}}
+</style>
+</head>
+<body><main>
+<nav aria-label="Back to Commons"><a href="./index.html">← Commons</a></nav>
+<p class="eyebrow">Commons · bounded revenue diagnostic</p>
+<h1>Save the catering deposit without inventing the quote.</h1>
+<p class="lede">Turn one inquiry into a rules-priced quote packet, one local follow-up record, and either an inert deposit intent or an explicit staff exception. Crash it. Replay it. Verify that nothing duplicates.</p>
+<section class="offer">
+<div><strong>$199 · one business day</strong><p class="small">We map one real quoting workflow and replay agreed, de-identified fixtures. A fixed $2,500 proof is offered only after the diagnostic finds a fit.</p></div>
+<div class="price">$199</div>
+<p class="price-actions"><a class="buy" href="https://buy.stripe.com/dRmdR8acR4Z36it2SC43S0q" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a> <span class="small">Secure Stripe checkout opens in a new tab.</span></p>
+</section>
+
+
+<p class="truth"><strong>Truth boundary:</strong> this browser tool sends no message, processes no payment, and stores no server data. The deposit reference is intentionally inert. Cash remains $0 until a hosted processor proves otherwise.</p>
+<div class="grid">
+<section class="card">
+<h2>Synthetic working demo</h2>
+<div class="fields">
+<label>Event ID<input id="eventId" value="CAT-1042"></label>
+<label>Customer<input id="customer" value="Riverside Robotics"></label>
+<label>Event date<input id="eventDate" type="date" value="2026-09-18"></label>
+<label>Guests<input id="guests" type="number" value="50" min="1" max="500"></label>
+<label>Menu<select id="menu"><option value="boxed-lunch">Boxed lunch · $18/guest</option><option value="buffet" selected>Buffet · $26/guest</option><option value="plated">Plated service · $42/guest</option></select></label>
+<label>Budget, USD<input id="budget" type="number" value="1600" min="0"></label>
+<label class="wide">Notes<textarea id="notes">Loading access must be confirmed by staff.</textarea></label>
+</div>
+<div class="actions">
+<button id="run">Run clean</button>
+<button id="crashQuote" class="secondary">Crash after quote</button>
+<button id="crashFollowup" class="secondary">Crash after follow-up</button>
+<button id="replay" class="secondary">Replay / resume</button>
+<button id="rollback" class="danger">Rollback incomplete</button>
+</div>
+</section>
+<section class="card">
+<h2>Durable local receipt <span id="status" class="status">READY TO RUN</span></h2>
+<pre id="output">Run a scenario. The exact JSON receipt will appear here.</pre>
+<div class="actions"><button id="copy" class="secondary">Copy receipt</button><button id="download" class="secondary">Download JSON</button></div>
+</section>
+<section class="card">
+<h2>Exact buyer intake</h2>
+<p class="small">For a restaurant-group catering sales director. Copy or export only; nothing is submitted.</p>
+<div class="fields">
+<label>Organization<input id="org" placeholder="Restaurant group"></label>
+<label>Buyer / title<input id="buyer" placeholder="Catering sales director"></label>
+<label>Public route<input id="route" placeholder="Published work email or profile URL"></label>
+<label>Monthly inquiries<input id="volume" type="number" min="0" placeholder="80"></label>
+<label class="wide">Current rule source<textarea id="rules" placeholder="Menu sheet, service fee, minimum guests, deposit rule"></textarea></label>
+<label class="wide">Observed failure<textarea id="failure" placeholder="Duplicate follow-up, unpriced quote, or lost deposit handoff"></textarea></label>
+</div>
+<div class="actions"><button id="packet">Build intake packet</button></div>
+</section>
+<section class="card">
+<h2>Binary acceptance</h2>
+<ul>
+<li>Every accepted menu price comes from the published fixed rule table.</li>
+<li>An identical replay creates at most one follow-up and one deposit intent.</li>
+<li>A same-ID/different-payload event is rejected as a conflict.</li>
+<li>Invalid or under-budget inquiries become one named staff exception.</li>
+<li>Crash/resume and rollback both leave a machine-readable receipt.</li>
+</ul>
+<p>Delivery contact: <a href="mailto:tokenjunkielabs@gmail.com" style="color:var(--gold)">tokenjunkielabs@gmail.com</a></p>
+</section>
+</div>
+<p class="foot-cta"><a class="buy" href="https://buy.stripe.com/dRmdR8acR4Z36it2SC43S0q" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a> <span class="small">Secure Stripe checkout opens in a new tab.</span></p>
+</main>
+<script src="./catering-deposit-rescue.js"></script>
+<script>
+(function(){
+  var api=window.CateringDepositRescue,journal=api.createJournal(),last=null;
+  function value(id){return document.getElementById(id).value}
+  function inquiry(){return{eventId:value("eventId"),customer:value("customer"),eventDate:value("eventDate"),guests:Number(value("guests")),menu:value("menu"),budgetCents:Math.round(Number(value("budget")||0)*100),notes:value("notes")}}
+  function show(receipt){last=receipt;document.getElementById("output").textContent=JSON.stringify(receipt,null,2);document.getElementById("status").textContent=receipt.status||"UNKNOWN"}
+  function run(crashAt){show(api.processInquiry(inquiry(),journal,{crashAt:crashAt||"",now:new Date().toISOString()}))}
+  document.getElementById("run").onclick=function(){run("")};
+  document.getElementById("crashQuote").onclick=function(){run("after_quote")};
+  document.getElementById("crashFollowup").onclick=function(){run("after_followup")};
+  document.getElementById("replay").onclick=function(){run("")};
+  document.getElementById("rollback").onclick=function(){show(api.rollback(value("eventId"),journal,{now:new Date().toISOString()}))};
+  document.getElementById("packet").onclick=function(){show({packetVersion:1,slug:"catering-deposit-rescue",generatedAt:new Date().toISOString(),buyer:{organization:value("org"),nameAndTitle:value("buyer"),publicRoute:value("route"),monthlyInquiries:value("volume").trim()===""?null:Number(value("volume"))},workflow:{ruleSource:value("rules"),observedFailure:value("failure")},offer:{diagnosticUsd:199,diagnosticWindow:"one business day",optionalProofUsd:2500,proofOnlyAfterFit:true},latestSyntheticReceipt:last,submission:"LOCAL_COPY_ONLY",externalMessagesSent:0,paymentsProcessed:0,cashUsd:0})};
+  document.getElementById("copy").onclick=function(){navigator.clipboard.writeText(document.getElementById("output").textContent)};
+  document.getElementById("download").onclick=function(){var blob=new Blob([document.getElementById("output").textContent],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="catering-deposit-rescue-receipt.json";a.click();URL.revokeObjectURL(a.href)};
+})();
+</script>
+
+
+
+</body></html>

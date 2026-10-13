@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Pace Lebanon microbial-volume evidence — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#f6f3ec;--ink:#172322;--muted:#52615f;--line:#b7c3bd;--card:#fffdfa;--green:#17694e;--blue:#245b78;--amber:#9b6118}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(150deg,#dcebe3,var(--paper) 40%);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
+main{max-width:1080px;margin:auto;padding:28px 16px 72px}a{color:var(--blue)}h1{font:800 clamp(2.2rem,6vw,4.4rem)/.96 system-ui,sans-serif;max-width:900px;margin:.2em 0}
+.kicker{letter-spacing:.14em;text-transform:uppercase;font-size:.76rem;color:var(--green)}.lede{font-size:1.1rem;max-width:780px;color:var(--muted)}
+.truth{border-left:5px solid var(--amber);padding:10px 14px;background:#fff7e8}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}.wide{grid-column:1/-1}
+table{width:100%;border-collapse:collapse}th,td{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+button{border:0;border-radius:999px;padding:11px 16px;background:var(--green);color:white;font-weight:700;cursor:pointer}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;min-height:180px;padding:14px;background:#132320;color:#dff5e9;border-radius:10px}
+.state{display:inline-block;border:1px solid var(--amber);color:var(--amber);border-radius:999px;padding:3px 9px;font-size:.75rem;font-weight:800}
+.small{color:var(--muted);font-size:.88rem}@media(max-width:760px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="./index.html">← Commons</a> · <a href="./offer.html">offers</a> · <a href="./feature-tracker.html">feature tracker</a></nav>
+<p class="kicker">Pace Lebanon · microbial-volume evidence LIMS · HOLD / BUILD-AND-VERIFY</p>
+<h1>Controlled microbial work from intake to staged evidence.</h1>
+
+
+
+
+<p class="lede">A working 120-submission synthetic acceptance runner binds sample, lot, matrix, specification, method version, route, incubation timepoints, QC controls, count, unit, and source hashes. Ninety records stage reports; thirty predetermined defects remain on HOLD.</p>
+<p class="truth"><strong>Truth boundary:</strong> this is synthetic workflow and lineage evidence. It makes no GMP, regulatory, clinical, diagnostic, sterility, or product-quality decision. Interfaces are simulated/read-only. A named quality reviewer is required to release a report.</p>
+
+<div class="grid">
+<section class="card">
+<h2>Frozen acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>Required result</th></tr></thead>
+<tbody>
+<tr><td>Input</td><td>120 synthetic submissions</td></tr>
+<tr><td>Ready / hold</td><td>90 / 30</td></tr>
+<tr><td>Routes</td><td>30 microbial limits · 30 sterility · 30 CCIT</td></tr>
+<tr><td>Holds</td><td>8 duplicate · 7 missing control data · 5 route · 5 incubation · 5 QC/control</td></tr>
+<tr><td>Held output</td><td>0 jobs · 0 results · 0 reports · 0 releases</td></tr>
+<tr><td>Replay</td><td>0 additions</td></tr>
+<tr><td>Release</td><td>named quality reviewer only</td></tr>
+</tbody>
+</table>
+<p class="small">Official command: <code>python3 pace_lebanon_microbial_volume_evidence.py</code><br>Binary: <code>python3 test_pace_lebanon_microbial_volume_evidence.py</code></p>
+</section>
+
+<section class="card">
+<h2>Evidence receipt <span id="state" class="state">NOT LOADED</span></h2>
+<p><button id="load" type="button">Load tested receipt</button></p>
+<pre id="output">Load the checked-in receipt and validate its exact acceptance counts.</pre>
+</section>
+
+<section class="card wide">
+<h2>What stays linked</h2>
+<p>Every ready record retains the controlled method and version, source payload hash, matrix/specification binding, configured timepoints and minimum duration, QC/positive-control state, count and unit, result hash, and staged report hash pointers. A rush flag never shortens the configured duration.</p>
+
+</section>
+</div>
+</main>
+<script>
+(() => {
+  const state = document.getElementById("state");
+  const output = document.getElementById("output");
+  const expectedHolds = {
+    HOLD_DUPLICATE_SUBMISSION_ID: 8,
+    HOLD_MISSING_METHOD_SPEC_MATRIX: 7,
+    HOLD_ROUTE_MISMATCH: 5,
+    HOLD_INCUBATION_WINDOW: 5,
+    HOLD_QC_CONTROL_FAILURE: 5
+  };
+  const expectedRoutes = {MICROBIAL_LIMITS: 30, STERILITY: 30, CCIT: 30};
+  document.getElementById("load").addEventListener("click", async () => {
+    state.textContent = "READING";
+    try {
+      const response = await fetch("./revenue/pace_lebanon_microbial_volume_evidence/receipt.json", {cache:"no-store"});
+      if (!response.ok) throw new Error("receipt HTTP " + response.status);
+      const value = await response.json();
+      const failures = [];
+      if (value.state !== "TESTED") failures.push("state");
+      if (value.input_rows !== 120 || value.ready !== 90 || value.holds !== 30) failures.push("counts");
+      if (value.jobs !== 90 || value.reports_staged !== 90 || value.reports_released !== 0) failures.push("outputs");
+      if (JSON.stringify(value.hold_counts) !== JSON.stringify(expectedHolds)) failures.push("hold_counts");
+      if (JSON.stringify(value.route_counts) !== JSON.stringify(expectedRoutes)) failures.push("route_counts");
+      if (!/^[a-f0-9]{64}$/.test(value.manifest_sha256 || "")) failures.push("manifest_sha256");
+      if (!/^[a-f0-9]{64}$/.test(value.audit_sha256 || "")) failures.push("audit_sha256");
+      state.textContent = failures.length ? "FAIL" : "PASS";
+      output.textContent = JSON.stringify({ok: !failures.length, failures, receipt: value}, null, 2);
+    } catch (error) {
+      state.textContent = "UNKNOWN";
+      output.textContent = String(error);
+    }
+  });
+})();
+</script>
+
+
+
+</body>
+</html>

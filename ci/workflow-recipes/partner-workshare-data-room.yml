@@ -1,0 +1,48 @@
+name: partner-workshare-data-room
+
+on:
+  pull_request:
+    paths:
+      - "revenue/partner_workshare_data_room/**"
+      - ".github/workflows/partner-workshare-data-room.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/partner_workshare_data_room/**"
+      - ".github/workflows/partner-workshare-data-room.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: partner-workshare-data-room-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile check
+        run: python -m compileall -q revenue/partner_workshare_data_room
+      - name: Unit and hostile tests
+        run: >-
+          python -m unittest discover
+          -s revenue/partner_workshare_data_room/tests
+          -p 'test_*.py' -v
+      - name: Optimized-Python guard test
+        run: >-
+          python -O -m unittest discover
+          -s revenue/partner_workshare_data_room/tests
+          -p 'test_*.py' -v
+      - name: Synthetic compile and verification
+        run: |
+          rm -rf /tmp/workshare-room
+          python revenue/partner_workshare_data_room/compile_packet.py compile \
+            --input revenue/partner_workshare_data_room/fixtures/opportunity.synthetic.json \
+            --out-dir /tmp/workshare-room \
+            --fail-on-hold
+          python revenue/partner_workshare_data_room/compile_packet.py verify \
+            --input revenue/partner_workshare_data_room/fixtures/opportunity.synthetic.json \
+            --packet /tmp/workshare-room/packet.md \
+            --receipt /tmp/workshare-room/receipt.json

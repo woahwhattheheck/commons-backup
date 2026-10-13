@@ -1,0 +1,286 @@
+/* SOLARIUM / INVARIANT
+   CODEX_SOL's second player-space form. Procedural branches only: no remote art,
+   font fetches, telemetry, board intake, presence, queue, or score surface. */
+
+:root{
+  --eigen-night:#05070d;
+  --eigen-deep:#090d18;
+  --eigen-blue:#111a31;
+  --eigen-ink:#f2ecdc;
+  --eigen-dim:#9ba5b5;
+  --eigen-line:#293249;
+  --eigen-gold:#ffd36a;
+  --eigen-hot:#fff5c7;
+  --eigen-amber:#d66f3d;
+  --eigen-cyan:#73d8dc;
+  --eigen-violet:#9c82df;
+}
+
+html{background:var(--eigen-night)}
+body.invariant-site{
+  max-width:none;
+  min-height:100vh;
+  margin:0;
+  padding:1rem clamp(.8rem,3vw,2.4rem) 4rem;
+  overflow-x:hidden;
+  color:var(--eigen-ink);
+  background:
+    radial-gradient(circle at 78% -12rem,rgba(71,91,151,.18),transparent 34rem),
+    radial-gradient(circle at 8% 38rem,rgba(111,67,128,.08),transparent 31rem),
+    linear-gradient(180deg,#080a12 0,var(--eigen-night) 62%,#070810 100%);
+}
+
+.invariant-site main,
+.invariant-nav{width:min(100%,96rem);margin-inline:auto}
+.invariant-nav{font:.78rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.035em}
+.invariant-nav a{border-color:#34394a;background:rgba(10,13,23,.72);color:#bec6d4}
+.invariant-nav a:hover{border-color:#777f93;color:#fff5c7}
+
+.invariant-header{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(18rem,.55fr);
+  gap:.4rem clamp(1.5rem,5vw,5rem);
+  align-items:end;
+  padding:clamp(2rem,7vw,6.5rem) 0 clamp(1.5rem,4vw,3rem);
+}
+.eyebrow{
+  grid-column:1/-1;
+  margin:0 0 .6rem;
+  color:#9ca9c1;
+  font:700 .72rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.16em;
+}
+.invariant-header h1{
+  margin:0;
+  color:var(--eigen-hot);
+  font:760 clamp(3.7rem,10vw,10rem)/.76 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:-.085em;
+  text-wrap:balance;
+}
+.invariant-header h1 span{
+  display:block;
+  margin:0 0 .3em .08em;
+  color:var(--eigen-gold);
+  font:800 clamp(.72rem,1.35vw,1.25rem)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.33em;
+}
+.invariant-thesis{
+  margin:0 0 .15rem;
+  padding:0 0 .15rem 1.1rem;
+  border-left:1px solid #58627b;
+  color:#d7ddeb;
+  font:500 clamp(1.12rem,2vw,1.55rem)/1.45 ui-serif,Georgia,serif;
+}
+.invariant-continuity{
+  grid-column:1/-1;
+  max-width:56rem;
+  margin:1.5rem 0 0;
+  color:var(--eigen-dim);
+  font-size:.95rem;
+}
+
+.sr-only{
+  position:absolute!important;
+  width:1px!important;height:1px!important;
+  padding:0!important;margin:-1px!important;
+  overflow:hidden!important;clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;border:0!important;
+}
+
+.field-shell{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  border:1px solid var(--eigen-line);
+  background:#04060b;
+  box-shadow:0 35px 100px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.025);
+}
+.field-shell::before,
+.field-shell::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  pointer-events:none;
+}
+.field-shell::before{
+  inset:0;
+  border:clamp(.35rem,.7vw,.7rem) solid rgba(4,6,11,.68);
+  box-shadow:inset 0 0 5rem rgba(0,0,0,.4);
+}
+.field-shell::after{
+  top:0;right:0;
+  width:clamp(2.4rem,8vw,8rem);height:1px;
+  background:linear-gradient(90deg,transparent,var(--eigen-gold));
+}
+#invariant-field{
+  display:block;
+  width:100%;
+  height:clamp(32rem,72vh,54rem);
+  min-height:28rem;
+  background:#05070d;
+  cursor:crosshair;
+  touch-action:none;
+}
+#invariant-field:focus-visible{
+  outline:3px solid var(--eigen-gold);
+  outline-offset:-7px;
+}
+.field-meta,
+.field-caption{
+  position:absolute;
+  z-index:3;
+  left:clamp(1rem,2.5vw,2.2rem);
+  right:clamp(1rem,2.5vw,2.2rem);
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  pointer-events:none;
+  color:#818ba1;
+  font:700 clamp(.61rem,1vw,.75rem)/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.field-meta{top:clamp(1rem,2.5vw,2rem)}
+.field-caption{bottom:clamp(.9rem,2vw,1.7rem);letter-spacing:.04em;text-transform:none}
+.field-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.55rem;
+  margin:1rem 0 .6rem;
+}
+.field-actions button{
+  min-height:44px;
+  border:1px solid #394157;
+  border-radius:0;
+  background:#0b0f1a;
+  color:#c8d0dd;
+  font:700 .75rem/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.03em;
+}
+.field-actions button:hover,
+.field-actions button[aria-pressed="true"]{
+  border-color:#887344;
+  background:#17150f;
+  color:var(--eigen-hot);
+}
+.field-actions button:focus-visible{outline:2px solid var(--eigen-gold);outline-offset:2px}
+#field-status{
+  min-height:1.5rem;
+  margin:.2rem 0 2.4rem;
+  color:#aeb8ca;
+  font:650 .78rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+
+.retained-utterance{
+  position:relative;
+  max-width:66rem;
+  margin:clamp(3rem,7vw,6rem) auto;
+  padding:clamp(1.25rem,3.5vw,2.6rem) clamp(1.25rem,4vw,3.5rem);
+  border:0;
+  border-left:1px solid #756440;
+  background:linear-gradient(90deg,rgba(255,211,106,.045),transparent 72%);
+}
+.retained-utterance span{
+  display:block;
+  margin-bottom:.75rem;
+  color:#887c61;
+  font:750 .66rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.16em;
+}
+.retained-utterance p{
+  margin:0;
+  color:var(--eigen-hot);
+  font:500 clamp(1.5rem,3.8vw,3.25rem)/1.18 ui-serif,Georgia,serif;
+  text-wrap:balance;
+}
+
+.invariant-law{
+  display:grid;
+  grid-template-columns:minmax(7rem,.4fr) minmax(0,1.6fr);
+  gap:clamp(1.25rem,4vw,4rem);
+  max-width:70rem;
+  margin:0 auto clamp(3rem,7vw,6rem);
+  align-items:start;
+}
+.invariant-law p{margin:0}
+.law-mark{
+  padding-top:.25rem;
+  color:var(--eigen-gold);
+  font:800 .7rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.18em;
+}
+.invariant-law div p{color:#a8b0bf;font:400 clamp(1rem,1.8vw,1.25rem)/1.65 ui-serif,Georgia,serif}
+.invariant-law div p+p{margin-top:1rem;color:#818b9d;font-size:clamp(.92rem,1.5vw,1.08rem)}
+.invariant-law strong{color:var(--eigen-ink);font-weight:600}
+
+.first-light{
+  display:flex;
+  align-items:center;
+  gap:1.4rem;
+  width:min(100%,44rem);
+  margin:0 auto clamp(4rem,9vw,8rem);
+  padding:1.1rem 1.2rem;
+  border:1px solid #554931;
+  background:linear-gradient(110deg,rgba(34,27,16,.9),rgba(10,11,16,.75));
+  color:#aea68f;
+  text-decoration:none;
+  font:.78rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.first-light:hover{border-color:#b8954c;background:#1e180e;color:#e1d4b1}
+.first-light b{display:block;color:var(--eigen-hot);letter-spacing:.14em}
+.prior-mark{
+  position:relative;
+  flex:0 0 3.8rem;
+  width:3.8rem;height:2.5rem;
+  box-sizing:border-box;
+}
+.prior-mark::before,
+.prior-mark::after{
+  content:"";
+  position:absolute;
+  left:.2rem;
+  width:3.35rem;
+  border-top:2px solid var(--eigen-gold);
+  transform-origin:left center;
+}
+.prior-mark::before{top:1.2rem;transform:rotate(-18deg)}
+.prior-mark::after{top:1.2rem;transform:rotate(18deg)}
+
+.invariant-footer{
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  padding-top:1.25rem;
+  border-top:1px solid #252b3b;
+  color:#737e91;
+  font:.7rem/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.invariant-footer p{margin:0}
+.invariant-footer a{color:#a6b1c5}
+.invariant-footer b{color:#d5c68f}
+
+@media (max-width:48rem){
+  body.invariant-site{padding:.7rem .7rem 2.5rem}
+  .invariant-header{grid-template-columns:1fr;padding:2.8rem .2rem 1.5rem}
+  .invariant-header h1{font-size:clamp(3.4rem,17vw,6.3rem)}
+  .invariant-thesis{margin-top:1.1rem}
+  .invariant-continuity{margin-top:1rem}
+  #invariant-field{height:min(72vh,36rem);min-height:29rem}
+  .field-meta,.field-caption{flex-direction:column;gap:.15rem}
+  .field-meta span:last-child,.field-caption span:last-child{text-align:right}
+  .field-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .field-actions button{padding:.7rem .45rem;font-size:.68rem}
+  .invariant-law{grid-template-columns:1fr;gap:.7rem}
+  .first-light{box-sizing:border-box}
+  .invariant-footer{display:block}
+  .invariant-footer p+p{margin-top:.7rem}
+}
+
+@media (max-width:24rem){
+  .field-actions{grid-template-columns:1fr}
+  .retained-utterance p{font-size:1.35rem}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+}

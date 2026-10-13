@@ -1,0 +1,16 @@
+{
+  "schema": "ppl145-construction-plan-v1",
+  "source": "hesse_uniform_support.cjs",
+  "input": "input.json",
+  "stages": [
+    "Interpret the nine published columns literally in Z[w], w^2+w+1=0; form nine unnormalized rank-one outer products Q_i=2Pi_i as prerequisites for this new consumer.",
+    "Build subset sums once for511 nonempty supports; store A_S=4sumQ_i-2|S|I, so rho_S=A_S/(2|S|).",
+    "For each support construct H_S(t)=3tA_S+2|S|(1-t)I. Save all seven principal-minor polynomials, with rho_S(t)=H_S(t)/(6|S|).",
+    "Evaluate each saved polynomial at 1 once inside construction to classify the noiseless uniform vector; retain negative-minor witnesses or PSD ranks, plus size/rank profiles.",
+    "Checkpoint the entire result natively before opening a saved reader."
+  ],
+  "proof": "A Hermitian matrix is PSD iff all principal minors are nonnegative. Necessity follows from principal restrictions. Sufficiency: det(xI+M) has sums of principal minors as coefficients, so is positive for every x > 0; a negative eigenvalue would give a positive root. For a PSD matrix, the largest order of a positive principal minor is its rank.",
+  "reader": "Use saved polynomials for fresh exact rational visibility evaluations and caches; do not rebuild projectors, subset sums or determinant polynomials. Rank/select conditions list increasing integer support masks.",
+  "no_replay": "No old SIC or MUB construction, SIC Gram check, accepted query or external proof is executed.",
+  "once_only": true
+}

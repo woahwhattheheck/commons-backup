@@ -1,0 +1,56 @@
+{
+  "id": "sanair-asbestos-coc-router-lims-01",
+  "version": 1,
+  "buyer": "SanAir Technologies / Sandra C. Sobrino",
+  "lead": {
+    "channel": "C0BTURDA3PW",
+    "ts": "1788149922.456529"
+  },
+  "demand": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788149947.449699"
+  },
+  "workflow": [
+    "signed-form gate",
+    "unique sample IDs",
+    "lab and method capability routing",
+    "receipt-based TAT clock",
+    "recipient permissions",
+    "amendment provenance",
+    "exception ownership",
+    "named-human release"
+  ],
+  "labs": ["RIC", "CIN", "BOS"],
+  "acceptance": [
+    "360 frozen synthetic COCs: 300 valid, 60 predefined exceptions",
+    "every valid order enters the designated lab exactly once with field parity",
+    "all 60 block with the exact code",
+    "TAT clocks follow fixture receipt rules",
+    "permissions match the COC",
+    "replay is idempotent with source hashes and full lineage",
+    "named human-only release; no autonomous release"
+  ],
+  "hold_codes": [
+    "HOLD_MISSING_SIGNATURE",
+    "HOLD_DUPLICATE_SAMPLE_ID",
+    "HOLD_INVALID_LAB_METHOD",
+    "HOLD_TAT_CUTOFF"
+  ],
+  "audit_sha256": "7e90246b6ab1cfaf8b5fac41669f968fa3cd2c8ed8c27381835387ea407483cf",
+  "lineage_sha256": "1d081f6acc19962337dadba0b2cfbcdb0a1c51e408d54d4533d1695d6b12dd27",
+  "fixture_sha256": "962eca037242f35e8fa3f2253f0d6a4bcdbc983dfca23e41511ba4effcfe4ef7",
+  "exclusions": [
+    "no live sample or test action",
+    "no production write",
+    "no live LIMS, instruments, or reports",
+    "no automatic release",
+    "no buyer outreach or contact",
+    "no incumbent replacement claim"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic COC routing, hold, TAT clock, permission, amendment lineage, and human-release receipts only; never production LIMS write, live sample action, or automatic release",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

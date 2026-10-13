@@ -1,0 +1,91 @@
+{
+  "schema": "widefield-run-state-validation-v1",
+  "python": "3.13.5",
+  "baseline": {
+    "bytes": 3497,
+    "git_blob": "f0e6fde861be48a92e8455d7ad6ac69b477a94ad",
+    "sha256": "211d3c0d49c30aa706e5252811358d99c350a4d9934f35f9722938c7652cb729"
+  },
+  "candidate": {
+    "bytes": 5710,
+    "git_blob": "cd168aef4adf8d631cc45322462915a6bad6a61f",
+    "sha256": "868e56e6bdf5b2cb73c603701b2d951e1f5e1bae42c814f6e86697fee61e69f4"
+  },
+  "tests": {
+    "bytes": 15197,
+    "git_blob": "71baa85fbd87cb8f0bf96f3a308946a835b265fd",
+    "sha256": "d672156794e973870e762b06dd5332ee03f01147604f38248ba603238afdd92f"
+  },
+  "methods": 19,
+  "candidate_failures": 0,
+  "candidate_errors": 0,
+  "baseline_failures": 11,
+  "baseline_errors": 0,
+  "baseline_failed_methods": [
+    "test_checkpoint_error_without_worker_error_propagates",
+    "test_checkpoint_precedes_stdout_notification",
+    "test_cleanup_failure_does_not_hide_original_write_failure",
+    "test_failed_then_successful_sibling_is_recorded",
+    "test_fsync_failure_preserves_previous_bytes",
+    "test_multiple_failures_keep_first_exception_and_no_retries",
+    "test_real_child_hard_exit_during_write_preserves_prior",
+    "test_real_worker_process_error_does_not_lose_sibling",
+    "test_replace_failure_preserves_previous_bytes",
+    "test_short_write_detected_and_previous_preserved",
+    "test_success_then_failed_sibling_is_recorded"
+  ],
+  "baseline_note": "Five staging tests fail because legacy code has no staged writer. Eleven failures do not mean eleven independent defects.",
+  "retained_function_asts": {
+    "sha256": true,
+    "valid_report": true,
+    "run_job": true
+  },
+  "real_baseline_witness": {
+    "source_git_blob": "f0e6fde861be48a92e8455d7ad6ac69b477a94ad",
+    "fixture": "two actual evaluator subprocesses; synthetic reports only",
+    "returncode": 1,
+    "successful_sibling_report_exists": true,
+    "run_state_exists": false,
+    "new_games": 0,
+    "engine_calls": 0
+  },
+  "real_candidate_witness": {
+    "source_git_blob": "cd168aef4adf8d631cc45322462915a6bad6a61f",
+    "fixture": "two actual evaluator subprocesses; synthetic reports only",
+    "returncode": 1,
+    "successful_sibling_report_exists": true,
+    "run_state_exists": true,
+    "new_games": 0,
+    "engine_calls": 0
+  },
+  "new_games": 0,
+  "engine_calls": 0,
+  "new_policy_calls": 0,
+  "evidence": {
+    "final-baseline-tests.log": {
+      "bytes": 9705,
+      "git_blob": "feb18b68e007074934a68d7c7f3e7d76f860eb07",
+      "sha256": "28504988466f2afe656896d528c2f1d6ed1e59015dc762a8e53679fe723ad960"
+    },
+    "final-candidate-tests.log": {
+      "bytes": 2616,
+      "git_blob": "88fa794e5bff89f2ca1dc0f1e1dbd82cc072e1cc",
+      "sha256": "e5516ab4891df3a6419576b1f1e40bb3d78649b44715a5ea66cd631adf359d64"
+    },
+    "baseline-witness.json": {
+      "bytes": 1590,
+      "git_blob": "8949db5bcf4f0e936228204e93c4ec5189868bdb",
+      "sha256": "404af5da826f2e0744bcfdbd76e684b5e58d9f6177a5e3cf2112e1049c12de73"
+    },
+    "candidate-witness.json": {
+      "bytes": 3042,
+      "git_blob": "6631e5513c24ecf15003c25c58ac8f2aea74445b",
+      "sha256": "627a378b73922d963f8e3050003658bd6192b13e6d898de2a96005247730ada2"
+    },
+    "fixture-driver-first-attempt.log": {
+      "bytes": 4970,
+      "git_blob": "b86d30e3d33aa8064d3d2d0e1f39fdfc976aa79e",
+      "sha256": "f0f7b30a298abd8f01c6a344e6f3e40bbc609edd9bfbab9b04ba83e75c94a025"
+    }
+  }
+}

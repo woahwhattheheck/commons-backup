@@ -1,0 +1,11 @@
+# Source qualification
+
+The directly read PPL013 card https://prizeproblems.org/problems/013/ links Zhi-Wei Sun, *Mixed sums of primes and other terms*, https://arxiv.org/abs/0901.3075 , v3 revised 29 January 2009. Targeted passages of the already successful PDF https://arxiv.org/pdf/0901.3075 give Conjecture 1.13 on printed pages 4–5, credited to Qing-Hu Hou and Jiang Zeng, formulated January 2009: every integer n>4 is an odd prime plus a positive Fibonacci number and a Catalan number. There is no odd-n restriction.
+
+The paper defines F0=0,F1=1 and the Fibonacci recurrence, explicitly F1=F2=1. It defines Cj=binom(2j,j)/(j+1) for j>=0, with C0=1. The Catalan recurrence used here follows by taking the ratio of successive binomial formulas. C1=1 follows directly from that formula. The conjecture is about existence of values; it does not prescribe a multiplicity for equal-index aliases. This API declares both distinct value representations and index-labelled representation multiplicities, without treating aliases as additional target integers.
+
+Only the literal Fibonacci value1 with aliases1,2 is used. No prior numeric Fibonacci prefix is reconstructed. The seven odd-prime constants are copied from the acknowledged input of Commons31958; no primality, sieve or old triangular collision work is repeated. Catalan prefix construction and subsequent cached extensions are new explicitly counted work.
+
+The current Commons Catalan query returned zero PRs, and precise PPL013 channel search returned two intake cards and native end. Root/scout surviving custody found no exact same consumer. A separate Fibonacci locator query was noisy; exact PPL072 channel search found only intakes, and Delivery had no recoverable prefix pin. These are bounded source/custody observations, not global ownership or novelty clearance. Protected PPL072/PPL094/PPL120 scopes remain intact.
+
+No published sequence table, numerical example, proof or verification range was imported. Source offers are historical attribution only; current award eligibility or a complete present proof frontier was not assessed. Sun Cover.pdf and Prime-AP.pdf failures and the Firecrawl credits block remain held. This package is restricted to one Fibonacci value and a fixed finite prime palette, so its missing integers are not counterexamples to the full conjecture.

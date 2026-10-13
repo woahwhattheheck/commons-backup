@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MealFrame</title>
+<style>
+:root{font-family:system-ui,sans-serif;color-scheme:light dark}body{max-width:980px;margin:0 auto;padding:24px}h1{margin-bottom:4px}.muted{opacity:.72}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{border:1px solid #8886;border-radius:12px;padding:16px;margin:12px 0}label{display:block;margin:8px 0}input,textarea,button{font:inherit;padding:8px;box-sizing:border-box}input,textarea{width:100%}button{cursor:pointer;margin:4px}.pill{display:inline-block;border:1px solid #8888;border-radius:999px;padding:4px 8px;margin:3px}.danger{border-color:#b33}.meal img{max-width:180px;max-height:130px;border-radius:8px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>MealFrame</h1>
+<p class="muted">A private, local meal-photo journal. Ingredient suggestions come only from your saved recipes/history—not image recognition. No calories, nutrition targets, diagnosis, or treatment advice.</p>
+<div class="grid">
+<section>
+<h2>Add meal</h2>
+<form id="mealForm" class="card">
+<label>Date <input id="mealDate" type="date" required></label>
+<label>Title <input id="mealTitle" maxlength="200" required></label>
+<label>Ingredients, one per line <textarea id="ingredients" rows="5"></textarea></label>
+<div><button type="button" id="suggest">Suggest from my saved history</button><span id="suggestions"></span></div>
+<label>Portion note <input id="portion" maxlength="500" placeholder="e.g. two slices; plain-language note"></label>
+<label>Notes <textarea id="notes" rows="3"></textarea></label>
+<label>Photo <input id="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"></label>
+<button>Add meal</button>
+</form>
+<h2>Save recipe</h2>
+<form id="recipeForm" class="card">
+<label>Name <input id="recipeName" required></label>
+<label>Ingredients, one per line <textarea id="recipeIngredients" rows="5"></textarea></label>
+<label>Notes <textarea id="recipeNotes" rows="2"></textarea></label>
+<button>Save recipe</button>
+</form>
+</section>
+<section>
+<h2>Weekly export</h2>
+<div class="card">
+<label>Monday <input id="weekStart" type="date"></label>
+<button id="jsonExport">JSON</button><button id="htmlExport">Printable HTML</button>
+</div>
+<h2>Privacy</h2>
+<div class="card danger">
+<p>Delete all meals, local photo bytes, and recipes. This cannot be undone.</p>
+<input id="deleteConfirm" placeholder="DELETE ALL MEALFRAME DATA">
+<button id="deleteAll">Delete all journal data</button>
+</div>
+</section>
+</div>
+<h2>Journal</h2>
+<div id="meals"></div>
+<h2>Recipes</h2>
+<div id="recipes"></div>
+<script>
+const $=s=>document.querySelector(s);
+const op=()=>crypto.randomUUID();
+const lines=v=>v.split("\n").map(x=>x.trim()).filter(Boolean);
+async function api(url,opts={}){const r=await fetch(url,opts);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||`HTTP ${r.status}`);return j}
+async function post(url,payload){return api(url,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)})}
+async function fileDataURL(file){if(!file)return null;return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file)})}
+function escapeHtml(v){const d=document.createElement("div");d.textContent=v;return d.innerHTML}
+async function refresh(){
+  const s=await api("/api/state");
+  $("#meals").innerHTML=s.meals.map(m=>`<article class="card meal">${m.photo_url?`<img src="${m.photo_url}" alt="Local meal photo">`:""}<h3>${escapeHtml(m.meal_date)} — ${escapeHtml(m.title)}</h3><p>${m.ingredients.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join("")}</p><p>${escapeHtml(m.portion_note||"")}</p><p>${escapeHtml(m.notes||"")}</p><small>v${m.version}${m.photo_sha256?` · photo sha256 ${m.photo_sha256.slice(0,12)}…`:""}</small></article>`).join("")||"<p>No meals yet.</p>";
+  $("#recipes").innerHTML=s.recipes.map(r=>`<article class="card"><h3>${escapeHtml(r.name)}</h3><p>${r.ingredients.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join("")}</p><p>${escapeHtml(r.notes||"")}</p></article>`).join("")||"<p>No recipes yet.</p>";
+}
+$("#mealDate").value=new Date().toISOString().slice(0,10);
+$("#mealForm").addEventListener("submit",async e=>{e.preventDefault();try{await post("/api/meal/create",{operation_id:op(),meal_date:$("#mealDate").value,title:$("#mealTitle").value,portion_note:$("#portion").value,notes:$("#notes").value,ingredients:lines($("#ingredients").value),photo_data_url:await fileDataURL($("#photo").files[0])});e.target.reset();$("#mealDate").value=new Date().toISOString().slice(0,10);await refresh()}catch(err){alert(err.message)}});
+$("#recipeForm").addEventListener("submit",async e=>{e.preventDefault();try{await post("/api/recipe/save",{operation_id:op(),name:$("#recipeName").value,ingredients:lines($("#recipeIngredients").value),notes:$("#recipeNotes").value});e.target.reset();await refresh()}catch(err){alert(err.message)}});
+$("#suggest").addEventListener("click",async()=>{try{const s=await api("/api/suggestions?title="+encodeURIComponent($("#mealTitle").value));$("#suggestions").innerHTML=s.suggestions.map(x=>`<button type="button" class="pill" title="${escapeHtml(x.basis)}">${escapeHtml(x.ingredient)}</button>`).join("");$("#suggestions").querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{const now=lines($("#ingredients").value);if(!now.some(x=>x.toLowerCase()===s.suggestions[i].ingredient.toLowerCase())){$("#ingredients").value=[...now,s.suggestions[i].ingredient].join("\n")}})}catch(err){alert(err.message)}});
+$("#jsonExport").onclick=()=>{const w=$("#weekStart").value;if(w)location.href=`/api/export?week=${encodeURIComponent(w)}&format=json`};
+$("#htmlExport").onclick=()=>{const w=$("#weekStart").value;if(w)location.href=`/api/export?week=${encodeURIComponent(w)}&format=html`};
+$("#deleteAll").onclick=async()=>{try{await post("/api/delete-all",{operation_id:op(),confirmation:$("#deleteConfirm").value});$("#deleteConfirm").value="";await refresh()}catch(err){alert(err.message)}};
+refresh().catch(err=>document.body.insertAdjacentHTML("beforeend",`<p>${escapeHtml(err.message)}</p>`));
+</script>
+</body>
+</html>

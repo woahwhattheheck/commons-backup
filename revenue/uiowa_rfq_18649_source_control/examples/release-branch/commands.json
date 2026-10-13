@@ -1,0 +1,243 @@
+[
+  {
+    "argv": [
+      "git",
+      "init",
+      "--initial-branch=main"
+    ],
+    "exit_code": 0,
+    "stdout": "Initialized empty Git repository in /workspace/scratch/94a2632f4359/source-control-workflows-run2/release-repo/.git/\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "config",
+      "core.hooksPath",
+      "/workspace/scratch/94a2632f4359/source-control-workflows-run2/release-repo/unused-hooks"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "config",
+      "commit.gpgsign",
+      "false"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "config",
+      "tag.gpgsign",
+      "false"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-201 establish baseline"
+    ],
+    "exit_code": 0,
+    "stdout": "[main (root-commit) 564d456] SC-201 establish baseline\n 1 file changed, 1 insertion(+)\n create mode 100644 service.txt\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "564d456ccb404700abf759d83fb8fbc74e59aaba\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "switch",
+      "-c",
+      "release/1"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Switched to a new branch 'release/1'\n"
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-202 stabilize release"
+    ],
+    "exit_code": 0,
+    "stdout": "[release/1 4f612cb] SC-202 stabilize release\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "4f612cb56cc55a487ae33bfae931e9b8b68e1b8d\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "switch",
+      "main"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Switched to branch 'main'\n"
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "roadmap.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-203 continue next release"
+    ],
+    "exit_code": 0,
+    "stdout": "[main 9191458] SC-203 continue next release\n 1 file changed, 1 insertion(+)\n create mode 100644 roadmap.txt\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "switch",
+      "release/1"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Switched to branch 'release/1'\n"
+  },
+  {
+    "argv": [
+      "git",
+      "add",
+      "service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "commit",
+      "-m",
+      "SC-204 repair release behavior"
+    ],
+    "exit_code": 0,
+    "stdout": "[release/1 b8180e8] SC-204 repair release behavior\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "b8180e88acb44a28bd596d8c1b5bb1a2c85bbd79\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "tag",
+      "release-1.0"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "switch",
+      "main"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Switched to branch 'main'\n"
+  },
+  {
+    "argv": [
+      "git",
+      "merge",
+      "--no-ff",
+      "release/1",
+      "-m",
+      "SC-205 reintegrate released fix"
+    ],
+    "exit_code": 0,
+    "stdout": "Merge made by the 'ort' strategy.\n service.txt | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "564595533a00ba9f10e8deb71b4c883271db1ec1\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "show",
+      "release-1.0:service.txt"
+    ],
+    "exit_code": 0,
+    "stdout": "mode=stable-fixed\n",
+    "stderr": ""
+  }
+]

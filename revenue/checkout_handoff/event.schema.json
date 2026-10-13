@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/checkout_handoff/event.schema.json",
+  "title": "Commons checkout provider observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "event_id", "provider", "provider_event_id", "provider_event_type", "provider_object_ref", "request_id", "crm_record_ref", "sku_id", "acceptance_digest", "occurred_at", "observed_at", "verification", "payload_sha256", "amount_minor", "currency", "facts"],
+  "properties": {
+    "schema_version": {"const": "commons-checkout-event/v1"},
+    "kind": {"const": "CHECKOUT_PROVIDER_OBSERVATION"},
+    "event_id": {"$ref": "#/$defs/id"},
+    "provider": {"enum": ["stripe", "bank-readback"]},
+    "provider_event_id": {"$ref": "#/$defs/id"},
+    "provider_event_type": {"enum": ["checkout.session.created", "checkout.session.completed", "payment_intent.succeeded", "charge.succeeded", "balance.available", "payout.paid", "charge.refunded", "commons.bank_available.confirmed"]},
+    "provider_object_ref": {"type": "string", "minLength": 1, "maxLength": 240},
+    "request_id": {"$ref": "#/$defs/id"},
+    "crm_record_ref": {"type": "string", "pattern": "^rec[A-Za-z0-9]{14}$"},
+    "sku_id": {"$ref": "#/$defs/id"},
+    "acceptance_digest": {"$ref": "#/$defs/sha256"},
+    "occurred_at": {"$ref": "#/$defs/timestamp"},
+    "observed_at": {"$ref": "#/$defs/timestamp"},
+    "verification": {"enum": ["SIGNATURE_VERIFIED", "PRIVATE_READBACK_VERIFIED"]},
+    "payload_sha256": {"$ref": "#/$defs/sha256"},
+    "amount_minor": {"type": "integer", "minimum": 0},
+    "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "payment_status": {"enum": ["paid", "unpaid", "no_payment_required"]},
+        "funds_available": {"type": "boolean"},
+        "payout_status": {"enum": ["paid", "pending", "failed"]},
+        "bank_posted": {"type": "boolean"},
+        "refund_status": {"enum": ["succeeded", "pending", "failed"]}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 8, "maxLength": 120, "pattern": "^[A-Za-z0-9._-]+$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "format": "date-time", "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"}
+  }
+}

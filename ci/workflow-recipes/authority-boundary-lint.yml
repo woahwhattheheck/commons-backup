@@ -1,0 +1,70 @@
+name: authority-boundary-lint
+
+on:
+  pull_request:
+    paths:
+      - '**/*.py'
+      - '**/*.js'
+      - '**/*.mjs'
+      - '**/*.cjs'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.jsx'
+      - '**/*.json'
+      - '**/*.yaml'
+      - '**/*.yml'
+      - 'tools/authority_boundary_lint/**'
+      - '.github/workflows/authority-boundary-lint.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority-boundary-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile tools/authority_boundary_lint/*.py
+      - name: Unit tests
+        run: >-
+          python -B -m unittest -v
+          tools.authority_boundary_lint.test_lint
+          tools.authority_boundary_lint.test_js_provenance
+      - name: Optimized unit tests
+        run: >-
+          python -O -B -m unittest -v
+          tools.authority_boundary_lint.test_lint
+          tools.authority_boundary_lint.test_js_provenance
+      - name: Advisory scan of changed source
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t paths < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
+            '*.py' '*.js' '*.mjs' '*.cjs' '*.ts' '*.tsx' '*.jsx' '*.json' '*.yaml' '*.yml')
+          existing=()
+          for path in "${paths[@]}"; do
+            if [[ -f "$path" ]]; then
+              existing+=("$path")
+            fi
+          done
+          if (( ${#existing[@]} )); then
+            python -m tools.authority_boundary_lint "${existing[@]}" --root . \
+              --json-out /tmp/authority-boundary-lint.json \
+              --markdown-out /tmp/authority-boundary-lint.md
+          else
+            python -m tools.authority_boundary_lint tools/authority_boundary_lint --root . \
+              --json-out /tmp/authority-boundary-lint.json \
+              --markdown-out /tmp/authority-boundary-lint.md
+          fi
+          cat /tmp/authority-boundary-lint.md >> "$GITHUB_STEP_SUMMARY"

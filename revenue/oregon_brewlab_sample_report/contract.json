@@ -1,0 +1,56 @@
+{
+  "id": "oregon-brewlab-sample-report-reconciliation-lims-01",
+  "version": 1,
+  "buyer": "Oregon BrewLab / Dana Garves",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788151400.000000"
+  },
+  "workflow": [
+    "order/form and container reconciliation",
+    "cold-chain and volume gates from public Oregon BrewLab intake rules",
+    "ASBC method routing with method/version/unit/source hashes",
+    "QC signoff",
+    "report-class selection (STANDARD / TTB / NOTARIZED)",
+    "simulated status notification",
+    "staged release until a named human"
+  ],
+  "volume_rules_oz": {
+    "standard": 4,
+    "VDK": 12,
+    "FCR": 12,
+    "additional_testing_multiplier": 2
+  },
+  "acceptance": [
+    "120 synthetic submissions",
+    "exactly 96 valid submissions become READY once",
+    "exactly 24 HOLD: 8 FORM_CONTAINER_MISMATCH, 6 DUPLICATE_ID, 5 WARM_MICRO_VDK, 5 INSUFFICIENT_VOLUME",
+    "no duplicate jobs",
+    "method/version/unit/source hashes match the golden catalog",
+    "replay is idempotent and adds zero jobs or holds",
+    "reports remain STAGED until named human release; autonomous release denied"
+  ],
+  "hold_codes": [
+    "FORM_CONTAINER_MISMATCH",
+    "DUPLICATE_ID",
+    "WARM_MICRO_VDK",
+    "INSUFFICIENT_VOLUME"
+  ],
+  "golden": {
+    "fixture_sha256": "e966c3143f9b8edebac7547e46949d7d6444636ecfd4256ae896c081524a09cf",
+    "catalog_sha256": "657d60b6f1e1b8ccfe4358950fa93cf21fd741fc714fd3444a6fe2d030f44613",
+    "audit_sha256": "bf5dc68f8f07262e9f195441a84ca54a56d8d86e40e572e9b8768786a7f930ca",
+    "report_digest": "2e22f1f918744479a2e00b420323f9de02a7d1936e8feb0f0e323efd4bd9ef3a"
+  },
+  "exclusions": [
+    "no autonomous certification or release",
+    "no interface marked live before golden-round-trip validation",
+    "no production writes, outreach, or prospect-facing demo"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake reconciliation, ASBC routing, QC hold, and human release receipts only; never live LIMS writes, customer CoA issuance, or production notify",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

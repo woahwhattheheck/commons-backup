@@ -1,0 +1,37 @@
+{
+  "schema": "uiowa-139-scope-cases/1",
+  "id": "CASE-03",
+  "title": "Newly supplied evidence during draft review",
+  "request": {
+    "from": "prospective_prime",
+    "class": "newly_supplied_evidence",
+    "summary": "Prime forwards a synthetic IAM MFA policy excerpt after the draft packet, asking that the IAM/security HOLD be flipped to supported.",
+    "exact_edit": "Add SRC-031 to the register as newly supplied, unauthorized-for-promotion until digest/currentness compile. Keep IAM-SEC cell HOLD. Do not promote unknown evidence."
+  },
+  "artifact": {
+    "phase": "draft",
+    "id": "IAM-SEC-HOLD",
+    "cell": "IAM/security",
+    "before_state": "hold",
+    "after_state": "hold",
+    "technical_conclusion_changed": false,
+    "before": "IAM / security: HOLD — no authorized MFA policy in the evidence register.\nRegister: (no SRC for IAM MFA policy).",
+    "after": "IAM / security: HOLD — SRC-031 newly supplied (synthetic fixture POL-IAM-MFA-v3 excerpt) is registered but not yet digest-bound or currentness-compiled. Unknown/new evidence is not promoted to a supported state.\nRegister: SRC-031 kind=policy owner=prime currentness=uncompiled digest=UNKNOWN."
+  },
+  "source_clauses": [
+    "S5_2_3_NO_PROMOTE",
+    "S3_NO_FABRICATE",
+    "S5_2_6_COMMENTS",
+    "S2_TRIGGERS"
+  ],
+  "disposition": "EVIDENCE_DEPENDENCY_HOLD",
+  "rationale": "Section 5.2.3 forbids silently promoting missing or untrusted evidence to a supported state. Section 3 requires blocked items to be identified rather than fabricated. The new bytes are recorded as a dependency. This is not new AIS-group scope and does not rewrite the draft delivery trigger in Section 2. If a material new evidence universe arrived after an accepted final generation, that would be Section 7 change-control instead.",
+  "effort": {
+    "class": "in_base_evidence_processing",
+    "hours_hypothetical": 2,
+    "usd_incremental": 0,
+    "label": "HYPOTHETICAL / NOT ACCEPTED"
+  },
+  "commercial_triggers_preserved": true,
+  "payment_effect": "NONE_SECTION_2_UNCHANGED"
+}

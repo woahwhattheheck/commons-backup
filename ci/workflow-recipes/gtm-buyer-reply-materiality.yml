@@ -1,0 +1,47 @@
+name: GTM buyer reply materiality
+
+on:
+  pull_request:
+    paths:
+      - host/lm_gtm_mailbox_buyer_reply_verify.py
+      - tests/test_ledger_crm6_mailbox_buyer_reply_verify.py
+      - host/lm_gtm_relationship_handoff.py
+      - host/lm_gtm_index.py
+      - revenue/lm_gtm_index/BUYER_REPLY_MATERIALITY.md
+      - .github/workflows/gtm-buyer-reply-materiality.yml
+  push:
+    branches: [main]
+    paths:
+      - host/lm_gtm_mailbox_buyer_reply_verify.py
+      - tests/test_ledger_crm6_mailbox_buyer_reply_verify.py
+      - host/lm_gtm_relationship_handoff.py
+      - host/lm_gtm_index.py
+      - revenue/lm_gtm_index/BUYER_REPLY_MATERIALITY.md
+      - .github/workflows/gtm-buyer-reply-materiality.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile GTM trust boundary
+        run: >-
+          python -m py_compile
+          host/lm_gtm_mailbox_buyer_reply_verify.py
+          host/lm_gtm_relationship_handoff.py
+          host/lm_gtm_index.py
+      - name: Focused mailbox materiality tests
+        run: python -m unittest -v tests.test_ledger_crm6_mailbox_buyer_reply_verify
+      - name: Relationship handoff regression
+        run: python -m unittest -v test_lm_gtm_relationship_handoff

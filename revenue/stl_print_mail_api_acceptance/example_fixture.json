@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "contract": {
+    "bid_id": "2027BID000033",
+    "title": "CONTRACT- Print & Mail API",
+    "source_url": "https://www.stlouis-mo.gov/government/procurement/single-procurement-view.cfm?id=300000175255557",
+    "product_spec_bound": false,
+    "product_spec_sha256": null
+  },
+  "departments": {
+    "SYNTH-ITSA": {
+      "budget_cents": 50000,
+      "live_authorizers": ["synthetic-owner"]
+    }
+  },
+  "mail_jobs": [
+    {
+      "job_id": "test-proof-001",
+      "department_id": "SYNTH-ITSA",
+      "environment": "TEST",
+      "artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "proof": {
+        "artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "render_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "observed_at": "2026-09-13T13:00:00Z"
+      },
+      "authorization": {
+        "approved": true,
+        "artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "render_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "authorizer_id": "synthetic-owner",
+        "authorized_at": "2026-09-13T13:01:00Z"
+      },
+      "submission": {
+        "effect_state": "NONE",
+        "idempotency_key": "idem-test-001",
+        "provider_request_id": null,
+        "submitted_at": null,
+        "physical_effect": false
+      },
+      "expected_cost_cents": 0,
+      "provider_events": []
+    },
+    {
+      "job_id": "live-mail-001",
+      "department_id": "SYNTH-ITSA",
+      "environment": "LIVE",
+      "artifact_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "proof": {
+        "artifact_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "render_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "observed_at": "2026-09-13T14:00:00Z"
+      },
+      "authorization": {
+        "approved": true,
+        "artifact_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "render_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "authorizer_id": "synthetic-owner",
+        "authorized_at": "2026-09-13T14:02:00Z"
+      },
+      "submission": {
+        "effect_state": "SUBMITTED",
+        "idempotency_key": "idem-live-001",
+        "provider_request_id": "synthetic-provider-request-001",
+        "submitted_at": "2026-09-13T14:03:00Z",
+        "physical_effect": true
+      },
+      "expected_cost_cents": 125,
+      "provider_events": [
+        {
+          "event_id": "synthetic-event-001",
+          "type": "ACCEPTED",
+          "provider_request_id": "synthetic-provider-request-001",
+          "observed_at": "2026-09-13T14:04:00Z"
+        }
+      ]
+    }
+  ]
+}

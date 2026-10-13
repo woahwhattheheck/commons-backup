@@ -1,0 +1,43 @@
+name: GitHub content-write pacemaker
+
+on:
+  pull_request:
+    paths:
+      - "tools/github_content_write_pacemaker/**"
+      - ".github/workflows/github-content-write-pacemaker.yml"
+  push:
+    branches: [main]
+    paths:
+      - "tools/github_content_write_pacemaker/**"
+      - ".github/workflows/github-content-write-pacemaker.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Compile
+        run: python -m py_compile tools/github_content_write_pacemaker/*.py
+      - name: Focused normal
+        run: >-
+          python -m unittest -q
+          tools.github_content_write_pacemaker.test_queue
+          tools.github_content_write_pacemaker.test_integrity
+      - name: Focused optimized
+        run: >-
+          python -O -m unittest -q
+          tools.github_content_write_pacemaker.test_queue
+          tools.github_content_write_pacemaker.test_integrity

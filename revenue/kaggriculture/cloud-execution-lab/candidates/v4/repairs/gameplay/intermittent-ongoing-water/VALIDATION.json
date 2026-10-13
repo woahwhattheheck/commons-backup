@@ -1,0 +1,40 @@
+{
+  "schema": "titan-v4-hydra-source-validation/v1",
+  "status": "SOURCE_BOUND_DEFAULT_OFF",
+  "engine": {
+    "path": "reference/engine/kaggriculture.py",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "repository_pin_test_present": true
+  },
+  "scope": {
+    "crops": ["TOMATO", "STRAWBERRY"],
+    "rewrite": "WATER->PASS",
+    "same_v4_tree_only": true,
+    "runtime_wiring": false,
+    "default_enabled": false,
+    "economic_promotion": false
+  },
+  "preflight": {
+    "isolated_core_tests_normal": {"passed": 15, "failed": 0, "errors": 0},
+    "isolated_core_tests_optimized": {"passed": 15, "failed": 0, "errors": 0},
+    "py_compile": "PASS",
+    "repository_test_count_with_engine_pin": 16
+  },
+  "admission_guards": [
+    "standard engine configuration only",
+    "already-existing ongoing plant only",
+    "planted_day strictly before current day",
+    "consecutive_unwatered exactly zero",
+    "not already watered today",
+    "no unclipped current fertilizer production bonus forfeiture",
+    "single authored WATER at target site",
+    "malformed or unknown state fails closed"
+  ],
+  "next_gate": "existing native assembler: both-seat current-runtime OFF/ON engagement census and economics",
+  "limitations": [
+    "source helper is not wired into production runtime",
+    "isolated preflight did not execute a full official-interpreter game",
+    "no field-EV or promotion claim",
+    "zero native engagement must be classified COLD, not KILL"
+  ]
+}

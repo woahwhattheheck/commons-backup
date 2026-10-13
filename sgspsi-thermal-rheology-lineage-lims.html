@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>SGS PSI thermal-rheology lineage LIMS — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#efece6;--ink:#171513;--mute:#5a5349;--line:#c8b9a4;--card:#fffaf2;--slate:#2f3d4a;--ok:#1f7a4d;--bad:#a33b2f;--copper:#8b3d1c}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#d3c4b0 0%,var(--paper) 28%);color:var(--ink);font:16px/1.5 "Iowan Old Style",Georgia,serif}
+main{max-width:1080px;margin:auto;padding:28px 16px 72px}a{color:var(--slate)}
+.kicker{letter-spacing:.16em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--copper)}
+h1{font-size:clamp(2rem,6vw,3.6rem);line-height:.95;margin:.18em 0 .3em}
+.lede{font-size:1.15rem;max-width:760px;color:var(--mute)}
+.bound{border-left:5px solid var(--ok);padding:8px 0 8px 14px}
+.desk{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);padding:16px}
+table{width:100%;border-collapse:collapse;font:13px/1.4 system-ui,sans-serif}th,td{border-top:1px solid var(--line);padding:6px 4px;text-align:left}
+button{border:1px solid var(--slate);background:var(--slate);color:#fff;padding:8px 12px;cursor:pointer;font:15px/1.3 system-ui,sans-serif}
+button.ghost{background:transparent;color:var(--slate)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;min-height:180px;background:#171513;color:#efe4d2;padding:12px;font:12px/1.4 ui-monospace,monospace}
+.stamp{display:inline-block;border:1px solid var(--ok);color:var(--ok);padding:2px 8px;font:11px/1.4 system-ui,sans-serif;letter-spacing:.08em}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+@media(max-width:820px){.desk{grid-template-columns:1fr}}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> · <a href="./savant-fe8-order-report-lims.html">Savant FE8 pattern</a></nav>
+<p class="kicker">Commons · sgspsi-high-throughput-thermal-rheology-lineage-lims-01 · AquaTrace HOLD / BUILD-AND-VERIFY</p>
+<h1>Linkage, DSC-250/HR-20 slot, raw lineage, staged report.</h1>
+
+
+
+
+
+<p class="lede">Kyle Copeland / SGS Polymer Solutions. Confirm requirement, form, and payment, accession once, bind a DSC-250 or HR-20 method/version and autosampler slot, keep source/method/raw-value/unit/report hashes, QC the packet, and stage the formal report. Named approval only.</p>
+<p class="bound"><strong>Truth boundary:</strong> 120 synthetic requests only. Instrument, QC, and report adapters stay simulated/read-only. No production writes. Named-human release is mandatory. PRE-SALE TRANSPORT: NONE. cash_usd = 0.</p>
+<div class="desk">
+<section class="card">
+<h2>Buyer pairing</h2>
+<p class="small">Demand <code>sgspsi-high-throughput-thermal-rheology-lineage-lims-01</code>. Buyer: Kyle Copeland / SGS Polymer Solutions. Official binary: <code>python3 test_sgspsi_thermal_rheology_lineage.py</code> and <code>python3 sgspsi_thermal_rheology_lineage.py</code>.</p>
+<h2>Binary acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>PASS</th></tr></thead>
+<tbody>
+<tr><td>Input requests</td><td>120 = 90 valid + 30 HOLD</td></tr>
+<tr><td>READY</td><td>90 unique reserved slots</td></tr>
+<tr><td>HOLD</td><td>8 MISSING_LINKAGE + 6 DUPLICATE_CONTAINER + 6 METHOD_INSTRUMENT_MISMATCH + 5 SLOT_COLLISION + 5 QC_FAILURE</td></tr>
+<tr><td>Hashes</td><td>source / method / raw-value / unit / report match</td></tr>
+<tr><td>Replay</td><td>zero extra records</td></tr>
+<tr><td>Reports</td><td>staged pending named APPROVER</td></tr>
+</tbody>
+</table>
+<p><button id="run">Run 120-request fixture</button> <button id="replay" class="ghost">Replay</button></p>
+</section>
+<section class="card">
+<h2>Lineage receipt <span id="status" class="stamp">READY</span></h2>
+<pre id="output">Run the synthetic SGS PSI fixture. Exact JSON stays in this tab. Official SHA-256 lives in the Python binary.</pre>
+</section>
+</div>
+<p class="small">Cite, do not remint: ace-qat-thermal-rheology-capacity-lims-01, savant-fe8-order-report-lims-01, ats-asphalt-spec-result-lims-01, cornell-craft-beverage-intake-lims-01 (different buyers). No outreach. No live instrument.</p>
+</main>
+<script src="./sgspsi-thermal-rheology-lineage-lims.js"></script>
+<script>
+(function () {
+  var out = document.getElementById("output");
+  var status = document.getElementById("status");
+  function show(result, label) {
+    var failures = SgsPsiThermalRheologyLineage.passContract(result);
+    status.textContent = failures.length ? "FAIL" : "PASS";
+    status.style.color = failures.length ? "#a33b2f" : "#1f7a4d";
+    status.style.borderColor = status.style.color;
+    out.textContent = JSON.stringify({
+      label: label,
+      ok: failures.length === 0,
+      failures: failures,
+      input_rows: result.input_rows,
+      ready: result.ready,
+      held: result.held,
+      hold_codes: result.hold_codes,
+      reserved_slots_occupied: result.reserved_slots_occupied,
+      staged_reports: result.staged_reports,
+      released_reports: result.released_reports,
+      official_binary: result.official_binary,
+      pre_sale_transport: result.pre_sale_transport
+    }, null, 2);
+  }
+  document.getElementById("run").onclick = function () {
+    show(SgsPsiThermalRheologyLineage.runGate(), "fresh");
+  };
+  document.getElementById("replay").onclick = function () {
+    var first = SgsPsiThermalRheologyLineage.runGate();
+    var second = SgsPsiThermalRheologyLineage.runGate();
+    show(second, first.ready === second.ready && first.held === second.held ? "replay-identical-counts" : "replay-drift");
+  };
+})();
+</script>
+</body></html>

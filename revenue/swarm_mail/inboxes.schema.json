@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/swarm_mail/inboxes.schema.json",
+  "title": "Commons swarm mail public inbox manifest",
+  "description": "Public-safe model routes and measured proof state. Runtime addresses, contacts, messages, DNS values, commitment keys, and transport secrets remain outside git.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "measured_at", "domain", "transport", "truth", "global_rules", "inboxes"],
+  "properties": {
+    "schema_version": {"const": "commons-swarm-mail/v2"},
+    "kind": {"const": "SWARM_MAIL_PUBLIC_INBOX_MANIFEST"},
+    "measured_at": {"type": "string", "format": "date-time"},
+    "domain": {"$ref": "#/$defs/domain"},
+    "transport": {"$ref": "#/$defs/transport"},
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measured_inboxes", "drafted_messages", "queued_messages", "unknown_effect_dispatches",
+        "mta_accepted_messages", "provider_reported_deliveries", "verified_positive_replies",
+        "paid_deliveries", "bank_available_usd"
+      ],
+      "properties": {
+        "measured_inboxes": {"type": "integer", "minimum": 0},
+        "drafted_messages": {"type": "integer", "minimum": 0},
+        "queued_messages": {"type": "integer", "minimum": 0},
+        "unknown_effect_dispatches": {"type": "integer", "minimum": 0},
+        "mta_accepted_messages": {"type": "integer", "minimum": 0},
+        "provider_reported_deliveries": {"type": "integer", "minimum": 0},
+        "verified_positive_replies": {"type": "integer", "minimum": 0},
+        "paid_deliveries": {"type": "integer", "minimum": 0},
+        "bank_available_usd": {"type": "number", "minimum": 0}
+      }
+    },
+    "global_rules": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 12}
+    },
+    "inboxes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/inbox"}
+    }
+  },
+  "$defs": {
+    "opaque_ref": {
+      "type": "string",
+      "pattern": "^opaque:[A-Za-z0-9._:-]{8,200}$"
+    },
+    "commitment": {
+      "type": "string",
+      "pattern": "^hmac-sha256:[0-9a-f]{64}$"
+    },
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "public_name", "proofs", "proof_bundle_commitment"],
+      "properties": {
+        "state": {"enum": ["UNPROVISIONED", "MEASURED"]},
+        "public_name": {"type": ["string", "null"], "pattern": "^[a-z0-9.-]+$"},
+        "proofs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mx", "spf", "dkim", "dmarc"],
+          "properties": {
+            "mx": {"enum": ["UNMEASURED", "MEASURED"]},
+            "spf": {"enum": ["UNMEASURED", "MEASURED"]},
+            "dkim": {"enum": ["UNMEASURED", "MEASURED"]},
+            "dmarc": {"enum": ["UNMEASURED", "MEASURED"]}
+          }
+        },
+        "proof_bundle_commitment": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/commitment"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "UNPROVISIONED"}}, "required": ["state"]},
+          "then": {
+            "properties": {
+              "public_name": {"const": null},
+              "proofs": {
+                "properties": {
+                  "mx": {"const": "UNMEASURED"},
+                  "spf": {"const": "UNMEASURED"},
+                  "dkim": {"const": "UNMEASURED"},
+                  "dmarc": {"const": "UNMEASURED"}
+                }
+              },
+              "proof_bundle_commitment": {"const": null}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "MEASURED"}}, "required": ["state"]},
+          "then": {
+            "properties": {
+              "public_name": {"type": "string", "pattern": "^[a-z0-9.-]+$"},
+              "proofs": {
+                "properties": {
+                  "mx": {"const": "MEASURED"},
+                  "spf": {"const": "MEASURED"},
+                  "dkim": {"const": "MEASURED"},
+                  "dmarc": {"const": "MEASURED"}
+                }
+              },
+              "proof_bundle_commitment": {"$ref": "#/$defs/commitment"}
+            }
+          }
+        }
+      ]
+    },
+    "transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "adapter", "mta_acceptance_receipt", "provider_report_receipt"],
+      "properties": {
+        "state": {"enum": ["UNMEASURED", "MTA_ACCEPTANCE_MEASURED", "PROVIDER_REPORT_RECORDED"]},
+        "adapter": {"const": "LOCAL_MTA"},
+        "mta_acceptance_receipt": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/opaque_ref"}
+          ]
+        },
+        "provider_report_receipt": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/opaque_ref"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "UNMEASURED"}}, "required": ["state"]},
+          "then": {
+            "properties": {
+              "mta_acceptance_receipt": {"const": null},
+              "provider_report_receipt": {"const": null}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "MTA_ACCEPTANCE_MEASURED"}}, "required": ["state"]},
+          "then": {
+            "properties": {
+              "mta_acceptance_receipt": {"$ref": "#/$defs/opaque_ref"},
+              "provider_report_receipt": {"const": null}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "PROVIDER_REPORT_RECORDED"}}, "required": ["state"]},
+          "then": {
+            "properties": {
+              "mta_acceptance_receipt": {"$ref": "#/$defs/opaque_ref"},
+              "provider_report_receipt": {"$ref": "#/$defs/opaque_ref"}
+            }
+          }
+        }
+      ]
+    },
+    "inbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inbox_id", "agent_claim", "model_family", "local_part", "address_state", "public_address",
+        "purpose", "send_mode", "daily_new_thread_limit", "sku_ids", "reply_owner", "handoff_classes"
+      ],
+      "properties": {
+        "inbox_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,40}$"},
+        "agent_claim": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,40}$"},
+        "model_family": {"enum": ["CODEX", "GROK", "CLAUDE", "GEMINI", "SWARM"]},
+        "local_part": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,40}$"},
+        "address_state": {"enum": ["UNPROVISIONED", "MEASURED"]},
+        "public_address": {"type": ["string", "null"], "format": "email"},
+        "purpose": {"const": "TARGETED_OUTREACH_AND_SALES"},
+        "send_mode": {"enum": ["DRAFT_ONLY", "INBOUND_AND_OUTBOUND"]},
+        "daily_new_thread_limit": {"type": "integer", "minimum": 1, "maximum": 50},
+        "sku_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,80}$"}
+        },
+        "reply_owner": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,40}$"},
+        "handoff_classes": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {"enum": ["QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN", "OPT_OUT", "COMPLAINT", "BOUNCE"]},
+          "allOf": [
+            {"contains": {"const": "QUESTION"}},
+            {"contains": {"const": "POSITIVE_SCOPE"}},
+            {"contains": {"const": "NEEDS_HUMAN"}},
+            {"contains": {"const": "OPT_OUT"}},
+            {"contains": {"const": "COMPLAINT"}},
+            {"contains": {"const": "BOUNCE"}}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"address_state": {"const": "UNPROVISIONED"}}, "required": ["address_state"]},
+          "then": {
+            "properties": {
+              "public_address": {"const": null},
+              "send_mode": {"const": "DRAFT_ONLY"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"address_state": {"const": "MEASURED"}}, "required": ["address_state"]},
+          "then": {
+            "properties": {
+              "public_address": {"type": "string", "format": "email"},
+              "send_mode": {"const": "INBOUND_AND_OUTBOUND"}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

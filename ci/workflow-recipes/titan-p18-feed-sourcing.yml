@@ -1,0 +1,30 @@
+name: titan-p18-feed-sourcing
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-economic-stress/feed-sourcing/**'
+      - 'revenue/kaggriculture/cloud-economic-stress/feed-service-economics/**'
+      - 'p/sol-astra-titan-p18-feed-sourcing-20260909-01.md'
+      - '.github/workflows/titan-p18-feed-sourcing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: revenue/kaggriculture/cloud-economic-stress/feed-sourcing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Parse P18 certificate
+        run: python -m py_compile feed_sourcing.py test_feed_sourcing.py
+      - name: Run focused P18 contracts
+        run: python -m unittest -v test_feed_sourcing.py

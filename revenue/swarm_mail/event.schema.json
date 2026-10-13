@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/swarm_mail/event.schema.json",
+  "title": "Commons swarm mail public-safe event",
+  "description": "A keyed, non-reversible projection of a private mail transition. Stable opaque references permit only the intended public thread linkage; the event cannot carry an address, header, subject, body, attachment, raw hash, private send key, or transport secret.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "kind", "event_id", "event_type", "occurred_at", "inbox_id",
+    "thread_ref", "message_ref", "sku_id", "prospect_ref", "payload_commitment", "send_ref",
+    "classification", "transport_state", "evidence_ref", "readiness", "limits"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-swarm-mail-event/v2"},
+    "kind": {"const": "SWARM_MAIL_PUBLIC_EVENT"},
+    "event_id": {"type": "string", "pattern": "^mail-[0-9a-f]{24}$"},
+    "event_type": {
+      "enum": [
+        "DRAFT_RECORDED", "QUEUE_PLANNED", "DISPATCH_CLAIMED", "MTA_ACCEPTED",
+        "DISPATCH_UNKNOWN", "DISPATCH_NOT_ACCEPTED", "PROVIDER_DELIVERY_REPORTED", "SOFT_BOUNCE_REPORTED",
+        "HARD_BOUNCE_REPORTED", "COMPLAINT_REPORTED", "INBOUND_RECORDED", "INBOX_MEASURED"
+      ]
+    },
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "inbox_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{2,120}$"},
+    "thread_ref": {"$ref": "#/$defs/nullable_opaque_ref"},
+    "message_ref": {"$ref": "#/$defs/nullable_opaque_ref"},
+    "sku_id": {"type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9-]{2,80}$"},
+    "prospect_ref": {"$ref": "#/$defs/nullable_opaque_ref"},
+    "payload_commitment": {"type": "string", "pattern": "^hmac-sha256:[0-9a-f]{64}$"},
+    "send_ref": {"$ref": "#/$defs/nullable_opaque_ref"},
+    "classification": {
+      "type": ["string", "null"],
+      "enum": [null, "OPT_OUT", "AUTO_RESPONSE", "NEGATIVE", "QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN"]
+    },
+    "transport_state": {"enum": ["NOT_SENT", "UNKNOWN_EFFECT", "MTA_ACCEPTED", "PROVIDER_REPORTED", "FAILED", "INBOUND"]},
+    "evidence_ref": {"$ref": "#/$defs/nullable_opaque_ref"},
+    "readiness": {
+      "type": ["string", "null"],
+      "enum": [
+        null, "SUPPRESSED", "SUPPRESSED_AT_DISPATCH", "ADDRESS_UNMEASURED", "DAILY_BUDGET_REACHED", "SEND_READY",
+        "DISPATCHING", "RECONCILE_REQUIRED", "NOT_ACCEPTED_FINAL", "MTA_ACCEPTED",
+        "PROVIDER_REPORTED", "SOFT_BOUNCE_REPORTED", "DO_NOT_SEND",
+        "OUTBOUND_THREAD_AND_TRUSTED_MTA_AUTH_PASS", "UNATTRIBUTED_NEEDS_HUMAN", "MEASURED"
+      ]
+    },
+    "limits": {
+      "const": [
+        "keyed commitments only; no address, header, subject, body, attachment, or transport secret",
+        "automatic dispatch is at-most-once; UNKNOWN_EFFECT requires reconciliation",
+        "provider-reported delivery is not a human reply, commercial acceptance, or bank-available cash"
+      ]
+    }
+  },
+  "$defs": {
+    "opaque_ref": {
+      "type": "string",
+      "pattern": "^opaque:[A-Za-z0-9._:-]{8,200}$"
+    },
+    "nullable_opaque_ref": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/opaque_ref"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"event_type": {"enum": ["DRAFT_RECORDED", "QUEUE_PLANNED", "INBOX_MEASURED"]}},
+        "required": ["event_type"]
+      },
+      "then": {"properties": {"transport_state": {"const": "NOT_SENT"}}}
+    },
+    {
+      "if": {
+        "properties": {"event_type": {"enum": ["DISPATCH_CLAIMED", "DISPATCH_UNKNOWN"]}},
+        "required": ["event_type"]
+      },
+      "then": {"properties": {"transport_state": {"const": "UNKNOWN_EFFECT"}}}
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "MTA_ACCEPTED"}}, "required": ["event_type"]},
+      "then": {"properties": {"transport_state": {"const": "MTA_ACCEPTED"}, "readiness": {"const": "MTA_ACCEPTED"}}}
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "DISPATCH_NOT_ACCEPTED"}}, "required": ["event_type"]},
+      "then": {"properties": {"transport_state": {"const": "FAILED"}, "readiness": {"const": "NOT_ACCEPTED_FINAL"}}}
+    },
+    {
+      "if": {
+        "properties": {"event_type": {"enum": ["PROVIDER_DELIVERY_REPORTED", "SOFT_BOUNCE_REPORTED"]}},
+        "required": ["event_type"]
+      },
+      "then": {"properties": {"transport_state": {"const": "PROVIDER_REPORTED"}}}
+    },
+    {
+      "if": {
+        "properties": {"event_type": {"enum": ["HARD_BOUNCE_REPORTED", "COMPLAINT_REPORTED"]}},
+        "required": ["event_type"]
+      },
+      "then": {"properties": {"transport_state": {"const": "FAILED"}, "readiness": {"const": "DO_NOT_SEND"}}}
+    },
+    {
+      "if": {
+        "properties": {"event_type": {"enum": ["DRAFT_RECORDED", "QUEUE_PLANNED"]}},
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "thread_ref": {"$ref": "#/$defs/opaque_ref"},
+          "message_ref": {"$ref": "#/$defs/opaque_ref"},
+          "sku_id": {"type": "string"},
+          "prospect_ref": {"$ref": "#/$defs/opaque_ref"},
+          "send_ref": {"$ref": "#/$defs/opaque_ref"},
+          "classification": {"const": null},
+          "evidence_ref": {"const": null}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "DRAFT_RECORDED"}}, "required": ["event_type"]},
+      "then": {
+        "properties": {
+          "readiness": {"enum": ["SUPPRESSED", "SUPPRESSED_AT_DISPATCH", "ADDRESS_UNMEASURED", "DAILY_BUDGET_REACHED"]}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "QUEUE_PLANNED"}}, "required": ["event_type"]},
+      "then": {"properties": {"readiness": {"const": "SEND_READY"}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "enum": [
+              "DISPATCH_CLAIMED", "MTA_ACCEPTED", "DISPATCH_UNKNOWN", "DISPATCH_NOT_ACCEPTED", "PROVIDER_DELIVERY_REPORTED",
+              "SOFT_BOUNCE_REPORTED", "HARD_BOUNCE_REPORTED", "COMPLAINT_REPORTED"
+            ]
+          }
+        },
+        "required": ["event_type"]
+      },
+      "then": {
+        "properties": {
+          "thread_ref": {"$ref": "#/$defs/opaque_ref"},
+          "message_ref": {"$ref": "#/$defs/opaque_ref"},
+          "sku_id": {"type": "string"},
+          "prospect_ref": {"$ref": "#/$defs/opaque_ref"},
+          "send_ref": {"$ref": "#/$defs/opaque_ref"},
+          "classification": {"const": null},
+          "evidence_ref": {"$ref": "#/$defs/opaque_ref"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "DISPATCH_CLAIMED"}}, "required": ["event_type"]},
+      "then": {"properties": {"readiness": {"const": "DISPATCHING"}}}
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "DISPATCH_UNKNOWN"}}, "required": ["event_type"]},
+      "then": {"properties": {"readiness": {"enum": ["RECONCILE_REQUIRED", "NOT_ACCEPTED_FINAL"]}}}
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "PROVIDER_DELIVERY_REPORTED"}}, "required": ["event_type"]},
+      "then": {"properties": {"readiness": {"const": "PROVIDER_REPORTED"}}}
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "SOFT_BOUNCE_REPORTED"}}, "required": ["event_type"]},
+      "then": {"properties": {"readiness": {"const": "SOFT_BOUNCE_REPORTED"}}}
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "INBOUND_RECORDED"}}, "required": ["event_type"]},
+      "then": {
+        "properties": {
+          "transport_state": {"const": "INBOUND"},
+          "thread_ref": {"$ref": "#/$defs/opaque_ref"},
+          "message_ref": {"$ref": "#/$defs/opaque_ref"},
+          "classification": {"enum": ["OPT_OUT", "AUTO_RESPONSE", "NEGATIVE", "QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN"]},
+          "evidence_ref": {"$ref": "#/$defs/opaque_ref"},
+          "readiness": {"enum": ["OUTBOUND_THREAD_AND_TRUSTED_MTA_AUTH_PASS", "UNATTRIBUTED_NEEDS_HUMAN"]}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"event_type": {"const": "INBOUND_RECORDED"}, "readiness": {"const": "OUTBOUND_THREAD_AND_TRUSTED_MTA_AUTH_PASS"}},
+        "required": ["event_type", "readiness"]
+      },
+      "then": {
+        "properties": {
+          "sku_id": {"type": "string"},
+          "prospect_ref": {"$ref": "#/$defs/opaque_ref"},
+          "send_ref": {"$ref": "#/$defs/opaque_ref"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"event_type": {"const": "INBOUND_RECORDED"}, "readiness": {"const": "UNATTRIBUTED_NEEDS_HUMAN"}},
+        "required": ["event_type", "readiness"]
+      },
+      "then": {
+        "properties": {
+          "sku_id": {"const": null},
+          "prospect_ref": {"const": null},
+          "send_ref": {"const": null},
+          "classification": {"const": "NEEDS_HUMAN"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "INBOX_MEASURED"}}, "required": ["event_type"]},
+      "then": {
+        "properties": {
+          "thread_ref": {"const": null},
+          "message_ref": {"const": null},
+          "sku_id": {"const": null},
+          "prospect_ref": {"const": null},
+          "send_ref": {"const": null},
+          "classification": {"const": null},
+          "evidence_ref": {"$ref": "#/$defs/opaque_ref"},
+          "readiness": {"const": "MEASURED"}
+        }
+      }
+    }
+  ]
+}

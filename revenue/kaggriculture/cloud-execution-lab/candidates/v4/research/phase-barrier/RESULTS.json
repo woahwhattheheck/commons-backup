@@ -1,0 +1,27 @@
+{
+  "name": "phase-barrier",
+  "status": "SOURCE_BOUND_REGRESSION_INFRASTRUCTURE",
+  "decision_authority": false,
+  "runtime_wired": false,
+  "default_enabled": false,
+  "engine": {
+    "path": "reference/engine/kaggriculture.py",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "contract": "all unit actions precede market processing in each callback"
+  },
+  "covered_same_callback_dependencies": [
+    "BUY_SEED->PLANT",
+    "BUY_PRODUCT(WHEAT)->FEED",
+    "BUY_PRODUCT(FERTILIZER)->FERTILIZE",
+    "BUY_ANIMAL/BUY_PRODUCT->PICKUP",
+    "BUY_ANIMAL->PLACE",
+    "HIRE->new-hand-action"
+  ],
+  "authoring_tests": {
+    "normal": {"tests": 17, "failures": 0, "errors": 0, "checkout_only_skips": 1},
+    "optimized": {"tests": 17, "failures": 0, "errors": 0, "checkout_only_skips": 1},
+    "note": "The single skipped authoring-container test requires the repository checkout and certifies the exact official engine bytes in-tree."
+  },
+  "engagement": "NOT_ASSESSED",
+  "economics": "NOT_ASSESSED"
+}

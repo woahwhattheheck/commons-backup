@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canonical UIOWA-031 to current UIOWA-023 bridge v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "assessment_authority",
+    "document_content_checked",
+    "source_authenticity_verified",
+    "manifest",
+    "native_register_columns",
+    "derived_columns",
+    "common_register"
+  ],
+  "properties": {
+    "schema": {
+      "const": "uiowa-031-common-register-bridge/1"
+    },
+    "assessment_authority": {
+      "const": false
+    },
+    "document_content_checked": {
+      "const": false
+    },
+    "source_authenticity_verified": {
+      "const": false
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "columns",
+        "rows"
+      ],
+      "properties": {
+        "columns": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "native_register_columns": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
+    },
+    "derived_columns": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "custodian_or_owner",
+          "content_digest"
+        ]
+      }
+    },
+    "common_register": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "columns",
+        "rows"
+      ],
+      "properties": {
+        "schema": {
+          "const": "uiowa-023-evidence-register/1"
+        },
+        "columns": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "required": [
+              "area",
+              "captured_at",
+              "claim",
+              "completeness_basis",
+              "confidence",
+              "conflict_group",
+              "content_digest",
+              "corroboration",
+              "custodian_or_owner",
+              "directness",
+              "enumerator_authority",
+              "evidence_id",
+              "evidence_state",
+              "finding_id",
+              "follow_up",
+              "group",
+              "observation_id",
+              "recency",
+              "representativeness",
+              "represented_period",
+              "scope_limit",
+              "source_ref",
+              "source_type",
+              "universe_definition"
+            ]
+          }
+        }
+      },
+      "$comment": "The Python validator additionally checks column/row-key equality, Unicode scalar validity and unchanged UIOWA-023 evidence semantics. Record-level preservation does not imply original CSV quoting or line-ending preservation."
+    }
+  },
+  "$comment": "The Python reverse adapter additionally reconstructs the forward conversion exactly; validates native table fields, source-ID joins and retained-declared owner/digest agreement. Neither a digest nor this bundle authenticates source content."
+}

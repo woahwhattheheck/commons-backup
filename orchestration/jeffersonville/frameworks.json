@@ -1,0 +1,375 @@
+{
+  "schema_version": "1.0.0",
+  "catalog_id": "commons.jeffersonville.orchestration",
+  "verified_at": "2026-08-26",
+  "deployment_status": "NOT_DEPLOYED",
+  "scope": {
+    "mode": "ADAPTER_AND_BENCHMARK_CATALOG_ONLY",
+    "facility_build_intent": "NONE",
+    "rust_or_go_rewrite_intent": "NONE",
+    "external_code_execution_intent": "NONE",
+    "statement": "This catalog records repository evidence and possible adapter roles. It is a local-read plan, not a build, rewrite, installation, execution, or deployment."
+  },
+  "open_door": {
+    "policy": "OPEN_DOOR",
+    "participation_effect": "NONE",
+    "descriptive_only": true,
+    "unknown_capabilities": "ACCEPT_AND_DESCRIBE",
+    "statement": "Descriptors report compatibility without deciding who or what may participate."
+  },
+  "frameworks": [
+    {
+      "id": "inception-core",
+      "name": "inception-core",
+      "canonical_repository": "https://github.com/nbursa/inception-core",
+      "head_short_sha": "e8f4b13",
+      "head_date": "2025-08-04",
+      "language": "Rust",
+      "license": "MIT",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "Short-term and long-term memory interfaces",
+        "In-memory, file, and RocksDB storage implementations",
+        "REST service",
+        "Optional gRPC and WebSocket service surfaces"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "Raft consensus was not found",
+        "BLAKE3 audit trails were not found",
+        "WebAssembly execution was not found",
+        "Capability-policy enforcement was not found",
+        "Verifiable replay was not found",
+        "gRPC methods are placeholders and the WebSocket path is an echo service"
+      ],
+      "maturity_signals": [
+        "No tagged releases",
+        "No repository CI workflow observed",
+        "Work-in-progress project",
+        "Repository size observed at approximately 39 KB"
+      ],
+      "verdict": "REFERENCE_ONLY"
+    },
+    {
+      "id": "multi-agent-engine",
+      "name": "multi-agent-engine",
+      "canonical_repository": "https://github.com/NickSpyker/multi-agent-engine",
+      "head_short_sha": "ed540b8",
+      "head_date": "2025-12-29",
+      "language": "Rust",
+      "license": "MIT OR Apache-2.0",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "Controller and System traits",
+        "ArcSwap-based shared-state access",
+        "Crossbeam channels",
+        "Thread-oriented execution scaffolding"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "The GPU crate is effectively empty and contains no verified backend",
+        "GPU acceleration was not implemented at the verified revision",
+        "SIMD execution was not implemented at the verified revision",
+        "Large-population performance statements are design claims rather than repository evidence"
+      ],
+      "maturity_signals": [
+        "No tagged releases",
+        "No repository CI workflow observed",
+        "No independent benchmark evidence observed"
+      ],
+      "verdict": "BENCHMARK_SCAFFOLD_ONLY"
+    },
+    {
+      "id": "autoagents",
+      "name": "AutoAgents",
+      "canonical_repository": "https://github.com/liquidos-ai/AutoAgents",
+      "head_short_sha": "6301004",
+      "head_date": "2026-08-26",
+      "language": "Rust",
+      "license": "MIT OR Apache-2.0",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "Typed agents and publish-subscribe messaging",
+        "ReAct execution",
+        "MCP client support",
+        "Caching and retry optimization",
+        "Memory and guardrails",
+        "Cloud and local model providers",
+        "Speech-to-text and text-to-speech integrations",
+        "OpenTelemetry instrumentation",
+        "Wasmtime-based tool runtime"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "Standard A2A protocol support was not verified",
+        "The inspected Wasmtime runtime did not expose explicit fuel, epoch, or memory limits",
+        "Open security issue 288 reports that the Google backend can expose an API key in an error URL"
+      ],
+      "maturity_signals": [
+        "Release v0.4.0 observed",
+        "Head CI, build, full-test, and WASI checks passed at verification time",
+        "Active development observed"
+      ],
+      "verdict": "PILOT_CANDIDATE_AFTER_PATCH"
+    },
+    {
+      "id": "swarms-rs",
+      "name": "swarms-rs",
+      "canonical_repository": "https://github.com/The-Swarm-Corporation/swarms-rs",
+      "head_short_sha": "9d22ba9",
+      "head_date": "2025-10-27",
+      "last_push_date": "2025-12-15",
+      "language": "Rust",
+      "license": "Apache-2.0",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "Sequential, concurrent, and graph workflow types",
+        "Persistence interfaces",
+        "Model-provider integrations",
+        "MCP stdio and SSE transports through rmcp"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "A2A support was not found",
+        "Raft support was not found",
+        "WebAssembly execution was not found",
+        "No independent performance evidence was found"
+      ],
+      "maturity_signals": [
+        "No tagged releases",
+        "README license text says MIT while the repository license is Apache-2.0",
+        "Scheduled CI, documentation, security, Miri, license, and supply-chain checks were failing on 2026-08-25 and 2026-08-26"
+      ],
+      "verdict": "HOLD"
+    },
+    {
+      "id": "graphbit",
+      "name": "GraphBit",
+      "canonical_repository": "https://github.com/InfinitiBit/graphbit",
+      "head_short_sha": "f80c46e",
+      "head_date": "2026-05-21",
+      "latest_release": "v0.6.8",
+      "latest_release_date": "2026-06-22",
+      "language": "Rust with Python bindings",
+      "license": "Apache-2.0",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "Workflow graph",
+        "Concurrent execution",
+        "Retry and circuit-breaker components",
+        "Memory interfaces",
+        "Model-provider integrations",
+        "Tracing",
+        "PyO3 bindings"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "MCP support was not found",
+        "A2A support was not found",
+        "WebAssembly execution was not found",
+        "GPU execution was not found",
+        "Durable checkpoint recovery was not found",
+        "Published performance statements were self-reported and were not independently verified"
+      ],
+      "maturity_signals": [
+        "Multi-platform wheel build and publication succeeded",
+        "README license badge says Custom while the repository license is Apache-2.0"
+      ],
+      "verdict": "BENCHMARK_CANDIDATE"
+    },
+    {
+      "id": "sayiir",
+      "name": "Sayiir",
+      "canonical_repository": "https://github.com/sayiir/sayiir",
+      "head_short_sha": "7d60cee",
+      "head_date": "2026-07-26",
+      "last_push_date": "2026-08-25",
+      "latest_release": "v1.0.0",
+      "language": "Rust",
+      "license": "MIT",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "Durable continuation workflows",
+        "Per-task checkpoints",
+        "PostgreSQL-backed distributed workers and task claims",
+        "Retries and timeouts",
+        "Fork and join",
+        "Delays",
+        "Pause, cancel, and resume controls",
+        "OpenTelemetry instrumentation",
+        "Rust, Python, Node, and Cloudflare bindings"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "This is a durable workflow engine rather than an LLM-agent orchestrator",
+        "MCP support was not found",
+        "A2A support was not found",
+        "Raft support was not found",
+        "Sandboxed tool execution was not found",
+        "The enterprise server is planned",
+        "External side effects still require application-level idempotency"
+      ],
+      "maturity_signals": [
+        "Release v1.0.0 observed",
+        "Active repository changes observed through 2026-08-25"
+      ],
+      "verdict": "DURABILITY_ADAPTER_CANDIDATE"
+    },
+    {
+      "id": "agent-framework-go",
+      "name": "Microsoft Agent Framework for Go",
+      "canonical_repository": "https://github.com/microsoft/agent-framework-go",
+      "head_short_sha": "8c8544a",
+      "head_date": "2026-08-26",
+      "language": "Go",
+      "license": "MIT",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "Agent abstractions",
+        "Middleware",
+        "Automatic tool calling",
+        "OpenTelemetry instrumentation",
+        "Graph workflows",
+        "Checkpoints",
+        "Streaming",
+        "Human-in-the-loop and time-travel workflow controls",
+        "MCP support",
+        "A2A support",
+        "AG-UI support",
+        "Microsoft Foundry integrations"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "Public-preview status",
+        "Handoffs were not implemented in the Go surface at verification time",
+        "Declarative agents were not implemented in the Go surface at verification time",
+        "RAG and CodeAct were not implemented in the Go surface at verification time",
+        "Functional workflows were not implemented in the Go surface at verification time",
+        "Foundry-hosted deployment was not implemented in the Go surface at verification time",
+        "Raft, WebAssembly, GPU, and bare-metal performance claims were not verified"
+      ],
+      "maturity_signals": [
+        "Head tests, lint, and CodeQL checks passed at verification time",
+        "Active development observed",
+        "Public preview rather than a stable production release"
+      ],
+      "verdict": "CONTROL_PLANE_ADAPTER_CANDIDATE"
+    },
+    {
+      "id": "aof",
+      "name": "AOF Agentic DevOps Framework",
+      "canonical_repository": "https://github.com/agenticdevops/aof",
+      "head_short_sha": "bf15701",
+      "head_date": "2026-02-14",
+      "last_push_date": "2026-03-23",
+      "latest_release": "0.4.0-beta",
+      "language": "Rust",
+      "license": "Apache-2.0",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "YAML-first Agent, Fleet, and AgentFlow descriptions",
+        "MCP stdio, SSE, and HTTP transports",
+        "Model-provider integrations",
+        "Tokio broadcast event bus",
+        "File-backed session persistence"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "NATS and Redis horizontal queues are explicitly planned rather than implemented",
+        "A NoOps compiler was not found",
+        "Runtime and component implementation is partial"
+      ],
+      "maturity_signals": [
+        "Project documentation reports approximately 80 percent completion",
+        "Head build and integration checks were failing at verification time",
+        "Latest verified head included removal of hard-coded Slack tokens",
+        "Beta version"
+      ],
+      "verdict": "SCHEMA_AND_MCP_PATTERN_ONLY"
+    },
+    {
+      "id": "rusty-agent",
+      "name": "rusty_agent",
+      "canonical_repository": "https://github.com/tmetsch/rusty_agent",
+      "head_short_sha": "f07e7df",
+      "head_date": "2022-10-31",
+      "language": "Rust",
+      "license": "MIT",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_primitives": [
+        "ZeroMQ REQ and REP messaging",
+        "Two-thread agent structure",
+        "Ping-based neighbor discovery and removal",
+        "Simple inter-agent messages"
+      ],
+      "unsupported_or_incomplete_claims": [
+        "The implementation uses Arc and Mutex and is not lock-free",
+        "Encryption and authentication were not found",
+        "Persistence was not found",
+        "Consensus was not found",
+        "Delivery guarantees were not found",
+        "Peer-loss detection is timeout-based rather than instantaneous"
+      ],
+      "maturity_signals": [
+        "No tagged releases",
+        "No repository CI workflow observed",
+        "Last verified commit was in 2022",
+        "Repository size observed at approximately 9 KB"
+      ],
+      "verdict": "ARCHIVE_REFERENCE_ONLY"
+    }
+  ],
+  "misattribution_corrections": [
+    {
+      "id": "inception-core-to-cathedral-fabric",
+      "deployment_status": "NOT_DEPLOYED",
+      "incorrectly_attributed_to": "https://github.com/nbursa/inception-core",
+      "corrected_source_candidate": "https://github.com/scalarian/cathedral.fabric",
+      "claim_family": "Raft, BLAKE3, WebAssembly, capability-safe execution, and verifiable audit or replay",
+      "correction": "Those claims were not found in inception-core. Their wording and dependency evidence align with cathedral.fabric, which remains an unverified lab candidate rather than an endorsed implementation."
+    },
+    {
+      "id": "aof-to-kumeo",
+      "deployment_status": "NOT_DEPLOYED",
+      "incorrectly_attributed_to": "https://github.com/agenticdevops/aof",
+      "corrected_source_candidate": "https://github.com/raestrada/kumeo",
+      "claim_family": "NoOps DSL, multi-language generation, NATS, and Kubernetes generation",
+      "correction": "Those claims were not found in AOF. Their wording aligns with kumeo, which remains an unverified reference candidate rather than an endorsed implementation."
+    }
+  ],
+  "unverified_candidates": [
+    {
+      "id": "cathedral.fabric",
+      "name": "cathedral.fabric",
+      "canonical_repository": "https://github.com/scalarian/cathedral.fabric",
+      "head_short_sha": "a98b290",
+      "head_date": "2026-01-03",
+      "language": "Rust",
+      "license": "MIT OR Apache-2.0",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_repository_signals": [
+        "Workspace dependency declarations include BLAKE3, OpenRaft, and Wasmtime",
+        "Repository source is present",
+        "GitHub license detection reported Apache-2.0 while workspace metadata permits MIT OR Apache-2.0"
+      ],
+      "limitations": [
+        "Created and last pushed on the same verified date",
+        "Early 0.1-era repository",
+        "No production validation was established",
+        "Dependency presence alone does not prove every reported behavior"
+      ],
+      "verdict": "UNVERIFIED_LAB"
+    },
+    {
+      "id": "kumeo",
+      "name": "kumeo",
+      "canonical_repository": "https://github.com/raestrada/kumeo",
+      "head_short_sha": "1b90d5d",
+      "head_date": "2025-05-26",
+      "language": "Rust",
+      "license": "GPL-3.0-or-later",
+      "deployment_status": "NOT_DEPLOYED",
+      "observed_repository_signals": [
+        "Repository descriptions align with the NoOps, code-generation, NATS, and Kubernetes claim family"
+      ],
+      "limitations": [
+        "No later activity was observed after the verified head date",
+        "No production validation was established",
+        "GPL-3.0-or-later licensing requires separate compatibility review before any reuse"
+      ],
+      "verdict": "UNVERIFIED_REFERENCE"
+    }
+  ]
+}

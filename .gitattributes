@@ -1,0 +1,58 @@
+ground/GEMMA_INGRESS.md -text
+ground/GEMMA_TOKENIZER_MAP.md -text
+# DIO receipts bind these delivered artifacts by exact bytes and SHA-256.
+bazaar/results/cursor-bazaar-lineage-seed0-20260822-01.json -text
+excerpts/20260823/grbn_circuits.json -text
+ground/SUBZERO_GRBN.md -text
+commons_mcp_app.html whitespace=cr-at-eol
+# Revenue recovery text is LF in Git and every checkout. Tests still exercise
+# synthetic CRLF offer input; private evidence digests remain exact-byte hashes.
+diagnostic.html text eol=lf
+host/revenue_recovery.py text eol=lf
+test_revenue_recovery.py text eol=lf
+revenue/payment_ready/*.json text eol=lf
+revenue/payment_ready/*.md text eol=lf
+p/jojo-revenue-recovery-pipeline-20260825-01.md text eol=lf
+p/demon-revenue-hardening-correction-20260825-01.md text eol=lf
+test_diagnostic_dlp.js text eol=lf
+test_carrier_from_memory.js text eol=lf
+# These six immutable Slack projections are identity-pinned to their Git blob
+# bytes.  Disable checkout conversion so Windows and Linux consumers see the
+# same bytes that CI and raw Git expose.
+p/demon-cash-now-overdrive-20260825-01.md -text
+p/gauge-claude-role-proposal-20260825-01.md -text
+p/gauge-p0-compliance-20260825-01.md -text
+p/jojo-device-queue-collapse-20260825-01.md -text
+p/gauge-zero-audit-20260825-01.md -text
+p/jojo-muhlnickel-subagent-protocol-20260825-01.md -text
+
+# The delta shards and the seat census are compared byte-for-byte against what
+# their generator would write before deciding to rewrite, so a no-op rebuild
+# produces no diff.  That comparison only holds while the checkout keeps the
+# LF the generator emits: a CRLF working copy makes every comparison differ and
+# the bake churns on every cycle.  Pin them, and pin the generators alongside.
+feed/*.json text eol=lf
+seats.json text eol=lf
+seats/*.json text eol=lf
+host/feed_delta.py text eol=lf
+host/seat_census.py text eol=lf
+test_feed_delta.py text eol=lf
+test_seat_census.py text eol=lf
+integrations/command_center/observability.py text eol=lf
+integrations/command_center/test_observability.py text eol=lf
+host/github_state.py text eol=lf
+test_github_state.py text eol=lf
+
+# The command consumer verifies this preserved source against its exact Git blob
+# before compiling it. Never let checkout/autocrlf rewrite those pinned bytes.
+host/_muhl_github_drive_legacy_source.txt -text
+infra/host/_muhl_github_drive_legacy_source.txt -text
+# Executable ingress code and its focused tests keep one LF representation on
+# every platform; the strict ticket parser has separate hostile CRLF fixtures.
+host/muhl_github_drive.py text eol=lf
+host/muhl_command_snapshot.py text eol=lf
+infra/host/muhl_github_drive.py text eol=lf
+infra/host/muhl_command_snapshot.py text eol=lf
+tests/test_muhl_command_snapshot.py text eol=lf
+tests/test_muhl_github_drive_snapshot.py text eol=lf
+.github/workflows/muhl-command-snapshot.yml text eol=lf

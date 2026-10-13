@@ -1,0 +1,98 @@
+{
+  "description": "Five-node, four-period, two-segment official-checker witness. Complete interval neighborhood has no improvement; complete demand-0 schedules do.",
+  "expected": {
+    "checker_rational_mismatches": 0,
+    "complete_schedule_feasible": 10,
+    "complete_schedule_proposals": 256,
+    "constant_interval_feasible": 43,
+    "constant_interval_improving": 0,
+    "constant_interval_proposals": 120,
+    "incumbent_vector_prefix": [10000000, 8000000, 4000000, 2500000],
+    "optimal_route_index_paths": [[0, 0, 0, 1], [0, 0, 0, 3]],
+    "optimum_vector_prefix": [10000000, 6000000, 4000000, 2400000],
+    "route_pool": [[], [114], [127], [153]],
+    "total_transition_cost": 3
+  },
+  "files": {
+    "DERIVATION.json": {
+      "change": "Change only max_segments from4 to2. Both retained solutions already use at most2 segments.",
+      "parent": "barrier-094-official-shape",
+      "reason": "Under cap4 there are six legal improving two/three-waypoint constant intervals, retained in the full archive. Cap2 defines a separate valid operator-discrimination case where the complete legal constant-interval neighborhood is exactly empty/single-waypoint.",
+      "scope": "Constructed restricted-segment case, not public-instance strength, not proof of superiority at the public segment cap."
+    },
+    "dp-escape.json": {
+      "srpaths": [
+        {"d": 0, "t": 3, "w": [114]},
+        {"d": 2, "t": 0, "w": [127]},
+        {"d": 2, "t": 1, "w": [127]},
+        {"d": 2, "t": 2, "w": [127]},
+        {"d": 2, "t": 3, "w": [127]}
+      ]
+    },
+    "local-optimum.json": {
+      "srpaths": [
+        {"d": 0, "t": 0, "w": [127]},
+        {"d": 0, "t": 1, "w": [127]},
+        {"d": 0, "t": 2, "w": [127]},
+        {"d": 2, "t": 0, "w": [127]},
+        {"d": 2, "t": 1, "w": [127]},
+        {"d": 2, "t": 2, "w": [127]},
+        {"d": 2, "t": 3, "w": [127]}
+      ]
+    },
+    "net.json": {
+      "directed": true,
+      "links": [
+        {"capacity": 50, "from": 101, "id": 0, "metric": 3, "to": 114},
+        {"capacity": 100, "from": 101, "id": 1, "metric": 1, "to": 127},
+        {"capacity": 50, "from": 101, "id": 2, "metric": 6, "to": 140},
+        {"capacity": 10, "from": 114, "id": 3, "metric": 9, "to": 101},
+        {"capacity": 100, "from": 114, "id": 4, "metric": 5, "to": 127},
+        {"capacity": 25, "from": 114, "id": 5, "metric": 6, "to": 140},
+        {"capacity": 40, "from": 127, "id": 6, "metric": 5, "to": 101},
+        {"capacity": 50, "from": 127, "id": 7, "metric": 5, "to": 114},
+        {"capacity": 20, "from": 127, "id": 8, "metric": 5, "to": 140},
+        {"capacity": 10, "from": 140, "id": 9, "metric": 2, "to": 101},
+        {"capacity": 40, "from": 140, "id": 10, "metric": 1, "to": 114},
+        {"capacity": 50, "from": 140, "id": 11, "metric": 9, "to": 127},
+        {"capacity": 1000000000, "from": 153, "id": 12, "metric": 1, "to": 114},
+        {"capacity": 1000000000, "from": 114, "id": 13, "metric": 1, "to": 153}
+      ],
+      "multigraph": false,
+      "nodes": [
+        {"id": 101, "name": "n101"},
+        {"id": 114, "name": "n114"},
+        {"id": 127, "name": "n127"},
+        {"id": 140, "name": "n140"},
+        {"id": 153, "name": "aux-demand-source"}
+      ]
+    },
+    "scenario.json": {
+      "budget": [{"t": 1, "value": 0}, {"t": 2, "value": 0}, {"t": 3, "value": 3}],
+      "interventions": [
+        {"links": [11, 1], "t": 1},
+        {"links": [], "t": 2},
+        {"links": [5, 3, 11], "t": 3}
+      ],
+      "max_segments": 2
+    },
+    "tm.json": {
+      "demands": [
+        {"s": 140, "t": 101, "v": [0, 60, 100, 80]},
+        {"s": 114, "t": 140, "v": [0, 60, 100, 0]},
+        {"s": 153, "t": 140, "v": [0, 20, 10, 0]}
+      ],
+      "num_time_slots": 4
+    }
+  },
+  "schema": "kestrel.roadef.temporal-barrier.v1",
+  "scope": "Constructed development witness, not public set-A/set-B or joint-demand optimum.",
+  "sha256": {
+    "DERIVATION.json": "3fa2436e7e1d1fb2964e147f5f2fb81bbefa219bef10c43fb39a3adc3d5eb43c",
+    "dp-escape.json": "4ef8b822e6408d27170a7ad27f5a3a31f7aa10ac824af0df4a25d24c4bcd8904",
+    "local-optimum.json": "41f25241e8a3473acfbb7c27914af811a9919fd06d69a3e2a03392548f3beb80",
+    "net.json": "4e1fc58163b78c1adc7dcb75c232406215a79be8df3d0d8e10f797784c9f7156",
+    "scenario.json": "28ae836fff34d9fd5a0a62f6883a2d68230d114f0f3133266ad177d6210b1cd2",
+    "tm.json": "1ed4cf39326d921024f8bfeb44e4fc2c3af1a2bb55286d61351476881de21483"
+  }
+}

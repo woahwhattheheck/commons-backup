@@ -1,0 +1,51 @@
+{
+  "client": {
+    "name": "Commons purchasing operator — editable sample",
+    "voice": "Direct, practical B2B copy. Explain the workflow, name its limits, avoid guaranteed savings, invented testimonials or unsupported integrations. Prices are agreed separately.",
+    "claims": [
+      {
+        "id": "matching",
+        "text": "Matches normalized supplier invoices to purchase orders using vendor aliases and exact PO lines. Compares currency, SKU, quantity and unit price with decimal arithmetic.",
+        "source": "https://github.com/woahwhattheheck/commons/blob/87d704a55dfef6964a41034ae08750fc922fe7d8/revenue/hive/purchasing-paperwork-operator/README.md"
+      },
+      {
+        "id": "traceability",
+        "text": "Original CSVs remain linked by path, SHA-256 and source line. Unknown or ambiguous vendors remain review items.",
+        "source": "https://github.com/woahwhattheheck/commons/blob/87d704a55dfef6964a41034ae08750fc922fe7d8/revenue/hive/purchasing-paperwork-operator/README.md"
+      },
+      {
+        "id": "outputs",
+        "text": "Produces reconciliation.json, review-ready accounting_import.csv and unsent exception_drafts.json.",
+        "source": "https://github.com/woahwhattheheck/commons/blob/87d704a55dfef6964a41034ae08750fc922fe7d8/revenue/hive/purchasing-paperwork-operator/README.md"
+      },
+      {
+        "id": "limits",
+        "text": "Does not perform OCR, send messages, post to accounting software, approve discrepancies, purchase anything or move money.",
+        "source": "https://github.com/woahwhattheheck/commons/blob/87d704a55dfef6964a41034ae08750fc922fe7d8/revenue/hive/purchasing-paperwork-operator/README.md"
+      }
+    ]
+  },
+  "request": {
+    "title": "Purchasing operator landing page + five-email sequence",
+    "kind": "Landing page + email sequence",
+    "brief": "Original copy for the existing Commons purchasing-paperwork operator. Calls to action request an example; do not invent a checkout, buyer, price or outcome. Bracketed source IDs are editorial references, removable after review.",
+    "priority": 50
+  },
+  "draft": {
+    "files": {
+      "landing-page.md": "# Know which invoice lines match — and which need a question.\n\n## Purchasing paperwork operator\n\nTurn normalized supplier invoices and purchase orders into a line-by-line reconciliation your team can review. Keep the original source close to every result.\n\n### Start with the records you already have\n\nImport vendor aliases, purchase orders and invoices as normalized CSV files. The operator matches vendors and exact PO lines, then compares currency, SKU, quantity and unit price using decimal arithmetic. [matching]\n\n### Separate clean lines from unresolved questions\n\nReview a reconciliation for every invoice line. Export clean rows as a review-ready accounting CSV, and use editable, unsent follow-up drafts to work through discrepancies. Unknown or ambiguous vendors remain review items rather than guessed matches. [outputs, traceability]\n\n### Keep a path back to the original\n\nResults carry the source path, SHA-256 and line reference. When a quantity or price needs a conversation, your team can find the record behind it. [traceability]\n\n## A practical first run\n\nPrepare the three CSV inputs, run the operator and review the reconciliation, clean-row export and exception drafts. Begin with a representative set of records and keep your existing approval process. [matching, outputs]\n\n**Next step:** Ask us for an example reconciliation, or bring your normalized CSV layout to a setup conversation. Pricing and service scope are agreed separately; this page does not establish a paid plan.\n\n### What stays with your team\n\nThis is not an OCR service or an automatic accounting integration. It does not send supplier messages, approve discrepancies, purchase goods or move money. The CSV export remains review-ready, not posted. [limits]\n",
+      "email-01-introduction.md": "Subject: A clearer view of invoice lines that need attention\n\nHi [First name],\n\nWhen a supplier invoice and purchase order disagree, the next step should be easy to find.\n\nOur purchasing paperwork operator matches normalized invoice CSVs against exact PO lines and compares currency, SKU, quantity and unit price. It separates clean rows from discrepancies instead of treating every line the same. [matching, outputs]\n\nWould an example reconciliation be useful for your team?\n\n[Sender name]\n\nDraft only. Use an authorized customer contact and the sender's existing preference/unsubscribe footer. No delivery or response is implied.\n",
+      "email-02-inputs.md": "Subject: What goes into a purchasing reconciliation?\n\nHi [First name],\n\nThe starting point is three normalized CSV inputs: vendor aliases, purchase orders and invoices. Exact vendor and PO-line matching makes the reconciliation explicit; unknown or ambiguous vendors stay open for review. [matching, traceability]\n\nThis version does not read invoices with OCR. Keeping that boundary clear makes it easier to decide whether your existing exports are a fit. [limits]\n\nReply with your column layout rather than sensitive invoice records, and we can discuss the setup needed for your workflow.\n\n[Sender name]\n\nUnsent draft. Retain your existing contact preferences and unsubscribe footer before any authorized use.\n",
+      "email-03-exceptions.md": "Subject: Turn a discrepancy into a specific question\n\nHi [First name],\n\nA quantity or unit-price mismatch needs context, not just a warning. The purchasing operator produces an unsent follow-up draft for each discrepancy, together with a recommended next action. [outputs]\n\nSource paths, SHA-256 hashes and line references preserve the connection to the original CSV records. Your team can inspect those records before deciding what to ask. [traceability]\n\nWould you like to see how a quantity exception appears in the output?\n\n[Sender name]\n\nUnsent draft. No supplier message is sent by the product. Include the sender's existing preference/unsubscribe footer.\n",
+      "email-04-handoff.md": "Subject: Clean rows, ready for your accounting review\n\nHi [First name],\n\nThe operator exports clean invoice lines to accounting_import.csv and marks them REVIEW_READY_NOT_POSTED. That gives your team a distinct handoff for review or import without presenting unresolved discrepancies as settled. [outputs]\n\nThe product does not post to an accounting system, approve differences or move money. Your existing accounting workflow remains responsible for those steps. [limits]\n\nWhich CSV fields does your current import process need? A column-level walkthrough is a useful next step.\n\n[Sender name]\n\nUnsent draft. Use only through the existing authorized communication workflow and preference/unsubscribe footer.\n",
+      "email-05-next-step.md": "Subject: A practical next step for your invoice workflow\n\nHi [First name],\n\nA useful first conversation starts with your normalized vendor, purchase-order and invoice layouts. From there, we can show how exact matching, review-ready rows and unsent exception drafts fit into your process. [matching, outputs]\n\nWe will keep the current boundaries explicit: no OCR, no automatic supplier messages, no accounting-system posting and no payment handling. [limits]\n\nReply to arrange an example walkthrough. Any service scope and price would be agreed separately; there is no assumed subscription or purchase.\n\n[Sender name]\n\nUnsent draft. Respect the contact's existing preferences and unsubscribe state before any use. No follow-up is automatically scheduled.\n"
+    },
+    "source_ids": [
+      "matching",
+      "traceability",
+      "outputs",
+      "limits"
+    ],
+    "note": "Initial finished source-linked sample. Not a customer commission and not sent or published."
+  }
+}

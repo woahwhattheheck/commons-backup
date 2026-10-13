@@ -1,0 +1,64 @@
+name: TITAN V3 E11 tranche deferral closure
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-e11-tranche-defer-closure-sol-pro/**"
+      - ".github/workflows/titan-v3-e11-tranche-defer-closure.yml"
+  push:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-e11-tranche-defer-closure-sol-pro/**"
+      - ".github/workflows/titan-v3-e11-tranche-defer-closure.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-interaction-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run stdlib contracts
+        run: |
+          python -B revenue/kaggriculture/cloud-execution-lab/analysis/v3-e11-tranche-defer-closure-sol-pro/test_closure.py
+      - name: Reconstruct exact authenticated historical packet
+        run: |
+          set -euo pipefail
+          D=revenue/kaggriculture/cloud-execution-lab/analysis/v3-e11-tranche-defer-closure-sol-pro
+          F="$D/fixture"
+          cat "$F"/v3_candidates_657b3d9c.tar.gz.b64.part* > /tmp/v3packet.b64
+          printf '%s  %s\n' \
+            38975ecf1c5b7365d6aba7afa733cc0799d32902e8adb36f06afd5f670792e21 \
+            /tmp/v3packet.b64 | sha256sum -c -
+          base64 --decode /tmp/v3packet.b64 > /tmp/v3packet.tar.gz
+          printf '%s  %s\n' \
+            f68792bf7f0fb269864ef4ab25967292e2d4cd03439dbc5c52b98dfcebd1b728 \
+            /tmp/v3packet.tar.gz | sha256sum -c -
+          test "$(wc -c < /tmp/v3packet.tar.gz)" = 27500
+          mkdir -p /tmp/v3packet
+          tar -xzf /tmp/v3packet.tar.gz -C /tmp/v3packet
+          C=/tmp/v3packet/revenue/kaggriculture/cloud-execution-lab/candidates/v3
+          test -f "$C/apply_v3.py"
+          test -f "$C/overlay/e11_rival_sell.py"
+          test -f "$C/overlay/l01_mechanics.py"
+          printf '%s  %s\n' \
+            8e1093429a1bb463e2b82490963b43d9c9a4fcbd16f9d1b8d02fd75434f84436 \
+            "$C/apply_v3.py" | sha256sum -c -
+          printf '%s  %s\n' \
+            0871703888bfd128a9118c0fd59fa6c6a7b4ce509d22d803b97255622bff4816 \
+            "$C/overlay/e11_rival_sell.py" | sha256sum -c -
+          printf '%s  %s\n' \
+            65fc1841f6d00b6db78e2eb88d98e9e7b05053502e0de527bce1f1a60fbe9691 \
+            "$C/overlay/l01_mechanics.py" | sha256sum -c -
+      - name: Reproduce predecessor and deterministic receipt
+        run: |
+          set -euo pipefail
+          D=revenue/kaggriculture/cloud-execution-lab/analysis/v3-e11-tranche-defer-closure-sol-pro
+          C=/tmp/v3packet/revenue/kaggriculture/cloud-execution-lab/candidates/v3
+          python -B "$D/closure.py" \
+            --candidate-root "$C" \
+            --expect-status VULNERABLE_REINTRODUCTION \
+            --require-exact-source \
+            --receipt-out /tmp/receipt.json
+          cmp "$D/receipt.json" /tmp/receipt.json

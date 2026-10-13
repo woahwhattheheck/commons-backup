@@ -1,0 +1,76 @@
+name: titan-v3-own-value-bound-panel-sol-closure
+
+on:
+  push:
+    paths:
+      - '.github/workflows/titan-v3-own-value-bound-panel-sol-closure.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-own-value-bound-panel-sol-closure/**'
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-own-value-bound-panel-sol-closure.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-own-value-bound-panel-sol-closure/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  exact-archive-action-bound-screen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      SEEDS: '539131249,1834999074,2609097301,2609097302,2609097303,2609097304,2611092201,2611092207'
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pinned official-interpreter dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Run exact archive-bound, action-bound paired screen
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          EXPECTED_CURRENT_MAIN: '2e2e7e52fd2d5c62117ac49c7f1eabb505078ffb'
+        run: |
+          set -euo pipefail
+          CASE=revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-own-value-bound-panel-sol-closure
+          OUT="$RUNNER_TEMP/titan-v3-own-value-bound-panel"
+          bash "$CASE/run_bound_panel.sh" "$OUT" 2>&1 \
+            | tee "$RUNNER_TEMP/titan-v3-own-value-bound-panel.log"
+
+      - name: Retain complete and partial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-own-value-bound-panel-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/titan-v3-own-value-bound-panel/
+            ${{ runner.temp }}/titan-v3-own-value-bound-panel.log
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Require terminal action-bound evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/titan-v3-own-value-bound-panel.log"
+          test -s "$RUNNER_TEMP/titan-v3-own-value-bound-panel/COMPLETE"
+          test -s "$RUNNER_TEMP/titan-v3-own-value-bound-panel/ACTION-ADMISSION.json"
+          test -s "$RUNNER_TEMP/titan-v3-own-value-bound-panel/PROVENANCE.json"
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain)"

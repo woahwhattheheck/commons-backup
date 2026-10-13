@@ -1,0 +1,49 @@
+{
+  "schema": "titan-v4-d4-promotion-closure/v1",
+  "status": "BLOCKED_OUTPUT_INERT_ON_AUTHENTICATED_NATIVE_BASELINE",
+  "lane": "D4 pre-flush STRAWBERRY timing",
+  "mechanism": "r04_d4_strawberry_timing",
+  "authority": {
+    "github_actions_artifact_id": 10180428228,
+    "archive_member": "checked-package/exports/titan-current.tar.gz",
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "source_manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+    "native_d4_git_blob": "55e5e75d7e8ebdbd40915d543df829f10fd403f5",
+    "native_d4_sha256": "3ae9e172acd2693419f6c1636618830e41eabeb3dc8a728bc025cacae634d7ac",
+    "build_native_d4_git_blob": "00e7d5690796eecda5d873370db941ab9529a0ad",
+    "build_native_d4_sha256": "d7622196c4b1e00c5ceb32a22a9c225a359cff03466b234309e33a210c1acf94",
+    "run_native_d4_git_blob": "97dba590b991a443e8a732dc85f01d254b943cdb",
+    "run_native_d4_sha256": "26cbb0b27197b35430637bc515f6a61748ea4ae03e9d4529bb1cdfaff3e5b191",
+    "native_inputs_git_blob": "b95b5988b3eb10434a0287146e39a9c3b3380937",
+    "native_inputs_sha256": "76e611f2c343ef61aad902e116c03380931e44e05724f23279eff4ba44b7b1d8"
+  },
+  "experiment": {
+    "candidate": "existing build_native_d4.py output over the authenticated baseline; after composition only r04_d4_strawberry_timing=true and r04_d4_strawberry_min_price=180 differ",
+    "process_isolation": "fresh Python process per game",
+    "opponent": "official starter",
+    "engaged_cells": [
+      [2, 0, 409, 427, 4, 231, "cfa74d92500b05ee69a7f9894bce331d366ed499c5b06d5d30529261905c2d74", "200907e786c764b1e82839ead035f0c3b0d8f35a2f14b64c58632edd3a1834a4", [174577.0, 3493.0]],
+      [2, 1, 409, 427, 4, 231, "cfa74d92500b05ee69a7f9894bce331d366ed499c5b06d5d30529261905c2d74", "82b6b898c0d0706e078f100cc0c9a54ea6e2f8772d94f0e61037a4970434035f", [3493.0, 174577.0]],
+      [4, 0, 409, 427, 4, 233, "9460df6a120fd9975265e510337e969593fb4d2673fea710f2d30bbe87efe930", "704798ef7032c83f9b3151b467793de5eedbc5cdf5e795ee81e6fde2bc703fbd", [181213.0, 3531.0]],
+      [4, 1, 409, 427, 4, 233, "9460df6a120fd9975265e510337e969593fb4d2673fea710f2d30bbe87efe930", "cabc399727235ba7d06fd9ac43ff678b64b0709f547898502a0ca8c145002808", [3531.0, 181213.0]],
+      [11, 0, 409, 427, 4, 208, "d30c7d84fa2deb8ef5331493e04d41506b17749fb780335db7f9d954a8c8718f", "2e083427ecd7037f39f795c6ff3d93c3ea6891c3899f91f1fa56acad1fbb9570", [185740.0, 3421.0]],
+      [11, 1, 409, 427, 4, 215, "d8a0ee028a4070a857b57fae9680f36be7d8173cea0cba33c2becdfd48d9a9e4", "634279706d7ddcfe12d55802e4ecd682b5affbf415cfd63a992d49f7b2ff8fe0", [3451.0, 180888.0]],
+      [12, 1, 409, 427, 4, 227, "1549e3f889dd656c1ef92b50518a59632f5b489bdc1af3039f42851388dc3c5b", "653734b5f28a608aaad2d37e103c7b64a1befdad632162fca9555cecff881ab9", [3639.0, 175481.0]]
+    ],
+    "engaged_cell_columns": ["seed", "seat", "step", "due", "represented_units", "price", "base_and_on_action_sha256", "base_and_on_state_sha256", "base_and_on_terminal_bank"],
+    "summary": {
+      "engaged_cells": 7,
+      "cells_with_exactly_one_d4_extension_on": 7,
+      "complete_action_hash_equal_base_vs_on": true,
+      "complete_state_hash_equal_base_vs_on": true,
+      "terminal_bank_equal_base_vs_on": true,
+      "margin_delta_all_zero": true
+    }
+  },
+  "disposition": {
+    "promotion_authorized": false,
+    "current_one_stack_claim": false,
+    "reason": "Natural D4 horizon extension is reachable, but every executed reachable ON180 cell is behaviorally inert against the authenticated native baseline: complete returned-action traces, official-interpreter state traces, terminal banks, and margins are identical.",
+    "required_next_step": "Do not spend a full economic panel or register a COMPOSE edge from this evidence. Re-open only after the sole current graph-to-postimage owner publishes an authenticated one-stack postimage AND D4 produces at least one output-changing natural witness there; otherwise retire as redundant with the incumbent optimizer."
+  }
+}

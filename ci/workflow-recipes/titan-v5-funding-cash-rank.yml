@@ -1,0 +1,33 @@
+name: titan-v5-funding-cash-rank
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v5-funding-cash-rank.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5-funding-cash-rank/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  focused:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Exact current-source regression
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5-funding-cash-rank
+        run: python3 -m unittest -v test_cash_rank.py
+      - name: Optimized current-source regression
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5-funding-cash-rank
+        run: PYTHONOPTIMIZE=1 python3 -m unittest -v test_cash_rank.py
+      - name: Compile materializer and regression
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5-funding-cash-rank
+        run: python3 -m py_compile apply_cash_rank.py test_cash_rank.py

@@ -1,0 +1,39 @@
+name: NIH temporal KG
+
+on:
+  pull_request:
+    paths:
+      - "research/nih_temporal_kg_2026/**"
+      - ".github/workflows/nih-temporal-kg.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "research/nih_temporal_kg_2026/**"
+      - ".github/workflows/nih-temporal-kg.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  temporal-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: research/nih_temporal_kg_2026
+    steps:
+      - name: Checkout focused paths
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            research/nih_temporal_kg_2026
+          sparse-checkout-cone-mode: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Standard interpreter hostile suite
+        run: python -m unittest -v test_temporal_evidence.py benchmark/test_benchmark.py
+      - name: Optimized interpreter hostile suite
+        run: python -O -m unittest -v test_temporal_evidence.py benchmark/test_benchmark.py

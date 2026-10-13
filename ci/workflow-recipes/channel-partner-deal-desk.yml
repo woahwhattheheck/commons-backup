@@ -1,0 +1,31 @@
+name: channel-partner-deal-desk
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/channel_partner_deal_desk/**'
+      - '.github/workflows/channel-partner-deal-desk.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/channel_partner_deal_desk/**'
+      - '.github/workflows/channel-partner-deal-desk.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/channel_partner_deal_desk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile channel_partner_deal_desk.py test_channel_partner_deal_desk.py
+      - run: python -m unittest -v test_channel_partner_deal_desk.py
+      - run: python -O -m unittest -v test_channel_partner_deal_desk.py
+      - run: |
+          d=$(mktemp -d)
+          python channel_partner_deal_desk.py demo "$d/desk.sqlite" "$d/out"
+          python channel_partner_deal_desk.py verify-export "$d/desk.sqlite" "$d/out"

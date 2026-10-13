@@ -1,0 +1,52 @@
+name: Outbound connector seam authority
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/outbound_connector_lease/**'
+      - 'revenue/outbound_mutex/README.md'
+      - 'revenue/outbound_mutex/PRODUCTION_DEPRECATION.md'
+      - '.agents/skills/outbound-send/SKILL.md'
+      - '.github/workflows/outbound-connector-seam-authority.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/outbound_connector_lease/**'
+      - 'revenue/outbound_mutex/README.md'
+      - 'revenue/outbound_mutex/PRODUCTION_DEPRECATION.md'
+      - '.agents/skills/outbound-send/SKILL.md'
+      - '.github/workflows/outbound-connector-seam-authority.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-seam:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile canonical seam modules
+        run: |
+          python -m py_compile \
+            revenue/outbound_connector_lease/key.py \
+            revenue/outbound_connector_lease/authority.py \
+            revenue/outbound_connector_lease/test_key.py \
+            revenue/outbound_connector_lease/test_authority.py \
+            revenue/outbound_mutex/lease.py
+      - name: Canonical and migration tests
+        run: |
+          python -m unittest -v \
+            revenue.outbound_connector_lease.test_key \
+            revenue.outbound_connector_lease.test_authority
+      - name: Optimized canonical and migration tests
+        run: |
+          python -O -m unittest -v \
+            revenue.outbound_connector_lease.test_key \
+            revenue.outbound_connector_lease.test_authority

@@ -1,0 +1,76 @@
+{
+  "admission_headroom_bytes": 798035968,
+  "all_eight_product_authority_bits_false": true,
+  "commands": [
+    {
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "revenue.rfp_addenda_delta.cli",
+        "compile",
+        "--old",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/old-generation.json",
+        "--new",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/new-generation.json",
+        "--decisions",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/prior-decisions.json",
+        "--out-json",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/delta-receipt.json",
+        "--out-md",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/delta-report.md"
+      ],
+      "elapsed_seconds": 0.03974,
+      "exit_code": 3,
+      "stderr": "",
+      "stdout": "SOURCE_REFRESH_REQUIRED 045eacc68d6e249dd5cbdc560d6744ef8a03c0bff0c42ad510c5ac2d648d5346"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "revenue.rfp_addenda_delta.cli",
+        "verify",
+        "--old",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/old-generation.json",
+        "--new",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/new-generation.json",
+        "--decisions",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/prior-decisions.json",
+        "--report",
+        "revenue/rfp_addenda_delta/packets/usac_it_26_139_20261004/delta-receipt.json"
+      ],
+      "elapsed_seconds": 0.039133,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "VALID"
+    }
+  ],
+  "complete": true,
+  "completed_at": "2026-10-04T00:35:33Z",
+  "elapsed_seconds": 0.080736,
+  "peak_child_rss_kib": 12436,
+  "prior_qualification_or_bridge_products_rerun": false,
+  "prior_wrapper_attempts": [
+    {
+      "error": "SyntaxError: commands list missing its closing bracket",
+      "exact_admission_headroom_bytes": null,
+      "exit_code": 1,
+      "guard_floor_bytes": 33554432,
+      "product_cli_calls": 0,
+      "runtime_or_packet_writes": false,
+      "stage": "PYTHON_PARSE_BEFORE_BODY_EXECUTION"
+    }
+  ],
+  "runtime_file_git_blobs": {
+    "revenue/rfp_addenda_delta/__init__.py": "31f1ec4cfd7615e5fdf19f43dca82dc0b01b82ad",
+    "revenue/rfp_addenda_delta/cli.py": "e79599d6c322a82da4f42fc24f76a970e30c2f5f",
+    "revenue/rfp_addenda_delta/engine.py": "0c329aa6863cc4dc1f73e5b045ba7195ee38a668",
+    "revenue/rfp_addenda_delta/schema.py": "0e051434486e0d67f58d981c41a4cdf1b21844bd"
+  },
+  "runtime_main_sha": "d94e6ec2d8c56f646c2154a7d0a85f18785ece0f",
+  "schema": "commons-usac-qa-delta-execution/v1",
+  "state": "SOURCE_REFRESH_REQUIRED",
+  "test_suites_run": false
+}

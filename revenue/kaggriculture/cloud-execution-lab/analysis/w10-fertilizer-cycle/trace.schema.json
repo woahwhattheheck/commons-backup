@@ -1,0 +1,226 @@
+{
+  "$defs": {
+    "capacity": {
+      "additionalProperties": false,
+      "properties": {
+        "carry_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "shed_units": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "carry_units",
+        "shed_units"
+      ],
+      "type": "object"
+    },
+    "identity": {
+      "additionalProperties": false,
+      "properties": {
+        "controlled_player": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "counterfactual_protocol_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "engine_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "evaluator_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "horizon_tick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "opponent_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "product": {
+          "pattern": "^[A-Z][A-Z0-9_]{0,31}$",
+          "type": "string"
+        },
+        "protected_commitments_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "seed": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start_state_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "worker_tick_budget": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "engine_sha256",
+        "evaluator_sha256",
+        "opponent_sha256",
+        "start_state_sha256",
+        "counterfactual_protocol_sha256",
+        "protected_commitments_sha256",
+        "seed",
+        "controlled_player",
+        "horizon_tick",
+        "worker_tick_budget",
+        "product"
+      ],
+      "type": "object"
+    },
+    "snapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "carry_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "cash": {
+          "type": "integer"
+        },
+        "deposit_actions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "deposited_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "discarded_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "fertilizer_actions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "harvest_actions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "harvested_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "produced_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "protected_obligation_misses": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "protected_stock_shortfall_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sale_actions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "shed_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sold_units": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "tick": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "travel_steps": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "watering_actions": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "worker_ticks_used": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tick",
+        "fertilizer_actions",
+        "produced_units",
+        "harvested_units",
+        "deposited_units",
+        "sold_units",
+        "cash",
+        "discarded_units",
+        "worker_ticks_used",
+        "travel_steps",
+        "watering_actions",
+        "harvest_actions",
+        "deposit_actions",
+        "sale_actions",
+        "protected_obligation_misses",
+        "protected_stock_shortfall_units",
+        "carry_units",
+        "shed_units"
+      ],
+      "type": "object"
+    }
+  },
+  "$comment": "Semantic validation is intentionally stricter than JSON Schema: booleans are not integers under this schema; the Python checker also enforces fixed-order validation, cumulative monotonicity, exact horizon termination, capacity, budget, action-accounting, and same-start paired comparison.",
+  "$id": "https://woahwhattheheck.github.io/commons/schemas/titan/w10/realized-fertilizer-trace-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural contract for one control or fertilized observation trace. Cross-row monotonicity, terminal horizon equality, capacity bounds, action accounting, and paired identity equivalence are enforced by realized_fertilizer.py.",
+  "properties": {
+    "capacity": {
+      "$ref": "#/$defs/capacity"
+    },
+    "identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "policy_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schema": {
+      "const": "titan.w10.realized-fertilizer-trace/v1"
+    },
+    "snapshots": {
+      "items": {
+        "$ref": "#/$defs/snapshot"
+      },
+      "maxItems": 100000,
+      "minItems": 2,
+      "type": "array"
+    },
+    "variant": {
+      "enum": [
+        "control",
+        "fertilized"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "variant",
+    "policy_sha256",
+    "identity",
+    "capacity",
+    "snapshots"
+  ],
+  "title": "TITAN W10 realized fertilizer trace v1",
+  "type": "object"
+}

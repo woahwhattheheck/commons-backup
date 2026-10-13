@@ -1,0 +1,36 @@
+{
+  "id": "salesforce-contact-preflight-20260831-01",
+  "version": 2,
+  "buyer": "Salesforce operations owner / executive reporting owner",
+  "input": "20 synthetic contact create, update, and merge events",
+  "outputs": [
+    "canonical match-key map",
+    "automation receipt ledger",
+    "duplicate/conflict ledger",
+    "dashboard-field lineage totals"
+  ],
+  "acceptance": [
+    "each unique person resolves to exactly one active canonical contact",
+    "exact event replay produces no second mutation",
+    "same event_id with different bytes is rejected",
+    "conflicts name the exact field and reason",
+    "dashboard department totals equal active canonical contacts"
+  ],
+  "boundaries": [
+    "synthetic data only",
+    "no Salesforce credentials",
+    "no live org write",
+    "no approval or denial",
+    "no authentication gate"
+  ],
+  "price_usd": 199,
+  "optional_proof_usd": 2500,
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_proof_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  }
+}

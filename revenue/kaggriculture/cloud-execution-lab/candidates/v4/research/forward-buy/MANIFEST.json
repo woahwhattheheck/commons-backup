@@ -1,0 +1,29 @@
+{
+  "kind": "titan-v4-research-custody",
+  "lane": "Forward-BUY engagement census",
+  "status": "EVIDENCE_TOOL_READY_RUNTIME_PROOF_REQUIRED",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "decoder": {
+    "git_blob": "83942caaf64e8a4e205d48ac26e734bdb8554bbe",
+    "bytes": 8040,
+    "sha256": "4b2358d34da1b12ba67890b1143217570f7e807f5a2b49805b1abed786226933",
+    "frozen_r01_tapes_blob": "a43289b9cc5e34a2481fddf652762a7d92f427ef",
+    "receipt": "V4-FWD-BUY-ENGAGEMENT-CENSUS-DECODER-20260911-01",
+    "self_test": "published receipt reports py_compile + normal/-O self-test PASS"
+  },
+  "scope": "Read-only structural decoder. Enumerates strict-int positive BUY_PRODUCT WHEAT/FERTILIZER rows in the exact frozen 13x719 R01 tape corpus and finds the nearest earlier market slot that can accept a row without crossing HIRE, BUY_LAND, BUY_SEED, BUY_ANIMAL, or same-product BUY/SELL structural barriers; candidate slot must have market room below 10.",
+  "non_claims": [
+    "cash affordability remains NEEDS_RUNTIME_PROOF",
+    "shed capacity remains NEEDS_RUNTIME_PROOF",
+    "opponent market effect remains NEEDS_RUNTIME_PROOF",
+    "the decoder is not a gameplay patch and does not establish positive economics"
+  ],
+  "required_next_step": "Materialize against the exact frozen R01 tape blob and publish the deterministic census. Then bind candidate witnesses to current-main runtime state to prove cash, capacity, opponent, and ownership feasibility before opening any Forward-BUY gameplay lane.",
+  "prohibitions": [
+    "do not mutate production/runtime/defaults from this research artifact",
+    "do not move BUY rows based on structural eligibility alone",
+    "do not run the decoder against a drifted r01_tapes.py source and treat the result as comparable",
+    "do not infer economic edge from naive own-price self-impact"
+  ]
+}

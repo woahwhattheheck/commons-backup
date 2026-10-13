@@ -1,0 +1,137 @@
+name: titan-v3-t01-current-panel-sol-settle
+
+on:
+  push:
+    paths:
+      - '.github/workflows/titan-v3-t01-current-panel-sol-settle.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-t01-current-panel-sol-settle/**'
+      - 'p/TITAN-V3-T01-CURRENT-ACTIVATION-AND-OWN-CASH-PANEL-20260910-01.md'
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-t01-current-panel-sol-settle.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-t01-current-panel-sol-settle/**'
+      - 'p/TITAN-V3-T01-CURRENT-ACTIVATION-AND-OWN-CASH-PANEL-20260910-01.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  contracts-and-panel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Bind exact additive checkout
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_HEAD: b986558e41938d34fcb4ab28b08c517be51203dc
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git rev-parse HEAD^)" = "$BASE_HEAD"
+          git diff --name-only "$BASE_HEAD" HEAD | tee "$RUNNER_TEMP/t01-changed-paths.txt"
+          while IFS= read -r path; do
+            case "$path" in
+              .github/workflows/titan-v3-t01-current-panel-sol-settle.yml) ;;
+              revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-t01-current-panel-sol-settle/*) ;;
+              p/TITAN-V3-T01-CURRENT-ACTIVATION-AND-OWN-CASH-PANEL-20260910-01.md) ;;
+              *) echo "out-of-scope path: $path" >&2; exit 1 ;;
+            esac
+          done < "$RUNNER_TEMP/t01-changed-paths.txt"
+          printf '%s\n' "$EXPECTED_HEAD" | tee "$RUNNER_TEMP/t01-head.sha"
+          printf '%s\n' "$BASE_HEAD" | tee "$RUNNER_TEMP/t01-base.sha"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install exact interpreter dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Run source and action-bound contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          ROOT="$LAB/analysis/titan-v3-t01-current-panel-sol-settle"
+          PYTHONDONTWRITEBYTECODE=1 python "$LAB/candidates/v3-terminal-settlement/test_terminal_settlement.py" -v \
+            |& tee "$RUNNER_TEMP/t01-source-tests.log"
+          PYTHONDONTWRITEBYTECODE=1 python "$ROOT/test_candidate.py" -v \
+            |& tee "$RUNNER_TEMP/t01-candidate-tests.log"
+          PYTHONDONTWRITEBYTECODE=1 python "$ROOT/test_audit.py" -v \
+            |& tee "$RUNNER_TEMP/t01-audit-tests.log"
+          python -m py_compile "$ROOT"/*.py
+
+      - name: Verify current canonical release and additive nonmutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab
+          python build_integrated.py --check
+          git diff --exit-code -- .
+
+      - name: Run 64-game paired official-engine panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-t01-current-panel-sol-settle
+          mkdir -p "$RUNNER_TEMP/t01-panel"
+          set +e
+          python "$ROOT/run_panel.py" \
+            --head "$(git rev-parse HEAD)" \
+            --seeds '2611092201,2611092202,2611092203,2611092204,2611092205,2611092206,2611092207,2611092208' \
+            --opponents 'arlene,v1' \
+            --workers 4 \
+            --action-timeout 1.0 \
+            --startup-timeout 15 \
+            --game-timeout 180 \
+            --output "$RUNNER_TEMP/t01-panel/T01-PANEL.json" \
+            --markdown "$RUNNER_TEMP/t01-panel/T01-PANEL.md" \
+            |& tee "$RUNNER_TEMP/t01-panel/T01-PANEL.log"
+          rc=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$rc" > "$RUNNER_TEMP/t01-panel/exit-code.txt"
+          if [[ "$rc" -ne 0 && "$rc" -ne 3 ]]; then
+            echo "T01 panel failed structurally with exit $rc" >&2
+            exit "$rc"
+          fi
+
+      - name: Publish panel summary
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/t01-panel/T01-PANEL.md" ]]; then
+            cat "$RUNNER_TEMP/t01-panel/T01-PANEL.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '# T01 exact-current panel did not produce a summary' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Retain exact panel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-t01-current-panel-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/t01-head.sha
+            ${{ runner.temp }}/t01-base.sha
+            ${{ runner.temp }}/t01-changed-paths.txt
+            ${{ runner.temp }}/t01-source-tests.log
+            ${{ runner.temp }}/t01-candidate-tests.log
+            ${{ runner.temp }}/t01-audit-tests.log
+            ${{ runner.temp }}/t01-panel/T01-PANEL.json
+            ${{ runner.temp }}/t01-panel/T01-PANEL.md
+            ${{ runner.temp }}/t01-panel/T01-PANEL.log
+            ${{ runner.temp }}/t01-panel/exit-code.txt
+          if-no-files-found: warn
+          retention-days: 30

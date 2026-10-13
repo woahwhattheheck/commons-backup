@@ -1,0 +1,51 @@
+{
+  "id": "preinnewhof-pfas-fieldblank-gate-lims-01",
+  "version": 1,
+  "buyer": "Prein&Newhof Environmental Laboratory / Steve Bylsma",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788151045.755839"
+  },
+  "workflow": [
+    "COC and bottle reconciliation across Grand Rapids, Holland, and Muskegon drop-off paths",
+    "PFAS field-blank binding and parentage",
+    "preservation and receipt-window checks",
+    "method routing for EPA 533 / 537.1 / 1633",
+    "staged portal result",
+    "human release"
+  ],
+  "locations": {
+    "GRAND_RAPIDS": "Grand Rapids drop-off",
+    "HOLLAND": "Holland drop-off",
+    "MUSKEGON": "Muskegon drop-off"
+  },
+  "hold_codes": [
+    "HOLD_MISSING_FIELD_BLANK",
+    "HOLD_BOTTLE_COC_MISMATCH",
+    "HOLD_DUPLICATE_SAMPLE_ID",
+    "HOLD_INVALID_RECEIPT_WINDOW",
+    "HOLD_WRONG_PRESERVATION",
+    "HOLD_UNSUPPORTED_METHOD_LOCATION"
+  ],
+  "acceptance": [
+    "150 frozen synthetic water submissions",
+    "exactly 120 valid rows accession once with the expected method and field-blank parentage",
+    "exactly 30 holds, 5 of each truth-set HOLD code",
+    "no held item creates a worksheet or portal result",
+    "source images, fields, hashes, and custody locations reconcile",
+    "replay creates zero records",
+    "human review controls release"
+  ],
+  "exclusions": [
+    "no production writes",
+    "no regulatory, certificate, CoA, or report release decision",
+    "no outreach or prospect-facing demo",
+    "no automatic portal release"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake, field-blank parentage, HOLD receipts, and staged portal only; never a live LIMS, regulatory, or portal write",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

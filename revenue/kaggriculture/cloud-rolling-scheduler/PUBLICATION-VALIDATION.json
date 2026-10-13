@@ -1,0 +1,99 @@
+{
+  "schema": "titan.t03.result-publication-validation.v1",
+  "scope": "T03 result publication; file/process tests with labelled evaluator fixture; zero official games",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+  "source": {
+    "baseline/evaluate_panel.py": {
+      "bytes": 8403,
+      "sha256": "8f124b71c0e717aa071436229b7345c6791f8eb518f8dcb7fd794fc29c434e9e",
+      "git_blob": "d98ca4fdb78b25f24c7c1afc4686873dfd337ed0"
+    },
+    "candidate/evaluate_panel.py": {
+      "bytes": 9786,
+      "sha256": "3ce9ea244fc4e4f85e3eeafa42357d6b7c6cdbe8b1b165996c621f17eaddc545",
+      "git_blob": "046c30128da0b0ff42c3d9d62aaff41740e0351d"
+    },
+    "candidate/test_panel_publication.py": {
+      "bytes": 14857,
+      "sha256": "9195b78e4e44c34f6051afe32cf9a602faf7f75a0fd9a71e7067c0da316d2e08",
+      "git_blob": "821ac17d2529ebe25636383febdeefec2ca4a2c5"
+    },
+    "candidate/test_panel_resume.py": {
+      "bytes": 13618,
+      "sha256": "e1ae2bf38a716e8b124838c6171ab305519c5bb613c252edfc8d046b2ec909d2",
+      "git_blob": "d746f32f0477864e764c5734f741764a68254587"
+    }
+  },
+  "results": {
+    "new_methods": 18,
+    "retained_methods": 27,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "baseline_controls": {
+      "tests": 4,
+      "failures": 4,
+      "errors": 0
+    },
+    "official_games": 0
+  },
+  "structural_delta": {
+    "changed_existing_functions": [
+      "run"
+    ],
+    "added_functions": [
+      "publish_json"
+    ],
+    "other_functions": "AST-identical to predecessor"
+  },
+  "commands": [
+    "python3 -B test_panel_publication.py -v",
+    "python3 -B test_panel_resume.py -v"
+  ],
+  "baseline_control_methods": [
+    "test_file_limit_never_exposes_partial_cell",
+    "test_file_limit_preserves_previous_summary",
+    "test_kill_during_cell_write_keeps_final_absent",
+    "test_kill_during_summary_write_preserves_old_complete_bytes"
+  ],
+  "logs": {
+    "publication-tests.log": {
+      "bytes": 2625,
+      "sha256": "e206880b90febe26fca115598f1fda963cb3ae5700e1d0309c22653256b5cc6c"
+    },
+    "retained-tests.log": {
+      "bytes": 3363,
+      "sha256": "f9cbe94a5f70efea14c65f1841c3620a196fd4cfce3390a198180c098e28c9d9"
+    },
+    "baseline-tests.log": {
+      "bytes": 3114,
+      "sha256": "970880d4390ac5ce3ccc6e9abb453cc36128738dad74d4b203a647e9b672790e"
+    },
+    "baseline-witness.json": {
+      "bytes": 1795,
+      "sha256": "4c2a831e3857c88299f52514544fd4317e2b5e8d8aad870961b8386a233c92b9"
+    }
+  },
+  "raw_logs_packet": "TITAN-VALE-T03-atomic-results.zip",
+  "original_os_limit_witness": [
+    {
+      "phase": "new_cell",
+      "exit": 1,
+      "game_calls": 1,
+      "final_exists": true,
+      "final_bytes": 8192,
+      "valid_json": false,
+      "prior_summary_preserved": null
+    },
+    {
+      "phase": "summary_replace",
+      "exit": 1,
+      "game_calls": 1,
+      "final_exists": true,
+      "final_bytes": 8192,
+      "valid_json": false,
+      "prior_summary_preserved": false
+    }
+  ]
+}

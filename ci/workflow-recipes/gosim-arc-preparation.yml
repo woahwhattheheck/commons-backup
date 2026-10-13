@@ -1,0 +1,52 @@
+name: GOSIM ARC preparation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/gosim2026/**'
+      - '.github/workflows/gosim-arc-preparation.yml'
+  pull_request:
+    paths:
+      - 'revenue/gosim2026/**'
+      - '.github/workflows/gosim-arc-preparation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Contract tests
+        run: python -m unittest discover -s revenue/gosim2026 -p 'test_*.py' -v
+      - name: Build real pinned upstream bundle
+        run: python revenue/gosim2026/build.py --output /tmp/commons-arc.zip
+      - name: Validate real runtime without model calls
+        run: python revenue/gosim2026/cloud_validate.py /tmp/commons-arc.zip --workspace /tmp/gosim-candidate
+      - name: Current-main readback
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git fetch origin main
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+          git cat-file -e origin/main:revenue/gosim2026/adapter.py
+          git cat-file -e origin/main:revenue/gosim2026/build.py
+          python revenue/gosim2026/audit_git_terminal.py --repo . --expected-commit "$GITHUB_SHA" --required-path revenue/gosim2026/adapter.py --required-path revenue/gosim2026/build.py
+      - name: Upload preparation candidate and actual validation
+        uses: actions/upload-artifact@v4
+        with:
+          name: gosim-arc-preparation-${{ github.sha }}
+          path: |
+            /tmp/commons-arc.zip
+            /tmp/validation.json
+            /tmp/requirements.resolved.txt
+          if-no-files-found: error
+          retention-days: 30

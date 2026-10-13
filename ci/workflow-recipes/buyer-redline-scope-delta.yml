@@ -1,0 +1,41 @@
+name: buyer-redline-scope-delta
+
+on:
+  pull_request:
+    paths:
+      - "revenue/buyer_redline_scope_delta/**"
+      - ".github/workflows/buyer-redline-scope-delta.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/buyer_redline_scope_delta/**"
+      - ".github/workflows/buyer-redline-scope-delta.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: buyer-redline-scope-delta-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile
+        run: python -m compileall -q revenue/buyer_redline_scope_delta
+      - name: Hostile suite
+        run: python -m unittest discover -s revenue/buyer_redline_scope_delta/tests -p 'test_*.py' -v
+      - name: Optimized Python
+        run: python -O -m unittest discover -s revenue/buyer_redline_scope_delta/tests -p 'test_*.py' -v
+      - name: Synthetic compile and verify
+        run: |
+          rm -rf /tmp/redline-demo
+          python revenue/buyer_redline_scope_delta/compile_redline.py compile \
+            --input revenue/buyer_redline_scope_delta/fixtures/requote.synthetic.json \
+            --out-dir /tmp/redline-demo
+          python revenue/buyer_redline_scope_delta/compile_redline.py verify \
+            --input revenue/buyer_redline_scope_delta/fixtures/requote.synthetic.json \
+            --packet /tmp/redline-demo/packet.md \
+            --receipt /tmp/redline-demo/receipt.json

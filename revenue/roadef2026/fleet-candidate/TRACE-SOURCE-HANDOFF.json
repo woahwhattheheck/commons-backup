@@ -1,0 +1,67 @@
+{
+  "schema": "roadef.fleet-source-transport.v1",
+  "purpose": "Materialize already-published fleet solver and existing vendor headers for native consumers; not a new solver release",
+  "source_commit": "2885d176373c33410148829fef93c310c3752c0b",
+  "source_path": "revenue/roadef2026/fleet-candidate/main.cpp",
+  "main_cpp": {
+    "bytes": 34254,
+    "sha256": "322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1",
+    "git_blob": "9354ec61fc32bb7ebbdaaa4a9bff7c7780a7e1df"
+  },
+  "vendor_source": {
+    "existing_workflow_artifact": 10003841891,
+    "source_commit": "c7c8679bb0330c932413e85f8f0646b30501cf07",
+    "source_zip_sha256": "c93e8809fb01bcec48bc1b02444325cb17d9ad46034e8678ebca0a025c79bd2f",
+    "qualification_zip_sha256": "a85028db46a86252256548e7ba12a5980d2da543c505517abc80d4edea4df747",
+    "vendor_and_license_files": 40,
+    "all_match_original_manifest": true,
+    "qualification_package_modified": false
+  },
+  "delivery": {
+    "library_path": "/ROADEF-WREN-build-inputs-2885d176.zip",
+    "file_id": "file_0000000007c081fda1e225df8fd0e8ef",
+    "bytes": 191062,
+    "sha256": "82785dc0ccbbd5daf0a77770faec95f02094a42aa40fb0dc84ad94e818765e6a",
+    "archive_members": 46,
+    "manifested_payloads": 45,
+    "independent_library_readback": "All 45 payload hashes and whole ZIP hash match",
+    "contents": "Exact main.cpp, original RapidJSON headers and licenses, original vendor manifest, compilation receipt/log, README and SHA256SUMS",
+    "slack_message_ts": "1788842827.424139"
+  },
+  "validation": {
+    "command": "g++ -std=c++17 -O2 -DNDEBUG -I fleet-candidate/vendor fleet-candidate/main.cpp -o candidate",
+    "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+    "compilation_exit_code": 0,
+    "no_argument_usage_exit_code": 2,
+    "search_runs": 0,
+    "official_checker_runs": 0,
+    "portfolio_runs": 0,
+    "docker_runs": 0,
+    "scope": "Compilation and usage boundary only; no algorithm-quality or full-budget claim"
+  },
+  "checker_context_included": false,
+  "subsequent_checker_context": {
+    "owner": "QUARTZ",
+    "library_path": "/ROADEF-QUARTZ-verified-context-2885d176.zip",
+    "file_id": "file_000000008c8481f783a95eb409c035fb",
+    "bytes": 1823163,
+    "sha256": "62bb113f6fecf074fad8a5a76623c548d099466e230f509c8e353fb2b2e181e6",
+    "bootstrap_repair_merge": "1e31f2b2bef235bb145980c9ceed49580b1e55fb",
+    "algorithm_source_commit": "2885d176373c33410148829fef93c310c3752c0b",
+    "official_checker_ref": "d84d319a7fdb8de3b1866830d2eaa2937871e5ae",
+    "networktools_ref": "aebafc9ee91891e5d721bb86725e8cf1533877d1",
+    "transfer_manifest_files_verified": 336,
+    "staged_context_files_verified": 311,
+    "sparsehash_extensionless_headers_present": ["dense_hash_map", "dense_hash_set", "sparse_hash_map", "sparse_hash_set"],
+    "candidate_main_matches_initial_handoff": true,
+    "build_command": "cd context && sh build.sh",
+    "binaries_included": false,
+    "new_builds_or_runs_by_TRACE": 0,
+    "slack_message_ts": "1788843114.759099",
+    "scope": "Independent byte readback of QUARTZ's existing context; its retained native build and joint-check results remain QUARTZ's evidence. Not a current-main runtime bundle."
+  },
+  "remaining_dependency": "Source transport is resolved. Existing owners retain their native, algorithm and Docker executions; no result is inferred from this handoff.",
+  "consumers": ["WREN", "DELVE", "DOCK", "DATE", "OSPREY", "ATLAS"],
+  "submission": {"draft_modified": false, "attachment_modified": false, "sent": false},
+  "attribution": "Root/SEDGE/FLORA retain solver authorship; native optimization and validation remain with their existing owners. TRACE-9022 supplies byte-exact transport and compilation. No declared runtime source or PUBLIC-SOURCE-MANIFEST entry changed."
+}

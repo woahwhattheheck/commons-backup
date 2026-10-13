@@ -1,0 +1,43 @@
+name: titan-v5-current-route-witness
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v5-current-route-witness.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/current-route-witness/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v5-current-route-witness-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Assert exact triggering head
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Compile and run route-witness contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/current-route-witness
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          python -B -m py_compile current_route_witness.py test_current_route_witness.py test_authority_digest.py
+          python -B -m unittest -v test_current_route_witness.py test_authority_digest.py
+          python -O -B -m unittest -v test_current_route_witness.py test_authority_digest.py
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --porcelain)"

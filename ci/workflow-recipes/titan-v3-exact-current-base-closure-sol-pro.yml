@@ -1,0 +1,88 @@
+name: titan-v3 exact-current base closure (SOL-PRO)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - .github/workflows/titan-v3-exact-current-base-closure-sol-pro.yml
+      - revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/**
+      - p/sol-pro-titan-v3-exact-current-base-closure-20260910-01.md
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-exact-current-base-closure-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: true
+
+jobs:
+  exact-current-base-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out the literal pull-request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fetch the live base tip
+        run: |
+          set -euo pipefail
+          test '${{ github.event.pull_request.base.ref }}' = main
+          git fetch --no-tags --force origin \
+            '+refs/heads/main:refs/remotes/origin/main'
+
+      - name: Prove exact-current ancestry and exact seven-path scope
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python3 -B revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/exact_current_base.py \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --event-json "$GITHUB_EVENT_PATH" \
+            --repository "$GITHUB_REPOSITORY" \
+            --expected-base-ref main \
+            --allow-path '.github/workflows/titan-v3-exact-current-base-closure-sol-pro.yml' \
+            --allow-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/README.md' \
+            --allow-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/exact_current_base.py' \
+            --allow-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/exact_current_base.py.zlib.b64' \
+            --allow-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/test_exact_current_base.py' \
+            --allow-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/test_exact_current_base.py.zlib.b64' \
+            --allow-path 'p/sol-pro-titan-v3-exact-current-base-closure-20260910-01.md' \
+            --require-path '.github/workflows/titan-v3-exact-current-base-closure-sol-pro.yml' \
+            --require-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/README.md' \
+            --require-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/exact_current_base.py' \
+            --require-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/exact_current_base.py.zlib.b64' \
+            --require-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/test_exact_current_base.py' \
+            --require-path 'revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure/test_exact_current_base.py.zlib.b64' \
+            --require-path 'p/sol-pro-titan-v3-exact-current-base-closure-20260910-01.md' \
+            --receipt "$RUNNER_TEMP/titan-v3-exact-current-base-closure.json"
+
+      - name: Run predecessor-killing contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/exact-current-base-closure
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          from pathlib import Path
+          for name in ("exact_current_base.py", "test_exact_current_base.py"):
+              compile(Path(name).read_text(encoding="utf-8"), name, "exec")
+          PY
+          python3 -B -m unittest -v test_exact_current_base.py
+
+      - name: Require final clean checkout
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+
+      - name: Retain exact-current receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-exact-current-base-closure-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/titan-v3-exact-current-base-closure.json
+          if-no-files-found: warn
+          retention-days: 14

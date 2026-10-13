@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/data/ci_receipt_corpus.schema.json",
+  "title": "Commons CI Receipt Corpus",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "assessed_at",
+    "scope",
+    "source_pool",
+    "selection_boundary",
+    "payloads_duplicated",
+    "scan",
+    "manual_review",
+    "license",
+    "release",
+    "truth",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-ci-receipt-corpus/v1"},
+    "kind": {"const": "CI_RECEIPT_CORPUS"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "generated_from_main": {"$ref": "#/$defs/git_sha"},
+    "assessed_at": {"const": "2026-08-26"},
+    "scope": {"type": "string", "minLength": 1},
+    "source_pool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "json_files_seen"],
+      "properties": {
+        "path": {"const": "actions/results"},
+        "json_files_seen": {"const": 50}
+      }
+    },
+    "selection_boundary": {"type": "string", "minLength": 1},
+    "payloads_duplicated": {"const": false},
+    "scan": {"$ref": "#/$defs/scan"},
+    "manual_review": {"$ref": "#/$defs/manual_review"},
+    "license": {"$ref": "#/$defs/license"},
+    "release": {"$ref": "#/$defs/release"},
+    "truth": {"$ref": "#/$defs/truth"},
+    "entries": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/entry"}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scanner_version", "rules", "files_scanned", "bytes_scanned", "hit_counts", "status"],
+      "properties": {
+        "scanner_version": {"const": "commons-ci-receipt-scan/v1"},
+        "rules": {
+          "type": "array",
+          "items": {"enum": ["PRIVATE_KEY", "GITHUB_TOKEN", "SLACK_TOKEN", "AWS_KEY", "STRIPE_SECRET", "BEARER", "PASSWORD", "EMAIL", "PHONE"]},
+          "minItems": 9,
+          "maxItems": 9,
+          "uniqueItems": true
+        },
+        "files_scanned": {"const": 9},
+        "bytes_scanned": {"const": 3733},
+        "hit_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["PRIVATE_KEY", "GITHUB_TOKEN", "SLACK_TOKEN", "AWS_KEY", "STRIPE_SECRET", "BEARER", "PASSWORD", "EMAIL", "PHONE"],
+          "properties": {
+            "PRIVATE_KEY": {"const": 0},
+            "GITHUB_TOKEN": {"const": 0},
+            "SLACK_TOKEN": {"const": 0},
+            "AWS_KEY": {"const": 0},
+            "STRIPE_SECRET": {"const": 0},
+            "BEARER": {"const": 0},
+            "PASSWORD": {"const": 0},
+            "EMAIL": {"const": 0},
+            "PHONE": {"const": 0}
+          }
+        },
+        "status": {"const": "PASS_ZERO_HITS"}
+      }
+    },
+    "manual_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reviewed_at", "reviewer_seat", "files_reviewed", "criteria", "result"],
+      "properties": {
+        "status": {"const": "PASS"},
+        "reviewed_at": {"const": "2026-08-26"},
+        "reviewer_seat": {"type": "string", "minLength": 1},
+        "files_reviewed": {"const": 9},
+        "criteria": {"const": "Inspect every selected JSON for credentials, personal contact data, customer or outreach material, private paths, and payload overcollection."},
+        "result": {"const": "Nine of nine selected receipts contain only technical repository-operation metadata; no customer, outreach, or private payload material was observed."}
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "root_license_files", "readme_license_statements", "reuse_rights_verified", "blocker"],
+      "properties": {
+        "status": {"const": "NOASSERTION"},
+        "root_license_files": {"const": 0},
+        "readme_license_statements": {"const": 0},
+        "reuse_rights_verified": {"const": false},
+        "blocker": {"type": "string", "minLength": 24}
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "manifest_public", "payload_release_created", "transfer_ready", "price_known"],
+      "properties": {
+        "state": {"const": "BLOCKED_LICENSE_REQUIRED"},
+        "manifest_public": {"const": true},
+        "payload_release_created": {"const": false},
+        "transfer_ready": {"const": false},
+        "price_known": {"const": false}
+      }
+    },
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["buyer_interest_verified", "agreement_signed", "delivery_completed", "cash_received"],
+      "properties": {
+        "buyer_interest_verified": {"const": false},
+        "agreement_signed": {"const": false},
+        "delivery_completed": {"const": false},
+        "cash_received": {"const": false}
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_id", "source_path", "source_blob_sha", "source_sha256", "source_bytes", "verb", "ok",
+        "executed_at", "classification", "scan_status", "manual_review", "customer_material", "outreach_material"
+      ],
+      "properties": {
+        "receipt_id": {"type": "string", "minLength": 1},
+        "source_path": {"type": "string", "pattern": "^actions/results/.+\\.json$"},
+        "source_blob_sha": {"$ref": "#/$defs/git_sha"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "source_bytes": {"type": "integer", "minimum": 1},
+        "verb": {"enum": ["OPEN", "RUN", "PUSH", "PATCH"]},
+        "ok": {"type": "boolean"},
+        "executed_at": {"type": "string", "format": "date-time"},
+        "classification": {"const": "PUBLIC_TECHNICAL_CI_RECEIPT"},
+        "scan_status": {"const": "PASS_ZERO_HITS"},
+        "manual_review": {"const": "PASS"},
+        "customer_material": {"const": false},
+        "outreach_material": {"const": false}
+      }
+    }
+  }
+}

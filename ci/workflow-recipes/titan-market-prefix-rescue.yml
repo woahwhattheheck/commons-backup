@@ -1,0 +1,131 @@
+name: TITAN V3 market-prefix rescue exact panel
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-market-prefix-rescue.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/market-prefix-rescue-20260909/**'
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: 'Comma-separated development seeds; do not use held selection seeds'
+        required: true
+        default: '2609099601,2609099602,2609099603,2609099604'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-market-prefix-rescue-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify exact candidate scope and source ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=853c2e3ea5195dbc957f479b87b2f240fa003a2c
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git merge-base --is-ancestor "$BASE" HEAD
+          unexpected="$(git diff --name-only "$BASE" HEAD | grep -Ev '^(\.github/workflows/titan-market-prefix-rescue\.yml|revenue/kaggriculture/cloud-execution-lab/market-prefix-rescue-20260909/)' || true)"
+          test -z "$unexpected" || { printf 'Unexpected changed paths:\n%s\n' "$unexpected"; exit 1; }
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install exact official engine package
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Pure candidate contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/market-prefix-rescue-20260909
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          set -euo pipefail
+          python -m py_compile market_prefix_rescue.py candidate.py run_panel.py test_market_prefix_rescue.py test_official_engine_contract.py
+          python -m unittest -v test_market_prefix_rescue.py
+
+      - name: Canonical package and exact engine transport contracts
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab
+          python build_integrated.py --check
+          cd market-prefix-rescue-20260909
+          python -m unittest -v test_official_engine_contract.py
+
+      - name: Paired current-control versus candidate panel
+        shell: bash
+        env:
+          SEEDS: ${{ github.event_name == 'workflow_dispatch' && inputs.seeds || '2609099601,2609099602,2609099603,2609099604' }}
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/titan-market-prefix-rescue
+          python revenue/kaggriculture/cloud-execution-lab/market-prefix-rescue-20260909/run_panel.py \
+            --seeds "$SEEDS" \
+            --runner-head "$(git rev-parse HEAD)" \
+            --action-timeout 1.0 \
+            --startup-timeout 10.0 \
+            --game-timeout 120.0 \
+            --output /tmp/titan-market-prefix-rescue/RESULTS.json \
+            --markdown /tmp/titan-market-prefix-rescue/RESULTS.md
+
+      - name: Publish compact panel receipt
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f /tmp/titan-market-prefix-rescue/RESULTS.json; then
+            python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path('/tmp/titan-market-prefix-rescue/RESULTS.json')
+          data = json.loads(path.read_text())
+          summary = data.get('summary') or {}
+          compact = {
+              'status': data.get('status'),
+              'paired_cells': summary.get('paired_cells'),
+              'activation_cells': summary.get('activation_cells'),
+              'activation_events': summary.get('activation_events'),
+              'mean_own_delta': summary.get('mean_own_delta'),
+              'mean_margin_delta': summary.get('mean_margin_delta'),
+              'positive_zero_negative': [summary.get('positive_margin_cells'), summary.get('zero_margin_cells'), summary.get('negative_margin_cells')],
+              'activated_mean_margin_delta': summary.get('activated_mean_margin_delta'),
+              'activated_worst_margin_delta': summary.get('activated_worst_margin_delta'),
+          }
+          text = json.dumps(compact, sort_keys=True, separators=(',', ':'))
+          print(f'::notice title=TITAN market-prefix rescue panel::{text}')
+          summary_path = os.environ.get('GITHUB_STEP_SUMMARY')
+          if summary_path:
+              with open(summary_path, 'a', encoding='utf-8') as stream:
+                  stream.write('## TITAN market-prefix rescue panel\n\n```json\n' + json.dumps(compact, indent=2, sort_keys=True) + '\n```\n')
+          PY
+          fi
+
+      - name: Upload exact evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-market-prefix-rescue-${{ github.run_id }}
+          path: |
+            /tmp/titan-market-prefix-rescue/RESULTS.json
+            /tmp/titan-market-prefix-rescue/RESULTS.md
+            revenue/kaggriculture/cloud-execution-lab/market-prefix-rescue-20260909/source_contract.json
+          if-no-files-found: warn
+          retention-days: 30

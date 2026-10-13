@@ -1,0 +1,127 @@
+name: titan-v3-early-capital-executable-prefix
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-early-capital-executable-prefix.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/early_capital.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_early_capital.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_early_capital_executable_prefix.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/titan-current/redundant_hire.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  exact-head:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Assert exact checkout and bounded diff
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        shell: python
+        run: |
+          import os, subprocess
+          head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          assert head == os.environ['EXPECTED_HEAD'], (head, os.environ['EXPECTED_HEAD'])
+          base = os.environ.get('BASE_SHA', '')
+          if base:
+              allowed = {
+                  '.github/workflows/titan-v3-early-capital-executable-prefix.yml',
+                  'revenue/kaggriculture/cloud-execution-lab/early_capital.py',
+                  'revenue/kaggriculture/cloud-execution-lab/test_early_capital.py',
+                  'revenue/kaggriculture/cloud-execution-lab/test_early_capital_executable_prefix.py',
+                  'revenue/kaggriculture/cloud-execution-lab/test_release_consistency.py',
+                  'revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz',
+                  'revenue/kaggriculture/cloud-execution-lab/exports/historical/titan-5f6a4153e502713b9467776eafe7464af650584149173ce7507a31a1b2af60f1.tar.gz',
+                  'revenue/kaggriculture/cloud-execution-lab/exports/historical/titan-cd6479e21a113a2342e5a9a38f9d9208d9789cf700adf5c17e5e9ae5b4698f78.tar.gz',
+                  'revenue/kaggriculture/cloud-execution-lab/runtime/integrated-selected/CURRENT-SOURCE.json',
+                  'revenue/kaggriculture/cloud-execution-lab/runtime/integrated-selected/CURRENT-ARCHIVE.json',
+              }
+              changed = set(subprocess.check_output(
+                  ['git', 'diff', '--name-only', f'{base}...HEAD'], text=True
+              ).splitlines())
+              assert changed == allowed, (changed, allowed)
+      - name: Compile exact source and tests
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          set -euo pipefail
+          PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile \
+            early_capital.py \
+            test_early_capital.py \
+            test_early_capital_executable_prefix.py
+      - name: Existing and executable-prefix contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          set -euo pipefail
+          PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+            python3 -m unittest -v \
+              test_early_capital \
+              test_early_capital_executable_prefix \
+            2>&1 | tee "$RUNNER_TEMP/early-capital-tests.log"
+      - name: Emit deterministic source receipt
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: python
+        run: |
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          engine = Path('revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py')
+          redundant = Path('revenue/kaggriculture/cloud-execution-lab/reference/titan-current/redundant_hire.py')
+          paths = [
+              Path('.github/workflows/titan-v3-early-capital-executable-prefix.yml'),
+              Path('revenue/kaggriculture/cloud-execution-lab/early_capital.py'),
+              Path('revenue/kaggriculture/cloud-execution-lab/test_early_capital.py'),
+              Path('revenue/kaggriculture/cloud-execution-lab/test_early_capital_executable_prefix.py'),
+              engine,
+              redundant,
+          ]
+          files = {}
+          for path in paths:
+              data = path.read_bytes()
+              files[str(path)] = {
+                  'bytes': len(data),
+                  'sha256': hashlib.sha256(data).hexdigest(),
+                  'git_blob': hashlib.sha1(
+                      b'blob ' + str(len(data)).encode() + b'\0' + data
+                  ).hexdigest(),
+              }
+          assert files[str(engine)]['git_blob'] == '3c202c7ee921da239356789e266b694635103fc4'
+          assert files[str(redundant)]['git_blob'] == '9ded2a9b636793df0511103da802bd3f26dbbb94'
+          log = Path(os.environ['RUNNER_TEMP']) / 'early-capital-tests.log'
+          log_bytes = log.read_bytes()
+          receipt = {
+              'schema': 'titan-v3-early-capital-executable-prefix/v2',
+              'head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'expected_head': os.environ['EXPECTED_HEAD'],
+              'files': files,
+              'test_log_sha256': hashlib.sha256(log_bytes).hexdigest(),
+              'scope': 'source and deterministic contracts only; no games or archive rebuild',
+          }
+          assert receipt['head'] == receipt['expected_head']
+          out = Path(os.environ['RUNNER_TEMP']) / 'early-capital-receipt.json'
+          out.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          print(out.read_text(), end='')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-early-capital-executable-prefix-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/early-capital-tests.log
+            ${{ runner.temp }}/early-capital-receipt.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Assert checkout stayed clean
+        run: test -z "$(git status --porcelain)"

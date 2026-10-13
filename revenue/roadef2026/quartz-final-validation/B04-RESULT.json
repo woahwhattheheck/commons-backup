@@ -1,0 +1,1537 @@
+{
+  "run_id": "quartz-roadef-final-20260908-01/B04",
+  "claim": "1788846312.934629",
+  "candidate_manifest_commit": "6feb9c0566b8f203c5d1a2ffdfbf1cb6d11be055",
+  "candidate_manifest_sha256": "6a5127cbf56305cfa46e5f26b52b4105c6c8b8aaa4ce12ed7643a076f82c9c51",
+  "unchanged_context_archive_file_id": "file_00000000187081fda7be9bc7faf7d292",
+  "arm_order": [
+    "portfolio",
+    "baseline"
+  ],
+  "artifact": {
+    "filename": "ROADEF-QUARTZ-final-B04-75897709.zip",
+    "file_id": "file_0000000051b081f7b489ae00a2655c64",
+    "library_file_id": "libfile_26ce157df70881918980dbff12bb367f",
+    "version": 0,
+    "bytes": 15540083,
+    "sha256": "bd0686f1547b222db929bde3f7ead4dc687c423442ab6db781c6818e553afb01",
+    "payload_files": 364,
+    "local_payload_hashes_verified": true,
+    "saved_size_verified": true,
+    "saved_readback_verified": false,
+    "readback_status": "Independent materialization returned HTTP 502."
+  },
+  "comparison_labels": {
+    "left": "portfolio",
+    "right": "independent unchanged SEDGE"
+  },
+  "comparison": {
+    "left_valid": true,
+    "right_valid": true,
+    "left_total_cost_diagnostic": 746,
+    "right_total_cost_diagnostic": 742,
+    "cost_used_in_ranking": false,
+    "first_changed_rank": 9366,
+    "load_count": 19392,
+    "left_mlu": "0.669499",
+    "right_mlu": "0.669499",
+    "winner": "right",
+    "left_at_first_change": "0.071957",
+    "right_at_first_change": "0.071945",
+    "left_checker_sha256": "af4f4c7d17e3e59bb8096cbae6862f95bba2fd46c2a9baa8ae46d1a405997c86",
+    "right_checker_sha256": "06a3db55168fae735afca62ea4f4d1b3c9b1d53f0fef9f29270aac45b912c45c"
+  },
+  "binaries": {
+    "candidate": "2dcbbe9bf36581fc102d861e742027c41d755fa198edcef8738c546b196df6cd",
+    "checker": "7227194df604d627720938b163b3d63baaba5a090ed90bff574e7e26af69149a",
+    "flora": "449fe1d4919bed04056924d70b6c9e786219940986225eb5dc0c67d250213790",
+    "sedge": "c9cb373dbe454dbaa87a581f09e4ff7608bc3ed31b05baeda5113df8cb629ec8"
+  },
+  "portfolio_resources": {
+    "command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=10s",
+      "590s",
+      "/tmp/quartz-roadef-final-20260908-01/context/run.sh",
+      "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-net.json",
+      "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-tm.json",
+      "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-scenario.json",
+      "/tmp/quartz-roadef-final-20260908-01/B04-portfolio.json"
+    ],
+    "cwd": "/tmp/quartz-roadef-final-20260908-01",
+    "started_utc": "2026-09-08T06:43:45.308259+00:00",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "cpu_max": "800000 100000",
+    "memory_max": "21474836480",
+    "observer_sha256": "9dc966fa257114768b221d73ad8429f186daff2c222c07f89a86020e0b146ccd",
+    "environment_controls": {
+      "PORTFOLIO_SECONDS": "585",
+      "PORTFOLIO_CHECK_INTERVAL": null,
+      "PORTFOLIO_CHECK_TIMEOUT": null,
+      "SEDGE_SECONDS": null,
+      "SEDGE_MAX_ROUNDS": null,
+      "CLOUD_INITIAL_SOLUTION": null,
+      "FLEET_DIRECTED": "1",
+      "FLEET_JOINT": "1",
+      "FLEET_WAYPOINT_LIMIT": "0"
+    },
+    "sample_period_seconds": 0.5,
+    "wall_observation_resolution_seconds": 0.5,
+    "memory_measurement": "sum of reachable process-tree VmRSS at 0.5s; excludes page cache; not a hard bound",
+    "pid": 8,
+    "returncode": 0,
+    "wall_seconds": 566.463431993001,
+    "sampled_peak_tree_rss_kib": 465712,
+    "samples": 1128,
+    "missing_or_racing_proc_entries": 0,
+    "maximum_observed_processes": 6,
+    "waited_children_user_seconds": 1735.3107909999999,
+    "waited_children_system_seconds": 3.312415,
+    "waited_children_maxrss_kib": 141080,
+    "finished_utc": "2026-09-08T06:53:11.773294+00:00"
+  },
+  "baseline_resources": {
+    "command": [
+      "python3",
+      "/tmp/quartz-roadef-native-20260908-01/pinned/revenue/roadef2026/fleet-candidate/benchmark.py",
+      "--data",
+      "/tmp/quartz-roadef-native-20260908-01/challenge",
+      "--checker",
+      "/tmp/roadef-context-fixed/bin/checker",
+      "--solver",
+      "sedge=/tmp/roadef-context-fixed/bin/sedge",
+      "--seconds",
+      "565",
+      "--workers",
+      "1",
+      "--instances",
+      "setB-04",
+      "--output",
+      "/tmp/quartz-roadef-final-20260908-01/B04-baseline"
+    ],
+    "cwd": "/tmp/quartz-roadef-final-20260908-01",
+    "started_utc": "2026-09-08T06:53:41.616666+00:00",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "cpu_max": "800000 100000",
+    "memory_max": "21474836480",
+    "observer_sha256": "9dc966fa257114768b221d73ad8429f186daff2c222c07f89a86020e0b146ccd",
+    "environment_controls": {
+      "PORTFOLIO_SECONDS": null,
+      "PORTFOLIO_CHECK_INTERVAL": null,
+      "PORTFOLIO_CHECK_TIMEOUT": null,
+      "SEDGE_SECONDS": null,
+      "SEDGE_MAX_ROUNDS": null,
+      "CLOUD_INITIAL_SOLUTION": null,
+      "FLEET_DIRECTED": null,
+      "FLEET_JOINT": null,
+      "FLEET_WAYPOINT_LIMIT": null
+    },
+    "sample_period_seconds": 0.5,
+    "wall_observation_resolution_seconds": 0.5,
+    "memory_measurement": "sum of reachable process-tree VmRSS at 0.5s; excludes page cache; not a hard bound",
+    "pid": 8,
+    "returncode": 0,
+    "wall_seconds": 565.8480301659984,
+    "sampled_peak_tree_rss_kib": 153676,
+    "samples": 1123,
+    "missing_or_racing_proc_entries": 0,
+    "maximum_observed_processes": 2,
+    "waited_children_user_seconds": 565.115498,
+    "waited_children_system_seconds": 0.48193199999999997,
+    "waited_children_maxrss_kib": 140700,
+    "finished_utc": "2026-09-08T07:03:07.466167+00:00"
+  },
+  "portfolio_receipt_original": {
+    "status": "complete",
+    "validated": true,
+    "solution_sha256": "66cf09e5fcc1b276f98d1049c83a50dab965abe5791b93bc8717ae25b4f4bd26",
+    "comparison": "official checker six-decimal descending saturation vector",
+    "cost_used_in_ranking": false,
+    "checker_sha256": "7227194df604d627720938b163b3d63baaba5a090ed90bff574e7e26af69149a",
+    "input_sha256": {
+      "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-net.json": "68c81752f1b0224f39c180325feb740c100a153f95a1aab8dde62f38c0eb271a",
+      "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-tm.json": "0459d7f4deccdb385c0f8c4b848e49a9c7e696096fc49619450e4e973fb4dc88",
+      "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-scenario.json": "6b28cc9616cd2122fa52ae6e5715be83abac13e315f89b827480a598d078f0c3"
+    },
+    "peak_sampled_process_rss_kib": 465776,
+    "memory_measurement": "Linux /proc RSS sum of supervisor and active lane/checker leaders every 0.5s; complete samples only; excludes descendants/page cache; shared pages may repeat; not a hard bound",
+    "memory_sampling": {
+      "status": "complete",
+      "expected_processes": 1,
+      "sampled_processes": 1,
+      "sampled_sum_kib": 32496,
+      "reason": null,
+      "complete_samples": 1114,
+      "incomplete_samples": 1,
+      "duration_seconds": 0.000124
+    },
+    "wall_seconds": 566.3305,
+    "search_allowance_seconds": 565.0,
+    "deadline_seconds": 585.0,
+    "signal_received": null,
+    "artifacts": "/tmp/quartz-roadef-final-20260908-01/B04-artifacts/roadef-portfolio-47n8l1nt",
+    "events": [
+      {
+        "event": "provisional_zero_change_checkpoint",
+        "elapsed_seconds": 0.0004
+      },
+      {
+        "event": "lane_started",
+        "elapsed_seconds": 0.0049,
+        "lane": "sedge",
+        "pid": 12
+      },
+      {
+        "event": "lane_started",
+        "elapsed_seconds": 0.0053,
+        "lane": "flora",
+        "pid": 13
+      },
+      {
+        "event": "lane_started",
+        "elapsed_seconds": 0.006,
+        "lane": "candidate",
+        "pid": 14
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 0.4491,
+        "lane": "zero_change_baseline",
+        "solution_sha256": "606a5ba1723e8ce3b803c8ebc565eee0d8ae7e1a9aeda274af3cac8b4465ee7b",
+        "maximum_load": "1.0",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 0.4498,
+        "lane": "zero_change_baseline",
+        "valid": true,
+        "checker_seconds": 0.4028,
+        "solution_sha256": "606a5ba1723e8ce3b803c8ebc565eee0d8ae7e1a9aeda274af3cac8b4465ee7b"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 16.006,
+        "lane": "sedge",
+        "solution_sha256": "45e52bf61578b2787acff93491d0f4eea844176911e539fe60dbb762ad8cb89d",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 16.0065,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4036,
+        "solution_sha256": "45e52bf61578b2787acff93491d0f4eea844176911e539fe60dbb762ad8cb89d"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 16.4642,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4034,
+        "solution_sha256": "7d1bbab41f76cb150250f670c305436eca80325427bd61f7ad39f347a5f9c2b7"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 30.9054,
+        "lane": "sedge",
+        "solution_sha256": "9125779cde5317ccc57f15459670f11f6857e138e304c347787be132a71b0446",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 30.9059,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.3022,
+        "solution_sha256": "9125779cde5317ccc57f15459670f11f6857e138e304c347787be132a71b0446"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 31.4713,
+        "lane": "flora",
+        "solution_sha256": "f0c2100f3abf0aa16b8d249c29fa3f905018bd5379a1e77a11455ab00696dda6",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 31.4718,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4012,
+        "solution_sha256": "f0c2100f3abf0aa16b8d249c29fa3f905018bd5379a1e77a11455ab00696dda6"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 31.9171,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4028,
+        "solution_sha256": "f031936bef4a6911c27bf1d20e30cc52750584b5e3053f201ceeb380c76b4697"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 45.9689,
+        "lane": "sedge",
+        "solution_sha256": "388569acbfcd27180a145b77c0ecc76692bd8f3e406faf53727d60745d6b1304",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 45.9694,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.3029,
+        "solution_sha256": "388569acbfcd27180a145b77c0ecc76692bd8f3e406faf53727d60745d6b1304"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 46.9177,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4034,
+        "solution_sha256": "d438b102fd5abd5b485ca795cb2e1b04d7ff1a243e9feb617ea515a85702600e"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 61.1641,
+        "lane": "sedge",
+        "solution_sha256": "c5f0b5b2c8b1ce2d96152053655dac9a17ea34a445e10a939a17156553fd66af",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 61.1645,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4062,
+        "solution_sha256": "c5f0b5b2c8b1ce2d96152053655dac9a17ea34a445e10a939a17156553fd66af"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 62.0219,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4029,
+        "solution_sha256": "084ec9e296fc9563b4f790bcaf37eb596c31cc551d86e82bab141ba9443612f3"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 76.1724,
+        "lane": "sedge",
+        "solution_sha256": "aa8ff323b3b33261c85a9ad5efc9de579d1a17e63f67c16c879ba0074f5c8aae",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 76.1732,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4033,
+        "solution_sha256": "aa8ff323b3b33261c85a9ad5efc9de579d1a17e63f67c16c879ba0074f5c8aae"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 77.0167,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4028,
+        "solution_sha256": "de337a7c452b7cc5e86273fa10c1d0aa6fba809e4e45bd581c062d1366af56c9"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 91.2558,
+        "lane": "sedge",
+        "solution_sha256": "cfbe52fe55f5b4ddf4a9466bef51e439b04a156de4c9ec05dec7fb7b99828716",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 91.2566,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4014,
+        "solution_sha256": "cfbe52fe55f5b4ddf4a9466bef51e439b04a156de4c9ec05dec7fb7b99828716"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 91.7221,
+        "lane": "flora",
+        "solution_sha256": "79f9e45a7235a2fe38f92256d443e554a605359327ba974e9d3a608a07c0d7d2",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 91.7228,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4067,
+        "solution_sha256": "79f9e45a7235a2fe38f92256d443e554a605359327ba974e9d3a608a07c0d7d2"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 92.1683,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4034,
+        "solution_sha256": "3a923108b3f9fbe5682ce943a2e7fcd7c46860d365f3a40b1a7e00b240ba0e1d"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 106.2158,
+        "lane": "sedge",
+        "solution_sha256": "01880a2d79a293f84d62b6c570c479309a699667f9f5cb104113ddea9bb5e426",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 106.2163,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.303,
+        "solution_sha256": "01880a2d79a293f84d62b6c570c479309a699667f9f5cb104113ddea9bb5e426"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 107.1726,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3027,
+        "solution_sha256": "8ca5822eb2d46f44e2a60723c9038933220aabe88a6ccd81998d1d0b5e814d1e"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 121.3981,
+        "lane": "sedge",
+        "solution_sha256": "76cfdfb673863cc8f93f79a90136e88835b695d9e8b4dd7f96796e012d3b078f",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 121.3985,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4028,
+        "solution_sha256": "76cfdfb673863cc8f93f79a90136e88835b695d9e8b4dd7f96796e012d3b078f"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 121.8647,
+        "lane": "flora",
+        "solution_sha256": "ac51b332ffa535f52a81f6b6517d3c3a1524395256f9d77ad1c4a12980a528d9",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 121.8652,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.403,
+        "solution_sha256": "ac51b332ffa535f52a81f6b6517d3c3a1524395256f9d77ad1c4a12980a528d9"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 122.2159,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3014,
+        "solution_sha256": "4050018067adf76c2bbdd26dde8d8d257704e755a05a918c76b41accb8595654"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 136.3512,
+        "lane": "sedge",
+        "solution_sha256": "1049ff08b17527f71a4b7556729fd854d461784139858dada0c3c26b1027039c",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 136.3517,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.301,
+        "solution_sha256": "1049ff08b17527f71a4b7556729fd854d461784139858dada0c3c26b1027039c"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 137.3003,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3013,
+        "solution_sha256": "c6931bf61e2913e0ab04afaead82588f966ef314bed0ee56a6a43c17ca5f7daa"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 151.5268,
+        "lane": "sedge",
+        "solution_sha256": "1a5b85165c489f43b5c46d7df6f94a4e75ac3949ed60a42d8236abe8986c2caa",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 151.5273,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4012,
+        "solution_sha256": "1a5b85165c489f43b5c46d7df6f94a4e75ac3949ed60a42d8236abe8986c2caa"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 151.9959,
+        "lane": "flora",
+        "solution_sha256": "67f48cf97e25f53fab81655d487c273809530212ffdbdb6b21b6e7b6d8231363",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 151.9966,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4039,
+        "solution_sha256": "67f48cf97e25f53fab81655d487c273809530212ffdbdb6b21b6e7b6d8231363"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 152.4464,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4039,
+        "solution_sha256": "c7da39fb3e15c2b2b13507ff9ed32d57678b96af2ce8c2bd9b144eb5d8c366bb"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 166.5828,
+        "lane": "sedge",
+        "solution_sha256": "cf8adde4f0bc742eff3bf7785d4d5262631d514ac7334378eee9a0fe4f05372b",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 166.5836,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4028,
+        "solution_sha256": "cf8adde4f0bc742eff3bf7785d4d5262631d514ac7334378eee9a0fe4f05372b"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 167.4499,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3028,
+        "solution_sha256": "3f42421b6f74c0bf781d7397c1b40d036c171964792469db6c11cbb1415f1603"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 181.5713,
+        "lane": "sedge",
+        "solution_sha256": "d97dbb52edebec09cd105ae57e5e2601ace40dfb366561afe87aca6de5c66085",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 181.572,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.3026,
+        "solution_sha256": "d97dbb52edebec09cd105ae57e5e2601ace40dfb366561afe87aca6de5c66085"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 182.1234,
+        "lane": "flora",
+        "solution_sha256": "f367f7b41bc27511d5752840c477a4b5114c1c128a5fb0eb5e4435b2df982b60",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 182.1239,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4032,
+        "solution_sha256": "f367f7b41bc27511d5752840c477a4b5114c1c128a5fb0eb5e4435b2df982b60"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 182.5725,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4011,
+        "solution_sha256": "400a97dd73f30b53f9600708b1dafb525f5994054449f7b1deceb19cae12a872"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 196.726,
+        "lane": "sedge",
+        "solution_sha256": "028d84090867104268c238e0ad74b80ed369ebd0a39d155e9760da43042c900b",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 196.7266,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4019,
+        "solution_sha256": "028d84090867104268c238e0ad74b80ed369ebd0a39d155e9760da43042c900b"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 197.1906,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4038,
+        "solution_sha256": "f49d2ed898b084c51606b7cf06768f1557ebb395c4d7f3daeb10774bce8d1aef"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 197.5377,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3034,
+        "solution_sha256": "80be1f4df558151c4ca775e20abc36b33ccea32170ac6425cf77ff3a04753f65"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 211.7781,
+        "lane": "sedge",
+        "solution_sha256": "09297220b67d97042add7d85d0738161db521c9447ab8394825d0d4988d6336f",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 211.7789,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4035,
+        "solution_sha256": "09297220b67d97042add7d85d0738161db521c9447ab8394825d0d4988d6336f"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 212.1351,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.3031,
+        "solution_sha256": "81fd3a2cb4e8aee56b88358517ba8307044959680922c0e5f2c1cb6567ce2244"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 212.5811,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.301,
+        "solution_sha256": "e540479bc121eeeb524090597686d9ad39dbdaf62f3f9dd8308dfaf5728cb7fd"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 226.7122,
+        "lane": "sedge",
+        "solution_sha256": "84f33eb66eafa9a678162dad51b384cd5073b69060b32850c092a6348b46f6b1",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 226.7128,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.3026,
+        "solution_sha256": "84f33eb66eafa9a678162dad51b384cd5073b69060b32850c092a6348b46f6b1"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 227.1564,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.3012,
+        "solution_sha256": "1bc5544342719ab221ebc6664d15b2c0646685ca314e7bf850aed270e295cf02"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 227.6058,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3033,
+        "solution_sha256": "af60c3a569cc305bc7a58884b035026176c51d608ef274451d70a013b43abb83"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 241.8482,
+        "lane": "sedge",
+        "solution_sha256": "9e6599bc9b207309c63652f58a016d71869c0ea06f0aa0f63c47f63af0b61302",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 241.8491,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.403,
+        "solution_sha256": "9e6599bc9b207309c63652f58a016d71869c0ea06f0aa0f63c47f63af0b61302"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 242.3044,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4101,
+        "solution_sha256": "f6bd9a9b79f23b25f117a3f9440e617e8ce510af8326a938ea783647d75abdd3"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 242.841,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4054,
+        "solution_sha256": "590aa79f377fe504bbe39ca7a87ad53242a833bc0b74d0111893ac6cecbaf3a4"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 256.8874,
+        "lane": "sedge",
+        "solution_sha256": "4b5c06aa7052bcd43e8ca74c516503cc45a5ddc9286dd8747938d895b47fd075",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 256.8881,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4031,
+        "solution_sha256": "4b5c06aa7052bcd43e8ca74c516503cc45a5ddc9286dd8747938d895b47fd075"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 257.3792,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.403,
+        "solution_sha256": "1eb0e4d5fec9286385b3a6c3d8fdf2e3e8c5ce80e6b68919c4c2fa075ab85adf"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 257.745,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3011,
+        "solution_sha256": "9e3415debc681cb0f9e217fc5b230115ff4e124eed972984b5dc5d46196f6b9b"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 271.8808,
+        "lane": "sedge",
+        "solution_sha256": "ebd40a0d969e9b68dfc8d1cdef4759d6699c002c99bb51d69dc3f39bba85a9ac",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 271.8817,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4015,
+        "solution_sha256": "ebd40a0d969e9b68dfc8d1cdef4759d6699c002c99bb51d69dc3f39bba85a9ac"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 272.4299,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4011,
+        "solution_sha256": "2a77117f9579230a481677d1a3286fd086b3af257fed2804ff5451551a570ab0"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 272.8752,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4035,
+        "solution_sha256": "d58144e85665e47f70ec1bce8bc0a7262860f080199efe7575eb147c5e2c98a7"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 286.9304,
+        "lane": "sedge",
+        "solution_sha256": "4cfbbd42f12737cad1ad1b4571a5986d57ef3f161fc7caf5cec7dcc1d32870a1",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 286.9313,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4032,
+        "solution_sha256": "4cfbbd42f12737cad1ad1b4571a5986d57ef3f161fc7caf5cec7dcc1d32870a1"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 287.4833,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4034,
+        "solution_sha256": "b48382e23bcf10449aa04e9c2ce1ccaa8a814cef007b7c0a6d601d4d73f66d5a"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 287.9457,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4034,
+        "solution_sha256": "9c200cd8bd2bdbbf6f799e1755d94c9763e2ad6da486fe758dae451cf35f3f7e"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 302.0047,
+        "lane": "sedge",
+        "solution_sha256": "57b69072db425b1b6556ead2a2ce1b186f778d88dba69e6fb708c1e7d53c61a9",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 302.0056,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4033,
+        "solution_sha256": "57b69072db425b1b6556ead2a2ce1b186f778d88dba69e6fb708c1e7d53c61a9"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 302.5783,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4037,
+        "solution_sha256": "2af06575ef97caf4a539e39f03d9dd68e83b8208ca90d8bf26dda39831394dd8"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 303.0321,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4012,
+        "solution_sha256": "f2bbdc0d62feda427d4ee63edf585c1eb0026af441f141c61e47efe487dad47b"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 317.0839,
+        "lane": "sedge",
+        "solution_sha256": "dbb86275c8cc19d7bc2e9a5856bd46a2e40105f9ca5c19b8bf35c114cc09300d",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 317.0847,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4044,
+        "solution_sha256": "dbb86275c8cc19d7bc2e9a5856bd46a2e40105f9ca5c19b8bf35c114cc09300d"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 317.6292,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4027,
+        "solution_sha256": "1bea4e7949bfeae51cc4556248c7f1e5e86f41268f43323e79f0b60a99c96c25"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 318.0762,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4037,
+        "solution_sha256": "4216617036e730878a09df045048bb91f020695d5db7c2957892c18717fef3e1"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 332.121,
+        "lane": "sedge",
+        "solution_sha256": "319c97e8b88dd8a3a32a8aee9b86b002c1184c78e838b46c6ce4e9584cb36182",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 332.1218,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4051,
+        "solution_sha256": "319c97e8b88dd8a3a32a8aee9b86b002c1184c78e838b46c6ce4e9584cb36182"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 332.686,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4035,
+        "solution_sha256": "e784ffe5f02acbfcef4db9403e0155189873407f35a9aec382921e4f5eab32df"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 333.137,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4032,
+        "solution_sha256": "eb7f6db668f1ac2b679dc2fae838817aee3df4d2774320cafa2c2d49eafbfab1"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 347.0833,
+        "lane": "sedge",
+        "solution_sha256": "7f4b7a180b4729f6ccfb0b5b49967fc3d8538ee8607b114ff204f15f5bd88529",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 347.0847,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.3014,
+        "solution_sha256": "7f4b7a180b4729f6ccfb0b5b49967fc3d8538ee8607b114ff204f15f5bd88529"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 347.7332,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4023,
+        "solution_sha256": "4bc9adc7659baff13ffea2a6818742cf6373d6d6f37dc49e6182b34634ff30a5"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 348.1943,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4028,
+        "solution_sha256": "6bcb9995aa542dee83908f7edee65c21fbbeed0966b105cf5b2953971036c1f1"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 362.1008,
+        "lane": "sedge",
+        "solution_sha256": "3c7b132b502093341bbc2b9bd67045b882db8cb38a139c55cce0c792c589c6af",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 362.1021,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.3033,
+        "solution_sha256": "3c7b132b502093341bbc2b9bd67045b882db8cb38a139c55cce0c792c589c6af"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 362.7741,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4032,
+        "solution_sha256": "4b62ea258c98e86e7bbefab86f7b0e2a98a8edf01b8ade58493333bd3ee7022f"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 363.2528,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4039,
+        "solution_sha256": "cb1b1756ace28473258ec7ad9ece84b341875d15f80c1d815ed1c22580aa4f73"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 377.2298,
+        "lane": "sedge",
+        "solution_sha256": "06e5ee15c93b875db53060c3015c4ac655c11f0c08aacd342d76e07abf913b26",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 377.231,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4036,
+        "solution_sha256": "06e5ee15c93b875db53060c3015c4ac655c11f0c08aacd342d76e07abf913b26"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 377.7964,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4035,
+        "solution_sha256": "343b937312725c27b0907871c3d0f8d57204bedca96bd4dbcc49c5a882ec2851"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 378.265,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4033,
+        "solution_sha256": "aa55e328748ba4dcfe69aaa45835541792bb95b89b9bb916d28ad99c1c5d901d"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 392.2104,
+        "lane": "sedge",
+        "solution_sha256": "34fb08c1ef7a85cd756dd57e656c394048e5b34f4a6fff55b0607cd4d8df334d",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 392.2113,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4032,
+        "solution_sha256": "34fb08c1ef7a85cd756dd57e656c394048e5b34f4a6fff55b0607cd4d8df334d"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 392.8569,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4032,
+        "solution_sha256": "e86ab720d35d0caf2c9b624163074d75906eda6acebbf6b2fd961b683fbccfe9"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 393.3039,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4032,
+        "solution_sha256": "187293945ffd2a1a056fdcb7bcdbe3dadb0a95ad204d014f0a94d32e9bbafc61"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 407.2756,
+        "lane": "sedge",
+        "solution_sha256": "5c2cb5f0401b7333d3a625a47d22961ab2b6b5b91aeaee17eb83d28d4b188933",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 407.2769,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4082,
+        "solution_sha256": "5c2cb5f0401b7333d3a625a47d22961ab2b6b5b91aeaee17eb83d28d4b188933"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 407.9692,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4013,
+        "solution_sha256": "8f72f0b70532115bab882ce309af901f68b34eacb455f053af2721a7d0d714ed"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 408.3206,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3066,
+        "solution_sha256": "c21f3b5907fae0e2c7d644c4432466b1e5fca6b262f2ffdcc8ba0d079f57ee14"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 422.2771,
+        "lane": "sedge",
+        "solution_sha256": "76e593332ae7b40bec66398fb552abe79715b8edcec1d7f1647bdb909093e065",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 422.2794,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4041,
+        "solution_sha256": "76e593332ae7b40bec66398fb552abe79715b8edcec1d7f1647bdb909093e065"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 422.9536,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.404,
+        "solution_sha256": "0c7c682f9329d9e06370fef613a7edc822eba5f8687292eab7e83ba95fa73ae5"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 423.5233,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4039,
+        "solution_sha256": "04881ecd766278e80280e95f3963cf1855b83fee3a7769e7b38b2e036ca59e27"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 437.3897,
+        "lane": "sedge",
+        "solution_sha256": "45cd696e941e5bfad1183c0ef4017962e19f9e7d3178698d99bd534a6eac2eb9",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 437.3911,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4039,
+        "solution_sha256": "45cd696e941e5bfad1183c0ef4017962e19f9e7d3178698d99bd534a6eac2eb9"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 437.8586,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.3032,
+        "solution_sha256": "255e959151396df1781eacf9c25e95733acfc5f0e0d3203527fe07c1e7405a78"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 438.5264,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4033,
+        "solution_sha256": "515410c1592ab64f111f87a412db5626acefcaf00b70ad5a63b4f75775faa315"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 452.4844,
+        "lane": "sedge",
+        "solution_sha256": "8a9c90acefc2b35d81aacaf77be8b787034578811b02844dbec6e3af3bbcb96a",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 452.4858,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4034,
+        "solution_sha256": "8a9c90acefc2b35d81aacaf77be8b787034578811b02844dbec6e3af3bbcb96a"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 452.9341,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.3026,
+        "solution_sha256": "88f2e0cf2299f5e0a92cb1b18977e807e6969c8b84904da76b8675d4023f0660"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 453.5853,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4054,
+        "solution_sha256": "95454098f9a6058650e386d30f3c5971757a60945b6278c481197a13f8326d41"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 467.5232,
+        "lane": "sedge",
+        "solution_sha256": "b2dca01fb9ebd416488857d70bc6468cd60e58d5b74322b36368f15941523d6a",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 467.5243,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4011,
+        "solution_sha256": "b2dca01fb9ebd416488857d70bc6468cd60e58d5b74322b36368f15941523d6a"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 467.9855,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.3012,
+        "solution_sha256": "467c4f1e56b2b8354db5ba93f3ecfe39776cb22b8f010bec226ada27ffa9bc5c"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 468.531,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3011,
+        "solution_sha256": "23e282cf0ec410be68fd9c5168033e6784ba1e3ba71674609ef66e380cc6e521"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 482.5777,
+        "lane": "sedge",
+        "solution_sha256": "766c25ab61a3ef8d9f4f9f28cdd9d768f32863783fdb5e8ba2be2c5a6bc60b77",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 482.5785,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4033,
+        "solution_sha256": "766c25ab61a3ef8d9f4f9f28cdd9d768f32863783fdb5e8ba2be2c5a6bc60b77"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 483.0456,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.3032,
+        "solution_sha256": "7a1194ddd33ea1e33ebf835362bd7637ca978efe7ff0bf0d4305a2ce7a12498f"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 483.715,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4058,
+        "solution_sha256": "f0ab0a21f186f9d0718a23664ea2433121450d317418236f6df1fbc583663ada"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 497.6718,
+        "lane": "sedge",
+        "solution_sha256": "e9a4f7775ea88911eef0164e6e620fd51ea720974caca6eff6f65cee81f46ec3",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 497.673,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4033,
+        "solution_sha256": "e9a4f7775ea88911eef0164e6e620fd51ea720974caca6eff6f65cee81f46ec3"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 498.2215,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.403,
+        "solution_sha256": "4199c177b593e13229447115287ccfea5c08f01ab4b3712ab0cbea1f42d68b07"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 498.7688,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4027,
+        "solution_sha256": "cc467d7ec854fb32e2e74558c8ce0eafe6d3d2941c5820163aa6888e02c95841"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 512.7048,
+        "lane": "sedge",
+        "solution_sha256": "ec855267ba4a7e6a9044265ed4e3c65d7d212453942a92a31fe1079f0b71dedb",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 512.7059,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4039,
+        "solution_sha256": "ec855267ba4a7e6a9044265ed4e3c65d7d212453942a92a31fe1079f0b71dedb"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 513.2579,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4036,
+        "solution_sha256": "0def03059a2cc0e5ca86b6d3adbff886a202da622b4a7a6edaf92f91e95af895"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 513.7065,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.3026,
+        "solution_sha256": "60036541cad3148333ae8b7ab7f260611b37945386bb8a1f42104ecda607a82c"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 527.7366,
+        "lane": "sedge",
+        "solution_sha256": "5862df8de2a596f6d79eac54e97ce310ce9938badd13612ff1dcd668050f2530",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 527.7377,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4035,
+        "solution_sha256": "5862df8de2a596f6d79eac54e97ce310ce9938badd13612ff1dcd668050f2530"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 528.2856,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4029,
+        "solution_sha256": "13126bb27ec016bdee71c06a8a6fdb39f21ceecd03273cb02f415e5173cbf8c6"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 528.8361,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4029,
+        "solution_sha256": "e383b65325178e9c146175f855377c8be3d46c6d2422acea0f3356b8111fbe68"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 542.7778,
+        "lane": "sedge",
+        "solution_sha256": "cb46eae95e9458c2200aab853d58e142fc949d17499cd93104a12d0e12ec8df7",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 542.7791,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4012,
+        "solution_sha256": "cb46eae95e9458c2200aab853d58e142fc949d17499cd93104a12d0e12ec8df7"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 543.2417,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.3015,
+        "solution_sha256": "1080b3faca5abc41d95a73574ed8f2bc8c4f9fad1ef89dc80f1e96d2e730a620"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 543.9078,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4011,
+        "solution_sha256": "fe54b1fef61bd1be8d68a59422de81d68732fe7d2572be38916cb7f42be42472"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 557.8412,
+        "lane": "sedge",
+        "solution_sha256": "9836556735ff897876908a3a4f389bed8f846ad0e00eb1d7ef33117c476f08ab",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 557.8424,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4031,
+        "solution_sha256": "9836556735ff897876908a3a4f389bed8f846ad0e00eb1d7ef33117c476f08ab"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 558.4011,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4041,
+        "solution_sha256": "aaafb4507434989d8f41ee9187dc940bff88dc98a8b8a7aa89b95ca10129471a"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 558.9479,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.4026,
+        "solution_sha256": "bdc7d9815204efce84e3dbe44c1b68c2aea4a327f90f4f92b8b264303abde83d"
+      },
+      {
+        "event": "stopping",
+        "elapsed_seconds": 565.087,
+        "reason": "search_budget"
+      },
+      {
+        "event": "incumbent_improved",
+        "elapsed_seconds": 565.5348,
+        "lane": "sedge",
+        "solution_sha256": "66cf09e5fcc1b276f98d1049c83a50dab965abe5791b93bc8717ae25b4f4bd26",
+        "maximum_load": "0.669499",
+        "load_count": 19392
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 565.5358,
+        "lane": "sedge",
+        "valid": true,
+        "checker_seconds": 0.4033,
+        "solution_sha256": "66cf09e5fcc1b276f98d1049c83a50dab965abe5791b93bc8717ae25b4f4bd26"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 565.9836,
+        "lane": "flora",
+        "valid": true,
+        "checker_seconds": 0.4029,
+        "solution_sha256": "846448bd5d74b0be0151246e7038067a6da4470dc49dd44c4b1264cf116da017"
+      },
+      {
+        "event": "check_completed",
+        "elapsed_seconds": 566.3284,
+        "lane": "candidate",
+        "valid": true,
+        "checker_seconds": 0.301,
+        "solution_sha256": "8bcd6e0715b3e38279e050afba206f1d4ce0ca13328fffc5d383ad0e07d76681"
+      }
+    ],
+    "lanes": [
+      {
+        "name": "sedge",
+        "executable": "/tmp/quartz-roadef-final-20260908-01/context/bin/sedge",
+        "source_binary_sha256": "c9cb373dbe454dbaa87a581f09e4ff7608bc3ed31b05baeda5113df8cb629ec8",
+        "returncode": 0
+      },
+      {
+        "name": "flora",
+        "executable": "/tmp/quartz-roadef-final-20260908-01/context/bin/flora",
+        "source_binary_sha256": "449fe1d4919bed04056924d70b6c9e786219940986225eb5dc0c67d250213790",
+        "returncode": 0
+      },
+      {
+        "name": "candidate",
+        "executable": "/tmp/quartz-roadef-final-20260908-01/context/bin/candidate",
+        "source_binary_sha256": "2dcbbe9bf36581fc102d861e742027c41d755fa198edcef8738c546b196df6cd",
+        "returncode": 0
+      }
+    ],
+    "selected_lane": "sedge",
+    "selected_checker_sha256": "af4f4c7d17e3e59bb8096cbae6862f95bba2fd46c2a9baa8ae46d1a405997c86",
+    "load_count": 19392,
+    "maximum_load": "0.669499",
+    "total_cost_diagnostic": 746
+  },
+  "independent_checks": [
+    {
+      "decimals": 6,
+      "command": [
+        "/tmp/quartz-roadef-final-20260908-01/context/bin/checker",
+        "--net",
+        "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-net.json",
+        "--tm",
+        "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-tm.json",
+        "--scenario",
+        "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-scenario.json",
+        "--srpaths",
+        "/tmp/quartz-roadef-final-20260908-01/B04-portfolio.json",
+        "--max-decimal-places",
+        "6"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.3127672379996511,
+      "valid": true,
+      "load_count": 19392,
+      "sha256": "af4f4c7d17e3e59bb8096cbae6862f95bba2fd46c2a9baa8ae46d1a405997c86"
+    },
+    {
+      "decimals": 12,
+      "command": [
+        "/tmp/quartz-roadef-final-20260908-01/context/bin/checker",
+        "--net",
+        "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-net.json",
+        "--tm",
+        "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-tm.json",
+        "--scenario",
+        "/tmp/quartz-roadef-native-20260908-01/challenge/setB/setB-04-scenario.json",
+        "--srpaths",
+        "/tmp/quartz-roadef-final-20260908-01/B04-portfolio.json",
+        "--max-decimal-places",
+        "12"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.28903196200189996,
+      "valid": true,
+      "load_count": 19392,
+      "sha256": "6b4d1aeb4f603fab5501ef22d3b1e384fab3da3a2e0f89fbf69c47e8bb758214"
+    }
+  ],
+  "baseline_result": {
+    "instance": "setB-04",
+    "solver": "sedge",
+    "valid": true,
+    "mlu_6": 0.669499,
+    "total_cost": 742,
+    "wall_seconds": 565.1075234580021,
+    "checker_seconds": {
+      "6": 0.2936500280011387,
+      "12": 0.2979853539982287
+    },
+    "accepted_moves": 2314,
+    "attempted_moves": 23703197,
+    "max_load_error": 1.0003664563384973e-12,
+    "load_count": 19392,
+    "solution_sha256": "052c4099ce1f9346993964e83b0895e79a3d2283c81fb6e02b29f216f1ae0c46",
+    "input_sha256": {
+      "setB-04-net.json": "68c81752f1b0224f39c180325feb740c100a153f95a1aab8dde62f38c0eb271a",
+      "setB-04-tm.json": "0459d7f4deccdb385c0f8c4b848e49a9c7e696096fc49619450e4e973fb4dc88",
+      "setB-04-scenario.json": "6b28cc9616cd2122fa52ae6e5715be83abac13e315f89b827480a598d078f0c3"
+    }
+  },
+  "baseline_experiment": {
+    "started_utc": "2026-09-08T06:53:41Z",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "benchmark_sha256": "d3cdb4c6bf12d442d27afe67c3c3e853e79a588e3d2cf2e5e1c37bad126d4aa3",
+    "seconds_per_solver": 565.0,
+    "rounds": null,
+    "workers": 1,
+    "checker_sha256": "7227194df604d627720938b163b3d63baaba5a090ed90bff574e7e26af69149a",
+    "challenge_commit": "d84d319a7fdb8de3b1866830d2eaa2937871e5ae",
+    "networktools_commit": "aebafc9ee91891e5d721bb86725e8cf1533877d1",
+    "solvers": {
+      "sedge": {
+        "path": "/tmp/roadef-context-fixed/bin/sedge",
+        "sha256": "c9cb373dbe454dbaa87a581f09e4ff7608bc3ed31b05baeda5113df8cb629ec8"
+      }
+    }
+  },
+  "other_worker_activity": "Routine evidence packaging on the same worker. All ROADEF arms and cases sequential; observer measures only its command tree.",
+  "limitations": [
+    "One timed loss retained; no tuning, repeatability/significance or equal-CPU-work claim.",
+    "Both selected lane and independent baseline use the same unchanged SEDGE binary.",
+    "8CPU/20GiB cgroup; no dedicated physical-host or Docker certification.",
+    "RSS sampled every0.5s; excludes pagecache, not a hard peak.",
+    "Internal portfolio search deadline observed; outer590s TERM/600s KILL guard did not fire.",
+    "Earlier original2885 runs remain separate from the frozen final composition."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "files_sha256": {
+    "normal.log": "fde1bf17375c940161d69f088bc573584b931413c7c4230626e027e0dcee15a2",
+    "optimized.log": "06de46854b93dcba7da5e5d41fc82ac372dc6c83d64061227b3c2b2a9668e539",
+    "recovery_before_after.json": "22626f59944ad9e623b0404a998ec663e11dec4752da6da1c9ccf7dbfaa01123"
+  },
+  "limits": [
+    "Not hosted CI",
+    "Not University findings",
+    "Not source authenticity or complete production export",
+    "UIOWA-129 separate adapter not modified or yet re-executed by this receipt"
+  ],
+  "model": "GPT-6 Astra Pro",
+  "operation": "uiowa-064-boundary-repair-kestrel6d9f-20260919",
+  "original_builder": "ZZ-Semaphore",
+  "py_compile_exit_code": 0,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "seat": "ZZ-KESTREL-6D9F",
+  "source_blobs": {
+    "calculator.py": "6e73cb8067bbdd38cc0dd94995805c5006b1c401",
+    "fixtures/synthetic_deployments.csv": "8fac02fb9d947deed7df99d563ab05d949127793",
+    "test_calculator.py": "e452331213f2da935c79099dd91e3d405bc2ed3d",
+    "test_input_boundaries.py": "6e92662e03b5bad02ab2208294bb6cfbe5cdb5d3"
+  },
+  "synthetic_only": true,
+  "validation": [
+    {
+      "command": "python -m unittest discover -s . -p 'test_*.py'",
+      "exit_code": 0,
+      "log": "normal.log",
+      "skipped": 0,
+      "tests": 37
+    },
+    {
+      "command": "PYTHONOPTIMIZE=1 python -O -m unittest discover -s . -p 'test_*.py'",
+      "exit_code": 0,
+      "log": "optimized.log",
+      "skipped": 0,
+      "tests": 37
+    }
+  ]
+}

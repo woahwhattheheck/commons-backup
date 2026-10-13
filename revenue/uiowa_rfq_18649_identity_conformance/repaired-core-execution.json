@@ -1,0 +1,57 @@
+{
+  "schema": "uiowa-identity-repaired-core-execution/v1",
+  "operation": "uiowa-103-cirrus-20260919",
+  "executed_at": "2026-09-19T14:48:37.326834+00:00",
+  "synthetic": true,
+  "assessment_authority": false,
+  "hosted_ci_claimed": false,
+  "target_commit": "f3dab31e57379f419f64712072e9e3c5ebc4b2b4",
+  "target_git_blob_sha": "2d60b997252f214d40d64941f685adc8796e5347",
+  "target_bytes": 19511,
+  "target_sha256": "34e6a48bc363ef1244618d9065d16f5c501859151e02eb85f4ed4c5ec348c784",
+  "scope": "incremental-import identity conformance and read-only import-impact consumer; not independent CLI/equivalence/conservation clearance",
+  "runs": [
+    {"command": "python -m unittest discover -s revenue/uiowa_rfq_18649_identity_conformance/tests -v", "exit_code": 0, "tests": 42, "stderr_tail": "Ran 42 tests in 0.338s\n\nOK"},
+    {"command": "python -O -m unittest discover -s revenue/uiowa_rfq_18649_identity_conformance/tests -v", "exit_code": 0, "tests": 42, "stderr_tail": "Ran 42 tests in 0.369s\n\nOK"},
+    {"command": "python revenue/uiowa_rfq_18649_identity_conformance/lodestone_adapter.py --mapper /mnt/data/cirrus/core-2d60b997.py --expect-blob 2d60b997252f214d40d64941f685adc8796e5347", "exit_code": 0, "passed": 8, "failed": 0, "stdout_sha256": "bc334284a49a1ad82f7719ce56043c9511f9cf8bbdda1891b6d4914854fad2e4", "stderr": ""},
+    {"command": "python -O revenue/uiowa_rfq_18649_identity_conformance/lodestone_adapter.py --mapper /mnt/data/cirrus/core-2d60b997.py --expect-blob 2d60b997252f214d40d64941f685adc8796e5347", "exit_code": 0, "passed": 8, "failed": 0, "stdout_sha256": "bc334284a49a1ad82f7719ce56043c9511f9cf8bbdda1891b6d4914854fad2e4", "stderr": ""},
+    {"command": "python revenue/uiowa_rfq_18649_identity_conformance/demo_import.py --mapper /mnt/data/cirrus/core-2d60b997.py --expect-blob 2d60b997252f214d40d64941f685adc8796e5347 --output-dir /tmp/cirrus-core-recheck-w4gja2g1/normal", "exit_code": 0, "stdout_sha256": "67ca0c4fa93f35788c6d69e2632b8aee5bb66ac019490b47ec3cde3dbdad6f3e", "stderr": ""},
+    {"command": "python -O revenue/uiowa_rfq_18649_identity_conformance/demo_import.py --mapper /mnt/data/cirrus/core-2d60b997.py --expect-blob 2d60b997252f214d40d64941f685adc8796e5347 --output-dir /tmp/cirrus-core-recheck-w4gja2g1/optimized", "exit_code": 0, "stdout_sha256": "67ca0c4fa93f35788c6d69e2632b8aee5bb66ac019490b47ec3cde3dbdad6f3e", "stderr": ""}
+  ],
+  "canonical_result": {
+    "schema": "uiowa-identity-conformance/v1",
+    "synthetic": true,
+    "passed": 8,
+    "failed": 0,
+    "fixture_digest": "293ae60ec8c1cdb937ea4626dd1e15e947af952606be27f819999ca299718f0c",
+    "cases": [
+      {"case": "unrelated_extension", "status": "PASS"},
+      {"case": "collision_extension", "status": "PASS"},
+      {"case": "permutation", "status": "PASS"},
+      {"case": "original_spelling", "status": "PASS"},
+      {"case": "duplicate_conflict", "status": "PASS"},
+      {"case": "unqualified_collision", "status": "PASS"},
+      {"case": "missing_target", "status": "PASS"},
+      {"case": "batch_growth", "status": "PASS"}
+    ],
+    "target": {"api": "IdentityMap.report and IdentityMap.resolve", "canonical_id_field": "occurrence_id", "driver_git_blob_sha": "798422a461c99d34534f93905a829a3e6a4af378", "git_blob_sha": "2d60b997252f214d40d64941f685adc8796e5347", "schema": "uiowa.identity-map.v1", "source_pin_checked": true}
+  },
+  "normal_optimized_demo_matches": {"snapshot-after.json": true, "import-impact.json": true, "manifest.json": true, "snapshot-before.json": true, "import-impact.html": true},
+  "old_new_core_artifact_matches": {"snapshot-after.json": true, "import-impact.json": true, "snapshot-before.json": true, "import-impact.html": true},
+  "manifest_target_binding_changed": true,
+  "demo_manifest": {
+    "schema": "uiowa.identity-import-demo.v1",
+    "synthetic": true,
+    "assessment_authority": false,
+    "expected_source_pin_checked": true,
+    "impact_git_blob_sha": "91055f8a0d1e8d7841a8d36582e9b78c780aa2dd",
+    "mapper_git_blob_sha": "2d60b997252f214d40d64941f685adc8796e5347",
+    "files": {
+      "import-impact.html": {"bytes": 67964, "sha256": "b660bef6fd0819bac098eb780b0c5d3963e2bccebebfdafb2f65cf938b34c847"},
+      "import-impact.json": {"bytes": 46596, "sha256": "3e4eafcd751af55e24f2301ff0043789c287654f2bb4f14fef70f70d785fd94a"},
+      "snapshot-after.json": {"bytes": 12829, "sha256": "0154d79b9e8f80a3808bc3ca92485ad3121de19fc851a916bf34ead857a3244f"},
+      "snapshot-before.json": {"bytes": 10337, "sha256": "3977556933b28ee9c32ebbb3f0b556fc905d890c6ccf8023577f417f868f1643"}
+    },
+    "summary": {"occurrences_before": 4, "occurrences_after": 6, "occurrences_added": 2, "occurrences_removed": 0, "occurrences_unchanged": 4, "occurrences_changed": 0, "same_key_rekeys": 0, "same_revision_original_changes": 0, "links_before": 4, "links_after": 4, "links_changed": 2, "links_unchanged": 2, "links_added": 0, "links_removed": 0, "newly_unresolved_links": 1, "newly_resolved_links": 1, "unresolved_before": 2, "unresolved_after": 2, "retargeted_endpoints_without_selector_change": 0}
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "uiowa64.output-integrity-execution.v1",
+  "operation": "uiowa064-output-integrity-da397452-20260919",
+  "seat": "ZZ-FARADAY-IO-DA397452",
+  "model": "GPT-6 Astra Pro",
+  "base_commit": "c5419b8283f4b24c5e54b404d2d41c6f55b470ff",
+  "baseline_calculator_blob": "6e73cb8067bbdd38cc0dd94995805c5006b1c401",
+  "candidate_blobs": {
+    "calculator.py": "ffc7d190a93cd7179c1909f2160e7f124d3232d1",
+    "test_output_integrity.py": "6feb57e0421fc5aded6bc5dfc3db65c2ee15b372"
+  },
+  "unchanged_dependencies": {
+    "test_calculator.py": "e452331213f2da935c79099dd91e3d405bc2ed3d",
+    "test_input_boundaries.py": "6e92662e03b5bad02ab2208294bb6cfbe5cdb5d3",
+    "fixtures/synthetic_deployments.csv": "8fac02fb9d947deed7df99d563ab05d949127793"
+  },
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41"
+  },
+  "execution": [
+    {
+      "mode": "normal",
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "exit_code": 0,
+      "command": ["python", "-m", "unittest", "test_calculator.py", "test_input_boundaries.py", "test_output_integrity.py"],
+      "environment": {},
+      "log": "normal.log",
+      "log_sha256": "9d59c1a6b918d6d3b34b1b21e29e4ac2dae28d4e55f1a0d2b1b8d9f231a167a3"
+    },
+    {
+      "mode": "optimized",
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "exit_code": 0,
+      "command": ["python", "-O", "-m", "unittest", "test_calculator.py", "test_input_boundaries.py", "test_output_integrity.py"],
+      "environment": {"PYTHONOPTIMIZE": "1"},
+      "log": "optimized.log",
+      "log_sha256": "4d0c3182ac399d879866521be174778140138f547d80a1d092baba7a2f31f5db"
+    }
+  ],
+  "py_compile": "PASS",
+  "definition_ast_comparison": {
+    "unchanged": ["DataError", "Deployment", "_parse_time", "_parse_bool", "_utc_datetime", "_normalize_deployment", "load_deployments", "_hours", "_coverage", "_recovery_coverage", "_median_mean", "calculate", "_required_time"],
+    "changed": ["main"],
+    "added": ["_write_report"]
+  },
+  "scope": "Synthetic disposable-file software tests only. Not University findings or a hosted-CI result.",
+  "limits": [
+    "Windows and ACL preservation not tested.",
+    "No power-loss/crash-durability or hostile-directory-concurrency guarantee.",
+    "Input evidence authenticity and export completeness are not established.",
+    "Optional recovery cutoff is a separate 8D42 contribution; calculation and validation definitions are unchanged here."
+  ]
+}

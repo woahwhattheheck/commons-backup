@@ -1,0 +1,153 @@
+{
+ "guard_path": "/home/user/commons/revenue/kaggriculture/cloud-execution-lab/reference/titan-current/deadline_adapter.py",
+ "guard_sha256": "c8f7c9842ba7e4eb29f6e57a8d6f9ba816140dcbea7817aea2b3efcabe2771c5",
+ "python": "3.11.15",
+ "worker_thread_supported": true,
+ "results": [
+  {
+   "test": "T1 cancellation identity",
+   "status": "PASS",
+   "detail": "raised object is the timer's own expired instance",
+   "raised_is_timer_expired": true
+  },
+  {
+   "test": "T2 worker-thread availability",
+   "status": "PASS",
+   "detail": "outcome=cancelled identity_preserved=True",
+   "outcome": "cancelled",
+   "error": null,
+   "identity_preserved": true
+  },
+  {
+   "test": "T3 tracer restoration (main thread)",
+   "status": "PASS",
+   "detail": "guard entered and cancelled; sys.gettrace restored by identity=True threading.gettrace restored by identity=True",
+   "guard_entered": true,
+   "entered": true,
+   "sys_restored": true,
+   "threading_restored": true,
+   "sys_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7fbd7c919bc0>",
+   "thr_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7fbd7c919bc0>"
+  },
+  {
+   "test": "T3 tracer restoration (worker thread)",
+   "status": "PASS",
+   "detail": "guard entered and cancelled; sys.gettrace restored by identity=True threading.gettrace restored by identity=True",
+   "guard_entered": true,
+   "entered": true,
+   "sys_restored": true,
+   "threading_restored": true,
+   "sys_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7fbd7c919d00>",
+   "thr_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7fbd7c919d00>"
+  },
+  {
+   "test": "T4 no signal mutation from a worker",
+   "status": "PASS",
+   "detail": "guard ran and cancelled ON THE WORKER; SIGALRM handler identity unchanged=True, ITIMER_REAL interval unchanged=True",
+   "guard_entered_on_worker": true,
+   "worker_error": null,
+   "handler_identity_unchanged": true,
+   "itimer_interval_unchanged": true
+  },
+  {
+   "test": "T5 bounded CPU-loop cancellation (main thread)",
+   "status": "PASS",
+   "detail": "outcome=cancelled budget=0.05s elapsed=0.05011816100000033 overshoot=0.000118",
+   "outcome": "cancelled",
+   "budget_seconds": 0.05,
+   "elapsed_seconds": 0.05011816100000033,
+   "overshoot_seconds": 0.000118,
+   "error": null
+  },
+  {
+   "test": "T5 bounded CPU-loop cancellation (worker thread)",
+   "status": "PASS",
+   "detail": "outcome=cancelled budget=0.05s elapsed=0.0500585190000038 overshoot=5.9e-05",
+   "outcome": "cancelled",
+   "budget_seconds": 0.05,
+   "elapsed_seconds": 0.0500585190000038,
+   "overshoot_seconds": 5.9e-05,
+   "error": null
+  },
+  {
+   "test": "T6 per-call overhead on the shipped default",
+   "status": "MEASURED",
+   "detail": "guard enter+exit mean 10.2 us (median 9.5, p99 36.6); shipped action mean 2.043 ms over 200 actions; guard is 0.498% of an action",
+   "guard": {
+    "mean_s": 1.0165854499966543e-05,
+    "median_s": 9.492000003774592e-06,
+    "p99_s": 3.663100000039776e-05,
+    "max_s": 0.00013646499999708794,
+    "samples": 2000
+   },
+   "shipped_action": {
+    "actions": 200,
+    "mean_s": 0.002042843849999798,
+    "median_s": 0.0015990219999935107,
+    "max_s": 0.043006684999994604
+   },
+   "guard_share_percent": 0.498
+  },
+  {
+   "test": "T7 trace-based cancellation cost on the shipped default",
+   "status": "MEASURED",
+   "detail": "no tracer 1.448 ms/action; call-level tracer 4.315 ms (2.98x); line-level tracer 6.281 ms (4.34x), over 120 actions",
+   "actions": 120,
+   "no_tracer_mean_s": 0.0014481507500004654,
+   "call_tracer_mean_s": 0.00431465740833327,
+   "line_tracer_mean_s": 0.006281157166666536,
+   "call_multiplier": 2.979,
+   "line_multiplier": 4.337
+  },
+  {
+   "test": "T9 guarded-body cost, main thread versus worker",
+   "status": "MEASURED",
+   "detail": "unguarded body 0.922 ms; guarded on main 0.926 ms (1.00x); guarded on worker 13.461 ms (14.60x), 400 reps each",
+   "unguarded_mean_s": 0.0009218669849998662,
+   "main_thread": {
+    "mean": 0.0009263350399996994,
+    "median": 0.0009084649999948624,
+    "p99": 0.0012558619999936127
+   },
+   "worker_thread": {
+    "mean": 0.013461470087499414,
+    "median": 0.013276068000010355,
+    "p99": 0.01837533500000177
+   },
+   "main_multiplier": 1.005,
+   "worker_multiplier": 14.602
+  },
+  {
+   "test": "T10 shipped policy driven from a worker thread",
+   "status": "MEASURED",
+   "detail": "main thread 1.308 ms/action (max 4.257); worker thread 24.848 ms/action (max 51.362) = 18.999x, over 120 actions each",
+   "main_thread": {
+    "actions": 120,
+    "mean_s": 0.0013078889000010937,
+    "median_s": 0.001300611000004892,
+    "p99_s": 0.0020688710000058563,
+    "max_s": 0.00425706799998693
+   },
+   "worker_thread": {
+    "actions": 120,
+    "mean_s": 0.024848395183332646,
+    "median_s": 0.02496319399998015,
+    "p99_s": 0.04242589300000077,
+    "max_s": 0.051361767000003056
+   },
+   "worker_multiplier": 18.999
+  },
+  {
+   "test": "T8 async-exc mechanism probe (identity and latency)",
+   "status": "MEASURED",
+   "detail": "outcome=interrupted threads_set=1 fired_after=0.05s elapsed=0.06059435899999244 latency=0.010594 delivered_is_pre_made_instance=False delivered_type=ProbeCancel",
+   "outcome": "interrupted",
+   "threads_set": 1,
+   "fire_after_seconds": 0.05,
+   "elapsed_seconds": 0.06059435899999244,
+   "latency_seconds": 0.010594,
+   "preserves_instance_identity": false,
+   "delivered_type": "ProbeCancel"
+  }
+ ]
+}

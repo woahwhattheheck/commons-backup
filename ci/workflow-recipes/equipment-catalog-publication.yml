@@ -1,0 +1,101 @@
+name: Equipment catalog publication
+
+on:
+  pull_request:
+    paths:
+      - 'integrations/shared_equipment/**'
+      - 'integrations/gemini_slack/**'
+      - 'integrations/command_center/**'
+      - 'commons_publication_policy.py'
+      - 'test_equipment_catalog_publication.py'
+      - '.github/workflows/equipment-catalog-publication.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /integrations/
+            /revenue/agent_failure_autopsy/
+            /revenue/dealer_service_lead_rescue/
+            /revenue/referral_intake_completeness/
+            /revenue/repair_booking_preflight/
+            /revenue/plant_downtime_handoff/
+            /commons_publication_policy.py
+            /test_equipment_catalog_publication.py
+            /test_shared_equipment_capability_manifest.py
+            /test_shared_equipment_newcomer_road.py
+            /.github/workflows/equipment-catalog-publication.yml
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Record source snapshot and catalog diagnostics
+        run: |
+          mkdir -p "$RUNNER_TEMP/catalog-validation"
+          python - <<'PY'
+          import hashlib, json, os, pathlib, shutil, subprocess
+          from commons_publication_policy import check_publication
+          from integrations.shared_equipment.services import build_cli_catalog, build_capability_manifest
+          from integrations.shared_equipment.peers import GeminiEquipment
+          root = pathlib.Path.cwd()
+          catalog = build_cli_catalog()
+          catalog.extensions.append(GeminiEquipment(None))
+          tools = catalog.tools()
+          manifest = build_capability_manifest(catalog=catalog)
+          paths = list(root.glob('integrations/shared_equipment/*.py'))
+          paths += list(root.glob('integrations/gemini_slack/*.py'))
+          paths += list(root.glob('integrations/command_center/*.py'))
+          paths += [root / 'commons_publication_policy.py', root / 'test_equipment_catalog_publication.py']
+          snapshot = {
+              'checkout': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'run_id': os.environ['GITHUB_RUN_ID'], 'attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+              'catalog_scope': 'Real CLI composition plus Gemini lifecycle schemas; no remote public MCP fetch.',
+              'operation_count': len(tools),
+              'sources': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths)},
+          }
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'catalog-validation'
+          (out / 'SOURCE-SNAPSHOT.json').write_text(json.dumps(snapshot, indent=2) + '\n')
+          for name, value in [('catalog', {'tools': tools}), ('manifest', manifest)]:
+              (out / (name + '.json')).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+              print(name, check_publication(json.dumps(value, ensure_ascii=False)))
+          diagnoses = []
+          for tool in tools:
+              decision = check_publication(json.dumps(tool, ensure_ascii=False))
+              if not decision['allowed']:
+                  row = {'name': tool['name'], 'rule': decision['rule'], 'description': tool.get('description')}
+                  diagnoses.append(row)
+                  print('CATALOG_DESCRIPTOR', json.dumps(row))
+          (out / 'descriptor-diagnostics.json').write_text(json.dumps(diagnoses, indent=2) + '\n')
+          for path in paths:
+              dest = out / 'source' / path.relative_to(root)
+              dest.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(path, dest)
+          PY
+      - name: Execute catalog and carrier regression checks
+        run: |
+          set -euo pipefail
+          python -m unittest -v test_equipment_catalog_publication \
+            2>&1 | tee "$RUNNER_TEMP/catalog-validation/catalog-tests.log"
+      - name: Retain existing shared-equipment coverage
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          python -m unittest -v test_shared_equipment_capability_manifest \
+            test_shared_equipment_newcomer_road \
+            integrations.shared_equipment.test_diagnostic_equipment_cards \
+            2>&1 | tee "$RUNNER_TEMP/catalog-validation/existing-tests.log"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: equipment-catalog-publication-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/catalog-validation
+          if-no-files-found: error

@@ -1,0 +1,36 @@
+name: Learn2Design 2026 carrier
+on:
+  pull_request:
+    paths:
+      - 'revenue/learn2design2026/**'
+      - 'test_learn2design2026.py'
+      - '.github/workflows/learn2design2026.yml'
+  push:
+    paths:
+      - 'revenue/learn2design2026/**'
+      - 'test_learn2design2026.py'
+      - '.github/workflows/learn2design2026.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile source
+        run: python -m py_compile revenue/learn2design2026/core.py revenue/learn2design2026/synthetic.py revenue/learn2design2026/benchmark.py revenue/learn2design2026/pack.py revenue/learn2design2026/submission.py test_learn2design2026.py
+      - name: Hostile contract tests
+        run: python -m unittest -v test_learn2design2026.py
+      - name: Optimized hostile contract tests
+        run: python -O -m unittest -v test_learn2design2026.py
+      - name: Deterministic synthetic evidence
+        run: |
+          python revenue/learn2design2026/benchmark.py --seed 17 --evaluations 320 --output /tmp/a.json
+          python revenue/learn2design2026/benchmark.py --seed 17 --evaluations 320 --output /tmp/b.json
+          cmp /tmp/a.json /tmp/b.json

@@ -1,0 +1,37 @@
+{
+  "id": "sc-labs-multistate-coa-rule-version-gate-01",
+  "version": 1,
+  "buyer": "SC Labs / Ryan DeCurtis",
+  "lead": {
+    "channel": "C0BTB4SUCP9",
+    "ts": "1788234641.456109"
+  },
+  "workflow": [
+    "ingest normalized/redacted CSV or JSON",
+    "join sample, jurisdiction, license, matrix, custody, rule pack, panel, method, limit, scope, signer, and final COA identifiers",
+    "emit RELEASEABLE or HOLD with one stable reason code",
+    "write deterministic CSV, JSON, append-only evidence manifest, and human-readable exception report",
+    "record any override in a hash-linked ledger with named reviewer, reason, and timestamp",
+    "keep release as a separate named-human receipt without altering validation output"
+  ],
+  "acceptance": [
+    "150 synthetic records across five jurisdiction and rule-pack fixtures",
+    "exactly 120 RELEASEABLE and 30 HOLD",
+    "exactly five each RULE_VERSION_EXPIRED, PANEL_NOT_VALID_FOR_JURISDICTION, METHOD_LIMIT_MISMATCH, CUSTODY_GAP, DUPLICATE_RELEASE_ID, and SCOPE_OR_SIGNER_MISMATCH",
+    "zero defective records RELEASEABLE",
+    "repeat CSV, JSON, decision, exception, and evidence-manifest outputs are byte-identical",
+    "source and result hashes remain unchanged",
+    "override ledger requires named reviewer, reason, timestamp, and prior-entry hash",
+    "zero autonomous releases"
+  ],
+  "exclusions": [
+    "no LIMS replacement",
+    "no chemical interpretation, regulatory opinion, result alteration, accreditation decision, or autonomous COA release",
+    "no live interface, outreach, buyer data, storefront, payment action, or cash claim"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

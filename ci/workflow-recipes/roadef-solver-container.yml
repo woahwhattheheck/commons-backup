@@ -1,0 +1,50 @@
+name: ROADEF solver container
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/roadef2026/sedge/source.zip'
+      - '.github/workflows/roadef-solver-container.yml'
+  workflow_dispatch:
+jobs:
+  container:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Fetch the exact published package
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/woahwhattheheck/commons/$SOURCE_SHA/revenue/roadef2026/sedge/source.zip" -o source.zip
+          unzip -q source.zip
+          git init challenge
+          git -C challenge fetch --depth 1 https://gitlab.com/Orange-OpenSource/network-optimization-tools/challenge-roadef-2026.git d84d319a7fdb8de3b1866830d2eaa2937871e5ae
+          git -C challenge checkout --detach FETCH_HEAD
+          git init networktools
+          git -C networktools fetch --depth 1 https://gitlab.com/Orange-OpenSource/network-optimization-tools/networktools.git aebafc9ee91891e5d721bb86725e8cf1533877d1
+          git -C networktools checkout --detach FETCH_HEAD
+      - name: Build the actual Ubuntu container and official checker
+        run: |
+          docker build -t sedge-roadef sedge-roadef-solver
+          make -C challenge/checker/src IDIRNT="$PWD/networktools/networktools"
+      - name: Run with network disabled and verify the result independently
+        run: |
+          mkdir result
+          chmod 777 result
+          docker run --rm --network none -e SEDGE_SECONDS=20 -e SEDGE_STATS=/out/stats.json -v "$PWD/challenge/setB:/data:ro" -v "$PWD/result:/out" sedge-roadef /home/run.sh /data/setB-01-net.json /data/setB-01-tm.json /data/setB-01-scenario.json /out/solution.json
+          challenge/checker/src/checker-v1.2.2-x86-64_linux --net challenge/setB/setB-01-net.json --tm challenge/setB/setB-01-tm.json --scenario challenge/setB/setB-01-scenario.json --srpaths result/solution.json --max-decimal-places 12 > result/checker.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          actual=json.loads(Path('result/checker.json').read_text())
+          stats=json.loads(Path('result/stats.json').read_text())
+          assert actual['valid'] is True
+          loads={(x['t'],x['from'],x['to']):x['sat'] for x in actual['saturations']}
+          predicted={(x['t'],x['from'],x['to']):x['sat'] for x in stats['loads']}
+          assert loads.keys()==predicted.keys()
+          error=max(abs(loads[k]-v) for k,v in predicted.items())
+          assert error<2e-9, error
+          assert sum(stats['budget_used'])==actual['total_cost']
+          assert stats['final_mlu']<stats['initial_mlu']
+          print('CONTAINER_VALIDATED',json.dumps({'valid':actual['valid'],'loads_compared':len(loads),'max_load_error':error,'initial_mlu':stats['initial_mlu'],'final_mlu':stats['final_mlu'],'total_cost':actual['total_cost']}))
+          PY

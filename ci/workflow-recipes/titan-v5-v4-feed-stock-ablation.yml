@@ -1,0 +1,40 @@
+name: TITAN V5 V4 feed-stock ablation
+
+on:
+  push:
+    branches:
+      - astra/v5-v4-feed-stock-ablation-20260912
+      - astra/v5-v4-feed-stock-harness-custody-postmerge-20260912
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v5-v4-feed-stock-ablation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-contracts:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Assert exact pushed head
+        shell: bash
+        run: test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Compile and run normal contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-feed-stock-ablation
+        run: |
+          python -B -m py_compile feed_stock_ablation.py paired.py test_feed_stock_ablation.py test_paired.py
+          python -B -m unittest -v test_feed_stock_ablation.py test_paired.py
+      - name: Run optimized contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-feed-stock-ablation
+        run: python -O -B -m unittest -v test_feed_stock_ablation.py test_paired.py

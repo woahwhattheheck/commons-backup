@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/apps/revenue_route_freshness/route_evidence.schema.json",
+  "title": "Revenue route evidence v1",
+  "type": "object",
+  "required": ["schema", "as_of", "buyer_scope", "offer_key", "purpose_key", "route"],
+  "properties": {
+    "schema": {"const": "revenue-route-evidence/v1"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "max_route_age_days": {"type": "integer", "minimum": 1, "maximum": 365},
+    "seat": {"type": "string", "minLength": 1},
+    "buyer_scope": {"type": "string", "minLength": 1},
+    "offer_key": {"type": "string", "minLength": 1},
+    "purpose_key": {"type": "string", "minLength": 1},
+    "route": {
+      "type": "object",
+      "required": ["kind", "value", "source_url", "source_class", "observed_at"],
+      "properties": {
+        "kind": {"enum": ["email", "url", "phone", "handle"]},
+        "value": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+        "source_class": {"enum": ["FIRST_PARTY", "SECONDARY", "UNKNOWN"]},
+        "observed_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "provider_events": {"type": "array"},
+    "company_touches": {"type": "array"},
+    "dnr": {"type": "array"},
+    "muse_leases": {"type": "array"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,45 @@
+name: commercial-experiment-lab
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/commercial_experiment_lab/**'
+      - 'revenue/commercial_funnel/**'
+      - '.github/workflows/commercial-experiment-lab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/commercial_experiment_lab/**'
+      - 'revenue/commercial_funnel/**'
+      - '.github/workflows/commercial-experiment-lab.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile package
+        run: python -m py_compile revenue/commercial_experiment_lab/*.py
+      - name: Run normal tests
+        run: python -m unittest -v revenue.commercial_experiment_lab.test_compiler revenue.commercial_experiment_lab.test_cli
+      - name: Run optimized tests
+        run: python -O -m unittest -v revenue.commercial_experiment_lab.test_compiler revenue.commercial_experiment_lab.test_cli
+      - name: Compile and verify synthetic example through real upstream funnel
+        run: |
+          out="$RUNNER_TEMP/commercial-experiment-lab-example"
+          python -m revenue.commercial_experiment_lab.cli compile \
+            revenue/commercial_experiment_lab/example_input.json \
+            --out-dir "$out"
+          python -m revenue.commercial_experiment_lab.cli verify \
+            revenue/commercial_experiment_lab/example_input.json \
+            --packet "$out/packet.json" \
+            --receipt "$out/receipt.json" \
+            --report-json "$out/report.json" \
+            --report-csv "$out/report.csv" \
+            --report-md "$out/report.md"

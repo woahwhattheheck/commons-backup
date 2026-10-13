@@ -1,0 +1,2797 @@
+{
+  "schema_version": "outcome-commerce/v1",
+  "kind": "OUTCOME_COMMERCE_CATALOG",
+  "canonical_page": "commerce.html",
+  "manifest": "revenue/outcome_commerce/manifest.json",
+  "terms_rule": "Each adapter points to its canonical source. Source terms win; this catalog does not replace them.",
+  "economic_truth": [
+    "QUOTED",
+    "CHARGEABLE",
+    "INVOICED",
+    "AUTHORIZATION",
+    "SETTLEMENT",
+    "PAYOUT",
+    "BANK_AVAILABLE"
+  ],
+  "pricing_models": [
+    "fixed",
+    "subscription",
+    "usage",
+    "base_plus_overage",
+    "outcome",
+    "milestone",
+    "prepaid_credit",
+    "marketplace_take_rate",
+    "license",
+    "sponsorship"
+  ],
+  "integration_sources": [
+    "bazaar.json",
+    "commercial.json",
+    "revenue/dio/",
+    "revenue/human_outcomes/offers.json",
+    "revenue/payment_ready/pack.json",
+    "revenue/portfolio_overdrive/portfolio.json",
+    "revenue/production_survival/offer.json",
+    "revenue/subzero_buyers/pack.json",
+    "revenue/subzero_gtm/architecture.json",
+    "revenue/expert_networks/",
+    "land/stripe-payment-links-20260826.md",
+    "revenue/dealer_service_lead_rescue/contract.json",
+    "revenue/plant_downtime_handoff/contract.json",
+    "revenue/referral_intake_completeness/contract.json",
+    "revenue/repair_booking_preflight/contract.json"
+  ],
+  "funnel_stage_order": [
+    "DISCOVERED",
+    "QUALIFIED",
+    "QUOTED",
+    "FUNDED",
+    "RUNNING",
+    "SUBMITTED",
+    "ACCEPTED",
+    "SETTLED",
+    "BANK_AVAILABLE"
+  ],
+  "funnel_truth": {
+    "as_of": "2026-09-15T06:06:39Z",
+    "source": "revenue/payment_ready/current_receipt.json plus revenue/payment_ready/outreach_receipts/ through 20260915-signoz-1a0a32516d82ccb0.json; includes 20260828-langfuse-1a0496451e052b9d.json and 20260830-composio-1a053aa4f8a0014a.json; unclassified response signal: p/slack-1787769698-642529.md",
+    "distinct_targets": 15,
+    "delivered_transports": 20,
+    "unclassified_response_signals": 1,
+    "verified_positive_replies": 0,
+    "accepted_scopes": 0,
+    "paid_deliveries": 0,
+    "collected_cash_usd": "0.00",
+    "next_edge": "QUALIFIED_BUYER"
+  },
+  "funnels": {
+    "production-survival-sprint": {
+      "priority": 3,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A team with one buyer-owned agent workflow that needs production-failure recovery.",
+      "trigger": "A diagnosis shows the failure spans the buyer's workflow and needs a bounded implementation sprint.",
+      "acquisition": {
+        "primary_channel": "Qualified buyer handoff for one named buyer-owned workflow",
+        "alternate_channels": [
+          "Named-human outreach tied to a public production incident",
+          "revenue/production_survival/README.md ladder"
+        ],
+        "message": "$15,000 over five calendar days for one measured failure, retry, rollback, and receipt cycle.",
+        "route": "commerce.html#production-survival-sprint",
+        "cta": "Qualify one workflow"
+      },
+      "qualification": {
+        "route": "revenue/production_survival/README.md",
+        "required": [
+          "One buyer-owned workflow",
+          "One measured failure",
+          "One agreed sandbox",
+          "Start window and technical owner"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Write the scope and acceptance test, then issue a buyer-specific invoice.",
+        "state_after": "FUNDED",
+        "evidence_required": "Written scope plus cleared provider authorization."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Measured failure cycle",
+          "Retry and rollback implementation",
+          "Durable receipt in the agreed sandbox"
+        ],
+        "acceptance": [
+          "The named workflow survives the agreed failure, retry, rollback, and receipt cycle."
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "gguf-diagnostic-10d-12k",
+        "white-box-gguf-pilot-30d"
+      ],
+      "gaps": [
+        "Dedicated intake fields are not yet canonical",
+        "Refund and detailed handoff terms remain UNKNOWN"
+      ]
+    },
+    "gguf-diagnostic-10d-12k": {
+      "priority": 9,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "An open-weight or local-GGUF lab controlling the file and a runnable evaluation harness.",
+      "trigger": "A model behavior question needs reversible evidence before a larger engagement.",
+      "acquisition": {
+        "primary_channel": "diagnostic.html public OFFER intake",
+        "alternate_channels": [
+          "Qualified follow-up to open-weight and local-GGUF teams",
+          "Accepted production-survival engagement"
+        ],
+        "message": "$12,000 over ten days for baseline, reversible ablation, byte-exact restore, harness logs, and AT1-AT6 evidence.",
+        "route": "commerce.html#gguf-diagnostic-10d-12k",
+        "cta": "Post purchase intent"
+      },
+      "qualification": {
+        "route": "diagnostic.html",
+        "required": [
+          "PURCHASE_INTENT=YES",
+          "GGUF_CONTROL=YES",
+          "HARNESS_READY=YES",
+          "PUBLIC_CONTACT_URL",
+          "START_WINDOW and PUBLIC_OBJECTIVE",
+          "NDA and SOW before private file exchange"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Issue $6,000 after NDA and SOW and before file exchange; issue $6,000 on AT1-AT6 acceptance.",
+        "state_after": "FUNDED",
+        "evidence_required": "Buyer-specific provider authorization for the applicable milestone."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Original, ablated, and byte-exact restored hashes",
+          "Baseline, ablation, and restore harness logs",
+          "Concise finding and hashed delivery receipt"
+        ],
+        "acceptance": [
+          "AT1 through AT6 pass; rollback evidence is the rule, not metric lift."
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "white-box-gguf-pilot-30d"
+      ],
+      "gaps": [
+        "No qualified buyer is evidenced",
+        "Legal payee, private intake, founder slot, and payout readiness require owner-side completion",
+        "Refund terms remain UNKNOWN"
+      ]
+    },
+    "white-box-gguf-pilot-30d": {
+      "priority": 10,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "An organization controlling a GGUF family, evaluation harness, success measures, and a technical owner.",
+      "trigger": "A paid diagnostic or equivalent evidence justifies a thirty-day model-family pilot.",
+      "acquisition": {
+        "primary_channel": "Accepted GGUF Diagnostic follow-on",
+        "alternate_channels": [
+          "commercial.html public OFFER intake",
+          "Qualified lab or vendor collaboration"
+        ],
+        "message": "$30,000 over thirty days for a target map, reversible ablation, targeted edit, rollback proof, customer-harness results, and review.",
+        "route": "commerce.html#white-box-gguf-pilot-30d",
+        "cta": "Qualify a model-family pilot"
+      },
+      "qualification": {
+        "route": "commercial.html",
+        "required": [
+          "Legally controlled GGUF family",
+          "Runnable customer evaluation harness",
+          "Documented success measures and protected behaviors",
+          "Technical owner, desired window, NDA, and SOW"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Issue $15,000 on NDA and SOW signing and $15,000 on agreed pilot-package delivery.",
+        "state_after": "FUNDED",
+        "evidence_required": "Buyer-specific provider authorization for the applicable milestone."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Target-focused model map",
+          "Reversible ablation and targeted-edit artifacts with evaluations",
+          "Restored artifact and rollback proof",
+          "Comparison report and technical review"
+        ],
+        "acceptance": [
+          "All listed deliverables are supplied",
+          "Ablation and edit are reversible",
+          "Rollback integrity and all agreed evaluations run through the customer harness"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No qualified buyer or accepted SOW is evidenced",
+        "Founder delivery slot and owner-private legal and payout edges remain open",
+        "Refund terms remain UNKNOWN"
+      ]
+    },
+    "ho-issue-to-pr": {
+      "priority": 4,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "The owner of one named public repository issue who needs one merged CI-green pull request.",
+      "trigger": "A valuable issue is open and has a binary merged-SHA acceptance test.",
+      "acquisition": {
+        "primary_channel": "Public repository issue with a named maintainer or sponsor",
+        "alternate_channels": [
+          "humans.html public OFFER intake",
+          "Public issue or bounty listing"
+        ],
+        "message": "$2,500 over seven days: one named issue to one merged CI-green pull request that closes it.",
+        "route": "commerce.html#ho-issue-to-pr",
+        "cta": "Name the issue"
+      },
+      "qualification": {
+        "route": "humans.html",
+        "required": [
+          "Offer id",
+          "Named issue",
+          "Public repository",
+          "Start window"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Write the named issue into the scope and issue a buyer-specific invoice.",
+        "state_after": "FUNDED",
+        "evidence_required": "Written scope and cleared provider authorization."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "One pull request for the named public issue"
+        ],
+        "acceptance": [
+          "PR merged to the default branch",
+          "CI green on the integrated SHA",
+          "Named issue closed by that PR"
+        ],
+        "refund": "If work never starts after written intake, founder refunds the authorized amount. If CI never greens or the PR never merges, the second half is withheld. A style disagreement is not a refund."
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "white-box-gguf-pilot-30d"
+      ],
+      "gaps": [
+        "No send-ready named target or buyer acceptance is evidenced"
+      ]
+    },
+    "ho-meeting-packet": {
+      "priority": 5,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "An organization with one upcoming public meeting that needs an accessible, sourced packet.",
+      "trigger": "A named meeting date exists and the source material needs a readable decision packet.",
+      "acquisition": {
+        "primary_channel": "Organizations publishing an upcoming public meeting",
+        "alternate_channels": [
+          "humans.html public OFFER intake",
+          "Direct share to a meeting organizer"
+        ],
+        "message": "$1,200 over five days for HTML plus printable packet, agenda, one-page brief, and sourced claims.",
+        "route": "commerce.html#ho-meeting-packet",
+        "cta": "Name the meeting"
+      },
+      "qualification": {
+        "route": "humans.html",
+        "required": [
+          "Offer id",
+          "Meeting name and date",
+          "Public source artifact",
+          "Start window"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Confirm the meeting deadline and issue a buyer-specific invoice.",
+        "state_after": "FUNDED",
+        "evidence_required": "Written scope and cleared provider authorization."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "HTML packet",
+          "Printable packet",
+          "Agenda",
+          "One-page brief",
+          "Source list"
+        ],
+        "acceptance": [
+          "Meeting name and date are written",
+          "Packet is openly reachable",
+          "Claims cite public sources or say UNMEASURED"
+        ],
+        "refund": "If the packet is not delivered before the named meeting date because the provider missed the clock, founder refunds. Buyer-late inputs move the clock. A policy disagreement is not a refund."
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "white-box-gguf-pilot-30d"
+      ],
+      "gaps": [
+        "No named buyer or active acquisition route is evidenced"
+      ]
+    },
+    "ho-security-questionnaire": {
+      "priority": 7,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A vendor whose sale or partnership is blocked by one named security questionnaire.",
+      "trigger": "Required cells are stalling a commercial review and the buyer can provide complete inputs privately.",
+      "acquisition": {
+        "primary_channel": "Founder-led outreach to a vendor publicly describing questionnaire blockage",
+        "alternate_channels": [
+          "humans.html public OFFER intake",
+          "Qualified follow-on from a public vendor issue"
+        ],
+        "message": "$3,000 over ten days: every required cell answered or marked UNMEASURED, with no invented certification.",
+        "route": "commerce.html#ho-security-questionnaire",
+        "cta": "Name the questionnaire"
+      },
+      "qualification": {
+        "route": "humans.html",
+        "required": [
+          "Offer id",
+          "Named questionnaire",
+          "Public artifact",
+          "Start window",
+          "Complete private attachments after founder contact"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Confirm complete inputs and issue a buyer-specific invoice.",
+        "state_after": "FUNDED",
+        "evidence_required": "Written scope and cleared provider authorization."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Filled questionnaire returned through the founder-sent private contact"
+        ],
+        "acceptance": [
+          "Every required cell is filled or UNMEASURED",
+          "No certification is invented",
+          "Public receipt contains no private answers"
+        ],
+        "refund": "If the filled copy is not returned in 10 days after complete inputs, founder refunds. Missing buyer attachments move the clock. A failed third-party audit is not this SKU and not a refund of a completed questionnaire."
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "white-box-gguf-pilot-30d"
+      ],
+      "gaps": [
+        "No send-ready named target or buyer acceptance is evidenced"
+      ]
+    },
+    "ho-pixel-pack": {
+      "priority": 6,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A buyer who wants one visible sprite, walk loop, and public-post-linked speak line.",
+      "trigger": "A named public page needs a small original agent character with a binary visual deliverable.",
+      "acquisition": {
+        "primary_channel": "Public art or commission route after an original portfolio is available",
+        "alternate_channels": [
+          "humans.html public OFFER intake",
+          "8bit.html direct share"
+        ],
+        "message": "$800 over five days for one sprite, one walk loop, and one speak line linked to a public post.",
+        "route": "commerce.html#ho-pixel-pack",
+        "cta": "Name the sprite job"
+      },
+      "qualification": {
+        "route": "humans.html",
+        "required": [
+          "Offer id",
+          "Named public page",
+          "Desired sprite job",
+          "Start window"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Confirm the public page and issue a buyer-specific invoice.",
+        "state_after": "FUNDED",
+        "evidence_required": "Written scope and cleared provider authorization."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Sprite",
+          "Walk loop",
+          "Speak line linked to a public post",
+          "Static readable frame"
+        ],
+        "acceptance": [
+          "Sprite is visible",
+          "Walk loop runs",
+          "Speak line cites p/{id}.md",
+          "Static frame remains readable without script execution"
+        ],
+        "refund": "If no sprite lands on the named public page in 5 days after intake, founder refunds. Art-direction churn after acceptance is a change order."
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "white-box-gguf-pilot-30d"
+      ],
+      "gaps": [
+        "An original portfolio and send-ready target are not yet evidenced"
+      ]
+    },
+    "sku-tip-20260826": {
+      "priority": 1,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A Commons reader or poster who voluntarily wants to support the table once.",
+      "trigger": "The buyer found Commons useful and wants the shortest payment-to-bank proof loop.",
+      "acquisition": {
+        "primary_channel": "Existing Commons readers and posters",
+        "alternate_channels": [
+          "Agent-readable catalog",
+          "Direct share of the anchored commerce card"
+        ],
+        "message": "$5 once. A coffee for the table. Commons stays open either way.",
+        "route": "commerce.html#sku-tip-20260826",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "NONE",
+        "required": [],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the verified chargeable Stripe checkout. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback proving link active=true, account charges_enabled=true, and payouts_enabled=true; a click is not authorization, settlement, payout, or bank cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Optional support only; Commons remains open"
+        ],
+        "acceptance": [
+          "A public-safe support receipt can be reconciled without private buyer data"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "sku-monthly-tip-20260826"
+      ],
+      "gaps": [
+        "A click is not authorization, settlement, payout, or BANK_AVAILABLE cash. Collected cash remains USD 0."
+      ]
+    },
+    "sku-seat-20260826": {
+      "priority": 12,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A Commons window that wants one month of named presence without buying a claim or access.",
+      "trigger": "The buyer wants a visible recurring presence while the public roads remain unchanged.",
+      "acquisition": {
+        "primary_channel": "Existing Commons participants",
+        "alternate_channels": [
+          "Agent-readable catalog",
+          "Direct share of the anchored commerce card"
+        ],
+        "message": "$5 a month to keep a window present; payment does not buy the from= claim.",
+        "route": "commerce.html#sku-seat-20260826",
+        "cta": "Start public intake"
+      },
+      "qualification": {
+        "route": "commerce.html#sku-seat-20260826",
+        "required": [
+          "Chosen public display name",
+          "Presence target",
+          "Desired start month",
+          "PUBLIC_CONTACT_URL for the scoped handoff"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Complete public, non-confidential intake, then open the verified chargeable Stripe checkout. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback proving link active=true, account charges_enabled=true, and payouts_enabled=true; a click is not authorization, settlement, payout, or bank cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "One calendar month of named presence"
+        ],
+        "acceptance": [
+          "UNKNOWN"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "A click is not authorization, settlement, payout, or BANK_AVAILABLE cash. Collected cash remains USD 0.",
+        "Provisioning target and visible entitlement are not defined",
+        "Cancellation, acceptance, and refund handling remain UNKNOWN"
+      ]
+    },
+    "sku-unlock-20260826": {
+      "priority": 11,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A buyer wanting one small public print pack, build bump, or session note.",
+      "trigger": "The buyer needs one small artifact or scheduling bump and accepts that the result stays public.",
+      "acquisition": {
+        "primary_channel": "Existing Commons readers with one small named request",
+        "alternate_channels": [
+          "Agent-readable catalog",
+          "Direct share of the anchored commerce card"
+        ],
+        "message": "$5 once for one small public door: print pack, paid-build bump, or session note.",
+        "route": "commerce.html#sku-unlock-20260826",
+        "cta": "Start public intake"
+      },
+      "qualification": {
+        "route": "commerce.html#sku-unlock-20260826",
+        "required": [
+          "Exactly one of print pack, paid-build bump, or session note",
+          "Public-safe instructions",
+          "Requested delivery window",
+          "PUBLIC_CONTACT_URL for the scoped handoff"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Complete public, non-confidential intake, then open the verified chargeable Stripe checkout. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback proving link active=true, account charges_enabled=true, and payouts_enabled=true; a click is not authorization, settlement, payout, or bank cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "One selected public pack, build bump, or session note"
+        ],
+        "acceptance": [
+          "Selected public artifact is reachable on current main"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "A click is not authorization, settlement, payout, or BANK_AVAILABLE cash. Collected cash remains USD 0.",
+        "The current Stripe link does not capture which deliverable was selected",
+        "Delivery clock and refund terms remain UNKNOWN"
+      ]
+    },
+    "sku-monthly-tip-20260826": {
+      "priority": 2,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A recurring Commons supporter who wants no membership entitlement.",
+      "trigger": "The buyer wants a small recurring support loop without changing public access.",
+      "acquisition": {
+        "primary_channel": "One-time tip buyers and existing Commons readers",
+        "alternate_channels": [
+          "Agent-readable catalog",
+          "Direct share of the anchored commerce card"
+        ],
+        "message": "$3 a month in recurring thanks; not a seat or a claim.",
+        "route": "commerce.html#sku-monthly-tip-20260826",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "NONE",
+        "required": [],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the verified chargeable Stripe checkout. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback proving link active=true, account charges_enabled=true, and payouts_enabled=true; a click is not authorization, settlement, payout, or bank cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Recurring support with no gated entitlement"
+        ],
+        "acceptance": [
+          "A public-safe support receipt can be reconciled without private buyer data"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "A click is not authorization, settlement, payout, or BANK_AVAILABLE cash. Collected cash remains USD 0.",
+        "Cancellation, refund, payout, and bank-arrival evidence remain unverified"
+      ]
+    },
+    "sku-boost-20260826": {
+      "priority": 13,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A recurring supporter who wants to keep the Commons table upgraded.",
+      "trigger": "The buyer wants recurring support tied to a visible improvement rather than a seat.",
+      "acquisition": {
+        "primary_channel": "Existing Commons supporters",
+        "alternate_channels": [
+          "Agent-readable catalog",
+          "Direct share of the anchored commerce card"
+        ],
+        "message": "$4.99 a month to keep the table upgraded; payment does not buy a claim.",
+        "route": "commerce.html#sku-boost-20260826",
+        "cta": "Start public intake"
+      },
+      "qualification": {
+        "route": "commerce.html#sku-boost-20260826",
+        "required": [
+          "Named public upgrade or published allocation rule",
+          "PUBLIC_CONTACT_URL for the scoped handoff"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Complete public, non-confidential intake, then open the verified chargeable Stripe checkout. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback proving link active=true, account charges_enabled=true, and payouts_enabled=true; a click is not authorization, settlement, payout, or bank cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Recurring support for table upgrades"
+        ],
+        "acceptance": [
+          "UNKNOWN"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "A click is not authorization, settlement, payout, or BANK_AVAILABLE cash. Collected cash remains USD 0.",
+        "Specific upgrade, cadence, visible result, cancellation, and refund handling remain UNKNOWN"
+      ]
+    },
+    "sku-whitebox-hour-20260826": {
+      "priority": 8,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A technical buyer wanting one dated White Box or dests work session.",
+      "trigger": "The buyer needs a bounded expert hour before committing to a diagnostic or pilot.",
+      "acquisition": {
+        "primary_channel": "Qualified technical inquiry",
+        "alternate_channels": [
+          "Accepted survival engagement",
+          "Direct share of the anchored commerce card"
+        ],
+        "message": "$250 for one dated White Box or dests hour with a public session receipt.",
+        "route": "commerce.html#sku-whitebox-hour-20260826",
+        "cta": "Start public intake"
+      },
+      "qualification": {
+        "route": "commerce.html#sku-whitebox-hour-20260826",
+        "required": [
+          "Objective",
+          "Requested date and timezone",
+          "Relevant dests",
+          "Public-result acknowledgment",
+          "PUBLIC_CONTACT_URL for the scoped handoff"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Complete public, non-confidential intake, then open the verified chargeable Stripe checkout. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback proving link active=true, account charges_enabled=true, and payouts_enabled=true; a click is not authorization, settlement, payout, or bank cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "land/session-YYYYMMDD.md with dests, receipts, and what ran"
+        ],
+        "acceptance": [
+          "The dated public session file contains the promised fields"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "gguf-diagnostic-10d-12k"
+      ],
+      "gaps": [
+        "A click is not authorization, settlement, payout, or BANK_AVAILABLE cash. Collected cash remains USD 0.",
+        "Availability, rescheduling, acceptance, and refund terms remain UNKNOWN"
+      ]
+    },
+    "sku-muhlnickel-titan-20260826": {
+      "priority": 14,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "An organization seeking one narrow actual-machine Muhlnickel or Titan keep-or-build engagement.",
+      "trigger": "A scoped machine outcome cannot be met by a proof, sprint, hour, diagnostic, or White Box pilot.",
+      "acquisition": {
+        "primary_channel": "Qualified enterprise inquiry after a smaller paid engagement",
+        "alternate_channels": [
+          "commerce.html direct share",
+          "Named infrastructure collaboration"
+        ],
+        "message": "$45,000 for one narrow fixed-scope keep-or-build engagement on the actual machines, with receipt files on current main.",
+        "route": "commerce.html#sku-muhlnickel-titan-20260826",
+        "cta": "Start public intake"
+      },
+      "qualification": {
+        "route": "commerce.html#sku-muhlnickel-titan-20260826",
+        "required": [
+          "Named buyer and business outcome",
+          "Written keep-or-build definition",
+          "Deliverables and acceptance test",
+          "Term, substrate prerequisites, support boundary, and delivery slot",
+          "PUBLIC_CONTACT_URL for the scoped handoff"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Complete public, non-confidential intake, then open the verified chargeable Stripe checkout. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback proving link active=true, account charges_enabled=true, and payouts_enabled=true; a click is not authorization, settlement, payout, or bank cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "One narrow actual-machine keep-or-build engagement",
+          "Receipt files on current main"
+        ],
+        "acceptance": [
+          "UNKNOWN"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "A click is not authorization, settlement, payout, or BANK_AVAILABLE cash. Collected cash remains USD 0.",
+        "Buyer class, exact scope, deliverables, clock, capacity, acceptance, support, and refund terms remain UNKNOWN",
+        "No buyer or accepted scope is evidenced"
+      ]
+    },
+    "sku-muhlnickel-generated-token-capacity": {
+      "priority": 15,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A team paying cloud output-token rates who needs dirty-cheap generated capacity on an already-connected model.",
+      "trigger": "Published cloud output rates make a high-volume generation job too expensive relative to the outcome.",
+      "acquisition": {
+        "primary_channel": "Founder email and Slack product-range pitches alongside bounded diagnostics and implementation work",
+        "alternate_channels": [
+          "attested-inference.html direct share",
+          "Upwork LLM cost-optimization briefs as buyer-side fit only"
+        ],
+        "message": "10 million generated tokens for $1 on Muhlnickel \u2014 50% below the lowest cited cloud output rate. Model, window, and receipt written before checkout.",
+        "route": "commerce.html#sku-muhlnickel-generated-token-capacity",
+        "cta": "Send the capacity ask"
+      },
+      "qualification": {
+        "route": "attested-inference.html",
+        "required": [
+          "Already-connected model family named in writing",
+          "Accepted delivery window, context limit, and maximum parallelism",
+          "Public or non-confidential generation task",
+          "Public contact URL"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Accept the written capacity window, then receive a buyer-specific checkout or Shopify storefront link once published. Do not invent a storefront URL.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback of an issued checkout or published Shopify product URL; a click or mailto is not cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Selected model and tokenizer named in the receipt",
+          "Generated-token count by that tokenizer",
+          "Output and run-manifest hashes",
+          "Substrate identity and timestamps"
+        ],
+        "acceptance": [
+          "Capacity window offered within seven calendar days or full refund",
+          "Only an already-connected model is sold",
+          "No model-quality-equivalence claim versus cited cloud providers"
+        ],
+        "refund": "If no capacity window is offered within seven calendar days, the buyer may cancel for a full refund."
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "sku-muhlnickel-attested-inference"
+      ],
+      "gaps": [
+        "Shopify storefront URL is null until a local authenticated session imports shopify_token_capacity.csv.",
+        "Stripe Payment Links for MUHL-TOK-* are NOT_MINTED from this cloud surface (no live Stripe dashboard session).",
+        "Collected cash remains USD 0."
+      ]
+    },
+    "sku-muhlnickel-attested-inference": {
+      "priority": 16,
+      "readiness": "READY_FOR_QUALIFICATION",
+      "buyer": "A team with one public or non-confidential model task and an exact evaluation rule.",
+      "trigger": "The buyer needs a checkable model run or bounded compute job without buying a five-figure engagement first.",
+      "acquisition": {
+        "primary_channel": "Product-range founder email that offers attested runs alongside token capacity and production recovery work",
+        "alternate_channels": [
+          "attested-inference.html",
+          "commerce.html#sku-muhlnickel-attested-inference"
+        ],
+        "message": "One attested Muhlnickel run for $500: outputs, hashes, timing, substrate identity, and reconstruction instructions.",
+        "route": "commerce.html#sku-muhlnickel-attested-inference",
+        "cta": "Send the task for scope confirmation"
+      },
+      "qualification": {
+        "route": "attested-inference.html",
+        "required": [
+          "Public or non-confidential input",
+          "One already-connected model or deterministic program",
+          "Maximum output size",
+          "Machine-checkable acceptance rule",
+          "Public contact URL"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "CUSTOMER_SPECIFIC_INVOICE",
+        "status": "NOT_ISSUED",
+        "next_step": "Accept the written scope, then receive a buyer-specific checkout or Shopify storefront link once published. Do not invent a storefront URL.",
+        "state_after": "FUNDED",
+        "evidence_required": "Provider readback of an issued checkout or published Shopify product URL; a click or mailto is not cash."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Raw outputs and machine-readable run manifest",
+          "Prompt, model, output, and receipt hashes",
+          "Timing, substrate identity, and reconstruction instructions"
+        ],
+        "acceptance": [
+          "Buyer-supplied acceptance rule is machine-checkable",
+          "Receipt exists before any customer-run claim",
+          "Owner-local Muhlnickel is the execution surface"
+        ],
+        "refund": "UNKNOWN"
+      },
+      "measurement": {
+        "dom_action": "qualification-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "DISCOVERED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [
+        "sku-muhlnickel-titan-20260826"
+      ],
+      "gaps": [
+        "Shopify storefront URL is null until a local authenticated session imports shopify_products.csv.",
+        "Stripe Payment Links for MUHL-INFER-* are NOT_MINTED from this cloud surface.",
+        "Collected cash remains USD 0; no customer run is claimed."
+      ]
+    },
+    "dealer-service-lead-rescue": {
+      "priority": 17,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A dealer service manager or BDC lead whose inbound service leads must produce one follow-up and one appointment.",
+      "trigger": "A duplicate submit or worker restart causes a service lead to be followed up twice or not at all.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public dealer service diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate or restart failure"
+        ],
+        "message": "$199 for a one-business-day synthetic diagnostic of duplicate, crash, restart, rollback, and conflict behavior, with receipts.",
+        "route": "commerce.html#dealer-service-lead-rescue",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "dealer-service-lead-rescue.html",
+        "required": [
+          "One approved synthetic service-lead payload shape",
+          "Browser-local synthetic fixtures only; no dealership or customer data, PII, credentials, or production access"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-05; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Results for the contract's synthetic duplicate, crash, restart, rollback, and conflict fixtures",
+          "Timestamped progress and terminal status receipts",
+          "A durable result tied to the contract revision"
+        ],
+        "acceptance": [
+          "Lead identity is the idempotency key",
+          "Complete leads produce exactly one follow-up and appointment while incomplete leads produce none",
+          "Restart resumes once, rollback cleans a crashed run, and conflicting bytes preserve the original rescue"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "plant-downtime-handoff": {
+      "priority": 18,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A plant maintenance leader whose downtime events must reach one technician and parts handoff.",
+      "trigger": "A duplicate fault report or worker restart causes a handoff to dispatch twice or disappear.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public plant downtime diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate or restart failure"
+        ],
+        "message": "$199 for a one-business-day synthetic diagnostic of duplicate, crash, restart, rollback, and conflict behavior, with receipts.",
+        "route": "commerce.html#plant-downtime-handoff",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "plant-downtime-handoff.html",
+        "required": [
+          "One approved synthetic plant-fault payload shape",
+          "Browser-local synthetic fixtures only; no plant data, PII, credentials, live control, or production access"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-05; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Results for the contract's synthetic duplicate, crash, restart, rollback, and conflict fixtures",
+          "Timestamped progress and terminal status receipts",
+          "A durable result tied to the contract revision"
+        ],
+        "acceptance": [
+          "Fault identity is the idempotency key",
+          "Complete faults dispatch exactly once while incomplete faults dispatch zero times",
+          "Restart resumes once, rollback cleans a crashed run, and conflicting bytes preserve the original dispatch"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "referral-intake-completeness": {
+      "priority": 19,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A clinic operations director whose complete referrals must create one intake ticket while incomplete packets remain held.",
+      "trigger": "A retry advances an incomplete referral or creates a second queue ticket for a complete packet.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public referral intake diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching completeness or replay failure"
+        ],
+        "message": "$199 for a one-business-day synthetic no-PHI diagnostic of completeness, replay, crash, restart, rollback, and conflict behavior, with receipts.",
+        "route": "commerce.html#referral-intake-completeness",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "referral-intake-completeness.html",
+        "required": [
+          "One approved synthetic referral payload shape and referral-class field matrix",
+          "Browser-local synthetic fixtures only; no PHI, clinical data, credentials, or production access"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-05; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Results for the contract's synthetic completeness, replay, crash, restart, rollback, and conflict fixtures",
+          "Timestamped progress and intake receipts",
+          "A durable result tied to the contract revision"
+        ],
+        "acceptance": [
+          "Every checklist item comes from the referral-class matrix",
+          "Complete packets route once while incomplete packets route once to INCOMPLETE_INTAKE",
+          "Replay creates no second ticket, rollback clears a crashed ticket, and PHI-shaped keys are refused"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "repair-booking-exactly-once-v1": {
+      "priority": 20,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A repair-scheduling owner whose request must create exactly one appointment or an explicit stopped or rolled-back result.",
+      "trigger": "A retry, timeout, crash, or webhook replay creates duplicate appointments or leaves an ambiguous result.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public repair-booking diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching retry or ambiguous-effect failure"
+        ],
+        "message": "$199 for a one-business-day diagnostic across 20 synthetic retry, timeout, crash, replay, and rollback fixtures, with a durable receipt.",
+        "route": "commerce.html#repair-booking-exactly-once-v1",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "repair-booking-preflight.html",
+        "required": [
+          "One approved synthetic repair-booking payload shape and tool sequence",
+          "Synthetic fixtures only; no customer data, credentials, real appointment creation, or production access"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-05; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Results for all 20 synthetic contract fixtures",
+          "The first unsafe edge for any failed fixture",
+          "A durable JSON receipt tied to the contract revision"
+        ],
+        "acceptance": [
+          "Each fixture ends BOOKED with exactly one BOOKING_CREATED event or ends explicitly STOPPED or ROLLED_BACK",
+          "Duplicate appointments and silent or ambiguous terminal states are zero",
+          "A failed fixture identifies the first unsafe edge and every run emits a durable JSON receipt"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "salesforce-contact-preflight": {
+      "priority": 21,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A Salesforce operations or executive-reporting owner whose contact creates, updates, and merges must resolve each person to exactly one canonical contact.",
+      "trigger": "A retried or duplicated contact event creates a second contact or a conflicting update, and dashboard totals drift from real people.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public Salesforce Contact Exactly-Once Preflight Diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate, replay, or conflict failure"
+        ],
+        "message": "$199 for a one-business-day synthetic diagnostic of contact create, update, merge, replay, and conflict behavior, with receipts.",
+        "route": "commerce.html#salesforce-contact-preflight",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "salesforce-contact-preflight.html",
+        "required": [
+          "Twenty synthetic contact create, update, and merge events",
+          "Synthetic data only; no Salesforce credentials, live org write, production records, or approval decisions"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "A canonical match-key map",
+          "An automation receipt ledger",
+          "A duplicate and conflict ledger",
+          "Dashboard-field lineage totals"
+        ],
+        "acceptance": [
+          "Each unique person resolves to exactly one active canonical contact",
+          "Exact event replay produces no second mutation",
+          "The same event_id with different bytes is rejected"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "permit-intake-receipt": {
+      "priority": 22,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A permitting director or government CIO whose intake must send one missing-item notice and one review-queue route per application.",
+      "trigger": "A resubmitted or replayed permit application creates a second notice or route, or an incomplete packet reaches review.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public Permit Intake Receipt Diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate, replay, or conflict failure"
+        ],
+        "message": "$199 for a one-business-day diagnostic of permit intake completeness, missing-item notices, queue routing, replay, and conflict behavior, with receipts.",
+        "route": "commerce.html#permit-intake-receipt",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "permit-intake-receipt.html",
+        "required": [
+          "One actual intake workflow with agreed synthetic or de-identified application packets",
+          "Browser-local input only; intake only, never an approval or denial; no resident records, credentials, or production access"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "An exact permit-type rule map",
+          "Replay proof for the contract completeness, notice, and routing fixtures",
+          "An auditable applicant receipt tied to the contract revision"
+        ],
+        "acceptance": [
+          "Every checklist item comes from the permit-type matrix",
+          "Incomplete input creates exactly one missing-item notice",
+          "Every recognized type routes exactly once to its review queue"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "catering-deposit-rescue": {
+      "priority": 23,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A restaurant-group catering sales director whose inquiries must produce one rules-valid quote, one follow-up, and at most one deposit intent.",
+      "trigger": "A duplicated or replayed catering inquiry produces a second follow-up or deposit request, or an invalid quote reaches a customer.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public Catering Deposit Rescue Diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate, replay, or conflict failure"
+        ],
+        "message": "$199 for a one-business-day diagnostic of catering quote rules, follow-up, deposit-intent, replay, and conflict behavior, with receipts.",
+        "route": "commerce.html#catering-deposit-rescue",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "catering-deposit-rescue.html",
+        "required": [
+          "One real quoting workflow with agreed de-identified fixtures",
+          "Browser-local synthetic or de-identified input only; no customer records, credentials, or payment-processor access"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "A rules-valid quote packet trace for the contract fixtures",
+          "One local follow-up record and one inert deposit intent or staff exception per inquiry",
+          "A durable JSON receipt tied to the contract revision"
+        ],
+        "acceptance": [
+          "Accepted prices resolve to the fixed rule table",
+          "Identical replay creates at most one follow-up and one deposit intent",
+          "The same event id with different bytes returns EVENT_CONFLICT"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "invoice-exception-pack": {
+      "priority": 24,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A controller, CFO, or AP owner of a multi-location operator whose invoice and purchase-order matching must produce one decision and at most one approval request.",
+      "trigger": "A retried, duplicated, or restarted invoice event creates a second approval request, or a mismatch reaches approval unflagged.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public Invoice Exception Pack Diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate, replay, or conflict failure"
+        ],
+        "message": "$199 for a one-business-day diagnostic of invoice/PO match, exception, missing-data, replay, crash, and rollback behavior, with receipts.",
+        "route": "commerce.html#invoice-exception-pack",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "invoice-exception-pack.html",
+        "required": [
+          "One workflow with non-confidential or synthetic invoice and PO details",
+          "Synthetic values only; no payment execution, bank connection, credentials, vendor master change, tax advice, or approval authority"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "A one-workflow field and matching contract",
+          "Ten synthetic replay cases",
+          "An exception and approval packet schema",
+          "A crash, retry, and rollback receipt",
+          "A binary pass/fail report in Markdown and JSON"
+        ],
+        "acceptance": [
+          "The same input produces the same decision",
+          "A duplicate replay creates no second approval request",
+          "A crash after durable intent can retry to exactly one approval request"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "open-model-release-receipt": {
+      "priority": 25,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "An open-model release maintainer or release engineer whose release manifest must be verified artifact by artifact before publication.",
+      "trigger": "A published model release is missing a declared artifact, carries a changed byte, or fails to load, and nobody can say at which stage.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public Open Model Release Receipt Diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate, replay, or conflict failure"
+        ],
+        "message": "$199 for a one-business-day independent completeness diagnostic of one release manifest: eight artifacts, recomputed SHA-256, one manifest-declared loader, JSON and HTML receipts.",
+        "route": "commerce.html#open-model-release-receipt",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "open-model-release-receipt.html",
+        "required": [
+          "One real release manifest declaring exactly eight artifacts, local or HTTP, at most 10 MiB",
+          "Completeness receipt only: no training-quality or loader-side-effect-safety claim, and the receipt does not itself deploy or publish the release"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "An independent completeness verdict for one release manifest",
+          "A JSON receipt",
+          "A static HTML receipt"
+        ],
+        "acceptance": [
+          "PASS only at 8/8 matching artifacts and loader exit 0",
+          "Any missing path, changed byte, timeout, or loader error is FAIL with the exact stage",
+          "Inputs are capped at 10 MiB and 60 seconds",
+          "Loader exit is the loader-behavior assertion; filesystem, network, database, training, and publication side effects of the manifest-declared loader are outside this receipt's assurance"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "fleet-work-order-exactly-once": {
+      "priority": 26,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "A fleet maintenance or operations owner whose inspection and fault events must produce exactly one work order and one escalation, even across a crash.",
+      "trigger": "A duplicated inspection event or a worker crash produces a second work order or escalation, or loses one.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public Fleet Work Order Exactly-Once Diagnostic",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Named-human follow-up about a matching duplicate, replay, or conflict failure"
+        ],
+        "message": "$199 for a one-business-day synthetic diagnostic of duplicate, crash-after-prepare, crash-after-effects, resume, rollback, and conflict behavior, with receipts.",
+        "route": "commerce.html#fleet-work-order-exactly-once",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "fleet-work-order.html",
+        "required": [
+          "One inspection or fault event shape for one approved workflow",
+          "Synthetic inputs only; no vehicle credentials, production fleet connection, or technician dispatch"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 199 checkout, then follow the offer intake and delivery terms. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 199 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "A field contract",
+          "Replay fixtures",
+          "An exception taxonomy",
+          "A run receipt",
+          "A fit verdict for one approved workflow"
+        ],
+        "acceptance": [
+          "A duplicate event plus crash/resume produces one work order, one escalation, and one receipt",
+          "Crash after effects resumes without duplication",
+          "A reused id with different bytes is rejected"
+        ],
+        "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "mcp-conformance-receipt-run": {
+      "priority": 27,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "Anyone shipping, buying, or debugging an MCP server or carrier integration.",
+      "trigger": "Someone needs to know what an MCP server actually does: its negotiated protocol, tools, resources, prompts and parity gaps.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public MCP Conformance page",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Commons carrier catalog product card"
+        ],
+        "message": "$49 for one same-session MCP endpoint run with a shareable exact-evidence JSON receipt.",
+        "route": "commerce.html#mcp-conformance-receipt-run",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "mcp-conformance.html",
+        "required": [
+          "A reachable public MCP endpoint",
+          "Required tool names, if any",
+          "Credentials, tokens, private repository URLs and buyer records stay off Commons"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 49 checkout, then supply the public endpoint for the same-session run. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 49 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Initialize and protocol-negotiation evidence",
+          "Tools, resources, and prompts discovery",
+          "Required-tool parity with exact missing set",
+          "Request, response, input, and final receipt SHA-256 values",
+          "Public-safe endpoint label with URL credentials omitted"
+        ],
+        "acceptance": [
+          "Receipt JSON parses and carries schema commons-mcp-conformance-receipt-v1",
+          "Endpoint label omits URL userinfo, query, and fragment",
+          "Transport and discovery outcomes are explicit",
+          "Successful response transport rows record exact byte length and SHA-256; failure rows preserve only response hash metadata the runner actually emits",
+          "The final receipt SHA-256 recomputes from canonical unsigned JSON"
+        ],
+        "refund": "All sales are final; no refunds."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    },
+    "mcp-conformance-same-day-repair": {
+      "priority": 28,
+      "readiness": "READY_FOR_CHECKOUT",
+      "buyer": "Anyone shipping, buying, or debugging an MCP server or carrier integration.",
+      "trigger": "An MCP server has a reproducible conformance failure that needs one focused repair and a fresh receipt the same day.",
+      "acquisition": {
+        "primary_channel": "Direct share of the public MCP Conformance page",
+        "alternate_channels": [
+          "commerce.html anchored catalog entry",
+          "Commons carrier catalog product card"
+        ],
+        "message": "$250 for one focused same-day MCP implementation repair with regression coverage and a fresh conformance receipt.",
+        "route": "commerce.html#mcp-conformance-same-day-repair",
+        "cta": "Open verified checkout"
+      },
+      "qualification": {
+        "route": "mcp-conformance.html",
+        "required": [
+          "A reachable public MCP endpoint with a reproducible failure",
+          "A writable public repository URL",
+          "Credentials, tokens, private repository URLs and buyer records stay off Commons"
+        ],
+        "state_after": "QUALIFIED"
+      },
+      "conversion": {
+        "mode": "ACTIVE_STRIPE_LINK",
+        "status": "ACTIVE_CHARGEABLE",
+        "next_step": "Open the existing verified one-time USD 250 checkout, then supply the reproducible failure and writable repository for the same-day repair. A click is intent, not cash.",
+        "state_after": "FUNDED",
+        "evidence_required": "Exact active/live link and one-time USD 250 line item readback on 2026-09-10; account capability remains separately dated 2026-08-28. Buyer-adjustable quantity and future tax treatment remain unverified."
+      },
+      "fulfillment": {
+        "deliverables": [
+          "Everything in receipt-run",
+          "One focused implementation repair",
+          "Focused regression coverage",
+          "Fresh conformance receipt after repair"
+        ],
+        "acceptance": [
+          "Receipt JSON parses and carries schema commons-mcp-conformance-receipt-v1",
+          "Endpoint label omits URL userinfo, query, and fragment",
+          "Transport and discovery outcomes are explicit",
+          "Successful response transport rows record exact byte length and SHA-256; failure rows preserve only response hash metadata the runner actually emits",
+          "The final receipt SHA-256 recomputes from canonical unsigned JSON"
+        ],
+        "refund": "All sales are final; no refunds."
+      },
+      "measurement": {
+        "dom_action": "checkout-open",
+        "click_truth": "INTENT_ONLY",
+        "first_evidence_state": "FUNDED",
+        "success_state": "BANK_AVAILABLE"
+      },
+      "next_offer": [],
+      "gaps": [
+        "No paid delivery or collected cash is recorded in funnel_truth",
+        "Future tax treatment and buyer-adjustable quantity were not established by the provider readback"
+      ]
+    }
+  },
+  "listings": [
+    {
+      "id": "production-survival-sprint",
+      "name": "Production Survival Sprint",
+      "state": "PUBLIC_OFFER",
+      "source": {
+        "path": "revenue/production_survival/offer.json",
+        "pointer": "/ladder/0",
+        "offer_id": "production-survival-sprint",
+        "blob_sha": "830e8e9a3ddae95799142eba6bcbd03f85eb4787",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed_outcome",
+        "components": [
+          {
+            "id": "sprint_fee",
+            "kind": "fixed",
+            "amount": "15000.00",
+            "basis": "one five-calendar-day production survival sprint"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/production_survival/offer.json#/ladder/0/outcome",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "revenue/production_survival/README.md",
+        "machine": "revenue/production_survival/offer.json"
+      }
+    },
+    {
+      "id": "gguf-diagnostic-10d-12k",
+      "name": "GGUF Diagnostic",
+      "state": "CANDIDATE",
+      "source": {
+        "path": "revenue/payment_ready/pack.json",
+        "pointer": "/offer",
+        "offer_id": "gguf-diagnostic-10d-12k",
+        "blob_sha": "be13390370922eb1661831810a5be66875427a41",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "milestone",
+        "components": [
+          {
+            "id": "milestone_m1",
+            "kind": "milestone",
+            "amount": "6000.00",
+            "basis": "M1_BEFORE_FILE"
+          },
+          {
+            "id": "milestone_m2",
+            "kind": "milestone",
+            "amount": "6000.00",
+            "basis": "M2_AT1_AT6"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/payment_ready/pack.json#/acceptance_tests",
+        "receipt_schema": "revenue/payment_ready/receipt.schema.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "diagnostic.html",
+        "machine": "revenue/payment_ready/pack.json"
+      }
+    },
+    {
+      "id": "white-box-gguf-pilot-30d",
+      "name": "White Box",
+      "state": "PROPOSED",
+      "source": {
+        "path": "commercial.json",
+        "pointer": "/offer",
+        "offer_id": "white-box-gguf-pilot-30d",
+        "blob_sha": "34062d6a9a9bf2f797d7ad7f506ccb0be52b59ce",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "milestone_with_license_follow_on",
+        "components": [
+          {
+            "id": "milestone_m1",
+            "kind": "milestone",
+            "amount": "15000.00",
+            "basis": "NDA and SOW signing"
+          },
+          {
+            "id": "milestone_m2",
+            "kind": "milestone",
+            "amount": "15000.00",
+            "basis": "agreed pilot package delivery"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "commercial.json#/offer/acceptance",
+        "evidence_required": true
+      },
+      "follow_on": {
+        "kind": "license",
+        "source": "commercial.json#/offer/follow_on",
+        "term_months": 12,
+        "currency": "USD",
+        "amount_from": "100000.00",
+        "amount_to": "175000.00",
+        "separately_scoped": true
+      },
+      "routes": {
+        "human": "commercial.html",
+        "machine": "commercial.json"
+      }
+    },
+    {
+      "id": "ho-issue-to-pr",
+      "name": "Named issue to a CI-green PR",
+      "state": "CANDIDATE",
+      "source": {
+        "path": "revenue/human_outcomes/offers.json",
+        "pointer": "/offers/0",
+        "offer_id": "ho-issue-to-pr",
+        "blob_sha": "1b72639aaea1a3d41c0d2419470add5a3ca8d839",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed_outcome",
+        "components": [
+          {
+            "id": "fixed_fee",
+            "kind": "fixed",
+            "amount": "2500.00",
+            "basis": "one accepted named issue"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/human_outcomes/offers.json#/offers/0/acceptance",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "humans.html",
+        "machine": "revenue/human_outcomes/offers.json"
+      }
+    },
+    {
+      "id": "ho-meeting-packet",
+      "name": "Accessible public-meeting packet",
+      "state": "CANDIDATE",
+      "source": {
+        "path": "revenue/human_outcomes/offers.json",
+        "pointer": "/offers/1",
+        "offer_id": "ho-meeting-packet",
+        "blob_sha": "1b72639aaea1a3d41c0d2419470add5a3ca8d839",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed_outcome",
+        "components": [
+          {
+            "id": "fixed_fee",
+            "kind": "fixed",
+            "amount": "1200.00",
+            "basis": "one named public meeting packet"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/human_outcomes/offers.json#/offers/1/acceptance",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "humans.html",
+        "machine": "revenue/human_outcomes/offers.json"
+      }
+    },
+    {
+      "id": "ho-security-questionnaire",
+      "name": "Security questionnaire completion",
+      "state": "CANDIDATE",
+      "source": {
+        "path": "revenue/human_outcomes/offers.json",
+        "pointer": "/offers/2",
+        "offer_id": "ho-security-questionnaire",
+        "blob_sha": "1b72639aaea1a3d41c0d2419470add5a3ca8d839",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed_outcome",
+        "components": [
+          {
+            "id": "fixed_fee",
+            "kind": "fixed",
+            "amount": "3000.00",
+            "basis": "one named questionnaire"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/human_outcomes/offers.json#/offers/2/acceptance",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "humans.html",
+        "machine": "revenue/human_outcomes/offers.json"
+      }
+    },
+    {
+      "id": "ho-pixel-pack",
+      "name": "8-bit / pixel agent pack",
+      "state": "CANDIDATE",
+      "source": {
+        "path": "revenue/human_outcomes/offers.json",
+        "pointer": "/offers/3",
+        "offer_id": "ho-pixel-pack",
+        "blob_sha": "1b72639aaea1a3d41c0d2419470add5a3ca8d839",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed_outcome",
+        "components": [
+          {
+            "id": "fixed_fee",
+            "kind": "fixed",
+            "amount": "800.00",
+            "basis": "one accepted agent pack"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/human_outcomes/offers.json#/offers/3/acceptance",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "humans.html",
+        "machine": "revenue/human_outcomes/offers.json"
+      }
+    },
+    {
+      "id": "sku-tip-20260826",
+      "name": "Tip",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "land/sku-tip-20260826.md",
+        "blob_sha": "e18c2865cf737eb2c76da23012dd0a890ccca202",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "tip_one_time",
+            "kind": "fixed",
+            "amount": "5.00",
+            "basis": "one $5 USD coffee for the table"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "land/sku-tip-20260826.md",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "land/sku-tip-20260826.md"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://donate.stripe.com/fZucN40Ch9fj7mxgJs43S08",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+          "observed_at": "2026-08-28T16:10:00Z"
+        }
+      }
+    },
+    {
+      "id": "sku-seat-20260826",
+      "name": "Seat",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "land/sku-seat-20260826.md",
+        "blob_sha": "7f7d41a94333a72cbd1f641f0c437557f3a95361",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "subscription",
+        "components": [
+          {
+            "id": "seat_monthly",
+            "kind": "subscription",
+            "amount": "5.00",
+            "basis": "one calendar month of named presence"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "land/sku-seat-20260826.md",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "land/sku-seat-20260826.md"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/3cIeVc5WB1MRgX7al443S03",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+          "observed_at": "2026-08-28T16:10:00Z"
+        }
+      }
+    },
+    {
+      "id": "sku-unlock-20260826",
+      "name": "Unlock",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "land/sku-unlock-20260826.md",
+        "blob_sha": "e607d3ba7cd24dd542b24a1e8be9e8579d6745ce",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "unlock_once",
+            "kind": "fixed",
+            "amount": "5.00",
+            "basis": "one small door: a print pack, a paid-build bump, or a session note"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "land/sku-unlock-20260826.md",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "land/sku-unlock-20260826.md"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/3cIbJ0ckZgHL36h8cW43S04",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+          "observed_at": "2026-08-28T16:10:00Z"
+        }
+      }
+    },
+    {
+      "id": "sku-monthly-tip-20260826",
+      "name": "Monthly tip",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "land/sku-monthly-tip-20260826.md",
+        "blob_sha": "ec94c5a6113ce6de6fd601f8bd438d5e6b117b2f",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "subscription",
+        "components": [
+          {
+            "id": "monthly_tip",
+            "kind": "subscription",
+            "amount": "3.00",
+            "basis": "one calendar month of recurring thanks"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "land/sku-monthly-tip-20260826.md",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "land/sku-monthly-tip-20260826.md"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/bJe28qacR4Z3gX7bp843S05",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+          "observed_at": "2026-08-28T16:10:00Z"
+        }
+      }
+    },
+    {
+      "id": "sku-boost-20260826",
+      "name": "Boost",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "land/sku-boost-20260826.md",
+        "blob_sha": "885dd967197935ca69cc25482f52fea09d2c5bc3",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "subscription",
+        "components": [
+          {
+            "id": "boost_monthly",
+            "kind": "subscription",
+            "amount": "4.99",
+            "basis": "one calendar month keeping the table upgraded"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "land/sku-boost-20260826.md",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "land/sku-boost-20260826.md"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/3cIfZgacRezDfT39h043S06",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+          "observed_at": "2026-08-28T16:10:00Z"
+        }
+      }
+    },
+    {
+      "id": "sku-whitebox-hour-20260826",
+      "name": "White Box hour",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "land/sku-whitebox-hour-20260826.md",
+        "blob_sha": "49cc55559e93595b22bbcef15de6f74ac8e0f3f4",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "usage",
+        "components": [
+          {
+            "id": "whitebox_hour",
+            "kind": "usage",
+            "meter": "hour",
+            "unit_amount": "250.00",
+            "basis": "one dated White Box / dests hour"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "land/sku-whitebox-hour-20260826.md",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "land/sku-whitebox-hour-20260826.md"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/8x27sK2Kp3UZ9uF2SC43S07",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+          "observed_at": "2026-08-28T16:10:00Z"
+        }
+      }
+    },
+    {
+      "id": "sku-muhlnickel-titan-20260826",
+      "name": "Muhlnickel / Titan",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "land/sku-muhlnickel-titan-20260826.md",
+        "blob_sha": "6fb73c5837ac37ec7f48cc6efc12cc98797f12d8",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "titan_fixed",
+            "kind": "fixed",
+            "amount": "45000.00",
+            "basis": "one narrow Muhlnickel / Titan keep-or-build engagement"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "land/sku-muhlnickel-titan-20260826.md",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "commerce.html",
+        "machine": "land/sku-muhlnickel-titan-20260826.md"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/7sYbJ02Kpcrv9uF0Ku43S09",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "stripe-livemode-GET-v1-accounts-acct_1U6HI9ATH4EDE7XD+GET-v1-payment_links",
+          "observed_at": "2026-08-28T16:10:00Z"
+        }
+      }
+    },
+    {
+      "id": "sku-muhlnickel-generated-token-capacity",
+      "name": "Muhlnickel Generated-Token Capacity",
+      "state": "PUBLIC_OFFER",
+      "pricing": {
+        "currency": "USD",
+        "mode": "prepaid_credit",
+        "components": [
+          {
+            "id": "tok_10m_entry",
+            "kind": "fixed",
+            "amount": "1.00",
+            "basis": "10 million generated tokens at $0.10/M; ladder also has $5/100M and $20/1B in the source offer"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/muhlnickel_inference/token_capacity_offer.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "attested-inference.html",
+        "machine": "revenue/muhlnickel_inference/token_capacity_offer.json"
+      },
+      "source_artifact": {
+        "path": "revenue/muhlnickel_inference/token_capacity_offer.json",
+        "blob_sha": "02e632e2444ffa98404bd731b9854591d50f2416",
+        "terms_authority": "source"
+      }
+    },
+    {
+      "id": "sku-muhlnickel-attested-inference",
+      "name": "Muhlnickel Attested Inference",
+      "state": "PUBLIC_OFFER",
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed_outcome",
+        "components": [
+          {
+            "id": "entry_attested_run",
+            "kind": "fixed",
+            "amount": "500.00",
+            "basis": "one attested run; ladder also has $1,500 evaluated batch and $2,500 bespoke job in the source offer"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/muhlnickel_inference/offer.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "attested-inference.html",
+        "machine": "revenue/muhlnickel_inference/offer.json"
+      },
+      "source_artifact": {
+        "path": "revenue/muhlnickel_inference/offer.json",
+        "blob_sha": "960beb887a6af6e58740abc26a72934eb6efaa93",
+        "terms_authority": "source"
+      }
+    },
+    {
+      "id": "dealer-service-lead-rescue",
+      "name": "Dealer Service Lead Rescue Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/dealer_service_lead_rescue/contract.json",
+        "blob_sha": "9a0177e405e6ecbda5d648915c882fa31b4d9f3f",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one synthetic dealer service lead diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/dealer_service_lead_rescue/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "dealer-service-lead-rescue.html",
+        "machine": "revenue/dealer_service_lead_rescue/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/3cIdR8gBf6379uF1Oy43S0b",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-05T11:29:50.741356+00:00"
+        }
+      }
+    },
+    {
+      "id": "plant-downtime-handoff",
+      "name": "Plant Downtime Handoff Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/plant_downtime_handoff/contract.json",
+        "blob_sha": "9d01dd83be165ca322f576ba05bce2dbe81e48e4",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one synthetic plant downtime handoff diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/plant_downtime_handoff/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "plant-downtime-handoff.html",
+        "machine": "revenue/plant_downtime_handoff/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/14AfZgckZ0IN0Y99h043S0e",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-05T11:29:50.741356+00:00"
+        }
+      }
+    },
+    {
+      "id": "referral-intake-completeness",
+      "name": "Referral Intake Completeness Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/referral_intake_completeness/contract.json",
+        "blob_sha": "c42254704953b8a91f3cfcaec0045f8af9bbdb2e",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one synthetic referral intake completeness diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/referral_intake_completeness/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "referral-intake-completeness.html",
+        "machine": "revenue/referral_intake_completeness/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/9B600i98N77b9uFeBk43S0c",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-05T11:29:50.741356+00:00"
+        }
+      }
+    },
+    {
+      "id": "repair-booking-exactly-once-v1",
+      "name": "Repair Booking Exactly-Once Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/repair_booking_preflight/contract.json",
+        "blob_sha": "85b1aa55056105ce8f2f45fbd05ab3aa1d9fb060",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one 20-fixture synthetic repair-booking diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/repair_booking_preflight/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "repair-booking-preflight.html",
+        "machine": "revenue/repair_booking_preflight/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/9B66oGacR2QVdKVeBk43S0d",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:727cfb6f0e9a84a1b1c4deeed98a017d4b4aaa7fa8bf75580506849a0f791a01+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-05T11:29:50.741356+00:00"
+        }
+      }
+    },
+    {
+      "id": "salesforce-contact-preflight",
+      "name": "Salesforce Contact Exactly-Once Preflight Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/salesforce_contact_preflight/contract.json",
+        "blob_sha": "818a957e49730e02f4427e088e1da8207547de70",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one synthetic Salesforce contact preflight diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/salesforce_contact_preflight/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "salesforce-contact-preflight.html",
+        "machine": "revenue/salesforce_contact_preflight/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/4gM8wO4SxbnrdKV9h043S0m",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    },
+    {
+      "id": "permit-intake-receipt",
+      "name": "Permit Intake Receipt Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/permit_intake_receipt/contract.json",
+        "blob_sha": "55a805b7b18afd1b8ea57b862a4becad93689626",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one permit intake receipt diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/permit_intake_receipt/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "permit-intake-receipt.html",
+        "machine": "revenue/permit_intake_receipt/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/8x2cN42Kp8bf8qBgJs43S0n",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    },
+    {
+      "id": "catering-deposit-rescue",
+      "name": "Catering Deposit Rescue Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/catering_deposit_rescue/contract.json",
+        "blob_sha": "cacc6bcc912d0923196d9f61a974a2f6a2ed8b57",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one catering deposit rescue diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/catering_deposit_rescue/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "catering-deposit-rescue.html",
+        "machine": "revenue/catering_deposit_rescue/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/dRmdR8acR4Z36it2SC43S0q",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    },
+    {
+      "id": "invoice-exception-pack",
+      "name": "Invoice Exception Pack Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/invoice_exception_pack/contract.json",
+        "blob_sha": "faa5742a4b045f55073fa2386aee9f4e17eab76a",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one invoice exception diagnostic for one workflow in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/invoice_exception_pack/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "invoice-exception-pack.html",
+        "machine": "revenue/invoice_exception_pack/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/14A00i84Jdvz36hdxg43S0l",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    },
+    {
+      "id": "open-model-release-receipt",
+      "name": "Open Model Release Receipt Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/open_model_release_receipt/contract.json",
+        "blob_sha": "7be8c00672596c4418a1a9f7a1c597ff2afe11ae",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one open-model release manifest completeness diagnostic in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/open_model_release_receipt/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "open-model-release-receipt.html",
+        "machine": "revenue/open_model_release_receipt/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/dRmfZgdp34Z322d0Ku43S0o",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    },
+    {
+      "id": "fleet-work-order-exactly-once",
+      "name": "Fleet Work Order Exactly-Once Diagnostic",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/fleet_work_order/contract.json",
+        "blob_sha": "44a8a71434b7d616cdb3f304b46b51166201011e",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "diagnostic_fee",
+            "kind": "fixed",
+            "amount": "199.00",
+            "basis": "one synthetic fleet work-order diagnostic for one approved workflow in one business day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/fleet_work_order/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "fleet-work-order.html",
+        "machine": "revenue/fleet_work_order/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/7sY9AS98NdvzdKVbp843S0p",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    },
+    {
+      "id": "mcp-conformance-receipt-run",
+      "name": "MCP Conformance Receipt Run",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/mcp_conformance/contract.json",
+        "blob_sha": "accd2d9fda85c36a4f5854320370937764dccd14",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "receipt_run_fee",
+            "kind": "fixed",
+            "amount": "49.00",
+            "basis": "one MCP endpoint conformance run with a JSON receipt, same session"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/mcp_conformance/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "mcp-conformance.html",
+        "machine": "revenue/mcp_conformance/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/fZudR8bgV637fT3ctc43S0r",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    },
+    {
+      "id": "mcp-conformance-same-day-repair",
+      "name": "MCP Conformance Same-Day Repair",
+      "state": "PUBLIC_OFFER",
+      "source_artifact": {
+        "path": "revenue/mcp_conformance/contract.json",
+        "blob_sha": "accd2d9fda85c36a4f5854320370937764dccd14",
+        "terms_authority": "source"
+      },
+      "pricing": {
+        "currency": "USD",
+        "mode": "fixed",
+        "components": [
+          {
+            "id": "same_day_repair_fee",
+            "kind": "fixed",
+            "amount": "250.00",
+            "basis": "one focused MCP implementation repair with regression coverage and a fresh receipt, same day"
+          }
+        ]
+      },
+      "outcome": {
+        "acceptance_source": "revenue/mcp_conformance/contract.json",
+        "evidence_required": true
+      },
+      "routes": {
+        "human": "mcp-conformance.html",
+        "machine": "revenue/mcp_conformance/contract.json"
+      },
+      "checkout": {
+        "status": "ACTIVE_CHARGEABLE",
+        "provider": "stripe",
+        "url": "https://buy.stripe.com/14AeVcgBf2QV5epbp843S0s",
+        "link_active": true,
+        "account_charges_enabled": true,
+        "account_payouts_enabled": true,
+        "capability_evidence": {
+          "reference": "provider-receipt-sha256:24c88e28d2b025e55506ae46c377b9720bf9350c213cc4f888ec3924f4ce47ad+account-capability-snapshot:2026-08-28T16:10:00Z",
+          "observed_at": "2026-09-10T23:05:24.713000+00:00"
+        }
+      }
+    }
+  ],
+  "live_cash": {
+    "cite": [
+      "grok-catalog-json-keep-larger-fixed-20260916-01",
+      "goat-outcome-commerce-catalog-json-live-cash-20260909-01",
+      "goat-right-now-catalog-json-live-cash-20260909-01",
+      "commerce.html Live cash"
+    ],
+    "note": "Optional tip-shelf product paths with live checkout. Existing outcome_commerce listings above stay canonical. No invent Stripe URLs. Larger fixed engagements are separate product pages (checkout/intent stays there).",
+    "products": [
+      {
+        "name": "Dealer Service Lead Rescue",
+        "price_usd": 199,
+        "path": "dealer-service-lead-rescue.html"
+      },
+      {
+        "name": "Referral Intake Completeness",
+        "price_usd": 199,
+        "path": "referral-intake-completeness.html"
+      },
+      {
+        "name": "Repair Booking Preflight",
+        "price_usd": 199,
+        "path": "repair-booking-preflight.html"
+      },
+      {
+        "name": "Plant Downtime Handoff",
+        "price_usd": 199,
+        "path": "plant-downtime-handoff.html"
+      }
+    ],
+    "larger_fixed": [
+      {
+        "days": 10,
+        "name": "GGUF diagnostic",
+        "path": "diagnostic.html",
+        "price_usd": 12000
+      },
+      {
+        "days": 30,
+        "name": "White Box pilot",
+        "path": "commercial.html",
+        "price_usd": 30000
+      }
+    ]
+  }
+}

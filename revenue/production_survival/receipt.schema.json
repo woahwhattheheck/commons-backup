@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/production_survival/receipt.schema.json",
+  "title": "Production Survival Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["offer_id", "status", "contract", "intake", "canary", "acceptance", "artifacts", "limits"],
+  "properties": {
+    "offer_id": {"const": "same-day-agent-survival-proof"},
+    "status": {"enum": ["LANDED", "BLOCKED"]},
+    "contract": {
+      "type": "object",
+      "required": ["input", "expected_output", "environment", "window"],
+      "properties": {
+        "input": {"type": "string", "minLength": 1},
+        "expected_output": {"type": "string", "minLength": 1},
+        "environment": {
+          "type": "object",
+          "required": ["runtime", "system"],
+          "properties": {
+            "runtime": {"type": "string", "minLength": 1},
+            "system": {"type": "string", "minLength": 1}
+          }
+        },
+        "window": {
+          "type": "object",
+          "required": ["kind", "timezone", "window_start", "window_end"],
+          "properties": {
+            "kind": {"type": "string", "minLength": 1},
+            "timezone": {"const": "America/New_York"},
+            "window_start": {"type": ["string", "null"], "format": "date-time"},
+            "window_end": {"type": ["string", "null"], "format": "date-time"}
+          }
+        }
+      }
+    },
+    "intake": {
+      "type": "object",
+      "required": ["sentence", "sha256"],
+      "properties": {
+        "sentence": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "canary": {
+      "type": "object",
+      "required": ["operation_key", "failure_injected", "failure_point", "attempts", "recovery_result", "dedupe_hits", "external_effect_count", "final_phase"],
+      "properties": {
+        "operation_key": {"type": "string", "minLength": 1},
+        "failure_injected": {"type": "boolean"},
+        "failure_point": {"type": ["string", "null"]},
+        "attempts": {"type": "integer", "minimum": 0},
+        "recovery_result": {"type": ["string", "null"]},
+        "dedupe_hits": {"type": "integer", "minimum": 0},
+        "external_effect_count": {"type": "integer", "minimum": 0},
+        "final_phase": {"type": "string", "minLength": 1}
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "required": ["forced_failure_visible", "recovery_reached_done", "exactly_once_effect", "replay_deduped"],
+      "properties": {
+        "forced_failure_visible": {"type": "boolean"},
+        "recovery_reached_done": {"type": "boolean"},
+        "exactly_once_effect": {"type": "boolean"},
+        "replay_deduped": {"type": "boolean"}
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "required": ["code", "code_sha256", "intake", "receipt", "schema"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "code_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "intake": {"type": "string", "minLength": 1},
+        "receipt": {"type": "string", "minLength": 1},
+        "schema": {"type": "string", "minLength": 1}
+      }
+    },
+    "limits": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "blocked_edge": {"type": "string", "minLength": 1}
+  }
+}

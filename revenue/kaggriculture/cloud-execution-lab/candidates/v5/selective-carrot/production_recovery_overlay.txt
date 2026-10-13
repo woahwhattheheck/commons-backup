@@ -1,0 +1,29 @@
+
+# Diagnostic V3.1 production-layer donor; retained V4 economics consume
+# its returned action once. Original sources and attribution remain intact.
+_ArleneAgent = Agent
+class Agent(_ArleneAgent):
+    def __init__(self):
+        super().__init__()
+        import r04_full_router as r04
+        from r01_tapes import load_tapes
+        self.R = {'R04-' + str(i): tape for i, tape in enumerate(load_tapes())}
+        self.cur = 'R04-0'
+        self._fs = None
+        self._fs_for = None
+        self._r04 = r04
+        self._policy = r04.install(horizon=8, opening=0, row_order=True,
+            evening_flush=True, sale_fertilizer=True, cattle_early=False,
+            kill_late_water=False, strawberry_endgame=False,
+            no_late_sale_advance=True, no_late_sale_advance_step=648,
+            strawberry_topup=True, b5_carrot_fertilizer=True,
+            b5_jit_fertilize=True, row_shed=True, fert_hand=True,
+            terminal_fertilizer=True, goose_rescue=True)
+
+    def act(self, obs):
+        import full_production_context
+        out = self._policy(obs, full_production_context.configuration)
+        state = self._r04._POLICY.players[int(obs['player'])]
+        self.cur = 'R04-' + str(state.plan)
+        return out
+

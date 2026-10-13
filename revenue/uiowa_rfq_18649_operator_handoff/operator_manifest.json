@@ -1,0 +1,309 @@
+{
+  "schema": "uiowa.operator-handoff.v1",
+  "snapshot_main_sha": "f3d68f9799a8c70300ff93bada956186c0c9ba1c",
+  "snapshot_date": "2026-09-19",
+  "scope": "University of Iowa RFQ 18649 preparation assets; synthetic demonstration only",
+  "phases": [
+    "kickoff",
+    "evidence_collection",
+    "analysis",
+    "draft_review",
+    "final_delivery",
+    "optional_readout"
+  ],
+  "assets": [
+    {
+      "asset_id": "scope_acceptance",
+      "phase": "kickoff",
+      "work_order": "UIOWA-005",
+      "status": "working_reference",
+      "path": "revenue/uiowa_rfq_18649_workshare/ACCEPTANCE_EXHIBIT.md",
+      "purpose": "Proposed scope, responsibilities, deliverables, acceptance boundaries, and commercial workshare framing.",
+      "operator_action": "Review with the prime before kickoff; do not treat PROPOSED text as accepted University terms.",
+      "authority_ceiling": "proposal preparation only; does not create acceptance, signature, bid submission, or payment authority"
+    },
+    {
+      "asset_id": "institution_context",
+      "phase": "kickoff",
+      "work_order": "UIOWA-011",
+      "status": "working_reference",
+      "path": "revenue/uiowa_rfq_18649_workbench/11-ais-context.md",
+      "purpose": "Primary-source AIS/ESS/RIS/IAM context and unresolved discovery questions.",
+      "operator_action": "Use to prepare kickoff questions; replace public-context assumptions with engagement evidence.",
+      "authority_ceiling": "public context is not evidence of internal operating practice"
+    },
+    {
+      "asset_id": "policy_context",
+      "phase": "kickoff",
+      "work_order": "UIOWA-012",
+      "status": "working_reference",
+      "path": "revenue/uiowa_rfq_18649_workbench/12-policy-reference-memo.md",
+      "purpose": "University policy applicability reference translated into discovery questions.",
+      "operator_action": "Use policy clauses as evidence-request prompts, not compliance conclusions.",
+      "authority_ceiling": "not a compliance audit"
+    },
+    {
+      "asset_id": "document_extraction",
+      "phase": "evidence_collection",
+      "work_order": "UIOWA-032",
+      "status": "working_optional_dependency",
+      "path": "revenue/uiowa_rfq_18649_document_extraction/README.md",
+      "purpose": "Locator-preserving PDF/DOCX/TXT extraction with content hashes.",
+      "operator_action": "Install its declared requirements before PDF extraction; retain source/version metadata.",
+      "authority_ceiling": "extraction preserves content and locators; it does not validate document truth"
+    },
+    {
+      "asset_id": "evidence_confidence",
+      "phase": "evidence_collection",
+      "work_order": "UIOWA-023",
+      "status": "working_reference",
+      "path": "revenue/uiowa_rfq_18649_workshare/methodology/23-evidence-confidence.md",
+      "purpose": "Evidence-confidence/provenance method distinguishing missing evidence from evidence of absence.",
+      "operator_action": "Assign stable evidence IDs and retain recency, directness, representativeness, and corroboration notes.",
+      "authority_ceiling": "confidence describes support for an observation, not maturity"
+    },
+    {
+      "asset_id": "workshare_compiler",
+      "phase": "analysis",
+      "work_order": "existing_workshare",
+      "status": "working",
+      "path": "revenue/uiowa_rfq_18649_workshare/compiler.py",
+      "purpose": "Compile, verify, and render the synthetic 12-cell assessment packet with explicit authority ceilings.",
+      "operator_action": "Use public CLI only for UNTRUSTED_INSPECTION; trusted current-state integration requires independent host-controlled authority root.",
+      "authority_ceiling": "public CLI never produces trusted current maturity/confidence",
+      "working_dir": "revenue/uiowa_rfq_18649_workshare",
+      "sample_commands": [
+        [
+          "compiler.py",
+          "compile",
+          "fixtures/synthetic_packet.json",
+          "fixtures/synthetic_authority.json",
+          "${OUT}/workshare-report.json"
+        ],
+        [
+          "compiler.py",
+          "verify",
+          "${OUT}/workshare-report.json"
+        ],
+        [
+          "compiler.py",
+          "render",
+          "${OUT}/workshare-report.json",
+          "${OUT}/workshare-report.md"
+        ]
+      ]
+    },
+    {
+      "asset_id": "analyst_workbench",
+      "phase": "analysis",
+      "work_order": "existing_workbench",
+      "status": "working_interactive",
+      "path": "revenue/uiowa_rfq_18649_workbench/README.md",
+      "purpose": "Loopback analyst UI for inspecting compiler output, filtering 12 cells, recording non-authoritative notes, and exporting a draft handoff.",
+      "operator_action": "Run python3 server.py --port 8765 from the workbench directory; open http://127.0.0.1:8765/.",
+      "authority_ceiling": "notes/dispositions remain separate from immutable compiler output"
+    },
+    {
+      "asset_id": "framework_crosswalk",
+      "phase": "analysis",
+      "work_order": "UIOWA-020",
+      "status": "working_reference",
+      "path": "revenue/uiowa_rfq_18649_workbench/framework_crosswalk/20-framework-crosswalk.csv",
+      "purpose": "Primary NIST SSDF/CSF/AI RMF reference crosswalk with adaptation limits.",
+      "operator_action": "Use framework IDs to structure questions and interpretation; cite University evidence for findings.",
+      "authority_ceiling": "framework mapping is not certification, compliance, or an empirical maturity scale"
+    },
+    {
+      "asset_id": "rating_composition",
+      "phase": "analysis",
+      "work_order": "UIOWA-022",
+      "status": "working",
+      "path": "revenue/uiowa_rfq_18649_rating_model/rating_model.py",
+      "purpose": "Compose maturity observations without hiding coverage, confidence, applicability, or critical gaps.",
+      "operator_action": "Feed externally calibrated ordinal observations and evidence-confidence labels; do not invent averages.",
+      "authority_ceiling": "does not define maturity anchors or calculate evidence confidence",
+      "working_dir": "revenue/uiowa_rfq_18649_rating_model",
+      "sample_commands": [
+        [
+          "rating_model.py",
+          "synthetic_case_critical_gap.json",
+          "--json-out",
+          "${OUT}/rating-critical-gap.json",
+          "--markdown-out",
+          "${OUT}/rating-critical-gap.md"
+        ]
+      ]
+    },
+    {
+      "asset_id": "security_event_review",
+      "phase": "analysis",
+      "work_order": "UIOWA-060",
+      "status": "working",
+      "path": "revenue/uiowa_rfq_18649_security_event_review/assess_security_events.py",
+      "purpose": "Offline event-to-review/action evidence assessment using synthetic data.",
+      "operator_action": "Use supplied or engagement-approved evidence exports; preserve UNKNOWN where review evidence is missing.",
+      "authority_ceiling": "does not inspect live systems or create a compliance verdict",
+      "working_dir": "revenue/uiowa_rfq_18649_security_event_review",
+      "sample_commands": [
+        [
+          "assess_security_events.py",
+          "fixtures/synthetic_events.json",
+          "--json-out",
+          "${OUT}/security-event-assessment.json",
+          "--csv-out",
+          "${OUT}/security-event-matrix.csv",
+          "--md-out",
+          "${OUT}/security-event-timeline.md"
+        ]
+      ]
+    },
+    {
+      "asset_id": "observability",
+      "phase": "analysis",
+      "work_order": "UIOWA-065",
+      "status": "working",
+      "path": "revenue/uiowa_rfq_18649_observability/observability.py",
+      "purpose": "Offline service-observability evidence assessment that separates component health from user-visible objectives.",
+      "operator_action": "Use service-scoped evidence and keep unknown/unsupported objective claims visible.",
+      "authority_ceiling": "no live monitoring-system connection",
+      "working_dir": "revenue/uiowa_rfq_18649_observability",
+      "sample_commands": [
+        [
+          "observability.py",
+          "examples.json",
+          "--out",
+          "${OUT}/observability.json"
+        ]
+      ]
+    },
+    {
+      "asset_id": "handoff_readiness",
+      "phase": "draft_review",
+      "work_order": "UIOWA-050",
+      "status": "working",
+      "path": "revenue/uiowa_rfq_18649_handoff/handoff.py",
+      "purpose": "Validate and render development-to-operations handoff evidence without declaring release approval.",
+      "operator_action": "Run planned and urgent synthetic examples before adapting the worksheet to engagement evidence.",
+      "authority_ceiling": "validation separates structure/evidence gaps from release approval",
+      "working_dir": "revenue/uiowa_rfq_18649_handoff",
+      "sample_commands": [
+        [
+          "handoff.py",
+          "validate",
+          "examples/planned_release.json"
+        ],
+        [
+          "handoff.py",
+          "render",
+          "examples/planned_release.json",
+          "--output",
+          "${OUT}/handoff-readiness.md"
+        ]
+      ]
+    },
+    {
+      "asset_id": "recommendation_prioritization",
+      "phase": "draft_review",
+      "work_order": "UIOWA-084",
+      "status": "working",
+      "path": "revenue/uiowa_rfq_18649_prioritization/prioritize.py",
+      "purpose": "Transparent recommendation prioritization and sensitivity analysis with missing-estimate holds.",
+      "operator_action": "Replace synthetic recommendation inputs and confirm weight profiles with Clark's before use in a deliverable.",
+      "authority_ceiling": "formula is decision support; it does not replace professional judgment or rank individuals",
+      "working_dir": "revenue/uiowa_rfq_18649_prioritization",
+      "sample_commands": [
+        [
+          "prioritize.py",
+          "recommendations.synthetic.csv",
+          "weights.json",
+          "--out-dir",
+          "${OUT}/prioritization"
+        ]
+      ]
+    },
+    {
+      "asset_id": "outcome_measurement",
+      "phase": "draft_review",
+      "work_order": "UIOWA-087",
+      "status": "working",
+      "path": "revenue/uiowa_rfq_18649_outcome_measurement/analyze.py",
+      "purpose": "Recommendation-linked baseline/follow-up outcome measurement separate from adoption activity.",
+      "operator_action": "Populate recommendation/register/measurement files with defined periods, populations, and evidence sources.",
+      "authority_ceiling": "no individual performance scoring",
+      "working_dir": "revenue/uiowa_rfq_18649_outcome_measurement",
+      "sample_commands": [
+        [
+          "analyze.py",
+          "validate",
+          "--recommendations",
+          "recommendations.csv",
+          "--register",
+          "measure_register.csv",
+          "--measurements",
+          "examples/measurements.csv"
+        ],
+        [
+          "analyze.py",
+          "report",
+          "--recommendations",
+          "recommendations.csv",
+          "--register",
+          "measure_register.csv",
+          "--measurements",
+          "examples/measurements.csv",
+          "--output",
+          "${OUT}/outcome-measurement.md"
+        ]
+      ]
+    },
+    {
+      "asset_id": "traceability_rehearsal",
+      "phase": "final_delivery",
+      "work_order": "UIOWA-093",
+      "status": "working_synthetic_rehearsal",
+      "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/README.md",
+      "purpose": "Finding-to-evidence-to-recommendation-to-report traceability rehearsal.",
+      "operator_action": "Use stable evidence/finding/recommendation/statement IDs and validate before final delivery.",
+      "authority_ceiling": "checked-in bundle is synthetic; executive wording cannot broaden evidence",
+      "working_dir": "revenue/uiowa_rfq_18649_traceability_rehearsal",
+      "sample_commands": [
+        [
+          "validate_trace.py",
+          "."
+        ]
+      ]
+    },
+    {
+      "asset_id": "final_acceptance_reference",
+      "phase": "final_delivery",
+      "work_order": "UIOWA-005",
+      "status": "working_reference",
+      "path": "revenue/uiowa_rfq_18649_workshare/ACCEPTANCE_EXHIBIT.md",
+      "purpose": "Reference completion/acceptance criteria and responsibility split when packaging final artifacts.",
+      "operator_action": "Reconcile final deliverable list with the actually accepted prime/subcontract scope before delivery.",
+      "authority_ceiling": "current repository version remains proposed until accepted"
+    },
+    {
+      "asset_id": "optional_readout_architecture",
+      "phase": "optional_readout",
+      "work_order": "UIOWA-088",
+      "status": "pending_at_snapshot",
+      "path": "",
+      "purpose": "Leadership/group readout structure and synthetic worked story.",
+      "operator_action": "At snapshot f3d68f97, no merged UIOWA-088 asset was present in the inspected tree; refresh current main before readout preparation.",
+      "authority_ceiling": "optional readout is separately proposed and depends on the final accepted report"
+    }
+  ],
+  "required_university_inputs": [
+    "agreed kickoff date and delivery/review calendar",
+    "confirmed ESS/RIS/IAM participant list, roles, and interview availability",
+    "authorized University evidence sources and access path",
+    "actual process documents, system/service records, exports, and interview evidence",
+    "clarified responsibility boundaries for University-managed, shared, and third-party services",
+    "agreed maturity-anchor method and any calibration decisions",
+    "confirmed evidence-confidence/provenance conventions",
+    "consolidated factual corrections and disputed interpretations during draft review",
+    "accepted recommendation priorities, ownership roles, and feasible sequencing constraints",
+    "final audience, branding/accessibility expectations, and optional-readout format if exercised"
+  ]
+}

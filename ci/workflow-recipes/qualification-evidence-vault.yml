@@ -1,0 +1,48 @@
+name: qualification-evidence-vault
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/qualification_evidence_vault/**'
+      - 'tests/test_qualification_evidence_vault.py'
+      - '.github/workflows/qualification-evidence-vault.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/qualification_evidence_vault/**'
+      - 'tests/test_qualification_evidence_vault.py'
+      - '.github/workflows/qualification-evidence-vault.yml'
+
+concurrency:
+  group: qualification-evidence-vault-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile
+        run: python -m py_compile revenue/qualification_evidence_vault/*.py tests/test_qualification_evidence_vault.py
+      - name: Test
+        run: python -m unittest -v tests.test_qualification_evidence_vault
+      - name: Test optimized
+        run: python -O -m unittest -v tests.test_qualification_evidence_vault
+      - name: Real CLI compile / verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          python -m revenue.qualification_evidence_vault.cli compile \
+            --vault revenue/qualification_evidence_vault/example.public-evidence.json \
+            --solicitation revenue/qualification_evidence_vault/example.synthetic-solicitation.json \
+            --as-of 2026-09-16T22:45:00Z \
+            --packet "$tmp/packet.json" --brief "$tmp/brief.md"
+          python -m revenue.qualification_evidence_vault.cli verify \
+            --vault revenue/qualification_evidence_vault/example.public-evidence.json \
+            --solicitation revenue/qualification_evidence_vault/example.synthetic-solicitation.json \
+            --packet "$tmp/packet.json" --brief "$tmp/brief.md"

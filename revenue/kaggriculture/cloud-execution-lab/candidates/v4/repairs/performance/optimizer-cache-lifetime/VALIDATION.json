@@ -1,0 +1,265 @@
+{
+  "artifact_provenance": {
+    "native_archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "official_engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "workflow_artifact_id": 10175943272,
+    "zip_sha256": "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8"
+  },
+  "baseline_failures_not_claimed_green": [
+    {
+      "baseline_subtest_failures": 50,
+      "baseline_tests": 4,
+      "candidate_subtest_failures": 50,
+      "cause": "Existing old-vendor versus active-core output dictionary/acceptance-schema mismatch.",
+      "suite": "test_selected_pruning.py"
+    },
+    {
+      "baseline_errors": 1,
+      "baseline_tests": 6,
+      "candidate_errors": 1,
+      "cause": "Artifact omits checks/reference/selected-action/t08/arrival_contract.py.",
+      "suite": "test_ordered_selected_sell.py"
+    }
+  ],
+  "benchmark": {
+    "candidate_git": "aab42542442dafaf9853a06fb057460526f777c6",
+    "memory": {
+      "False": {
+        "baseline": {
+          "automatic_gc": false,
+          "calls": 32,
+          "retained_models": 32,
+          "traced_current_bytes": 3547712,
+          "traced_peak_bytes": 3558751
+        },
+        "candidate": {
+          "automatic_gc": false,
+          "calls": 32,
+          "retained_models": 0,
+          "traced_current_bytes": 92128,
+          "traced_peak_bytes": 167383
+        }
+      },
+      "True": {
+        "baseline": {
+          "automatic_gc": true,
+          "calls": 32,
+          "retained_models": 9,
+          "traced_current_bytes": 1140256,
+          "traced_peak_bytes": 1409671
+        },
+        "candidate": {
+          "automatic_gc": true,
+          "calls": 32,
+          "retained_models": 0,
+          "traced_current_bytes": 92128,
+          "traced_peak_bytes": 167383
+        }
+      }
+    },
+    "notes": [
+      "Memory phase uses tracemalloc; timing phase does not.",
+      "Arms alternate order each round; forced collection is outside measured calls.",
+      "GC-off phase is a retention diagnostic, not the production configuration.",
+      "No full-game, deadline-tail, Python 3.11, or leaderboard claim."
+    ],
+    "package_promotion": false,
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "schema": "titan-v4-cache-lifetime-benchmark/v1",
+    "source_git": "f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+    "strength_claim": false,
+    "timings": {
+      "False": {
+        "baseline": {
+          "batch_totals_ms": [
+            57.911638,
+            58.099443,
+            65.497049,
+            59.076701,
+            57.534294
+          ],
+          "calls": 160,
+          "collections": [
+            0,
+            0,
+            0
+          ],
+          "max_ms": 3.998263,
+          "median_ms": 1.778395,
+          "p95_ms": 2.138231
+        },
+        "candidate": {
+          "batch_totals_ms": [
+            55.91478,
+            59.954818,
+            54.913847,
+            55.138192000000004,
+            56.519058
+          ],
+          "calls": 160,
+          "collections": [
+            0,
+            0,
+            0
+          ],
+          "max_ms": 3.925635,
+          "median_ms": 1.705516,
+          "p95_ms": 2.007945
+        },
+        "candidate_over_baseline_median": 0.9590197903165495
+      },
+      "True": {
+        "baseline": {
+          "batch_totals_ms": [
+            59.008262,
+            58.076851,
+            60.071163,
+            58.572487,
+            59.88525
+          ],
+          "calls": 160,
+          "collections": [
+            25,
+            0,
+            0
+          ],
+          "max_ms": 3.052884,
+          "median_ms": 1.7556064999999998,
+          "p95_ms": 2.315337
+        },
+        "candidate": {
+          "batch_totals_ms": [
+            55.941658000000004,
+            55.984845,
+            55.238364,
+            56.072685,
+            55.636582
+          ],
+          "calls": 160,
+          "collections": [
+            0,
+            0,
+            0
+          ],
+          "max_ms": 2.141325,
+          "median_ms": 1.706828,
+          "p95_ms": 2.022797
+        },
+        "candidate_over_baseline_median": 0.972215584756607
+      }
+    },
+    "workload": {
+      "config": {},
+      "dates": [
+        400,
+        404,
+        408
+      ],
+      "inventory": 9800,
+      "item": "WHEAT",
+      "now": 400,
+      "params": null,
+      "quantity": 24,
+      "reference": [
+        [
+          400,
+          24
+        ]
+      ],
+      "rival_quantity": 12,
+      "shops": [
+        "BAKERY"
+      ]
+    }
+  },
+  "canonical_branch": "main",
+  "claim_slack_ts": "1789180616.027249",
+  "deconfliction": {
+    "FUNDING-PERF": "Owns native funding model pool; baseline stressed-receipt wrapper was withdrawn and is NOT delivered. Dispose pool-owned models only at the owner exit, not after each borrowed receipt.",
+    "MEADOW_EVENTPATH_PRESSURE_PERF": "Keep pricing/math/cache optimization ownership; lifetime scope is independent.",
+    "SIEVE": "Owns selected incumbent-bound algorithm; our transform preserves all statements and accepts only explicitly pinned reviewed successor source. Real SIEVE composition not executed in this receipt."
+  },
+  "derived_outputs": {
+    "scheduler.py": "329668f963133b94443577723fe559210446d552",
+    "selected_sell_core.py": "aab42542442dafaf9853a06fb057460526f777c6"
+  },
+  "existing_native_controls": {
+    "scope": "Temporary native source composition; root optimizer modules patched and selected attributed mirror updated only in sandbox; frozen_selected remains exact fc7baf5c179818a55037f6a61d92984d81d1a21c.",
+    "test_funded_prefix.py": {
+      "normal_pass": 8,
+      "optimized_pass": 8
+    },
+    "test_joint_market_slots.py": {
+      "normal_pass": 28,
+      "optimized_pass": 28
+    }
+  },
+  "focused_normal": {
+    "candidate_git": "aab42542442dafaf9853a06fb057460526f777c6",
+    "counters": {
+      "capacity_trace_equal_cells": 364,
+      "optimizer_parity_cells": 364,
+      "scheduler_parity_cells": 45
+    },
+    "errors": 0,
+    "failures": 0,
+    "optimized": false,
+    "package_promotion": false,
+    "passed": true,
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "schema": "titan-v4-cache-lifetime-tests/v1",
+    "skipped": 0,
+    "source_git": "f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+    "strength_claim": false,
+    "tests_run": 16
+  },
+  "focused_optimized": {
+    "candidate_git": "aab42542442dafaf9853a06fb057460526f777c6",
+    "counters": {
+      "capacity_trace_equal_cells": 364,
+      "optimizer_parity_cells": 364,
+      "scheduler_parity_cells": 45
+    },
+    "errors": 0,
+    "failures": 0,
+    "optimized": true,
+    "package_promotion": false,
+    "passed": true,
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "schema": "titan-v4-cache-lifetime-tests/v1",
+    "skipped": 0,
+    "source_git": "f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+    "strength_claim": false,
+    "tests_run": 16
+  },
+  "limitations": [
+    "Executed CPython 3.13.5 only; Python 3.11 NOT_RUN.",
+    "No full-game A/B, timeout-tail, native archive promotion, default change, provider/Actions dispatch, or Kaggle submission.",
+    "Timing is a bounded microbenchmark, not generalized speed or strength evidence.",
+    "Preserved public MarketPath reusable cache behavior; only non-escaping private optimize_lot owners are scoped.",
+    "Explicit successor source pins are identity checks, not independent review of arbitrary code."
+  ],
+  "schema": "titan-v4-optimizer-cache-lifetime-validation/v1",
+  "source_files": {
+    "benchmark_cache_lifetime.py": {
+      "git_blob": "e2407d19b898b14e6619634a2ca4e77be6eb3dc4",
+      "sha256": "3830b670ee1b9adabc1fa24226675addea7deed21275a2920a23442679691c0d"
+    },
+    "repair_cache_lifetime.py": {
+      "git_blob": "e48861b8fe186ded0337aa66ba68833b760708b3",
+      "sha256": "2800bba597914e97c0ed9d2ee2b8d66f1699341f6db3cc3738d46ceb027745d2"
+    },
+    "test_cache_lifetime.py": {
+      "git_blob": "0f5c28f64076254a64e09983e9ec18f988addff2",
+      "sha256": "66a235a4e9e166408c93271f4b3551ebb2d561949ca540e2f31e9f0973f9107c"
+    }
+  },
+  "source_inputs": {
+    "mechanics.py": "044a4f9c0a4a44dde10ada57563238bcaf82075d",
+    "reference/decision/decision.py": "2931aa55831204fbb473ab85a6f5b81ec947fcf7",
+    "scheduler.py": "a483b24dd72b580d7d8811636b54d2d44f391575",
+    "selected_sell_core.py": "f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3"
+  },
+  "status": "SOURCE_COMPONENT_TESTED_NOT_RUNTIME_PROMOTED",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/performance/optimizer-cache-lifetime"
+}

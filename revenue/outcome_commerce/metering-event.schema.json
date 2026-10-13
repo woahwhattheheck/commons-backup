@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/outcome_commerce/metering-event.schema.json",
+  "title": "Append-only Outcome Commerce Metering Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "idempotency_key", "correlation_id", "listing_id", "event_type", "state", "occurred_at"],
+  "properties": {
+    "schema_version": {"const": "outcome-commerce-event/v1"},
+    "event_id": {"$ref": "#/$defs/id"},
+    "idempotency_key": {"$ref": "#/$defs/id"},
+    "correlation_id": {"$ref": "#/$defs/id"},
+    "causation_id": {"$ref": "#/$defs/nullableId"},
+    "listing_id": {"$ref": "#/$defs/id"},
+    "component_id": {"$ref": "#/$defs/id"},
+    "contract_id": {"$ref": "#/$defs/id"},
+    "job_id": {"$ref": "#/$defs/id"},
+    "attempt_id": {"$ref": "#/$defs/id"},
+    "order_id": {"$ref": "#/$defs/id"},
+    "receipt_id": {"$ref": "#/$defs/id"},
+    "event_type": {
+      "enum": [
+        "FIXED_ACTIVATED", "SUBSCRIPTION_CYCLE", "USAGE_RECORDED", "OUTCOME_VERIFIED",
+        "OUTCOME_CANDIDATE", "OUTCOME_FAILED", "OUTCOME_ESCALATED", "MILESTONE_ACCEPTED",
+        "GROSS_REVENUE_RECORDED", "LICENSE_ACTIVATED", "SPONSORSHIP_DELIVERED",
+        "CREDIT_GRANTED", "ADJUSTMENT"
+      ]
+    },
+    "state": {"enum": ["RECORDED", "VERIFIED", "ACCEPTED", "REVERSED"]},
+    "occurred_at": {"$ref": "#/$defs/timestamp"},
+    "quantity": {"$ref": "#/$defs/unsignedDecimal"},
+    "amount": {"$ref": "#/$defs/signedDecimal"},
+    "currency": {"type": "string", "pattern": "^[A-Z][A-Z0-9._-]{1,31}$"},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uri", "sha256"],
+        "properties": {
+          "uri": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "reverses_event_id": {"$ref": "#/$defs/id"},
+    "source": {"type": "object", "description": "Context and lineage only; never admission or authorization."}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"state": {"const": "REVERSED"}}, "required": ["state"]},
+      "then": {"required": ["reverses_event_id"]},
+      "else": {
+        "if": {"properties": {"event_type": {"enum": ["CREDIT_GRANTED", "ADJUSTMENT"]}}, "required": ["event_type"]},
+        "then": {"required": ["amount", "currency"]},
+        "else": {"required": ["component_id"]}
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "OUTCOME_VERIFIED"}}, "required": ["event_type"]},
+      "then": {"properties": {"state": {"const": "VERIFIED"}, "evidence": {"minItems": 1}}, "required": ["quantity", "evidence"]}
+    },
+    {
+      "if": {"properties": {"event_type": {"enum": ["OUTCOME_CANDIDATE", "OUTCOME_FAILED", "OUTCOME_ESCALATED"]}}, "required": ["event_type"]},
+      "then": {"properties": {"state": {"const": "RECORDED"}}, "required": ["component_id"]}
+    },
+    {
+      "if": {"properties": {"event_type": {"enum": ["MILESTONE_ACCEPTED", "FIXED_ACTIVATED", "LICENSE_ACTIVATED"]}}, "required": ["event_type"]},
+      "then": {"properties": {"state": {"const": "ACCEPTED"}}}
+    }
+  ],
+  "$defs": {
+    "id": {"type": "string", "minLength": 8, "maxLength": 80, "pattern": "^[A-Za-z0-9._-]+$"},
+    "nullableId": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+    "timestamp": {"type": "string", "format": "date-time", "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"},
+    "unsignedDecimal": {"type": "string", "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,8})?$"},
+    "signedDecimal": {"type": "string", "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,8})?$"}
+  }
+}

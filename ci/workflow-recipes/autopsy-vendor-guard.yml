@@ -1,0 +1,67 @@
+name: autopsy-vendor-guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/agents_for_humans/**'
+      - '.github/workflows/autopsy-vendor-guard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autopsy-vendor-guard-main
+  cancel-in-progress: false
+
+jobs:
+  restore-manifest-owned-bytes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Restore exact SOURCE_MANIFEST Git blobs without force-push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "autopsy-vendor-guard"
+          git config user.email "autopsy-vendor-guard@users.noreply.github.com"
+
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+
+            restore_json="$(python revenue/agents_for_humans/scripts/restore_vendor.py --apply)"
+            echo "$restore_json"
+            (
+              cd revenue/agents_for_humans
+              python scripts/verify_vendor.py
+            )
+
+            mapfile -t changed_paths < <(
+              RESTORE_JSON="$restore_json" python -c 'import json, os; [print(path) for path in json.loads(os.environ["RESTORE_JSON"])["changed"]]'
+            )
+            if (( ${#changed_paths[@]} == 0 )); then
+              echo "Attributed vendor bytes already match SOURCE_MANIFEST."
+              exit 0
+            fi
+
+            git add -- "${changed_paths[@]}"
+            git commit -m "guard: restore attributed vendor blobs"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+
+            echo "main advanced during guard publish; retrying from fresh origin/main"
+            sleep $((attempt * 2))
+          done
+
+          echo "autopsy vendor guard lost four non-force publish races" >&2
+          exit 1

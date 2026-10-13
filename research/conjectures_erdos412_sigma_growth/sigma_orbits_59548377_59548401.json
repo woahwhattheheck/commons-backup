@@ -1,0 +1,1727 @@
+{
+  "schema": "erdos412.sigma_orbit_merge_run/v1",
+  "operation_id": "ERDOS412-SIGMA-ORBIT-MERGE-API-20261004-7CA6",
+  "date_utc": "2026-10-04",
+  "provenance": {
+    "repository": "woahwhattheheck/commons",
+    "original_carrier_pr": 16060,
+    "original_carrier_merge": "45ebd6eaa2e62f7a2f474a0e5c7c080025ec20d7",
+    "original_python_blob_sha": "3dbf9e8c74e79f7c9231658803e0df61e2984c67",
+    "original_receipt_blob_sha": "74f2e7c07fb01eaf10c523d0fbded4be6b742430",
+    "original_lean_blob_sha": "0c97c610c3f6af250a9de4f6fa3526855cf49c5c",
+    "current_formal_source": {
+      "url": "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/ErdosProblems/412.lean",
+      "blob_sha": "1c4dcea6de61664cc8ece2068d9cf8f6151763fc",
+      "read_scope": "current problem statement and conventions; no proof audit or elaboration"
+    },
+    "seed_source": {
+      "pull_request": 31166,
+      "merge_sha": "361e17e2d342d8f4a469a1a2b77f19f295d3a46d",
+      "path": "research/conjectures_erdos376_digit_exact_20260918/interval_1000001_1000000000000.json",
+      "blob_sha": "36354d1c19cf5156679e65cedf0c0b73ff59d679",
+      "extraction": [
+        "combined_result.values[0].value",
+        "combined_result.values[1].value"
+      ],
+      "retained_values": [
+        "59548377",
+        "59548401"
+      ],
+      "digit_search_replayed": false,
+      "inference": "the digit-survivor property supplies concrete retained integers; it implies no sigma-orbit relationship"
+    },
+    "new_api_path": "research/conjectures_erdos412_sigma_growth/sigma_orbit_merge.cjs",
+    "new_api_binding": "the complete public module is committed alongside this result",
+    "original_slack_thread": {
+      "parent_message_ts": "1789760078.336469",
+      "operation_message_ts": "1791105748.569169"
+    }
+  },
+  "mathematical_conventions": {
+    "sigma": "sum of all positive divisors",
+    "seed_domain": "integers at least 2",
+    "iterate_zero": "sigma^0(n)=n",
+    "two_iteration_counts": "independent nonnegative integers",
+    "accepted_dependency": "each sigma orbit in this seed domain is strictly increasing, as recorded in the original carrier",
+    "finite_merge_derivation": "discard the smaller current head; previously discarded values cannot be a common orbit value. Any future common value is at least the larger current head."
+  },
+  "prior_work": {
+    "original_strict_growth_cases": 9999,
+    "original_strict_growth_inputs": {
+      "from": 2,
+      "through": 10000
+    },
+    "original_orbit_transition_cases": 2040,
+    "original_orbit_seeds": {
+      "from": 2,
+      "through": 256,
+      "steps_each": 8
+    },
+    "original_orbit_stream_sha256": "1cfa64a2f0982817bb9a8839e0a70d3fc84d7c630cdee6a2ace6b394199fe269",
+    "old_computations_replayed": false,
+    "historical_sources": [
+      {
+        "credit": "van Wijngaarden, attributed by Paul Erdős",
+        "title": "Some unconventional problems in number theory",
+        "year": 1979,
+        "printed_page": 71,
+        "section": 1,
+        "url": "https://www.renyi.hu/~p_erdos/1979-23.pdf"
+      },
+      {
+        "credit": "Graeme L. Cohen and Herman J. J. te Riele",
+        "title": "Iterating the Sum-of-Divisors Function",
+        "year": 1996,
+        "journal": "Experimental Mathematics",
+        "volume": 5,
+        "pages": "91-100",
+        "section": 4,
+        "url": "https://ir.cwi.nl/pub/10355/10355D.pdf",
+        "doi": "10.1080/10586458.1996.10504580",
+        "reported_finite_results": "21 orbit trees from starts 2..200 remained distinct at the 10^200 boundary; 64 trees for starts through 1000 with a 10^100 boundary",
+        "replayed": false
+      },
+      {
+        "credit": "Patrick White, with model assistance disclosed by the report",
+        "date_utc": "2026-07-28",
+        "url": "https://www.erdosproblemaday.com/report/412",
+        "reported_finite_result": "no common value at most 10^342 for the seed-2 and seed-5 orbits",
+        "status": "PARTIAL and expressly not independently verified",
+        "replayed_or_certified_here": false
+      }
+    ],
+    "new_external_frontier_claim": false,
+    "priority_claim": false,
+    "old_arithmetic_lean_receipt_source_and_test_files_modified": false
+  },
+  "actual_input": {
+    "left": "59548377",
+    "right": "59548401",
+    "factor_limit": "1000000000000",
+    "max_transitions": 256
+  },
+  "initial_description": {
+    "schema": "erdos412.sigma_orbit_merge/v1",
+    "status": "IN_PROGRESS",
+    "seeds": {
+      "left": "59548377",
+      "right": "59548401"
+    },
+    "heads": {
+      "left": {
+        "index": 0,
+        "value": "59548377"
+      },
+      "right": {
+        "index": 0,
+        "value": "59548401"
+      }
+    },
+    "factor_limit": "1000000000000",
+    "max_transitions": 256,
+    "completed_transitions": 0,
+    "remaining_transition_capacity": 256,
+    "retained_transition_records": 0,
+    "meeting": null,
+    "bounded_nonintersection": {
+      "from": "0",
+      "through": "59548400",
+      "endpoints_inclusive": true,
+      "basis": "accepted strict growth and the retained smaller-head merge decisions"
+    },
+    "no_common_value_at_most_factor_limit": null,
+    "next_required_transition": {
+      "side": "left",
+      "input_index": 0,
+      "value": "59548377",
+      "within_factor_limit": true,
+      "within_hard_factor_cap": true
+    },
+    "continuation": {
+      "tail_options": {
+        "left": "59548377",
+        "right": "59548401",
+        "factor_limit": "1000000000000",
+        "max_transitions": 256
+      },
+      "index_offsets": {
+        "left": 0,
+        "right": 0
+      },
+      "semantics": "starts the two unprocessed tails with new local indices; compose with the retained offsets and prefix records",
+      "current_factor_limit_permits_transition": true,
+      "hard_factor_cap_permits_transition": true
+    },
+    "work": {
+      "factorizations": 0,
+      "head_order_decisions": 1,
+      "remainder_tests": 0,
+      "exact_quotient_divisions": 0,
+      "trial_candidates": 0,
+      "retained_prime_power_factors": 0,
+      "total_remainder_tests_upper_bound": 128010240,
+      "total_quotient_divisions_upper_bound": 9984
+    },
+    "evidence": {
+      "completed_prefix_records_retained_in_full": true,
+      "no_factorization_of_unprocessed_heads": true,
+      "infinite_nonintersection_claim": false
+    }
+  },
+  "result": {
+    "schema": "erdos412.sigma_orbit_merge/v1",
+    "status": "FACTOR_LIMIT",
+    "seeds": {
+      "left": "59548377",
+      "right": "59548401"
+    },
+    "heads": {
+      "left": {
+        "index": 9,
+        "value": "2839668249600"
+      },
+      "right": {
+        "index": 9,
+        "value": "3643474348800"
+      }
+    },
+    "factor_limit": "1000000000000",
+    "max_transitions": 256,
+    "completed_transitions": 18,
+    "remaining_transition_capacity": 238,
+    "retained_transition_records": 18,
+    "meeting": null,
+    "bounded_nonintersection": {
+      "from": "0",
+      "through": "3643474348799",
+      "endpoints_inclusive": true,
+      "basis": "accepted strict growth and the retained smaller-head merge decisions"
+    },
+    "no_common_value_at_most_factor_limit": true,
+    "next_required_transition": {
+      "side": "left",
+      "input_index": 9,
+      "value": "2839668249600",
+      "within_factor_limit": false,
+      "within_hard_factor_cap": false
+    },
+    "continuation": {
+      "tail_options": {
+        "left": "2839668249600",
+        "right": "3643474348800",
+        "factor_limit": "1000000000000",
+        "max_transitions": 256
+      },
+      "index_offsets": {
+        "left": 9,
+        "right": 9
+      },
+      "semantics": "starts the two unprocessed tails with new local indices; compose with the retained offsets and prefix records",
+      "current_factor_limit_permits_transition": false,
+      "hard_factor_cap_permits_transition": false
+    },
+    "work": {
+      "factorizations": 18,
+      "head_order_decisions": 19,
+      "remainder_tests": 1677,
+      "exact_quotient_divisions": 252,
+      "trial_candidates": 1425,
+      "retained_prime_power_factors": 96,
+      "total_remainder_tests_upper_bound": 128010240,
+      "total_quotient_divisions_upper_bound": 9984
+    },
+    "evidence": {
+      "completed_prefix_records_retained_in_full": true,
+      "no_factorization_of_unprocessed_heads": true,
+      "infinite_nonintersection_claim": false
+    }
+  },
+  "paths": {
+    "index_convention": "array index is the zero-based iterate count for that seed",
+    "left": [
+      "59548377",
+      "92360976",
+      "251159520",
+      "816721920",
+      "3334064640",
+      "10861019136",
+      "36641299968",
+      "146192674320",
+      "688733061120",
+      "2839668249600"
+    ],
+    "right": [
+      "59548401",
+      "94682016",
+      "335724480",
+      "1508028480",
+      "6491996160",
+      "22548535296",
+      "68702699520",
+      "293131509216",
+      "979760259072",
+      "3643474348800"
+    ],
+    "all_generated_terms_retained": true,
+    "includes_first_term_above_factor_limit_for_both_seeds": true,
+    "last_terms_at_most_factor_limit": {
+      "left": {
+        "index": 8,
+        "value": "688733061120"
+      },
+      "right": {
+        "index": 8,
+        "value": "979760259072"
+      }
+    },
+    "first_terms_above_factor_limit": {
+      "left": {
+        "index": 9,
+        "value": "2839668249600"
+      },
+      "right": {
+        "index": 9,
+        "value": "3643474348800"
+      }
+    }
+  },
+  "finite_conclusion": {
+    "no_common_value_at_most": "3643474348799",
+    "endpoints_inclusive": true,
+    "no_common_value_at_most_factor_cap": true,
+    "current_larger_head": "3643474348800",
+    "current_smaller_head": "2839668249600",
+    "reason": "every discarded head is excluded from the other full orbit; an undiscovered common value must occur in both retained tails and is therefore at least the larger current head",
+    "first_possible_future_meeting_value": "3643474348800",
+    "first_possible_future_meeting_excluded": false,
+    "status": "bounded nonintersection with an explicit unfinished continuation",
+    "infinite_nonintersection_proved": false,
+    "original_conjecture_settled": false
+  },
+  "complete_transition_records": [
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 0,
+      "side": "left",
+      "input_index": 0,
+      "output_index": 1,
+      "input": "59548377",
+      "output": "92360976",
+      "other_head": {
+        "index": 0,
+        "value": "59548401"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "59548377",
+        "sigma": "92360976",
+        "prime_powers": [
+          {
+            "prime": "3",
+            "exponent": 1,
+            "prime_power": "3",
+            "geometric_sum": "4",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 2,
+            "prime_power": "49",
+            "geometric_sum": "57",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "405091",
+            "exponent": 1,
+            "prime_power": "405091",
+            "geometric_sum": "405092",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "59548377",
+        "sigma_product": "92360976",
+        "work": {
+          "remainder_tests": 321,
+          "exact_quotient_divisions": 3,
+          "trial_candidates": 318,
+          "last_tested_divisor": "635"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "405091",
+          "divisor": "637",
+          "divisor_square": "405769",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 1,
+      "side": "right",
+      "input_index": 0,
+      "output_index": 1,
+      "input": "59548401",
+      "output": "94682016",
+      "other_head": {
+        "index": 1,
+        "value": "92360976"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "59548401",
+        "sigma": "94682016",
+        "prime_powers": [
+          {
+            "prime": "3",
+            "exponent": 2,
+            "prime_power": "9",
+            "geometric_sum": "13",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "11",
+            "exponent": 1,
+            "prime_power": "11",
+            "geometric_sum": "12",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "113",
+            "exponent": 1,
+            "prime_power": "113",
+            "geometric_sum": "114",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5323",
+            "exponent": 1,
+            "prime_power": "5323",
+            "geometric_sum": "5324",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "59548401",
+        "sigma_product": "94682016",
+        "work": {
+          "remainder_tests": 61,
+          "exact_quotient_divisions": 4,
+          "trial_candidates": 57,
+          "last_tested_divisor": "113"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "5323",
+          "divisor": "115",
+          "divisor_square": "13225",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 2,
+      "side": "left",
+      "input_index": 1,
+      "output_index": 2,
+      "input": "92360976",
+      "output": "251159520",
+      "other_head": {
+        "index": 1,
+        "value": "94682016"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "92360976",
+        "sigma": "251159520",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 4,
+            "prime_power": "16",
+            "geometric_sum": "31",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 1,
+            "prime_power": "3",
+            "geometric_sum": "4",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "19",
+            "exponent": 1,
+            "prime_power": "19",
+            "geometric_sum": "20",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "101273",
+            "exponent": 1,
+            "prime_power": "101273",
+            "geometric_sum": "101274",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "92360976",
+        "sigma_product": "251159520",
+        "work": {
+          "remainder_tests": 165,
+          "exact_quotient_divisions": 6,
+          "trial_candidates": 159,
+          "last_tested_divisor": "317"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "101273",
+          "divisor": "319",
+          "divisor_square": "101761",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 3,
+      "side": "right",
+      "input_index": 1,
+      "output_index": 2,
+      "input": "94682016",
+      "output": "335724480",
+      "other_head": {
+        "index": 2,
+        "value": "251159520"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "94682016",
+        "sigma": "335724480",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 5,
+            "prime_power": "32",
+            "geometric_sum": "63",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 2,
+            "prime_power": "9",
+            "geometric_sum": "13",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "11",
+            "exponent": 3,
+            "prime_power": "1331",
+            "geometric_sum": "1464",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "13",
+            "exponent": 1,
+            "prime_power": "13",
+            "geometric_sum": "14",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "19",
+            "exponent": 1,
+            "prime_power": "19",
+            "geometric_sum": "20",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "94682016",
+        "sigma_product": "335724480",
+        "work": {
+          "remainder_tests": 18,
+          "exact_quotient_divisions": 11,
+          "trial_candidates": 7,
+          "last_tested_divisor": "13"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "19",
+          "divisor": "15",
+          "divisor_square": "225",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 4,
+      "side": "left",
+      "input_index": 2,
+      "output_index": 3,
+      "input": "251159520",
+      "output": "816721920",
+      "other_head": {
+        "index": 2,
+        "value": "335724480"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "251159520",
+        "sigma": "816721920",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 5,
+            "prime_power": "32",
+            "geometric_sum": "63",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 1,
+            "prime_power": "3",
+            "geometric_sum": "4",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "31",
+            "exponent": 1,
+            "prime_power": "31",
+            "geometric_sum": "32",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "16879",
+            "exponent": 1,
+            "prime_power": "16879",
+            "geometric_sum": "16880",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "251159520",
+        "sigma_product": "816721920",
+        "work": {
+          "remainder_tests": 73,
+          "exact_quotient_divisions": 8,
+          "trial_candidates": 65,
+          "last_tested_divisor": "129"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "16879",
+          "divisor": "131",
+          "divisor_square": "17161",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 5,
+      "side": "right",
+      "input_index": 2,
+      "output_index": 3,
+      "input": "335724480",
+      "output": "1508028480",
+      "other_head": {
+        "index": 3,
+        "value": "816721920"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "335724480",
+        "sigma": "1508028480",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 6,
+            "prime_power": "64",
+            "geometric_sum": "127",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 3,
+            "prime_power": "27",
+            "geometric_sum": "40",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 2,
+            "prime_power": "49",
+            "geometric_sum": "57",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "13",
+            "exponent": 1,
+            "prime_power": "13",
+            "geometric_sum": "14",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "61",
+            "exponent": 1,
+            "prime_power": "61",
+            "geometric_sum": "62",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "335724480",
+        "sigma_product": "1508028480",
+        "work": {
+          "remainder_tests": 20,
+          "exact_quotient_divisions": 13,
+          "trial_candidates": 7,
+          "last_tested_divisor": "13"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "61",
+          "divisor": "15",
+          "divisor_square": "225",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 6,
+      "side": "left",
+      "input_index": 3,
+      "output_index": 4,
+      "input": "816721920",
+      "output": "3334064640",
+      "other_head": {
+        "index": 3,
+        "value": "1508028480"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "816721920",
+        "sigma": "3334064640",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 12,
+            "prime_power": "4096",
+            "geometric_sum": "8191",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 3,
+            "prime_power": "27",
+            "geometric_sum": "40",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 1,
+            "prime_power": "7",
+            "geometric_sum": "8",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "211",
+            "exponent": 1,
+            "prime_power": "211",
+            "geometric_sum": "212",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "816721920",
+        "sigma_product": "3334064640",
+        "work": {
+          "remainder_tests": 24,
+          "exact_quotient_divisions": 17,
+          "trial_candidates": 7,
+          "last_tested_divisor": "13"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "211",
+          "divisor": "15",
+          "divisor_square": "225",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 7,
+      "side": "right",
+      "input_index": 3,
+      "output_index": 4,
+      "input": "1508028480",
+      "output": "6491996160",
+      "other_head": {
+        "index": 4,
+        "value": "3334064640"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "1508028480",
+        "sigma": "6491996160",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 6,
+            "prime_power": "64",
+            "geometric_sum": "127",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 2,
+            "prime_power": "9",
+            "geometric_sum": "13",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 1,
+            "prime_power": "7",
+            "geometric_sum": "8",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "19",
+            "exponent": 1,
+            "prime_power": "19",
+            "geometric_sum": "20",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "31",
+            "exponent": 1,
+            "prime_power": "31",
+            "geometric_sum": "32",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "127",
+            "exponent": 1,
+            "prime_power": "127",
+            "geometric_sum": "128",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "1508028480",
+        "sigma_product": "6491996160",
+        "work": {
+          "remainder_tests": 28,
+          "exact_quotient_divisions": 12,
+          "trial_candidates": 16,
+          "last_tested_divisor": "31"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "127",
+          "divisor": "33",
+          "divisor_square": "1089",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 8,
+      "side": "left",
+      "input_index": 4,
+      "output_index": 5,
+      "input": "3334064640",
+      "output": "10861019136",
+      "other_head": {
+        "index": 4,
+        "value": "6491996160"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "3334064640",
+        "sigma": "10861019136",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 9,
+            "prime_power": "512",
+            "geometric_sum": "1023",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 1,
+            "prime_power": "3",
+            "geometric_sum": "4",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "53",
+            "exponent": 1,
+            "prime_power": "53",
+            "geometric_sum": "54",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "8191",
+            "exponent": 1,
+            "prime_power": "8191",
+            "geometric_sum": "8192",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "3334064640",
+        "sigma_product": "10861019136",
+        "work": {
+          "remainder_tests": 57,
+          "exact_quotient_divisions": 12,
+          "trial_candidates": 45,
+          "last_tested_divisor": "89"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "8191",
+          "divisor": "91",
+          "divisor_square": "8281",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 9,
+      "side": "right",
+      "input_index": 4,
+      "output_index": 5,
+      "input": "6491996160",
+      "output": "22548535296",
+      "other_head": {
+        "index": 5,
+        "value": "10861019136"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "6491996160",
+        "sigma": "22548535296",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 18,
+            "prime_power": "262144",
+            "geometric_sum": "524287",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 1,
+            "prime_power": "3",
+            "geometric_sum": "4",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "13",
+            "exponent": 1,
+            "prime_power": "13",
+            "geometric_sum": "14",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "127",
+            "exponent": 1,
+            "prime_power": "127",
+            "geometric_sum": "128",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "6491996160",
+        "sigma_product": "22548535296",
+        "work": {
+          "remainder_tests": 28,
+          "exact_quotient_divisions": 21,
+          "trial_candidates": 7,
+          "last_tested_divisor": "13"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "127",
+          "divisor": "15",
+          "divisor_square": "225",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 10,
+      "side": "left",
+      "input_index": 5,
+      "output_index": 6,
+      "input": "10861019136",
+      "output": "36641299968",
+      "other_head": {
+        "index": 5,
+        "value": "22548535296"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "10861019136",
+        "sigma": "36641299968",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 17,
+            "prime_power": "131072",
+            "geometric_sum": "262143",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 5,
+            "prime_power": "243",
+            "geometric_sum": "364",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "11",
+            "exponent": 1,
+            "prime_power": "11",
+            "geometric_sum": "12",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "31",
+            "exponent": 1,
+            "prime_power": "31",
+            "geometric_sum": "32",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "10861019136",
+        "sigma_product": "36641299968",
+        "work": {
+          "remainder_tests": 29,
+          "exact_quotient_divisions": 23,
+          "trial_candidates": 6,
+          "last_tested_divisor": "11"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "31",
+          "divisor": "13",
+          "divisor_square": "169",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 11,
+      "side": "right",
+      "input_index": 5,
+      "output_index": 6,
+      "input": "22548535296",
+      "output": "68702699520",
+      "other_head": {
+        "index": 6,
+        "value": "36641299968"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "22548535296",
+        "sigma": "68702699520",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 11,
+            "prime_power": "2048",
+            "geometric_sum": "4095",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 1,
+            "prime_power": "3",
+            "geometric_sum": "4",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 1,
+            "prime_power": "7",
+            "geometric_sum": "8",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "524287",
+            "exponent": 1,
+            "prime_power": "524287",
+            "geometric_sum": "524288",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "22548535296",
+        "sigma_product": "68702699520",
+        "work": {
+          "remainder_tests": 375,
+          "exact_quotient_divisions": 13,
+          "trial_candidates": 362,
+          "last_tested_divisor": "723"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "524287",
+          "divisor": "725",
+          "divisor_square": "525625",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 12,
+      "side": "left",
+      "input_index": 6,
+      "output_index": 7,
+      "input": "36641299968",
+      "output": "146192674320",
+      "other_head": {
+        "index": 6,
+        "value": "68702699520"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "36641299968",
+        "sigma": "146192674320",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 9,
+            "prime_power": "512",
+            "geometric_sum": "1023",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 4,
+            "prime_power": "81",
+            "geometric_sum": "121",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 2,
+            "prime_power": "49",
+            "geometric_sum": "57",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "13",
+            "exponent": 1,
+            "prime_power": "13",
+            "geometric_sum": "14",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "19",
+            "exponent": 1,
+            "prime_power": "19",
+            "geometric_sum": "20",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "73",
+            "exponent": 1,
+            "prime_power": "73",
+            "geometric_sum": "74",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "36641299968",
+        "sigma_product": "146192674320",
+        "work": {
+          "remainder_tests": 27,
+          "exact_quotient_divisions": 17,
+          "trial_candidates": 10,
+          "last_tested_divisor": "19"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "73",
+          "divisor": "21",
+          "divisor_square": "441",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 13,
+      "side": "right",
+      "input_index": 6,
+      "output_index": 7,
+      "input": "68702699520",
+      "output": "293131509216",
+      "other_head": {
+        "index": 7,
+        "value": "146192674320"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "68702699520",
+        "sigma": "293131509216",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 24,
+            "prime_power": "16777216",
+            "geometric_sum": "33554431",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 2,
+            "prime_power": "9",
+            "geometric_sum": "13",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 1,
+            "prime_power": "7",
+            "geometric_sum": "8",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "13",
+            "exponent": 1,
+            "prime_power": "13",
+            "geometric_sum": "14",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "68702699520",
+        "sigma_product": "293131509216",
+        "work": {
+          "remainder_tests": 32,
+          "exact_quotient_divisions": 28,
+          "trial_candidates": 4,
+          "last_tested_divisor": "7"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "13",
+          "divisor": "9",
+          "divisor_square": "81",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 14,
+      "side": "left",
+      "input_index": 7,
+      "output_index": 8,
+      "input": "146192674320",
+      "output": "688733061120",
+      "other_head": {
+        "index": 7,
+        "value": "293131509216"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "146192674320",
+        "sigma": "688733061120",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 4,
+            "prime_power": "16",
+            "geometric_sum": "31",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 2,
+            "prime_power": "9",
+            "geometric_sum": "13",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 1,
+            "prime_power": "7",
+            "geometric_sum": "8",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "11",
+            "exponent": 3,
+            "prime_power": "1331",
+            "geometric_sum": "1464",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "19",
+            "exponent": 1,
+            "prime_power": "19",
+            "geometric_sum": "20",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "31",
+            "exponent": 1,
+            "prime_power": "31",
+            "geometric_sum": "32",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "37",
+            "exponent": 1,
+            "prime_power": "37",
+            "geometric_sum": "38",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "146192674320",
+        "sigma_product": "688733061120",
+        "work": {
+          "remainder_tests": 29,
+          "exact_quotient_divisions": 13,
+          "trial_candidates": 16,
+          "last_tested_divisor": "31"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "37",
+          "divisor": "33",
+          "divisor_square": "1089",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 15,
+      "side": "right",
+      "input_index": 7,
+      "output_index": 8,
+      "input": "293131509216",
+      "output": "979760259072",
+      "other_head": {
+        "index": 8,
+        "value": "688733061120"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "293131509216",
+        "sigma": "979760259072",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 5,
+            "prime_power": "32",
+            "geometric_sum": "63",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 1,
+            "prime_power": "3",
+            "geometric_sum": "4",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 1,
+            "prime_power": "7",
+            "geometric_sum": "8",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "13",
+            "exponent": 1,
+            "prime_power": "13",
+            "geometric_sum": "14",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "31",
+            "exponent": 1,
+            "prime_power": "31",
+            "geometric_sum": "32",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "601",
+            "exponent": 1,
+            "prime_power": "601",
+            "geometric_sum": "602",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "1801",
+            "exponent": 1,
+            "prime_power": "1801",
+            "geometric_sum": "1802",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "293131509216",
+        "sigma_product": "979760259072",
+        "work": {
+          "remainder_tests": 311,
+          "exact_quotient_divisions": 10,
+          "trial_candidates": 301,
+          "last_tested_divisor": "601"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "1801",
+          "divisor": "603",
+          "divisor_square": "363609",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 16,
+      "side": "left",
+      "input_index": 8,
+      "output_index": 9,
+      "input": "688733061120",
+      "output": "2839668249600",
+      "other_head": {
+        "index": 8,
+        "value": "979760259072"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "688733061120",
+        "sigma": "2839668249600",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 15,
+            "prime_power": "32768",
+            "geometric_sum": "65535",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 2,
+            "prime_power": "9",
+            "geometric_sum": "13",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "5",
+            "exponent": 1,
+            "prime_power": "5",
+            "geometric_sum": "6",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "13",
+            "exponent": 1,
+            "prime_power": "13",
+            "geometric_sum": "14",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "19",
+            "exponent": 1,
+            "prime_power": "19",
+            "geometric_sum": "20",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "31",
+            "exponent": 1,
+            "prime_power": "31",
+            "geometric_sum": "32",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "61",
+            "exponent": 1,
+            "prime_power": "61",
+            "geometric_sum": "62",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "688733061120",
+        "sigma_product": "2839668249600",
+        "work": {
+          "remainder_tests": 37,
+          "exact_quotient_divisions": 21,
+          "trial_candidates": 16,
+          "last_tested_divisor": "31"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "61",
+          "divisor": "33",
+          "divisor_square": "1089",
+          "residual_is_appended_prime": true
+        }
+      }
+    },
+    {
+      "schema": "erdos412.sigma_orbit_transition/v1",
+      "event_index": 17,
+      "side": "right",
+      "input_index": 8,
+      "output_index": 9,
+      "input": "979760259072",
+      "output": "3643474348800",
+      "other_head": {
+        "index": 9,
+        "value": "2839668249600"
+      },
+      "advanced_smaller_head": true,
+      "factorization": {
+        "schema": "erdos412.sigma_factorization/v1",
+        "input": "979760259072",
+        "sigma": "3643474348800",
+        "prime_powers": [
+          {
+            "prime": "2",
+            "exponent": 13,
+            "prime_power": "8192",
+            "geometric_sum": "16383",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "3",
+            "exponent": 2,
+            "prime_power": "9",
+            "geometric_sum": "13",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "7",
+            "exponent": 3,
+            "prime_power": "343",
+            "geometric_sum": "400",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "17",
+            "exponent": 1,
+            "prime_power": "17",
+            "geometric_sum": "18",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "43",
+            "exponent": 1,
+            "prime_power": "43",
+            "geometric_sum": "44",
+            "extraction": "trial_division"
+          },
+          {
+            "prime": "53",
+            "exponent": 1,
+            "prime_power": "53",
+            "geometric_sum": "54",
+            "extraction": "terminal_prime"
+          }
+        ],
+        "factor_product": "979760259072",
+        "sigma_product": "3643474348800",
+        "work": {
+          "remainder_tests": 42,
+          "exact_quotient_divisions": 20,
+          "trial_candidates": 22,
+          "last_tested_divisor": "43"
+        },
+        "terminal": {
+          "reason": "divisor_square_exceeds_residual",
+          "residual": "53",
+          "divisor": "45",
+          "divisor_square": "2025",
+          "residual_is_appended_prime": true
+        }
+      }
+    }
+  ],
+  "execution": {
+    "runtime": "connected V8",
+    "started_utc": "2026-10-04T09:26:06.189Z",
+    "completed_utc": "2026-10-04T09:26:06.193Z",
+    "factory_calls": 1,
+    "initial_describe_calls": 1,
+    "advance_calls": 2,
+    "advance_transition_budget": 16,
+    "record_page_calls": 1,
+    "accepted_predecessor_computation_replayed": false,
+    "final_describe_was_returned_by_advance": true,
+    "point_api_calls_outside_merge": 0,
+    "initial_seed_values_reused_from_retained_data": true,
+    "native_execution": false,
+    "old_checks_or_transition_ranges_replayed": false,
+    "source_module_imports_or_network_calls": 0,
+    "full_transition_record_count": 18,
+    "full_prime_power_factor_count": 96,
+    "advance_summaries": [
+      {
+        "advance": 1,
+        "status": "IN_PROGRESS",
+        "completed_transitions": 16,
+        "heads": {
+          "left": {
+            "index": 8,
+            "value": "688733061120"
+          },
+          "right": {
+            "index": 8,
+            "value": "979760259072"
+          }
+        },
+        "remainder_tests": 1598,
+        "exact_quotient_divisions": 211
+      },
+      {
+        "advance": 2,
+        "status": "FACTOR_LIMIT",
+        "completed_transitions": 18,
+        "heads": {
+          "left": {
+            "index": 9,
+            "value": "2839668249600"
+          },
+          "right": {
+            "index": 9,
+            "value": "3643474348800"
+          }
+        },
+        "remainder_tests": 1677,
+        "exact_quotient_divisions": 252
+      }
+    ]
+  },
+  "retention_scope": {
+    "every_new_input_output_transition": true,
+    "every_new_prime_power_and_geometric_sum": true,
+    "both_entire_generated_paths": true,
+    "per_transition_trial_counts_and_terminal_primality_bounds": true,
+    "all_unsuccessful_trial_remainders_retained": false,
+    "standalone_formal_primality_certificates": false,
+    "factorization_of_unprocessed_heads_performed": false,
+    "note": "deterministic trial division establishes the recorded prime factors under the documented cap; the record retains factorization data and trial termination bounds, not every unsuccessful remainder"
+  },
+  "continuation": {
+    "next_required_transition": {
+      "side": "left",
+      "input_index": 9,
+      "value": "2839668249600",
+      "within_factor_limit": false,
+      "within_hard_factor_cap": false
+    },
+    "tail_restart": {
+      "tail_options": {
+        "left": "2839668249600",
+        "right": "3643474348800",
+        "factor_limit": "1000000000000",
+        "max_transitions": 256
+      },
+      "index_offsets": {
+        "left": 9,
+        "right": 9
+      },
+      "semantics": "starts the two unprocessed tails with new local indices; compose with the retained offsets and prefix records",
+      "current_factor_limit_permits_transition": false,
+      "hard_factor_cap_permits_transition": false
+    },
+    "required_capability": "evaluate sigma at 2839668249600; this exceeds the direct factor-input hard cap",
+    "original_prefix_to_preserve": {
+      "left_transitions": 9,
+      "right_transitions": 9,
+      "total_transitions": 18
+    },
+    "reusing_same_direct_factor_factory_at_these_heads": "returns FACTOR_LIMIT immediately, with no completed prefix replay"
+  },
+  "evidence_scope": {
+    "new_bounded_commons_consumer": true,
+    "full_new_records_persisted": true,
+    "accepted_growth_argument_reproved": false,
+    "new_lean_elaboration": false,
+    "sponsor_submission_made": false,
+    "source_authorship_and_submission_ownership_preserved": true
+  }
+}

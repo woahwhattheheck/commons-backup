@@ -1,0 +1,72 @@
+{
+  "oracle_git_blob": "49640c27862d3d132c828fbafc6a8b4957527736",
+  "engine_sha256": {
+    "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+  },
+  "loader_sha256": "cd113a94ae99b03492502e425bdcf09c3db17a2aa2a8fd866f0d78caec9e311e",
+  "source_git_blobs": {
+    "kaggriculture.json": "b354d06b742fe48402513792253f1a5c29366b20",
+    "utils.py": "91c8822ee6201ba4a5a8416c7dbe34f95dd61c87",
+    "kaggriculture.py": "3c202c7ee921da239356789e266b694635103fc4"
+  },
+  "harness_sha256": "89be0587dbb79fa76a659c33e58f917cef91b38eea7503658bd20bc78f72a166",
+  "cases": 2030,
+  "executed_steps_per_arm": 2438,
+  "coverage": {
+    "single_step_joint_cases": 1920,
+    "multi_step_cases": 72,
+    "normalization_cases": 14,
+    "callable_cases": 24
+  },
+  "mismatches": 0,
+  "failures": [],
+  "seconds": 1.9801914579999789,
+  "input_immutability_checked": true,
+  "negative_controls": [
+    {
+      "defect": "wrong_cash",
+      "detected": true,
+      "first_difference": [
+        "/cash_gain: 906.0 != 905.0"
+      ]
+    },
+    {
+      "defect": "omitted_market",
+      "detected": true,
+      "first_difference": [
+        "/cash_gain: 0.0 != 905.0"
+      ]
+    },
+    {
+      "defect": "omitted_farmer_action",
+      "detected": true,
+      "first_difference": [
+        "/private/inventories/0/WHEAT: 3 != 6"
+      ]
+    },
+    {
+      "defect": "input_mutation",
+      "detected": true,
+      "first_difference": [
+        "oracle mutated input observation/configuration/plan"
+      ]
+    },
+    {
+      "defect": "invented_liquidation",
+      "detected": true,
+      "first_difference": [
+        "/farm/money: 3997.0 != 3905.0"
+      ]
+    }
+  ],
+  "scope": "Exact own farm/private, market, town and cash; PASS rival, zero weed spawning and no new shop unlocks. Synthetic states, not games or held-panel runs.",
+  "excluded": [
+    "simultaneous rival orders",
+    "unknown future shop/weed scenarios",
+    "policy controller cloning",
+    "runtime policy strength",
+    "hosted leaderboard behavior"
+  ]
+}

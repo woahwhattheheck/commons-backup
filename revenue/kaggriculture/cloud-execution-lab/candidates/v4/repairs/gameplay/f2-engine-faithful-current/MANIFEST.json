@@ -1,0 +1,30 @@
+{
+  "kind": "titan-v4-repair-authority",
+  "mechanism": "f2-engine-faithful-current",
+  "status": "source-and-focused-tests-current-default-off",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "owner_pr": 12609,
+  "owner_head_observed": "fdad33a2b2209a4e49472719b423dc5106329171",
+  "source_helper_blob": "46f9073289a2eb3a204d069ccd5143a71dd31bc7",
+  "focused_test_blobs": {
+    "test_v4_feed_prebuy.py": "b52b70c2e43dae146553065a3d6c1fc7107e7e6a",
+    "test_v4_feed_prebuy_day_coverage.py": "5e7c713f108e624fcbf1fa9122deb1f9f2d03287",
+    "test_v4_feed_prebuy_future_cash.py": "a0527dc4c0e81f15a6da521b2d786c582d285c2e",
+    "test_v4_feed_prebuy_price_bound.py": "ca0ac86ac8a18703bc75401b7b63083b38d2f5ce",
+    "test_v4_feed_prebuy_stock_boundary.py": "f7a09dc6ebbf15d54fba217d6e23c6b9267dc949"
+  },
+  "supersedes_canonical_donor_source_blob": "6ba6c79e4e930a0187c9b8809b177b698034e914",
+  "required_semantics": [
+    "official BUY_PRODUCT is not gated by public market inventory availability",
+    "preserve complete actionable-day future-cash custody",
+    "preserve strict standard configuration and exact player-domain fail-closed checks",
+    "preserve finite money, capacity, target and +25 same-turn WHEAT funding guards",
+    "preserve native-first V217 planning with F3 fallback for both baseline and funded probes"
+  ],
+  "forbidden": [
+    "do not restore retired market.inventory availability gates",
+    "do not execute the legacy apply_v4 materializer against current production runtime",
+    "do not activate F2 or modify production routing/defaults from this authority pack"
+  ]
+}

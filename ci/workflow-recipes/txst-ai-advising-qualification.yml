@@ -1,0 +1,54 @@
+name: TXST AI advising qualification
+
+on:
+  pull_request:
+    paths:
+      - "revenue/txst_ai_advising_754/**"
+      - ".github/workflows/txst-ai-advising-qualification.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/txst_ai_advising_754/**"
+      - ".github/workflows/txst-ai-advising-qualification.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile exact carrier
+        run: >-
+          python -m py_compile
+          revenue/txst_ai_advising_754/qualification.py
+          revenue/txst_ai_advising_754/cli.py
+          revenue/txst_ai_advising_754/test_qualification.py
+          revenue/txst_ai_advising_754/test_cli.py
+      - name: Unit and hostile tests
+        run: python -m unittest -v revenue.txst_ai_advising_754.test_qualification revenue.txst_ai_advising_754.test_cli
+      - name: Optimized-mode unit and hostile tests
+        run: python -O -m unittest -v revenue.txst_ai_advising_754.test_qualification revenue.txst_ai_advising_754.test_cli
+      - name: Current candidate must remain fail-closed
+        shell: bash
+        run: |
+          out="$(mktemp)"
+          rm -f "$out"
+          python -m revenue.txst_ai_advising_754.cli compile \
+            --candidate revenue/txst_ai_advising_754/current_candidate.json \
+            --out "$out"
+          python - "$out" <<'PY'
+          import json, sys
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          assert report["state"] == "HOLD_OFFICIAL_PACKET_REQUIRED", report["state"]
+          assert report["official_packet_retained"] is False
+          assert all(v is False for v in report["authority"].values())
+          PY

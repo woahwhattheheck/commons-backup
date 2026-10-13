@@ -1,0 +1,454 @@
+{
+  "operation": "TITAN-V4-CAPTRACE-20260911",
+  "status": "SOURCE_AND_COMPONENT_GATES_COMPLETE_NOT_RELEASED",
+  "canonical_workspace": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "package": "repairs/performance/funding-replay",
+  "claim": "1789182854.612059",
+  "files": {
+    "check_funding_capacity.py": {
+      "bytes": 24815,
+      "git_blob": "1fe3c4ecf62a842b47d0b18fa24a4784f0fa1e3e",
+      "sha256": "7bbdd25b6af437696936fe15273479eb62c9af789d8d363aff7031d421c20945"
+    },
+    "compose_funding_capacity.py": {
+      "bytes": 7068,
+      "git_blob": "d8aa0a6cde7ec74142b806d29d1dca5201d9757a",
+      "sha256": "cbef1234d00d9f4c82bf0bd4b7f1f87ce658f009fd3ff19b7e6c346661375545"
+    },
+    "run_funding_capacity_native.py": {
+      "bytes": 8993,
+      "git_blob": "ac8cd266817ce64dd79850f89a0ea78dc8bd867c",
+      "sha256": "2868fba5abd09be382afbb8b021360595cd5605d8aa22d938685356f0fe2b8f2"
+    }
+  },
+  "peers": {
+    "TOWNPATH": {
+      "file": "apply_town_funding.py",
+      "blob": "527811763c80e627895d8e11319f8877b18105e6"
+    },
+    "UNITFLOW": {
+      "file": "../../runtime/joint-unit-projection/compose.py",
+      "blob": "e1127c4aad842278a9e617903b0718d21c00f348"
+    },
+    "FUNDING-PERF": {
+      "file": "apply_funding_replay.py",
+      "blob": "d579759e8f6bd6c4649d58f220b1b193a9bda491"
+    }
+  },
+  "composition_order": [
+    "TOWNPATH",
+    "UNITFLOW",
+    "FUNDING-PERF",
+    "CAPTRACE"
+  ],
+  "input": {
+    "artifact_id": 10175943272,
+    "artifact_zip_sha256": "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8",
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "source_manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+    "runtime_members": 109,
+    "engine_sha256": {
+      "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+    },
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]"
+  },
+  "focused_per_mode": {
+    "normal": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "counts_before_mutants": {
+        "initializations": 228,
+        "transitions": 1512,
+        "trace_comparisons": 1304,
+        "minimum_comparisons": 384,
+        "audit_parity": 16
+      },
+      "mutants": [
+        {
+          "name": "oversized_shed",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "unverified_zero",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "skip_pre_sale_buys",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "shift_raw_slot",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "skip_boundary_draw",
+          "assertion_failures": 1,
+          "errors": 0
+        }
+      ],
+      "counts_including_mutants": {
+        "initializations": 233,
+        "transitions": 1525,
+        "trace_comparisons": 1304,
+        "minimum_comparisons": 384,
+        "audit_parity": 16
+      }
+    },
+    "optimized": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "counts_before_mutants": {
+        "initializations": 228,
+        "transitions": 1512,
+        "trace_comparisons": 1304,
+        "minimum_comparisons": 384,
+        "audit_parity": 16
+      },
+      "mutants": [
+        {
+          "name": "oversized_shed",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "unverified_zero",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "skip_pre_sale_buys",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "shift_raw_slot",
+          "assertion_failures": 1,
+          "errors": 0
+        },
+        {
+          "name": "skip_boundary_draw",
+          "assertion_failures": 1,
+          "errors": 0
+        }
+      ],
+      "counts_including_mutants": {
+        "initializations": 233,
+        "transitions": 1525,
+        "trace_comparisons": 1304,
+        "minimum_comparisons": 384,
+        "audit_parity": 16
+      }
+    }
+  },
+  "inherited": {
+    "test": "checks/test_funded_prefix.py",
+    "tests": 8,
+    "arms": 8,
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "result": "PASS in every arm and mode"
+  },
+  "composed_outputs": {
+    "unit0-perf0": {
+      "scheduler_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+      "frozen_blob": "76dc54813751ebd83995271033ea031f82ac341b",
+      "frozen_sha256": "9d7014eb116754d9a40c2a51bfede8e23a3794baf47a2c97285b694190979c04"
+    },
+    "unit0-perf1": {
+      "scheduler_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+      "frozen_blob": "52f8973edc8cb85b6de18e0b6430430708227b39",
+      "frozen_sha256": "a570869deabe7b9734c3112720c353271d694cfda59fceedea587f9a22530b4b"
+    },
+    "unit1-perf0": {
+      "scheduler_blob": "eb289f87adebb7dc7e90046bfbec31a307cb5aaa",
+      "frozen_blob": "20350d2cd4e487c714a4ebfd8bae626c9d717591",
+      "frozen_sha256": "690287b275d8a379e08a799789e2d649f2cc8a8a4df619df190ebf5fc1931453"
+    },
+    "unit1-perf1": {
+      "scheduler_blob": "eb289f87adebb7dc7e90046bfbec31a307cb5aaa",
+      "frozen_blob": "360a4be9b9913cf9e17c4e0da78b8abaf3509269",
+      "frozen_sha256": "e0053c6209652d14ef84c95018d1f2ba960e8f13894c0f89ea7b63aadcd207d3"
+    },
+    "town-unit0-perf0": {
+      "scheduler_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+      "frozen_blob": "dbdf12769cc9b72f9b4710b6dacc9c5e3c35cc46",
+      "frozen_sha256": "aad2540a5148838a02af870e6e7548ec45c28bcba1f3b165203fce8afdfee46a"
+    },
+    "town-unit0-perf1": {
+      "scheduler_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+      "frozen_blob": "cf1b547b47a038927553212c449536804fb615ac",
+      "frozen_sha256": "99f4776f1327d948c955055247bcb23a17f75b251c02992fedf090b65c5aa1f8"
+    },
+    "town-unit1-perf0": {
+      "scheduler_blob": "eb289f87adebb7dc7e90046bfbec31a307cb5aaa",
+      "frozen_blob": "b15b6645019b4eef1ca8733078a89c18879f6f92",
+      "frozen_sha256": "275d23b75a8e507c385a1e5e3c21e249ab9364de532e78f32e6512abc0eae9fc"
+    },
+    "town-unit1-perf1": {
+      "scheduler_blob": "eb289f87adebb7dc7e90046bfbec31a307cb5aaa",
+      "frozen_blob": "ef090f6731c2d1ee648e2caaf3e215641b006518",
+      "frozen_sha256": "c13c398b435c73baed2086d107133cfc5572b824b8285c5a7aefe9470f00b0a2"
+    }
+  },
+  "native": {
+    "entrypoint": "main.py::agent",
+    "seed": 9922999,
+    "opponent": "official_starter",
+    "paired_arm_games": 24,
+    "extra_final_uninstrumented_games": 2,
+    "counted_games": 26,
+    "callbacks": 18694,
+    "paired_frame_comparisons": 8628,
+    "completed_status_every_game": {
+      "completed": 719
+    },
+    "all_pairs": {
+      "changed_actions": 0,
+      "changed_state_frames": 0,
+      "delta_own": 0,
+      "delta_rival": 0,
+      "delta_margin": 0
+    },
+    "own_score_every_game": 190363,
+    "rival_score_every_game": 3550,
+    "minimum_calls_per_instrumented_game": 758,
+    "scout_funding_boundaries_per_instrumented_game": 669,
+    "action_sha256_every_game": "4d6e8e6993f682d0453068bf07720afea05c3013b22792529caef0d77849ae49",
+    "state_sha256_by_seat": {
+      "0": "ea5082b7c1d7fa9878c86c1fdd6ac774e290ac24ed2500dfb3427e982fe0bcf7",
+      "1": "a067e0679695a04ee89da06b8b4389e08514fc212fc84ab52ced052efe74774d"
+    },
+    "cohorts": [
+      {
+        "mode": "normal",
+        "foundation": "native",
+        "before_frozen_blob": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+        "after_frozen_blob": "76dc54813751ebd83995271033ea031f82ac341b",
+        "rows_seat_repair_total_seconds_max_seconds": [
+          [
+            0,
+            0,
+            2.374866,
+            0.056223
+          ],
+          [
+            0,
+            1,
+            2.690983,
+            0.052755
+          ],
+          [
+            1,
+            0,
+            2.36756,
+            0.053965
+          ],
+          [
+            1,
+            1,
+            2.676658,
+            0.065615
+          ]
+        ]
+      },
+      {
+        "mode": "normal",
+        "foundation": "unit-perf",
+        "before_frozen_blob": "581c745e2249705b92e2154858257b5f81f9722b",
+        "after_frozen_blob": "360a4be9b9913cf9e17c4e0da78b8abaf3509269",
+        "rows_seat_repair_total_seconds_max_seconds": [
+          [
+            0,
+            0,
+            2.48278,
+            0.056586
+          ],
+          [
+            0,
+            1,
+            2.651054,
+            0.05379
+          ],
+          [
+            1,
+            0,
+            2.398159,
+            0.051941
+          ],
+          [
+            1,
+            1,
+            2.548412,
+            0.054445
+          ]
+        ]
+      },
+      {
+        "mode": "optimized",
+        "foundation": "native",
+        "before_frozen_blob": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+        "after_frozen_blob": "76dc54813751ebd83995271033ea031f82ac341b",
+        "rows_seat_repair_total_seconds_max_seconds": [
+          [
+            0,
+            0,
+            2.354664,
+            0.059135
+          ],
+          [
+            0,
+            1,
+            2.721068,
+            0.055597
+          ],
+          [
+            1,
+            0,
+            2.36344,
+            0.056617
+          ],
+          [
+            1,
+            1,
+            2.684951,
+            0.054064
+          ]
+        ]
+      },
+      {
+        "mode": "optimized",
+        "foundation": "unit-perf",
+        "before_frozen_blob": "581c745e2249705b92e2154858257b5f81f9722b",
+        "after_frozen_blob": "360a4be9b9913cf9e17c4e0da78b8abaf3509269",
+        "rows_seat_repair_total_seconds_max_seconds": [
+          [
+            0,
+            0,
+            2.333358,
+            0.052231
+          ],
+          [
+            0,
+            1,
+            2.516929,
+            0.051599
+          ],
+          [
+            1,
+            0,
+            2.355605,
+            0.054336
+          ],
+          [
+            1,
+            1,
+            2.545312,
+            0.052213
+          ]
+        ]
+      },
+      {
+        "mode": "normal",
+        "foundation": "town-unit-perf",
+        "before_frozen_blob": "3115465b57d79100106cf061655d0110383e271a",
+        "after_frozen_blob": "ef090f6731c2d1ee648e2caaf3e215641b006518",
+        "rows_seat_repair_total_seconds_max_seconds": [
+          [
+            0,
+            0,
+            2.446421,
+            0.055685
+          ],
+          [
+            0,
+            1,
+            2.651912,
+            0.052935
+          ],
+          [
+            1,
+            0,
+            2.33931,
+            0.053702
+          ],
+          [
+            1,
+            1,
+            2.579771,
+            0.055751
+          ]
+        ]
+      },
+      {
+        "mode": "optimized",
+        "foundation": "town-unit-perf",
+        "before_frozen_blob": "3115465b57d79100106cf061655d0110383e271a",
+        "after_frozen_blob": "ef090f6731c2d1ee648e2caaf3e215641b006518",
+        "rows_seat_repair_total_seconds_max_seconds": [
+          [
+            0,
+            0,
+            2.458098,
+            0.054309
+          ],
+          [
+            0,
+            1,
+            2.606747,
+            0.052623
+          ],
+          [
+            1,
+            0,
+            2.372273,
+            0.061644
+          ],
+          [
+            1,
+            1,
+            2.54996,
+            0.055533
+          ]
+        ]
+      }
+    ],
+    "timing_interpretation": "One local game per arm/cell; CAPTRACE adds work and every measured pair has higher total agent-call time. Not a speedup or robust deadline benchmark.",
+    "parity_note": "Final town-unit-perf repaired seat0 also ran without the diagnostic wrapper in both modes; complete action/state hashes and rewards match."
+  },
+  "original_report_sha256": {
+    "final-normal.json": "92aa667fbc0359fe60f8675e6a852a5cf4eb8877512060e69e5efab8a48015eb",
+    "final-optimized.json": "3d440ba8a72947051067cc54804321c0de9c76bcd84e2bf4a79c297962a04885",
+    "native-normal.json": "db00e776a710925edcb2e21b6b5a9265446ea8356d146577c5be7e41035bc860",
+    "native-optimized.json": "4e453e6d08434a43caee242951641e545cec6b8e024c2ccfe4e0858cd44a2e45",
+    "town-normal.json": "72b1535661487e9c90bb1ca621eb3aece2623fa57e61e9b19c4a673bb046a0b7",
+    "town-optimized.json": "7bc6d60f871f11af1cbb80997a3a27a4410fe81eb421f77fca9746f5b191238e"
+  },
+  "counting_notes": [
+    "Two earlier unit-perf uninstrumented games and pilots are excluded from the 26 counted games.",
+    "An expanded all-foundation parent run exceeded the execution-tool timeout and produced no complete report. It is excluded. Final runner saves each child and PARTIAL parent state; town cohorts were rerun to COMPLETE.",
+    "First four foundation source cases were executed before adding TOWNPATH pins; the accepted extension leaves their exact generated bytes unchanged."
+  ],
+  "limits": {
+    "production_modified": false,
+    "default_modified": false,
+    "archive_modified": false,
+    "kaggle_submission": false,
+    "hosted_ci_claim": false,
+    "release_authorized": false,
+    "competitive_ev_measured": false,
+    "latest_whole_v4_certified": false,
+    "coverage": "Constructed same-day own-deposit and raw-slot funding witnesses, authenticated peer composition, plus one-seed starter native compatibility. This is not proof for arbitrary farm decay, land transitions, rival tapes, opponent fields, or changed source HEAD."
+  }
+}

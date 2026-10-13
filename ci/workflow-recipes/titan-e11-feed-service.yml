@@ -1,0 +1,29 @@
+name: titan-e11-feed-service
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-economic-stress/feed-service-economics/**'
+      - 'p/sol-astra-titan-e11-feed-service-20260909-01.md'
+      - '.github/workflows/titan-e11-feed-service.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: revenue/kaggriculture/cloud-economic-stress/feed-service-economics
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Parse evaluator
+        run: python -m py_compile feed_service_economics.py test_feed_service_economics.py
+      - name: Run focused E11 contracts
+        run: python -m unittest -v test_feed_service_economics.py

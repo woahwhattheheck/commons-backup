@@ -1,0 +1,420 @@
+name: TITAN V4 ROWSHED graph-postimage field
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/titan-v4-row-shed-postimage-field.yml
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/COMPOSITION.json
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/check_composition_graph.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/build_composed_postimage.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/run_composed_postimage.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/postimage_trust.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/row-shed-sell-order/**
+  pull_request:
+    paths:
+      - .github/workflows/titan-v4-row-shed-postimage-field.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: titan-v4-row-shed-postimage-field
+  cancel-in-progress: false
+
+jobs:
+  field:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Authenticate canonical graph and row-shed source generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4
+          ROW="$V4/repairs/gameplay/row-shed-sell-order"
+          test "$(git hash-object "$V4/COMPOSITION.json")" = 925221c32f4af05765d35113a2a5498ba80a0c04
+          test "$(git hash-object "$V4/check_composition_graph.py")" = fd360bec637d802664d3617c250fb676cca03456
+          test "$(git hash-object "$V4/build_composed_postimage.py")" = e99068258744382609a4e0eddbcbdbac6c852ac7
+          test "$(git hash-object "$V4/run_composed_postimage.py")" = 97fbfc26cbccd88d3027dd01c86c80c894329535
+          test "$(git hash-object "$V4/postimage_trust.py")" = 4666f06e31f232cd4175be58621b6607ca2772d7
+          test "$(git hash-object "$ROW/COMPOSER-READY.json")" = beb000a661a30de1b2bf746af85722cda3fd21c7
+          test "$(git hash-object "$ROW/compose.py")" = 02295e66b58353051665ff533f4c4112e0449766
+          test "$(git hash-object "$ROW/row_shed_sell_order.py")" = 9df048a4ba866d154861b6885f59502cf9e01cae
+          pushd "$ROW"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest discover -v -p 'test_*.py'
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest discover -v -p 'test_*.py'
+          python -B -m py_compile compose.py row_shed_sell_order.py
+          popd
+          PYTHONDONTWRITEBYTECODE=1 python -B "$V4/run_composed_postimage.py" --workspace "$V4" --check
+          PYTHONDONTWRITEBYTECODE=1 python -OB "$V4/run_composed_postimage.py" --workspace "$V4" --check
+
+      - name: Recover exact authenticated b567 composition foundation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP="$RUNNER_TEMP/row-shed-foundation.zip"
+          EXTRACT="$RUNNER_TEMP/row-shed-foundation-artifact"
+          BASE="$RUNNER_TEMP/row-shed-b567"
+          GRAPH="$RUNNER_TEMP/row-shed-graph"
+          PATCH="$RUNNER_TEMP/row-shed-compose"
+          ON="$RUNNER_TEMP/row-shed-on"
+          OUT="$RUNNER_TEMP/row-shed-evidence"
+          mkdir -p "$EXTRACT" "$BASE" "$OUT"
+          curl --fail --location --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/10175943272/zip" \
+            -o "$ZIP"
+          echo "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8  $ZIP" | sha256sum -c -
+          unzip -q "$ZIP" -d "$EXTRACT"
+          TAR="$EXTRACT/checked-package/exports/titan-current.tar.gz"
+          echo "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9  $TAR" | sha256sum -c -
+          tar -xzf "$TAR" -C "$BASE"
+          test "$(git hash-object "$BASE/main.py")" = 4a8cf7bcda1f0fea231a144692cb84a779a9e73e
+          test "$(git hash-object "$BASE/frozen_selected.py")" = fc7baf5c179818a55037f6a61d92984d81d1a21c
+          printf 'ROW_SHED_BASE=%s\n' "$BASE" >> "$GITHUB_ENV"
+          printf 'ROW_SHED_GRAPH=%s\n' "$GRAPH" >> "$GITHUB_ENV"
+          printf 'ROW_SHED_PATCH=%s\n' "$PATCH" >> "$GITHUB_ENV"
+          printf 'ROW_SHED_ON=%s\n' "$ON" >> "$GITHUB_ENV"
+          printf 'ROW_SHED_OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+
+      - name: Materialize the sole authenticated V4 graph postimage
+        shell: bash
+        run: |
+          set -euo pipefail
+          V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4
+          PYTHONDONTWRITEBYTECODE=1 python -B "$V4/run_composed_postimage.py" \
+            --workspace "$V4" \
+            --package "$ROW_SHED_BASE" \
+            --output "$ROW_SHED_GRAPH"
+          python - "$ROW_SHED_GRAPH" "$ROW_SHED_OUT/graph-identity.json" <<'PY'
+          import hashlib, json, sys
+          from pathlib import Path
+          root, out = Path(sys.argv[1]), Path(sys.argv[2])
+          frozen = (root / "frozen_selected.py").read_bytes()
+          blob = hashlib.sha1(b"blob " + str(len(frozen)).encode("ascii") + b"\0" + frozen).hexdigest()
+          sha = hashlib.sha256(frozen).hexdigest()
+          if blob != "4a5d3d5f4bed04acf73c7339e41fed56badf34c9":
+              raise SystemExit(f"wrong graph predecessor Git blob: {blob}")
+          if sha != "4dc1de418632edd0a0bb66b9b01ab267c73225badabf0b62b5dee81d50233c5e":
+              raise SystemExit(f"wrong graph predecessor SHA256: {sha}")
+          receipt = root / "V4-POSTIMAGE.json"
+          if not receipt.is_file():
+              raise SystemExit("authenticated graph runner did not publish V4-POSTIMAGE.json")
+          json.dump({
+              "schema": "titan-v4-row-shed-graph-identity/v1",
+              "foundation_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+              "frozen_selected_git_blob": blob,
+              "frozen_selected_sha256": sha,
+              "graph_receipt_sha256": hashlib.sha256(receipt.read_bytes()).hexdigest(),
+              "production_activated": False,
+              "promotion_authorized": False,
+          }, out.open("w"), sort_keys=True, indent=2)
+          PY
+
+      - name: Compose row-shed onto the exact graph predecessor
+        shell: bash
+        run: |
+          set -euo pipefail
+          V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4
+          ROW="$V4/repairs/gameplay/row-shed-sell-order"
+          PYTHONDONTWRITEBYTECODE=1 python -B "$ROW/compose.py" \
+            --package "$ROW_SHED_GRAPH" \
+            --output "$ROW_SHED_PATCH" \
+            --frozen-blob 4a5d3d5f4bed04acf73c7339e41fed56badf34c9
+          mkdir -p "$ROW_SHED_ON"
+          cp -a "$ROW_SHED_GRAPH/." "$ROW_SHED_ON/"
+          cp "$ROW_SHED_PATCH/frozen_selected.py" "$ROW_SHED_ON/frozen_selected.py"
+          cp "$ROW_SHED_PATCH/row_shed_sell_order.py" "$ROW_SHED_ON/row_shed_sell_order.py"
+          python - "$ROW_SHED_GRAPH" "$ROW_SHED_ON" "$ROW_SHED_PATCH" "$ROW_SHED_OUT/construction.json" <<'PY'
+          import hashlib, json, sys
+          from pathlib import Path
+          control, treatment, patch, out = map(Path, sys.argv[1:])
+          def git_blob(data):
+              return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
+          def files(root):
+              return {p.relative_to(root).as_posix(): p for p in root.rglob("*") if p.is_file()}
+          a, b = files(control), files(treatment)
+          changed = []
+          for rel in sorted(set(a) | set(b)):
+              if rel not in a or rel not in b or a[rel].read_bytes() != b[rel].read_bytes():
+                  changed.append(rel)
+          expected = ["frozen_selected.py", "row_shed_sell_order.py"]
+          if changed != expected:
+              raise SystemExit(f"row-shed overlay changed unexpected runtime files: {changed}")
+          helper = (treatment / "row_shed_sell_order.py").read_bytes()
+          if git_blob(helper) != "9df048a4ba866d154861b6885f59502cf9e01cae":
+              raise SystemExit("row-shed helper Git identity drift")
+          if hashlib.sha256(helper).hexdigest() != "ebde4930a46f4bc582fcf5b0f039138d0d91d3686ee114e2266a79d72461bb23":
+              raise SystemExit("row-shed helper SHA256 drift")
+          frozen = (treatment / "frozen_selected.py").read_bytes()
+          compose_receipt = patch / "ROW-SHED-COMPOSITION.json"
+          if not compose_receipt.is_file():
+              raise SystemExit("row-shed composer did not publish its receipt")
+          json.dump({
+              "schema": "titan-v4-row-shed-construction/v1",
+              "control_graph_frozen_git_blob": "4a5d3d5f4bed04acf73c7339e41fed56badf34c9",
+              "control_graph_frozen_sha256": "4dc1de418632edd0a0bb66b9b01ab267c73225badabf0b62b5dee81d50233c5e",
+              "treatment_frozen_git_blob": git_blob(frozen),
+              "treatment_frozen_sha256": hashlib.sha256(frozen).hexdigest(),
+              "row_shed_helper_git_blob": git_blob(helper),
+              "row_shed_helper_sha256": hashlib.sha256(helper).hexdigest(),
+              "compose_receipt_sha256": hashlib.sha256(compose_receipt.read_bytes()).hexdigest(),
+              "changed_runtime_files": changed,
+              "field_probe_is_production_source": False,
+              "production_activated": False,
+              "promotion_authorized": False,
+          }, out.open("w"), sort_keys=True, indent=2)
+          PY
+          cp "$ROW_SHED_PATCH/ROW-SHED-COMPOSITION.json" "$ROW_SHED_OUT/ROW-SHED-COMPOSITION.json"
+          cp "$ROW_SHED_GRAPH/V4-POSTIMAGE.json" "$ROW_SHED_OUT/V4-POSTIMAGE.json"
+
+      - name: Add field-only diagnostics probe without changing returned actions
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$ROW_SHED_ON/row_shed_probe.py" <<'PY'
+          """Field-only observer for fresh row-shed applications; returned action is untouched."""
+          from __future__ import annotations
+          import json
+          import os
+          from pathlib import Path
+          import main as _main
+
+          TELEMETRY = Path(__file__).with_name("row-shed-telemetry.jsonl")
+
+          def agent(observation, configuration):
+              action = _main.agent(observation, configuration)
+              consumer = getattr(getattr(_main, "_INSTANCE", None), "consumer", None)
+              diag = getattr(consumer, "row_shed_diagnostics", None)
+              parent_diag = getattr(consumer, "diagnostics", None)
+              fresh = (isinstance(parent_diag, dict)
+                       and parent_diag.get("step") == observation.get("step"))
+              if fresh and isinstance(diag, dict) and diag.get("status") == "applied":
+                  record = {
+                      "step": observation.get("step"),
+                      "player": observation.get("player"),
+                      "diagnostics": diag,
+                      "returned_market": action.get("market", []) if isinstance(action, dict) else None,
+                  }
+                  payload = json.dumps(record, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n"
+                  fd = os.open(TELEMETRY, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+                  try:
+                      os.write(fd, payload.encode("utf-8"))
+                  finally:
+                      os.close(fd)
+              return action
+          PY
+          python - "$ROW_SHED_ON/row_shed_probe.py" "$ROW_SHED_OUT/probe-identity.json" <<'PY'
+          import hashlib, json, sys
+          from pathlib import Path
+          src, out = map(Path, sys.argv[1:])
+          data = src.read_bytes()
+          compile(data, str(src), "exec")
+          blob = hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
+          json.dump({
+              "schema": "titan-v4-row-shed-field-probe/v1",
+              "git_blob": blob,
+              "sha256": hashlib.sha256(data).hexdigest(),
+              "field_only": True,
+              "returned_action_mutation": False,
+              "logs_only_fresh_applied_callbacks": True,
+          }, out.open("w"), sort_keys=True, indent=2)
+          PY
+          rm -f "$ROW_SHED_ON/row-shed-telemetry.jsonl"
+
+      - name: Official-engine both-seat control field
+        shell: bash
+        run: |
+          set -euo pipefail
+          EVAL="$ROW_SHED_GRAPH/checks/reference/evaluator/evaluate.py"
+          ENGINE="$ROW_SHED_GRAPH/checks/reference/engine"
+          LOADER="$ROW_SHED_GRAPH/checks/reference/evaluator/loader.py"
+          PYTHONDONTWRITEBYTECODE=1 python -B "$EVAL" \
+            --engine-dir "$ENGINE" \
+            --loader "$LOADER" \
+            --candidate "$ROW_SHED_GRAPH/main.py::agent" \
+            --opponent "graph=$ROW_SHED_GRAPH/main.py::agent" \
+            --seeds 2027,6607,104729 \
+            --output "$ROW_SHED_OUT/control.json"
+
+      - name: Official-engine both-seat row-shed treatment field
+        shell: bash
+        run: |
+          set -euo pipefail
+          EVAL="$ROW_SHED_GRAPH/checks/reference/evaluator/evaluate.py"
+          ENGINE="$ROW_SHED_GRAPH/checks/reference/engine"
+          LOADER="$ROW_SHED_GRAPH/checks/reference/evaluator/loader.py"
+          PYTHONDONTWRITEBYTECODE=1 python -B "$EVAL" \
+            --engine-dir "$ENGINE" \
+            --loader "$LOADER" \
+            --candidate "$ROW_SHED_ON/row_shed_probe.py::agent" \
+            --opponent "graph=$ROW_SHED_GRAPH/main.py::agent" \
+            --seeds 2027,6607,104729 \
+            --output "$ROW_SHED_OUT/treatment.json"
+          if [[ -f "$ROW_SHED_ON/row-shed-telemetry.jsonl" ]]; then
+            cp "$ROW_SHED_ON/row-shed-telemetry.jsonl" "$ROW_SHED_OUT/row-shed-telemetry.jsonl"
+          else
+            : > "$ROW_SHED_OUT/row-shed-telemetry.jsonl"
+          fi
+
+      - name: Publish natural-engagement and paired field receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - "$ROW_SHED_OUT" <<'PY'
+          import json, statistics, sys
+          from pathlib import Path
+          out = Path(sys.argv[1])
+          control = json.loads((out / "control.json").read_text())
+          treatment = json.loads((out / "treatment.json").read_text())
+          expected_seeds = [2027, 6607, 104729]
+          for name, report in (("control", control), ("treatment", treatment)):
+              if report.get("engine_ref") != "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c":
+                  raise SystemExit(f"{name}: wrong official-engine ref")
+              if report.get("seeds") != expected_seeds:
+                  raise SystemExit(f"{name}: seed panel drift")
+              summary = report.get("summary", {}).get("graph", {})
+              if summary.get("scheduled") != 6 or summary.get("completed") != 6 or summary.get("failed") != 0:
+                  raise SystemExit(f"{name}: incomplete official field: {summary}")
+          if control.get("engine_sha256") != treatment.get("engine_sha256"):
+              raise SystemExit("control/treatment official engine identity mismatch")
+          if control.get("loader_sha256") != treatment.get("loader_sha256"):
+              raise SystemExit("control/treatment loader identity mismatch")
+          if control.get("evaluator_sha256") != treatment.get("evaluator_sha256"):
+              raise SystemExit("control/treatment evaluator identity mismatch")
+
+          def game_map(report):
+              return {(g["seed"], g["candidate_seat"]): g for g in report["games"]}
+          cg, tg = game_map(control), game_map(treatment)
+          if sorted(cg) != sorted(tg):
+              raise SystemExit("control/treatment cell mismatch")
+          cells = []
+          trace_changes = 0
+          margin_deltas = []
+          for key in sorted(cg):
+              c, t = cg[key], tg[key]
+              if c.get("status") != "complete" or t.get("status") != "complete":
+                  raise SystemExit(f"incomplete paired cell {key}")
+              seat = key[1]
+              c_margin = c["scores"][seat] - c["scores"][1-seat]
+              t_margin = t["scores"][seat] - t["scores"][1-seat]
+              delta = t_margin - c_margin
+              margin_deltas.append(delta)
+              changed = c.get("trace_sha256") != t.get("trace_sha256")
+              trace_changes += int(changed)
+              cells.append({
+                  "seed": key[0],
+                  "candidate_seat": seat,
+                  "control_margin": c_margin,
+                  "treatment_margin": t_margin,
+                  "paired_margin_delta": delta,
+                  "trace_changed": changed,
+              })
+
+          telemetry = []
+          tele_path = out / "row-shed-telemetry.jsonl"
+          if tele_path.is_file():
+              telemetry = [json.loads(line) for line in tele_path.read_text().splitlines() if line.strip()]
+          applied = []
+          reordered = []
+          for rec in telemetry:
+              diag = rec.get("diagnostics") or {}
+              if diag.get("status") != "applied":
+                  continue
+              applied.append(rec)
+              scores = diag.get("scores") or []
+              ranked = [x.get("original_index") for x in sorted(scores, key=lambda x: x.get("impact", 0), reverse=True)]
+              original = [x.get("original_index") for x in scores]
+              if ranked != original:
+                  reordered.append({
+                      "step": rec.get("step"),
+                      "player": rec.get("player"),
+                      "original_order": original,
+                      "ranked_order": ranked,
+                      "scores": scores,
+                      "returned_market": rec.get("returned_market"),
+                  })
+
+          receipt = {
+              "schema": "titan-v4-row-shed-postimage-field/v1",
+              "generation": "authenticated-b567-composition-foundation",
+              "foundation_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+              "graph_frozen_git_blob": "4a5d3d5f4bed04acf73c7339e41fed56badf34c9",
+              "graph_frozen_sha256": "4dc1de418632edd0a0bb66b9b01ab267c73225badabf0b62b5dee81d50233c5e",
+              "row_shed_helper_git_blob": "9df048a4ba866d154861b6885f59502cf9e01cae",
+              "seeds": expected_seeds,
+              "both_seats": True,
+              "scheduled_games_per_arm": 6,
+              "applied_callbacks": len(applied),
+              "natural_activation_witness": bool(applied),
+              "natural_reorder_callbacks": len(reordered),
+              "natural_reorder_witness": bool(reordered),
+              "reorder_witnesses": reordered[:20],
+              "paired_cells": cells,
+              "trace_changed_cells": trace_changes,
+              "paired_margin_delta_mean": statistics.mean(margin_deltas),
+              "paired_margin_delta_median": statistics.median(margin_deltas),
+              "trace_delta_is_advisory_only": True,
+              "economics_are_promotion_authority": False,
+              "production_activated": False,
+              "promotion_authorized": False,
+          }
+          if reordered:
+              receipt["verdict"] = "NATURAL_REORDER_WITNESS"
+          elif applied:
+              receipt["verdict"] = "NATURAL_ENGAGEMENT_NO_REORDER_IN_PANEL"
+          else:
+              receipt["verdict"] = "HOLD_NO_NATURAL_ENGAGEMENT_IN_PANEL"
+          (out / "FIELD-RECEIPT.json").write_text(json.dumps(receipt, sort_keys=True, indent=2) + "\n")
+          print(json.dumps({
+              "verdict": receipt["verdict"],
+              "applied_callbacks": receipt["applied_callbacks"],
+              "natural_reorder_callbacks": receipt["natural_reorder_callbacks"],
+              "trace_changed_cells": trace_changes,
+              "paired_margin_delta_mean": receipt["paired_margin_delta_mean"],
+          }, sort_keys=True))
+          PY
+
+      - name: Bind checkout and source identities
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="${ROW_SHED_OUT:-$RUNNER_TEMP/row-shed-evidence}"
+          mkdir -p "$OUT"
+          printf 'ROW_SHED_OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$OUT/checkout-commit.txt"
+          V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4
+          ROW="$V4/repairs/gameplay/row-shed-sell-order"
+          sha256sum \
+            "$V4/COMPOSITION.json" \
+            "$V4/check_composition_graph.py" \
+            "$V4/build_composed_postimage.py" \
+            "$V4/run_composed_postimage.py" \
+            "$V4/postimage_trust.py" \
+            "$ROW/COMPOSER-READY.json" \
+            "$ROW/compose.py" \
+            "$ROW/row_shed_sell_order.py" \
+            > "$OUT/source-sha256.txt"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v4-row-shed-postimage-field-${{ github.run_id }}
+          path: ${{ env.ROW_SHED_OUT }}
+          retention-days: 14
+          if-no-files-found: error

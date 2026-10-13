@@ -1,0 +1,36 @@
+name: Snohomish RFP packet gate
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/snoco_ai_governance_packet_gate/**'
+      - '.github/workflows/snoco-rfp-packet-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/snoco_ai_governance_packet_gate/**'
+      - '.github/workflows/snoco-rfp-packet-gate.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: snoco-rfp-packet-gate-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile revenue/snoco_ai_governance_packet_gate/packet_gate.py revenue/snoco_ai_governance_packet_gate/test_packet_gate.py revenue/snoco_ai_governance_packet_gate/test_packet_gate_trust_binding.py
+      - run: python -m unittest -v revenue/snoco_ai_governance_packet_gate/test_packet_gate.py revenue/snoco_ai_governance_packet_gate/test_packet_gate_trust_binding.py
+      - run: python -O -m unittest -v revenue/snoco_ai_governance_packet_gate/test_packet_gate.py revenue/snoco_ai_governance_packet_gate/test_packet_gate_trust_binding.py
+      - run: python revenue/snoco_ai_governance_packet_gate/packet_gate.py >/tmp/snoco-receipt.json
+      - run: python revenue/snoco_ai_governance_packet_gate/packet_gate.py --verify --receipt /tmp/snoco-receipt.json

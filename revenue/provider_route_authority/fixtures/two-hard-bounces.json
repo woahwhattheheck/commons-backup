@@ -1,0 +1,66 @@
+{
+  "schema": "provider-route-authority-input/v1",
+  "subject": {
+    "org": "example.com",
+    "route_type": "EMAIL",
+    "route": "third@example.com",
+    "purpose": "paid-workshare"
+  },
+  "events": [
+    {
+      "event_id": "bounce-first",
+      "kind": "HARD_BOUNCE",
+      "source": "PROVIDER",
+      "at": "2026-09-17T01:00:00-04:00",
+      "org": "example.com",
+      "purpose": "older-workshare",
+      "route_type": "EMAIL",
+      "route": "first@example.com",
+      "evidence_ref": "synthetic:dsn:first"
+    },
+    {
+      "event_id": "bounce-second",
+      "kind": "HARD_BOUNCE",
+      "source": "PROVIDER",
+      "at": "2026-09-17T01:05:00-04:00",
+      "org": "example.com",
+      "purpose": "older-workshare",
+      "route_type": "EMAIL",
+      "route": "second@example.com",
+      "evidence_ref": "synthetic:dsn:second"
+    },
+    {
+      "event_id": "take-third",
+      "kind": "SLACK_TAKE",
+      "source": "SLACK",
+      "at": "2026-09-17T02:00:00-04:00",
+      "org": "example.com",
+      "purpose": "paid-workshare",
+      "route_type": "EMAIL",
+      "route": "third@example.com",
+      "evidence_ref": "synthetic:slack:take"
+    },
+    {
+      "event_id": "verify-third",
+      "kind": "ROUTE_VERIFIED",
+      "source": "PUBLIC_EVIDENCE",
+      "at": "2026-09-17T02:01:00-04:00",
+      "org": "example.com",
+      "purpose": "paid-workshare",
+      "route_type": "EMAIL",
+      "route": "third@example.com",
+      "evidence_ref": "synthetic:route:verified"
+    },
+    {
+      "event_id": "muse-third",
+      "kind": "MUSE_CLEAR",
+      "source": "MUSE",
+      "at": "2026-09-17T02:02:00-04:00",
+      "org": "example.com",
+      "purpose": "paid-workshare",
+      "route_type": "EMAIL",
+      "route": "third@example.com",
+      "evidence_ref": "synthetic:muse:clear"
+    }
+  ]
+}

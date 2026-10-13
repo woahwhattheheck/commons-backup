@@ -1,0 +1,88 @@
+{
+  "schema": "titan-v4-source-admission/v1",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "authority": "funding-capacity-stack / repairs/performance/funding-replay",
+  "status": "source_candidate_awaiting_exact_head_execution_not_composed",
+  "legacy_provenance": {
+    "pull_requests": [12075, 12112],
+    "rule": "consume the plant-decay chronology theorem and season-reachable capacity witness only; do not revive the V3 carriers"
+  },
+  "current_chain": {
+    "source_order": ["TOWNPATH", "UNITFLOW", "FUNDING-PERF", "CAPTRACE"],
+    "captrace_authenticated_funding_trace_post_sha256": [
+      "2adf10d26fd7a0d3445783e5fb64e540361eecdfd0702e1edc2b777034aaf1e4",
+      "61b78c43f796c10a943b72ca84a458720219e3cc732903df27f18c6c2545906b",
+      "74ef800fe10fbec67e1771644de3a3ba2b43f7fbb07e93b6597e7689858f17a9",
+      "db252cac77861df9c946340affbd9ebeaf9de34d286a77e68c218d31dae3d6b0"
+    ],
+    "required_full_chain_markers": ["shop_interval", "center_interval", "apply_projected_units", "sale_receipts"]
+  },
+  "binding": {
+    "frozen_selected_git_blob": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+    "scheduler_git_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+    "mechanics_git_blob": "044a4f9c0a4a44dde10ada57563238bcaf82075d",
+    "official_engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "runtime_decay_semantics_must_match_official_ast": true
+  },
+  "defects": [
+    "the current authenticated funding replay executes represented unit and market/town stages but omits the official deterministic post-market plant-decay stage before the next represented callback",
+    "the current replay accepts horizons crossing official end-of-day while simulating none of the EOD lifecycle: hand deletion, inventory-to-shed drop, worker reset, daily plant/animal refresh, or private inventory reset"
+  ],
+  "repair": {
+    "same_day_guard": {
+      "turns_per_day": 24,
+      "reason": "the authenticated replay already hardcodes t // 24 and literal 24 in represented unit execution; non-24 clocks are outside its source-real domain",
+      "cross_eod_behavior": "raise ValueError before represented unit replay when now // 24 differs from end // 24",
+      "full_eod_simulation_claim": false
+    },
+    "inserted_source": "m._decay_plants(f, t)",
+    "position": "final statement of each admitted outer represented funding turn, after TOWNPATH and immediately before the funding receipt return boundary",
+    "delta": "one exact same-day guard block plus one exact plant-decay source line",
+    "idempotence": "accepted only when deleting the exact guard and decay line reconstructs an authenticated full-chain predecessor",
+    "fail_closed": true
+  },
+  "cross_eod_killer": {
+    "now": 119,
+    "end": 120,
+    "predecessor_state": "one existing hand and matching private inventory before official step-119 EOD",
+    "future_route": {"120": "hand[0] HARVEST"},
+    "predecessor_defect": "the replay carries that hand across EOD and executes actor index 1 at step 120 even though official EOD removed all hands",
+    "candidate_expected": "reject before step-120 unit replay"
+  },
+  "season_reachable_witness": {
+    "now": 120,
+    "end": 123,
+    "shed_capacity": 2,
+    "starting_cash": 300,
+    "current_shed": {"MILK": 1},
+    "current_market": [["SELL", "MILK", 1]],
+    "plant": {"crop": "WHEAT", "planted_day": 0, "yield_units": 2, "max_lifespan_step": 120},
+    "future_route": {"121": "HARVEST", "122": "DROP", "123": "BUY_ANIMAL GOOSE 1"},
+    "expected_full_v4_predecessor_minimum_now": 0,
+    "expected_decay_candidate_minimum_now": 1,
+    "reason": "official step-120 decay reduces WHEAT 2->1; the later HARVEST/DROP then leaves one capacity slot for the baseline goose only when the inherited MILK sale is preserved"
+  },
+  "focused_gate": {
+    "tests_per_mode": 9,
+    "modes": ["normal", "PYTHONOPTIMIZE=1"],
+    "compile": ["apply_plant_decay.py", "test_plant_decay.py"],
+    "materializes_actual_current_v4_funding_chain": true,
+    "must_cover": [
+      "exact authenticated four-stage predecessor",
+      "guard-plus-decay reversible idempotent composition",
+      "raw/town-only and target-span drift refusal",
+      "non-24-turn clock refusal",
+      "119-to-120 stale-hand cross-EOD killer",
+      "step-120 decay boundary",
+      "same-day season-reachable capacity witness"
+    ]
+  },
+  "forbidden": [
+    "new V4 root or controller",
+    "claiming full EOD lifecycle simulation",
+    "cross-EOD funding replay admission",
+    "direct mutation of root frozen_selected.py",
+    "COMPOSITION.json activation before exact-head execution and authenticated current postimage binding",
+    "runtime/default/config/archive/Kaggle/submission mutation"
+  ]
+}

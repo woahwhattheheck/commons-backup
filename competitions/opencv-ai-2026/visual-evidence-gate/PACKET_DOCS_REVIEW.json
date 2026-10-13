@@ -1,0 +1,77 @@
+{
+  "schema": "opencv-packet-docs-review/v1",
+  "recorded_at_utc": "2026-09-19T15:54:58.055947+00:00",
+  "reviewer": "ZZ–Keystone-43CF / workbench_review",
+  "model": "Codex / GPT family (exact model identifier unavailable)",
+  "verdict": "PASS",
+  "scope": "Semantic review against frozen implementation and retained local rehearsal comparison; external publication state is not established by this review. No executable edits or tests performed.",
+  "reviewed_docs": {
+    "competitions/opencv-ai-2026/visual-evidence-gate/PACKET_GUIDE.md": {
+      "git_blob": "46ab8e6c394bc481392880d0d64d1599fc97c7c2",
+      "sha256": "aa04d23989e6118ef9d4cc92feb7efe1ff7ab00611b75687fd3a3f6ed422f41b",
+      "bytes": 10180
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/README.md": {
+      "git_blob": "cdbcb34d92208d2e84c982e8e7714668e5e13a6d",
+      "sha256": "ddfe0d6e2e995459469f744e24b651b190970cab1c331dc0abeca564ddd6b02d",
+      "bytes": 3147
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/PACKET_WORKED_RESULT.md": {
+      "git_blob": "409160031e5c800c3ed43569c878a7934ba2f219",
+      "sha256": "e1bc727c5190b284f39bc266b8e883fb9526e0b85554c13084ed569de4f54bcf",
+      "bytes": 1699
+    }
+  },
+  "prior_source_review": {
+    "file": "source-review.json",
+    "sha256": "f7c4be2f4edfc187ef70e8785eda8ced1b9961b9d48b4e6a75482812044208ce",
+    "preserved_without_modification": true
+  },
+  "production_cleanup_review": {
+    "file": "competitions/opencv-ai-2026/visual-evidence-gate/packet_cli.py",
+    "prior_git_blob": "6088249b0d49c68cdc7d252c610f3360f3234296",
+    "current": {
+      "git_blob": "1e2f51e33bc4136b4789b5ce1d9659097a24d065",
+      "sha256": "36827e7afb3c78aec6f4bff7107f06ee4530950bdbc57d58e37b5f2c3cde5cb6",
+      "bytes": 3741
+    },
+    "change": "Only the unused import json line was removed; exact reconstruction reproduces the previously reviewed blob.",
+    "verdict": "PASS"
+  },
+  "resolved_corrections": [
+    "Receipt description names packet and image payload digests, without implying implementation source hashes are in the content receipt.",
+    "README explicitly names the canonical subdirectory for original single-frame commands after the repository-root rehearsal example.",
+    "ETags are conditional-read validators, not MD5 assumptions, S3 VersionId values or unique object-version identities."
+  ],
+  "checked_semantics": [
+    "Unreadable, duplicate, missing-view, quality and human-review priority order matches code; low focus takes precedence over clipping.",
+    "Content digests and exact recompile are distinguished from signatures, authentic capture and physical custody.",
+    "CLI map resolution, complete membership, exit status and exclusive output behavior match the implementation.",
+    "Partial new-directory output on interrupted writes is disclosed; prior paths are preserved.",
+    "The optional S3 adapter remains read-only and uses IfMatch; provider streams complete through EOF and are closed.",
+    "Runtime and competition claims preserve actual OpenCV4.13 local scope and no AWS/OpenCV5 execution or submission claim.",
+    "Bounds match constants, and native postdecode allocation limitations are explicit.",
+    "The nine worked-result actions and observed OpenCV version match the retained rehearsal comparison."
+  ],
+  "rehearsal_evidence": {
+    "file": "rehearsal-comparison.json",
+    "sha256": "b944b8e3f86d98cbb24ef6a7f01ff99df5b2ea01c77297968a1e565d6253c8e1",
+    "files": 55,
+    "bytes": 671097,
+    "normal_optimized_byte_identical": true
+  },
+  "count_interpretation": {
+    "distinct_tests": 72,
+    "original": 20,
+    "packet": 44,
+    "cli": 8,
+    "root_runner_count": 73,
+    "root_extra_unit": "real optimized-subprocess wrapper, not a 73rd distinct feature test"
+  },
+  "primary_references_checked": [
+    "https://docs.opencv.org/4.13.0/d4/da8/group__imgcodecs.html",
+    "https://docs.opencv.org/4.13.0/d5/db5/tutorial_laplace_operator.html",
+    "https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html"
+  ],
+  "external_state_note": "The current worked result describes the command creating the complete generated image/input/receipt bundle. It makes no claim that the bundle has already been published to Slack. This local semantic review does not assert external publication."
+}

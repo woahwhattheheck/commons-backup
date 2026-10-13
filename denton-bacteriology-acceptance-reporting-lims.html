@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Denton bacteriology acceptance + reporting — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#eef3f6;--ink:#152027;--muted:#4d5d66;--line:#b4c4cc;--card:#f7fbfc;--water:#1b5f78;--amber:#9a6118}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#c5dbe4,var(--paper) 40%);color:var(--ink);font:16px/1.5 "Source Serif 4",Georgia,serif}
+main{max-width:980px;margin:auto;padding:28px 16px 72px}a{color:var(--water)}
+.kicker{letter-spacing:.14em;text-transform:uppercase;font:12px/1.2 ui-sans-serif,system-ui,sans-serif;color:var(--water)}
+h1{font:800 clamp(2.1rem,6vw,3.6rem)/.96 ui-sans-serif,system-ui,sans-serif;max-width:920px;margin:.2em 0}
+.lede{font-size:1.1rem;max-width:780px;color:var(--muted)}
+.truth{border-left:5px solid var(--amber);padding:10px 14px;background:#fff4de}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0}
+table{width:100%;border-collapse:collapse}th,td{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;background:#132027;color:#d7eef5;border-radius:10px}
+.state{display:inline-block;border:1px solid var(--amber);color:var(--amber);border-radius:999px;padding:3px 9px;font-size:.75rem;font-weight:800}
+.small{color:var(--muted);font-size:.88rem}
+button{border:0;border-radius:999px;padding:11px 16px;background:var(--water);color:white;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="./index.html">← Commons</a> · <a href="./offer.html">offers</a> · <a href="./feature-tracker.html">feature tracker</a> · </nav>
+<p class="kicker">Denton Municipal Laboratory · bacteriology acceptance + reporting · HOLD / BUILD-AND-VERIFY</p>
+<h1>Accession once. Hold the rest. A named reviewer releases the report.</h1>
+<p class="lede">A working synthetic runner reconciles account/PWS, custody, bottle age, temperature/hold-time, sample identity, and TCEQ/AP/E. coli/HPC report forms. One hundred sixty valid submissions accession exactly once. Forty predetermined defects stay on HOLD with no worksheet or report.</p>
+<p class="truth"><strong>Truth boundary:</strong> synthetic fixtures only. This is not a production LIMS, TCEQ decision, or readiness claim. Adapters are simulated/read-only. A named human reviewer is required to release a report. No outreach. PRE-SALE TRANSPORT: NONE. cash_usd=0. Open door; no login.</p>
+
+<section class="card">
+<h2>Frozen acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>Required result</th></tr></thead>
+<tbody>
+<tr><td>Input</td><td>200 synthetic submissions</td></tr>
+<tr><td>ACCESSIONED / HOLD</td><td>160 / 40</td></tr>
+<tr><td>Holds</td><td>8 missing account/PWS · 8 absent custody · 6 expired bottle · 8 temperature/hold-time · 5 duplicate sample ID · 5 mismatched report form</td></tr>
+<tr><td>Held output</td><td>0 worksheets · 0 reports · 0 releases</td></tr>
+<tr><td>Replay</td><td>0 additions</td></tr>
+<tr><td>Release</td><td>named human reviewer only</td></tr>
+</tbody>
+</table>
+<p class="small">Official command: <code>python test_denton_bacteriology_acceptance_reporting_lims.py</code><br>Engine: <code>python denton_bacteriology_acceptance_reporting_lims.py</code></p>
+</section>
+
+<section class="card">
+<h2>Contract window <span id="state" class="state">NOT LOADED</span></h2>
+<p><button id="load" type="button">Load checked-in contract</button></p>
+<pre id="output">Load the reserved contract.json and confirm this remains synthetic / HOLD / BUILD-AND-VERIFY.</pre>
+
+</section>
+</main>
+<script>
+(() => {
+  const state = document.getElementById("state");
+  const output = document.getElementById("output");
+  document.getElementById("load").addEventListener("click", async () => {
+    state.textContent = "READING";
+    try {
+      const response = await fetch("./revenue/denton_bacteriology_acceptance_reporting_lims/contract.json", {cache:"no-store"});
+      if (!response.ok) throw new Error("contract HTTP " + response.status);
+      const value = await response.json();
+      const failures = [];
+      if (value.demand_id !== "denton-bacteriology-acceptance-reporting-lims-01") failures.push("demand_id");
+      if (value.state !== "HOLD / BUILD-AND-VERIFY") failures.push("state");
+      if (value.synthetic !== true) failures.push("synthetic");
+      if (value.live_lims !== false) failures.push("live_lims");
+      if (value.official_test !== "python test_denton_bacteriology_acceptance_reporting_lims.py") failures.push("official_test");
+      state.textContent = failures.length ? "FAIL" : "PASS";
+      output.textContent = JSON.stringify({ok: !failures.length, failures, contract: value}, null, 2);
+    } catch (error) {
+      state.textContent = "UNKNOWN";
+      output.textContent = String(error);
+    }
+  });
+})();
+</script>
+</body>
+</html>

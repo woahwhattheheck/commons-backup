@@ -1,0 +1,180 @@
+{
+  "authority": {
+    "auto_accept": false,
+    "auto_scope_expand": false,
+    "buyer_contact": false,
+    "invoice": false,
+    "payment": false,
+    "product_vendor_recommendation": false,
+    "revenue": false,
+    "scheduling": false,
+    "submission": false,
+    "travel": false
+  },
+  "baseline": {
+    "currency": "USD",
+    "dimensions": [
+      "software",
+      "security",
+      "deployment",
+      "ai_readiness"
+    ],
+    "groups": [
+      "ESS",
+      "RIS",
+      "IAM"
+    ],
+    "rfq_id": "18649",
+    "roles": {
+      "principal": "prime",
+      "specialist": "subcontract"
+    },
+    "status": "PROPOSED_NOT_ACCEPTED",
+    "travel_treatment": "excluded_from_base",
+    "workshare_base_usd": 24000,
+    "workshare_option_usd": 4000
+  },
+  "case": {
+    "artifact": {
+      "after": "IAM / security: HOLD \u2014 SRC-031 newly supplied (synthetic fixture POL-IAM-MFA-v3 excerpt) is registered but not yet digest-bound or currentness-compiled. Unknown/new evidence is not promoted to a supported state.\nRegister: SRC-031 kind=policy owner=prime currentness=uncompiled digest=UNKNOWN.",
+      "after_state": "hold",
+      "before": "IAM / security: HOLD \u2014 no authorized MFA policy in the evidence register.\nRegister: (no SRC for IAM MFA policy).",
+      "before_state": "hold",
+      "cell": "IAM/security",
+      "id": "IAM-SEC-HOLD",
+      "phase": "draft",
+      "technical_conclusion_changed": false
+    },
+    "commercial_triggers_preserved": true,
+    "disposition": "EVIDENCE_DEPENDENCY_HOLD",
+    "effort": {
+      "class": "in_base_evidence_processing",
+      "hours_hypothetical": 2,
+      "label": "HYPOTHETICAL / NOT ACCEPTED",
+      "usd_incremental": 0
+    },
+    "id": "CASE-03",
+    "payment_effect": "NONE_SECTION_2_UNCHANGED",
+    "rationale": "Section 5.2.3 forbids silently promoting missing or untrusted evidence to a supported state. Section 3 requires blocked items to be identified rather than fabricated. The new bytes are recorded as a dependency. This is not new AIS-group scope and does not rewrite the draft delivery trigger in Section 2. If a material new evidence universe arrived after an accepted final generation, that would be Section 7 change-control instead.",
+    "request": {
+      "class": "newly_supplied_evidence",
+      "exact_edit": "Add SRC-031 to the register as newly supplied, unauthorized-for-promotion until digest/currentness compile. Keep IAM-SEC cell HOLD. Do not promote unknown evidence.",
+      "from": "prospective_prime",
+      "summary": "Prime forwards a synthetic IAM MFA policy excerpt after the draft packet, asking that the IAM/security HOLD be flipped to supported."
+    },
+    "schema": "uiowa-139-scope-cases/1",
+    "source_clauses": [
+      "S5_2_3_NO_PROMOTE",
+      "S3_NO_FABRICATE",
+      "S5_2_6_COMMENTS",
+      "S2_TRIGGERS"
+    ],
+    "title": "Newly supplied evidence during draft review"
+  },
+  "clauses": [
+    {
+      "key": "S5_2_3_NO_PROMOTE",
+      "rule": "Missing, stale, conflicting, or untrusted evidence is visibly bounded and cannot silently promote a cell to a supported state.",
+      "section": "5.2.3",
+      "title": "No silent promotion"
+    },
+    {
+      "key": "S3_NO_FABRICATE",
+      "rule": "Blocked items are identified; unavailable inputs are not fabricated.",
+      "section": "3",
+      "title": "Schedule boundary"
+    },
+    {
+      "key": "S5_2_6_COMMENTS",
+      "rule": "Comments that correct TJLabs artifact nonconformance are incorporated; comments that require prime judgment, new evidence, or scope change are recorded as bounded open items.",
+      "section": "5.2.6",
+      "title": "Prime review comments"
+    },
+    {
+      "key": "S2_TRIGGERS",
+      "rule": "Kickoff is written-authorization triggered; draft is delivery triggered; only the final base milestone is acceptance-triggered. Artifact cure does not rewrite those triggers.",
+      "section": "2",
+      "title": "Commercial milestones"
+    }
+  ],
+  "disposition_spec": {
+    "authority": {
+      "auto_accept": false,
+      "auto_scope_expand": false,
+      "buyer_contact": false,
+      "invoice": false,
+      "payment": false,
+      "product_vendor_recommendation": false,
+      "revenue": false,
+      "scheduling": false,
+      "submission": false,
+      "travel": false
+    },
+    "code": "EVIDENCE_DEPENDENCY_HOLD",
+    "defect": false,
+    "kind": "evidence",
+    "new_scope": false,
+    "payment_effect": "NONE_SECTION_2_UNCHANGED",
+    "section_2": [
+      {
+        "acceptance_triggered": false,
+        "amount_usd": 9600,
+        "milestone": "kickoff",
+        "share_pct": 40,
+        "trigger": "written_authorization"
+      },
+      {
+        "acceptance_triggered": false,
+        "amount_usd": 9600,
+        "milestone": "draft_technical_work_package",
+        "share_pct": 40,
+        "trigger": "delivery"
+      },
+      {
+        "acceptance_triggered": true,
+        "amount_usd": 4800,
+        "milestone": "final_technical_work_package",
+        "share_pct": 20,
+        "trigger": "acceptance"
+      }
+    ],
+    "summary": "New or unknown evidence is registered; cells stay HOLD until compiled. Unknown is not promoted."
+  },
+  "exhibit": {
+    "blob": "48465060fff1402af966871352e894686fffe05e",
+    "path": "revenue/uiowa_rfq_18649_workshare/ACCEPTANCE_EXHIBIT.md"
+  },
+  "notes": [
+    "$24000 is TJLabs subcontract workshare, not the prime all-inclusive bid fee.",
+    "Artifact cure is not a payment trigger rewrite (Section 2).",
+    "Unknown evidence is never promoted to a supported state.",
+    "Technical disagreement is not automatically a defect.",
+    "New work is proposed, not silently added.",
+    "Effort figures are HYPOTHETICAL / NOT ACCEPTED.",
+    "This packet is not an invoice, acceptance, submission, or schedule."
+  ],
+  "schema": "uiowa-139-scope-cases/1",
+  "section_2_triggers": [
+    {
+      "acceptance_triggered": false,
+      "amount_usd": 9600,
+      "milestone": "kickoff",
+      "share_pct": 40,
+      "trigger": "written_authorization"
+    },
+    {
+      "acceptance_triggered": false,
+      "amount_usd": 9600,
+      "milestone": "draft_technical_work_package",
+      "share_pct": 40,
+      "trigger": "delivery"
+    },
+    {
+      "acceptance_triggered": true,
+      "amount_usd": 4800,
+      "milestone": "final_technical_work_package",
+      "share_pct": 20,
+      "trigger": "acceptance"
+    }
+  ]
+}

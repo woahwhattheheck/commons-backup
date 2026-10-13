@@ -1,0 +1,29 @@
+name: fort-worth-ai-ivr-validation
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/fort_worth_ai_ivr_validation/**'
+      - '.github/workflows/fort-worth-ai-ivr-validation.yml'
+  push:
+    paths:
+      - 'revenue/fort_worth_ai_ivr_validation/**'
+      - '.github/workflows/fort-worth-ai-ivr-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/fort_worth_ai_ivr_validation/*.py
+      - run: python -m unittest -v revenue.fort_worth_ai_ivr_validation.test_core
+      - run: python -O -m unittest -v revenue.fort_worth_ai_ivr_validation.test_core

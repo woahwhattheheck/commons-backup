@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "base_config": {
+    "consumer": "frozen", "seed": true, "funding": true,
+    "terminal_route": false, "committed": true,
+    "budget_seconds": 1.0, "reserve_seconds": 0.01,
+    "terminal_history": false, "redundant_hire": true,
+    "fourth_quadrant": false, "market_pressure": true,
+    "committed_seed_retry": false, "operating_stock": true,
+    "idle_fertilizer": true, "crop_release": true, "early_capital": true
+  },
+  "features": ["seed", "funding", "terminal_route", "committed", "terminal_history", "redundant_hire", "fourth_quadrant", "market_pressure", "committed_seed_retry", "operating_stock", "idle_fertilizer", "crop_release", "early_capital"],
+  "requires": [],
+  "excludes": [["terminal_route", "redundant_hire"], ["terminal_route", "fourth_quadrant"], ["terminal_route", "idle_fertilizer"], ["terminal_route", "crop_release"]],
+  "fixed": {"terminal_history": false},
+  "provenance": {
+    "config_path": "revenue/kaggriculture/cloud-execution-lab/TITAN-CONFIG.json",
+    "config_git_blob": "3a3bef83899d3010fad623b628d9e95d9978111b",
+    "runtime_path": "revenue/kaggriculture/cloud-execution-lab/titan_runtime.py",
+    "runtime_git_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+    "constraint_source": "Features.__post_init__, lines 73-85; frozen consumer and absent history_hypotheses retained",
+    "scope": "Current production ABI composition exercise, NOT legacy r04 donor flags. Declarative constructor legality only; no economic or gameplay-safety claim. Runner must verify source artifacts independently."
+  }
+}

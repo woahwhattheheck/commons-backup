@@ -1,0 +1,354 @@
+{
+ "schema": "titan-v4-composition/v1",
+ "mode": "fail_closed",
+ "canonical_branch": "main",
+ "canonical_root": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+ "purpose": "Order authenticated current-ABI transforms for the sole V4 workspace; never infer runtime promotion from custody.",
+ "components": [
+  {
+   "id": "fast-tape-clone-current-runtime",
+   "state": "compose",
+   "package": "repairs/performance/fast-tape-clone",
+   "entrypoints": [
+    "repairs/performance/fast-tape-clone/port_current_runtime.py"
+   ],
+   "transforms": [
+    {
+     "surface": "titan_runtime.py::TitanAgent.act:selected-action-checkpoint",
+     "input_identity": "git-blob:6d9720f4aa1e6b46e92ee5183897074d8e9ea5a0",
+     "output_identity": "git-blob:6472260d9aa82f1d6e4008afb24a2645bfb1226c"
+    }
+   ],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Current-ABI adapter is authenticated and component-tested; #12940 proves the REBIND-compatible live edge, feature remains default-OFF, and composable does not mean production-promoted."
+  },
+  {
+   "id": "funding-capacity-stack",
+   "state": "compose",
+   "package": "repairs/performance/funding-replay",
+   "entrypoints": [
+    "repairs/performance/funding-replay/apply_town_funding.py",
+    "repairs/runtime/joint-unit-projection/compose.py",
+    "repairs/performance/funding-replay/apply_funding_replay.py",
+    "repairs/performance/funding-replay/compose_funding_capacity.py"
+   ],
+   "source_order": [
+    "repairs/performance/funding-replay/apply_town_funding.py",
+    "repairs/runtime/joint-unit-projection/compose.py",
+    "repairs/performance/funding-replay/apply_funding_replay.py",
+    "repairs/performance/funding-replay/compose_funding_capacity.py"
+   ],
+   "members": [
+    "TOWNPATH",
+    "UNITFLOW",
+    "FUNDING-PERF",
+    "CAPTRACE"
+   ],
+   "foundation": {
+    "artifact_id": 10175943272,
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9"
+   },
+   "receipt": "repairs/performance/funding-replay/CAPACITY-VALIDATION.json",
+   "transforms": [
+    {
+     "surface": "scheduler.py",
+     "input_identity": "git-blob:a483b24dd72b580d7d8811636b54d2d44f391575",
+     "output_identity": "git-blob:eb289f87adebb7dc7e90046bfbec31a307cb5aaa"
+    },
+    {
+     "surface": "frozen_selected.py",
+     "input_identity": "git-blob:fc7baf5c179818a55037f6a61d92984d81d1a21c",
+     "output_identity": "git-blob:ef090f6731c2d1ee648e2caaf3e215641b006518"
+    }
+   ],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Exact aggregate edge for the receipt-proved TOWNPATH -> UNITFLOW -> FUNDING-PERF -> CAPTRACE chain. The full-peer frozen preimage immediately before CAPTRACE is git-blob:3115465b57d79100106cf061655d0110383e271a; this aggregate remains foundation-bound and does not certify newer source HEAD or production promotion."
+  },
+  {
+   "id": "scoped-construction",
+   "state": "compose",
+   "package": "repairs/performance",
+   "entrypoints": [
+    "repairs/performance/compose_scoped_constructor.py"
+   ],
+   "receipt": "repairs/performance/SCOPED-CONSTRUCTION.json",
+   "composition_receipt": "repairs/tooling/composition-graph/LOOM-4-MATERIALIZATION.json",
+   "foundation": {
+    "artifact_id": 10175943272,
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9"
+   },
+   "standalone_receipt_edges": [
+    {
+     "surface": "selected_sell_core.py",
+     "input_identity": "git-blob:f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+     "output_identity": "git-blob:33ef376f10bed223a364a6bc6fbfa3b2419e1701"
+    },
+    {
+     "surface": "scheduler.py",
+     "input_identity": "git-blob:a483b24dd72b580d7d8811636b54d2d44f391575",
+     "output_identity": "git-blob:fce7153200abd35aa692192ec658ed07b6905bc2"
+    },
+    {
+     "surface": "WEAVE-four-component-stack",
+     "input_identity": "git-blob:16dde00627effa5d0ae4d73a8e05a295e9534e1f",
+     "output_identity": "git-blob:db9e9ec033c01902b585343224a58f036199ebc2"
+    }
+   ],
+   "transforms": [
+    {
+     "surface": "scheduler.py",
+     "input_identity": "git-blob:eb289f87adebb7dc7e90046bfbec31a307cb5aaa",
+     "output_identity": "git-blob:b29d1e9887f517506c5b3d858baa9bda5848e73f"
+    },
+    {
+     "surface": "selected_sell_core.py",
+     "input_identity": "git-blob:f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+     "output_identity": "git-blob:33ef376f10bed223a364a6bc6fbfa3b2419e1701"
+    }
+   ],
+   "requires": [
+    "funding-capacity-stack"
+   ],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "LOOM-4 combined materialization reproduced the published standalone receipt, preserved unrelated CAPTRACE/UNITFLOW bytes reversibly, and authenticated the post-CAPTRACE scheduler edge. Combined focused runtime gate passed 50/50 normal and 50/50 optimized. Source-only composition; not production promotion."
+  },
+  {
+   "id": "projection-state-clone",
+   "state": "compose",
+   "package": "repairs/performance/projection-state-clone",
+   "entrypoints": [
+    "repairs/performance/projection-state-clone/compose.py"
+   ],
+   "receipt": "repairs/performance/projection-state-clone/VALIDATION.json",
+   "composition_receipt": "repairs/tooling/composition-graph/LOOM-4-MATERIALIZATION.json",
+   "foundation": {
+    "artifact_id": 10175943272,
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "unitflow_dependency_blob": "e1127c4aad842278a9e617903b0718d21c00f348"
+   },
+   "published_postimages": [
+    {
+     "surface": "frozen_selected.py",
+     "output_identity": "git-blob:ec173cd30557f5ca0b708610b526a3169e9524d2",
+     "sha256": "9406beee7d2b4687682c74fef1e507b57a728e4f63ebf534fd7cc541230d6a61"
+    },
+    {
+     "surface": "early_capital.py",
+     "output_identity": "git-blob:460355e30349de19f7e51f8b7c30e2751c18c6f9",
+     "sha256": "8a8fff6a6bcae5ba7fdf64c5cfb348b60ba94f32314ab756e142b5e9302adca4"
+    },
+    {
+     "surface": "projection_clone.py",
+     "output_identity": "git-blob:cf2cd8913bd990469ebf2e5733eee28c6af569ea",
+     "sha256": "f5916d47e01d37d848047930b397003632b98042a53dfc6c027dd85c7ef1c87e"
+    }
+   ],
+   "method_preimage_sha256": {
+    "represented_shed_event_native": "5f3b2f66cf77ce177d951aa0dec3acff5d9cb4c5530f5ece27ab1f733373e9b7",
+    "represented_shed_event_unitflow": "81e8710927a6af2f1306ab6acfcf181963451aef62182a044d32d5b5f9119b1c",
+    "early_capital_project_post_unit_private": "2c0e9143e7e05fddcd267059fa060c5c424f0abac3c8a6fd76f34915cbec1196"
+   },
+   "transforms": [
+    {
+     "surface": "frozen_selected.py",
+     "input_identity": "git-blob:ef090f6731c2d1ee648e2caaf3e215641b006518",
+     "output_identity": "git-blob:4a5d3d5f4bed04acf73c7339e41fed56badf34c9"
+    },
+    {
+     "surface": "early_capital.py",
+     "input_identity": "git-blob:1161859ac5af617eca65aec3f732b5c1396cad37",
+     "output_identity": "git-blob:460355e30349de19f7e51f8b7c30e2751c18c6f9"
+    }
+   ],
+   "requires": [
+    "funding-capacity-stack"
+   ],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "LOOM-4 combined materialization reproduced the exact CAPTRACE frozen postimage first, then LIVEPATH accepted the authenticated UNITFLOW method preimage and produced exact whole-file before/after identities. Combined focused runtime gate passed 50/50 normal and 50/50 optimized. Source-only composition; not production promotion."
+  },
+  {
+   "id": "h3s420-sale-window",
+   "state": "compose",
+   "package": "research/sale-window-engagement",
+   "entrypoints": [
+    "research/sale-window-engagement/compose_current_h3s420.py"
+   ],
+   "receipt": "research/sale-window-engagement/H3S420-LOOM-MATERIALIZATION.json",
+   "transforms": [
+    {
+     "surface": "frozen_selected.py",
+     "input_identity": "git-blob:4a5d3d5f4bed04acf73c7339e41fed56badf34c9",
+     "output_identity": "git-blob:712f7334288951bdc5b8dd2a1aa1d7f985cd50dc"
+    }
+   ],
+   "requires": [
+    "projection-state-clone",
+    "scoped-construction"
+   ],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Default-OFF source composition only. Same-tree scheduler remains git-blob:b29d1e9887f517506c5b3d858baa9bda5848e73f; #12896 HOLD economics remain separate and this edge is not runtime promotion."
+  },
+  {
+   "id": "v218-native-movement-equivalence",
+   "state": "evidence_only",
+   "package": "repairs/gameplay/v218-legal-movement",
+   "entrypoints": [
+    "repairs/gameplay/v218-legal-movement/check_current_native_binding.py"
+   ],
+   "receipt": "repairs/gameplay/v218-legal-movement/NATIVE-SEMANTIC-EQUIVALENCE.json",
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Current native already carries the V218 LOCKED-transit and all-four-shed-corners semantics on the actually-called frozen/Arlene/SpatialTempo path. This is authenticated semantic evidence, not a transform: no donor router, identity postimage, feature key, or runtime promotion is implied. Runtime gates must still execute the merged checker against the exact mounted current package."
+  },
+  {
+   "id": "d4-strawberry-timing",
+   "state": "blocked",
+   "reason": "Merged closure #12852 proves natural D4 engagement on the authenticated b567 baseline but complete returned-action/state hashes and terminal outcomes remain exact identity; there is no output-changing current one-stack postimage to compose.",
+   "package": "research/d4-strawberry-timing",
+   "entrypoints": [
+    "research/d4-strawberry-timing/build_native_d4.py"
+   ],
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "REACHABLE_BUT_OUTPUT_INERT per #12852 / commit 209a6a8293218c47fa77661ed22b0e08eb7b5bc7: seven natural ON180 cells reached step409->due427 for 4 STRAWBERRY units with one d4_extension each, yet action/state hashes, terminal banks and margin stayed identical. Reopen only if the sole graph/postimage assembler publishes an authenticated current one-stack postimage with an output-changing natural D4 witness."
+  },
+  {
+   "id": "row-shed-sell-order",
+   "state": "blocked",
+   "reason": "Current-ABI source component is landed, but no authenticated materialized runtime postimage/composer output is pinned; official-engine/full-game activation gate also remains required.",
+   "package": "repairs/gameplay/row-shed-sell-order",
+   "entrypoints": [
+    "repairs/gameplay/row-shed-sell-order/row_shed_sell_order.py"
+   ],
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "STRATUM semantics remain authoritative; LOOM only records that source custody is not yet a composable runtime edge."
+  },
+  {
+   "id": "ghost-plant-admission",
+   "state": "blocked",
+   "reason": "Source/engine repair is certified, but the landed native census found zero natural activations and no authenticated current-runtime returned-action postimage/composer edge is pinned.",
+   "package": "repairs/gameplay/ghost-plant-admission",
+   "entrypoints": [
+    "repairs/gameplay/ghost-plant-admission/ghost_plant_admission.py"
+   ],
+   "receipt": "repairs/gameplay/ghost-plant-admission/VALIDATION.json",
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "SEEDGHOST remains default-OFF/COLD. Registration makes the merged package visible to the sole composition/custody control plane without authorizing runtime wiring. Reopen only after current natural engagement and a sanctioned returned-action boundary prove a materializable edge."
+  },
+  {
+   "id": "redundant-hire-two-seat-laborflow",
+   "state": "blocked",
+   "reason": "The two-seat fail-close repair and LABORFLOW source composer are landed, but no authenticated current-runtime postimage/production-source edge or current-native two-seat economics are pinned.",
+   "package": "repairs/gameplay/redundant-hire-two-seat",
+   "entrypoints": [
+    "repairs/gameplay/redundant-hire-two-seat/repair_redundant_hire_two_seat.py",
+    "repairs/gameplay/redundant-hire-two-seat/compose_laborflow_multi_detour.py"
+   ],
+   "receipt": "repairs/gameplay/redundant-hire-two-seat/MANIFEST.json",
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Custody only: preserve the converged redundant-HIRE family and its contiguous-prefix productive-detour extension without authorizing runtime application. Current-native two-seat economics and a sanctioned postimage remain separate gates."
+  },
+  {
+   "id": "r04-defensive-guards",
+   "state": "blocked",
+   "reason": "Canonical source/test custody is landed under repairs/gameplay/defensive-guard and the raw-payload blocker is closed. Runtime promotion remains blocked: current-runtime wiring, exact returned-action activation, EOD-rescue ablation, and economics are still required.",
+   "package": "repairs/gameplay/defensive-guard",
+   "entrypoints": [
+    "repairs/gameplay/defensive-guard/r04_defensive_guards.py"
+   ],
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Canonical source blob b1fc775ecaf608ca40d01945ec82ae8372ee988b and focused-test blob 07785fa53d56444f764af9af4d7cb906bd39ba7d. The race-created repairs/gameplay/r04-defensive-guards copy is a superseded mirror/evidence-only carrier. Harvestable scope remains numeric sanitization plus PLANT overdemand; broad EOD autodrop stays quarantined pending ablation and CARE stripping remains rejected."
+  },
+  {
+   "id": "r04-exec-pace",
+   "state": "blocked",
+   "reason": "Landed source component: direction-conditional execution pacing, gated +$63 +/- $7 over 16 hardened cells (14+/0-/2=, GATED-PASS), default-OFF stacked key R04_EXEC_PACE. Not yet runtime-promoted: r04_full_router wiring (R04_EXEC_PACE global, install(exec_pace=...), reserve_sales/evening-flush seams), titan_runtime.Features.r04_exec_pace, and TITAN-CONFIG.json key remain to be composed and gated on the current runtime.",
+   "package": "repairs/gameplay/exec-pace",
+   "entrypoints": [
+    "repairs/gameplay/exec-pace/r04_exec_pace.py"
+   ],
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Microstructure lane from #13158 under tip package repairs/gameplay/exec-pace (not a remint of the module). Caps applied BEFORE debt recording (leak-free by construction); pacing stops at END_STEP 690. Module fail-closed, stdlib-only; flag-off action path byte-identical to the unkeyed route. COMPOSITION registry only."
+  },
+  {
+   "id": "e13-future-sale-solvency",
+   "state": "blocked",
+   "reason": "Current-ABI source is landed (status current_abi_source_real_action_unmeasured) but returned-action activation, gameplay strength, and production promotion remain false. Discovery finds port_current_runtime.py; without this registry row TITAN V4 cross-ledger coherence fails closed on unregistered_entrypoint.",
+   "package": "repairs/gameplay/e13-future-sale-solvency",
+   "entrypoints": [
+    "repairs/gameplay/e13-future-sale-solvency/port_current_runtime.py"
+   ],
+   "receipt": "repairs/gameplay/e13-future-sale-solvency/MANIFEST.json",
+   "transforms": [],
+   "requires": [],
+   "before": [],
+   "after": [],
+   "conflicts": [],
+   "note": "Custody only. Method-scoped authenticated transform on frozen_selected.py::funded_minimum_now. Default-OFF. Reopen only after composition plus a fresh one-tree returned-action activation receipt and economic gate. Source PRs include #12037 / #12877."
+  }
+ ],
+ "discovery": {
+  "roots": [
+   "repairs",
+   "research"
+  ],
+  "patterns": [
+   "port_current_runtime.py",
+   "build_native_d4.py",
+   "row_shed_sell_order.py",
+   "repairs/performance/funding-replay/apply_town_funding.py",
+   "repairs/runtime/joint-unit-projection/compose.py",
+   "repairs/performance/funding-replay/apply_funding_replay.py",
+   "repairs/performance/funding-replay/compose_funding_capacity.py",
+   "repairs/performance/compose_scoped_constructor.py",
+   "repairs/performance/projection-state-clone/compose.py",
+   "research/sale-window-engagement/compose_current_h3s420.py",
+   "repairs/gameplay/v218-legal-movement/check_current_native_binding.py",
+   "repairs/gameplay/ghost-plant-admission/ghost_plant_admission.py",
+   "repairs/gameplay/redundant-hire-two-seat/repair_redundant_hire_two_seat.py",
+   "repairs/gameplay/redundant-hire-two-seat/compose_laborflow_multi_detour.py",
+   "repairs/gameplay/defensive-guard/r04_defensive_guards.py",
+   "repairs/gameplay/exec-pace/r04_exec_pace.py"
+  ],
+  "strict": true,
+  "ignore": []
+ }
+}

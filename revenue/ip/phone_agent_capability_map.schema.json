@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/phone_agent_capability_map.schema.json",
+  "title": "Commons Phone-Agent Capability Map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "assessed_at",
+    "scope",
+    "comparison_boundary",
+    "commercial_use",
+    "truth",
+    "dimensions",
+    "systems"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-phone-agent-capability-map/v1"},
+    "kind": {"const": "PHONE_AGENT_CAPABILITY_MAP"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "generated_from_main": {"$ref": "#/$defs/git_sha"},
+    "assessed_at": {"const": "2026-08-26"},
+    "scope": {"type": "string", "minLength": 1},
+    "comparison_boundary": {"type": "string", "minLength": 1},
+    "commercial_use": {"type": "string", "minLength": 1},
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benchmark_performed",
+        "win_claimed",
+        "external_deployment_verified",
+        "buyer_interest_verified",
+        "cash_received"
+      ],
+      "properties": {
+        "benchmark_performed": {"const": false},
+        "win_claimed": {"const": false},
+        "external_deployment_verified": {"const": false},
+        "buyer_interest_verified": {"const": false},
+        "cash_received": {"const": false}
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "interruption",
+          "latency",
+          "tool_use",
+          "recovery",
+          "receipts",
+          "deployment_boundary",
+          "data_handling"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 7,
+      "maxItems": 7
+    },
+    "systems": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/system"}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "url", "source_date", "observed_at", "path", "blob_sha", "evidence_phrase"],
+      "properties": {
+        "kind": {"enum": ["COMMONS_GIT", "PROVIDER_PRIMARY", "NONE"]},
+        "url": {"type": "string"},
+        "source_date": {"type": "string", "pattern": "^(UNKNOWN|[0-9]{4}-[0-9]{2}-[0-9]{2})$"},
+        "observed_at": {"const": "2026-08-26"},
+        "path": {"type": "string"},
+        "blob_sha": {"type": "string", "pattern": "^$|^[0-9a-f]{40}$"},
+        "evidence_phrase": {"type": "string"}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "statement", "limitations", "source"],
+      "properties": {
+        "status": {"enum": ["MEASURED", "SOURCE_DOCUMENTED", "UNKNOWN"]},
+        "statement": {"type": "string", "minLength": 1},
+        "limitations": {"type": "string", "minLength": 1},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interruption", "latency", "tool_use", "recovery", "receipts", "deployment_boundary", "data_handling"],
+      "properties": {
+        "interruption": {"$ref": "#/$defs/claim"},
+        "latency": {"$ref": "#/$defs/claim"},
+        "tool_use": {"$ref": "#/$defs/claim"},
+        "recovery": {"$ref": "#/$defs/claim"},
+        "receipts": {"$ref": "#/$defs/claim"},
+        "deployment_boundary": {"$ref": "#/$defs/claim"},
+        "data_handling": {"$ref": "#/$defs/claim"}
+      }
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "provider", "offering", "boundary_kind", "evidence_scope", "claims"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"},
+        "provider": {"type": "string", "minLength": 1},
+        "offering": {"type": "string", "minLength": 1},
+        "boundary_kind": {"enum": ["DEVICE_CONTROL_AGENT", "REALTIME_AUDIO_API", "VOICE_AGENT_PLATFORM"]},
+        "evidence_scope": {"type": "string", "minLength": 1},
+        "claims": {"$ref": "#/$defs/claims"}
+      }
+    }
+  }
+}

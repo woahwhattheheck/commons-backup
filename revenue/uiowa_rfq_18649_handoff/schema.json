@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/woahwhattheheck/commons/revenue/uiowa_rfq_18649_handoff/schema.json",
+  "title": "UIOWA-050 development-to-operations handoff packet",
+  "description": "Structural interchange contract. Known fields have explicit types. Missing evidence and pending work remain representable for handoff.py assessment; schema validity is not semantic traceability, completeness, release approval, or evidence authenticity.",
+  "$comment": "Nested contract revision 2026-09-19. See SCHEMA_CONTRACT.md for compatibility changes, gap semantics, and independently executed conformance coverage. No remote $ref, defaults, coercion, or data mutation.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "user_facing_behavior",
+    "known_limitations",
+    "requirements",
+    "acceptance_evidence",
+    "support_readiness",
+    "documentation_updates",
+    "operational_needs",
+    "rollback_and_recovery",
+    "open_items"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "user_facing_behavior": {
+      "$ref": "#/$defs/behavior"
+    },
+    "known_limitations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/limitation"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/requirement"
+      },
+      "minItems": 1
+    },
+    "acceptance_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "support_readiness": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/support"
+      }
+    },
+    "documentation_updates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/documentation"
+      }
+    },
+    "operational_needs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/operation"
+      }
+    },
+    "rollback_and_recovery": {
+      "$ref": "#/$defs/recovery"
+    },
+    "open_items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/openItem"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "nullableText": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nonblankText": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "referenceIds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/nonblankText"
+      }
+    },
+    "readinessStatus": {
+      "anyOf": [
+        {
+          "enum": [
+            "complete",
+            "pending",
+            "deferred_with_owner"
+          ]
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\s*$"
+        }
+      ]
+    },
+    "documentationStatus": {
+      "anyOf": [
+        {
+          "enum": [
+            "updated",
+            "reviewed_no_change",
+            "pending",
+            "deferred_with_owner"
+          ]
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\s*$"
+        }
+      ]
+    },
+    "openSeverity": {
+      "anyOf": [
+        {
+          "enum": [
+            "blocking",
+            "non_blocking"
+          ]
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\s*$"
+        }
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "packet_version": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "change_id": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "change_type": {
+          "enum": [
+            "planned_release",
+            "urgent_maintenance"
+          ]
+        },
+        "service": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "group": {
+          "enum": [
+            "ESS",
+            "RIS",
+            "IAM"
+          ]
+        },
+        "summary": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "requested_behavior": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "implementation_owner_role": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "support_owner_role": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "release_trigger": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "synthetic": {
+          "type": "boolean"
+        },
+        "urgency_reason": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "packet_version",
+        "change_id",
+        "change_type",
+        "service",
+        "group",
+        "summary",
+        "requested_behavior",
+        "implementation_owner_role",
+        "support_owner_role",
+        "release_trigger",
+        "synthetic"
+      ]
+    },
+    "behavior": {
+      "type": "object",
+      "properties": {
+        "before": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "after": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "communications": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "affected_users": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/nullableText"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonblankText"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "limitation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "description": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "affected_scope": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "owner_role": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "follow_up_trigger": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "mitigation": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true
+    },
+    "requirement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "statement": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "acceptance_criteria": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "acceptance_evidence": {
+          "$ref": "#/$defs/referenceIds"
+        },
+        "support_readiness": {
+          "$ref": "#/$defs/referenceIds"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "statement",
+        "acceptance_criteria"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "kind": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "locator": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "result": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "notes": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "id"
+      ]
+    },
+    "support": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "item": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "owner_role": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "status": {
+          "$ref": "#/$defs/readinessStatus"
+        },
+        "locator": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "follow_up_trigger": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "id"
+      ]
+    },
+    "documentation": {
+      "type": "object",
+      "properties": {
+        "document": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "owner_role": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "status": {
+          "$ref": "#/$defs/documentationStatus"
+        },
+        "locator": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "follow_up_trigger": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonblankText"
+        },
+        "kind": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "need": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "owner_role": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "status": {
+          "$ref": "#/$defs/readinessStatus"
+        },
+        "verification": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "follow_up_trigger": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "id"
+      ]
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "rollback_trigger": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "rollback_method": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "data_recovery_notes": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "owner_role": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true
+    },
+    "openItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "severity": {
+          "$ref": "#/$defs/openSeverity"
+        },
+        "question": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "owner_role": {
+          "$ref": "#/$defs/nullableText"
+        },
+        "resolution_trigger": {
+          "$ref": "#/$defs/nullableText"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

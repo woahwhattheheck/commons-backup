@@ -1,0 +1,35 @@
+name: Multi-Framework Evidence Freshness
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/multi_framework_evidence_freshness/**'
+      - 'tests/test_multi_framework_evidence_freshness.py'
+      - '.github/workflows/multi-framework-evidence-freshness.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/multi_framework_evidence_freshness/**'
+      - 'tests/test_multi_framework_evidence_freshness.py'
+      - '.github/workflows/multi-framework-evidence-freshness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: python -m py_compile revenue/multi_framework_evidence_freshness/*.py tests/test_multi_framework_evidence_freshness.py
+      - name: Tests
+        run: python -m unittest -v tests.test_multi_framework_evidence_freshness
+      - name: Optimized tests
+        run: python -O -m unittest -v tests.test_multi_framework_evidence_freshness

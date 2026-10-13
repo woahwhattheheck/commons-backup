@@ -1,0 +1,125 @@
+{
+  "packet_id": "UIOWA-058-SYNTHETIC-20260919",
+  "fictional": true,
+  "guidance": [
+    {
+      "guidance_id": "GUIDE-INPUT-01",
+      "title": "Validate structured input at the service boundary",
+      "topic": "input_handling",
+      "status": "current",
+      "owner_role": "application-security-enablement",
+      "audience": ["developers", "maintainers"],
+      "decision_triggers": ["new import format", "new external integration", "changes to validation rules"],
+      "reusable_pattern": "Define an expected schema and bounds, reject malformed input predictably, and keep diagnostic context separate from user-visible output.",
+      "discoverable_locations": ["fictional engineering handbook / input patterns", "fictional starter template"],
+      "specialist_route": {"available": true, "route": "fictional AppSec office-hours queue", "when_to_use": "novel parser, ambiguous trust boundary, or repeated validation bypass"},
+      "evidence_ref": "SYNTH-GUIDE-INPUT-01-v3"
+    },
+    {
+      "guidance_id": "GUIDE-AUTHZ-01",
+      "title": "Authorize the requested resource and action, not only the signed-in identity",
+      "topic": "authorization_design",
+      "status": "current",
+      "owner_role": "identity-security-architecture",
+      "audience": ["developers", "solution architects"],
+      "decision_triggers": ["new role", "new resource type", "delegated administration", "cross-service API"],
+      "reusable_pattern": "Evaluate the caller, requested action, target resource, and relevant relationship; deny when required authorization evidence is absent.",
+      "discoverable_locations": ["fictional engineering handbook / authorization", "fictional API design checklist"],
+      "specialist_route": {"available": true, "route": "fictional IAM architecture consult", "when_to_use": "shared roles, delegated administration, or cross-domain policy"},
+      "evidence_ref": "SYNTH-GUIDE-AUTHZ-01-v2"
+    },
+    {
+      "guidance_id": "GUIDE-ERROR-01",
+      "title": "Separate user-safe error messages from internal diagnostic detail",
+      "topic": "error_handling",
+      "status": "current",
+      "owner_role": "platform-reliability-enablement",
+      "audience": ["developers", "support engineers"],
+      "decision_triggers": ["new exception path", "new external dependency", "support logging change"],
+      "reusable_pattern": "Return stable user-facing error categories with a correlation identifier; retain diagnostic detail in access-controlled operational evidence.",
+      "discoverable_locations": ["fictional service template / error handling"],
+      "specialist_route": {"available": true, "route": "fictional security/reliability design clinic", "when_to_use": "unclear sensitive-data boundary or cross-service failure semantics"},
+      "evidence_ref": "SYNTH-GUIDE-ERROR-01-v4"
+    },
+    {
+      "guidance_id": "GUIDE-INPUT-OLD",
+      "title": "Legacy input sanitization note",
+      "topic": "input_handling",
+      "status": "superseded",
+      "owner_role": "application-security-enablement",
+      "audience": ["developers"],
+      "decision_triggers": ["legacy maintenance"],
+      "reusable_pattern": "Legacy note retained for migration history only.",
+      "discoverable_locations": ["fictional archive"],
+      "specialist_route": {"available": true, "route": "fictional AppSec office-hours queue", "when_to_use": "legacy migration question"},
+      "evidence_ref": "SYNTH-GUIDE-INPUT-OLD-v1"
+    },
+    {
+      "guidance_id": "GUIDE-AUTHZ-PARTIAL",
+      "title": "Research delegation notes",
+      "topic": "authorization_design",
+      "status": "current",
+      "owner_role": null,
+      "audience": ["research systems maintainers"],
+      "decision_triggers": [],
+      "reusable_pattern": "Document delegation boundaries and resource ownership before implementation.",
+      "discoverable_locations": ["fictional RIS team notes"],
+      "specialist_route": {"available": false, "route": null, "when_to_use": null},
+      "evidence_ref": "SYNTH-RIS-AUTHZ-NOTE"
+    },
+    {
+      "guidance_id": "GUIDE-ERROR-UNKNOWN",
+      "title": "Troubleshooting error-message note",
+      "topic": "error_handling",
+      "status": "unknown",
+      "owner_role": "unknown",
+      "audience": ["support engineers"],
+      "decision_triggers": ["support escalation"],
+      "reusable_pattern": "Use a correlation identifier when escalating diagnostics.",
+      "discoverable_locations": [],
+      "specialist_route": {"available": false, "route": null, "when_to_use": null},
+      "evidence_ref": "SYNTH-UNVERIFIED-NOTE"
+    }
+  ],
+  "exercises": [
+    {
+      "exercise_id": "EX-INPUT-01",
+      "title": "Student import gains a new partner-supplied CSV field",
+      "topic": "input_handling",
+      "scenario": "A fictional ESS import receives a new optional field from an external partner. Sample files vary in encoding, field length, and row shape. The team must decide how the boundary should behave before release.",
+      "practice_goal": "Use reusable input-boundary guidance to define accepted structure, bounds, failure behavior, and support diagnostics.",
+      "guidance_refs": ["GUIDE-INPUT-01", "GUIDE-INPUT-OLD"],
+      "discussion_questions": ["Where would you look for the current pattern?", "What should be explicitly accepted or rejected?", "What evidence would show the behavior was tested?", "When would specialist input be useful?"],
+      "evidence_to_request": ["current validation guidance", "representative schema/contract", "boundary-condition tests", "review or design record"],
+      "unsafe_shortcut": "Accept any row that can be parsed and rely on downstream code to cope with unexpected structure.",
+      "reasoning_anchors": ["define expected structure and bounds", "predictable rejection path", "separate user-facing error from diagnostics", "prefer current guidance over superseded note"],
+      "specialist_trigger": "The parser or trust boundary is novel, or the team cannot determine which malformed cases must be rejected."
+    },
+    {
+      "exercise_id": "EX-AUTHZ-02",
+      "title": "Research administrator can act for several projects",
+      "topic": "authorization_design",
+      "scenario": "A fictional RIS feature adds delegated administration. A signed-in administrator may update some research projects but not others, and a shared API serves several project types.",
+      "practice_goal": "Separate authentication from authorization and make the requested action/resource relationship explicit.",
+      "guidance_refs": ["GUIDE-AUTHZ-01", "GUIDE-AUTHZ-PARTIAL"],
+      "discussion_questions": ["Which facts should the authorization decision depend on?", "Where is the reusable authorization pattern?", "How would you test cross-project boundaries?", "What ambiguity should trigger IAM/security consultation?"],
+      "evidence_to_request": ["role/resource decision model", "authorization tests", "delegation design record", "specialist consultation route"],
+      "unsafe_shortcut": "Treat possession of a broad administrator role as sufficient for every project resource.",
+      "reasoning_anchors": ["caller plus action plus target resource", "resource-scoped policy", "deny when required evidence is absent", "test permitted and non-permitted project boundaries"],
+      "specialist_trigger": "Delegation crosses organizational or policy domains, or existing role semantics do not express resource ownership clearly."
+    },
+    {
+      "exercise_id": "EX-ERROR-03",
+      "title": "Identity synchronization fails on an external dependency",
+      "topic": "error_handling",
+      "scenario": "A fictional IAM synchronization job receives an unexpected dependency response. Operators need enough detail to investigate, while end users should receive a stable supportable message.",
+      "practice_goal": "Apply reusable error-handling guidance that preserves diagnostics without exposing unnecessary internal detail.",
+      "guidance_refs": ["GUIDE-ERROR-01", "GUIDE-ERROR-UNKNOWN"],
+      "discussion_questions": ["What belongs in the user-facing response versus operational evidence?", "How should a support engineer correlate the two?", "Where is current guidance located?", "When should reliability/security specialists join the design?"],
+      "evidence_to_request": ["error-handling pattern", "sample user-safe response", "access-controlled diagnostic example", "correlation/runbook evidence"],
+      "unsafe_shortcut": "Return raw dependency exceptions directly to the caller so support has maximum detail.",
+      "reasoning_anchors": ["stable user-safe category", "correlation identifier", "diagnostic detail retained in controlled evidence", "known owner and specialist route"],
+      "specialist_trigger": "The team is unsure whether diagnostic content crosses a sensitive-data boundary or how failures propagate across services."
+    }
+  ]
+}

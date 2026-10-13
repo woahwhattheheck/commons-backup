@@ -1,0 +1,36 @@
+{
+  "id": "lexington-mrf-diversion-gate-01",
+  "version": 1,
+  "buyer": "Lexington Recycle Center / Julie Hatter",
+  "lead": {
+    "channel": "C0BTURDA3PW",
+    "ts": "1788146829.344569",
+    "route": "jhatter@lexingtonky.gov"
+  },
+  "workflow": [
+    "per-load downtime handoff",
+    "collapse duplicate load_id rows",
+    "ignore stale plant notices",
+    "city divert windows emit LANDFILL_CITY",
+    "outside-hauler hold windows emit HOLD_HAULER",
+    "open window accepts until 100t occupancy",
+    "overflow emits HOLD_CAPACITY",
+    "receipts only; zero equipment control"
+  ],
+  "acceptance": [
+    "50 input rows",
+    "collapse 10 duplicates",
+    "ignore 8 stale states",
+    "10 LANDFILL_CITY",
+    "10 HOLD_HAULER",
+    "15 ACCEPT",
+    "5 HOLD_CAPACITY",
+    "occupancy <= 100t",
+    "replay identical SHA-256"
+  ],
+  "decision_boundary": "operating-state receipts only; never equipment control, autonomous safety, send, or alert",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

@@ -1,0 +1,41 @@
+name: right-now-checkout-authority
+
+on:
+  push:
+    paths:
+      - "host/right_now_revenue.py"
+      - "revenue/right_now/**"
+      - "revenue/agent_failure_autopsy/offer.json"
+      - "agent-rescue.html"
+      - "test_right_now_checkout_authority.py"
+      - "test_right_now_execution.py"
+      - ".github/workflows/right-now-checkout-authority.yml"
+  pull_request:
+    paths:
+      - "host/right_now_revenue.py"
+      - "revenue/right_now/**"
+      - "revenue/agent_failure_autopsy/offer.json"
+      - "agent-rescue.html"
+      - "test_right_now_checkout_authority.py"
+      - "test_right_now_execution.py"
+      - ".github/workflows/right-now-checkout-authority.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  checkout-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate deterministic right-now projection
+        run: python3 host/right_now_revenue.py validate
+      - name: Run checkout-authority and composed-control tests
+        run: python3 -m unittest test_right_now_checkout_authority.py test_right_now_execution.py
+      - name: Run optimized-mode regressions
+        run: python3 -O -m unittest test_right_now_checkout_authority.py test_right_now_execution.py
+      - name: Verify Python syntax
+        run: python3 -m py_compile host/right_now_revenue.py test_right_now_checkout_authority.py test_right_now_execution.py

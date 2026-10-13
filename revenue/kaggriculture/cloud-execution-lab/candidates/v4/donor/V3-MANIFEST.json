@@ -1,0 +1,438 @@
+{
+  "schema": "titan.v3-integration.v1",
+  "operation": "titan-v3-integration-20260909-01",
+  "owner_rule": "2026-09-09: all fleet work lands in candidates/v3 as deterministic TITAN-CONFIG.json keys, not as split candidate directories. exports/titan-current.tar.gz and the Kaggle submission stay with Bryce.",
+  "base": {
+    "archive": "exports/titan-current.tar.gz",
+    "sha256": "5f6a4153e502713b9467776eafe7464af650584149173ce7507a31a1b2af60f1",
+    "bytes": 427870,
+    "files": 110,
+    "main_sha_seen": "741e7262 (Reconcile canonical TITAN package with current documentation source, 2026-09-10T19:19Z), read from main 2026-09-10; code-identical to 17f53608 (only SOURCE.json, TITAN-RELEASE.md, reference/decision/README.md differ)",
+    "note": "supersedes 17f536087b3a6baf4ae1222a051285766a3ea8c2ca5af6edc190d4f527e12b86 (main 47d3b556) and a055fd56 (main 0d82aa7c, the base of the 2026-09-09 V3 panels); the completion block carries a second diagnostics receipt after _finish_production, so the post-hook anchor ends at the _finish_production line and _v3_post_final runs before that receipt"
+  },
+  "archive": {
+    "path": "dist/titan-v3.tar.gz (build product, not committed)",
+    "sha256": "3f98599280dec218955ed4387be786c33cff070d97ef9e5ad3f7a39a74dfbbe3",
+    "bytes": 579495,
+    "files": 148
+  },
+  "releases": [
+    {
+      "version": "3.0",
+      "tree_commit": "2ff565d0efc69dbfd6bf955e6f15384f449a2d91",
+      "package": {
+        "path": "dist/titan-v3.tar.gz",
+        "sha256": "c30e5b0a4e6ff0a80ff228696251c5169e4f45eba49c39285f2015269ac12f68",
+        "files": 126
+      },
+      "submission_archive": {
+        "name": "titan-v3.tar.gz",
+        "builder": "python make_submission.py <candidates/v3> ../../exports/titan-current.tar.gz titan-v3.tar.gz 8",
+        "edit": "the package with TITAN-CONFIG.json r04_sale_window set true; nothing else changed",
+        "sha256": "a06298447704e65c7b101788dd559d3b8a1be7a5a44d5492767fb43c60bea897",
+        "bytes": 526839,
+        "files": 126
+      },
+      "config": {
+        "r04_sale_window": true,
+        "r04_sale_horizon": 8,
+        "r04_open_roundtrip": 0,
+        "r04_row_order": true,
+        "r04_evening_flush": true
+      },
+      "kaggle": {
+        "competition": "kaggriculture (competitionId 147734)",
+        "submission_id": 56159263,
+        "team_id": 16846069,
+        "submitted_utc": "2026-09-11T05:32:05.740Z",
+        "content_length": 526839,
+        "description": "TITAN V3 - R04 sale window (horizon 8, SELL row order, evening flush; opening round-trip 0). Commit 2ff565d0e, package c30e5b0a, archive sha256 a0629844."
+      },
+      "boundary": "Everything committed up to and including tree_commit is V3.0. All work after this record is V3.1."
+    },
+    {
+      "version": "3.1",
+      "tree_commit": "a90d888f03987ef0b35cfd20ec3519c6144db08a",
+      "source_branch": "claude/v31-final-20260911",
+      "package": {
+        "path": "dist/titan-v3.tar.gz",
+        "sha256": "3f98599280dec218955ed4387be786c33cff070d97ef9e5ad3f7a39a74dfbbe3",
+        "files": 148
+      },
+      "submission_archive": {
+        "name": "titan-v3.1.tar.gz",
+        "sha256": "5db3921f85efbc7596e5a1e7e198fc5f4644ceea43d8e8323c74ded7b4ba4361",
+        "bytes": 579497,
+        "files": 148
+      },
+      "kaggle": {
+        "competition": "kaggriculture (competitionId 147734)",
+        "submission_id": 56172377,
+        "team_id": 16846069,
+        "submitted_utc": "2026-09-11T20:36:50Z",
+        "content_length": 579497,
+        "description": "TITAN V3.1. Source a90d888f0, package 3f985992, archive sha256 5db3921f."
+      },
+      "boundary": "V3.1 submission 56172377 is bound to tree_commit and source_branch above. titan/v4-20260911 branches from this exact source; later commits are V4."
+    }
+  ],
+  "keys": {
+    "e11_rival_sell": {
+      "default": false,
+      "seam": "SellScheduler._v3_e11_before_pending / FrozenSelected via inherited method, before pending accounting",
+      "module": "e11_rival_sell.py"
+    },
+    "rival_model": {
+      "default": false,
+      "seam": "TitanAgent._v3_post before _finish_production",
+      "module": "rival_model.py"
+    },
+    "e20_hire_guard": {
+      "default": false,
+      "seam": "TitanAgent._v3_post before _finish_production",
+      "module": "e20_hire_guard.py"
+    },
+    "params": {
+      "rival_dump_price_drop": 15.0,
+      "rival_dump_lookback_steps": 8,
+      "e11_min_future_absorption": 2,
+      "e20_max_hires_per_day": 3,
+      "e20_min_unwatered_crops": 3,
+      "g01_early_expander_step": 144,
+      "g01_land_cash_floor": 0,
+      "r04_sale_horizon": 8,
+      "r04_open_roundtrip": 0,
+      "r04_row_order": true,
+      "r04_evening_flush": true,
+      "r04_sale_fertilizer": true,
+      "r04_cattle_early": true
+    },
+    "l01_land": {
+      "default": false,
+      "seam": "TitanAgent._v3_l01_install at the end of _initialize (patches controller.R once)",
+      "module": "l01_mechanics.py",
+      "effect": "BUY_LAND appended at tape steps 74 and 98 (150/265 kept)"
+    },
+    "l01_sheep": {
+      "default": false,
+      "seam": "TitanAgent._v3_l01_install at the end of _initialize (patches controller.R once)",
+      "module": "l01_mechanics.py",
+      "effect": "BUY_ANIMAL COW after step 1 becomes SHEEP"
+    },
+    "l01_day0buy": {
+      "default": false,
+      "seam": "TitanAgent._v3_l01_install at the end of _initialize (patches controller.R once)",
+      "module": "l01_mechanics.py",
+      "effect": "step-0 market becomes the SpaTaro basket"
+    },
+    "l01_leanplant": {
+      "default": false,
+      "seam": "TitanAgent._v3_l01_install at the end of _initialize (patches controller.R once)",
+      "module": "l01_mechanics.py",
+      "effect": "last 92 PLANT WHEAT units become PASS"
+    },
+    "l01_tranche": {
+      "default": false,
+      "seam": "TitanAgent._v3_post_final after _finish_production",
+      "module": "l01_mechanics.py",
+      "effect": "day>=28 SELL WHEAT<=57 CARROT<=32 and pack other shed products"
+    },
+    "r01_shop_router": {
+      "default": false,
+      "seam": "TitanAgent.act first line: whole-route delegate, the canonical controller is never built",
+      "module": "r01_shop_router.py, r01_tapes.py",
+      "effect": "yhay81 Shop Router 0909 base policy and its 13 tapes"
+    },
+    "r02_route_bank": {
+      "default": false,
+      "seam": "TitanAgent._v3_r02_install at the end of _initialize; _v3_r02_step inside the deadline context",
+      "module": "r02_route_bank.py, r01_tapes.py",
+      "effect": "the same tapes seated as the canonical MAIN route; TITAN keeps the market"
+    },
+    "r03_full_router": {
+      "default": false,
+      "seam": "TitanAgent.act first line: whole-route delegate, the canonical controller is never built",
+      "module": "r03_full_router.py, r01_tapes.py",
+      "effect": "complete published shop-router policy: base rules plus layers V216-V234"
+    },
+    "r04_sale_window": {
+      "default": false,
+      "seam": "TitanAgent.act first line: whole-route delegate, the canonical controller is never built",
+      "module": "r04_full_router.py, r01_tapes.py",
+      "effect": "R03 policy with the E184 sale window outermost, horizon r04_sale_horizon (default 8); opening round trip r04_open_roundtrip (default 0, the published opening); SELL row order r04_row_order (default true); evening flush r04_evening_flush (default true); FERTILIZER in the sale window r04_sale_fertilizer (default true, V3.1); V231 day-8 cattle window r04_cattle_early (default true, V3.1); takes precedence over R03 and R01"
+    },
+    "r04_kill_late_water": {
+      "default": false,
+      "seam": "r04_full_router.v3_agent between POLICY_AGENT and ROW_ORDER",
+      "module": "r04_kill_late_water.py",
+      "effect": "steps 672-718: WATER with no possible payoff becomes PASS"
+    },
+    "r04_strawberry_endgame": {
+      "default": false,
+      "seam": "r04_full_router.v3_agent between POLICY_AGENT and ROW_ORDER: applies only when installed on",
+      "module": "r04_strawberry_endgame.py, r04_full_router.py",
+      "effect": "at most r04_strawberry_max_plants (default 8) [\"PLANT\", \"WHEAT\"] orders in steps [576, 648] become [\"PLANT\", \"STRAWBERRY\"], at most 2 per step, only while strawberry seeds are held; seed-gated so it no-ops without seeds; non-WHEAT plantings and market rows untouched; watering/harvest/drop ride the crop-agnostic tape cadence"
+    },
+    "r04_strawberry_max_plants": {
+      "default": 8,
+      "seam": "r04_full_router.install strawberry_max_plants parameter, passed positionally from TitanAgent._v3_r03_act",
+      "module": "r04_strawberry_endgame.py, r04_full_router.py",
+      "effect": "total per-game cap on strawberry-endgame conversions; non-negative int"
+    },
+    "r04_no_late_sale_advance": {
+      "default": false,
+      "seam": "r04_full_router E184 agent() reservation call site via install()",
+      "module": "r04_no_late_sale_advance.py, r04_full_router.py",
+      "effect": "no future tape-planned sale is pulled forward into today's SELL rows at steps >= r04_no_late_sale_advance_step (default 648); the tape's own late SELL rows are kept; pre-threshold debts still settle (V3.1, ASTRA / GPT-5.6 SOL B10 port)"
+    },
+    "r04_no_late_sale_advance_step": {
+      "default": 648,
+      "seam": "r04_full_router E184 agent() reservation call site via install()",
+      "module": "r04_no_late_sale_advance.py, r04_full_router.py",
+      "effect": "absolute step at or above which the E184 reservation is suppressed when r04_no_late_sale_advance is on"
+    }
+  },
+  "lanes": [
+    {
+      "id": "E11",
+      "key": "e11_rival_sell",
+      "status": "integrated",
+      "lineage": [
+        "TESSERA design (Slack C0BUH19DW80)",
+        "G01 Grok Build #2 PR #11371 candidates/v3-g01-gemini-patches",
+        "ARGUS repair candidates/v3-g01-argus-safe (A2 exact future ticks, A3 pre-pending seam, A9 no rival-causation claim)"
+      ]
+    },
+    {
+      "id": "O01",
+      "key": "rival_model",
+      "status": "integrated",
+      "lineage": [
+        "TESSERA rival model",
+        "G01",
+        "ARGUS repair (A1 append-only BUY_LAND, A4 E11 owns SELLs, A8 composed before early_capital ordering)"
+      ]
+    },
+    {
+      "id": "E20",
+      "key": "e20_hire_guard",
+      "status": "integrated",
+      "lineage": [
+        "TESSERA E20",
+        "G01",
+        "ARGUS repair (A5 every excess HIRE, A6 dead branch removed)"
+      ]
+    },
+    {
+      "id": "O02",
+      "key": null,
+      "status": "callable_only",
+      "lineage": [
+        "TESSERA O02",
+        "G01",
+        "ARGUS A7: no fractional absorption; scoring-only seam pending"
+      ]
+    },
+    {
+      "id": "early_capital",
+      "key": "early_capital",
+      "status": "canonical",
+      "lineage": [
+        "canonical archive a055fd56"
+      ]
+    },
+    {
+      "id": "P07",
+      "key": "joint_actor_assignment",
+      "status": "pending",
+      "owner": "Grok Build #6"
+    },
+    {
+      "id": "T01",
+      "key": "terminal_liquidation",
+      "status": "pending",
+      "owner": "TESSERA design; any Grok"
+    },
+    {
+      "id": "T02",
+      "key": "land_unlock_timing",
+      "status": "pending",
+      "owner": "TESSERA design; any Grok"
+    },
+    {
+      "id": "T03",
+      "key": "opening_script",
+      "status": "pending",
+      "owner": "TESSERA design; any Grok"
+    },
+    {
+      "id": "T04",
+      "key": "tight_guard",
+      "status": "pending",
+      "owner": "TESSERA design; any Grok"
+    },
+    {
+      "id": "S02",
+      "key": null,
+      "status": "excluded",
+      "reason": "H=6 receding-horizon MPC lost all 4 smoke games by 88,615 mean margin (candidates/v3-s02-mpc/RESULTS.md)"
+    },
+    {
+      "id": "S11",
+      "key": null,
+      "status": "infrastructure",
+      "path": "bank/v3-adversarial"
+    },
+    {
+      "id": "S11b",
+      "key": null,
+      "status": "infrastructure",
+      "path": "bank/v3-adversarial/leader-clones (PR #11425)"
+    },
+    {
+      "id": "S12",
+      "key": null,
+      "status": "infrastructure",
+      "path": "docs/s12-leader-replays, candidates/v3-s12-replay-diag"
+    },
+    {
+      "id": "L01",
+      "key": [
+        "l01_land",
+        "l01_sheep",
+        "l01_day0buy",
+        "l01_tranche",
+        "l01_leanplant"
+      ],
+      "status": "integrated",
+      "lineage": [
+        "Grok Build #5 PR #11459 candidates/v3-l01-leader-mechanics (canonical 3b4b, same MAIN tape 7015cc00acfa4922)",
+        "V3 port 2026-09-09: flags from Features, tape patch at _initialize, tranche after _finish_production, checks/test_v3_l01.py (13 cases)"
+      ],
+      "panels": {
+        "a055 control seeds 2611061001-016 (shard V 23:20Z)": "arlene 32-0 +1630.3, apex 32-0 +8942.7, kaito_v43 30-2 +14596.8, cok_v10 32-0 +26303.1, public_bt12 32-0 +22454.7, v1_submitted 32-0 +873.9"
+      }
+    },
+    {
+      "id": "R01",
+      "key": "r01_shop_router",
+      "status": "integrated",
+      "lineage": [
+        "yhay81, Shop Router 0909 (https://www.kaggle.com/code/yhay81/shop-router-0909), Apache-2.0",
+        "13 tapes extracted from prvsiyan's lossless single-file packaging; checks/test_v3_r01.py"
+      ]
+    },
+    {
+      "id": "R02",
+      "key": "r02_route_bank",
+      "status": "integrated",
+      "lineage": [
+        "R01 tapes seated in place as the canonical MAIN route; tail replacement at steps 144 and 648",
+        "checks/test_v3_r02.py"
+      ]
+    },
+    {
+      "id": "R03",
+      "key": "r03_full_router",
+      "status": "integrated",
+      "lineage": [
+        "prvsiyan, Kaggriculture Frontier | The Soil Remembers Rain, kernel version 348803013, submission.tar.gz sha256 c06916d03be5b1f11430e453e5ce6a9dc223f9e80f4cda9e807b3797dca72b12, Apache-2.0",
+        "base policy and tapes: yhay81 Shop Router 0909; layers V216-V234: prvsiyan",
+        "module = the published main.py with its inline tape blob replaced by r01_tapes and the redundant tape deepcopy skipped (every rule only reads the tapes); checks/test_v3_r03.py"
+      ],
+      "fidelity": "against the published agent, 8 of 8 games returned identical final scores (seeds 2611151001-004, both seats)"
+    },
+    {
+      "id": "R04",
+      "key": [
+        "r04_sale_window",
+        "r04_sale_horizon",
+        "r04_open_roundtrip",
+        "r04_row_order",
+        "r04_evening_flush",
+        "r04_sale_fertilizer",
+        "r04_cattle_early",
+        "r04_kill_late_water",
+        "r04_strawberry_endgame",
+        "r04_strawberry_max_plants",
+        "r04_no_late_sale_advance",
+        "r04_no_late_sale_advance_step"
+      ],
+      "status": "integrated",
+      "lineage": [
+        "R03 policy",
+        "Dmitrii Gluzdov, E184 Sale Window, Kaggriculture Two Coins One Sheep, kernel version 348776687, submission.tar.gz sha256 d02b8e23992611fa928eba96ee0952948f672e737e5fd611712688614a077c4a, Apache-2.0",
+        "E184 appended verbatim as the outermost layer; checks/test_v3_r04.py"
+      ],
+      "panels": [
+        "protocol: pinned engine 28b6d8af (kaggle-environments 1.32.7, blob-verified) through a Windows port of checks/reference/evaluator play() (same configuration defaults, seed assignment, observation writes, JSON round trip to one agent process per seat, per-seat RNG and PYTHONHASHSEED); seeds 2611151001-008, both seats, 16 games per cell; opponents are the published Kaggle output archives (S14 public bank) and local variants named inline",
+        "r04_sale_horizon=8 (standalone composition): gluzdov_twocoins 16-0-0 +4262, gluzdov_twocoins(its sale_horizon setting 3) 16-0-0 +4365, prvsiyan_soil 16-0-0 +3453, berat_v33 16-0-0 +4113, ravi_v21mem 16-0-0 +42452, web3cainiao_v21 16-0-0 +53197, boatlee_v21 16-0-0 +26412, sokolovsky 16-0-0 +38318, tokenjunkielabs_v2 16-0-0 +7550, nusrati_2715 16-0-0 +6982, r04(horizon 3) 16-0-0 +3140, r04(horizon 4) 16-0-0 +2950, r04(horizon 6) 16-0-0 +3568",
+        "r04_sale_horizon=4 (standalone composition): gluzdov_twocoins 16-0-0 +5151, gluzdov_twocoins(its sale_horizon setting 3) 16-0-0 +4891, prvsiyan_soil 16-0-0 +4349, berat_v33 16-0-0 +5012, ravi_v21mem 16-0-0 +43400, web3cainiao_v21 16-0-0 +53745, boatlee_v21 16-0-0 +26197, sokolovsky 16-0-0 +38957, tokenjunkielabs_v2 16-0-0 +8632, nusrati_2715 16-0-0 +8059, r04(horizon 3) 16-0-0 +3620",
+        "private lineage tier: 49 recorded seats of 13 private agents that follow the public tapes (hands agreement with their best tape 458-719 of 719 steps; mtmr_s1, Yusuke Hayashi, insuperabilehart, Michael Shihong Zhang and nine others, rated about 2850-2960) from 48 hosted Kaggle episodes that the pinned engine reproduces exactly; each recorded seat plays open-loop on its own seed against the candidate in the other seat (recorded seats drift 0-3% from their recorded scores): gluzdov_twocoins 11-38, prvsiyan_soil 20-29, r04 horizon 4 24-25, horizon 6 27-22, horizon 8 32-17 (mean +3803), horizon 10 33-16, horizon 12 32-17, horizon 16 32-17",
+        "opening round trip, measured and shipped off: against the published opening a trip of n=45 takes 39 coins (the rival's early purchases start failing between 26 and 39 coins short; live 16-0, +941), but against openers that sell a lot of wheat at step 0 (ymg_aq, Gleb Tumanov) every size measured, 10-45, gives up 67-103 coins; on seed 779172307 against ymg_aq's recorded opening n=45 turned a 123,213 finish into 96,049. The step-0 action cannot depend on the rival, so that exposure is real in play",
+        "stack with opening 45 (for reference): r04(h8 + row order) 16-0-0 +940, r04(h8 + opening 45) 16-0-0 +1882, r04(h8, no row order) 16-0-0 +2892, r04(h8 + opening 60) 16-0-0 +2863, prvsiyan_soil 16-0-0 +4931, gluzdov_twocoins 16-0-0 +7113, berat_v33 16-0-0 +8251",
+        "shipped defaults (r04_sale_horizon 8, r04_row_order true, r04_evening_flush true, r04_open_roundtrip 0): r04(h8 + row order) 16-0-0 +449, prvsiyan_soil 16-0-0 +2841, gluzdov_twocoins 16-0-0 +3561; against the 49 recorded private lineage-tier seats 37-12 (35-14 without the flush, 32-17 without row order); against recorded off-tape seats outside the top six 8-5 (7-6 without the flush); against recorded top-six seats 28-6 with or without it (those seats drift about -15% from their recorded scores, so that proxy is loose)",
+        "row order without the flush: r04(h8, no row order) 16-0-0 +1882, prvsiyan_soil 16-0-0 +3778, gluzdov_twocoins 16-0-0 +4654, berat_v33 16-0-0 +4496",
+        "sale-hour evidence: the off-tape top agents place about a third of their steep-product SELL quantity at hours 0-1 and a quarter at hours 21-23; the tape lineage sells mostly at hours 16-22. A flush at hour 0 alone went 4-12 against the same stack without it, a flush at hour 23 alone 16-0 (+437), hours 21-23 16-0 (+449)",
+        "V3 tree through the TITAN entrypoint versus the standalone composition: 24 of 24 games identical at the shipped defaults; 32 of 32 with row order only; 32 of 32 with opening 45; 16 of 16 at each of horizons 3, 4 and 8",
+        "first-call setup through the TITAN entrypoint: under 0.5 s on step 0, 1-3 ms per later step (TITAN budget 1.0 s)",
+        "V3.1 pinned-leader bench (leader_pin.py / pin_batch.py): 98 recorded top-band hosted seats (48 episodes, both seats) replayed on their own seeds with each recorded seat's purchases pinned to the recording (pin_selftest.py: 49 of 49 tapes, both seats, reproduce exactly). V3.0 wins 68 of 98. Margin change against V3.0 per game: r04_sale_fertilizer +48.8 (90 better, 0 worse, 8 same); r04_cattle_early +325.4 (13 better, 4 worse, 81 same); both on +374.1 (88 better, 4 worse, 6 same).",
+        "V3.1 standalone arms (V3.0 standalone composition plus the key; 8 seeds 2611151001-008, both seats, 16 games per cell): r04_sale_fertilizer vs V3.0 15-0-1 +104, berat_v33 16-0-0 +3831, gluzdov_twocoins 16-0-0 +3663, prvsiyan_soil 16-0-0 +2942; r04_cattle_early berat_v33 16-0-0 +3730, gluzdov_twocoins 16-0-0 +3561, prvsiyan_soil 16-0-0 +2841 (its day-8 window needs a milk shop pair and opens on none of these eight seeds against these opponents)."
+      ]
+    }
+  ],
+  "panels": {
+    "protocol": "tools/v25_sims/gauntlet.py @ claude/funny-newton-33p0t1 e12becfb; opponents arlene,apex,kaito_v43,cok_v10,public_bt12,v1_submitted; both seats; engine kaggle-environments 1.32.7 28b6d8af",
+    "arms": [
+      "canonical a055 (control)",
+      "v3 all keys off (must equal control cell-for-cell)",
+      "v3 e11_rival_sell",
+      "v3 rival_model",
+      "v3 e20_hire_guard",
+      "v3 all three"
+    ],
+    "seeds": "2611091001-2611091016 first, then dev 2611001001-016, hold 2611002001-016, conf 2611003001-032 for any arm that is non-negative",
+    "results": []
+  },
+  "overlay": {
+    "b11_mirror_horizon.py": "d84894f2433edd7c71adb55ba2c1537016a42ace8c5a47a1fa93cc8dfcad044e",
+    "b5_fertilize.py": "f2d03ab19e1a233566cfc9076bd8b9843c7f8d611703578218bd73c1af0f626f",
+    "b9_terminal_fertilizer.py": "31446d29af013aa49e19590b2dcf0aa23e1a981b07f95f0d1991e71d5f77881b",
+    "checks/test_v31_astra_lanes.py": "728f8afd1e69a8d7c984762a58fefa1113c0b24404161006d96574581ac1a273",
+    "checks/test_v31_b5_fertilize.py": "101abc2fb81905bdb21925cfb8904b6ac0733e02bd3bb4d89bc439eda2439241",
+    "checks/test_v31_dribble_dump.py": "fd17a10ced453bde64bd9fa8789367c6e11eec9e225e5836cc4ab3ddf97693d8",
+    "checks/test_v31_fert_hand.py": "235f91bcbf1cb48f42d41f72654f4105e3be0cbb8e1b9e91e799722996c8f6cf",
+    "checks/test_v31_h4_strawberry.py": "7676948bc372fc27f2beb9cacfee1f329beecbf2a6c99ff9934227bdb4555a98",
+    "checks/test_v31_row_shed.py": "3fbb6be1a89be6b569af3a12509b83d3008834f0bfde6e91e41f20419b260947",
+    "checks/test_v31_shipped_keys.py": "18d8d131151a06abe4df7580853eb2ac533eff96577703612ed7f9c5d577be89",
+    "checks/test_v3_features.py": "19f8c42da93bf9d1f7db7722af80f5b6ab12c249362ddb95d9142c1c57d76e8d",
+    "checks/test_v3_l01.py": "fb3a4ecebbc37021977423dfc23cc0bb3db75eddc41dae6a9db8eb490462a589",
+    "checks/test_v3_r01.py": "5f708e0e0fa722a55652440ca88c413c0340cd771c3cd43892e10e23fb679edd",
+    "checks/test_v3_r02.py": "f8910905e259d9e1b775fc343ff192f3e0bf52772bfcb60abbbecd83acda1ddf",
+    "checks/test_v3_r03.py": "67ea6def3e34f6508ec55889f4fd9a41d1877c436fe65331e47981da487e8422",
+    "checks/test_v3_r04.py": "da4a93cce2746f226e60b97ca23c275bec01fb03b85a41769f0dd15924abea0f",
+    "checks/test_v3_r04_l3_rival_gate.py": "2e18561efaf7929f90ff2cae905a185a53aa3b13c4b3966f3826a33b82809704",
+    "checks/test_v3_r04_late_water.py": "c97206b9d5c4583dbfdc8476c77b204692f7049daa79705914f58ae0de3f7a91",
+    "checks/test_v3_r04_no_late_advance.py": "dce65a47f2ba99fb0d22c43f5230998bb04664b2c6fe1943ba9ab0a0c00d72df",
+    "checks/test_v3_r04_strawberry.py": "281aa36ff0d9f3dba33e3d41a7af7aeb74f70032ac215f67a3606a7c0f983e1c",
+    "e11_rival_sell.py": "0871703888bfd128a9118c0fd59fa6c6a7b4ce509d22d803b97255622bff4816",
+    "e20_hire_guard.py": "3d841b271bd735d4edecfc05be31753bd94f5a5fcfb37e0fea24df4eeb7372ea",
+    "h3c_goose_eod_cap_rescue.py": "582949e1ba4b2f65aa898a362929013fd9b96f8865582884c181972ffcba5fab",
+    "jit_pass_fertilize.py": "5ad6340bf31dab13aaba82bfe0b51e6cde18222155013be1e0e080f0a26242b2",
+    "l01_mechanics.py": "65fc1841f6d00b6db78e2eb88d98e9e7b05053502e0de527bce1f1a60fbe9691",
+    "r01_shop_router.py": "7729665719f8eb1faa1317f76da05ab1fe9090b675c66d4e112ab9c77900133c",
+    "r01_tapes.py": "4a60e775e52905048257aff4871a11c5ba49de6ba464177ed6ae4d9bd3120e18",
+    "r02_route_bank.py": "c7904b40a5ebc21a2728314d0603678807784339cc13e420d45218d043cdd962",
+    "r03_full_router.py": "605ae5c1b5b14a60ffdbc19a6e4d4a9691f3b2b28860c10782642a658b28b15c",
+    "r04_dribble_dump.py": "e65e0ad94de8cfc71393082dc12aa7c3ed0372599374a82c67a99e6251b95df4",
+    "r04_fert_hand.py": "c34b1c3c58f58506ed66a6d551c6df8ac03d659b4373932cf58a464b631cead0",
+    "r04_full_router.py": "41ea55c5f20c43cd58c5099fbadb212de62ec95a95dfc2e6e1e19c3d4d55b39a",
+    "r04_h4_strawberry.py": "e7069b9a1c3909fa011d806708fc91cebc7ed36da29d78f77c9ae3789a882785",
+    "r04_kill_late_water.py": "601170700110118b2d5692fb298ccc8fb3d3d3e3bab190c7113be3636f09b97d",
+    "r04_no_late_sale_advance.py": "a0abd894ae7b33477167ad8bd17df7fc1d0ebad91fbaa407b2aa9b11998ee0f7",
+    "r04_strawberry_endgame.py": "4f7abca92cb44793046524847cefab73d5fcb7d0d9a91e0d0c1434c7a7b98fea",
+    "rival_model.py": "0329fbf5d707781ed385d5bb309a89d7340271fb8368c7ef01ba52a312066f25",
+    "shop_arb.py": "135b67dd9d0ecc6cc66deabf275ac5e598054cdcf8ce1295ce666dc1860e8655",
+    "apply_v3.py": "0ea2e80a74f3ce4b7409f1ed42735945ab6b9d5040b8885ae6c585c320a464e2"
+  }
+}

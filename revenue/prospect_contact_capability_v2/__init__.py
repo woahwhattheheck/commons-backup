@@ -1,0 +1,32 @@
+"""Connector-native capability-chain prospect contact custody v2."""
+from .protocol import (
+    CustodyError,
+    bind_claim_commit,
+    bind_contacted_commit,
+    bind_release_reveal_commit,
+    bind_terminal_commit,
+    capability_commitment,
+    claim_branch,
+    claim_receipt_from_readback,
+    contacted_branch,
+    contacted_receipt_from_readback,
+    normalize_target,
+    prepare_claim,
+    prepare_contacted,
+    prepare_dispatch_terminal,
+    prepare_release_reveal,
+    prepare_release_terminal,
+    release_reveal_receipt_from_readback,
+    reveal_branch,
+    terminal_branch,
+    terminal_receipt_from_readback,
+    verify_claim_possession,
+    verify_claim_readback,
+    verify_claim_receipt,
+    verify_contacted_receipt,
+    verify_dispatch_possession,
+    verify_release_reveal_receipt,
+    verify_terminal_receipt,
+)
+
+__all__ = [name for name in globals() if not name.startswith("_")]

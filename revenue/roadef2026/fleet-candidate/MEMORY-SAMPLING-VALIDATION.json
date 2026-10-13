@@ -1,0 +1,141 @@
+{
+  "scope": "memory observations only; native matching-namespace reads plus offline procfs fixtures and actual supervisor protocol fixtures, not official solver/contest performance",
+  "python": "3.13.5",
+  "system": "Linux-6.18.35-x86_64-with-glibc2.41",
+  "base_supervisor": {
+    "bytes": 21743,
+    "git_blob": "2201b2cd345d80c5745f0d47f7ed14dea434cba7",
+    "sha256": "e132568db1a88d38380d222d84b210a823da019c644974afcb535bbade2d7d67"
+  },
+  "delivery": {
+    "test_memory_receipt.py": {
+      "bytes": 2813,
+      "git_blob": "5fca0a53776ea8d9780ec5a691c0e0cba4a554a8",
+      "sha256": "f66d487db5701ed5ad74a8cf81300961e8903ab29c6d8584b7e8bd1b1a13fc78"
+    },
+    "test_supervisor.py": {
+      "bytes": 5913,
+      "git_blob": "6b5bfd883260a91a3346fa34e8e077c2396befca",
+      "sha256": "1deb7ab76b79a609bb10120ef3e9166e0fbda29af1e533cbd15f42b850777945"
+    },
+    "supervisor.py": {
+      "bytes": 26402,
+      "git_blob": "35b70f07e6d507b026da8b1ddae9f07c1e48424b",
+      "sha256": "5be32965e166d764fd101e1ab53c057bf9b02d014bb8e4464040a68d9faf7381"
+    },
+    "MEMORY-SAMPLING.md": {
+      "bytes": 6123,
+      "git_blob": "5e5ff18db58b70d96aec43a0f44509810d2fd94a",
+      "sha256": "242977b558f0b01dd8f122342f42c3aaf4e5caa901705bd5bc31857c938341c0"
+    },
+    "test_abnormal_exit.py": {
+      "bytes": 11336,
+      "git_blob": "5a3243a8669e65bfd90766691c21156148cb4525",
+      "sha256": "c8e0be285a2a172c96ec414416a0b32d8aa49b6714936c678f483d16a960b4ba"
+    },
+    "memory-sampling.patch": {
+      "bytes": 7917,
+      "git_blob": "4716e8f09e62cab0add63c5270c4bc78fcc02ecc",
+      "sha256": "17a7524ee7cb2f47e8004e77935eafd7bda2e3caf6f4f017b9443d8cc7e1b0e0"
+    },
+    "test_memory_regressions.py": {
+      "bytes": 2909,
+      "git_blob": "a42f1c3a904e5a19eff4b4176e219615ce97542a",
+      "sha256": "861c9e58cc4ae583e246e2110a328cb3e3b7898bf54495e1052a72aa0a4aff9b"
+    },
+    "compare_checker.py": {
+      "bytes": 5546,
+      "git_blob": "b9865e824ba2aaeda31f9e2a877e6c24ba447433",
+      "sha256": "0b2d2bfbb3314ea76d1c434bf5fe2cc424ebc38d337c0f0b23a05b1a089adc9b"
+    },
+    "test_memory_sampling.py": {
+      "bytes": 10619,
+      "git_blob": "ba671805e3d23391cb7b719fb4fa9588bbb3383e",
+      "sha256": "5c75887f2405d6059d5f4e2f4aec8d756fa10208526d09b0160f8374654ed16a"
+    }
+  },
+  "function_ast": {
+    "changed_existing": [
+      "sample_rss",
+      "save_receipt"
+    ],
+    "unchanged_existing": [
+      "__init__",
+      "accept",
+      "atomic_write",
+      "begin_stop",
+      "emit",
+      "enqueue",
+      "executable",
+      "launch",
+      "main",
+      "number",
+      "poll_checker",
+      "retry_check",
+      "run",
+      "schedule_check",
+      "signal_handler",
+      "start_lanes",
+      "stop_process"
+    ],
+    "added_nested": [
+      "rss",
+      "status"
+    ]
+  },
+  "execution": {
+    "command": "python -B -m unittest -v test_memory_sampling test_memory_regressions test_memory_receipt test_supervisor test_abnormal_exit",
+    "tests": 50,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "breakdown": {
+      "sampler": 23,
+      "peak_only": 10,
+      "receipt": 2,
+      "original_supervisor": 3,
+      "joint_abnormal_exit": 12
+    }
+  },
+  "original_control": {
+    "tests": 10,
+    "failures": 7,
+    "errors": 0,
+    "test_contract": "peak-only pre-existing fields; does not require new coverage metadata"
+  },
+  "evidence": {
+    "final-joined-tests.log": {
+      "bytes": 9665,
+      "git_blob": "0416b3da4bedca0d63fc92cff4f104ad824f28ce",
+      "sha256": "2ae7a55c92f91cc9b236218e48deb1c0930602fb4094a934a69170f36c676830"
+    },
+    "original-peak-controls.log": {
+      "bytes": 6146,
+      "git_blob": "a5f3282131f9716be9c3558c82bcd15e827b77f5",
+      "sha256": "1c046925fdc94217295617e3dae5841184d229d1f54a19ca0a1bf2e38777d4c4"
+    },
+    "sampling-timing.json": {
+      "bytes": 33814,
+      "git_blob": "d254693b7129a6d0d4a5e1bf3772d23e061d56f0",
+      "sha256": "7d630dded70e34f67cde936629cb4b72539ad2c731c438f35130ba465b60510e"
+    },
+    "original_reproduction.json": {
+      "bytes": 452,
+      "git_blob": "8b1ea9061265b59c5c0aa7e2741a0badd6b82e92",
+      "sha256": "2e8c8cc5b39e20c553497072a569ee4339e59def33dab7dc3a8080a9baa72a5d"
+    }
+  },
+  "native_sampling_timing": {
+    "original": {
+      "median_of_pair_medians_us": 54.79625,
+      "max_observed_us": 385.412
+    },
+    "corrected": {
+      "median_of_pair_medians_us": 88.75925,
+      "max_observed_us": 1020.985
+    }
+  },
+  "downstream_status": "source consumer tests complete; main publication and real outer-procfs adoption are separately reported",
+  "patch_apply": "git apply on exact base reproduces final source bytes",
+  "benchmark_reproduction": "Archived script preserves measured loop; input paths relocated to baseline/ and source/."
+}

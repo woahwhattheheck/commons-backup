@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Fleet Work Order — Exactly Once</title>
+<style>
+:root{color-scheme:dark;font-family:ui-sans-serif,system-ui,sans-serif;background:#090d0b;color:#ecf7ef}
+*{box-sizing:border-box}body{max-width:72rem;margin:auto;padding:1rem 1.25rem 4rem}a{color:#8ff0b1}
+.law,.card{border:1px solid #31523a;background:#101813;border-radius:12px;padding:1rem}.law{font-weight:700}
+h1{font-size:clamp(2.2rem,7vw,5rem);line-height:.95;max-width:14ch}.lead{font-size:1.25rem;max-width:48rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1rem}.price{font:800 2rem ui-monospace,monospace}
+label{display:block;margin:.75rem 0 .25rem}input,select,textarea,button{width:100%;font:inherit;padding:.7rem;border-radius:8px;border:1px solid #45634c;background:#080c09;color:#eef7f0}
+button{cursor:pointer;background:#1f6737;font-weight:800;margin-top:.65rem}button.secondary{background:#1b2820}.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.5rem}
+.checkout-active,.buy{display:inline-block;margin:.2rem .25rem .2rem 0;border:0;border-radius:8px;padding:.7rem .9rem;background:#1f6737;color:#ecf7ef;font-weight:850;text-decoration:none}.js-checkout-slot p{margin:.4rem 0}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#050706;padding:1rem;border-radius:8px;min-height:9rem}.status{font:700 1rem ui-monospace,monospace;color:#9cf1b8}
+</style>
+</head>
+<body>
+<p class="law">PUBLIC OPEN DOOR · no login · no vehicle credentials · synthetic inputs only in this demo.</p>
+<nav><a href="./index.html">Commons</a> · <a href="mailto:tokenjunkielabs@gmail.com?subject=Fleet%20work-order%20diagnostic&amp;body=Fleet%20size%3A%0ACurrent%20inspection%20source%3A%0AWork-order%20destination%3A%0ADuplicate%20or%20restart%20failure%3A%0AOne%20redacted%20sample%20event%20(optional)%3A">email exact fleet intake</a></nav>
+<header>
+  <p>Token Junkie Labs · one bounded workflow</p>
+  <h1>One fault. One work order. Even after a crash.</h1>
+
+<p id="live-cash" class="note"><strong>Live cash</strong> — <a href="./dealer-service-lead-rescue.html">$199 dealer</a> · <a href="./referral-intake-completeness.html">$199 referral</a> · <a href="./repair-booking-preflight.html">$199 repair</a> · <a href="./plant-downtime-handoff.html">$199 plant</a>.</p>
+<p class="note"><strong>Larger fixed engagements</strong> (separate product pages; checkout/intent stays there): <a href="./diagnostic.html">GGUF diagnostic · $12,000 / 10 days</a> · <a href="./commercial.html">White Box pilot · $30,000 / 30 days</a>. Not remints of tip SKUs.</p>
+
+  <p class="lead">Replay a duplicate inspection event or stop the worker halfway through. The ledger still produces exactly one work order, exactly one escalation, and one durable closeout receipt.</p>
+  <p class="price">$199 diagnostic · one business day</p>
+  <div class="js-checkout-slot" data-sku="fleet-work-order-exactly-once"><p class="note">Loading verified $199 diagnostic checkout from the catalog…</p></div>
+  <p class="note">A click is intent, not cash. The Stripe URL is filled from catalog evidence; this page does not invent a checkout link.</p>
+  <p>$2,500 proof only after the diagnostic finds a real fit. The demo does not dispatch technicians or connect to a production fleet.</p>
+</header>
+
+<section class="grid" aria-label="Offer and acceptance">
+  <article class="card"><h2>Input</h2><p>One inspection or fault event with an id, vehicle, fault code, severity, timestamp, and optional note.</p></article>
+  <article class="card"><h2>Binary acceptance</h2><p>Duplicate event + crash/resume = one work order, one escalation, one receipt. Reused ids with different bytes are rejected.</p></article>
+  <article class="card"><h2>What lands</h2><p>Field contract, replay fixtures, exception taxonomy, run receipt, and fit verdict for one approved workflow.</p></article>
+</section>
+
+<section class="card" aria-labelledby="demo-heading">
+<h2 id="demo-heading">Working synthetic demo</h2>
+<form id="event-form">
+<div class="grid">
+  <div><label for="event-id">Event id</label><input id="event-id" value="inspection-1042" required></div>
+  <div><label for="vehicle-id">Vehicle id</label><input id="vehicle-id" value="truck-17" required></div>
+  <div><label for="fault-code">Fault code</label><input id="fault-code" value="BRAKE-PAD-LOW" required></div>
+  <div><label for="severity">Severity</label><select id="severity"><option>LOW</option><option>MEDIUM</option><option selected>HIGH</option><option>CRITICAL</option></select></div>
+  <div><label for="reported-at">Reported at</label><input id="reported-at" value="2026-08-31T00:00:00Z" required></div>
+  <div><label for="note">Note</label><input id="note" value="rear axle sensor"></div>
+</div>
+<div class="actions">
+  <button type="submit">Process once</button>
+  <button type="button" class="secondary" id="replay">Replay same event</button>
+  <button type="button" class="secondary" id="crash-prepare">Crash after prepare</button>
+  <button type="button" class="secondary" id="crash-effects">Crash after effects</button>
+  <button type="button" class="secondary" id="resume">Resume</button>
+  <button type="button" class="secondary" id="rollback">Rollback incomplete</button>
+  <button type="button" class="secondary" id="reset">Reset synthetic ledger</button>
+</div>
+</form>
+<p class="status" id="status">READY</p>
+<pre id="output" aria-live="polite"></pre>
+</section>
+
+<section class="grid">
+  <article class="card"><h2>Failure path</h2><p><strong>Crash after prepare</strong> leaves no external effect. <strong>Crash after effects</strong> persists deterministic effect ids; resume detects them and commits without duplication.</p></article>
+  <article class="card"><h2>Rollback path</h2><p>An incomplete event can remove provisional demo effects and leave a <code>ROLLED_BACK</code> audit receipt. A committed work order requires operator closeout and is never silently erased.</p></article>
+  <article class="card"><h2>Exact buyer intake</h2><p>Fleet size · inspection source · work-order destination · observed duplicate/restart failure · one redacted sample event. No credentials or production data for the diagnostic.</p></article>
+</section>
+<script src="./fleet-work-order.js"></script>
+<script>
+(function(){
+  const store=FleetWorkOrder.localStore(localStorage);
+  const $=id=>document.getElementById(id), status=$("status"), output=$("output");
+  function event(){return {event_id:$("event-id").value,vehicle_id:$("vehicle-id").value,fault_code:$("fault-code").value,severity:$("severity").value,reported_at:$("reported-at").value,note:$("note").value};}
+  function show(result){status.textContent=result.kind;output.textContent=JSON.stringify(result,null,2);}
+  function run(failAt){try{show(FleetWorkOrder.process(store,event(),failAt?{fail_at:failAt}:{}));}catch(error){status.textContent=error.message;output.textContent=JSON.stringify(store.load(),null,2);}}
+  $("event-form").addEventListener("submit",e=>{e.preventDefault();run();});
+  $("replay").onclick=()=>run(); $("crash-prepare").onclick=()=>run("after_prepare"); $("crash-effects").onclick=()=>run("after_effects"); $("resume").onclick=()=>run();
+  $("rollback").onclick=()=>show(FleetWorkOrder.rollback(store,event().event_id.trim()));
+  $("reset").onclick=()=>{store.clear();status.textContent="RESET";output.textContent=JSON.stringify(store.load(),null,2);};
+  output.textContent=JSON.stringify(store.load(),null,2);
+})();
+</script>
+<p class="note">Verified $199 checkout is filled from the catalog at the top of this page. Fallback: <a href="mailto:tokenjunkielabs@gmail.com?subject=Fleet%20work-order%20diagnostic">email exact fleet intake</a>.</p>
+<script src="./pay.js?v=20260902a"></script>
+</body>
+</html>

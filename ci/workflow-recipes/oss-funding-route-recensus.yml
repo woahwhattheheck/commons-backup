@@ -1,0 +1,38 @@
+name: OSS funding route recensus
+
+on:
+  pull_request:
+    paths:
+      - "research/oss_funding_route_recensus/**"
+      - "research/oss_sponsor_route_map/route_map.json"
+      - ".github/workflows/oss-funding-route-recensus.yml"
+  push:
+    branches: [main]
+    paths:
+      - "research/oss_funding_route_recensus/**"
+      - "research/oss_sponsor_route_map/route_map.json"
+      - ".github/workflows/oss-funding-route-recensus.yml"
+
+jobs:
+  validate:
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Hostile tests
+        run: python -m unittest -v research.oss_funding_route_recensus.test_recensus
+      - name: Optimized hostile tests
+        run: python -O -m unittest -v research.oss_funding_route_recensus.test_recensus
+      - name: Reference demo
+        run: python research/oss_funding_route_recensus/demo.py
+      - name: Syntax
+        run: >-
+          python -m py_compile
+          research/oss_funding_route_recensus/recensus.py
+          research/oss_funding_route_recensus/demo.py
+          research/oss_funding_route_recensus/test_recensus.py

@@ -1,0 +1,30 @@
+name: AIR workforce RFI preflight
+
+on:
+  pull_request:
+    paths:
+      - "opportunities/air_ai_workforce_rfi_2026/**"
+      - ".github/workflows/air-ai-workforce-rfi.yml"
+  push:
+    branches: [main]
+    paths:
+      - "opportunities/air_ai_workforce_rfi_2026/**"
+      - ".github/workflows/air-ai-workforce-rfi.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m py_compile opportunities/air_ai_workforce_rfi_2026/preflight.py opportunities/air_ai_workforce_rfi_2026/test_preflight.py
+      - run: python -B -m unittest -v opportunities.air_ai_workforce_rfi_2026.test_preflight
+      - run: python -O -B -m unittest -v opportunities.air_ai_workforce_rfi_2026.test_preflight

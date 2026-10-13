@@ -1,0 +1,40 @@
+name: Cash realization ledger
+
+on:
+  push:
+    paths:
+      - 'revenue/cash_realization_ledger/**'
+      - '.github/workflows/cash-realization-ledger.yml'
+  pull_request:
+    paths:
+      - 'revenue/cash_realization_ledger/**'
+      - '.github/workflows/cash-realization-ledger.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile module
+        run: python -m py_compile revenue/cash_realization_ledger/cash_realization_ledger.py
+      - name: Hostile tests
+        run: |
+          python -m unittest discover -s revenue/cash_realization_ledger -p 'test_*.py' -v
+          python -O -m unittest discover -s revenue/cash_realization_ledger -p 'test_*.py' -v
+      - name: Compile and verify synthetic truth-boundary example
+        run: |
+          python revenue/cash_realization_ledger/cash_realization_ledger.py compile \
+            --input revenue/cash_realization_ledger/examples/synthetic_funded_work.json \
+            --json-out /tmp/cash-ledger.json \
+            --markdown-out /tmp/cash-ledger.md \
+            --csv-out /tmp/cash-ledger.csv
+          python revenue/cash_realization_ledger/cash_realization_ledger.py verify \
+            --input revenue/cash_realization_ledger/examples/synthetic_funded_work.json \
+            --ledger /tmp/cash-ledger.json

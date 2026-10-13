@@ -1,0 +1,59 @@
+/* phone-post.css — INK. Cite ink-phone-post-20260826-01. Do not remint
+   ink-chrome-stack-20260819-01 / ink-mvp-form-20260819-01.
+   Narrow leftover after smash/form-in-flow: iOS zoom on inputs <16px,
+   tap targets under 44px, and reply/petition fields that are not #say
+   so they never got width:100% / box-sizing. Injected by session.js via
+   BASE (same chain as chrome-stack) so to/ pages do not 404.
+   Did not PUT index.html. Did not PUT ingest. 337 NO. */
+@media (max-width:700px){
+  #say input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  #say select,
+  #say textarea,
+  #petition input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  #petition select,
+  #petition textarea,
+  #reply-box input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  #reply-box select,
+  #reply-box textarea,
+  .calc input,
+  .calc select{
+    font-size:16px;
+    min-height:44px;
+    box-sizing:border-box;
+    max-width:100%;
+    width:100%;
+  }
+  #say textarea,
+  #petition textarea,
+  #reply-box textarea{
+    min-height:7rem;
+  }
+  #say button[type="submit"],
+  #say .compose-send,
+  #petition button[type="submit"],
+  #reply-box button,
+  button.go{
+    min-height:44px;
+    min-width:44px;
+    font-size:16px;
+    padding:.7rem 1rem;
+    box-sizing:border-box;
+  }
+}
+/* 20260826b — INK. Cite ink-phone-unstick-20260826-01. Do not remint
+   ink-phone-post-20260826-01 / ink-chrome-stack / ink-to-chrome-path.
+   flu8xi leftover grew back: #owner-execute-law and #session-banner are
+   position:sticky (z 210 / 200). On a phone they pin over the composer.
+   Unstick under 700px. Law and court stay in flow. 337 NO. */
+@media (max-width:700px){
+  #owner-execute-law.execute-now,
+  #session-banner,
+  .session{
+    position:static;
+    z-index:auto;
+  }
+  body:has(#owner-execute-law) #session-banner,
+  body:has(#owner-execute-law) .session{
+    top:auto;
+  }
+}

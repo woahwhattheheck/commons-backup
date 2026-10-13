@@ -1,0 +1,53 @@
+{
+  "id": "ats-asphalt-spec-result-lims-01",
+  "version": 1,
+  "buyer": "Asphalt Testing Solutions & Engineering / Tanya Nash",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788150162.908599"
+  },
+  "workflow": [
+    "consultation and project intake against a controlled specification revision",
+    "sample and COC custody",
+    "binder DSR, emulsion residue, Superpave ignition, and Hamburg routing",
+    "method-revision and calibration evidence gates",
+    "exception ownership with exact hold codes",
+    "mock instrument results with one OOS and one invalid review hold",
+    "named-human report release only"
+  ],
+  "service_classes": {
+    "BINDER": "AASHTO T 315 / M 320 PG 76-22, unit kPa, min 500 g, DSR-TAMPA-01",
+    "EMULSION": "AASHTO T 59 / M 208 CSS-1h, unit percent, min 3800 g, EMUL-OVEN-01",
+    "MIX": "AASHTO T 308 / FDOT 334-23 SP-12.5, unit percent, min 25000 g, IGN-OVEN-01",
+    "PERFORMANCE": "AASHTO T 324-22 / FDOT 334-23 Hamburg 50C, unit mm, min 20000 g, HWTD-01"
+  },
+  "hold_codes": [
+    "MISSING_SPEC",
+    "WRONG_UNIT",
+    "INSUFFICIENT_QUANTITY",
+    "DUPLICATE_ID",
+    "METHOD_REVISION",
+    "EXPIRED_CALIBRATION"
+  ],
+  "acceptance": [
+    "60 input jobs, 15 per asphalt service class",
+    "exactly 48 enter worklists once",
+    "exactly 12 HOLD with two of each truth-set code",
+    "sample/project/method lineage preserved",
+    "mock results generate one Hamburg OOS and one binder invalid review hold",
+    "replay creates zero new records",
+    "audit hash deterministic",
+    "human releaser required; autonomous release denied"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no live QC decision",
+    "no production write, billing, or report delivery"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake, routing, coded holds, mock results, and human release receipts only; never live instrument, spec, or QC I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

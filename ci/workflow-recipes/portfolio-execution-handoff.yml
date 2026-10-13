@@ -1,0 +1,32 @@
+name: portfolio-execution-handoff
+
+on:
+  pull_request:
+    paths:
+      - "revenue/portfolio_execution_handoff/**"
+      - "revenue/opportunity_portfolio/**"
+      - ".github/workflows/portfolio-execution-handoff.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/portfolio_execution_handoff/**"
+      - "revenue/opportunity_portfolio/**"
+      - ".github/workflows/portfolio-execution-handoff.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  handoff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax
+        run: python -m py_compile revenue/portfolio_execution_handoff/*.py
+      - name: Tests
+        run: python -m unittest revenue.portfolio_execution_handoff.test_handoff
+      - name: Optimized tests
+        run: python -O -m unittest revenue.portfolio_execution_handoff.test_handoff

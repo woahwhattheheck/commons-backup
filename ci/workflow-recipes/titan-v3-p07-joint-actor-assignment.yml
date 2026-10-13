@@ -1,0 +1,72 @@
+name: TITAN V3 P07 joint actor assignment
+
+on:
+  push:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3/**'
+      - '.github/workflows/titan-v3-p07-joint-actor-assignment.yml'
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3/**'
+      - '.github/workflows/titan-v3-p07-joint-actor-assignment.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  p07:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Focused source contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v3
+        run: |
+          python -m unittest -v \
+            overlay/checks/test_p07_joint_actor_assignment.py \
+            overlay/checks/test_p07_materialize.py
+      - name: Materialize exact current archive, prove off parity, and smoke enabled package
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v3
+        run: |
+          set -euo pipefail
+          BASE=../../exports/titan-current.tar.gz
+          python p07_materialize.py --base "$BASE" --output /tmp/titan-v3-p07-off.tar.gz \
+            --receipt /tmp/titan-v3-p07-off.json
+          cmp "$BASE" /tmp/titan-v3-p07-off.tar.gz
+          python p07_materialize.py --base "$BASE" --output /tmp/titan-v3-p07-on.tar.gz \
+            --enabled --tree /tmp/titan-v3-p07 --receipt /tmp/titan-v3-p07-on.json
+          python -m py_compile \
+            /tmp/titan-v3-p07/main.py \
+            /tmp/titan-v3-p07/titan_runtime.py \
+            /tmp/titan-v3-p07/p07_joint_actor_assignment.py
+          cd /tmp/titan-v3-p07
+          python -m unittest -v checks/test_p07_joint_actor_assignment.py
+          python - <<'PY'
+          import json
+          from p07_joint_actor_assignment import JointActorAssignment
+
+          cfg = {'maxMarketOrdersPerTurn': 10}
+          def obs(step, hands):
+              return {'step': step, 'day': 0, 'player': 0,
+                      'farms': [{'hands': [{} for _ in range(hands)]}, {'hands': []}]}
+          first = {'farmer': ['PASS'], 'hands': [['PASS']],
+                   'market': [['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]}
+          second = {'farmer': ['PASS'],
+                    'hands': [['PASS'], ['PASS'], ['HARVEST'], ['WATER'], ['DIG']],
+                    'market': [['SELL', 'WHEAT', 1]]}
+          route = [first, second]
+          lane = JointActorAssignment(enabled=True)
+          lane.apply(obs(0, 1), cfg, first, route=route, route_id='MAIN')
+          out, report = lane.apply(obs(1, 4), cfg, second, route=route, route_id='MAIN')
+          assert report['requested_hands'] == 4
+          assert report['completed_hands'] == 3
+          assert report['mapping'] == [0, 2, 3, 4]
+          assert out['hands'] == [['PASS'], ['HARVEST'], ['WATER'], ['DIG']]
+          assert out['farmer'] is second['farmer'] and out['market'] is second['market']
+          config = json.load(open('TITAN-CONFIG.json'))
+          assert config['joint_actor_assignment'] is True
+          print(json.dumps(report, sort_keys=True))
+          PY

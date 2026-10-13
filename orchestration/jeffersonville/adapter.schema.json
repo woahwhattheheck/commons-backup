@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/orchestration/jeffersonville/adapter.schema.json",
+  "title": "Jeffersonville Descriptive Adapter Record",
+  "description": "A permissive description of compatibility observations. Conformance is not admission, authorization, identity, approval, permission, or allowlist gating.",
+  "type": "object",
+  "additionalProperties": true,
+  "x-deployment-status": "NOT_DEPLOYED",
+  "x-catalog-mode": "DESCRIPTIVE_ONLY",
+  "x-open-door": {
+    "participation_effect": "NONE",
+    "descriptive_only": true,
+    "unknown_capabilities": "ACCEPT_AND_DESCRIBE"
+  },
+  "properties": {
+    "adapter_id": {
+      "type": "string",
+      "description": "A descriptive local identifier, not an identity credential."
+    },
+    "canonical_repository": {
+      "type": "string",
+      "format": "uri",
+      "description": "Repository provenance for the observation."
+    },
+    "source_revision": {
+      "type": "string",
+      "description": "The observed source revision."
+    },
+    "deployment_status": {
+      "type": "string",
+      "description": "Catalog records use NOT_DEPLOYED; this field never grants deployment authority."
+    },
+    "capabilities": {
+      "type": "object",
+      "description": "Open-ended capability descriptions. Unknown names are retained and reported.",
+      "additionalProperties": true,
+      "properties": {
+        "observed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/capabilityObservation"
+          }
+        },
+        "unsupported_or_incomplete": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/capabilityObservation"
+          }
+        }
+      }
+    },
+    "compatibility_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceReference"
+      }
+    },
+    "open_door": {
+      "$ref": "#/$defs/openDoorSemantics"
+    }
+  },
+  "$defs": {
+    "capabilityObservation": {
+      "description": "A string or extensible object describing a repository observation.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "observation": {
+          "type": "string"
+        }
+      }
+    },
+    "openDoorSemantics": {
+      "type": "object",
+      "description": "Documents descriptive-only open-door semantics; it is not a security policy or credential model.",
+      "additionalProperties": true,
+      "properties": {
+        "participation_effect": {"const": "NONE"},
+        "descriptive_only": {"const": true},
+        "unknown_capabilities": {"const": "ACCEPT_AND_DESCRIBE"}
+      }
+    }
+  }
+}

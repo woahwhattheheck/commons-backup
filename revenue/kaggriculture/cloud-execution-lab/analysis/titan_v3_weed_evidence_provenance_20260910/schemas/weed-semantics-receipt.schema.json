@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:titan:schema:weed-semantics-receipt:v1",
+  "title": "TITAN weed semantics receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_revision",
+    "classification",
+    "claimable_semantics",
+    "promotion_eligible_as_w0",
+    "reason_codes",
+    "artifacts",
+    "analysis",
+    "receipt_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "titan.weed-semantics-receipt.v1"
+    },
+    "source_revision": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "classification": {
+      "enum": [
+        "EXPLICIT_W0",
+        "EXPLICIT_W1",
+        "LEGACY_PRE_GATE_W1",
+        "COUPLED_WEED",
+        "AMBIGUOUS"
+      ]
+    },
+    "claimable_semantics": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "W0",
+          "W1",
+          "LEGACY_PRE_GATE_W1"
+        ]
+      }
+    },
+    "promotion_eligible_as_w0": {
+      "type": "boolean"
+    },
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spatial_source",
+        "runtime_source",
+        "entrypoint_source",
+        "runtime_config"
+      ],
+      "properties": {
+        "spatial_source": {
+          "$ref": "#/$defs/artifact"
+        },
+        "runtime_source": {
+          "$ref": "#/$defs/artifact"
+        },
+        "runtime_config": {
+          "$ref": "#/$defs/artifact"
+        },
+        "entrypoint_source": {
+          "$ref": "#/$defs/artifact"
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spatial",
+        "runtime",
+        "entrypoint",
+        "config"
+      ],
+      "properties": {
+        "spatial": {
+          "type": "object"
+        },
+        "runtime": {
+          "type": "object"
+        },
+        "config": {
+          "type": "object"
+        },
+        "entrypoint": {
+          "type": "object"
+        }
+      }
+    },
+    "generated_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "receipt_id": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitSha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "path",
+        "bytes",
+        "sha256",
+        "git_blob_sha1"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "spatial_source",
+            "runtime_source",
+            "entrypoint_source",
+            "runtime_config"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "git_blob_sha1": {
+          "$ref": "#/$defs/gitSha1"
+        }
+      }
+    }
+  }
+}

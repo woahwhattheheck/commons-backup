@@ -1,0 +1,128 @@
+{
+  "_README": [
+    "EDITABLE TEMPLATE for the optional final-readout deck (UIOWA-088).",
+    "Fill this in against a real assessment report, then run:",
+    "  python3 deck_architecture.py check  --report <report>.json --deck <this file>",
+    "  python3 deck_architecture.py render --report <report>.json --deck <this file> --outdir out/",
+    "The seven core sections are fixed and must appear once each in this order:",
+    "  purpose, evidence, strengths, priority_findings, roadmap, resources, decisions.",
+    "Appendix slides carry the detail. Rules of the road, enforced by the checker:",
+    "  - Any figure you say out loud is a claim with cites+measure+value+unit.",
+    "  - A core slide stating a figure must name an appendix slide carrying the same id.",
+    "  - A measure the report leaves UNKNOWN must be written as the string \"UNKNOWN\" here.",
+    "    Do not substitute 0, 'n/a', or an estimate.",
+    "  - Every high-priority gap in the report must appear on a core slide.",
+    "  - Core minutes must fit session_minutes.",
+    "Claim types: strength | gap | figure | phase | resource | evidence | decision.",
+    "Delete this _README key in a real deck if you prefer; the checker ignores it."
+  ],
+  "meta": {
+    "deck_id": "REPLACE-DECK-ID",
+    "report_ref": "REPLACE-WITH-THE-report_id-OF-THE-REPORT",
+    "title": "REPLACE - readout deck title",
+    "audience": "REPLACE - who is in the room",
+    "session_minutes": 45,
+    "fiction_notice": "REPLACE or delete. If any content is synthetic, say so here."
+  },
+  "slides": [
+    {
+      "id": "S-01", "section": "purpose", "track": "core", "minutes": 3,
+      "title": "REPLACE - why we are in this room",
+      "bullets": ["REPLACE - scope in one line", "REPLACE - what this session decides", "REPLACE - how UNKNOWN is treated"],
+      "claims": [],
+      "appendix_support": [],
+      "speaker_notes": ["REPLACE - opening prompt", "REPLACE - the one thing to say about UNKNOWN"]
+    },
+    {
+      "id": "S-02", "section": "evidence", "track": "core", "minutes": 4,
+      "title": "REPLACE - what this rests on",
+      "bullets": ["REPLACE - sources and counts", "REPLACE - sampling basis", "REPLACE - a stated limitation"],
+      "claims": [{"type": "evidence", "cites": "EV-001", "text": "REPLACE"}],
+      "appendix_support": ["S-A1"],
+      "speaker_notes": ["REPLACE - where to go when a number is challenged"]
+    },
+    {
+      "id": "S-03", "section": "strengths", "track": "core", "minutes": 6,
+      "title": "REPLACE - what is already working",
+      "bullets": ["REPLACE", "REPLACE", "REPLACE"],
+      "claims": [{"type": "strength", "cites": "F-001", "measure": "REPLACE", "value": 0, "unit": "REPLACE", "text": "REPLACE"}],
+      "appendix_support": ["S-A2"],
+      "speaker_notes": ["REPLACE - why naming an internal model matters"]
+    },
+    {
+      "id": "S-04", "section": "priority_findings", "track": "core", "minutes": 10,
+      "title": "REPLACE - the gaps worth leadership time",
+      "bullets": ["REPLACE", "REPLACE", "REPLACE - state that findings are about the process record, not individuals"],
+      "claims": [{"type": "gap", "cites": "F-002", "measure": "REPLACE", "value": 0, "unit": "REPLACE", "text": "REPLACE"}],
+      "appendix_support": ["S-A3"],
+      "speaker_notes": ["REPLACE - which gap to lead with and why", "REPLACE - a question to put back to the room"]
+    },
+    {
+      "id": "S-05", "section": "roadmap", "track": "core", "minutes": 8,
+      "title": "REPLACE - sequence",
+      "bullets": ["REPLACE - 0-90", "REPLACE - 90-180", "REPLACE - 180+"],
+      "claims": [{"type": "phase", "cites": "R-001", "phase": "0-90", "text": "REPLACE"}],
+      "appendix_support": ["S-A4"],
+      "speaker_notes": ["REPLACE - state each phase by the evidence it produces, not a maturity level"]
+    },
+    {
+      "id": "S-06", "section": "resources", "track": "core", "minutes": 6,
+      "title": "REPLACE - what it costs, and what cannot be costed yet",
+      "bullets": ["REPLACE - one-time", "REPLACE - recurring", "REPLACE - what stays UNKNOWN and why"],
+      "claims": [
+        {"type": "resource", "cites": "RES-001", "measure": "one_time_effort", "value": 0, "unit": "staff-hours", "text": "REPLACE"},
+        {"type": "resource", "cites": "RES-001", "measure": "recurring_effort", "value": "UNKNOWN", "unit": "staff-hours per month", "text": "REPLACE"}
+      ],
+      "appendix_support": ["S-A5"],
+      "speaker_notes": ["REPLACE - name who can supply each missing input, and by when"]
+    },
+    {
+      "id": "S-07", "section": "decisions", "track": "core", "minutes": 8,
+      "title": "REPLACE - what we need from you today",
+      "bullets": ["REPLACE - decision 1", "REPLACE - decision 2", "REPLACE - decision 3"],
+      "claims": [{"type": "decision", "cites": "D-001", "text": "REPLACE - the options"}],
+      "appendix_support": [],
+      "speaker_notes": ["REPLACE - record the chosen option and its owner in the room", "REPLACE - a defer is a legitimate outcome; record what would change it"]
+    },
+    {
+      "id": "S-A1", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "REPLACE - appendix: evidence register",
+      "bullets": ["REPLACE - exact locators and versions"],
+      "claims": [{"type": "evidence", "cites": "EV-001", "text": "REPLACE"}],
+      "appendix_support": [],
+      "speaker_notes": ["REPLACE - read the locator, not the conclusion"]
+    },
+    {
+      "id": "S-A2", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "REPLACE - appendix: strength detail",
+      "bullets": ["REPLACE"],
+      "claims": [{"type": "strength", "cites": "F-001", "measure": "REPLACE", "value": 0, "unit": "REPLACE", "text": "REPLACE"}],
+      "appendix_support": [],
+      "speaker_notes": ["REPLACE"]
+    },
+    {
+      "id": "S-A3", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "REPLACE - appendix: priority gap detail",
+      "bullets": ["REPLACE"],
+      "claims": [{"type": "gap", "cites": "F-002", "measure": "REPLACE", "value": 0, "unit": "REPLACE", "text": "REPLACE"}],
+      "appendix_support": [],
+      "speaker_notes": ["REPLACE"]
+    },
+    {
+      "id": "S-A4", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "REPLACE - appendix: phase dependencies",
+      "bullets": ["REPLACE - what each later phase waits on"],
+      "claims": [{"type": "phase", "cites": "R-001", "phase": "0-90", "text": "REPLACE"}],
+      "appendix_support": [],
+      "speaker_notes": ["REPLACE"]
+    },
+    {
+      "id": "S-A5", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "REPLACE - appendix: resource assumptions and open inputs",
+      "bullets": ["REPLACE - what each estimate covers", "REPLACE - every UNKNOWN is a named missing input"],
+      "claims": [{"type": "resource", "cites": "RES-001", "measure": "one_time_effort", "value": 0, "unit": "staff-hours", "text": "REPLACE"}],
+      "appendix_support": [],
+      "speaker_notes": ["REPLACE"]
+    }
+  ]
+}

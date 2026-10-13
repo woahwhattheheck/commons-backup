@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>Luvak–SSA materials cutover LIMS — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#eef1f4;--ink:#16191d;--mute:#5b6570;--line:#c5ced6;--card:#fbfcfd;--steel:#2f4f63;--ok:#1f7a4d;--bad:#a33b2f}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#d5dee6 0%,var(--paper) 28%);color:var(--ink);font:16px/1.5 "Source Serif 4",Georgia,serif}
+main{max-width:1080px;margin:auto;padding:28px 16px 72px}a{color:var(--steel)}
+.kicker{letter-spacing:.16em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--steel)}
+h1{font-size:clamp(2rem,6vw,3.6rem);line-height:.95;margin:.18em 0 .3em}
+.lede{font-size:1.15rem;max-width:760px;color:var(--mute)}
+.bound{border-left:5px solid var(--ok);padding:8px 0 8px 14px}
+.desk{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);padding:16px}
+table{width:100%;border-collapse:collapse;font:13px/1.4 system-ui,sans-serif}th,td{border-top:1px solid var(--line);padding:6px 4px;text-align:left}
+button{border:1px solid var(--steel);background:var(--steel);color:#fff;padding:8px 12px;cursor:pointer;font:15px/1.3 system-ui,sans-serif}
+button.ghost{background:transparent;color:var(--steel)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;min-height:180px;background:#16191d;color:#dce4ea;padding:12px;font:12px/1.4 ui-monospace,monospace}
+.stamp{display:inline-block;border:1px solid var(--ok);color:var(--ok);padding:2px 8px;font:11px/1.4 system-ui,sans-serif;letter-spacing:.08em}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+@media(max-width:820px){.desk{grid-template-columns:1fr}}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> · <a href="./cornell-craft-beverage-intake-lims.html">Cornell intake pattern</a></nav>
+<p class="kicker">Commons · luvak-ssa-lab-analytics-cutover-lims-01 · AquaTrace HOLD / BUILD-AND-VERIFY</p>
+<h1>Quote, form, package, CoC. Freeze the method. Stage the SSA report.</h1>
+
+
+
+
+<p class="lede">For a materials lab manager cutting Luvak into Scientific Safety Alliance Lab Analytics: accession only after an accepted quote, match the submission form to the physical package, freeze the method revision, hash interstitial-gas and metals evidence, and keep the report staged until a named human releases it.</p>
+<p class="bound"><strong>Truth boundary:</strong> 100 synthetic shipments only. Adapters stay read-only. Materials-quality evidence only — no qualification decision. Named-human release is mandatory. PRE-SALE TRANSPORT: NONE. cash_usd = 0.</p>
+<div class="desk">
+<section class="card">
+<h2>Buyer pairing</h2>
+<p class="small">Demand <code>luvak-ssa-lab-analytics-cutover-lims-01</code>. Buyer: Dean Gaskill / Luvak Laboratories. Public intake facts: accept the quote, then a Sample Submission form; optional Chain of Custody; email/fax paperwork and ship a physical copy with the sample. Gases prefer 3–5 g solid. Official report is emailed/faxed.</p>
+<h2>Binary acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>PASS</th></tr></thead>
+<tbody>
+<tr><td>Input shipments</td><td>100</td></tr>
+<tr><td>READY</td><td>80</td></tr>
+<tr><td>HOLD</td><td>20 exact codes</td></tr>
+<tr><td>Missing accepted quote</td><td>8</td></tr>
+<tr><td>Duplicate sample IDs</td><td>4</td></tr>
+<tr><td>Form/package mismatch</td><td>4</td></tr>
+<tr><td>Method-revision mismatch</td><td>4</td></tr>
+<tr><td>Holds</td><td>no test/report stage</td></tr>
+<tr><td>READY hashes</td><td>quote/form/CoC/method/result/report</td></tr>
+<tr><td>Replay</td><td>zero duplicates</td></tr>
+<tr><td>Release</td><td>named human only</td></tr>
+</tbody>
+</table>
+<p class="small">Official binary: <code>python3 test_luvak_ssa_lab_analytics_cutover.py</code></p>
+<p><button id="run">Run 100-shipment fixture</button> <button id="replay" class="ghost">Replay</button></p>
+</section>
+<section class="card">
+<h2>Cutover receipt <span id="status" class="stamp">READY</span></h2>
+<pre id="output">Run the synthetic fixture. Exact JSON stays in this tab.</pre>
+</section>
+</div>
+<p class="small">Cite, do not remint: cornell-craft-beverage-intake-lims-01 and lexington-mrf-diversion-gate-01 (different products). Do not remint claimed Billings 1421 lanes. No outreach.</p>
+</main>
+<script src="./luvak-ssa-lab-analytics-cutover-lims.js"></script>
+<script>
+(function () {
+  var out = document.getElementById("output");
+  var status = document.getElementById("status");
+  var last = null;
+  function show(result, label) {
+    last = result;
+    var failures = LuvakSsaLabAnalyticsCutover.passContract(result);
+    status.textContent = failures.length ? "FAIL" : "PASS";
+    status.style.color = failures.length ? "#a33b2f" : "#1f7a4d";
+    status.style.borderColor = status.style.color;
+    out.textContent = JSON.stringify({
+      label: label,
+      ok: failures.length === 0,
+      failures: failures,
+      input_rows: result.input_rows,
+      ready: result.ready,
+      hold: result.hold,
+      hold_counts: result.hold_counts,
+      staged_reports: result.staged_reports,
+      released_reports: result.released_reports,
+      manifest_sha256: result.manifest_sha256,
+      pre_sale_transport: result.pre_sale_transport
+    }, null, 2);
+  }
+  document.getElementById("run").onclick = function () {
+    show(LuvakSsaLabAnalyticsCutover.runGate(), "run");
+  };
+  document.getElementById("replay").onclick = function () {
+    var first = last || LuvakSsaLabAnalyticsCutover.runGate();
+    var second = LuvakSsaLabAnalyticsCutover.runGate();
+    var same = JSON.stringify(first.hold_counts) === JSON.stringify(second.hold_counts)
+      && first.manifest_sha256 === second.manifest_sha256
+      && first.ready === second.ready;
+    show(second, same ? "replay-identical" : "replay-mismatch");
+  };
+})();
+</script>
+
+
+
+</body></html>

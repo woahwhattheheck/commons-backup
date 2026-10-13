@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Fieldnote Prospect Workspace</title>
+  <style>
+    :root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.45; }
+    body { margin: 0; background: Canvas; color: CanvasText; }
+    main { max-width: 1180px; margin: auto; padding: 24px; }
+    header { display: flex; gap: 20px; justify-content: space-between; align-items: end; margin-bottom: 24px; }
+    h1,h2,h3,p { margin-top: 0; }
+    h1 { margin-bottom: 4px; letter-spacing: -0.035em; }
+    .eyebrow { font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; opacity: .65; font-weight: 700; }
+    .muted { opacity: .68; font-size: .9rem; }
+    .status { padding: 8px 12px; border: 1px solid color-mix(in srgb, CanvasText 20%, transparent); border-radius: 999px; font-size: .82rem; max-width: 390px; }
+    .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+    section, .panel { min-width: 0; border: 1px solid color-mix(in srgb, CanvasText 18%, transparent); border-radius: 16px; padding: 18px; background: color-mix(in srgb, Canvas 96%, CanvasText 4%); }
+    .wide { grid-column: 1 / -1; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+    label { display: grid; gap: 5px; font-size: .88rem; min-width: 150px; flex: 1; }
+    input, select, textarea, button { font: inherit; }
+    input, select, textarea { box-sizing: border-box; width: 100%; border: 1px solid color-mix(in srgb, CanvasText 24%, transparent); border-radius: 9px; padding: 9px 10px; background: Canvas; color: CanvasText; }
+    textarea { min-height: 92px; resize: vertical; }
+    button, .file-button { border: 0; border-radius: 9px; padding: 10px 14px; background: CanvasText; color: Canvas; cursor: pointer; font-weight: 700; }
+    button.quiet, .file-button.quiet { background: color-mix(in srgb, CanvasText 12%, transparent); color: CanvasText; }
+    button.danger { background: color-mix(in srgb, #b42318 86%, Canvas); color: white; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .file-button { display: inline-block; position: relative; overflow: hidden; }
+    .file-button input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    #mapping-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }
+    .field-label { font-size: .75rem; opacity: .7; }
+    #import-report > div { margin-top: 6px; }
+    .error, #message[data-kind="error"] { color: #b42318; }
+    .warning { color: #9a6700; }
+    #message { min-height: 1.5em; margin: 14px 0; font-weight: 600; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+    .table-wrap { overflow: auto; border: 1px solid color-mix(in srgb, CanvasText 14%, transparent); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 820px; }
+    th, td { text-align: left; vertical-align: top; padding: 10px; border-bottom: 1px solid color-mix(in srgb, CanvasText 12%, transparent); }
+    th { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+    td:first-child { width: 32px; }
+    .source-link { display: block; max-width: 310px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .82rem; }
+    #editor[hidden] { display: none; }
+    #editor { margin-top: 14px; }
+    .privacy { border-left: 4px solid CanvasText; padding-left: 12px; }
+    @media (max-width: 760px) { main { padding: 14px; } header { display: block; } .grid { grid-template-columns: minmax(0, 1fr); } .wide { grid-column: auto; } .status { margin-top: 12px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <div class="eyebrow">Demand 029 · agency prospect workflow</div>
+      <h1>Fieldnote</h1>
+      <p class="muted">Build a source-linked account list, merge repeats, keep working notes, and export a clean CRM-ready segment.</p>
+    </div>
+    <div id="storage-status" class="status" role="status">Checking local workspace…</div>
+  </header>
+
+  <div id="message" role="status" aria-live="polite"></div>
+
+  <div class="grid">
+    <section>
+      <h2>1. Import customer-provided prospects</h2>
+      <p class="muted">Use a CSV file or paste CSV text. Preview is isolated; rows with errors must be corrected before commit.</p>
+      <div class="row">
+        <label>CSV file<input id="csv-file" type="file" accept=".csv,text/csv"></label>
+        <label>Import label<input id="import-name" placeholder="Agency list · Sep 9"></label>
+      </div>
+      <label style="margin-top:10px">Or paste CSV<textarea id="csv-text" spellcheck="false" placeholder="Company,Website,Name,Email,Source&#10;Acme,acme.example,Jordan Lee,jordan@acme.example,https://source.example/acme"></textarea></label>
+      <div class="toolbar"><button id="preview-import" type="button">Preview import</button><button id="commit-import" type="button" disabled>Commit import</button></div>
+      <div id="mapping-grid" aria-label="CSV column mapping"></div>
+      <div id="import-report" aria-live="polite"></div>
+    </section>
+
+    <section>
+      <h2>2. Search and segment</h2>
+      <label>Search company, domain, contact, note or tag<input id="filter-q" type="search" placeholder="manufacturing louisville"></label>
+      <div class="row" style="margin-top:10px">
+        <label>Industry<select id="filter-industry"><option value="">Any industry</option></select></label>
+        <label>Tag<select id="filter-tag"><option value="">Any tag</option></select></label>
+        <label>Stage<select id="filter-stage"><option value="">Any stage</option></select></label>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;margin-top:10px;min-width:0"><input id="filter-email" type="checkbox" style="width:auto"> Has a contact email</label>
+      <div class="row" style="margin-top:10px">
+        <label>Segment name<input id="segment-name" placeholder="Louisville manufacturers"></label>
+        <button id="save-segment" type="button">Save segment</button>
+        <label><span class="field-label">Apply</span><select id="segment-list"><option value="">Saved segments</option></select></label>
+      </div>
+      <div class="toolbar"><button id="clear-filters" type="button" class="quiet">Clear filters</button><button id="export-csv" type="button">Export filtered CRM CSV</button></div>
+    </section>
+
+    <section class="wide">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><h2 style="margin-bottom:2px">3. Accounts</h2><div id="account-count" class="muted"></div></div>
+        <button id="merge-selected" type="button" class="quiet" disabled>Merge selected</button>
+      </div>
+      <div class="table-wrap" style="margin-top:12px" tabindex="0" role="region" aria-label="Accounts table, scroll horizontally for all columns">
+        <table>
+          <thead><tr><th></th><th>Company & sources</th><th>Contacts</th><th>Stage</th><th>Tags</th><th></th></tr></thead>
+          <tbody id="accounts-body"></tbody>
+        </table>
+      </div>
+      <div id="editor" class="panel" hidden>
+        <h3>Edit <span id="edit-company"></span></h3>
+        <div class="row">
+          <label>Stage<input id="edit-stage"></label>
+          <label>Industry<input id="edit-industry"></label>
+          <label>Location<input id="edit-location"></label>
+          <label>Tags<input id="edit-tags" placeholder="priority, warm"></label>
+        </div>
+        <label style="margin-top:10px">Notes<textarea id="edit-notes"></textarea></label>
+        <div class="toolbar"><button id="save-edit" type="button">Save account</button><button id="cancel-edit" type="button" class="quiet">Cancel</button></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Backup and restore</h2>
+      <p class="muted">Browser storage is local to this browser. Export a JSON backup before moving devices or clearing site data.</p>
+      <div class="toolbar">
+        <button id="export-backup" type="button">Download JSON backup</button>
+        <label class="file-button quiet">Restore validated backup<input id="restore-backup" type="file" accept="application/json,.json"></label>
+        <button id="reset-local" type="button" class="danger">Delete local workspace</button>
+      </div>
+    </section>
+
+    <section class="privacy">
+      <h2>Operating boundary</h2>
+      <p>This page makes no enrichment, scraping, messaging, payment, or customer-system calls. Imported data stays in this browser unless you explicitly export it or use the separate private SQLite backup panel supplied by the existing backend.</p>
+      <p class="muted">Source URLs are shown as links only when the landed model accepts them as HTTP(S). CSV export uses the landed spreadsheet-safe encoder. The SQLite service, when used, injects its own backup panel below this page; it is an explicit snapshot workflow, not live sync.</p>
+    </section>
+  </div>
+</main>
+<script src="model.js"></script>
+<script src="app.js"></script>
+<script src="integrity.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+{
+  "schema_version": "outcome-commerce-manifest/v1",
+  "kind": "OUTCOME_COMMERCE_MANIFEST",
+  "name": "Commons Outcome Commerce Bridge",
+  "public": true,
+  "human": "https://woahwhattheheck.github.io/commons/commerce.html",
+  "catalog": "https://woahwhattheheck.github.io/commons/revenue/outcome_commerce/catalog.json",
+  "schemas": {
+    "catalog": "catalog.schema.json",
+    "commercial_event": "event.schema.json",
+    "metering_event": "metering-event.schema.json",
+    "outcome_contract": "outcome-contract.schema.json",
+    "commercial_projection": "projection.schema.json",
+    "statement": "statement.schema.json"
+  },
+  "cli": "python3 host/outcome_commerce.py",
+  "pricing": {
+    "primitive_components": [
+      "fixed",
+      "subscription",
+      "usage",
+      "outcome",
+      "milestone",
+      "take_rate",
+      "license",
+      "sponsorship"
+    ],
+    "composition": [
+      "base_plus_overage",
+      "prepaid_credit",
+      "outcome_plus_subscription",
+      "marketplace_commission"
+    ],
+    "arithmetic": "decimal strings; deterministic Python Decimal; no float money"
+  },
+  "events": {
+    "storage": "one immutable JSON file per event",
+    "canonical_chain": "revenue/dio/ CUSTOMER_JOB -> QUOTE -> ACCEPTED_WORK -> DELIVERY_RECEIPT, extended by public-safe commercial transitions",
+    "correlation": "caller-supplied correlation_id is preserved across job, attempt, provider effect, delivery, and factual cash states",
+    "dedupe": "event_id plus stable idempotency_key per external business effect",
+    "conflict": "same event_id with different canonical bytes is invalid",
+    "reversal": "a separate REVERSED event names reverses_event_id",
+    "unknown_effect": "an uncertain provider effect enters UNKNOWN_EFFECT; only provider reconciliation may return it to RUNNING or advance it to SUBMITTED",
+    "projection_cli": "python3 host/outcome_commerce.py project --events revenue/outcome_commerce/examples/commercial_events.json"
+  },
+  "interfaces": {
+    "web": "commerce.html",
+    "json": "revenue/outcome_commerce/catalog.json",
+    "mcp_resources": [
+      "commons://commerce/catalog",
+      "commons://commerce/manifest",
+      "commons://commerce/a2a-skills"
+    ],
+    "a2a": {
+      "status": "SKILLS_FRAGMENT_READY",
+      "path": "revenue/outcome_commerce/a2a-skills.json",
+      "is_agent_card": false,
+      "reason": "No A2A task endpoint is claimed. The fragment can be embedded when a real A2A server binding exists."
+    },
+    "execution": [
+      "action.html",
+      "bazaar.html",
+      "commons_mcp.py fire_action",
+      "GitHub issue and contents roads"
+    ]
+  },
+  "settlement": {
+    "calculator_moves_money": false,
+    "states": [
+      "QUOTED",
+      "CHARGEABLE",
+      "INVOICED",
+      "AUTHORIZATION",
+      "SETTLEMENT",
+      "PAYOUT",
+      "BANK_AVAILABLE"
+    ],
+    "job_state_chain": [
+      "DISCOVERED",
+      "QUALIFIED",
+      "QUOTED",
+      "FUNDED",
+      "RUNNING",
+      "SUBMITTED",
+      "ACCEPTED",
+      "SETTLED",
+      "BANK_AVAILABLE"
+    ],
+    "branches": ["EXPIRED", "REJECTED", "REFUNDED", "UNKNOWN_EFFECT"],
+    "rail_descriptors_supported": [
+      "processor_invoice",
+      "marketplace_escrow",
+      "stablecoin",
+      "smart_contract"
+    ],
+    "configured_execution_adapters": [],
+    "external_private_state": ["buyer contact data", "contracts", "processor credentials", "tax records", "bank data"],
+    "cash_rule": "A quote, outcome proof, statement, invoice, processor reference, or chain transaction is not bank-available cash."
+  },
+  "source_adapters": [
+    "bazaar.json",
+    "commercial.json",
+    "revenue/dio/",
+    "revenue/human_outcomes/offers.json",
+    "revenue/payment_ready/pack.json",
+    "revenue/portfolio_overdrive/portfolio.json",
+    "revenue/production_survival/offer.json",
+    "revenue/subzero_buyers/pack.json",
+    "revenue/subzero_gtm/architecture.json",
+    "revenue/expert_networks/",
+    "land/stripe-payment-links-20260826.md"
+  ]
+}

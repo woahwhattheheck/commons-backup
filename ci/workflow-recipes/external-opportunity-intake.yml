@@ -1,0 +1,22 @@
+name: external-opportunity-intake
+on:
+  pull_request:
+    paths:
+      - 'revenue/external_opportunity_intake/**'
+      - '.github/workflows/external-opportunity-intake.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/external_opportunity_intake/**'
+      - '.github/workflows/external-opportunity-intake.yml'
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m py_compile revenue/external_opportunity_intake/*.py
+      - run: python -m revenue.external_opportunity_intake.selftest
+      - run: python -O -m revenue.external_opportunity_intake.selftest

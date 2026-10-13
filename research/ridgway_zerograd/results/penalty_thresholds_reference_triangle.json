@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_by": "research/ridgway_zerograd/penalty_threshold.py",
+  "scope": "local divergence-free polynomial coercivity diagnostic; not a global Scott-Vogelius convergence theorem",
+  "reference_triangle": [[0, 0], [1, 0], [0, 1]],
+  "boundary_edge": "y=0",
+  "outward_normal": [0, -1],
+  "form": "0.5*int_K D(v):D(v) - 2*int_e partial_n(v).v + mu_edge*int_e |v|^2",
+  "records": [
+    {"degree": 1, "basis_dimension": 5, "edge_scaled_threshold": 4.605551275463988, "diameter_scaled_threshold": 6.513233075965879},
+    {"degree": 2, "basis_dimension": 9, "edge_scaled_threshold": 7.747751221934745, "diameter_scaled_threshold": 10.956974855952836},
+    {"degree": 3, "basis_dimension": 14, "edge_scaled_threshold": 13.722220481558436, "diameter_scaled_threshold": 19.406150310893803},
+    {"degree": 4, "basis_dimension": 20, "edge_scaled_threshold": 21.64389840489578, "diameter_scaled_threshold": 30.609094666829012},
+    {"degree": 5, "basis_dimension": 27, "edge_scaled_threshold": 31.820788076456445, "diameter_scaled_threshold": 45.00139006312478}
+  ],
+  "quartic_interpretation": {
+    "local_edge_scaled_mu100_above_threshold": true,
+    "local_diameter_scaled_mu100_above_threshold": true,
+    "global_max_mesh_mu100_uniformly_safe_under_arbitrary_boundary_overrefinement": false,
+    "reason": "If the implemented penalty is mu_global/h_Omega while boundary elements scale like h_Gamma, local positivity requires mu_global >= mu_edge_star*(h_Omega/h_Gamma), up to affine shape factors."
+  },
+  "authority": {
+    "proves_local_reference_triangle_threshold": true,
+    "proves_global_mesh_coercivity": false,
+    "proves_scott_vogelius_nitsche_convergence": false,
+    "proves_prize_claim": false
+  }
+}

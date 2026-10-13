@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/woahwhattheheck/commons/revenue/uiowa_rfq_18649_rating_model/rating_input.schema.json",
+  "title": "UIOWA-022 rating composition input",
+  "type": "object",
+  "required": ["criteria"],
+  "additionalProperties": true,
+  "properties": {
+    "engagement": {"type": ["string", "null"]},
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min_coverage_for_characterization": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "mixed_maturity_spread": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "criterion_id",
+          "area",
+          "service",
+          "assessment_status",
+          "criticality"
+        ],
+        "properties": {
+          "criterion_id": {"type": "string", "minLength": 1},
+          "area": {"type": "string", "minLength": 1},
+          "service": {"type": "string", "minLength": 1},
+          "assessment_status": {
+            "enum": ["assessed", "unassessed", "not_applicable"]
+          },
+          "criticality": {
+            "enum": ["supporting", "important", "critical"]
+          },
+          "maturity_rank": {
+            "type": ["integer", "null"],
+            "minimum": 0
+          },
+          "maturity_label": {
+            "type": ["string", "null"]
+          },
+          "confidence": {
+            "enum": ["low", "moderate", "high", null]
+          },
+          "material_gap": {
+            "type": ["boolean", "null"]
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          },
+          "applicability_reason": {
+            "type": "string"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "assessment_status": {"const": "assessed"}
+              }
+            },
+            "then": {
+              "required": [
+                "maturity_rank",
+                "maturity_label",
+                "confidence",
+                "material_gap",
+                "evidence_ids"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "assessment_status": {"const": "not_applicable"}
+              }
+            },
+            "then": {
+              "required": ["applicability_reason"]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

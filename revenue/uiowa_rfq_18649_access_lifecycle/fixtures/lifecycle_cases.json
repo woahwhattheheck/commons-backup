@@ -1,0 +1,402 @@
+{
+  "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+  "label": "FICTION. Six invented role-change episodes. Every person, system, ticket, date and record below was written to exercise the review method. Nobody is described, and no row is an observation of anything real.",
+  "cases": [
+    {
+      "case_id": "CASE-SYN-LEAVER-01",
+      "lifecycle_event": "leaver",
+      "worker_type": "contractor",
+      "person_role": "Integration developer (fictional)",
+      "event_on": "2026-08-31",
+      "summary": "Contractor departure at end of engagement",
+      "notes": "The case the order names. The central identity account was confirmed disabled; the deployment pipeline carries a separate local account that nobody has looked at. An aggregate 'access removed' would have hidden that entirely.",
+      "access_changes": [
+        {
+          "system": "central identity provider",
+          "environment": "shared",
+          "intent": "revoke",
+          "entitlement": "standard staff account",
+          "effective_on": "2026-08-31"
+        },
+        {
+          "system": "source repository",
+          "environment": "development",
+          "intent": "revoke",
+          "entitlement": "write access to two repositories",
+          "effective_on": "2026-08-31"
+        },
+        {
+          "system": "deployment pipeline",
+          "environment": "deployment",
+          "intent": "revoke",
+          "entitlement": "local pipeline account, created outside the identity provider",
+          "effective_on": "2026-08-31"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "written_policy",
+          "statement": "A published standard requires access removal on the last working day",
+          "locator": "synthetic-access-standard-v2.pdf"
+        },
+        {
+          "kind": "ticket_request",
+          "system": "central identity provider",
+          "statement": "Offboarding ticket raised by the engaging manager",
+          "observed_on": "2026-08-28",
+          "locator": "synthetic-ticket-4411"
+        },
+        {
+          "kind": "approval_record",
+          "system": "central identity provider",
+          "statement": "Offboarding approved by the engaging manager",
+          "observed_on": "2026-08-29",
+          "locator": "synthetic-ticket-4411#approval"
+        },
+        {
+          "kind": "execution_record",
+          "system": "central identity provider",
+          "statement": "Ticket closed, marked account disabled",
+          "observed_on": "2026-08-31",
+          "locator": "synthetic-ticket-4411#closure"
+        },
+        {
+          "kind": "system_state_observation",
+          "system": "central identity provider",
+          "statement": "Directory export shows the account in a disabled state",
+          "observed_on": "2026-09-04",
+          "matches_intent": true,
+          "locator": "synthetic-directory-export-2026-09-04.csv"
+        },
+        {
+          "kind": "execution_record",
+          "system": "source repository",
+          "statement": "Ticket closed, marked repository access removed",
+          "observed_on": "2026-08-31",
+          "locator": "synthetic-ticket-4411#closure"
+        }
+      ],
+      "interview_prompts": [
+        "For this departure, which systems were in scope, and who decided the list?",
+        "How are accounts created outside the identity provider brought into offboarding?",
+        "Can you show the pipeline's own account listing as at a date after 31 August?"
+      ]
+    },
+    {
+      "case_id": "CASE-SYN-MOVER-01",
+      "lifecycle_event": "mover",
+      "worker_type": "staff",
+      "person_role": "Moved from application support to release engineering (fictional)",
+      "event_on": "2026-07-01",
+      "summary": "Changed responsibilities: new access granted, previous access not evidenced as removed",
+      "notes": "The second case the order names. Movers are where entitlement accumulates: the grant is confirmed because somebody needed it to work, and the revoke has a request and nothing after it.",
+      "access_changes": [
+        {
+          "system": "deployment pipeline",
+          "environment": "deployment",
+          "intent": "grant",
+          "entitlement": "release approver role",
+          "effective_on": "2026-07-01"
+        },
+        {
+          "system": "support console",
+          "environment": "production support",
+          "intent": "revoke",
+          "entitlement": "tier 2 support role, no longer required",
+          "effective_on": "2026-07-01"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "written_policy",
+          "statement": "A published standard requires entitlements to follow role changes",
+          "locator": "synthetic-access-standard-v2.pdf"
+        },
+        {
+          "kind": "approval_record",
+          "system": "deployment pipeline",
+          "statement": "Release approver role approved by the receiving manager",
+          "observed_on": "2026-06-30",
+          "locator": "synthetic-ticket-4102#approval"
+        },
+        {
+          "kind": "execution_record",
+          "system": "deployment pipeline",
+          "statement": "Role assigned",
+          "observed_on": "2026-07-01",
+          "locator": "synthetic-ticket-4102#closure"
+        },
+        {
+          "kind": "system_state_observation",
+          "system": "deployment pipeline",
+          "statement": "Pipeline role listing shows the release approver role present",
+          "observed_on": "2026-07-15",
+          "matches_intent": true,
+          "locator": "synthetic-pipeline-roles-2026-07-15.csv"
+        },
+        {
+          "kind": "ticket_request",
+          "system": "support console",
+          "statement": "Request raised to remove the tier 2 support role",
+          "observed_on": "2026-07-02",
+          "locator": "synthetic-ticket-4103"
+        }
+      ],
+      "interview_prompts": [
+        "When somebody changes team, what triggers the removal of the entitlements they no longer need?",
+        "Is the removal tracked to completion, or closed when the new access is working?",
+        "Can you show the support console's role listing for this person as at any date after 1 July?"
+      ]
+    },
+    {
+      "case_id": "CASE-SYN-JOINER-01",
+      "lifecycle_event": "joiner",
+      "worker_type": "staff",
+      "person_role": "Application developer (fictional)",
+      "event_on": "2026-06-01",
+      "summary": "New starter, development environments only",
+      "notes": "The comparatively clean case. Both systems observed after the change; included so the matrix is not only failures.",
+      "access_changes": [
+        {
+          "system": "central identity provider",
+          "environment": "shared",
+          "intent": "grant",
+          "entitlement": "standard staff account",
+          "effective_on": "2026-06-01"
+        },
+        {
+          "system": "source repository",
+          "environment": "development",
+          "intent": "grant",
+          "entitlement": "write access to one repository",
+          "effective_on": "2026-06-01"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "ticket_request",
+          "system": "central identity provider",
+          "statement": "Onboarding request raised",
+          "observed_on": "2026-05-26",
+          "locator": "synthetic-ticket-3980"
+        },
+        {
+          "kind": "approval_record",
+          "system": "central identity provider",
+          "statement": "Approved by the hiring manager",
+          "observed_on": "2026-05-27",
+          "locator": "synthetic-ticket-3980#approval"
+        },
+        {
+          "kind": "execution_record",
+          "system": "central identity provider",
+          "statement": "Account created",
+          "observed_on": "2026-06-01",
+          "locator": "synthetic-ticket-3980#closure"
+        },
+        {
+          "kind": "system_state_observation",
+          "system": "central identity provider",
+          "statement": "Directory export shows an enabled account",
+          "observed_on": "2026-06-05",
+          "matches_intent": true,
+          "locator": "synthetic-directory-export-2026-06-05.csv"
+        },
+        {
+          "kind": "approval_record",
+          "system": "source repository",
+          "statement": "Repository access approved by the repository owner",
+          "observed_on": "2026-06-01",
+          "locator": "synthetic-ticket-3981#approval"
+        },
+        {
+          "kind": "system_state_observation",
+          "system": "source repository",
+          "statement": "Repository collaborator export shows write access",
+          "observed_on": "2026-06-05",
+          "matches_intent": true,
+          "locator": "synthetic-repo-collaborators-2026-06-05.csv"
+        }
+      ],
+      "interview_prompts": [
+        "How soon after a start date is access checked against what was approved?",
+        "Who owns the approval for repository access, and is it separate from the identity account?"
+      ]
+    },
+    {
+      "case_id": "CASE-SYN-EMERGENCY-01",
+      "lifecycle_event": "emergency_access",
+      "worker_type": "staff",
+      "person_role": "On-call engineer (fictional)",
+      "event_on": "2026-08-12",
+      "summary": "Emergency elevation used during an incident; retrospective approval not evidenced",
+      "notes": "Emergency access is the path designed to bypass the approval gate. The elevation is confirmed in the system; the retrospective approval the standard requires has no record at all, and the removal has only an audit-log entry with no later observation. Both changes sit on ONE system, so each piece of evidence has to name which change it concerns -- evidence that does not is excluded as ambiguous rather than credited to whichever change is nearby.",
+      "access_changes": [
+        {
+          "system": "deployment pipeline",
+          "environment": "deployment",
+          "intent": "grant",
+          "entitlement": "emergency elevated role",
+          "effective_on": "2026-08-12"
+        },
+        {
+          "system": "deployment pipeline",
+          "environment": "deployment",
+          "intent": "revoke",
+          "entitlement": "emergency elevated role, after the incident",
+          "effective_on": "2026-08-13"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "written_policy",
+          "statement": "A published standard requires retrospective approval of emergency elevation within one working day",
+          "locator": "synthetic-access-standard-v2.pdf"
+        },
+        {
+          "kind": "execution_record",
+          "system": "deployment pipeline",
+          "statement": "Elevation recorded in the pipeline audit log",
+          "observed_on": "2026-08-12",
+          "locator": "synthetic-pipeline-audit-2026-08-12",
+          "intent": "grant"
+        },
+        {
+          "kind": "system_state_observation",
+          "system": "deployment pipeline",
+          "statement": "Role listing during the incident window shows the elevated role present",
+          "observed_on": "2026-08-12",
+          "matches_intent": true,
+          "locator": "synthetic-pipeline-roles-2026-08-12.csv",
+          "intent": "grant"
+        },
+        {
+          "kind": "execution_record",
+          "system": "deployment pipeline",
+          "intent": "revoke",
+          "statement": "Pipeline audit log records the elevated role being removed after the incident",
+          "observed_on": "2026-08-13",
+          "locator": "synthetic-pipeline-audit-2026-08-13"
+        }
+      ],
+      "interview_prompts": [
+        "What record is created when emergency elevation is used, and who reviews it?",
+        "Can you show the retrospective approval for the 12 August elevation?",
+        "How is the elevated role removed after the incident, and is its removal observed?"
+      ]
+    },
+    {
+      "case_id": "CASE-SYN-LEAVER-02",
+      "lifecycle_event": "leaver",
+      "worker_type": "staff",
+      "person_role": "Analyst (fictional)",
+      "event_on": "2026-05-29",
+      "summary": "Departure where the only applicable evidence is the written standard",
+      "notes": "The refusal case. There is a policy and nothing else, so no conclusion about this departure can be drawn at all. The policy is not weak evidence here; it is evidence about a different subject.",
+      "access_changes": [
+        {
+          "system": "central identity provider",
+          "environment": "shared",
+          "intent": "revoke",
+          "entitlement": "standard staff account",
+          "effective_on": "2026-05-29"
+        },
+        {
+          "system": "reporting database",
+          "environment": "production support",
+          "intent": "revoke",
+          "entitlement": "read access",
+          "effective_on": "2026-05-29"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "written_policy",
+          "statement": "A published standard requires access removal on the last working day",
+          "locator": "synthetic-access-standard-v2.pdf"
+        }
+      ],
+      "interview_prompts": [
+        "For a departure in May, what records would still exist today?",
+        "Where are offboarding tickets retained, and for how long?",
+        "If no ticket exists, is there any system-side record that would show when the account was disabled?"
+      ]
+    },
+    {
+      "case_id": "CASE-SYN-LEAVER-03",
+      "lifecycle_event": "leaver",
+      "worker_type": "staff",
+      "person_role": "Database administrator (fictional)",
+      "event_on": "2026-09-05",
+      "summary": "Departure where the system state contradicts the closed ticket, and a stale export was offered as proof",
+      "notes": "Two mechanisms at once. The reporting database still shows the account after the departure, which outranks the closed ticket. And an export taken before the departure was offered as evidence for the identity provider; it is excluded and listed, because it cannot show a later change.",
+      "access_changes": [
+        {
+          "system": "central identity provider",
+          "environment": "shared",
+          "intent": "revoke",
+          "entitlement": "standard staff account",
+          "effective_on": "2026-09-05"
+        },
+        {
+          "system": "reporting database",
+          "environment": "production support",
+          "intent": "revoke",
+          "entitlement": "administrative role",
+          "effective_on": "2026-09-05"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "ticket_request",
+          "system": "central identity provider",
+          "statement": "Offboarding ticket raised",
+          "observed_on": "2026-09-02",
+          "locator": "synthetic-ticket-4720"
+        },
+        {
+          "kind": "approval_record",
+          "system": "central identity provider",
+          "statement": "Approved by the line manager",
+          "observed_on": "2026-09-03",
+          "locator": "synthetic-ticket-4720#approval"
+        },
+        {
+          "kind": "system_state_observation",
+          "system": "central identity provider",
+          "statement": "Directory export supplied as evidence of removal",
+          "observed_on": "2026-09-01",
+          "matches_intent": true,
+          "locator": "synthetic-directory-export-2026-09-01.csv"
+        },
+        {
+          "kind": "execution_record",
+          "system": "reporting database",
+          "statement": "Ticket closed, marked administrative role removed",
+          "observed_on": "2026-09-05",
+          "locator": "synthetic-ticket-4721#closure"
+        },
+        {
+          "kind": "system_state_observation",
+          "system": "reporting database",
+          "statement": "Role listing still shows the administrative role assigned",
+          "observed_on": "2026-09-12",
+          "matches_intent": false,
+          "locator": "synthetic-db-roles-2026-09-12.csv"
+        },
+        {
+          "kind": "entitlement_review_record",
+          "system": "reporting database",
+          "statement": "A quarterly entitlement review was recorded in July",
+          "observed_on": "2026-07-15",
+          "locator": "synthetic-entitlement-review-q3.csv"
+        }
+      ],
+      "interview_prompts": [
+        "The database still shows this role. Was the change reversed, never applied, or applied to a different account?",
+        "What date does the supplied directory export cover, and is there one from after the departure?",
+        "Does the quarterly entitlement review cover the reporting database's administrative roles?"
+      ]
+    }
+  ]
+}

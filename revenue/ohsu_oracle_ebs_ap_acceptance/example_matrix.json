@@ -1,0 +1,215 @@
+{
+  "cases": [
+    {
+      "attempts": [
+        {
+          "attempt_id": "A01",
+          "oracle_txn_id": "TX-PO2",
+          "outcome": "posted",
+          "posting_intent_id": "PI-PO2"
+        }
+      ],
+      "case_id": "C01",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "oracle_posting_receipt",
+        "sha256": "f01c119140202784e8e59d4089591be6393ecf6add82b6313afdf49d6c9782df",
+        "source_id": "C01-evidence"
+      },
+      "expected_terminal": "POSTED",
+      "invoice_key": "INV-PO2",
+      "scenario": "po_2way_match",
+      "state_trace": [
+        "RECEIVED",
+        "VALIDATED",
+        "MATCHED",
+        "APPROVED",
+        "POST_INTENT",
+        "POSTED"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "attempt_id": "A02",
+          "oracle_txn_id": "TX-PO3",
+          "outcome": "posted",
+          "posting_intent_id": "PI-PO3"
+        }
+      ],
+      "case_id": "C02",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "oracle_posting_receipt",
+        "sha256": "30e70ebe9f88445cefd3263c702f94ee49a49a2e1cfb6b2836cbc5e02a232072",
+        "source_id": "C02-evidence"
+      },
+      "expected_terminal": "POSTED",
+      "invoice_key": "INV-PO3",
+      "scenario": "po_3way_match",
+      "state_trace": [
+        "RECEIVED",
+        "VALIDATED",
+        "MATCHED",
+        "APPROVED",
+        "POST_INTENT",
+        "POSTED"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "attempt_id": "A03",
+          "oracle_txn_id": "TX-NPO",
+          "outcome": "posted",
+          "posting_intent_id": "PI-NPO"
+        }
+      ],
+      "case_id": "C03",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "oracle_posting_receipt",
+        "sha256": "71a8749e8368fa6bdb401836fd800ca8a8814f974bd7b70a2aadd21188d7a8d0",
+        "source_id": "C03-evidence"
+      },
+      "expected_terminal": "POSTED",
+      "invoice_key": "INV-NPO",
+      "scenario": "non_po_coding_approval",
+      "state_trace": [
+        "RECEIVED",
+        "VALIDATED",
+        "CODED",
+        "APPROVED",
+        "POST_INTENT",
+        "POSTED"
+      ]
+    },
+    {
+      "attempts": [],
+      "case_id": "C04",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "duplicate_detection",
+        "sha256": "6ae6a35bc4c0575f6ac583d3fcf1814a9d1d8449fc4f77addc271f46b4079960",
+        "source_id": "C04-evidence"
+      },
+      "expected_terminal": "HOLD",
+      "invoice_key": "INV-DUP",
+      "scenario": "duplicate_invoice",
+      "state_trace": [
+        "RECEIVED",
+        "DUPLICATE_DETECTED",
+        "HOLD"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "attempt_id": "A05a",
+          "oracle_txn_id": null,
+          "outcome": "failed",
+          "posting_intent_id": "PI-RETRY"
+        },
+        {
+          "attempt_id": "A05b",
+          "oracle_txn_id": "TX-RETRY",
+          "outcome": "posted",
+          "posting_intent_id": "PI-RETRY"
+        }
+      ],
+      "case_id": "C05",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "oracle_posting_receipt",
+        "sha256": "f272b466e85843826d788b20f60984e710da3da00873c77be5a64df5969b62f1",
+        "source_id": "C05-evidence"
+      },
+      "expected_terminal": "POSTED",
+      "invoice_key": "INV-RETRY",
+      "scenario": "posting_retry",
+      "state_trace": [
+        "RECEIVED",
+        "VALIDATED",
+        "MATCHED",
+        "APPROVED",
+        "POST_INTENT",
+        "RETRYABLE_FAILURE",
+        "POST_INTENT",
+        "POSTED"
+      ]
+    },
+    {
+      "attempts": [],
+      "case_id": "C06",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "inquiry_resolution",
+        "sha256": "43d3a144786b904d3b7e918e1e2acb36d1966201c04638dd2eb8852ffe728e7d",
+        "source_id": "C06-evidence"
+      },
+      "expected_terminal": "INQUIRY_RESOLVED",
+      "invoice_key": "SUP-INQ",
+      "scenario": "supplier_inquiry",
+      "state_trace": [
+        "INQUIRY_RECEIVED",
+        "INQUIRY_RESOLVED"
+      ]
+    },
+    {
+      "attempts": [],
+      "case_id": "C07",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "reconciliation",
+        "sha256": "f0c0009a898d6a65cac857b638090c8679f5d76b52f533402a526d3beca0f66c",
+        "source_id": "C07-evidence"
+      },
+      "expected_terminal": "RECONCILED",
+      "invoice_key": "STMT-001",
+      "scenario": "statement_reconciliation",
+      "state_trace": [
+        "STATEMENT_RECEIVED",
+        "RECONCILED"
+      ]
+    },
+    {
+      "attempts": [],
+      "case_id": "C08",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "exception_route",
+        "sha256": "6b9f3c40e8e7436d2da6a9b158273e91414ce395e41b6fe10ea35fc19bc15f33",
+        "source_id": "C08-evidence"
+      },
+      "expected_terminal": "HOLD",
+      "invoice_key": "INV-EXC",
+      "scenario": "exception_routing",
+      "state_trace": [
+        "RECEIVED",
+        "VALIDATED",
+        "EXCEPTION",
+        "HOLD"
+      ]
+    },
+    {
+      "attempts": [],
+      "case_id": "C09",
+      "evidence": {
+        "captured_at": "2026-09-13T09:30:00Z",
+        "kind": "audit_report",
+        "sha256": "d11fd41485f7ba5540e414c41e407db69bb935f45f8fe9ea57ff3d421b3e5414",
+        "source_id": "C09-evidence"
+      },
+      "expected_terminal": "REPORTED",
+      "invoice_key": "AUDIT-001",
+      "scenario": "reporting_audit",
+      "state_trace": [
+        "AUDIT_REQUESTED",
+        "REPORTED"
+      ]
+    }
+  ],
+  "evaluated_at": "2026-09-13T09:30:00Z",
+  "opportunity_id": "OHSU-RFI-2027-0824",
+  "oracle_target": "EBS_R12"
+}

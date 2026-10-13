@@ -1,0 +1,34 @@
+{
+  "case_id": "CASE-SYN-IAM-RUNBOOK",
+  "synthetic": true,
+  "_fiction_notice": "Invented for demonstration. Models the common real situation where the assisted workflow was adopted before anybody instrumented the checking step.",
+  "workflow": "Producing an access-review runbook section (SYNTHETIC)",
+  "assumptions": [
+    {"id": "ASM-D-001", "name": "analyst_hourly_cost", "value": 85, "low": 70, "high": 110,
+     "unit": "currency_per_hour", "basis": "ASSUMED", "source": "synthetic planning assumption"},
+    {"id": "ASM-D-002", "name": "documents_per_month", "value": 10, "low": 6, "high": 14,
+     "unit": "documents_per_month", "basis": "ASSUMED", "source": "synthetic volume assumption"},
+    {"id": "ASM-D-003", "name": "evaluation_horizon_months", "value": 12, "low": 12, "high": 12,
+     "unit": "months", "basis": "ASSUMED", "source": "synthetic one-year evaluation window"}
+  ],
+  "documents": [
+    {"id": "DOC-D-B1", "variant": "BASELINE", "events": [
+      {"id": "EVT-D-B1-1", "kind": "AUTHOR", "minutes": 120, "day": 1},
+      {"id": "EVT-D-B1-2", "kind": "CHECK", "minutes": 25, "day": 2},
+      {"id": "EVT-D-B1-3", "kind": "ACCEPT", "minutes": 0, "day": 3}]},
+    {"id": "DOC-D-B2", "variant": "BASELINE", "events": [
+      {"id": "EVT-D-B2-1", "kind": "AUTHOR", "minutes": 115, "day": 1},
+      {"id": "EVT-D-B2-2", "kind": "CHECK", "minutes": 28, "day": 2},
+      {"id": "EVT-D-B2-3", "kind": "ACCEPT", "minutes": 0, "day": 3}]},
+    {"id": "DOC-D-A1", "variant": "ASSISTED", "events": [
+      {"id": "EVT-D-A1-1", "kind": "GENERATE", "minutes": 8, "day": 1},
+      {"id": "EVT-D-A1-2", "kind": "CHECK", "minutes": null, "day": 1},
+      {"id": "EVT-D-A1-3", "kind": "ACCEPT", "minutes": 0, "day": 2}]},
+    {"id": "DOC-D-A2", "variant": "ASSISTED", "events": [
+      {"id": "EVT-D-A2-1", "kind": "GENERATE", "minutes": 9, "day": 1},
+      {"id": "EVT-D-A2-2", "kind": "CHECK", "minutes": 33, "day": 1}]}
+  ],
+  "quality_measurements": [
+    {"id": "QM-D-A1", "document_id": "DOC-D-A1", "required_elements": 10, "correct_elements": 7, "fabricated_references": 1}
+  ]
+}

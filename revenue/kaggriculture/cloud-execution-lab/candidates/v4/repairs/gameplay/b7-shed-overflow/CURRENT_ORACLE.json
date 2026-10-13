@@ -1,0 +1,60 @@
+{
+  "kind": "titan-v4-current-engine-oracle-receipt",
+  "mechanism": "b7-shed-overflow",
+  "status": "unit_phase_pass_isolated_dependency_activation_blocked",
+  "activation_authorized": false,
+  "canonical_branch": "main",
+  "oracle_blob": "109bf70a385b211eede790f00a2de05a979b4e02",
+  "oracle_commit": "f5d6da7d82a45d30400c29ef6e1bf88df6bdd30a",
+  "pins": {
+    "legacy_guard": "a27da659884c0f9a9594cbd9332b5edb4d7f3307",
+    "official_engine": "3c202c7ee921da239356789e266b694635103fc4",
+    "current_titan_runtime": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+    "official_spec": "b354d06b742fe48402513792253f1a5c29366b20"
+  },
+  "planned_execution": [
+    "python current_engine_oracle.py --pretty",
+    "python -O current_engine_oracle.py --pretty"
+  ],
+  "execution": {
+    "python": "3.13.5",
+    "direct_command_status": "blocked_missing_kaggle_environments_in_sandbox",
+    "isolated_execution": "Unchanged exact-pinned oracle.run() with exact official engine/spec and an explicit raising resolve_episode_seed import shim; resolver calls zero",
+    "normal": "PASS",
+    "optimized": "PASS",
+    "stdout_identical_between_modes": true,
+    "matrix_cells": 128,
+    "changed_cells": 80,
+    "unchanged_cells": 48,
+    "changed_per_seat": {"0": 40, "1": 40},
+    "changed_per_actor": {"0": 40, "1": 40},
+    "boundaries_passed": 5,
+    "runner_claim": "ASTRA-B7-EXEC completed and released",
+    "companion_portable_runner": "run_portable_oracle.py; separate peer implementation merged via PR12696"
+  },
+  "coverage": {
+    "base_matrix_cells": 128,
+    "dimensions": ["player seat 0/1", "actor 0/1", "shed room 0/1/2/5", "cargo 1/2/3/6", "MILK/WOOL"],
+    "boundaries": ["prior product PLACE", "prior DROP", "prior PICKUP fail-closed", "ambiguous animal PLACE fail-closed", "disabled exact identity"]
+  },
+  "intended_theorem": "For admitted single-product overflowing DROP rows, transformed and parent engine outcomes have identical farm state and shed contents; only the cargo units destroyed by DROP overflow remain in the transformed actor inventory.",
+  "theorem_scope": "Unit phase only. This theorem is not global full-turn or multi-turn preservation.",
+  "runtime_note": "No hook is installed. The pinned current ABI admits a future final selected unit-action guard only after _feed_stock_selected and _early_capital_selected and before finish bookkeeping.",
+  "confirmed_activation_blocker": {
+    "kind": "retained_earlier_cargo_crowds_out_later_cargo_at_EOD",
+    "both_seats_cash_delta_in_constructed_witness": -1269,
+    "immediate_eod_veto_is_insufficient": true,
+    "reason": "Cargo retained on step262 can still displace more valuable cargo at EOD263 even when the EOD action itself is vetoed",
+    "required_before_activation": "Multi-turn inventory-priority/cargo-custody proof plus current-package natural-engagement and economic gates",
+    "evidence": "EOD_PRIORITY_RECEIPT.json",
+    "counterexample": "test_b7_carryover_risk.py",
+    "narrow_repair_and_tests_pr": 12704,
+    "merge_commit": "d917708ec6c178d434dbfbe04cdbc19db9a9a9d0"
+  },
+  "prohibitions": [
+    "do not interpret isolated unit-phase PASS as installed-package, full-season, hosted3.11 or economic PASS",
+    "do not wire or enable B7 while the confirmed carry-over priority risk remains unresolved",
+    "do not run the stale legacy evaluator as current authority",
+    "do not change production/Kaggle/defaults/ref ancestry"
+  ]
+}

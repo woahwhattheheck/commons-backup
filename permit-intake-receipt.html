@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>Permit intake receipt — Commons</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0e12;--panel:#141a21;--line:#2d3b48;--ink:#eef6ff;--muted:#9db0c2;--blue:#65b8ff;--green:#70d6a0;--red:#ff7b7b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#162536 0,var(--bg) 40%);color:var(--ink);font:16px/1.48 system-ui,sans-serif}
+main{max-width:1100px;margin:auto;padding:30px 18px 80px}.eyebrow{letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-size:.78rem}
+h1{font-size:clamp(2.4rem,7vw,5.5rem);line-height:.94;margin:.2em 0}.lede{font-size:1.2rem;max-width:780px;color:var(--muted)}
+.offer,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}.offer{display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px;margin:26px 0}
+.price{font-size:2.2rem;color:var(--blue);font-weight:800}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}label{display:grid;gap:5px;color:var(--muted);font-size:.9rem}.wide{grid-column:1/-1}
+input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:#090d11;color:var(--ink)}
+textarea{min-height:76px}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}button{border:1px solid var(--blue);border-radius:999px;padding:10px 14px;background:var(--blue);color:#06111b;font-weight:750;cursor:pointer}
+button.secondary{background:transparent;color:var(--blue)}button.danger{background:transparent;border-color:var(--red);color:var(--red)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#070a0d;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:240px;color:var(--green)}
+.truth{border-left:4px solid var(--green);padding-left:14px}.small{color:var(--muted);font-size:.88rem}.status{display:inline-block;padding:4px 9px;border-radius:999px;background:#0a1015;color:var(--green);font-size:.78rem}
+@media(max-width:780px){.grid,.fields,.offer{grid-template-columns:1fr}}
+</style></head><body><main>
+<nav aria-label="Back to Commons"><a href="./index.html">← Commons</a></nav>
+<p class="eyebrow">Commons · permitting operations diagnostic</p>
+<h1>One application. One checklist. One honest receipt.</h1>
+<p class="lede">Turn a permit packet into a deterministic completeness checklist, a named missing-item notice, and the correct review queue—without approving or denying anything.</p>
+<section class="offer"><div><strong>$199 · one business day</strong><p class="small">One actual intake workflow, agreed de-identified fixtures, exact rule map, replay proof, and receipt. Optional fixed $2,500 proof only after the diagnostic finds a fit.</p></div><div class="price">$199</div><p class="price-actions"><a class="buy" href="https://buy.stripe.com/8x2cN42Kp8bf8qBgJs43S0n" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a> <span class="small">Secure Stripe checkout opens in a new tab.</span></p></section>
+
+<p class="truth"><strong>Truth boundary:</strong> this browser tool is intake-only. It sends no notice, creates no government record, and makes no approval or denial. All data stays in this tab.</p>
+<div class="grid">
+<section class="card"><h2>Synthetic application</h2><div class="fields">
+<label>Application ID<input id="applicationId" value="PERMIT-2048"></label>
+<label>Permit type<select id="permitType"><option value="residential-remodel" selected>Residential remodel</option><option value="commercial-tenant">Commercial tenant improvement</option><option value="sign">Sign permit</option><option value="demolition">Demolition</option></select></label>
+<label>Applicant<input id="applicant" value="Ada Rivera"></label><label>Parcel ID<input id="parcelId" value="17-042-008"></label>
+<label class="wide">Site address<input id="siteAddress" value="100 Civic Commons Way"></label>
+<label class="wide">Scope<input id="scope" value="Kitchen remodel; no structural wall removal"></label>
+<label>Estimated cost<input id="estimatedCost" value="24000"></label><label>Owner consent<input id="ownerConsent" value="attached"></label>
+<label>Plan set<input id="planSet" value="A0-A4"></label><label>Occupancy type<input id="occupancyType" value="B"></label>
+<label>Contractor license<input id="contractorLicense" value="LIC-8821"></label><label>Sign dimensions<input id="signDimensions" value="4x8 ft"></label>
+<label>Site plan<input id="sitePlan" value="attached"></label><label>Utility disconnects<input id="utilityDisconnects" value="confirmed"></label>
+<label>Asbestos survey<input id="asbestosSurvey" value="clear"></label>
+</div><div class="actions"><button id="run">Run intake</button><button id="crashChecklist" class="secondary">Crash after checklist</button><button id="crashNotice" class="secondary">Crash after notice</button><button id="replay" class="secondary">Replay / resume</button><button id="rollback" class="danger">Rollback incomplete</button></div></section>
+<section class="card"><h2>Applicant receipt <span id="status" class="status">READY TO RUN</span></h2><pre id="output">Run a scenario. Exact JSON appears here.</pre><div class="actions"><button id="copy" class="secondary">Copy JSON</button><button id="download" class="secondary">Download JSON</button></div></section>
+<section class="card"><h2>Exact buyer intake</h2><p class="small">For a permitting director or government CIO. Copy/export only; nothing is submitted.</p><div class="fields">
+<label>Agency / jurisdiction<input id="org" placeholder="City or county"></label><label>Buyer / title<input id="buyer" placeholder="Permitting director / CIO"></label>
+<label>Public work route<input id="route" placeholder="Published email or profile URL"></label><label>Monthly volume<input id="volume" type="number" min="0"></label>
+<label class="wide">Current intake rule source<textarea id="ruleSource" placeholder="Checklist, ordinance section, routing table"></textarea></label>
+<label class="wide">Observed failure<textarea id="failure" placeholder="Missing documents, wrong queue, duplicate notices"></textarea></label>
+</div><div class="actions"><button id="packet">Build buyer packet</button></div></section>
+<section class="card"><h2>Binary acceptance</h2><ul>
+<li>Every checklist item comes from the published permit-type matrix.</li><li>Incomplete packets create one missing-item notice, never a decision.</li>
+<li>Every recognized type routes once to its exact review queue.</li><li>Duplicate replay creates no second notice, route, or receipt.</li>
+<li>Crash/resume, rollback, and conflicting reuse stay explicit and auditable.</li></ul>
+<p>Delivery contact: <a style="color:var(--blue)" href="mailto:tokenjunkielabs@gmail.com">tokenjunkielabs@gmail.com</a></p></section>
+</div><p class="foot-cta"><a class="buy" href="https://buy.stripe.com/8x2cN42Kp8bf8qBgJs43S0n" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a> <span class="small">Secure Stripe checkout opens in a new tab.</span></p>
+</main>
+<script src="./permit-intake-receipt.js"></script><script>
+(function(){
+ var api=window.PermitIntakeReceipt,journal=api.createJournal(),last=null;
+ function v(id){return document.getElementById(id).value}
+ function application(){var keys=["applicant","parcelId","siteAddress","scope","estimatedCost","ownerConsent","planSet","occupancyType","contractorLicense","signDimensions","sitePlan","utilityDisconnects","asbestosSurvey"],items={};keys.forEach(function(k){items[k]=v(k)});var applicationId=v("applicationId"),prior=journal.applications[applicationId.trim()];return{applicationId:applicationId,permitType:v("permitType"),submittedAt:prior&&prior.input?prior.input.submittedAt:new Date().toISOString(),items:items}}
+ function show(r,remember){if(remember!==false)last=r;document.getElementById("output").textContent=JSON.stringify(r,null,2);document.getElementById("status").textContent=r.status||"UNKNOWN"}
+ function run(crashAt){show(api.processApplication(application(),journal,{crashAt:crashAt||"",now:new Date().toISOString()}))}
+ document.getElementById("run").onclick=function(){run("")};document.getElementById("crashChecklist").onclick=function(){run("after_checklist")};document.getElementById("crashNotice").onclick=function(){run("after_notice")};document.getElementById("replay").onclick=function(){run("")};
+ document.getElementById("rollback").onclick=function(){show(api.rollback(v("applicationId"),journal,{now:new Date().toISOString()}))};
+ document.getElementById("packet").onclick=function(){show({packetVersion:1,slug:"permit-intake-receipt",generatedAt:new Date().toISOString(),buyer:{agency:v("org"),nameAndTitle:v("buyer"),publicRoute:v("route"),monthlyVolume:Number(v("volume")||0)},workflow:{ruleSource:v("ruleSource"),observedFailure:v("failure")},offer:{diagnosticUsd:199,window:"one business day",optionalProofUsd:2500,proofOnlyAfterFit:true},latestSyntheticReceipt:last,submission:"LOCAL_COPY_ONLY",externalMessagesSent:0,approvals:0,denials:0,cashUsd:0},false)};
+ document.getElementById("copy").onclick=function(){navigator.clipboard.writeText(document.getElementById("output").textContent)};
+ document.getElementById("download").onclick=function(){var blob=new Blob([document.getElementById("output").textContent],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="permit-intake-receipt.json";a.click();URL.revokeObjectURL(a.href)};
+})();
+</script>
+
+
+</body></html>

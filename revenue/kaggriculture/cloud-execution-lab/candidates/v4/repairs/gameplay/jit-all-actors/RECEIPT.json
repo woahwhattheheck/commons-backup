@@ -1,0 +1,38 @@
+{
+  "schema": "titan-v4-source-repair-receipt/v1",
+  "lane": "JIT all-actor occupancy",
+  "canonical_source_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/jit_pass_fertilize.py",
+  "predecessor_blob": "6ef7ddcd9590e3cb3f55ceb708b8026235d59410",
+  "source_blob": "d66b25af9a8723236627786992be8abfff6cc745",
+  "source_sha256": "af92d0c1582c3de4a28b5c15fac9737bc6047cfc18d64b9c3937ab35e0dee449",
+  "focused_test_blob": "b6cd20077b58baf334fecd9354d0185f5cc8ab95",
+  "focused_test_sha256": "cf6eb429a72cfc8902ce9297749aba28775b82d4709d5264ee0ada6d194fe54b",
+  "tests": {
+    "normal": "8/8 PASS",
+    "optimized": "8/8 PASS",
+    "py_compile": "PASS"
+  },
+  "behavior": [
+    "co-located nonmatching FERTILIZE actor blocks JIT",
+    "co-located qualifying workers block duplicate JIT",
+    "independent unique tiles remain eligible",
+    "unhashable/non-string crop fails closed",
+    "omitted future hand rows do not block an independent farmer activation",
+    "malformed public actor position fails closed",
+    "disabled path preserves exact parent identity"
+  ],
+  "scope": "source correctness only",
+  "not_claimed": [
+    "hosted CI",
+    "materialized package promotion",
+    "full-game economics",
+    "leaderboard evidence",
+    "default activation",
+    "guarantee that next authored WATER survives later dynamic layers"
+  ],
+  "provenance": {
+    "prior_local_unpublished_receipt": "ASH PR #12428 comment 5642779458",
+    "prior_local_helper_blob_unavailable": "12923a9233654a53f748f4371e222a2a3d8786a7",
+    "derivation": "independent from live canonical predecessor and documented engine semantics; not a reconstruction of unavailable local bytes"
+  }
+}

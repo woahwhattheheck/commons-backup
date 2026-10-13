@@ -1,0 +1,21 @@
+name: nourish-digital-health
+on:
+  pull_request:
+    paths:
+      - 'competitions/nourish-autoimmunity-digital-health-2026/**'
+      - '.github/workflows/nourish-digital-health.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/nourish-autoimmunity-digital-health-2026/**'
+      - '.github/workflows/nourish-digital-health.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test test_core.mjs test_readiness.mjs
+        working-directory: competitions/nourish-autoimmunity-digital-health-2026

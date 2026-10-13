@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "lane": "V4_OPERATING_STOCK_EXECUTABLE_PREFIX",
+  "status": "native_port_tested_unwired",
+  "canonical_workspace": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "claim": "V4-OPERATING-STOCK-EXEC-PREFIX-20260911-01",
+  "production_pins": {
+    "main_observed": "63a553c463a282201b6d2e54e79eabed3a08328d",
+    "main.py": "4a8cf7bcda1f0fea231a144692cb84a779a9e73e",
+    "titan_runtime.py": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+    "operating_stock.py": "781aa90da0d85d0ba23c665e29d6087d182c085e",
+    "TITAN-CONFIG.json": "3a3bef83899d3010fad623b628d9e95d9978111b"
+  },
+  "production_relevance": {
+    "operating_stock_enabled": true,
+    "bug": "FERTILIZER operating-stock admission reads raw market suffix rows that the engine cannot execute after maxMarketOrdersPerTurn; dead-tail HIRE/BUY rows can falsely block an otherwise valid executable-prefix reservation, and the delegate can rewrite dead suffix SELL rows.",
+    "contrast": "adjacent WHEAT feed-stock caller already gates SELL inspection on market[:10], and several operating-stock subhelpers already bound market scans to maxMarketOrdersPerTurn"
+  },
+  "repair": {
+    "module": "operating_stock_prefix.py",
+    "module_bytes": 4524,
+    "module_sha256": "ece51ffc45cd71816fb8f7b9aabc35517eaaa74df711a8453e4dfb279502ca4d",
+    "module_git_blob": "dafa0afc9f1144bc4c9f768a1e84b4aa01ae05a2",
+    "test": "test_operating_stock_prefix.py",
+    "test_bytes": 5673,
+    "test_sha256": "d288ae4aa73c74b49c871151688360e2307c633a7d963c7a9a744856bd00402d",
+    "test_git_blob": "89655121f25c6f45c5fe0c6e5433754e2fa406b7"
+  },
+  "verification": {
+    "py_compile": "PASS",
+    "unittest_normal": "9/9 PASS",
+    "unittest_optimized": "9/9 PASS",
+    "properties": [
+      "current and future market views expose only the executable prefix",
+      "raw current-action suffix is restored byte-for-byte after a prefix edit",
+      "future route rows are deep-isolated from delegate mutation",
+      "full executable prefixes cannot change length and shift a raw suffix into execution",
+      "nonmarket delegate edits fail closed",
+      "unchanged delegates return the exact parent action object"
+    ]
+  },
+  "native_port": {
+    "owner": "ASTRA-STOCKPORT",
+    "module": "port_operating_stock_prefix.py",
+    "module_git_blob": "dfd13f1652fa1092d34576b3a66716421d9deabb",
+    "test": "test_native_stock_prefix.py",
+    "test_git_blob": "48c951a11cf9a31663f759db0ff93f3fe24f5dc5",
+    "caller_fixture": "current_caller.fixture.txt",
+    "caller_fixture_git_blob": "d4d5633e45a3c0a0bbc150cee7bdff404cc907b3",
+    "helper_preimage": "781aa90da0d85d0ba23c665e29d6087d182c085e",
+    "helper_postimage": "6a511194c53a5a3baab112160d52d97f2e271472",
+    "runtime_method_preimage": "365a88dae11472e6fa1e07f4fbc6150f2bf2ca2f",
+    "official_engine": "3c202c7ee921da239356789e266b694635103fc4",
+    "engine_utils": "91c8822ee6201ba4a5a8416c7dbe34f95dd61c87",
+    "receipt": "NATIVE-EXECUTION.md",
+    "receipt_commit": "42400795067403d152225aa8f78dd9730f59add8",
+    "unittest_normal": "25/25 PASS",
+    "unittest_optimized": "25/25 PASS",
+    "test_count_scope": "5 existing current-delegate oracle tests plus 20 native source/caller/engine tests; original generic 9-test guard suite is a separate owner receipt",
+    "suffix_cases_per_mode": 168,
+    "in_cap_parity_cases_per_mode": 32,
+    "engine_prefix_pairs_per_mode": 72,
+    "engine_calls_per_mode": 348,
+    "reverted_native_variants_detected_per_mode": 5,
+    "trajectory_result": "both-seat synthetic 48-callback routes: +1 STRAWBERRY yield at refresh, -100 current cash; not final-game economics",
+    "runtime_scope": "exact extracted current method and caller-to-full-helper tests; full TitanAgent/package not executed",
+    "integration_surface": "native two-source delta, not an added prototype-guard controller",
+    "source_claim": "completed_released"
+  },
+  "boundaries": {
+    "production_wired": false,
+    "default_changed": false,
+    "feature_changed": false,
+    "economics_changed": false,
+    "legacy_materializer_authorized": false,
+    "next_gate": "delegate execution and native source port COMPLETE; sole current-runtime serializer consumes port_operating_stock_prefix.py, preserves existing defaults and concurrent runtime fixes, then runs full-current-runtime composition and opponent-diverse economic gates before production/archive promotion"
+  }
+}

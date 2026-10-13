@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/checkout_handoff/request.schema.json",
+  "title": "Commons acceptance-locked checkout request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "request_id", "crm", "sku_id", "state", "acceptance", "acceptance_digest", "quote", "provider", "routes"],
+  "properties": {
+    "schema_version": {"const": "commons-checkout-request/v1"},
+    "kind": {"const": "ACCEPTANCE_LOCKED_CHECKOUT_REQUEST"},
+    "request_id": {"$ref": "#/$defs/id"},
+    "crm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_id", "table_id", "record_id"],
+      "properties": {
+        "base_id": {"const": "appo8mlEVFcph1SP0"},
+        "table_id": {"const": "tblYNSKoenAE3Tcl1"},
+        "record_id": {"type": "string", "pattern": "^rec[A-Za-z0-9]{14}$"}
+      }
+    },
+    "sku_id": {"$ref": "#/$defs/id"},
+    "state": {"const": "ACCEPTANCE_LOCKED"},
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intake_sentence", "given", "when", "then", "input", "expected_output", "environment", "window_start", "window_end", "timezone", "refund_choice", "exclusions"],
+      "properties": {
+        "intake_sentence": {"$ref": "#/$defs/text"},
+        "given": {"$ref": "#/$defs/text"},
+        "when": {"$ref": "#/$defs/text"},
+        "then": {"$ref": "#/$defs/text"},
+        "input": {"$ref": "#/$defs/text"},
+        "expected_output": {"$ref": "#/$defs/text"},
+        "environment": {"$ref": "#/$defs/text"},
+        "window_start": {"$ref": "#/$defs/timestamp"},
+        "window_end": {"$ref": "#/$defs/timestamp"},
+        "timezone": {"const": "America/New_York"},
+        "refund_choice": {"enum": ["REFUND_IF_MISS", "FREE_NEXT_BUSINESS_DAY_REPAIR_IF_MISS"]},
+        "exclusions": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {"enum": ["credentials", "private-data", "pii-phi", "authentication", "billing", "production-migration", "ongoing-hosting-or-sla", "white-box-or-model-files"]}
+        }
+      }
+    },
+    "acceptance_digest": {"$ref": "#/$defs/sha256"},
+    "quote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "amount"],
+      "properties": {
+        "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "amount": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"}
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "livemode"],
+      "properties": {"name": {"const": "stripe"}, "livemode": {"type": "boolean"}}
+    },
+    "routes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["success_url", "cancel_url"],
+      "properties": {
+        "success_url": {"type": "string", "pattern": "^https://"},
+        "cancel_url": {"type": "string", "pattern": "^https://"}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 8, "maxLength": 120, "pattern": "^[A-Za-z0-9._-]+$"},
+    "text": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "format": "date-time", "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"}
+  }
+}

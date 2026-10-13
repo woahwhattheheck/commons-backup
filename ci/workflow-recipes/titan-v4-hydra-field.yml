@@ -1,0 +1,110 @@
+name: TITAN V4 HYDRA current-native field gate
+on:
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/intermittent-ongoing-water/**
+      - .github/workflows/titan-v4-hydra-field.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: titan-v4-hydra-field-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  current-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Authenticate HYDRA source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/intermittent-ongoing-water
+          test "$(git hash-object "$SRC/ongoing_water_skip.py")" = b7b91bb92d5825aa3b1e4c36e5470f26382ee3c8
+          test "$(git hash-object "$SRC/test_ongoing_water_skip.py")" = 75babaf66b43d13088978b54a0a688f1bda5c72f
+          python -B -m py_compile "$SRC/ongoing_water_skip.py" "$SRC/test_ongoing_water_skip.py" "$SRC/hydra_native_entry.py" "$SRC/run_hydra_current_field.py"
+      - name: Focused source regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/intermittent-ongoing-water
+          pushd "$SRC"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v test_ongoing_water_skip
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest -v test_ongoing_water_skip
+          popd
+      - name: Recover authenticated canonical runtime
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARTIFACT_ID=10180428228
+          ZIP="$RUNNER_TEMP/hydra-canonical.zip"
+          EXTRACT="$RUNNER_TEMP/hydra-artifact"
+          RUNTIME="$RUNNER_TEMP/hydra-runtime"
+          mkdir -p "$EXTRACT" "$RUNTIME"
+          curl --fail --location --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o "$ZIP"
+          echo "737c0b2b69147a826d1000f3b2266b70a579fffd0ab91d4126c6c9a84159d799  $ZIP" | sha256sum -c -
+          unzip -q "$ZIP" -d "$EXTRACT"
+          TAR="$EXTRACT/checked-package/exports/titan-current.tar.gz"
+          echo "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9  $TAR" | sha256sum -c -
+          tar -xzf "$TAR" -C "$RUNTIME"
+          test "$(sha256sum "$RUNTIME/main.py" | awk '{print $1}')" = c4c22d0f2b1071cadf6a9f74effccc8cb20ea9f4d10ca1cf9f1fe57351709dc1
+          SRC="$GITHUB_WORKSPACE/revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/intermittent-ongoing-water"
+          cp "$SRC/ongoing_water_skip.py" "$RUNTIME/ongoing_water_skip.py"
+          cp "$SRC/hydra_native_entry.py" "$RUNTIME/hydra_native_entry.py"
+          printf 'HYDRA_RUNTIME=%s\n' "$RUNTIME" >> "$GITHUB_ENV"
+          printf 'HYDRA_RESULTS=%s\n' "$RUNNER_TEMP/hydra-results" >> "$GITHUB_ENV"
+      - name: Three-arm both-seat current-native gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/intermittent-ongoing-water
+          mkdir -p "$HYDRA_RESULTS"
+          PYTHONDONTWRITEBYTECODE=1 python -B "$SRC/run_hydra_current_field.py" \
+            --runtime "$HYDRA_RUNTIME" \
+            --output "$HYDRA_RESULTS" \
+            --seeds 2026091201,2026091207,2026091213,2026091219 \
+            | tee "$HYDRA_RESULTS/summary.log"
+      - name: Assert pinned HYDRA field conclusion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          result = json.loads((Path(os.environ["HYDRA_RESULTS"]) / "HYDRA-CURRENT-FIELD-RESULT.json").read_text())
+          summary = result["summary"]
+          assert summary["classification"] == "SAFETY_BLOCKED", summary
+          assert summary["complete_cells"] == summary["requested_cells"], summary
+          assert summary["off_exact_identity_cells"] == summary["requested_cells"], summary
+          assert summary["engaged_cells"] > 0, summary
+          assert summary["weed_after_rewrite"] > 0, summary
+          print(json.dumps(summary, sort_keys=True))
+          PY
+      - name: Pin checkout and source hashes
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HYDRA_RESULTS"
+          git rev-parse HEAD > "$HYDRA_RESULTS/checkout-commit.txt"
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/intermittent-ongoing-water
+          sha256sum "$SRC/ongoing_water_skip.py" "$SRC/hydra_native_entry.py" "$SRC/run_hydra_current_field.py" > "$HYDRA_RESULTS/source-sha256.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v4-hydra-current-field-${{ github.run_id }}
+          path: ${{ env.HYDRA_RESULTS }}
+          retention-days: 14
+          if-no-files-found: error

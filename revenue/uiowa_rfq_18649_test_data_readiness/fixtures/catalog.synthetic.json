@@ -1,0 +1,80 @@
+{
+  "label": "UIOWA-047 fictional ESS/RIS/IAM rehearsal catalog",
+  "as_of": "2026-09-19",
+  "datasets": [
+    {
+      "dataset_id": "ESS-REGISTRATION-BOUNDARIES",
+      "service": "ESS",
+      "purpose": "Exercise registration rule boundaries and integration behavior.",
+      "owner_role": "Student Systems Test Lead",
+      "data_origin": "synthetic",
+      "handling_reference": "SYNTHETIC-ONLY",
+      "last_refreshed": "2026-09-10",
+      "refresh_cadence_days": 30,
+      "fixture_interface_version": "student-registration-v4",
+      "current_interface_version": "student-registration-v4",
+      "required_boundary_cases": [
+        "add_drop_deadline",
+        "maximum_credit_load",
+        "waitlist_to_enrolled"
+      ],
+      "covered_boundary_cases": [
+        "add_drop_deadline",
+        "maximum_credit_load",
+        "waitlist_to_enrolled"
+      ],
+      "cleanup_required": true,
+      "cleanup_last_verified": "2026-09-11",
+      "retention_days": 45,
+      "estimated_refresh_hours": 4
+    },
+    {
+      "dataset_id": "RIS-AWARD-SYNC",
+      "service": "RIS",
+      "purpose": "Exercise sponsored-award synchronization and status transitions.",
+      "owner_role": "Research Systems Integration Lead",
+      "data_origin": "synthetic",
+      "handling_reference": "SYNTHETIC-ONLY",
+      "last_refreshed": "2026-05-15",
+      "refresh_cadence_days": 30,
+      "fixture_interface_version": "research-awards-v2",
+      "current_interface_version": "research-awards-v3",
+      "required_boundary_cases": [
+        "pending_award",
+        "sponsor_type_variation",
+        "resubmission_after_change"
+      ],
+      "covered_boundary_cases": [
+        "sponsor_type_variation"
+      ],
+      "cleanup_required": true,
+      "cleanup_last_verified": "2026-05-15",
+      "retention_days": 60,
+      "estimated_refresh_hours": 8
+    },
+    {
+      "dataset_id": "IAM-ROLE-TRANSITION",
+      "service": "IAM",
+      "purpose": "Exercise role and employment-state transitions across relying services.",
+      "owner_role": "",
+      "data_origin": "synthetic",
+      "handling_reference": "SYNTHETIC-ONLY",
+      "last_refreshed": null,
+      "refresh_cadence_days": 30,
+      "fixture_interface_version": "identity-events-v5",
+      "current_interface_version": "identity-events-v5",
+      "required_boundary_cases": [
+        "contractor_termination",
+        "role_change",
+        "emergency_access_expiry"
+      ],
+      "covered_boundary_cases": [
+        "role_change"
+      ],
+      "cleanup_required": true,
+      "cleanup_last_verified": null,
+      "retention_days": null,
+      "estimated_refresh_hours": null
+    }
+  ]
+}

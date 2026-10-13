@@ -1,0 +1,90 @@
+{
+  "schema": "erdos146-reader-plan-v1",
+  "hosts": [
+    {
+      "name": "complete",
+      "mask": 32767
+    },
+    {
+      "name": "empty",
+      "mask": 0
+    },
+    {
+      "name": "one_K23",
+      "mask": 476
+    },
+    {
+      "name": "cycle6",
+      "mask": 21041
+    },
+    {
+      "name": "K5_isolated",
+      "mask": 5871
+    },
+    {
+      "name": "K33",
+      "mask": 4060
+    }
+  ],
+  "filters": [
+    {
+      "name": "all",
+      "filter": {}
+    },
+    {
+      "name": "all_maximum",
+      "filter": {
+        "size": 10
+      }
+    },
+    {
+      "name": "required_forbidden",
+      "filter": {
+        "include": 476
+      }
+    },
+    {
+      "name": "avoid_pattern_edges",
+      "filter": {
+        "exclude": 476
+      }
+    },
+    {
+      "name": "mixed_size8",
+      "filter": {
+        "include": 3,
+        "exclude": 4,
+        "size": 8
+      }
+    },
+    {
+      "name": "star_size9",
+      "filter": {
+        "include": 31,
+        "size": 9
+      }
+    },
+    {
+      "name": "triangle_size9",
+      "filter": {
+        "include": 35,
+        "size": 9
+      }
+    },
+    {
+      "name": "K5_condition",
+      "filter": {
+        "host": 5871,
+        "include": 1,
+        "exclude": 2,
+        "size": 7
+      }
+    }
+  ],
+  "sequence": "summary and patterns; per host minimum,witness,minimal; each host optimal first/middle/last deletion with inverse; each filter condition, first/middle/last selection with inverse if nonempty; export all72 full-host maxima; per-host minimal first/middle/last; host profile selections; complete caches",
+  "result_input": {
+    "bytes": 1911280,
+    "git_blob_sha": "03668419188249258d52cfa72d63e234fca27de3"
+  },
+  "allowed_new_work": "saved-family scans, conditional sums, inclusion-maximal one-edge lookups, decoding and binary searches; no compiler/pattern/zeta replay"
+}

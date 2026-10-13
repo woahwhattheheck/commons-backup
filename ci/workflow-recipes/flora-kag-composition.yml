@@ -1,0 +1,41 @@
+name: Kaggriculture composition receipt
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-composition/**"
+      - ".github/workflows/flora-kag-composition.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/kaggriculture/cloud-composition/**"
+      - ".github/workflows/flora-kag-composition.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Source contract and immutable result receipt
+        run: |
+          python -B revenue/kaggriculture/cloud-composition/test_composition.py
+          python -B revenue/kaggriculture/cloud-composition/verify_receipt.py
+          python -m compileall -q revenue/kaggriculture/cloud-composition
+      - name: Diff and current-main guard
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            git fetch --quiet --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+            git diff --check "${{ github.event.pull_request.base.sha }}" HEAD
+          else
+            git fetch --filter=blob:none --depth=100 origin main
+            git diff --exit-code HEAD origin/main -- revenue/kaggriculture/cloud-composition .github/workflows/flora-kag-composition.yml
+            python .github/scripts/audit_git_terminal.py --target-ref origin/main --expected-commit "$EXPECTED_COMMIT" --required-path revenue/kaggriculture/cloud-composition/candidate.py
+          fi

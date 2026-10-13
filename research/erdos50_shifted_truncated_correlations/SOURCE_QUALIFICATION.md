@@ -1,0 +1,13 @@
+# Source and input qualification
+
+The full current FormalConjectures/ErdosProblems/50.lean file was requested from google-deepmind/formal-conjectures at main and returned blob bc1ea50a170839b20f3c8b69ea4dc94180c22d3e. It defines the strict density of {n:phi(n)<c*n} for c in [0,1], and asks about a positive derivative within [0,1]. The distribution-existence and singularity annotations are research solved, while the derivative question is research open; all inspected theorem bodies are placeholders. These are observed annotations, not checked formal proofs or an independent literature-status determination.
+
+The current intake is https://prizeproblems.org/problems/003/. The canonical Erdős50 route remains held after an earlier access denial and was not retried or acquired through another route. The predecessor guide cites Banerjee–Chahal–Chaubey–Khurana (2023) for existence/continuity attribution; that external paper and the predecessor's enclosure proof were not re-read here.
+
+Accepted input is Commons #31398, https://github.com/woahwhattheheck/commons/pull/31398, merge 44380533ac7cf3f8425b8033d5714ec8b1f2ec81. Its complete data e056035b46910fc37911418ed12ca622329ccecd (338,223 UTF-8 bytes) and guide 7b4922f7691f0f7c7c4111a30fbdb9e68d44ceb4 (27,161 bytes) were acquired and independently matched. Inspection was confined to source qualifications, API/schema and the exact new input fields; no old constructor, reader, proof, sieve, atom construction, cumulative-weight calculation or tail bound was run.
+
+The supplied atoms are copied from /index/versions/7, with the first seven saved primes. Each source row is [mask,ratio numerator,ratio denominator,weight,cumulative weight]; this input copies the first four fields and records its source row, leaving old cumulative weights unused. The period is copied from the version header. Source primality, ratios, weights and strict ratio order remain premises.
+
+The new function is R_P(n)=product over p in P dividing n of (1-1/p), defined periodically on integer residues. It is not phi(n)/n for arbitrary n. Its local two-point residue cases are derived directly: when p divides h the divisibility indicators for n and n+h agree, with masses 1 and p-1; otherwise only-left and only-right have mass 1 each and neither has mass p-2. Independent prime residues combine by CRT. This is the new finite joint construction, not an attribution to an unread paper. For a natural-density interpretation, take positive n with n+h positive; the finite excluded initial segment does not affect the periodic density. A residue labelled zero is not an evaluation of phi(0)/0.
+
+No current reward, novelty, derivative resolution, full totient correlation or improved omitted-prime estimate is claimed.

@@ -1,0 +1,48 @@
+name: hotel-room-turn-evidence
+
+on:
+  pull_request:
+    paths:
+      - "revenue/hotel_room_turn_evidence/**"
+      - ".github/workflows/hotel-room-turn-evidence.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/hotel_room_turn_evidence/**"
+      - ".github/workflows/hotel-room-turn-evidence.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Parse source
+        run: python -m py_compile revenue/hotel_room_turn_evidence/contracts.py revenue/hotel_room_turn_evidence/engine.py revenue/hotel_room_turn_evidence/compiler.py revenue/hotel_room_turn_evidence/test_compiler.py
+      - name: Hostile suite
+        run: python -m unittest -v revenue.hotel_room_turn_evidence.test_compiler
+      - name: Optimized interpreter
+        run: python -O -m unittest -v revenue.hotel_room_turn_evidence.test_compiler
+      - name: Production CLI retained-policy compile and current replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/hotel_room_turn_evidence
+          REPORT=/tmp/hotel-room-turn-report.json
+          CURRENT=/tmp/hotel-room-turn-current.md
+          rm -f "$REPORT" "$CURRENT"
+          REPORT_SHA="$(python compiler.py compile --evidence fixtures/evidence.json --out "$REPORT")"
+          python compiler.py verify-history --report "$REPORT" --expected-report-sha256 "$REPORT_SHA"
+          python compiler.py verify --report "$REPORT" --evidence fixtures/evidence.json --expected-report-sha256 "$REPORT_SHA"
+          python compiler.py render --report "$REPORT" --evidence fixtures/evidence.json --expected-report-sha256 "$REPORT_SHA" --out "$CURRENT"
+          test -s "$REPORT"
+          test -s "$CURRENT"
+          grep -q "Current READY" "$CURRENT"
+          grep -q "not a perpetual certificate" "$CURRENT"

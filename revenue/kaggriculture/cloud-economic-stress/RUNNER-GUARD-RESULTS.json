@@ -1,0 +1,166 @@
+{
+  "schema": "titan-stress-runner-guard-join-v1",
+  "python": "3.13.5",
+  "base_commit": "31af70178c832dd19f8ddf68a89effc388e2f080",
+  "source": {
+    "runner.py": {
+      "bytes": 17626,
+      "sha256": "3a5047a2d3324564edd1cec76b10bd6fad440ddbeddf2ad256eac52437f4dedf",
+      "git_blob": "a175de4fba2ba9688531d2504c26d7712454adb8"
+    },
+    "deadline_adapter.py": {
+      "bytes": 9730,
+      "sha256": "c3bef158763cb4f5f8b8436800f442b1acc94be2c407c5db1e740edd3a0d68f0",
+      "git_blob": "1c777790cf74cd528461466765c2a48ef49cf191"
+    },
+    "test_runner_guard_join.py": {
+      "bytes": 20398,
+      "sha256": "99e8e36869c1e1ad0103e546a2779bc9449dcd953da55dbb10e33d6cb9bc50f2",
+      "git_blob": "6915f8f894d103cc51305cf91a4e5d5758aa341a"
+    },
+    "test_runner.py": {
+      "bytes": 4082,
+      "sha256": "df19201e2b3252f4a6f35078ab08aab9eefa5a61abea9b792509345ebb6fb3b3",
+      "git_blob": "7cf6286fe3dd17784c7374ac66adc3205aed1ee5"
+    }
+  },
+  "original_runner": {
+    "bytes": 16111,
+    "sha256": "74759f92fc762988a4880ea46de026ea2ef59aff4d79e622a7846d995f5c5281",
+    "git_blob": "01a6e843d93b703d552d2e9f1db72570c81bb832"
+  },
+  "new_methods": {
+    "run": 23,
+    "passed": 23,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "unchanged_existing_methods": 5,
+  "total_final_passing_methods": 28,
+  "original_same_suite": {
+    "run": 23,
+    "assertion_failures": 10,
+    "errors": 0,
+    "skipped": 0,
+    "failing_methods": [
+      "test_deadline_path_uses_existing_guard_once",
+      "test_earlier_caller_alarm_remains_caller_exception",
+      "test_later_caller_alarm_is_not_erased",
+      "test_natural_production_is_inside_guard",
+      "test_periodic_caller_alarm_retains_cadence",
+      "test_production_cannot_swallow_guard_cancellation",
+      "test_short_production_injection_runs_only_in_production",
+      "test_transform_cannot_swallow_guard_cancellation",
+      "test_actual_planoverlay_commit_is_cancelled_through_runner",
+      "test_real_transform_deadline_returns_selected_with_stage_receipt"
+    ]
+  },
+  "controlled_before": [
+    {
+      "case": "natural_production",
+      "elapsed": 0.12044174499999372,
+      "finished": true,
+      "production_calls": 1,
+      "transform_calls": 0
+    },
+    {
+      "case": "swallowed_transform",
+      "elapsed": 0.04034392799997022,
+      "swallowed": true,
+      "timeouts": 0
+    }
+  ],
+  "controlled_after": [
+    {
+      "case": "natural_production",
+      "elapsed": 0.04034395700000459,
+      "finished": false,
+      "production_calls": 1,
+      "transform_calls": 0
+    },
+    {
+      "case": "swallowed_transform",
+      "elapsed": 0.04077893300006963,
+      "swallowed": false,
+      "timeouts": 1
+    },
+    {
+      "case": "actual_commit_cancellation",
+      "seat": 0,
+      "elapsed": 0.08025312099994153,
+      "timeouts": 1,
+      "committed": false
+    },
+    {
+      "case": "actual_commit_cancellation",
+      "seat": 1,
+      "elapsed": 0.0802531030000182,
+      "timeouts": 1,
+      "committed": false
+    }
+  ],
+  "actual_join": {
+    "guarded_decisions": 6,
+    "direct_control_decisions": 6,
+    "official_transitions": 6,
+    "seats": [
+      0,
+      1
+    ],
+    "steps": [
+      0,
+      1,
+      2
+    ],
+    "producer_calls_per_decision": 1,
+    "controller_calls_per_decision": 1,
+    "transform_calls_per_completed_decision": 1,
+    "actual_transform_cancellations": 2,
+    "actual_commit_cancellations": 2,
+    "action_differences": 0,
+    "input_hashes": {
+      "runtime_manifest": "47dfd0b92ae84225cdd059d86d9d8871e84f5b75b38f1df952a9700accaeaa59",
+      "engine": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "seed_helper": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "frame_stream": "13b9f985b34df86f41e6cf7b60693d07e8ab72ee80d27a395af0290056167572"
+    }
+  },
+  "evidence": {
+    "original-final.json": {
+      "bytes": 10759,
+      "sha256": "23cf53490200e5bebe1ff98a998b793e42d54e71582c706d5648a88216e3bece",
+      "git_blob": "75d3f6bad83d5e53fcf58d4a6dfcbabd66b01ceb"
+    },
+    "original-final.log": {
+      "bytes": 9803,
+      "sha256": "6afe79ee0486dcee6e3062d73df152c6a0ca2b8e8430a7f232e5738c7d4963a2",
+      "git_blob": "e92fc362ac4f8de2680d7dca62db34aa14dbc4f1"
+    },
+    "fixed-final.json": {
+      "bytes": 6239,
+      "sha256": "4d90b7db03a5318de8e50288e035f432a667fc3fa391a67cb9d44ccea4cf0a7a",
+      "git_blob": "00897fd6401b1520512ee7d59e80ed4c150387a6"
+    },
+    "fixed-final.log": {
+      "bytes": 3147,
+      "sha256": "ca32b171edc133d3009a117a447b6399e4b997af479165763f01c278f633048f",
+      "git_blob": "666a61960860bffe766534d34de299b9c44b0890"
+    },
+    "existing-five.log": {
+      "bytes": 777,
+      "sha256": "193c17c57c087f2c5b16536c4520b9a0d2efbd885ed96fc6cd98f155006a6e01",
+      "git_blob": "aba9ccd8df8f6c5d331a51d7192f17a8a490aad6"
+    }
+  },
+  "full_games": 0,
+  "new_game_seeds": [],
+  "adapter_changed": false,
+  "kaggle_writes": false,
+  "selected_policy_changed": false,
+  "notes": [
+    "Actual-source compatibility uses the frozen PR9997 closure, not every later main optimization.",
+    "Private original observations and final raw evidence stay in Library, not public Git.",
+    "No whole-repository or hosted CI claim."
+  ]
+}

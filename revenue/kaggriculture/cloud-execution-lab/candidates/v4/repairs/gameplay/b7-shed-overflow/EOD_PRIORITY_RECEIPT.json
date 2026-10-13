@@ -1,0 +1,132 @@
+{
+  "schema": "titan-v4-b7-eod-priority/v1",
+  "date": "2026-09-11",
+  "status": "narrow_component_pass_with_confirmed_multiturn_risk",
+  "activation_authorized": false,
+  "python": "3.13.5",
+  "source_blobs": {
+    "compose_b7_eod_gate.py": "78c6b42d72955d49d2c1fe32889e6ddc75afccd9",
+    "test_b7_full_turn_eod.py": "5c4154b63d30c4a60838293b3ab13ad7c720b0e3",
+    "test_b7_carryover_risk.py": "b50b21b120849a1e2cec9c988605dfd1d7d9c1ad"
+  },
+  "pins": {
+    "donor": "a27da659884c0f9a9594cbd9332b5edb4d7f3307",
+    "composed_output": "d7fc5688eed719f0de9ef935cbe2db2ff8d55774",
+    "oracle": "109bf70a385b211eede790f00a2de05a979b4e02",
+    "engine": "3c202c7ee921da239356789e266b694635103fc4",
+    "spec": "b354d06b742fe48402513792253f1a5c29366b20",
+    "runtime_read_only": "b952c9c228ecbde592bf3d2df01638677abb0d24"
+  },
+  "validation": {
+    "repaired_normal": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "non_eod_cells": 2592,
+      "eod_cells": 96,
+      "interpreter_calls": 7980,
+      "seed_calls": 0
+    },
+    "repaired_optimized": "identical_stdout_to_repaired_normal",
+    "donor_normal": {
+      "tests": 19,
+      "failed_subcases": 122,
+      "errors": 0,
+      "non_eod_cells": 2592
+    },
+    "donor_optimized": "identical_stdout_to_donor_normal",
+    "original_oracle": {
+      "normal": "PASS",
+      "optimized": "PASS",
+      "cells": 128,
+      "changed": 80,
+      "unchanged": 48,
+      "boundaries": 5
+    },
+    "carryover_risk": {
+      "tests": 1,
+      "normal": "RESIDUAL_RISK_CONFIRMED",
+      "optimized": "RESIDUAL_RISK_CONFIRMED",
+      "identical_stdout": true,
+      "seats": [
+        0,
+        1
+      ],
+      "retention_step": 262,
+      "eod_veto_step": 263,
+      "liquidation_step": 264,
+      "parent_cash": 4834.0,
+      "repaired_cash": 3565.0,
+      "delta": -1269.0
+    }
+  },
+  "direct_eod_witness": {
+    "seats": [
+      0,
+      1
+    ],
+    "step": 263,
+    "initial_shed": {
+      "CARROT": 100
+    },
+    "inventories": [
+      {
+        "WHEAT": 10
+      },
+      {
+        "MILK": 10
+      }
+    ],
+    "action": {
+      "farmer": [
+        "DROP"
+      ],
+      "hands": [
+        [
+          "PASS"
+        ]
+      ],
+      "market": [
+        [
+          "SELL",
+          "CARROT",
+          10
+        ]
+      ]
+    },
+    "parent_eod_shed": {
+      "CARROT": 90,
+      "MILK": 10
+    },
+    "donor_eod_shed": {
+      "CARROT": 90,
+      "WHEAT": 10
+    },
+    "next_identical_sale": [
+      [
+        "SELL",
+        "WHEAT",
+        10
+      ],
+      [
+        "SELL",
+        "MILK",
+        10
+      ]
+    ],
+    "parent_cash": 4834.0,
+    "donor_cash": 3565.0,
+    "repaired_cash": 4834.0
+  },
+  "dependency_note": "Exact engine/spec execute unchanged. An explicit raising, temporary resolve_episode_seed import shim is unused by all interpreter turns; one deliberately caught negative-control call verifies it raises. No game initialization or runtime import.",
+  "gates_remaining": [
+    "The immediate EOD veto does NOT prevent harmful carry-over from previous turns. Require multi-turn inventory-priority/cargo-custody proof before B7 activation.",
+    "Current package and natural-engagement/economics gates not run; constructed cash deltas are not estimated field EV.",
+    "Python 3.11 hosted/deadline behavior not verified."
+  ],
+  "preserved": [
+    "Raw helper and original oracle bytes",
+    "Peer portable-runner extension and CURRENT_ORACLE.json",
+    "Production runtime, defaults, exports, legacy materializer and Kaggle state"
+  ]
+}

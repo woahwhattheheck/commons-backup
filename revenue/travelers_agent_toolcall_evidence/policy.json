@@ -1,0 +1,58 @@
+{
+  "schema": "agent-toolcall-policy/v1",
+  "policy_id": "travelers-agent-toolcall-evidence-pilot",
+  "version": "2026-09-17.1",
+  "environment": "SYNTHETIC_NONPRODUCTION_ONLY",
+  "allowed_tool_actions": {
+    "claims_lookup": ["read"],
+    "customer_notice": ["draft", "send"],
+    "document_store": ["read", "write"],
+    "payment_sandbox": ["quote", "submit"],
+    "policy_lookup": ["read"]
+  },
+  "role_resource_prefixes": {
+    "adjuster": ["claim/", "document/", "notice/", "policy/"],
+    "auditor": ["claim/", "document/", "policy/"],
+    "service_agent": ["claim/", "notice/", "policy/"],
+    "supervisor": ["claim/", "document/", "notice/", "payment/", "policy/"]
+  },
+  "restricted_data_classes": [
+    "AUTH_SECRET",
+    "FULL_SSN",
+    "RAW_CREDENTIAL",
+    "RAW_MODEL_PROMPT"
+  ],
+  "human_approval_required_for_actions": ["send", "submit", "write"],
+  "human_approval_roles": ["human_approver", "supervisor"],
+  "max_approval_age_seconds": 1800,
+  "max_future_skew_seconds": 30,
+  "max_cost_minor_by_tool_action": {
+    "claims_lookup:read": 250,
+    "customer_notice:draft": 100,
+    "customer_notice:send": 500,
+    "document_store:read": 250,
+    "document_store:write": 750,
+    "payment_sandbox:quote": 500,
+    "payment_sandbox:submit": 2500,
+    "policy_lookup:read": 250
+  },
+  "retry_semantics": {
+    "draft": "SAFE_RETRY",
+    "quote": "SAFE_RETRY",
+    "read": "SAFE_RETRY",
+    "send": "IDEMPOTENCY_REQUIRED",
+    "submit": "IDEMPOTENCY_REQUIRED",
+    "write": "IDEMPOTENCY_REQUIRED"
+  },
+  "authority": {
+    "production_tool_call_authorized": false,
+    "network_provider_mutation_authorized": false,
+    "credential_use_authorized": false,
+    "customer_data_access_authorized": false,
+    "deployment_authorized": false,
+    "insurance_decision_authorized": false,
+    "financial_decision_authorized": false,
+    "payment_authorized": false,
+    "revenue_claimed": false
+  }
+}

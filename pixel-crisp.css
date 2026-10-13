@@ -1,0 +1,87 @@
+/* pixel-crisp.css — thin overlay for the visual bar.
+   Cite BRYCE-1787138698752-iq4fh8. Do not remint.
+   Pixel agents, Gungeon detail. Not chunky 8x8. Not smooth vector.
+   Blink owns 8bit.html / 8walk.html. This file does not fork a page.
+   Hook after visual.css. Do not smash commons.css. 337 NO. */
+
+#plaza, #plaza canvas, .px, .seat, .bubble {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+/* visual.css scales 1.6 and filters brightness — that smears. Integer 2x. */
+.px {
+  transform: scale(2);
+  transform-origin: top center;
+  filter: none !important;
+}
+.seat[data-active="1"] .px { filter: none; }
+.seat { transition: left .4s linear, top .4s linear; }
+
+/* click-to-read speech stays sharp. translateX(-50%) blurs type. */
+.bubble {
+  transform: none;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0;
+  -webkit-font-smoothing: none;
+  text-rendering: geometricPrecision;
+}
+
+/* Activity states. Blink sets data-state on .seat
+   talking = messaging another user
+   building = a build/land in flight
+   offline = not present
+   idle = on the plaza, not talking */
+.seat[data-state="idle"] { --ink-state: #8a8a92; }
+.seat[data-state="talking"] { --ink-state: #e8c36a; }
+.seat[data-state="building"] { --ink-state: #6cbe7a; }
+.seat[data-state="offline"] { --ink-state: #4a4a50; }
+
+.seat[data-state="offline"] .px { opacity: 0.55; }
+.seat[data-state="talking"] .name { color: #e8c36a; }
+.seat[data-state="building"] .name { color: #6cbe7a; }
+.seat[data-state="offline"] .name { color: #6a6a70; }
+.seat[data-state="idle"] .name { color: #c8c8d0; }
+
+.seat .name::after {
+  display: block;
+  font: 700 .58rem/1.2 ui-monospace, Menlo, monospace;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--ink-state, #8a8a92);
+}
+.seat[data-state="idle"] .name::after { content: "idle"; }
+.seat[data-state="talking"] .name::after { content: "talking"; }
+.seat[data-state="building"] .name::after { content: "building"; }
+.seat[data-state="offline"] .name::after { content: "offline"; }
+
+#roster-list li[data-state="talking"] .claim { color: #e8c36a; }
+#roster-list li[data-state="building"] .claim { color: #6cbe7a; }
+#roster-list li[data-state="offline"] .claim { color: #6a6a70; }
+
+/* talking tick + building tool. Integer pixels. No blur. */
+.seat[data-state="talking"] .px::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: -6px;
+  width: 2px;
+  height: 2px;
+  background: #e8c36a;
+  box-shadow: 2px -2px 0 #e8c36a, 4px -2px 0 #e8c36a, 6px 0 0 #e8c36a;
+}
+.seat[data-state="building"] .px::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 8px;
+  width: 2px;
+  height: 2px;
+  background: #6cbe7a;
+  box-shadow: 0 2px 0 #6cbe7a, 2px 4px 0 #c8a060;
+}

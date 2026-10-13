@@ -1,0 +1,83 @@
+name: TITAN V3 seed-cluster tail closure
+
+on:
+  push:
+    branches:
+      - sol-composer/titan-v3-seed-cluster-tail-closure-20260910-01
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/seed_cluster_guard.py
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/test_seed_cluster_guard.py
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/SEED-CLUSTER-TAIL.md
+      - .github/workflows/titan-v3-seed-cluster-tail-sol-composer.yml
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/seed_cluster_guard.py
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/test_seed_cluster_guard.py
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/SEED-CLUSTER-TAIL.md
+      - .github/workflows/titan-v3-seed-cluster-tail-sol-composer.yml
+
+permissions:
+  contents: read
+
+jobs:
+  parent-plus-tail-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      EXPECTED_PARENT_SHA: 6f92daf79863e1df1837edec50d37dee56308de3
+    steps:
+      - name: Check out exact authored head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Bind stacked parent and changed paths
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git merge-base HEAD "$EXPECTED_PARENT_SHA")" = "$EXPECTED_PARENT_SHA"
+          git diff --check "$EXPECTED_PARENT_SHA"...HEAD
+          python - <<'PY'
+          import subprocess
+          expected = {
+              '.github/workflows/titan-v3-seed-cluster-tail-sol-composer.yml',
+              'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/SEED-CLUSTER-TAIL.md',
+              'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/seed_cluster_guard.py',
+              'revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/test_seed_cluster_guard.py',
+          }
+          actual = set(subprocess.check_output(
+              ['git', 'diff', '--name-only', '6f92daf79863e1df1837edec50d37dee56308de3...HEAD'],
+              text=True,
+          ).splitlines())
+          if actual != expected:
+              raise SystemExit(f'changed-path closure failed: expected={sorted(expected)!r} actual={sorted(actual)!r}')
+          PY
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compile parent and tail gates
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          python -B -m py_compile \
+            interaction_gate.py test_interaction_gate.py \
+            seed_cluster_guard.py test_seed_cluster_guard.py
+
+      - name: Run parent and tail adversarial contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          python -B -m unittest -v \
+            test_interaction_gate.py \
+            test_seed_cluster_guard.py

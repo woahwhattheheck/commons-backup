@@ -1,0 +1,57 @@
+{
+  "demand_id": "kincell-rtp-qc-release-bridge-lims-01",
+  "schema": "commons-kincell-rtp-qc-release-bridge-lims/v1",
+  "buyer": "Kincell Bio RTP / Melodie Bryce",
+  "site": "RTP",
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "cash_usd": 0,
+  "pre_sale_transport": "NONE",
+  "interfaces": "SIMULATED",
+  "interface_live": false,
+  "phi": false,
+  "named_qa_role": "NAMED_QA",
+  "named_qa_actor": "qa-named-1",
+  "timestamp_epoch": "2026-08-31T00:00:00Z",
+  "batch_count": 30,
+  "samples_per_batch": 10,
+  "sample_count": 300,
+  "exception_count": 30,
+  "programs": {
+    "AUTOLOGOUS": [1, 15],
+    "ALLOGENEIC": [16, 30]
+  },
+  "sample_plan": {
+    "in_process": 4,
+    "final": 3,
+    "stability": 3
+  },
+  "labs": ["QC", "MICROBIOLOGY", "STABILITY"],
+  "exception_kinds": [
+    {"code": "POTENCY_OOS", "qms_kind": "SIM_QMS_OOS", "slot": 1},
+    {"code": "IDENTITY_FAIL", "qms_kind": "SIM_QMS_DEVIATION", "slot": 3},
+    {"code": "STERILITY_POSITIVE", "qms_kind": "SIM_QMS_DEVIATION", "slot": 6},
+    {"code": "ENDOTOXIN_OOS", "qms_kind": "SIM_QMS_OOS", "slot": 4},
+    {"code": "MYCOPLASMA_POSITIVE", "qms_kind": "SIM_QMS_DEVIATION", "slot": 7},
+    {"code": "VIABILITY_BELOW_SPEC", "qms_kind": "SIM_QMS_OOS", "slot": 2},
+    {"code": "VECTOR_COPY_OOS", "qms_kind": "SIM_QMS_OOS", "slot": 5},
+    {"code": "APPEARANCE_FAIL", "qms_kind": "SIM_QMS_DEVIATION", "slot": 10},
+    {"code": "STABILITY_OOS", "qms_kind": "SIM_QMS_OOS", "slot": 8},
+    {"code": "METHOD_VALIDATION_GAP", "qms_kind": "SIM_QMS_CHANGE_CONTROL", "slot": 10}
+  ],
+  "expected": {
+    "samples": 300,
+    "batches": 30,
+    "exceptions": 30,
+    "qms_events": 30,
+    "duplicate_samples": 0,
+    "duplicate_results": 0,
+    "truth_set_matches": 300,
+    "released_without_named_qa": 0,
+    "released_after_named_qa": 270,
+    "exception_hold": 30,
+    "replay_changed_records": 0
+  },
+  "golden_audit_sha256": "3771349f17f020256269857d865601789f3f41271df4fa51a90ce73231609e26",
+  "golden_erp_bundle_sha256": "75e17c264aeb1a0e800ad686871f61d261c878e5fd027cfd5ea9681b19adc615",
+  "golden_qms_bundle_sha256": "8e5fd0345773ecf87377d6429f9c0e2c6c19548d03c396385bac582d8ca4f3fc"
+}

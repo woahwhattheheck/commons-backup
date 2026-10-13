@@ -1,0 +1,22 @@
+name: Revenue opportunity portfolio
+
+on:
+  pull_request:
+    paths:
+      - "revenue/opportunity_portfolio/**"
+      - ".github/workflows/revenue-opportunity-portfolio.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m compileall -q revenue/opportunity_portfolio
+      - run: python -m unittest -v revenue.opportunity_portfolio.test_portfolio
+      - run: PYTHONOPTIMIZE=1 python -m unittest -v revenue.opportunity_portfolio.test_portfolio

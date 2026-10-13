@@ -1,0 +1,41 @@
+name: Agentic GenAI evaluation evidence gate
+
+on:
+  pull_request:
+    paths:
+      - "revenue/agentic_genai_evaluation_gate/**"
+      - "tests/test_agentic_genai_evaluation_gate.py"
+      - "tests/_agentic_gate_*.py"
+      - ".github/workflows/agentic-genai-evaluation-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/agentic_genai_evaluation_gate/**"
+      - "tests/test_agentic_genai_evaluation_gate.py"
+      - "tests/_agentic_gate_*.py"
+      - ".github/workflows/agentic-genai-evaluation-gate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hostile-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+      - name: Compile exact sources
+        run: >-
+          python -m py_compile
+          revenue/agentic_genai_evaluation_gate/*.py
+          tests/_agentic_gate_*.py
+          tests/test_agentic_genai_evaluation_gate.py
+      - name: Hostile suite
+        run: python -m unittest -v tests.test_agentic_genai_evaluation_gate
+      - name: Optimized hostile suite
+        run: python -O -m unittest -v tests.test_agentic_genai_evaluation_gate

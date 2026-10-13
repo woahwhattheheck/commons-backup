@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>CS Analytical expansion cross-line evidence LIMS — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#eef2f4;--ink:#12161a;--mute:#536068;--line:#b7c4cc;--card:#f7fbfc;--teal:#1d5f6a;--ok:#1f7a4d;--bad:#a33b2f;--slate:#24343b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#c5d5db 0%,var(--paper) 28%);color:var(--ink);font:16px/1.5 "Iowan Old Style",Georgia,serif}
+main{max-width:1080px;margin:auto;padding:28px 16px 72px}a{color:var(--teal)}
+.kicker{letter-spacing:.16em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--teal)}
+h1{font-size:clamp(2rem,6vw,3.6rem);line-height:.95;margin:.18em 0 .3em}
+.lede{font-size:1.15rem;max-width:760px;color:var(--mute)}
+.bound{border-left:5px solid var(--ok);padding:8px 0 8px 14px}
+.desk{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);padding:16px}
+table{width:100%;border-collapse:collapse;font:13px/1.4 system-ui,sans-serif}th,td{border-top:1px solid var(--line);padding:6px 4px;text-align:left}
+button{border:1px solid var(--slate);background:var(--slate);color:#fff;padding:8px 12px;cursor:pointer;font:15px/1.3 system-ui,sans-serif}
+button.ghost{background:transparent;color:var(--slate)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;min-height:180px;background:#12161a;color:#dce8ec;padding:12px;font:12px/1.4 ui-monospace,monospace}
+.stamp{display:inline-block;border:1px solid var(--ok);color:var(--ok);padding:2px 8px;font:11px/1.4 system-ui,sans-serif;letter-spacing:.08em}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+@media(max-width:820px){.desk{grid-template-columns:1fr}}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> · <a href="./ace-qat-thermal-rheology-capacity-lims.html">ACE/QAT pattern</a></nav>
+<p class="kicker">Commons · csanalytical-expansion-crossline-evidence-lims-01 · AquaTrace HOLD / BUILD-AND-VERIFY</p>
+<h1>Study, lot, package component, CCIT vs material/gas/micro, staged report.</h1>
+
+
+
+
+<p class="lede">Brandon Zurawlow / CS Analytical. Bind a client study to a sample/lot and product/package component, route CCIT versus raw-material, gas, or micro, lock method/version and instrument/run, then hold QC until a named human releases the staged report. Cross-line misroutes never schedule.</p>
+<p class="bound"><strong>Truth boundary:</strong> 120 synthetic submissions only. Adapters stay synthetic/read-only. No compliance decision. No production writes. Named-human release is mandatory. PRE-SALE TRANSPORT: NONE. cash_usd = 0.</p>
+<div class="desk">
+<section class="card">
+<h2>Buyer pairing</h2>
+<p class="small">Demand <code>csanalytical-expansion-crossline-evidence-lims-01</code>. Buyer: Brandon Zurawlow / CS Analytical. Official binary: <code>python3 test_csanalytical_expansion_crossline_lims.py</code> and <code>python3 csanalytical_expansion_crossline_lims.py</code>.</p>
+<h2>Binary acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>PASS</th></tr></thead>
+<tbody>
+<tr><td>Input submissions</td><td>120 = 90 valid + 30 HOLD</td></tr>
+<tr><td>READY</td><td>90 staged reports</td></tr>
+<tr><td>HOLD</td><td>8 DUPLICATE_ID + 7 WRONG_LINE + 5 MISSING_METADATA + 5 QC_FAIL + 5 SOURCE_HASH_MISMATCH</td></tr>
+<tr><td>Intake holds</td><td>schedule nothing</td></tr>
+<tr><td>Held records</td><td>never stage or release</td></tr>
+<tr><td>Hashes</td><td>method / instrument / value / unit / audit / source match</td></tr>
+<tr><td>Replay</td><td>zero new records</td></tr>
+<tr><td>Release</td><td>named RELEASER only; autonomous denied</td></tr>
+</tbody>
+</table>
+<p><button id="run">Run 120-row fixture</button> <button id="replay" class="ghost">Replay</button></p>
+</section>
+<section class="card">
+<h2>Cross-line receipt <span id="status" class="stamp">READY</span></h2>
+<pre id="output">Run the synthetic CS Analytical fixture. Exact JSON stays in this tab. Official SHA-256 lives in the Python binary.</pre>
+</section>
+</div>
+<p class="small">Cite, do not remint: ace-qat-thermal-rheology-capacity-lims-01, cornell-craft-beverage-intake-lims-01, and ait-mn-metrc-capacity-gate-lims-01 (different buyers). No outreach. No live instrument. No compliance decision.</p>
+</main>
+<script src="./csanalytical-expansion-crossline-lims.js"></script>
+<script>
+(function () {
+  var out = document.getElementById("output");
+  var status = document.getElementById("status");
+  function show(result, label) {
+    var failures = CsAnalyticalExpansionCrosslineLims.passContract(result);
+    status.textContent = failures.length ? "FAIL" : "PASS";
+    status.style.color = failures.length ? "#a33b2f" : "#1f7a4d";
+    status.style.borderColor = status.style.color;
+    out.textContent = JSON.stringify({
+      label: label,
+      ok: failures.length === 0,
+      failures: failures,
+      input_rows: result.input_rows,
+      ready: result.ready,
+      held: result.held,
+      jobs: result.jobs,
+      scheduled: result.scheduled,
+      intake_holds_scheduled: result.intake_holds_scheduled,
+      held_staged: result.held_staged,
+      hold_codes: result.hold_codes,
+      released_reports: result.released_reports,
+      staged_reports: result.staged_reports,
+      official_binary: result.official_binary,
+      pre_sale_transport: result.pre_sale_transport
+    }, null, 2);
+  }
+  document.getElementById("run").onclick = function () {
+    show(CsAnalyticalExpansionCrosslineLims.runGate(), "fresh");
+  };
+  document.getElementById("replay").onclick = function () {
+    var first = CsAnalyticalExpansionCrosslineLims.runGate();
+    var second = CsAnalyticalExpansionCrosslineLims.runGate();
+    show(second, first.ready === second.ready && first.held === second.held ? "replay-identical-counts" : "replay-drift");
+  };
+})();
+</script>
+
+
+
+</body></html>

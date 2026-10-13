@@ -1,0 +1,61 @@
+{
+  "id": "qlabs-qconnect-cutover-verification-lims-01",
+  "version": 1,
+  "buyer": "Q Laboratories / Jeff Knowles",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788150837.762639"
+  },
+  "workflow": [
+    "catalog-version validation",
+    "per-user access migration",
+    "submission preflight",
+    "retry-safe cutover verification",
+    "named human QA release"
+  ],
+  "acceptance": [
+    "immutable 240-case manifest: 200 valid personal-care/pharma submissions and 40 predefined holds",
+    "all 200 create exactly one correctly routed accession",
+    "all 40 remain held with the truth-set reason",
+    "obsolete codes never enter testing",
+    "shared credentials are denied",
+    "retries create zero duplicates",
+    "field/catalog/user provenance is complete",
+    "human QA releases the build; autonomous release denied"
+  ],
+  "hold_codes": [
+    "OBSOLETE_CODE",
+    "WRONG_DEPARTMENT",
+    "MISSING_FIELD",
+    "INVALID_ACCOUNT",
+    "INVALID_USER",
+    "SHARED_CREDENTIAL",
+    "TIMEOUT_RETRY"
+  ],
+  "hold_code_counts": {
+    "OBSOLETE_CODE": 8,
+    "WRONG_DEPARTMENT": 8,
+    "MISSING_FIELD": 8,
+    "INVALID_ACCOUNT": 3,
+    "INVALID_USER": 3,
+    "SHARED_CREDENTIAL": 2,
+    "TIMEOUT_RETRY": 8
+  },
+  "catalog_version": "2026.08",
+  "audit_sha256": "c551c9a1d98fd421823119b1d52f2df5f6f4e40cc9fd9427960d8497f3ac8c0b",
+  "manifest_sha256": "d484e7c953fb8aa2acff16044596f39684b44ba5d84bfb83dc6b68b64ba37ef5",
+  "catalog_sha256": "a5d9efcd018e89fdb73ceefe7dd83c9631af5570facc721ed38cda45144a57d2",
+  "exclusions": [
+    "no production writes",
+    "no outreach",
+    "no prospect-facing demo",
+    "no automatic release",
+    "read-only shadowing only until buyer/vendor golden round trip"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic cutover preflight, accession, hold, provenance, and human-QA receipts only; never production Q Connect write or live testing",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

@@ -1,0 +1,39 @@
+name: Proposal validity expiry requote gate
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/proposal_validity_expiry_requote_gate/**'
+      - 'tests/test_proposal_validity_expiry_requote_gate.py'
+      - '.github/workflows/proposal-validity-expiry-requote-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/proposal_validity_expiry_requote_gate/**'
+      - 'tests/test_proposal_validity_expiry_requote_gate.py'
+      - '.github/workflows/proposal-validity-expiry-requote-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile revenue/proposal_validity_expiry_requote_gate/gate.py tests/test_proposal_validity_expiry_requote_gate.py
+      - name: Tests
+        run: python -m unittest -v tests/test_proposal_validity_expiry_requote_gate.py
+      - name: Optimized tests
+        run: python -O -m unittest -v tests/test_proposal_validity_expiry_requote_gate.py
+      - name: Example compile and verify
+        run: |
+          tmp="$(mktemp)"
+          rm -f "$tmp"
+          python revenue/proposal_validity_expiry_requote_gate/gate.py compile --issued revenue/proposal_validity_expiry_requote_gate/example_issued.json --current revenue/proposal_validity_expiry_requote_gate/example_current.json --out "$tmp"
+          python revenue/proposal_validity_expiry_requote_gate/gate.py verify --issued revenue/proposal_validity_expiry_requote_gate/example_issued.json --current revenue/proposal_validity_expiry_requote_gate/example_current.json --packet "$tmp"

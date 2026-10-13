@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fleetline rental request</title>
+  <style>
+    body{font:16px system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;line-height:1.45}
+    form,section{border:1px solid #bbb;border-radius:12px;padding:1rem;margin:1rem 0}
+    label{display:block;margin:.7rem 0}.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    input,select,textarea,button{font:inherit;width:100%;box-sizing:border-box;padding:.55rem}
+    button{cursor:pointer} .muted{opacity:.75}.error{font-weight:650}.quote{font-variant-numeric:tabular-nums}
+    #status-result{white-space:pre-wrap;overflow-wrap:anywhere}
+    @media(max-width:600px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <h1>Request a rental</h1>
+  <p class="muted">Check current availability and request a booking. A request does not hold inventory or record payment. The operator must accept it before it becomes a reservation.</p>
+  <form id="request-form">
+    <div class="row">
+      <label>Start <input id="start" type="datetime-local" required></label>
+      <label>End <input id="end" type="datetime-local" required></label>
+    </div>
+    <button id="check" type="button">Check availability</button>
+    <label>Available asset <select id="asset" required disabled><option value="">Check dates first</option></select></label>
+    <div id="quote" class="quote muted"></div>
+    <label>Name <input id="customer" maxlength="160" autocomplete="name" required></label>
+    <label>Contact <input id="contact" maxlength="254" autocomplete="email" required></label>
+    <label>Notes <textarea id="notes" maxlength="2000" rows="4"></textarea></label>
+    <button id="submit" type="submit" disabled>Send booking request</button>
+    <p id="result" role="status"></p>
+  </form>
+  <section>
+    <div id="recovery" hidden>
+      <h2>Recover a saved request</h2>
+      <p id="recovery-detail"></p>
+      <p class="muted">A lost response does not tell us whether the operator received the request. Retry it here to recover the same request before sending different details.</p>
+      <button id="retry" type="button">Retry saved request</button>
+    </div>
+    <h2>Request status</h2>
+    <p class="muted">This browser keeps your request details until receipt is confirmed, then retains its request identity and private status capability. These are not included in the URL. Keep this browser data to recover a request after closing the page.</p>
+    <button id="status" type="button">Refresh my last request</button>
+    <pre id="status-result"></pre>
+  </section>
+  <script src="customer_portal.js"></script>
+</body>
+</html>

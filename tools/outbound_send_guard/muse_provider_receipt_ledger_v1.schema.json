@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tokenjunkielabs.invalid/schemas/outbound-muse-provider-receipt-ledger-v1.json",
+  "title": "Muse provider receipt ledger v1",
+  "oneOf": [
+    {"$ref": "#/$defs/manifest"},
+    {"$ref": "#/$defs/proofEnvelope"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitSha": {"type": "string", "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$"},
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version","ordinal","receipt_sha256","receipt_path","request_sha256","request_id","publication_key","candidate_sha256","decision","compiled_at","selection_message_ts"],
+      "properties": {
+        "schema_version": {"const": "outbound-muse-provider-receipt-ledger-entry/v1"},
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 4095},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_path": {"type": "string", "pattern": "^provider/muse_receipt_ledger_v1/receipts/[0-9a-f]{64}\\.json$"},
+        "request_sha256": {"$ref": "#/$defs/sha256"},
+        "request_id": {"type": "string", "minLength": 1, "maxLength": 160},
+        "publication_key": {"$ref": "#/$defs/sha256"},
+        "candidate_sha256": {"$ref": "#/$defs/sha256"},
+        "decision": {"enum": ["SELECTED","NOT_SELECTED","HOLD"]},
+        "compiled_at": {"type": "string", "minLength": 1, "maxLength": 32},
+        "selection_message_ts": {"type": ["string","null"]}
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version","provider_repo","provider_ref","generation","genesis_parent_sha","previous_head_sha","entries","complete_prefix_sha256"],
+      "properties": {
+        "schema_version": {"const": "outbound-muse-provider-receipt-ledger/v1"},
+        "provider_repo": {"const": "woahwhattheheck/commons"},
+        "provider_ref": {"const": "refs/heads/muse-provider-receipt-ledger-v1"},
+        "generation": {"type": "integer", "minimum": 0, "maximum": 4096},
+        "genesis_parent_sha": {"$ref": "#/$defs/gitSha"},
+        "previous_head_sha": {"oneOf": [{"$ref": "#/$defs/gitSha"},{"type":"null"}]},
+        "entries": {"type": "array", "maxItems": 4096, "items": {"$ref": "#/$defs/entry"}},
+        "complete_prefix_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version","provider_repo","provider_ref","provider_head_sha","generation","entry_count","complete_prefix_sha256","manifest_sha256","request_sha256","request_id","publication_key","candidate_sha256","prior_receipt_ledger_authenticated","ledger_complete","terminal_election_authorized","requires_current_worker_lease_possession","requires_fresh_provider_preflight","external_send_authorized","side_effects_authorized"],
+      "properties": {
+        "schema_version": {"const": "outbound-muse-provider-receipt-ledger-proof/v1"},
+        "provider_repo": {"const": "woahwhattheheck/commons"},
+        "provider_ref": {"const": "refs/heads/muse-provider-receipt-ledger-v1"},
+        "provider_head_sha": {"$ref": "#/$defs/gitSha"},
+        "generation": {"type":"integer","minimum":0,"maximum":4096},
+        "entry_count": {"type":"integer","minimum":0,"maximum":4096},
+        "complete_prefix_sha256": {"$ref":"#/$defs/sha256"},
+        "manifest_sha256": {"$ref":"#/$defs/sha256"},
+        "request_sha256": {"$ref":"#/$defs/sha256"},
+        "request_id": {"type":"string","minLength":1,"maxLength":160},
+        "publication_key": {"$ref":"#/$defs/sha256"},
+        "candidate_sha256": {"$ref":"#/$defs/sha256"},
+        "prior_receipt_ledger_authenticated": {"const":true},
+        "ledger_complete": {"const":true},
+        "terminal_election_authorized": {"const":false},
+        "requires_current_worker_lease_possession": {"const":true},
+        "requires_fresh_provider_preflight": {"const":true},
+        "external_send_authorized": {"const":false},
+        "side_effects_authorized": {"const":false}
+      }
+    },
+    "proofEnvelope": {
+      "type":"object",
+      "additionalProperties":false,
+      "required":["payload","proof_sha256"],
+      "properties": {
+        "payload":{"$ref":"#/$defs/proof"},
+        "proof_sha256":{"$ref":"#/$defs/sha256"}
+      }
+    }
+  }
+}

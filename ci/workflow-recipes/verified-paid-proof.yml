@@ -1,0 +1,77 @@
+name: verified-paid-proof
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/verified_paid_proof/**'
+      - '.github/workflows/verified-paid-proof.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/verified_paid_proof/**'
+      - '.github/workflows/verified-paid-proof.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hostile-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Normal interpreter
+        run: >-
+          python -W error::SyntaxWarning -m unittest
+          revenue.verified_paid_proof.test_verified_paid_proof
+          revenue.verified_paid_proof.test_custody
+          revenue.verified_paid_proof.test_strict_input -v
+      - name: Optimized interpreter
+        run: >-
+          python -O -W error::SyntaxWarning -m unittest
+          revenue.verified_paid_proof.test_verified_paid_proof
+          revenue.verified_paid_proof.test_custody
+          revenue.verified_paid_proof.test_strict_input -v
+      - name: Compile all modules
+        run: python -W error::SyntaxWarning -m compileall -q revenue/verified_paid_proof
+      - name: Synthetic split-custody public-boundary smoke
+        run: |
+          root="$(mktemp -d)"
+          export VPP_SMOKE_ROOT="$root"
+          python -W error::SyntaxWarning -m revenue.verified_paid_proof.verified_paid_proof \
+            revenue/verified_paid_proof/example.synthetic.json \
+            --internal-dir "$root/internal" \
+            --public-dir "$root/public"
+          test -s "$root/internal/proof.json"
+          test -s "$root/internal/receipt.sha256"
+          test -s "$root/public/proof.md"
+          test -s "$root/public/public.json"
+          test -s "$root/public/receipt.sha256"
+          test ! -e "$root/public/proof.json"
+          ! grep -q 'private_evidence' "$root/public/public.json"
+          ! grep -q 'engagement_id' "$root/public/public.json"
+          ! grep -q 'Synthetic Buyer' "$root/public/public.json"
+          python -W error::SyntaxWarning -m revenue.verified_paid_proof.verified_paid_proof \
+            revenue/verified_paid_proof/example.synthetic.json \
+            --public-json > "$root/public.stdout.json"
+          cmp "$root/public/public.json" "$root/public.stdout.json"
+          python - <<'PY2'
+          import hashlib
+          import json
+          from pathlib import Path
+          from revenue.verified_paid_proof.core import _canonical_json
+
+          path = Path(__import__("os").environ["VPP_SMOKE_ROOT"]) / "public" / "public.json"
+          payload = json.loads(path.read_text())
+          receipt = payload.pop("public_receipt_sha256")
+          assert receipt == hashlib.sha256(_canonical_json(payload).encode("utf-8")).hexdigest()
+          assert payload == {
+              "schema_version": 3,
+              "policy_version": "verified-paid-proof/v3",
+              "release_state": "NO_PUBLIC_CLAIM",
+              "commercial_claim": None,
+              "reason": "evidence_provenance_unverified",
+          }
+          PY2

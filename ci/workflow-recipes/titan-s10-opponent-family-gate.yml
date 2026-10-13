@@ -1,0 +1,139 @@
+name: titan-s10-opponent-family-gate
+
+on:
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/opponent_family_gate.py
+      - revenue/kaggriculture/cloud-execution-lab/test_opponent_family_gate.py
+      - .github/workflows/titan-s10-opponent-family-gate.yml
+
+permissions:
+  contents: read
+
+jobs:
+  opponent-family-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Public-prefix family contracts
+        run: python3 -B -m unittest -v test_opponent_family_gate
+
+      - name: Family-disjoint audit and 1 MiB / 2 ms admission
+        run: |
+          python3 - <<'PY'
+          import json
+          import time
+          import tracemalloc
+          from opponent_family_gate import (
+              FAMILIES,
+              FEATURE_FIELDS,
+              CalibratedCentroidClassifier,
+              LabeledPrefix,
+              evaluate_classifier,
+              evaluate_rules,
+              evaluate_ungated,
+              family_disjoint_folds,
+          )
+
+          def prefix(**changes):
+              row = {
+                  'turns_observed': 6,
+                  'early_unlock_events': 0,
+                  'animal_events': 0,
+                  'hire_events': 0,
+                  'route_events': 0,
+                  'market_events': 0,
+              }
+              row.update(changes)
+              return row
+
+          def labeled(family, *, loss=0, **features):
+              return LabeledPrefix.from_mapping({
+                  'family': family,
+                  'prefix': prefix(**features),
+                  'goop_loss_bp': loss,
+              })
+
+          training = []
+          calibration = []
+          evaluation = []
+          for index, (family, field) in enumerate(zip(FAMILIES, FEATURE_FIELDS)):
+              secondary = FEATURE_FIELDS[(index + 1) % len(FEATURE_FIELDS)]
+              training.extend([
+                  labeled(family, **{field: 7, secondary: 1}),
+                  labeled(family, **{field: 6, secondary: 1}),
+              ])
+              calibration.append(labeled(family, **{field: 5, secondary: 1}))
+              evaluation.append(labeled(family, loss=100 * (index + 1), **{field: 5, secondary: 1}))
+          evaluation.extend([
+              labeled('route', loss=1500, route_events=1, market_events=1),
+              labeled('market', loss=1800),
+          ])
+
+          calibrated = CalibratedCentroidClassifier.fit(training, calibration)
+          report = {
+              'rules': evaluate_rules(evaluation),
+              'calibrated': evaluate_classifier(calibrated, evaluation),
+              'ungated': evaluate_ungated(evaluation),
+              'calibration_cap_ppm': calibrated.confidence_cap_ppm,
+          }
+
+          fold_rows = []
+          for index, (family, field) in enumerate(zip(FAMILIES, FEATURE_FIELDS)):
+              secondary = FEATURE_FIELDS[(index + 1) % len(FEATURE_FIELDS)]
+              for sample in range(4):
+                  fold_rows.append(labeled(
+                      family,
+                      loss=200 * (sample + 1),
+                      **{field: 6 - sample % 2, secondary: 1 + sample % 2},
+                  ))
+          withheld = {}
+          for family, train_rows, test_rows in family_disjoint_folds(fold_rows):
+              base_rows = tuple(row for i, row in enumerate(train_rows) if i % 2 == 0)
+              calibration_rows = tuple(row for i, row in enumerate(train_rows) if i % 2 == 1)
+              model = CalibratedCentroidClassifier.fit(base_rows, calibration_rows)
+              withheld[family] = evaluate_classifier(model, test_rows)
+          report['withheld_family'] = withheld
+          report['withheld_family_safe_to_promote'] = all(
+              audit['misclassification_loss_bp'] == 0 for audit in withheld.values()
+          )
+
+          probes = [row.prefix for row in evaluation]
+          tracemalloc.start()
+          started = time.perf_counter_ns()
+          for i in range(1024):
+              calibrated.predict(probes[i % len(probes)])
+          elapsed_ns = time.perf_counter_ns() - started
+          _, peak = tracemalloc.get_traced_memory()
+          tracemalloc.stop()
+          average_ns = elapsed_ns // 1024
+          assert average_ns <= 2_000_000, average_ns
+          assert peak <= 1 * 1024 * 1024, peak
+          report['admission'] = {
+              'predictions': 1024,
+              'elapsed_ns': elapsed_ns,
+              'average_ns_per_prediction': average_ns,
+              'time_limit_ns_per_prediction': 2_000_000,
+              'peak_bytes': peak,
+              'memory_limit_bytes': 1 * 1024 * 1024,
+          }
+
+          with open('s10-opponent-family-gate-report.json', 'w', encoding='utf-8') as fh:
+              json.dump(report, fh, indent=2, sort_keys=True)
+              fh.write('\n')
+          print(json.dumps(report, sort_keys=True))
+          PY
+
+      - name: Upload S10 receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-s10-opponent-family-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: revenue/kaggriculture/cloud-execution-lab/s10-opponent-family-gate-report.json
+          if-no-files-found: error

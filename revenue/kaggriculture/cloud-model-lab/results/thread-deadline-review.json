@@ -1,0 +1,114 @@
+{
+ "guard_path": "/home/user/commons/revenue/kaggriculture/cloud-execution-lab/reference/titan-current/deadline_adapter.py",
+ "guard_sha256": "c3bef158763cb4f5f8b8436800f442b1acc94be2c407c5db1e740edd3a0d68f0",
+ "python": "3.11.15",
+ "worker_thread_supported": false,
+ "results": [
+  {
+   "test": "T1 cancellation identity",
+   "status": "PASS",
+   "detail": "raised object is the timer's own expired instance",
+   "raised_is_timer_expired": true
+  },
+  {
+   "test": "T2 worker-thread availability",
+   "status": "UNSUPPORTED",
+   "detail": "outcome=raised error=ValueError: signal only works in main thread of the main interpreter",
+   "outcome": "raised",
+   "error": "ValueError: signal only works in main thread of the main interpreter",
+   "identity_preserved": null
+  },
+  {
+   "test": "T3 tracer restoration (main thread)",
+   "status": "PASS",
+   "detail": "guard entered and cancelled; sys.gettrace restored by identity=True threading.gettrace restored by identity=True",
+   "guard_entered": true,
+   "entered": true,
+   "sys_restored": true,
+   "threading_restored": true,
+   "sys_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f600cb15940>",
+   "thr_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f600cb15940>"
+  },
+  {
+   "test": "T3 tracer restoration (worker thread)",
+   "status": "UNSUPPORTED",
+   "detail": "guard could not be entered here (ValueError: signal only works in main thread of the main interpreter), so the property was NOT exercised",
+   "guard_entered": false,
+   "error": "ValueError: signal only works in main thread of the main interpreter",
+   "sys_restored": true,
+   "threading_restored": true,
+   "sys_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f600cb55620>",
+   "thr_after": "<function t3_tracer_restoration.<locals>.sentinel at 0x7f600cb55620>"
+  },
+  {
+   "test": "T4 no signal mutation from a worker",
+   "status": "PASS",
+   "detail": "guard unusable on a worker (ValueError: signal only works in main thread of the main interpreter) -- so it also cannot mutate signal state; handler identity unchanged=True",
+   "worker_error": "ValueError: signal only works in main thread of the main interpreter",
+   "handler_identity_unchanged": true,
+   "itimer_interval_unchanged": true
+  },
+  {
+   "test": "T5 bounded CPU-loop cancellation (main thread)",
+   "status": "PASS",
+   "detail": "outcome=cancelled budget=0.05s elapsed=0.050122851000026 overshoot=0.000123",
+   "outcome": "cancelled",
+   "budget_seconds": 0.05,
+   "elapsed_seconds": 0.050122851000026,
+   "overshoot_seconds": 0.000123,
+   "error": null
+  },
+  {
+   "test": "T5 bounded CPU-loop cancellation (worker thread)",
+   "status": "UNSUPPORTED",
+   "detail": "outcome=raised budget=0.05s elapsed=3.113999997594874e-05 overshoot=-0.049969 error=ValueError: signal only works in main thread of the main interpreter",
+   "outcome": "raised",
+   "budget_seconds": 0.05,
+   "elapsed_seconds": 3.113999997594874e-05,
+   "overshoot_seconds": -0.049969,
+   "error": "ValueError: signal only works in main thread of the main interpreter"
+  },
+  {
+   "test": "T6 per-call overhead on the shipped default",
+   "status": "MEASURED",
+   "detail": "guard enter+exit mean 6.0 us (median 5.7, p99 12.0); shipped action mean 2.062 ms over 200 actions; guard is 0.293% of an action",
+   "guard": {
+    "mean_s": 6.033636999887903e-06,
+    "median_s": 5.688999976882769e-06,
+    "p99_s": 1.1964000009356823e-05,
+    "max_s": 4.4994000006681745e-05,
+    "samples": 2000
+   },
+   "shipped_action": {
+    "actions": 200,
+    "mean_s": 0.002062423780001268,
+    "median_s": 0.0015791689999673508,
+    "max_s": 0.06542100099994741
+   },
+   "guard_share_percent": 0.293
+  },
+  {
+   "test": "T7 trace-based cancellation cost on the shipped default",
+   "status": "MEASURED",
+   "detail": "no tracer 1.316 ms/action; call-level tracer 4.565 ms (3.47x); line-level tracer 6.587 ms (5.00x), over 120 actions",
+   "actions": 120,
+   "no_tracer_mean_s": 0.0013161930666650316,
+   "call_tracer_mean_s": 0.004564855524997805,
+   "line_tracer_mean_s": 0.006587199466668399,
+   "call_multiplier": 3.468,
+   "line_multiplier": 5.005
+  },
+  {
+   "test": "T8 async-exc mechanism probe (identity and latency)",
+   "status": "MEASURED",
+   "detail": "outcome=interrupted threads_set=1 fired_after=0.05s elapsed=0.06070622299995421 latency=0.010706 delivered_is_pre_made_instance=False delivered_type=ProbeCancel",
+   "outcome": "interrupted",
+   "threads_set": 1,
+   "fire_after_seconds": 0.05,
+   "elapsed_seconds": 0.06070622299995421,
+   "latency_seconds": 0.010706,
+   "preserves_instance_identity": false,
+   "delivered_type": "ProbeCancel"
+  }
+ ]
+}

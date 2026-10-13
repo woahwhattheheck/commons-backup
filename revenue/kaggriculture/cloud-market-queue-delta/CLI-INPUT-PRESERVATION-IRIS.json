@@ -1,0 +1,118 @@
+{
+  "schema": "iris.queue-cli-input-preservation.v1",
+  "publication_status": "NOT_LANDED",
+  "source_path": "revenue/kaggriculture/cloud-market-queue-delta/queue_delta.py",
+  "baseline_git_blob": "b95dff0010cf70941cc96e7f416798d36a8aa57d",
+  "baseline_sha256": "e95e0b8e3cc481d4687e9f0e6c3e53b4e4cbd4cf1b48f740f86acaa8a8b24122",
+  "repaired_git_blob": "d025229b9861e227d681e943af87fd93781aa2a5",
+  "repaired_sha256": "54e9f93c3e2539eb142bc98cbf62ae5361647e89773fee2ce105c1ab2d34334d",
+  "before": {
+    "tests": 11,
+    "passed": false,
+    "failures": 12,
+    "errors": 1,
+    "skipped": 0,
+    "source_sha256": "e95e0b8e3cc481d4687e9f0e6c3e53b4e4cbd4cf1b48f740f86acaa8a8b24122",
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "case_sha256": "905b93cd0e3bb83a3e2ba35aa9aca3059ca19a60b3abff3899cc08a09fc8738b",
+    "failure_ids": [
+      "__main__.QueueCLIInputTests.test_broken_output_symlink_cycle_is_explicit",
+      "__main__.QueueCLIInputTests.test_engine_source_aliases_preserve_inputs (target='engine', alias='direct')",
+      "__main__.QueueCLIInputTests.test_engine_source_aliases_preserve_inputs (target='engine', alias='symlink')",
+      "__main__.QueueCLIInputTests.test_engine_source_aliases_preserve_inputs (target='engine', alias='hardlink')",
+      "__main__.QueueCLIInputTests.test_executing_cli_aliases_preserve_inputs (target='cli', alias='direct')",
+      "__main__.QueueCLIInputTests.test_executing_cli_aliases_preserve_inputs (target='cli', alias='symlink')",
+      "__main__.QueueCLIInputTests.test_executing_cli_aliases_preserve_inputs (target='cli', alias='hardlink')",
+      "__main__.QueueCLIInputTests.test_input_document_aliases_preserve_inputs (target='input', alias='direct')",
+      "__main__.QueueCLIInputTests.test_input_document_aliases_preserve_inputs (target='input', alias='symlink')",
+      "__main__.QueueCLIInputTests.test_input_document_aliases_preserve_inputs (target='input', alias='hardlink')",
+      "__main__.QueueCLIInputTests.test_relative_parent_alias_preserves_inputs",
+      "__main__.QueueCLIInputTests.test_symlinked_directory_alias_preserves_inputs"
+    ],
+    "error_ids": [
+      "__main__.QueueCLIInputTests.test_alias_validation_precedes_loading_and_comparison"
+    ],
+    "new_games": 0,
+    "policy_calls": 0,
+    "scope": "CLI file preservation; actual retained single-market comparisons, not new games"
+  },
+  "after": {
+    "tests": 11,
+    "passed": true,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "source_sha256": "54e9f93c3e2539eb142bc98cbf62ae5361647e89773fee2ce105c1ab2d34334d",
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "case_sha256": "905b93cd0e3bb83a3e2ba35aa9aca3059ca19a60b3abff3899cc08a09fc8738b",
+    "failure_ids": [],
+    "error_ids": [],
+    "new_games": 0,
+    "policy_calls": 0,
+    "scope": "CLI file preservation; actual retained single-market comparisons, not new games"
+  },
+  "retained_report_continuity": {
+    "schema": "iris.queue-cli-preservation-continuity.v1",
+    "cases": [
+      {
+        "fixture": "buyer-case.json",
+        "sha256": "239cf0dd3e857528565d44121957925a60473cdea0c527e8acd539b2c6fa95f8",
+        "entire_report_matches_excluding_elapsed": true,
+        "exit_codes": [
+          0,
+          0
+        ],
+        "delta": {
+          "own_cash": 17.0,
+          "rival_cash": -17.0,
+          "relative_cash": 34.0
+        },
+        "action_selected": false
+      },
+      {
+        "fixture": "seller-case.json",
+        "sha256": "905b93cd0e3bb83a3e2ba35aa9aca3059ca19a60b3abff3899cc08a09fc8738b",
+        "entire_report_matches_excluding_elapsed": true,
+        "exit_codes": [
+          0,
+          0
+        ],
+        "delta": {
+          "own_cash": -70.0,
+          "rival_cash": 70.0,
+          "relative_cash": -140.0
+        },
+        "action_selected": false
+      }
+    ],
+    "unchanged_runtime_function_and_class_bodies": [
+      "Struct",
+      "BudgetExceeded",
+      "_delta",
+      "_view",
+      "_effect",
+      "_units",
+      "_queue",
+      "_check_deadline",
+      "_validate_party",
+      "_simulate",
+      "_compare_row",
+      "compare_queues",
+      "load_market_engine"
+    ],
+    "new_games": 0,
+    "policy_calls": 0,
+    "scope": "Retained market stages only; exact current queue baseline, CLI-only source change"
+  },
+  "direct_symlink_hardlink_input_types": [
+    "engine source",
+    "input document",
+    "executing CLI"
+  ],
+  "new_games": 0,
+  "policy_calls": 0,
+  "github_writes": 0,
+  "slack_posts": 0,
+  "canonical_package_changed": false,
+  "scope": "CLI main only; all comparator/engine-loading bodies unchanged"
+}

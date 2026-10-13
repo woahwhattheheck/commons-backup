@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "captured_repository_main": "021a91b2bed219a84f882de87efaa8245be167f2",
+  "captured_at_utc": "2026-09-09T20:58:11Z",
+  "verdict": "BLOCKED_STALE_AND_UNREGISTERED_EVIDENCE",
+  "canonical_archive": {
+    "path": "exports/titan-current.tar.gz",
+    "sha256": "17f536087b3a6baf4ae1222a051285766a3ea8c2ca5af6edc190d4f527e12b86",
+    "bytes": 427870,
+    "runtime_files": 109,
+    "source_manifest_sha256": "1feec5a68ffde28ab7b5c7d2c92a34aa66ff5705b7d88182ef6af98df8bb5083"
+  },
+  "checked_in_test_receipt": {
+    "path": "exports/titan-current.tar.gz",
+    "sha256": "6ac897241cb54baa205e4132fab1f83e7a21e4ae957e19e16c6c48a7ecbd8bc1",
+    "bytes": 408621,
+    "runtime_files": 104,
+    "source_manifest_sha256": "8f65a8b4c9c6c73a8080995731a954bdc963b72e29614961572f525eb10b8c17"
+  },
+  "blockers": [
+    {
+      "code": "STALE_TEST_RECEIPT",
+      "meaning": "CURRENT-TESTS does not apply to the canonical archive"
+    },
+    {
+      "code": "CURRENT_ARCHIVE_UNREGISTERED",
+      "meaning": "exports/ARTIFACTS.json does not bind titan-current.tar.gz to the canonical SHA"
+    },
+    {
+      "code": "NO_CURRENT_FULL_GAMES",
+      "meaning": "changed current bytes have no exact full-game panel"
+    }
+  ],
+  "historical_boundaries": {
+    "submitted_v1_archive_sha256": "7b58fa06da778b1519b81d509d28dff3481b3bbcc7a2d656e8bdfe4a22540524",
+    "frozen_v2_archive_sha256": "e363125093463d1f7a63a01aecb70646344dae5b318952e13a1b1641e2043e58",
+    "frozen_v2_first_observed_score": 904.4,
+    "rule": "Do not relabel predecessor or historical panels as evidence for either exact archive or current bytes"
+  },
+  "next_measurement": {
+    "required_pair_key": [
+      "engine_sha256",
+      "environment_seed",
+      "opponent_sha256",
+      "seat"
+    ],
+    "requirements": [
+      "fresh unused seed families",
+      "both seats",
+      "exact submitted V1 archive",
+      "exact frozen V2 archive",
+      "exact current candidate archive",
+      "fixed opponent artifact identities",
+      "zero error or timeout cells",
+      "dual-predecessor and provenance gates"
+    ]
+  },
+  "side_effects": {
+    "runtime_changed": false,
+    "archive_built": false,
+    "games_launched": 0,
+    "kaggle_submission": false
+  }
+}

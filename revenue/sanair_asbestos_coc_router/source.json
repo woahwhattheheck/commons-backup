@@ -1,0 +1,82 @@
+{
+  "demand_id": "sanair-asbestos-coc-router-lims-01",
+  "buyer": "SanAir Technologies / Sandra C. Sobrino",
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "network_note": "Public network also lists Syracuse. This leftover routes Richmond, Cincinnati, and Boston only.",
+  "labs": {
+    "RIC": {
+      "name": "Richmond",
+      "timezone": "America/New_York",
+      "utc_offset": "-04:00",
+      "methods": ["PLM_BULK_EPA600", "PCM_AIR_NIOSH7400"],
+      "tat_codes": ["SAME_DAY", "RUSH_24H"]
+    },
+    "CIN": {
+      "name": "Cincinnati",
+      "timezone": "America/New_York",
+      "utc_offset": "-04:00",
+      "methods": ["TEM_AIR_AHERA", "TEM_BULK_CHATFIELD"],
+      "tat_codes": ["RUSH_24H", "RUSH_48H"]
+    },
+    "BOS": {
+      "name": "Boston",
+      "timezone": "America/New_York",
+      "utc_offset": "-04:00",
+      "methods": ["PLM_SOIL_CARB435", "TEM_DUST_ASTM_D5755"],
+      "tat_codes": ["RUSH_48H", "STANDARD"]
+    }
+  },
+  "methods": {
+    "PLM_BULK_EPA600": {
+      "matrix": "BULK",
+      "labs": ["RIC"],
+      "tat_codes": ["SAME_DAY", "RUSH_24H"],
+      "family": "polarized_light_microscopy"
+    },
+    "PCM_AIR_NIOSH7400": {
+      "matrix": "AIR",
+      "labs": ["RIC"],
+      "tat_codes": ["SAME_DAY", "RUSH_24H"],
+      "family": "phase_contrast_microscopy"
+    },
+    "TEM_AIR_AHERA": {
+      "matrix": "AIR",
+      "labs": ["CIN"],
+      "tat_codes": ["RUSH_24H", "RUSH_48H"],
+      "family": "transmission_electron_microscopy"
+    },
+    "TEM_BULK_CHATFIELD": {
+      "matrix": "BULK",
+      "labs": ["CIN"],
+      "tat_codes": ["RUSH_24H", "RUSH_48H"],
+      "family": "transmission_electron_microscopy"
+    },
+    "PLM_SOIL_CARB435": {
+      "matrix": "SOIL",
+      "labs": ["BOS"],
+      "tat_codes": ["RUSH_48H", "STANDARD"],
+      "family": "polarized_light_microscopy"
+    },
+    "TEM_DUST_ASTM_D5755": {
+      "matrix": "DUST",
+      "labs": ["BOS"],
+      "tat_codes": ["RUSH_48H", "STANDARD"],
+      "family": "transmission_electron_microscopy"
+    }
+  },
+  "tat_rules": {
+    "SAME_DAY": {"hours": 8, "cutoff_local": "10:00", "labs": ["RIC"]},
+    "RUSH_24H": {"hours": 24, "cutoff_local": "15:00", "labs": ["RIC", "CIN"]},
+    "RUSH_48H": {"hours": 48, "cutoff_local": "17:00", "labs": ["CIN", "BOS"]},
+    "STANDARD": {"hours": 120, "cutoff_local": null, "labs": ["BOS"]}
+  },
+  "source_kinds": {
+    "COC_PDF": {"coordinate_prefix": "SANAIR-PDF:"},
+    "EMAIL": {"coordinate_prefix": "SANAIR-EML:"},
+    "FAX": {"coordinate_prefix": "SANAIR-FAX:"}
+  },
+  "human_releaser": "SYN-SANAIR-RELEASE-OFFICER",
+  "human_role": "RELEASE_OFFICER",
+  "exception_owner_role": "ASBESTOS_INTAKE_LEAD",
+  "exception_owner_desk": "RAPID_TAT_COC_ROUTER"
+}

@@ -1,0 +1,118 @@
+name: titan-v3-funding-town-consumption-sol-atlas
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v3-funding-town-consumption-sol-atlas/**"
+      - ".github/workflows/titan-v3-funding-town-consumption-sol-atlas.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-head-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPYCACHEPREFIX: /tmp/titan-town-consumption-pycache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact event head and additive scope
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          mkdir -p /tmp/titan-town-consumption-evidence
+          printf '%s\n' "$EXPECTED_HEAD" > /tmp/titan-town-consumption-evidence/EXACT_HEAD
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$BASE_SHA"...HEAD | sort \
+              > /tmp/titan-town-consumption-evidence/CHANGED_PATHS
+            python - <<'PY'
+          from pathlib import Path
+          allowed = {
+              ".github/workflows/titan-v3-funding-town-consumption-sol-atlas.yml",
+              "revenue/kaggriculture/cloud-execution-lab/candidates/v3-funding-town-consumption-sol-atlas/README.md",
+              "revenue/kaggriculture/cloud-execution-lab/candidates/v3-funding-town-consumption-sol-atlas/test_town_consumption_closure.py",
+              "revenue/kaggriculture/cloud-execution-lab/candidates/v3-funding-town-consumption-sol-atlas/town_consumption_closure.py",
+          }
+          paths = set(Path("/tmp/titan-town-consumption-evidence/CHANGED_PATHS").read_text().splitlines())
+          extra = sorted(paths - allowed)
+          missing = sorted(allowed - paths)
+          if extra or missing:
+              raise SystemExit(f"scope mismatch: extra={extra}, missing={missing}")
+          PY
+          else
+            : > /tmp/titan-town-consumption-evidence/CHANGED_PATHS
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile, materialize, and run predecessor contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          CANDIDATE="$LAB/candidates/v3-funding-town-consumption-sol-atlas"
+          python -m py_compile \
+            "$CANDIDATE/town_consumption_closure.py" \
+            "$CANDIDATE/test_town_consumption_closure.py"
+          (
+            cd "$CANDIDATE"
+            python -m unittest -v test_town_consumption_closure.py 2>&1 \
+              | tee /tmp/titan-town-consumption-evidence/TEST.log
+          )
+          python "$CANDIDATE/town_consumption_closure.py" \
+            --source "$LAB/frozen_selected.py" \
+            --engine "$LAB/reference/engine/kaggriculture.py" \
+            --output /tmp/titan-town-consumption-evidence/frozen_selected_town.py \
+            --receipt /tmp/titan-town-consumption-evidence/RECEIPT.json \
+            | tee /tmp/titan-town-consumption-evidence/MATERIALIZE.log
+          python -m py_compile \
+            /tmp/titan-town-consumption-evidence/frozen_selected_town.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('/tmp/titan-town-consumption-evidence')
+          receipt = json.loads((root / 'RECEIPT.json').read_text())
+          assert receipt['schema'] == 'titan-v3-funding-town-consumption/v2'
+          assert receipt['complete'] is True
+          assert receipt['source_blob_sha1'] == 'fc7baf5c179818a55037f6a61d92984d81d1a21c'
+          assert receipt['engine_blob_sha1'] == '3c202c7ee921da239356789e266b694635103fc4'
+          assert receipt['town_helper_count'] == 1
+          assert receipt['town_call_count'] == 1
+          assert receipt['lifecycle_guard_count'] == 1
+          assert receipt['lifecycle_call_count'] == 1
+          assert receipt['shop_lifecycle_policy'] == 'same-day exact; cross-day fail-closed'
+          assert receipt['canonical_runtime_modified'] is False
+          assert receipt['hosted_strength_claim'] is False
+          assert receipt['release_selection_claim'] is False
+          PY
+          sha256sum \
+            "$CANDIDATE/README.md" \
+            "$CANDIDATE/town_consumption_closure.py" \
+            "$CANDIDATE/test_town_consumption_closure.py" \
+            /tmp/titan-town-consumption-evidence/frozen_selected_town.py \
+            /tmp/titan-town-consumption-evidence/RECEIPT.json \
+            /tmp/titan-town-consumption-evidence/TEST.log \
+            > /tmp/titan-town-consumption-evidence/SHA256SUMS
+          git diff --exit-code
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+
+      - name: Retain exact-head evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-funding-town-consumption-exact-head
+          path: /tmp/titan-town-consumption-evidence
+          retention-days: 30
+          if-no-files-found: error

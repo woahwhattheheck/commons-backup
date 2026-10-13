@@ -1,0 +1,52 @@
+{
+  "id": "catering-deposit-rescue",
+  "version": 2,
+  "buyer": "restaurant-group catering sales director",
+  "workflow": [
+    "synthetic inquiry",
+    "rules-valid quote packet",
+    "one local follow-up record",
+    "inert deposit intent or staff exception",
+    "durable JSON receipt"
+  ],
+  "public_rules": {
+    "currency": "USD",
+    "menus": {
+      "boxed-lunch": {
+        "cents_per_guest": 1800,
+        "minimum_guests": 10
+      },
+      "buffet": {
+        "cents_per_guest": 2600,
+        "minimum_guests": 20
+      },
+      "plated": {
+        "cents_per_guest": 4200,
+        "minimum_guests": 25
+      }
+    },
+    "service_fee_cents": 7500,
+    "deposit_rate": 0.25,
+    "max_guests": 500
+  },
+  "acceptance": [
+    "accepted prices resolve to the fixed rule table",
+    "identical replay creates at most one follow-up and one deposit intent",
+    "same event id with different bytes returns EVENT_CONFLICT",
+    "invalid or under-budget inquiries create one staff exception",
+    "crash/resume and rollback preserve a machine-readable receipt",
+    "external messages sent equals zero",
+    "payments processed equals zero until a hosted processor proves otherwise"
+  ],
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_proof_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "browser-local synthetic or de-identified input; no server submission"
+}

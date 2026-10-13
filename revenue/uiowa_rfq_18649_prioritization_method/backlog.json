@@ -1,0 +1,114 @@
+{
+  "backlog_id": "UIOWA-029-SYNTHETIC-BACKLOG-001",
+  "work_order": "UIOWA-029",
+  "solicitation_id": "18649",
+  "synthetic": true,
+  "authority": "FICTIONAL_REHEARSAL_ONLY",
+  "content_warning": "FICTIONAL. Every recommendation, effort range and horizon below was invented for rehearsal. Not a University of Iowa finding and not a commitment to any date. Editable: change a field and re-run python3 method.py --check.",
+  "parameters": {
+    "quick_win_max_effort_days": 10,
+    "high_effort_min_effort_days": 60
+  },
+  "parameters_note": "Thresholds are parameters of this method, not findings. Change them here and re-run to see which items move.",
+  "recommendations": [
+    {
+      "recommendation_id": "REC-SYN-ESS-SD-001",
+      "title": "Record the design-review decision, not only that a review happened",
+      "group": "ESS", "area": "SD",
+      "effects": {"quality": 3, "security": 0, "delivery": 1},
+      "complexity": 2,
+      "effort_days_low": 3, "effort_days_high": 6,
+      "prerequisites": [],
+      "declared_horizon": "0-90",
+      "declared_horizon_reason": ""
+    },
+    {
+      "recommendation_id": "REC-SYN-ESS-DEP-002",
+      "title": "Publish a change record template carrying a rollback procedure",
+      "group": "ESS", "area": "DEP",
+      "effects": {"quality": 2, "security": 1, "delivery": 3},
+      "complexity": 2,
+      "effort_days_low": 4, "effort_days_high": 8,
+      "prerequisites": [],
+      "declared_horizon": "0-90",
+      "declared_horizon_reason": ""
+    },
+    {
+      "recommendation_id": "REC-SYN-IAM-SEC-003",
+      "title": "Inventory service identities and record an accountable role for each",
+      "group": "IAM", "area": "SEC",
+      "effects": {"quality": 1, "security": 4, "delivery": 0},
+      "complexity": 3,
+      "effort_days_low": 15, "effort_days_high": 30,
+      "prerequisites": [],
+      "declared_horizon": "0-90",
+      "declared_horizon_reason": "Placed early because two later items depend on the inventory existing; the team accepts the horizon is tight."
+    },
+    {
+      "recommendation_id": "REC-SYN-ESS-SD-004",
+      "title": "Introduce review by someone outside the authoring team for significant changes",
+      "group": "ESS", "area": "SD",
+      "effects": {"quality": 4, "security": 2, "delivery": null},
+      "complexity": 3,
+      "effort_days_low": 20, "effort_days_high": 40,
+      "prerequisites": ["REC-SYN-ESS-SD-001"],
+      "declared_horizon": "90-180",
+      "declared_horizon_reason": ""
+    },
+    {
+      "recommendation_id": "REC-SYN-RIS-DEP-005",
+      "title": "Rebuild the nightly export pipeline on the replacement format",
+      "group": "RIS", "area": "DEP",
+      "effects": {"quality": 3, "security": 2, "delivery": 4},
+      "complexity": 5,
+      "effort_days_low": 60, "effort_days_high": 110,
+      "prerequisites": [],
+      "declared_horizon": "180+",
+      "declared_horizon_reason": ""
+    },
+    {
+      "recommendation_id": "REC-SYN-RIS-SD-006",
+      "title": "Automate a regression suite for the award intake application",
+      "group": "RIS", "area": "SD",
+      "effects": {"quality": 5, "security": 1, "delivery": 3},
+      "complexity": 4,
+      "effort_days_low": 70, "effort_days_high": 120,
+      "prerequisites": [],
+      "declared_horizon": "90-180",
+      "declared_horizon_reason": "The team wants it before the next reporting cycle and intends to split it; the split is not yet written down, so the effort range still covers the whole piece of work."
+    },
+    {
+      "recommendation_id": "REC-SYN-IAM-SEC-007",
+      "title": "Require a closure verification record before a vulnerability leaves the queue",
+      "group": "IAM", "area": "SEC",
+      "effects": {"quality": 2, "security": 4, "delivery": 0},
+      "complexity": 2,
+      "effort_days_low": 8, "effort_days_high": 8,
+      "prerequisites": [],
+      "declared_horizon": "0-90",
+      "declared_horizon_reason": ""
+    },
+    {
+      "recommendation_id": "REC-SYN-ESS-AI-008",
+      "title": "Record which AI-assisted steps are in the delivery path and who reviews their output",
+      "group": "ESS", "area": "AI",
+      "effects": {"quality": null, "security": null, "delivery": null},
+      "complexity": null,
+      "effort_days_low": null, "effort_days_high": null,
+      "prerequisites": [],
+      "declared_horizon": null,
+      "declared_horizon_reason": "Nobody has sized this. It is held out of the horizons rather than guessed into one."
+    },
+    {
+      "recommendation_id": "REC-SYN-IAM-DEP-009",
+      "title": "Move the remaining batch jobs off the deprecated scheduler",
+      "group": "IAM", "area": "DEP",
+      "effects": {"quality": 2, "security": 3, "delivery": 2},
+      "complexity": 4,
+      "effort_days_low": 30, "effort_days_high": 50,
+      "prerequisites": ["REC-SYN-IAM-SEC-003"],
+      "declared_horizon": "90-180",
+      "declared_horizon_reason": ""
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="BidBridge: evidence-bound procurement opportunity review for women entrepreneurs and small teams.">
+  <title>BidBridge — Evidence-bound procurement review</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="eyebrow">PAZHOU 2026 · WOMEN-FRIENDLY AI PRODUCT · WORKING DEMO</div>
+    <div class="hero-grid">
+      <div>
+        <h1>BidBridge</h1>
+        <p class="lede">A procurement copilot that turns tender requirements, evidence, teaming gaps, deadlines, and owner capacity into an explainable review queue — without pretending your business is eligible and without submitting anything for you.</p>
+      </div>
+      <aside class="truth-box" aria-label="Truth boundary">
+        <strong>Truth boundary</strong>
+        <span>No autonomous bid submission.</span>
+        <span>No invented compliance.</span>
+        <span>No partner contact.</span>
+        <span>Operator-supplied evidence stays visible.</span>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="controls panel" aria-labelledby="demo-title">
+      <div>
+        <p class="kicker">Synthetic opportunity</p>
+        <h2 id="demo-title">Run the evidence review</h2>
+        <p>The checked-in example is fictional. Change the trusted review time to see deadline and capacity behavior without changing source evidence.</p>
+      </div>
+      <label>
+        Trusted review time (UTC)
+        <input id="asOf" type="text" value="2026-09-13T14:00:00.000Z" spellcheck="false" autocomplete="off">
+      </label>
+      <button id="evaluate" type="button">Evaluate opportunity</button>
+      <p id="error" class="error" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section id="result" hidden>
+      <div class="summary-grid">
+        <article class="metric state-card">
+          <span class="label">Owner review state</span>
+          <strong id="state">—</strong>
+        </article>
+        <article class="metric">
+          <span class="label">Time to submission</span>
+          <strong id="timeToSubmission">—</strong>
+        </article>
+        <article class="metric">
+          <span class="label">Remaining effort reference</span>
+          <strong id="effort">—</strong>
+        </article>
+        <article class="metric">
+          <span class="label">Usable owner capacity</span>
+          <strong id="capacity">—</strong>
+        </article>
+      </div>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Evidence matrix</p>
+            <h2>What the opportunity currently proves</h2>
+          </div>
+          <span id="referenceAmount" class="pill">—</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Requirement</th><th>Class</th><th>Status</th><th>Effort</th><th>Team state</th></tr>
+            </thead>
+            <tbody id="requirements"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <p class="kicker">Critical path</p>
+        <h2>Owner review queue</h2>
+        <div id="queue" class="queue"></div>
+      </section>
+
+      <section class="panel split">
+        <div>
+          <p class="kicker">Fail closed</p>
+          <h2>Authority stays with the owner</h2>
+          <p>BidBridge can organize evidence and arithmetic. It cannot turn a missing fact into eligibility, contact a teaming candidate, mutate a procurement portal, or make the bid/no-bid decision.</p>
+        </div>
+        <div id="authorities" class="authority-grid"></div>
+      </section>
+    </section>
+
+    <section class="panel story">
+      <p class="kicker">Why this product</p>
+      <h2>Procurement access is not only an opportunity-discovery problem.</h2>
+      <p>Small teams must convert long solicitations into a complete requirement matrix, prove current evidence, manage partner dependencies, and still leave enough preparation buffer to submit. BidBridge focuses on that decision layer. The women-friendly product thesis is simple: reduce proposal-operations friction for women entrepreneurs without replacing their judgment or making unsupported eligibility claims.</p>
+      <div class="story-grid">
+        <div><strong>Evidence first</strong><span>Every mandatory row must have current, revision-bound evidence.</span></div>
+        <div><strong>Explainable gaps</strong><span>Hard blockers, partial work, teaming dependencies, deadlines, and capacity stay distinct.</span></div>
+        <div><strong>Commercially extensible</strong><span>Future connectors can ingest portals and documents while the decision core remains deterministic.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>BidBridge working prototype · synthetic demo data only</span>
+    <a href="business-plan.md">Business plan source</a>
+    <a href="application-answers.md">Application answer bank</a>
+  </footer>
+
+  <script type="module">
+    import { appendText, compileBidBridge, formatMinutes, moneyLabel } from './bidbridge.js';
+
+    const byId = id => document.getElementById(id);
+    let demo;
+
+    function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+    function statusClass(status) { return `status status-${status.toLowerCase().replaceAll('_', '-')}`; }
+
+    function render(result) {
+      byId('result').hidden = false;
+      byId('state').textContent = result.evaluation.state;
+      byId('timeToSubmission').textContent = formatMinutes(result.evaluation.minutesToSubmission);
+      byId('effort').textContent = `${result.evaluation.remainingEffortHours} h`;
+      byId('capacity').textContent = `${result.evaluation.usablePrepHours} h`;
+      byId('referenceAmount').textContent = moneyLabel(result.opportunity.currency, result.opportunity.referenceAmountCents);
+
+      const rows = byId('requirements'); clear(rows);
+      for (const req of result.requirements) {
+        const tr = document.createElement('tr');
+        appendText(tr, 'td', req.requirementId);
+        appendText(tr, 'td', req.class);
+        const tdStatus = document.createElement('td'); appendText(tdStatus, 'span', req.status, statusClass(req.status)); tr.appendChild(tdStatus);
+        appendText(tr, 'td', `${req.effortHours} h`);
+        appendText(tr, 'td', req.teamState ?? '—');
+        rows.appendChild(tr);
+      }
+
+      const queue = byId('queue'); clear(queue);
+      if (result.queue.length === 0) appendText(queue, 'p', 'No critical-path queue items at this review time.', 'empty');
+      for (const item of result.queue) {
+        const card = document.createElement('article'); card.className = 'queue-item';
+        appendText(card, 'span', item.type, 'queue-type');
+        appendText(card, 'strong', item.requirementId ?? 'Opportunity-level');
+        appendText(card, 'p', item.reason.replaceAll('_', ' '));
+        appendText(card, 'small', `Due ${item.dueAt}`);
+        queue.appendChild(card);
+      }
+      if (result.holds.length) {
+        for (const hold of result.holds) {
+          const card = document.createElement('article'); card.className = 'queue-item hold';
+          appendText(card, 'span', 'HOLD', 'queue-type');
+          appendText(card, 'strong', hold.requirementId);
+          appendText(card, 'p', hold.reason.replaceAll('_', ' '));
+          queue.prepend(card);
+        }
+      }
+
+      const auth = byId('authorities'); clear(auth);
+      for (const [name, allowed] of Object.entries(result.authorities)) {
+        const row = document.createElement('div');
+        appendText(row, 'span', name.replace(/([A-Z])/g, ' $1').toLowerCase());
+        appendText(row, 'strong', allowed ? 'allowed' : 'not granted');
+        auth.appendChild(row);
+      }
+    }
+
+    function evaluate() {
+      byId('error').textContent = '';
+      try {
+        render(compileBidBridge(demo, { asOf: byId('asOf').value }));
+      } catch (error) {
+        byId('result').hidden = true;
+        byId('error').textContent = `${error.code ?? 'ERROR'}${error.field ? ` · ${error.field}` : ''}`;
+      }
+    }
+
+    try {
+      const response = await fetch('./demo-opportunity.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP_${response.status}`);
+      demo = await response.json();
+      byId('evaluate').addEventListener('click', evaluate);
+      evaluate();
+    } catch (error) {
+      byId('error').textContent = `DEMO_LOAD_FAILED · ${error.message}`;
+    }
+  </script>
+</body>
+</html>

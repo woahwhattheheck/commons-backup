@@ -1,0 +1,49 @@
+name: ARC Prize 2026 Paper Carrier
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/arc-prize-2026-paper/**'
+      - '.github/workflows/arc-prize-2026-paper.yml'
+  push:
+    paths:
+      - 'competitions/arc-prize-2026-paper/**'
+      - '.github/workflows/arc-prize-2026-paper.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  paper-carrier:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: competitions/arc-prize-2026-paper
+        run: python -m py_compile paper_carrier.py microdynamics.py tests/test_paper_carrier.py
+      - name: Regenerate deterministic evidence
+        working-directory: competitions/arc-prize-2026-paper
+        run: python microdynamics.py
+      - name: Hostile tests
+        working-directory: competitions/arc-prize-2026-paper
+        run: |
+          python -m unittest -v tests.test_paper_carrier
+          python -O -m unittest -v tests.test_paper_carrier
+      - name: Example remains fail-closed
+        working-directory: competitions/arc-prize-2026-paper
+        run: |
+          python paper_carrier.py evidence.example.json --now 2026-09-14T04:00:00Z > readiness.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('readiness.json').read_text())
+          assert data['disposition'] == 'HOLD', data
+          assert data['authority']['external_mutation_authorized'] is False, data
+          PY

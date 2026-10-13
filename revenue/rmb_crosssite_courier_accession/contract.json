@@ -1,0 +1,53 @@
+{
+  "id": "rmb-crosssite-courier-accession-lims-01",
+  "version": 1,
+  "buyer": "RMB Environmental Laboratories / Robert Borash",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788151147.165819"
+  },
+  "workflow": [
+    "read-only courier-receipt to incumbent-LIMS accession shadow",
+    "RMB Detroit Lakes or Beckton Ponce facility binding",
+    "certification scope and method routing",
+    "48-hour hold-time clock",
+    "cooler custody and courier cutoff",
+    "legacy/acquired-site mapping",
+    "staged report with human release"
+  ],
+  "facilities": {
+    "RMB_DETROIT_LAKES": "RMB Detroit Lakes HQ",
+    "BECKTON_PONCE": "Beckton Laboratory, Ponce PR (acquired)"
+  },
+  "hold_codes": [
+    "HOLD_RECEIPT_OVER_48H",
+    "HOLD_MISSED_COURIER_CUTOFF",
+    "HOLD_DUPLICATE_SAMPLE_ID",
+    "HOLD_BROKEN_COOLER_CUSTODY",
+    "HOLD_FACILITY_METHOD_SCOPE_MISMATCH",
+    "HOLD_LEGACY_SITE_MAPPING"
+  ],
+  "acceptance": [
+    "300 frozen synthetic water/lake submissions",
+    "exactly 240 valid rows map to one incumbent-LIMS accession and facility",
+    "exactly 60 holds, 10 of each truth-set HOLD code",
+    "no sample or result crosses client/site",
+    "certification scope and courier timestamps match the signed manifest",
+    "source and custody hashes reconcile",
+    "replay creates zero records",
+    "human review controls release"
+  ],
+  "exclusions": [
+    "no production writes",
+    "no incumbent-LIMS writes",
+    "no outreach or prospect-facing demo",
+    "no automatic release",
+    "existing LIMS remains authoritative"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "read-only shadow bindings and HOLD receipts only; never a live courier, LIMS, or regulatory write",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

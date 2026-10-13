@@ -1,0 +1,33 @@
+name: LACSD 04252 AP acceptance
+
+on:
+  pull_request:
+    paths:
+      - "revenue/opportunities/lacsd_04252_ap_automation/**"
+      - ".github/workflows/lacsd-04252-ap-acceptance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: revenue/opportunities/lacsd_04252_ap_automation
+        run: python -m py_compile lacsd_04252.py test_lacsd_04252.py
+      - name: Normal semantic suite
+        working-directory: revenue/opportunities/lacsd_04252_ap_automation
+        run: python -m unittest -v test_lacsd_04252.py
+      - name: Optimized semantic suite
+        working-directory: revenue/opportunities/lacsd_04252_ap_automation
+        run: python -O -m unittest -v test_lacsd_04252.py

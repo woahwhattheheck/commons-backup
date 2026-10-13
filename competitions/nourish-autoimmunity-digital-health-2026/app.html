@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NOURISH Signal Notebook Prototype</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header>
+    <h1>NOURISH Signal Notebook</h1>
+    <p class="lede">A local-first prototype for recording diet, nutrition and symptom observations and exploring descriptive within-person associations.</p>
+    <div class="warning" role="note"><strong>Research/self-tracking prototype.</strong> It does not diagnose, treat, recommend diets, or establish that an exposure caused an outcome. Data stays in this browser session unless you explicitly export a file.</div>
+    <p id="status" aria-live="polite"></p>
+  </header>
+
+  <main>
+    <section aria-labelledby="diet-title">
+      <h2 id="diet-title">Record a diet or nutrition exposure</h2>
+      <form id="diet-form">
+        <label>When <input name="occurred_at" type="datetime-local" required></label>
+        <label>Label <input name="label" maxlength="120" placeholder="e.g. breakfast" required></label>
+        <label>Tags <input name="tags" placeholder="comma-separated, e.g. high-fiber, demo-exposure" required></label>
+        <label>Private note <textarea name="note" maxlength="500" rows="2"></textarea></label>
+        <button type="submit">Add diet event</button>
+      </form>
+    </section>
+
+    <section aria-labelledby="symptom-title">
+      <h2 id="symptom-title">Record a symptom observation</h2>
+      <form id="symptom-form">
+        <label>When <input name="occurred_at" type="datetime-local" required></label>
+        <label>Symptom domain <input name="domain" maxlength="80" placeholder="e.g. fatigue" required></label>
+        <label>Severity (0–10) <input name="severity" type="number" min="0" max="10" step="0.1" required></label>
+        <label>Private note <textarea name="note" maxlength="500" rows="2"></textarea></label>
+        <button type="submit">Add symptom event</button>
+      </form>
+    </section>
+
+    <section aria-labelledby="score-title">
+      <h2 id="score-title">Record a validated measure score</h2>
+      <p>Record a score you obtained using an authorized copy of a validated instrument. This prototype does not reproduce questionnaire items.</p>
+      <form id="score-form">
+        <label>When <input name="occurred_at" type="datetime-local" required></label>
+        <label>Instrument <input name="instrument" placeholder="e.g. PROMIS Fatigue" required></label>
+        <label>Version <input name="instrument_version" required></label>
+        <label>Domain <input name="domain" placeholder="e.g. fatigue" required></label>
+        <label>Score <input name="score" type="number" step="0.01" required></label>
+        <label>Scale minimum <input name="scale_min" type="number" step="0.01" required></label>
+        <label>Scale maximum <input name="scale_max" type="number" step="0.01" required></label>
+        <label>Instrument/source URL <input name="source_url" type="url" pattern="https://.*" required></label>
+        <button type="submit">Add validated score</button>
+      </form>
+    </section>
+
+    <section aria-labelledby="context-title">
+      <h2 id="context-title">Record a context change</h2>
+      <p>Context flags are not controls for every confounder; they simply keep obvious changes visible in the analysis receipt.</p>
+      <form id="context-form">
+        <label>When <input name="occurred_at" type="datetime-local" required></label>
+        <label>Context
+          <select name="domain" required>
+            <option value="medication_change">Medication change</option>
+            <option value="sleep">Sleep</option>
+            <option value="stress">Stress</option>
+            <option value="activity">Activity</option>
+            <option value="illness">Intercurrent illness</option>
+            <option value="menstrual_cycle">Menstrual cycle</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>Value <input name="value" maxlength="240" required></label>
+        <button type="submit">Add context event</button>
+      </form>
+    </section>
+
+    <section aria-labelledby="analysis-title">
+      <h2 id="analysis-title">Explore a descriptive association</h2>
+      <form id="analysis-form">
+        <label>Exposure tag <input name="exposure_tag" value="demo-exposure" required></label>
+        <label>Outcome domain <input name="outcome_domain" value="fatigue" required></label>
+        <label>Pre-exposure baseline window (hours) <input name="baseline_hours" type="number" min="1" max="336" value="24" required></label>
+        <label>Post-exposure window (hours) <input name="lag_hours" type="number" min="1" max="336" value="24" required></label>
+        <button type="submit">Analyze matched windows</button>
+      </form>
+      <pre id="analysis-output" tabindex="0" aria-label="Analysis output"></pre>
+    </section>
+
+    <section aria-labelledby="data-title">
+      <h2 id="data-title">Session data</h2>
+      <div class="actions">
+        <button id="load-demo" type="button">Load synthetic demo</button>
+        <button id="export-research" type="button">Export research JSON</button>
+        <label class="file-label">Import local event JSON <input id="import-file" type="file" accept="application/json,.json"></label>
+        <button id="clear-all" type="button">Clear session</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>Recorded events</caption>
+          <thead><tr><th>When</th><th>Kind</th><th>Summary</th></tr></thead>
+          <tbody id="timeline-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Prototype for the 2026 NIH NOURISH Autoimmunity Digital Health Challenge. No NIH endorsement is claimed. Synthetic demo content is not biomedical evidence.</p>
+  </footer>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>

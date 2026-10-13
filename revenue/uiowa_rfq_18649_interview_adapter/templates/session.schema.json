@@ -1,0 +1,31 @@
+{
+  "title": "Interview session capture",
+  "note": "Field reference for the adapter. Deliberately has no field for an individual's name, email, or account; the loader refuses a file carrying one at any depth.",
+  "session": {
+    "session_id": "string, required",
+    "fiction_notice": "string, required for synthetic material",
+    "group": "ESS | RIS | IAM",
+    "session_source_id": "source_id of these notes in the source register",
+    "recorded_by_role": "role, not a name",
+    "participants": [{"participant_id": "string", "role": "string", "group": "string"}],
+    "questions": [{"question_id": "string", "assessment_area": "string", "text": "string"}],
+    "notes": [{
+      "note_id": "string",
+      "participant_id": "must match a participant",
+      "question_id": "must match a question",
+      "stated_practice": "string",
+      "concrete_example": "string or null",
+      "corroborating_artifact": "source_id or null; an interview record is refused",
+      "disagrees_with": "note_id or null",
+      "follow_up": "string or null"
+    }]
+  },
+  "forbidden_keys": ["name", "participant_name", "person", "full_name", "email",
+                     "employee_id", "netid", "username"],
+  "statuses": {
+    "STATED": "testimony only; supports_finding = false",
+    "ILLUSTRATED": "statement plus a specific example; supports_finding = false",
+    "CORROBORATED": "statement plus a resolving artifact; supports_finding = true",
+    "DISPUTED": "contradicted by another note; supports_finding = false, both retained"
+  }
+}

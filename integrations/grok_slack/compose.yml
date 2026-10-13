@@ -1,0 +1,23 @@
+# Host-neutral compose for the grok.com Slack connector.
+# From the repository root:
+#   docker compose -f integrations/grok_slack/compose.yml up --build
+# Put tokens in integrations/grok_slack/.env.local (gitignored) or the
+# process environment. Do not commit values.
+services:
+  grok-slack:
+    build:
+      context: ../..
+      dockerfile: integrations/grok_slack/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - path: .env.local
+        required: false
+    environment:
+      COMMONS_GROK_SLACK_STATE_DB: /var/lib/commons/grok_slack.sqlite3
+      COMMONS_GROK_SLACK_HEALTH_BIND: 127.0.0.1:8788
+    volumes:
+      - grok_slack_state:/var/lib/commons
+    # Socket Mode is outbound. Loopback /health stays inside the container.
+
+volumes:
+  grok_slack_state:

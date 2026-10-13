@@ -1,0 +1,89 @@
+{
+  "schema": "titan-v4-starvation-oracle-validation/v1",
+  "operation": "ASTRA-STARVEORACLE",
+  "disposition": "MECHANISM_CONFIRMED_BASE_ONLY__CARE_AWARE_POLICY_GATE_REQUIRED",
+  "scope": "constructed placed-animal complete-interpreter mechanism controls; not field EV or activation",
+  "reference": {
+    "artifact_id": 10175943272,
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e"
+  },
+  "authored_files": {
+    "starvation_cadence.py": {
+      "git_blob": "8831ff953faf033cc6d3892c6f32ccd1ee1af06c",
+      "sha256": "4a02d58f67594c074e3b41ef0b76602630a24576ce5d1d1642ffbb8fc37b001f"
+    },
+    "test_starvation_cadence.py": {
+      "git_blob": "a6403ab04d34f18a71712026e58b278b8bd44ad4",
+      "sha256": "fa5e57ec3512d0637916d20c392bbf570aa93206b0b22eab23fc65009af9d4b3"
+    }
+  },
+  "authored_validation": {
+    "normal": {
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "skips": 0,
+      "complete_interpreter_calls": 17424
+    },
+    "python_optimized": {
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "skips": 0,
+      "complete_interpreter_calls": 17424
+    },
+    "py_compile": "PASS",
+    "receipt_generation_complete_interpreter_calls": 15264
+  },
+  "base_no_care": {
+    "GOOSE": {
+      "daily": {"wheat": 30, "product": 27, "fertilizer": 30},
+      "alternating_phase0": {"wheat": 15, "product": 27, "fertilizer": 30},
+      "alternating_phase1": {"wheat": 15, "product": 27, "fertilizer": 30}
+    },
+    "COW": {
+      "daily": {"wheat": 30, "product": 12, "fertilizer": 30},
+      "alternating_phase0": {"wheat": 15, "product": 12, "fertilizer": 30},
+      "alternating_phase1": {"wheat": 15, "product": 12, "fertilizer": 30}
+    },
+    "SHEEP": {
+      "daily": {"wheat": 30, "product": 9, "fertilizer": 30},
+      "alternating_phase0": {"wheat": 15, "product": 9, "fertilizer": 30},
+      "alternating_phase1": {"wheat": 15, "product": 9, "fertilizer": 30}
+    }
+  },
+  "held_capacity_control": {
+    "GOOSE": {"daily_product": 4, "alternating_product": 4},
+    "COW": {"daily_product": 6, "alternating_product": 6},
+    "SHEEP": {"daily_product": 6, "alternating_product": 6}
+  },
+  "escape_control": {
+    "two_consecutive_unfed_escape_day_zero_based": 1,
+    "all_species": true
+  },
+  "care_counterexample": {
+    "GOOSE": {"daily_product": 56, "alternating_product": 27, "lost_product": 29},
+    "COW": {"daily_product": 39, "alternating_product": 12, "lost_product": 27},
+    "SHEEP": {"daily_product": 38, "alternating_product": 13, "lost_product": 25},
+    "alternating_wheat": 15,
+    "daily_wheat": 30,
+    "fertilizer_preserved": true
+  },
+  "admission_boundary": [
+    "never permit two consecutive unfed days before the next effective feed",
+    "account for pending CARE bonus before skipping FEED",
+    "revalidate held output and shed/storage pressure",
+    "prove current composed V4 can execute the next feed in time",
+    "require both-seat native economics and fallback/deadline checks before activation"
+  ],
+  "side_effects": {
+    "gameplay_changed": false,
+    "defaults_changed": false,
+    "archive_changed": false,
+    "kaggle_submission": false
+  }
+}

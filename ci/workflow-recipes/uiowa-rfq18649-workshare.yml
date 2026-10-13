@@ -1,0 +1,47 @@
+name: uiowa-rfq18649-workshare
+
+on:
+  pull_request:
+    paths:
+      - "revenue/uiowa_rfq_18649_workshare/**"
+      - ".github/workflows/uiowa-rfq18649-workshare.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/uiowa_rfq_18649_workshare/**"
+      - ".github/workflows/uiowa-rfq18649-workshare.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax proof
+        working-directory: revenue/uiowa_rfq_18649_workshare
+        run: python -m py_compile compiler.py workshare_constants.py workshare_core.py workshare_candidate.py workshare_authority.py workshare_contract.py workshare_assessment.py workshare_compile.py workshare_verify.py workshare_render.py workshare_engine.py workshare_read.py workshare_write.py workshare_io.py authority_test_helpers.py authority_tests_core.py authority_tests_verification.py authority_tests.py filesystem_tests_io.py filesystem_tests_cli.py filesystem_tests.py test_compiler.py
+      - name: Normal interpreter hostile suite
+        working-directory: revenue/uiowa_rfq_18649_workshare
+        run: python -m unittest -v test_compiler.py
+      - name: Optimized interpreter hostile suite
+        working-directory: revenue/uiowa_rfq_18649_workshare
+        run: python -O -m unittest -v test_compiler.py
+      - name: Public CLI stays untrusted and deterministic
+        working-directory: revenue/uiowa_rfq_18649_workshare
+        run: |
+          python compiler.py compile fixtures/synthetic_packet.json fixtures/synthetic_authority.json /tmp/uiowa-report.normal.json
+          python -O compiler.py compile fixtures/synthetic_packet.json fixtures/synthetic_authority.json /tmp/uiowa-report.optimized.json
+          cmp /tmp/uiowa-report.normal.json /tmp/uiowa-report.optimized.json
+          python compiler.py verify /tmp/uiowa-report.normal.json | grep -F 'UNTRUSTED_INTEGRITY_ONLY'
+          python compiler.py render /tmp/uiowa-report.normal.json /tmp/uiowa-report.md
+          grep -F 'HOLD_TRUSTED_AUTHORITY_REQUIRED' /tmp/uiowa-report.normal.json
+          grep -F 'did **not** independently authenticate' /tmp/uiowa-report.md
+          test -s /tmp/uiowa-report.normal.json
+          test -s /tmp/uiowa-report.md

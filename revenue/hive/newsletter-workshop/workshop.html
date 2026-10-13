@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Newsletter Workshop · Working files, not slides</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#1b3029;background:#edf2ef;font-size:16px}*{box-sizing:border-box}body{margin:0}header{background:#173c30;color:#fff;padding:32px max(24px,calc((100vw - 1200px)/2));border-bottom:6px solid #d1b766}header p{max-width:760px;line-height:1.65;color:#e0eee7}header h1{margin:6px 0;font-size:clamp(28px,4vw,44px);letter-spacing:-.03em}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:12px;font-weight:750}main{max-width:1248px;margin:auto;padding:24px}.steps{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}.steps span{padding:10px 15px;background:#dce8df;border-radius:4px;font-size:14px}.layout{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}.card{background:#fff;border:1px solid #cfdbd2;border-radius:9px;padding:24px;margin-bottom:20px}h2{font-size:21px;margin:0 0 18px}h3{font-size:17px;margin:20px 0 12px}p,li{line-height:1.65}.muted{font-size:14px;color:#455e50}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:block;font-size:14px;font-weight:650;margin:14px 0 7px}input,select,textarea{font:inherit;width:100%;padding:11px;border:1px solid #90a697;border-radius:5px;background:#fff;color:#1b3029}textarea{resize:vertical;min-height:88px;line-height:1.55}input:focus,select:focus,textarea:focus{outline:3px solid #cfddb6;outline-offset:1px}button,.file-label{font:inherit;font-weight:650;padding:12px 16px;border-radius:5px;border:1px solid #8ba392;background:#fff;color:#173c30;cursor:pointer;display:inline-block;text-align:center}button.primary{background:#245840;color:white;border-color:#245840}button:disabled{opacity:.65;cursor:wait}.actions{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}.actions button{flex:1 1 auto}.section{border-left:3px solid #b2c7b7;padding-left:18px;margin-top:24px}.section h3{margin-top:0}.recipients{padding-left:20px;font-size:14px}#status{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3ef;padding:14px;border-radius:5px;font-size:14px;line-height:1.6}#raw{font:13px/1.55 ui-monospace,monospace;min-height:380px}.file-label input{display:none}details summary{cursor:pointer;font-weight:650}aside .card{position:sticky;top:20px}code{font-size:.9em;background:#edf3ef;padding:2px 4px}footer{padding:8px 0 24px;color:#40594a;font-size:13px}@media(max-width:850px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}header{padding:24px}main{padding:16px}.card{padding:18px}aside{grid-row:1}aside .card{position:static}}
+#titanmcp-pad-pointer code{color:#1b3029}#titanmcp-pad-pointer a{color:#e0eee7}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">Hive · Practical workshop 031</div><h1>Build a newsletter you can change.</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>Bring a few source notes. Leave with an editable issue, a browser preview, a plain-text edition, and preference-aware email drafts. Everything runs on this machine. Nothing is sent.</p></header>
+<main>
+<div class="steps"><span>1 · Load your working file</span><span>2 · Edit the issue and sources</span><span>3 · Build an unsent edition</span></div>
+<div class="layout"><div>
+<section class="card"><h2>Your publication</h2><p class="muted">The starter and its subscribers are fictional. Import your own workspace JSON to use a different publication. No source pages are fetched.</p><div class="actions"><button id="example" type="button">Load fictional starter</button><label class="file-label" style="margin:0">Import workspace<input id="import" type="file" accept="application/json,.json"></label><button id="save" type="button">Save editable JSON</button></div>
+<div class="grid"><div><label for="publication">Publication name</label><input id="publication" data-group="publication" data-key="name"></div><div><label for="subject">Issue subject</label><input id="subject" data-group="issue" data-key="subject"></div><div><label for="slug">Edition slug</label><input id="slug" data-group="issue" data-key="slug"></div><div><label for="topic">Topic</label><input id="topic" data-group="issue" data-key="topic"></div><div><label for="planned">Planned datetime with timezone</label><input id="planned" data-group="issue" data-key="planned_at"></div><div><label for="preheader">Preheader</label><input id="preheader" data-group="issue" data-key="preheader"></div></div>
+<label for="intro">Introduction</label><textarea id="intro" data-group="issue" data-key="intro"></textarea>
+<div id="sections"></div></section>
+<section class="card"><h2>Sources and preferences</h2><p class="muted">The full working file contains source texts, source URLs, sender details, and subscriber preferences. Edit them here and press Apply. An exact quote match only checks the supplied text; it does not verify that a source or editorial comment is true.</p><details id="advanced"><summary>Edit the full workspace JSON</summary><label for="raw">Working file</label><textarea id="raw" spellcheck="false"></textarea><div class="actions"><button id="apply" type="button">Apply JSON changes</button></div></details><ul id="recipients" class="recipients"></ul></section>
+</div><aside><section class="card"><div class="eyebrow">Your working output</div><h2 style="margin-top:12px">Build this edition</h2><p>The ZIP contains the preview, text edition, original working file, delivery plan, and individual <strong>unsent</strong> email drafts.</p><div class="actions"><button class="primary" id="build" type="button">Download edition ZIP</button></div><div id="status" role="status" aria-live="polite">Loading the fictional starter…</div><h3>Try a real edit</h3><p class="muted">Change the headline, then change a subscriber to <code>unsubscribed</code>. Rebuild and compare the delivery plan.</p><p class="muted">Changing preferences does not recall an old ZIP. Rebuild before any use in an email platform. The planned time is metadata, not a scheduled job.</p><p class="muted">Your applied edits are cached in this browser when storage is available. Save the JSON for a portable copy; caches can be cleared.</p><p class="muted">Start this workspace with:<br><code>python newsletter_workflow.py serve</code></p></section></aside></div>
+<footer>Offline authoring workspace · No login, external model, email provider, or paid service required · See WORKSHOP.md for the guided exercises.</footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const KEY = 'hive-newsletter-workshop-v1';
+let workspace = null;
+let rawDirty = false;
+function status(text) { $('status').textContent = text; }
+function cache() { try { localStorage.setItem(KEY, JSON.stringify(workspace)); } catch (_) { status('Edits are in memory. Browser storage is unavailable; save the editable JSON.'); } }
+function shape(value) {
+  if (!value || typeof value !== 'object' || !value.publication || !value.issue || !Array.isArray(value.issue.sections) || !Array.isArray(value.subscribers)) throw new Error('A workspace needs publication, issue.sections, and subscribers. See the fictional starter.');
+  if (Array.isArray(value.publication) || Array.isArray(value.issue) || value.issue.sections.some(s => !s || typeof s !== 'object' || Array.isArray(s)) || value.subscribers.some(s => !s || typeof s !== 'object' || Array.isArray(s))) throw new Error('Publication, issue, sections and subscribers must be objects.');
+  return value;
+}
+function field(label, value, onChange, multiline) {
+  const wrap = document.createElement('div');
+  const caption = document.createElement('label');
+  caption.textContent = label;
+  const input = document.createElement(multiline ? 'textarea' : 'input');
+  input.value = typeof value === 'string' ? value : '';
+  input.setAttribute('aria-label', label);
+  input.addEventListener('input', () => { onChange(input.value); syncRaw(); cache(); });
+  caption.appendChild(input); wrap.appendChild(caption); return wrap;
+}
+function lockForm(locked) { document.querySelectorAll('[data-group],#sections input,#sections textarea').forEach(el => {el.disabled=locked;}); }
+function syncRaw() { $('raw').value = JSON.stringify(workspace, null, 2); rawDirty = false; lockForm(false); }
+function paint() {
+  document.querySelectorAll('[data-group]').forEach(input => { input.value = workspace[input.dataset.group][input.dataset.key] || ''; });
+  $('sections').replaceChildren();
+  workspace.issue.sections.forEach((section, i) => {
+    const card = document.createElement('div'); card.className = 'section';
+    const title = document.createElement('h3'); title.textContent = `Section ${i + 1}`; card.appendChild(title);
+    [['Heading','heading',false], ['Source ID','source_id',false], ['Exact source excerpt','quote',true], ['Your editorial commentary','commentary',true]].forEach(([label,key,multi]) => card.appendChild(field(label,section[key], value => {section[key] = value;},multi)));
+    $('sections').appendChild(card);
+  });
+  $('recipients').replaceChildren();
+  workspace.subscribers.forEach(s => { const item = document.createElement('li'); item.textContent = `${s.name}: ${s.email} · ${s.status} · ${(Array.isArray(s.topics) ? s.topics : []).join(', ')}`; $('recipients').appendChild(item); });
+  syncRaw();
+}
+async function validateRaw(raw) {
+  const response = await fetch('/validate', {method:'POST', headers:{'Content-Type':'application/json'}, body:raw});
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || 'Invalid workspace');
+  return shape(result);
+}
+async function applyRaw() {
+  if (rawDirty) { workspace = await validateRaw($('raw').value); paint(); cache(); }
+}
+function download(data, name, type) {
+  const url = URL.createObjectURL(data instanceof Blob ? data : new Blob([data], {type}));
+  const link = document.createElement('a'); link.href = url; link.download = name; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+async function loadExample() {
+  const response = await fetch('/example.json');
+  if (!response.ok) throw new Error('Could not load the starter. Run the Python workshop server.');
+  workspace = shape(await response.json()); paint(); cache(); status('Fictional starter loaded. Two subscribed workshop readers will receive prepared drafts; three records are excluded. Nothing is sent.');
+}
+document.querySelectorAll('[data-group]').forEach(input => input.addEventListener('input', () => {
+  if (rawDirty) { status('Apply your full JSON edits before editing the short form.'); return; }
+  workspace[input.dataset.group][input.dataset.key] = input.value; syncRaw(); cache();
+}));
+$('raw').addEventListener('input', () => { rawDirty = true; lockForm(true); status('Full JSON edits are pending. Apply, save, or build to use them.'); });
+$('apply').addEventListener('click', async () => { try { await applyRaw(); status('JSON applied. Build runs the complete source and preference checks.'); } catch(e) { status(e.message); } });
+$('example').addEventListener('click', () => { if (!workspace || confirm('Replace the current draft with the fictional starter? Save your editable JSON first to retain it.')) loadExample().catch(e => status(e.message)); });
+$('import').addEventListener('change', async event => { try { const file = event.target.files[0]; if (!file) return; workspace = await validateRaw(await file.text()); paint(); cache(); status('Workspace imported. Build validates the complete file.'); } catch(e) {status(e.message);} finally {event.target.value='';} });
+$('save').addEventListener('click', () => { try { download(rawDirty ? $('raw').value : JSON.stringify(workspace,null,2)+'\n','workspace.json','application/json'); status('Editable working file saved, including pending edits. Build or Apply validates it. No emails were sent.'); } catch(e) {status(e.message);} });
+$('build').addEventListener('click', async () => {
+  $('build').disabled = true;
+  try {
+    await applyRaw();
+    const response = await fetch('/build', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(workspace)});
+    if (!response.ok) { const body = await response.json(); throw new Error(body.error || 'Build failed'); }
+    download(await response.blob(),`${workspace.issue.slug}.zip`,'application/zip');
+    status('Edition ZIP prepared. Open preview.html after extracting it. Inspect delivery-plan.csv and drafts/. No delivery or scheduling occurred.');
+  } catch(e) {status(e.message);} finally {$('build').disabled = false;}
+});
+(async () => { try { let stored; try {stored = localStorage.getItem(KEY);} catch (_) {} if (stored) {workspace=shape(JSON.parse(stored));paint();status('Restored applied edits from this browser. Save JSON for a portable copy.');} else {await loadExample();} } catch(e) {status(e.message+' Use Load fictional starter to start again.');} })();
+</script>
+</body>
+</html>

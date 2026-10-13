@@ -1,0 +1,69 @@
+name: TITAN behavior-equivalence arm ledger
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/titan_behavior_equivalence_gate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/titan_behavior_equivalence/**"
+      - "revenue/kaggriculture/cloud-execution-lab/titan_behavior_equivalence_test_support.py"
+      - "revenue/kaggriculture/cloud-execution-lab/test_titan_behavior_equivalence_*.py"
+      - "revenue/kaggriculture/cloud-execution-lab/TITAN-BEHAVIOR-EQUIVALENCE-GATE.md"
+      - ".github/workflows/titan-behavior-equivalence-gate.yml"
+  push:
+    branches:
+      - "sol-pro/titan-v3-behavior-equivalence-arm-ledger-20260910-01"
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/titan_behavior_equivalence_gate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/titan_behavior_equivalence/**"
+      - "revenue/kaggriculture/cloud-execution-lab/titan_behavior_equivalence_test_support.py"
+      - "revenue/kaggriculture/cloud-execution-lab/test_titan_behavior_equivalence_*.py"
+      - "revenue/kaggriculture/cloud-execution-lab/TITAN-BEHAVIOR-EQUIVALENCE-GATE.md"
+      - ".github/workflows/titan-behavior-equivalence-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile exact paths
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: >-
+          python -B -m py_compile
+          titan_behavior_equivalence_gate.py
+          titan_behavior_equivalence/*.py
+          titan_behavior_equivalence_test_support.py
+          test_titan_behavior_equivalence_family.py
+          test_titan_behavior_equivalence_observations.py
+          test_titan_behavior_equivalence_receipts.py
+      - name: Predecessor-killing contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: >-
+          python -B -m unittest -v
+          test_titan_behavior_equivalence_family.py
+          test_titan_behavior_equivalence_observations.py
+          test_titan_behavior_equivalence_receipts.py
+      - name: Optimized-interpreter contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: >-
+          python -O -B -m unittest -v
+          test_titan_behavior_equivalence_family.py
+          test_titan_behavior_equivalence_observations.py
+          test_titan_behavior_equivalence_receipts.py
+      - name: CLI surfaces
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          python -B titan_behavior_equivalence_gate.py --help
+          python -B titan_behavior_equivalence_gate.py preflight --help
+          python -B titan_behavior_equivalence_gate.py analyze --help
+          python -B titan_behavior_equivalence_gate.py verify-ledger --help

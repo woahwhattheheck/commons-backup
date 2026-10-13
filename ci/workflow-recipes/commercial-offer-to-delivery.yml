@@ -1,0 +1,40 @@
+name: commercial-offer-to-delivery
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/commercial_offer_to_delivery/**'
+      - 'revenue/commercial_offer_contract/**'
+      - 'host/scope_to_delivery.py'
+      - 'revenue/outcome_commerce/catalog.json'
+      - '.github/workflows/commercial-offer-to-delivery.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/commercial_offer_to_delivery/**'
+      - 'revenue/commercial_offer_contract/**'
+      - 'host/scope_to_delivery.py'
+      - 'revenue/outcome_commerce/catalog.json'
+      - '.github/workflows/commercial-offer-to-delivery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile exact bridge sources
+        run: |
+          python -m py_compile revenue/commercial_offer_to_delivery/*.py
+      - name: Run hostile and landed-rail integration suite
+        run: python -m unittest discover -v -s revenue/commercial_offer_to_delivery -t . -p 'test_*.py'
+      - name: Run optimized-mode suite
+        run: python -O -m unittest discover -v -s revenue/commercial_offer_to_delivery -t . -p 'test_*.py'

@@ -1,0 +1,293 @@
+{
+  "coverage": [
+    {
+      "answered_by": [
+        "P1",
+        "P3"
+      ],
+      "assessment_area": "deployment",
+      "not_covered_by": [
+        "P2"
+      ],
+      "question_id": "Q1"
+    },
+    {
+      "answered_by": [
+        "P1",
+        "P2"
+      ],
+      "assessment_area": "software",
+      "not_covered_by": [
+        "P3"
+      ],
+      "question_id": "Q2"
+    },
+    {
+      "answered_by": [
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "assessment_area": "security",
+      "not_covered_by": [],
+      "question_id": "Q3"
+    },
+    {
+      "answered_by": [
+        "P1",
+        "P2"
+      ],
+      "assessment_area": "ai_readiness",
+      "not_covered_by": [
+        "P3"
+      ],
+      "question_id": "Q4"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "DISAGREEMENT_MADE_MUTUAL",
+      "field": "disagrees_with",
+      "message": "N2 contradicts this note; marking both DISPUTED so the unaware side does not export as settled",
+      "note_id": "N1",
+      "severity": "INFO"
+    },
+    {
+      "code": "DISAGREEMENT_MADE_MUTUAL",
+      "field": "disagrees_with",
+      "message": "N9 contradicts this note; marking both DISPUTED so the unaware side does not export as settled",
+      "note_id": "N8",
+      "severity": "INFO"
+    },
+    {
+      "code": "VAGUE_EXAMPLE",
+      "field": "concrete_example",
+      "message": "the example describes a habit rather than an instance, so it does not raise the note above STATED",
+      "note_id": "N5",
+      "severity": "WARNING"
+    },
+    {
+      "code": "NOT_COVERED",
+      "field": "P2",
+      "message": "ESS QA analyst did not answer this question; recorded as not covered, which is not a finding about the practice",
+      "note_id": "Q1",
+      "severity": "INFO"
+    },
+    {
+      "code": "NOT_COVERED",
+      "field": "P3",
+      "message": "Change manager (shared services) did not answer this question; recorded as not covered, which is not a finding about the practice",
+      "note_id": "Q2",
+      "severity": "INFO"
+    },
+    {
+      "code": "NOT_COVERED",
+      "field": "P3",
+      "message": "Change manager (shared services) did not answer this question; recorded as not covered, which is not a finding about the practice",
+      "note_id": "Q4",
+      "severity": "INFO"
+    }
+  ],
+  "fiction_notice": "FICTION. An invented interview session written for this adapter. No interview has been conducted, requested, or scheduled, and no real person is represented. Participants are ROLES, never named individuals.",
+  "records": [
+    {
+      "artifact_locator": "fictional-repo/ess/release/log-2026-q1.csv",
+      "assessment_area": "deployment",
+      "basis": "contradicted by N2; this side carries artifact SRC-ESS-REL-LOG. Adjudicate against that artifact — the adapter does not decide",
+      "concrete_example": "CR-411 last month went through both the peer approval and the change-manager approval.",
+      "corroborating_artifact": "SRC-ESS-REL-LOG",
+      "disputed_with": "N2",
+      "follow_up": null,
+      "group": "ESS",
+      "participant_id": "P1",
+      "question_id": "Q1",
+      "record_id": "EV-INT-2026-03-11-ESS-N1",
+      "role": "ESS release engineer",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "Standard changes take two approvals before release.",
+      "status": "DISPUTED",
+      "supports_finding": false
+    },
+    {
+      "artifact_locator": "fictional-repo/ess/policy/change-management.md#approvals",
+      "assessment_area": "deployment",
+      "basis": "statement plus artifact SRC-ESS-CHG-PROC resolving to fictional-repo/ess/policy/change-management.md#approvals",
+      "concrete_example": "Section 4 of the procedure states it.",
+      "corroborating_artifact": "SRC-ESS-CHG-PROC",
+      "disputed_with": null,
+      "follow_up": null,
+      "group": "ESS",
+      "participant_id": "P3",
+      "question_id": "Q1",
+      "record_id": "EV-INT-2026-03-11-ESS-N10",
+      "role": "Change manager (shared services)",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "The written change procedure requires two approvals.",
+      "status": "CORROBORATED",
+      "supports_finding": true
+    },
+    {
+      "artifact_locator": null,
+      "assessment_area": "security",
+      "basis": "statement plus a specific example, still the participant's own account; no artifact supplied",
+      "concrete_example": "The ticket for removing a leaver in February was REQ-7781.",
+      "corroborating_artifact": null,
+      "disputed_with": null,
+      "follow_up": "Ask for the ticket export covering the last two quarters.",
+      "group": "ESS",
+      "participant_id": "P2",
+      "question_id": "Q3",
+      "record_id": "EV-INT-2026-03-11-ESS-N11",
+      "role": "ESS QA analyst",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "Access changes for the release group go through a ticket.",
+      "status": "ILLUSTRATED",
+      "supports_finding": false
+    },
+    {
+      "artifact_locator": null,
+      "assessment_area": "deployment",
+      "basis": "contradicted by N1; no artifact on this side. Both notes are retained and neither is promoted",
+      "concrete_example": "The March batch of routine schema changes each had a single approval entry.",
+      "corroborating_artifact": null,
+      "disputed_with": "N1",
+      "follow_up": "Ask for the standing exception, if one is written down.",
+      "group": "ESS",
+      "participant_id": "P3",
+      "question_id": "Q1",
+      "record_id": "EV-INT-2026-03-11-ESS-N2",
+      "role": "Change manager (shared services)",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "In practice most standard changes carry one approval; the second is only for high-risk ones.",
+      "status": "DISPUTED",
+      "supports_finding": false
+    },
+    {
+      "artifact_locator": "fictional-repo/ess/quality/runs-2026-03.json",
+      "assessment_area": "software",
+      "basis": "statement plus artifact SRC-ESS-TEST-RUN resolving to fictional-repo/ess/quality/runs-2026-03.json",
+      "concrete_example": "The 2026-03-28 run is the most recent one we looked at together.",
+      "corroborating_artifact": "SRC-ESS-TEST-RUN",
+      "disputed_with": null,
+      "follow_up": null,
+      "group": "ESS",
+      "participant_id": "P2",
+      "question_id": "Q2",
+      "record_id": "EV-INT-2026-03-11-ESS-N3",
+      "role": "ESS QA analyst",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "A nightly suite runs against the integration environment.",
+      "status": "CORROBORATED",
+      "supports_finding": true
+    },
+    {
+      "artifact_locator": null,
+      "assessment_area": "software",
+      "basis": "testimony only; no artifact and no specific example supplied",
+      "concrete_example": null,
+      "corroborating_artifact": null,
+      "disputed_with": null,
+      "follow_up": "Ask where contract-test results are retained.",
+      "group": "ESS",
+      "participant_id": "P1",
+      "question_id": "Q2",
+      "record_id": "EV-INT-2026-03-11-ESS-N4",
+      "role": "ESS release engineer",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "We also run contract tests against the student-record interface.",
+      "status": "STATED",
+      "supports_finding": false
+    },
+    {
+      "artifact_locator": null,
+      "assessment_area": "software",
+      "basis": "testimony only; no artifact and no specific example supplied",
+      "concrete_example": "We generally keep it high.",
+      "corroborating_artifact": null,
+      "disputed_with": null,
+      "follow_up": "Ask for a coverage report from after the March migration.",
+      "group": "ESS",
+      "participant_id": "P2",
+      "question_id": "Q2",
+      "record_id": "EV-INT-2026-03-11-ESS-N5",
+      "role": "ESS QA analyst",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "Coverage is good across the enrollment module.",
+      "status": "STATED",
+      "supports_finding": false
+    },
+    {
+      "artifact_locator": "fictional-repo/iam/reviews/2025-q4.pdf",
+      "assessment_area": "security",
+      "basis": "statement plus artifact SRC-IAM-REVIEW-Q4 resolving to fictional-repo/iam/reviews/2025-q4.pdf",
+      "concrete_example": "The Q4 2025 review covered the release group.",
+      "corroborating_artifact": "SRC-IAM-REVIEW-Q4",
+      "disputed_with": null,
+      "follow_up": "Ask whether a Q1 2026 review has been completed.",
+      "group": "ESS",
+      "participant_id": "P3",
+      "question_id": "Q3",
+      "record_id": "EV-INT-2026-03-11-ESS-N6",
+      "role": "Change manager (shared services)",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "Pipeline access is reviewed with the wider access review each quarter.",
+      "status": "CORROBORATED",
+      "supports_finding": true
+    },
+    {
+      "artifact_locator": null,
+      "assessment_area": "security",
+      "basis": "testimony only; no artifact and no specific example supplied",
+      "concrete_example": null,
+      "corroborating_artifact": null,
+      "disputed_with": null,
+      "follow_up": "Ask for the group membership export.",
+      "group": "ESS",
+      "participant_id": "P1",
+      "question_id": "Q3",
+      "record_id": "EV-INT-2026-03-11-ESS-N7",
+      "role": "ESS release engineer",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "Only the release group can deploy to production.",
+      "status": "STATED",
+      "supports_finding": false
+    },
+    {
+      "artifact_locator": null,
+      "assessment_area": "ai_readiness",
+      "basis": "contradicted by N9; no artifact on this side. Both notes are retained and neither is promoted",
+      "concrete_example": null,
+      "corroborating_artifact": null,
+      "disputed_with": "N9",
+      "follow_up": "Ask whether individually adopted assistants are included in that answer.",
+      "group": "ESS",
+      "participant_id": "P2",
+      "question_id": "Q4",
+      "record_id": "EV-INT-2026-03-11-ESS-N8",
+      "role": "ESS QA analyst",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "No AI tools are used in QA work.",
+      "status": "DISPUTED",
+      "supports_finding": false
+    },
+    {
+      "artifact_locator": null,
+      "assessment_area": "ai_readiness",
+      "basis": "contradicted by N8; no artifact on this side. Both notes are retained and neither is promoted",
+      "concrete_example": "It is used for first-draft unit tests.",
+      "corroborating_artifact": null,
+      "disputed_with": "N8",
+      "follow_up": "Ask how it was obtained and whether a licence record exists.",
+      "group": "ESS",
+      "participant_id": "P1",
+      "question_id": "Q4",
+      "record_id": "EV-INT-2026-03-11-ESS-N9",
+      "role": "ESS release engineer",
+      "session_id": "INT-2026-03-11-ESS",
+      "stated_practice": "An AI coding assistant is in daily use on the engineering side.",
+      "status": "DISPUTED",
+      "supports_finding": false
+    }
+  ],
+  "session_id": "INT-2026-03-11-ESS"
+}

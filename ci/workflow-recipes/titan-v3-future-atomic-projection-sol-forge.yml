@@ -1,0 +1,162 @@
+name: titan-v3-future-atomic-projection-sol-forge
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - sol-forge/titan-v3-future-atomic-plant-projection-20260910-01
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-future-atomic-plant-projection-sol-forge/**"
+      - ".github/workflows/titan-v3-future-atomic-projection-sol-forge.yml"
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-future-atomic-plant-projection-sol-forge/**"
+      - ".github/workflows/titan-v3-future-atomic-projection-sol-forge.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  exact-repair-packet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            .github/workflows/titan-v3-future-atomic-projection-sol-forge.yml
+            revenue/kaggriculture/cloud-execution-lab/scheduler.py
+            revenue/kaggriculture/cloud-execution-lab/mechanics.py
+            revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py
+            revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.json
+            revenue/kaggriculture/cloud-execution-lab/reference/decision/decision.py
+            revenue/kaggriculture/cloud-execution-lab/reference/next-panel/vendor/arlene.py
+            revenue/kaggriculture/cloud-runtime-pulse/observed_clone.py
+            revenue/kaggriculture/cloud-execution-lab/analysis/v3-future-atomic-plant-projection-sol-forge
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Publication, real-engine, closure, and route contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/titan-future-atomic"
+          mkdir -p "$out"
+          PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+            python analysis/v3-future-atomic-plant-projection-sol-forge/test_materialize.py \
+            2>&1 | tee "$out/contracts.log"
+          PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+            python analysis/v3-future-atomic-plant-projection-sol-forge/test_route_census.py \
+            2>&1 | tee -a "$out/contracts.log"
+      - name: Materialize exact candidate, census, and provenance
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/titan-future-atomic"
+          PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+            python analysis/v3-future-atomic-plant-projection-sol-forge/materialize.py \
+              --output "$out/scheduler.py" \
+              --receipt "$out/RECEIPT.json" \
+              | tee "$out/run.log"
+          PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+            python analysis/v3-future-atomic-plant-projection-sol-forge/route_census.py \
+              --output "$out/ROUTE-CENSUS.json" \
+              | tee "$out/route-census.log"
+          python -m py_compile "$out/scheduler.py"
+          OUT="$out" python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          out = Path(os.environ["OUT"])
+          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+          pull = event.get("pull_request") or {}
+          head = pull.get("head") or {}
+          base = pull.get("base") or {}
+          digest = lambda path: hashlib.sha256(Path(path).read_bytes()).hexdigest()
+          provenance = {
+              "schema": "titan-v3-future-atomic-projection-hosted-provenance-v1",
+              "event_name": os.environ.get("GITHUB_EVENT_NAME"),
+              "ref": os.environ.get("GITHUB_REF"),
+              "head_ref": os.environ.get("GITHUB_HEAD_REF"),
+              "base_ref": os.environ.get("GITHUB_BASE_REF"),
+              "github_sha": os.environ.get("GITHUB_SHA"),
+              "checked_out_sha": subprocess.check_output(
+                  ["git", "rev-parse", "HEAD"], text=True
+              ).strip(),
+              "pull_request_head_sha": head.get("sha"),
+              "pull_request_base_sha": base.get("sha"),
+              "run_id": os.environ.get("GITHUB_RUN_ID"),
+              "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
+              "bound_source_git_blobs": {
+                  "scheduler.py": subprocess.check_output(
+                      ["git", "hash-object", "scheduler.py"], text=True
+                  ).strip(),
+                  "reference/engine/kaggriculture.py": subprocess.check_output(
+                      ["git", "hash-object", "reference/engine/kaggriculture.py"],
+                      text=True,
+                  ).strip(),
+                  "mechanics.py": subprocess.check_output(
+                      ["git", "hash-object", "mechanics.py"], text=True
+                  ).strip(),
+                  "../cloud-runtime-pulse/observed_clone.py": subprocess.check_output(
+                      ["git", "hash-object", "../cloud-runtime-pulse/observed_clone.py"],
+                      text=True,
+                  ).strip(),
+                  "reference/next-panel/vendor/arlene.py": subprocess.check_output(
+                      ["git", "hash-object", "reference/next-panel/vendor/arlene.py"],
+                      text=True,
+                  ).strip(),
+                  "reference/decision/decision.py": subprocess.check_output(
+                      ["git", "hash-object", "reference/decision/decision.py"],
+                      text=True,
+                  ).strip(),
+              },
+              "artifact_sha256": {
+                  "scheduler.py": digest(out / "scheduler.py"),
+                  "RECEIPT.json": digest(out / "RECEIPT.json"),
+                  "ROUTE-CENSUS.json": digest(out / "ROUTE-CENSUS.json"),
+                  "contracts.log": digest(out / "contracts.log"),
+                  "run.log": digest(out / "run.log"),
+                  "route-census.log": digest(out / "route-census.log"),
+              },
+          }
+          (out / "PROVENANCE.json").write_text(
+              json.dumps(provenance, indent=2, sort_keys=True) + "\n"
+          )
+          PY
+          git diff --exit-code -- \
+            scheduler.py \
+            mechanics.py \
+            reference/engine/kaggriculture.py \
+            reference/engine/kaggriculture.json \
+            reference/decision/decision.py \
+            reference/next-panel/vendor/arlene.py \
+            ../cloud-runtime-pulse/observed_clone.py
+          sha256sum \
+            "$out/scheduler.py" \
+            "$out/RECEIPT.json" \
+            "$out/ROUTE-CENSUS.json" \
+            "$out/PROVENANCE.json" \
+            "$out/contracts.log" \
+            "$out/run.log" \
+            "$out/route-census.log" \
+            > "$out/SHA256SUMS"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v3-future-atomic-projection-sol-forge
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/titan-future-atomic/scheduler.py
+            ${{ runner.temp }}/titan-future-atomic/RECEIPT.json
+            ${{ runner.temp }}/titan-future-atomic/ROUTE-CENSUS.json
+            ${{ runner.temp }}/titan-future-atomic/PROVENANCE.json
+            ${{ runner.temp }}/titan-future-atomic/contracts.log
+            ${{ runner.temp }}/titan-future-atomic/run.log
+            ${{ runner.temp }}/titan-future-atomic/route-census.log
+            ${{ runner.temp }}/titan-future-atomic/SHA256SUMS

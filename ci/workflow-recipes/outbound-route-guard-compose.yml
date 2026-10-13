@@ -1,0 +1,49 @@
+name: outbound route guard composition
+
+on:
+  push:
+    paths:
+      - "tools/outbound_send_guard/route_guard.py"
+      - "tools/outbound_send_guard/test_route_guard.py"
+      - "tools/outbound_send_guard/ROUTE_GUARD.md"
+      - ".github/workflows/outbound-route-guard-compose.yml"
+  pull_request:
+    paths:
+      - "tools/outbound_send_guard/route_guard.py"
+      - "tools/outbound_send_guard/test_route_guard.py"
+      - "tools/outbound_send_guard/ROUTE_GUARD.md"
+      - ".github/workflows/outbound-route-guard-compose.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  route-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Compile focused surface
+        run: |
+          python -m py_compile \
+            tools/outbound_send_guard/route_guard.py \
+            tools/outbound_send_guard/test_route_guard.py
+      - name: Run focused and dependency regressions
+        run: |
+          python -m unittest -v \
+            tools.outbound_send_guard.test_route_guard \
+            tools.outbound_send_guard.test_guard \
+            tools.outbound_send_guard.test_route_lifecycle \
+            tools.outbound_send_guard.test_dsn_normalizer \
+            tools.outbound_send_guard.test_dsn_authority
+      - name: Run optimized focused and dependency regressions
+        run: |
+          python -O -m unittest -v \
+            tools.outbound_send_guard.test_route_guard \
+            tools.outbound_send_guard.test_guard \
+            tools.outbound_send_guard.test_route_lifecycle \
+            tools.outbound_send_guard.test_dsn_normalizer \
+            tools.outbound_send_guard.test_dsn_authority

@@ -1,0 +1,67 @@
+{
+  "id": "sharp-rtu-vial-isolator-lineage-lims-01",
+  "version": 1,
+  "buyer": "James Hamilton / Sharp Sterile Manufacturing",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "lane": "build-demand",
+    "slack_ts": "1788152006.079759"
+  },
+  "lines": [
+    "ISOLATOR_FILL",
+    "LYOPHILIZER",
+    "ANALYTICAL",
+    "STABILITY",
+    "STERILITY"
+  ],
+  "formats": [
+    "RTU_2R",
+    "RTU_6R",
+    "RTU_10R",
+    "RTU_20R"
+  ],
+  "workflow": [
+    "sponsor tech-transfer intake",
+    "material/batch lot binding",
+    "RTU-vial/isolator route",
+    "fill/weight provenance",
+    "lyophilizer-cycle provenance",
+    "analytical/stability/sterility QC",
+    "staged batch evidence pack",
+    "named-human release"
+  ],
+  "acceptance": [
+    "120 synthetic records",
+    "exactly 90 READY staged evidence packs",
+    "exactly 30 HOLD: 8 DUPLICATE_COMPONENT_BATCH, 7 FORMAT_LINE_MISMATCH, 5 MISSING_METHOD_VERSION, 5 WEIGHT_SLOT_CONFLICT, 5 QC_STERILITY_FAIL",
+    "intake defects schedule no line jobs",
+    "no held record stages or releases evidence",
+    "cycle, weight, result, unit, and source hashes match the fixture",
+    "replay creates zero new records",
+    "human releaser required; autonomous release denied"
+  ],
+  "hold_codes": [
+    "DUPLICATE_COMPONENT_BATCH",
+    "FORMAT_LINE_MISMATCH",
+    "MISSING_METHOD_VERSION",
+    "WEIGHT_SLOT_CONFLICT",
+    "QC_STERILITY_FAIL"
+  ],
+  "golden": {
+    "fixture_sha256": "2d8fb72fa37908bcb7187d21f1ec1082e02de4f950c7b8a5772afd958ca80b84",
+    "audit_sha256": "d248f9b13cdc38c76d1be2e4d8c2d753a77aa1d3f8efc7fcf6bc30cf7e0c95a8",
+    "evidence_digest": "d255a5866b7d1a34c697a2f653d56e9c95fc98a271e2da5f7290c623e324ca01"
+  },
+  "exclusions": [
+    "no autonomous certification or release",
+    "no GMP, compliance, clinical, or public-health decision",
+    "no interface marked live before golden-round-trip validation",
+    "no production writes, outreach, or prospect-facing demo"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake, RTU-vial/isolator routing, fill/weight/lyo-cycle provenance, QC hold, hash match, and human release receipts only; never live isolator I/O, lyophilizer control, regulatory compliance, or production LIMS writes",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

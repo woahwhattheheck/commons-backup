@@ -1,0 +1,47 @@
+/* Observatory Measure door. Extends commons.css. No color-only state. */
+.skip{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip:focus{position:static;width:auto;height:auto;padding:.4rem .6rem;background:#121214;outline:2px solid #c8c8ce}
+.filters{display:flex;flex-wrap:wrap;gap:.5rem .8rem;margin:.4rem 0 1rem;align-items:end}
+.filters label{display:flex;flex-direction:column;gap:.2rem;font-size:.82rem;color:#c8c8ce}
+.filters input{background:#121214;color:#f2f2f4;border:1px solid #3a3a40;padding:.35rem .5rem;min-width:8rem}
+.filters button{background:#121214;color:#f2f2f4;border:1px solid #c8c8ce;padding:.4rem .7rem}
+caption{text-align:left;padding:.4rem .6rem;color:#9c9ca3;font-size:.82rem}
+.eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:.78rem;color:#9c9ca3;font-weight:800}
+.lede{max-width:46rem;color:#c8c8ce}
+.cockpit{list-style:none;padding:0;margin:.5rem 0 1rem;display:grid;gap:.4rem}
+.cockpit li{background:#121214;border:1px solid #2a2a2e;padding:.7rem .9rem;font-weight:700}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.6rem;margin:0 0 1.25rem}
+.metric{background:#121214;border:1px solid #2a2a2e;padding:.7rem .8rem}
+.metric strong{display:block;font-size:1.6rem}
+.metric span{color:#9c9ca3;font-size:.82rem}
+.table-wrap{overflow:auto;border:1px solid #2a2a2e;margin:.4rem 0 1rem}
+table{margin:0}
+.state,.class-pill{display:inline-block;border:1px solid #5a5a60;padding:.05rem .4rem;font-size:.78rem;letter-spacing:.03em}
+.state-WORKING,.state-ACTIVE{border-color:#8af7c1;color:#8af7c1}
+.state-IDLE{border-color:#c8c8ce;color:#c8c8ce}
+.state-BLOCKED{border-color:#e08060;color:#e08060}
+.state-STALE{border-color:#ffd479;color:#ffd479}
+.state-TERMINAL,.state-RELEASED,.state-SUPERSEDED{border-color:#9c9ca3;color:#9c9ca3}
+.findings{list-style:none;padding:0;margin:0 0 1rem}
+.findings li{border:1px solid #2a2a2e;padding:.7rem .9rem;margin:0 0 .4rem;background:#121214}
+.timeline{list-style:none;padding:0;margin:0 0 1rem}
+.timeline li{border-left:2px solid #3a3a40;padding:.35rem 0 .35rem .8rem;margin:0 0 .2rem}
+.briefing,.economy{background:#121214;border:1px solid #2a2a2e;padding:.9rem;margin:0 0 .8rem}
+.routes{padding-left:1.2rem}
+details.evidence{margin:.25rem 0}
+details.evidence summary{cursor:pointer}
+.offline,.empty,.error{color:#9c9ca3;border:1px dashed #3a3a40;padding:.7rem}
+[aria-current="page"]{outline:2px solid #c8c8ce;outline-offset:2px}
+:focus-visible{outline:2px solid #c8c8ce;outline-offset:2px}
+@media (max-width:720px){
+  body{padding:1rem}
+  .nav a{padding:.4rem .6rem}
+  td,th{white-space:nowrap}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+}
+@media (forced-colors:active){
+  .cockpit li,.metric,.findings li,.briefing,.economy,.nav a,.state{border:1px solid CanvasText}
+  .state-WORKING,.state-ACTIVE,.state-BLOCKED,.state-STALE{forced-color-adjust:none}
+}

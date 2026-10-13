@@ -1,0 +1,40 @@
+name: Post-delivery buyer acceptance
+
+on:
+  push:
+    paths:
+      - 'revenue/post_delivery_acceptance/**'
+      - '.github/workflows/post-delivery-acceptance.yml'
+  pull_request:
+    paths:
+      - 'revenue/post_delivery_acceptance/**'
+      - '.github/workflows/post-delivery-acceptance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile revenue/post_delivery_acceptance/post_delivery_acceptance.py
+      - name: Hostile tests
+        run: |
+          python -m unittest discover -s revenue/post_delivery_acceptance -p 'test_*.py' -v
+          python -O -m unittest discover -s revenue/post_delivery_acceptance -p 'test_*.py' -v
+      - name: Synthetic compile and exact verify
+        run: |
+          python revenue/post_delivery_acceptance/post_delivery_acceptance.py compile \
+            --input revenue/post_delivery_acceptance/examples/synthetic_delivery.json \
+            --json-out /tmp/post-delivery.json \
+            --markdown-out /tmp/post-delivery.md \
+            --csv-out /tmp/post-delivery.csv
+          python revenue/post_delivery_acceptance/post_delivery_acceptance.py verify \
+            --input revenue/post_delivery_acceptance/examples/synthetic_delivery.json \
+            --ledger /tmp/post-delivery.json

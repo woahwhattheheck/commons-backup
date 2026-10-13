@@ -1,0 +1,41 @@
+{
+  "schema": "titan.v4.market-order-budget.validation.v1",
+  "status": "SOURCE_TESTED_HOSTED_CENSUS_PENDING",
+  "branch_base": "27fcf8f50349c9575efc1f90e4ef5538345340ba",
+  "slack_claim_ts": "1789186272.436169",
+  "source_pins": {
+    "official_engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "canonical_runtime_artifact_id": 10180428228,
+    "artifact_zip_sha256": "737c0b2b69147a826d1000f3b2266b70a579fffd0ab91d4126c6c9a84159d799",
+    "runtime_archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "source_manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+    "arlene_sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4"
+  },
+  "local_pre_row_semantics_update": {
+    "python": "3.13.5",
+    "normal_tests": {"passed": 10, "failed": 0, "errors": 0},
+    "optimized_tests": {"passed": 10, "failed": 0, "errors": 0},
+    "py_compile": "PASS"
+  },
+  "current_exact_head": {
+    "focused_test_count": 11,
+    "hosted_execution": "PENDING",
+    "note": "The additional test is a pure regression proving adjacent identical market rows remain separate raw rows; no production/helper algorithm changed."
+  },
+  "claims": [
+    "Official engine raw market queues are sliced to maxMarketOrdersPerTurn before order parsing; default is 10 on the pinned source.",
+    "The budget is raw rows, not quantity units; surviving BUY/SELL quantities execute in rival-aligned per-row lockstep.",
+    "Adjacent same-product rows must not be generically consolidated to recover capacity because row partition can affect rival interleaving, quotes/commits and first-failure behavior.",
+    "The audit helper never mutates, reorders or compacts returned actions.",
+    "The test-only native wrapper returns its parent action unchanged and records telemetry only.",
+    "No runtime/default/config/archive/controller/Kaggle mutation is included."
+  ],
+  "not_claimed": [
+    "hosted workflow green",
+    "current-native overflow or absence of overflow",
+    "generic compressor correctness",
+    "economic gain",
+    "strength improvement",
+    "runtime promotion authority"
+  ]
+}

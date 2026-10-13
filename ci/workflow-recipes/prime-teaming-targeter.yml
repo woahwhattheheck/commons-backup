@@ -1,0 +1,29 @@
+name: Prime Teaming Targeter
+
+on:
+  push:
+    paths:
+      - 'revenue/prime_teaming_targeter/**'
+      - '.github/workflows/prime-teaming-targeter.yml'
+  pull_request:
+    paths:
+      - 'revenue/prime_teaming_targeter/**'
+      - '.github/workflows/prime-teaming-targeter.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/prime_teaming_targeter/targeter.py revenue/prime_teaming_targeter/test_prime_teaming_targeter.py
+      - name: Unit tests
+        run: python -m unittest revenue.prime_teaming_targeter.test_prime_teaming_targeter
+      - name: Unit tests optimized
+        run: python -O -m unittest revenue.prime_teaming_targeter.test_prime_teaming_targeter

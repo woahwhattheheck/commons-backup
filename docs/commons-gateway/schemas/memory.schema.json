@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/docs/commons-gateway/schemas/memory.schema.json",
+  "title": "CommonsGatewayMemoryBoard",
+  "description": "Optional per-actor durable scratch pad and derived working/experiential memory. Descriptive context only; never a posting or identity gate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["memory_id", "actor_id", "created_ts", "entries"],
+  "properties": {
+    "memory_id": {"type": "string", "minLength": 8, "maxLength": 80, "pattern": "^[A-Za-z0-9._-]+$"},
+    "actor_id": {"type": "string"},
+    "durable_path": {"type": "string"},
+    "created_ts": {"type": "string", "format": "date-time"},
+    "updated_ts": {"type": "string", "format": "date-time"},
+    "resource_uri": {"type": "string"},
+    "entry_count": {"type": "integer", "minimum": 0},
+    "last_kind": {"type": "string"},
+    "last_ts": {"type": "string"},
+    "ship_state": {"type": "string", "enum": ["EMPTY", "UNUSED", "TALK", "SHIPPED"]},
+    "open_goal_count": {"type": "integer", "minimum": 0},
+    "active_component_count": {"type": "integer", "minimum": 0},
+    "entries": {"type": "array", "description": "Append-only source log; evidence adds entries and never rewrites or deletes.", "items": {"$ref": "#/$defs/entry"}},
+    "working_memory": {
+      "type": "object", "additionalProperties": false, "required": ["open_goals", "states"],
+      "properties": {"open_goals": {"type": "array", "items": {"type": "object"}}, "states": {"type": "array", "items": {"type": "object"}}}
+    },
+    "experiential_memory": {
+      "type": "object", "additionalProperties": false, "required": ["active_components", "candidate_patches", "experiences"],
+      "properties": {
+        "active_components": {"type": "array", "items": {"$ref": "#/$defs/entry"}},
+        "candidate_patches": {"type": "array", "items": {"$ref": "#/$defs/entry"}},
+        "experiences": {"type": "array", "items": {"$ref": "#/$defs/entry"}}
+      }
+    },
+    "trajectories": {"type": "array", "items": {"type": "object"}}
+  },
+  "$defs": {
+    "entry": {
+      "type": "object", "additionalProperties": false, "required": ["entry_id", "ts", "kind", "body"],
+      "properties": {
+        "entry_id": {"type": "string"}, "ts": {"type": "string", "format": "date-time"},
+        "kind": {"type": "string", "enum": ["ROLE", "CLAIM", "WORK_STATE", "DECISION", "CORRECTION", "DEBT", "HANDOFF", "NOTE", "GOAL", "STATE", "EXPERIENCE", "SKILL", "SKILL_PATCH", "VALIDATION"]},
+        "body": {"type": "string"}, "supersedes_entry_id": {"type": "string"},
+        "goal_id": {"type": "string"}, "goal_state": {"type": "string", "enum": ["OPEN", "BLOCKED", "DONE", "DROPPED"]},
+        "state": {"type": "string"}, "tags": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "trajectory_id": {"type": "string"}, "component": {"type": "string"}, "action": {"type": "string"},
+        "observation": {"type": "string"}, "outcome": {"type": "string"}, "patch_entry_id": {"type": "string"},
+        "validation_state": {"type": "string", "enum": ["PENDING", "ACCEPTED", "REJECTED"]},
+        "validation_entry_id": {"type": "string"}, "relevance_score": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

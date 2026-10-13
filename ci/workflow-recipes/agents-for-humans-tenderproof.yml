@@ -1,0 +1,46 @@
+name: Agents for Humans TenderProof contract
+
+on:
+  pull_request:
+    paths:
+      - "competitions/agents-for-humans-2026/tenderproof/**"
+      - ".github/workflows/agents-for-humans-tenderproof.yml"
+  push:
+    branches: [main]
+    paths:
+      - "competitions/agents-for-humans-2026/tenderproof/**"
+      - ".github/workflows/agents-for-humans-tenderproof.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r competitions/agents-for-humans-2026/tenderproof/requirements.txt
+      - name: Compile source
+        working-directory: competitions/agents-for-humans-2026/tenderproof
+        run: python -m py_compile core.py cli.py strands_agent.py agent_cli.py validate_readiness.py
+      - name: Contract and hostile tests
+        working-directory: competitions/agents-for-humans-2026/tenderproof
+        run: PYTHONPATH=. python -B -m unittest discover -s tests -v
+      - name: Optimized-mode hostile tests
+        working-directory: competitions/agents-for-humans-2026/tenderproof
+        run: PYTHONPATH=. python -O -B -m unittest discover -s tests -v
+      - name: Offline deterministic demo
+        working-directory: competitions/agents-for-humans-2026/tenderproof
+        run: >-
+          PYTHONPATH=. python cli.py
+          --rfp sample/rfp.md
+          --evidence sample/company_evidence.json
+          --as-of 2026-09-13
+          --out /tmp/tenderproof-demo.json
+      - name: Checked-in competition state must remain blocked
+        working-directory: competitions/agents-for-humans-2026/tenderproof
+        run: python validate_readiness.py submission_readiness.json --expect-blocked

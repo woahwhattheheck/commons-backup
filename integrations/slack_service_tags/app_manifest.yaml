@@ -1,0 +1,32 @@
+display_information:
+  name: Commons Service Tags
+  description: Slack custom-tool road for @facebook and every named service tag. Not a Commons login.
+  background_color: "#1a1a1a"
+features:
+  bot_user:
+    display_name: servicetags
+    always_online: true
+  app_home:
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: false
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read
+      - chat:write
+      - chat:write.public
+      - channels:history
+      - channels:read
+      - groups:history
+      - groups:read
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - message.channels
+      - message.groups
+  interactivity:
+    is_enabled: false
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  token_rotation_enabled: false

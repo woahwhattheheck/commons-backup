@@ -1,0 +1,55 @@
+{
+  "id": "corrigan-specialty-fuel-blend-dossier-lims-01",
+  "version": 1,
+  "buyer": "Corrigan Labs / Mike Corrigan",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788150668.224159"
+  },
+  "workflow": [
+    "controlled specialty/reference-fuel formula version",
+    "ingredient lot assignment against the formula",
+    "tank movements from ingredient tanks through blend to finish",
+    "internal lab result join",
+    "external-result packet join",
+    "staged Certificate of Analysis with deterministic rounding",
+    "named-human disposition only"
+  ],
+  "hold_codes": [
+    "FORMULA_VERSION_MISMATCH",
+    "MISSING_EXTERNAL_RESULT",
+    "OOS"
+  ],
+  "acceptance": [
+    "80 synthetic blend orders",
+    "exactly 64 CLEAN with exact genealogy",
+    "exactly 8 FORMULA_VERSION_MISMATCH",
+    "exactly 4 MISSING_EXTERNAL_RESULT",
+    "exactly 4 OOS",
+    "zero orphan tank movements",
+    "zero duplicate batches",
+    "deterministic CoA contents and rounding",
+    "immutable source lineage",
+    "idempotent replay adds zero records",
+    "human releaser required; autonomous release denied"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no live LIMS",
+    "no production write, billing, or outreach",
+    "no prospect-facing demo"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic dossier, coded holds, staged CoA, and human disposition receipts only; never live tank, lab, or CoA I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0,
+  "official_binary": "python3 corrigan_specialty_fuel_blend_dossier.py",
+  "official_test": "python3 test_corrigan_specialty_fuel_blend_dossier.py",
+  "page": "corrigan-specialty-fuel-blend-dossier-lims.html",
+  "schema": "commons-corrigan-specialty-fuel-blend-dossier-lims/v1",
+  "interfaces": "SIMULATED_READ_ONLY",
+  "live_lims": false,
+  "production_deployment": false
+}

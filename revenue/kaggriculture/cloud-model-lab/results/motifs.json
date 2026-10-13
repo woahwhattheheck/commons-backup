@@ -1,0 +1,651 @@
+{
+ "motifs": [
+  {
+   "op": [
+    "BUILD_PASTURE"
+   ],
+   "when": {
+    "tile": "EMPTY"
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "farmer",
+    "hand"
+   ],
+   "proposable": false,
+   "hold_reason": "precondition is an empty tile, so the payoff is not local: it depends on a later fill this template cannot see",
+   "support": {
+    "model": 24,
+    "teacher": 0,
+    "total": 24
+   },
+   "provenance": [
+    "model"
+   ],
+   "sources": [
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 4,
+     "unit": 0
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 5,
+     "unit": 1
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 5,
+     "unit": 2
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 8,
+     "unit": 1
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 8,
+     "unit": 2
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 10,
+     "unit": 1
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 10,
+     "unit": 2
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 10,
+     "unit": 3
+    }
+   ],
+   "id": "m000"
+  },
+  {
+   "op": [
+    "PLACE",
+    "SHEEP",
+    1
+   ],
+   "when": {
+    "tile": "PASTURE",
+    "structure==arg_structure": true,
+    "arg": "SHEEP",
+    "carry[arg]>=n": true
+   },
+   "effect": "installed_animal",
+   "role": "worker",
+   "observed_roles": [
+    "hand"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 5,
+    "teacher": 0,
+    "total": 5
+   },
+   "provenance": [
+    "model"
+   ],
+   "sources": [
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 19,
+     "unit": 1
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 19,
+     "unit": 2
+    },
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 19,
+     "unit": 3
+    },
+    {
+     "trace": "play-sb-on-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 12,
+     "unit": 1
+    },
+    {
+     "trace": "play-sb-on-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 12,
+     "unit": 2
+    }
+   ],
+   "id": "m003"
+  },
+  {
+   "op": [
+    "CARE"
+   ],
+   "when": {
+    "tile": "ANIMAL",
+    "cared_today": false,
+    "fed_today": false
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "hand"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 1,
+    "teacher": 0,
+    "total": 1
+   },
+   "provenance": [
+    "model"
+   ],
+   "sources": [
+    {
+     "trace": "play-sb-on-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 18,
+     "unit": 1
+    }
+   ],
+   "id": "m001"
+  },
+  {
+   "op": [
+    "PICKUP",
+    "COW",
+    1
+   ],
+   "when": {
+    "shed_access": true,
+    "shed[arg]>=n": true,
+    "arg": "COW"
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "farmer"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 1,
+    "teacher": 0,
+    "total": 1
+   },
+   "provenance": [
+    "model"
+   ],
+   "sources": [
+    {
+     "trace": "play-sb-off-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 18,
+     "unit": 0
+    }
+   ],
+   "id": "m002"
+  },
+  {
+   "op": [
+    "PLANT",
+    "MELON"
+   ],
+   "when": {
+    "tile": "EMPTY",
+    "seeds[arg]>=1": true,
+    "arg": "MELON"
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "hand"
+   ],
+   "proposable": false,
+   "hold_reason": "precondition is an empty tile, so the payoff is not local: it depends on a later fill this template cannot see",
+   "support": {
+    "model": 1,
+    "teacher": 0,
+    "total": 1
+   },
+   "provenance": [
+    "model"
+   ],
+   "sources": [
+    {
+     "trace": "play-sb-on-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 18,
+     "unit": 2
+    }
+   ],
+   "id": "m004"
+  },
+  {
+   "op": [
+    "WATER"
+   ],
+   "when": {
+    "tile": "PLANT",
+    "watered_today": false,
+    "unwatered_run": 1
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "hand"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 1,
+    "teacher": 0,
+    "total": 1
+   },
+   "provenance": [
+    "model"
+   ],
+   "sources": [
+    {
+     "trace": "play-sb-on-s3131017.json",
+     "seed": 3131017,
+     "provenance": "model",
+     "step": 19,
+     "unit": 2
+    }
+   ],
+   "id": "m005"
+  }
+ ],
+ "meta": {
+  "compiled_at": "2026-09-07T10:16:27Z",
+  "engine_pin": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "traces": [
+   "play-sb-off-s3131017.json",
+   "play-sb-on-s3131017.json",
+   "play-refresh-s3131017.json",
+   "play-s5252003-t24.json"
+  ],
+  "verified_turns": 48,
+  "uncompiled_turns": 48,
+  "effect_classifier_disagreements": 0,
+  "min_support": 1,
+  "proposable": 4,
+  "held": 2,
+  "provenance": "model"
+ },
+ "uncompiled": [
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 0,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 1,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 2,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 3,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 4,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 5,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 6,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 7,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 8,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 9,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 10,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 11,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 12,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 13,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 14,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 15,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 16,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 17,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 18,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 19,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 20,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 21,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 22,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-refresh-s3131017.json",
+   "index": 23,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 0,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 1,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 2,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 3,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 4,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 5,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 6,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 7,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 8,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 9,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 10,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 11,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 12,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 13,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 14,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 15,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 16,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 17,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 18,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 19,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 20,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 21,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 22,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  },
+  {
+   "trace": "play-s5252003-t24.json",
+   "index": 23,
+   "why": [
+    "recomputed unit_effects differ from the recorded chain"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "sgspsi-high-throughput-thermal-rheology-lineage-lims-01",
+  "version": 1,
+  "buyer": "Kyle Copeland / SGS Polymer Solutions",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "note": "BUILD DEMAND posted in #build-demand; builder Cursor"
+  },
+  "instruments": [
+    "DSC-250",
+    "HR-20"
+  ],
+  "workflow": [
+    "confirmed requirement/form/payment linkage",
+    "accession",
+    "DSC-250/HR-20 method/version and autosampler slot",
+    "raw-data provenance hashes",
+    "QC",
+    "staged formal report pending named approval"
+  ],
+  "acceptance": [
+    "120 synthetic requests",
+    "exactly 90 READY with one sample in each reserved slot",
+    "exactly 30 HOLD: 8 MISSING_LINKAGE, 6 DUPLICATE_CONTAINER, 6 METHOD_INSTRUMENT_MISMATCH, 5 SLOT_COLLISION, 5 QC_FAILURE",
+    "source, method, raw-value, unit, and report hashes match the golden lineage",
+    "replay creates zero extra records",
+    "reports remain staged pending named APPROVER; autonomous release denied"
+  ],
+  "hold_codes": [
+    "MISSING_LINKAGE",
+    "DUPLICATE_CONTAINER",
+    "METHOD_INSTRUMENT_MISMATCH",
+    "SLOT_COLLISION",
+    "QC_FAILURE"
+  ],
+  "golden": {
+    "fixture_sha256": "3914c61ed2dfe51c4601c773cc03816e53c13a12cbc9815ec2ddec2e9ac4016b",
+    "audit_sha256": "22c85bf6a5658eb4b2460bca3d07a23e3756590a55cfc336348d4a4cc631565d",
+    "lineage_sha256": "87f0ed13ee7ab7cbbdb30ef9daec7505c61c22ceb57611efb1f0f6be5c2f9e26",
+    "report_digest": "3341fe765f072d291c9c3422d40651edbb7f2041839d3e103e3b5880de439738"
+  },
+  "exclusions": [
+    "no autonomous certification or release",
+    "no interface marked live before golden-round-trip validation",
+    "no production writes, outreach, or prospect-facing demo"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "linkage, accession, slot, lineage hashes, QC hold, and staged-report receipts only; never live instrument I/O, customer CoA issuance, or production LIMS writes",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

@@ -1,0 +1,88 @@
+name: titan-s19-constraint-repair
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-s19-constraint-repair.yml'
+      - 'revenue/kaggriculture/cloud-constraint-repair-splice/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/titan-s19-constraint-repair.yml
+            /revenue/kaggriculture/cloud-constraint-repair-splice/
+
+      - name: Record exact committed source
+        shell: python
+        run: |
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          out = Path(os.environ['RUNNER_TEMP']) / 's19-constraint-repair'
+          out.mkdir()
+          files = [
+              Path('.github/workflows/titan-s19-constraint-repair.yml'),
+              *sorted(Path('revenue/kaggriculture/cloud-constraint-repair-splice').glob('*.py')),
+          ]
+          records = {}
+          for path in files:
+              data = path.read_bytes()
+              records[str(path)] = {
+                  'bytes': len(data),
+                  'sha256': hashlib.sha256(data).hexdigest(),
+                  'git_blob': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest(),
+              }
+          checkout = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          if checkout != os.environ['GITHUB_SHA']:
+              raise SystemExit('checkout differs from event SHA')
+          report = {
+              'schema': 'titan.s19.source.v1',
+              'checkout': checkout,
+              'event': os.environ['GITHUB_EVENT_NAME'],
+              'files': records,
+              'scope': 'isolated exact-checkpoint repair primitive; no canonical runtime change',
+          }
+          (out / 'SOURCE-SNAPSHOT.json').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
+
+      - name: Exact checkpoint and splice contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-constraint-repair-splice
+          python3 -B -m unittest -v test_constraint_repair.py \
+            2>&1 | tee "$RUNNER_TEMP/s19-constraint-repair/contracts.log"
+
+      - name: 128-node 10ms deterministic runtime contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-constraint-repair-splice
+          python3 -B run_contracts.py \
+            --runs 64 \
+            --output "$RUNNER_TEMP/s19-constraint-repair/RUNTIME-CONTRACT.json" \
+            2>&1 | tee "$RUNNER_TEMP/s19-constraint-repair/runtime-contract.log"
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: titan-s19-constraint-repair-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/s19-constraint-repair/
+          if-no-files-found: error
+          retention-days: 7

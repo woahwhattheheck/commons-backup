@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>Corrigan specialty-fuel batch dossier — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#f4efe4;--ink:#1a1610;--mute:#5c5346;--line:#cbb89a;--card:#fffaf1;--fuel:#6b3a12;--ok:#1f7a4d}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#d7c4a4 0%,var(--paper) 28%);color:var(--ink);font:16px/1.5 "Iowan Old Style",Georgia,serif}
+main{max-width:960px;margin:auto;padding:28px 16px 72px}a{color:var(--fuel)}
+.kicker{letter-spacing:.16em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--fuel)}
+h1{font-size:clamp(2rem,6vw,3.4rem);line-height:.95;margin:.18em 0 .3em}
+.lede{font-size:1.15rem;max-width:760px;color:var(--mute)}
+.bound{border-left:5px solid var(--ok);padding:8px 0 8px 14px}
+.card{background:var(--card);border:1px solid var(--line);padding:16px;margin:16px 0}
+table{width:100%;border-collapse:collapse;font:13px/1.4 system-ui,sans-serif}th,td{border-top:1px solid var(--line);padding:6px 4px;text-align:left}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#1a1610;color:#efe4d2;padding:12px;font:13px/1.4 ui-monospace,monospace}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> · <a href="./action.html">Action Pad</a></nav>
+<p class="kicker">Commons · corrigan-specialty-fuel-blend-dossier-lims-01 · HOLD / BUILD-AND-VERIFY</p>
+<h1>Specialty-fuel batch dossier. Formula, lots, tanks, staged CoA.</h1>
+
+
+
+
+
+<p class="lede">Corrigan Labs / Mike Corrigan. This page is a window onto the working runner, not a second product. The product is the Python CLI that joins formula version, ingredient lots, tank movements, internal and external lab results, and a staged CoA.</p>
+<p class="bound"><strong>Truth boundary:</strong> 80 synthetic blend orders only. Adapters stay simulated/read-only. No live LIMS. No production write. No outreach. No prospect-facing demo. Named-human disposition only. No automatic release. PRE-SALE TRANSPORT: NONE. cash_usd = 0.</p>
+<section class="card">
+<h2>Official command</h2>
+<pre>python3 corrigan_specialty_fuel_blend_dossier.py
+python3 test_corrigan_specialty_fuel_blend_dossier.py</pre>
+<p class="small">Demand <code>corrigan-specialty-fuel-blend-dossier-lims-01</code>. Receipt: . Pack: <code>revenue/corrigan_specialty_fuel_blend_dossier/</code>.</p>
+<h2>Binary acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>PASS</th></tr></thead>
+<tbody>
+<tr><td>Input orders</td><td>80 = 64 clean + 16 HOLD</td></tr>
+<tr><td>HOLD</td><td>8 FORMULA_VERSION_MISMATCH + 4 MISSING_EXTERNAL_RESULT + 4 OOS</td></tr>
+<tr><td>Genealogy</td><td>exact formula + lots + tank movements + internal/external + staged CoA on all 64</td></tr>
+<tr><td>Integrity</td><td>zero orphan tank movements, zero duplicate batches</td></tr>
+<tr><td>CoA</td><td>deterministic contents and rounding; staged, not released</td></tr>
+<tr><td>Replay</td><td>idempotent — adds 0 orders / batches / movements / holds</td></tr>
+<tr><td>Disposition</td><td>mike-corrigan-releaser only; autonomous denied</td></tr>
+<tr><td>audit_sha256</td><td><code>85f8acfab58b66c1022fffcefeef49bef19cb7c3e36db65c4c912de74ab754fe</code></td></tr>
+</tbody>
+</table>
+</section>
+<p class="small">Cite, do not remint: torrent-workorder-commissioning-lims-01, bsk-multilab-accession-parity-lims-01, chemtechford-short-hold-intake-lims-01, paragon-biodiesel-sample-coa-lims-01, qlabs-qconnect-cutover-verification-lims-01, savant-fe8-order-report-lims-01, clark-d4172-proficiency-lims-01, eagletrax-split-sample-preflight-lims-01. No outreach. grok.com dry.</p>
+</main></body></html>

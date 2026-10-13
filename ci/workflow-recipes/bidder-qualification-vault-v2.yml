@@ -1,0 +1,32 @@
+name: Bidder Qualification Vault v2
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/bidder_qualification_vault/v2/**'
+      - '.github/workflows/bidder-qualification-vault-v2.yml'
+  push:
+    paths:
+      - 'revenue/bidder_qualification_vault/v2/**'
+      - '.github/workflows/bidder-qualification-vault-v2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.13']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: python -m py_compile revenue/bidder_qualification_vault/v2/*.py
+      - name: Normal
+        run: python -m unittest revenue.bidder_qualification_vault.v2.test_registry -v
+      - name: Optimized
+        run: python -O -m unittest revenue.bidder_qualification_vault.v2.test_registry -v

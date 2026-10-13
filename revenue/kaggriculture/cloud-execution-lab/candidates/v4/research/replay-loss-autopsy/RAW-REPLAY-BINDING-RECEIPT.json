@@ -1,0 +1,48 @@
+{
+  "canonical_root": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "donor": {
+    "files": [
+      "scripts/replay_trace_gate.py",
+      "scripts/replay_loss_attribution.py"
+    ],
+    "license": "MIT",
+    "notice_file": "RAW-REPLAY-DONOR-NOTICE.md",
+    "repository": "Seyamalam/Kaggriculture"
+  },
+  "episode_target": {
+    "episode_id": "108038484",
+    "known_opponent_submission_id": "56158124",
+    "replay_bytes_committed": false
+  },
+  "files_sha256": {
+    "RAW-REPLAY-BINDING.md": "fdde671efe491a82472aa34da6916f7942a5ff1cbca96aca8b924eb6c5c88986",
+    "RAW-REPLAY-DONOR-NOTICE.md": "d89e68b9a439bff0556b6ce0f68df76697369562da367b7164b67692213c106f",
+    "bind_raw_replay.py": "32824536a42284e55faac9d6ce9d60adc57f19c703a7ee94b0dffc43e4b30baa",
+    "test_bind_raw_replay.py": "fb432d2c71f0c672ffa27b2e53964929dda72518cd027f78e2cde3ad84106db2"
+  },
+  "home": "research/replay-loss-autopsy",
+  "safety": {
+    "action_mapping": "steps[i].action applied to steps[i-1][seat].observation.step",
+    "open_loop_counterfactual_caveat": true,
+    "raw_byte_hash_bound": true,
+    "strength_claim": false
+  },
+  "schema": "titan.v4.raw-replay-binding-receipt/v1",
+  "scope": "raw replay semantic/provenance binding only; no candidate/engine execution, gameplay/default/archive/Kaggle mutation",
+  "tests": {
+    "compile": {
+      "command": "python -B -m py_compile bind_raw_replay.py test_bind_raw_replay.py",
+      "status": "PASS"
+    },
+    "normal": {
+      "command": "python -B -m unittest -v test_bind_raw_replay.py",
+      "failed": 0,
+      "passed": 15
+    },
+    "optimized": {
+      "command": "python -O -B -m unittest -v test_bind_raw_replay.py",
+      "failed": 0,
+      "passed": 15
+    }
+  }
+}

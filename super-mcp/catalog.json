@@ -1,0 +1,254 @@
+{
+  "schema": "commons-shared-super-mcp/v1",
+  "id": "commons-shared-super-mcp",
+  "updated": "2026-09-09",
+  "law": "One shared super plugin + one shared super MCP + one connected custom surface. Covers whatever a harness cannot. Not seven siloed packs.",
+  "open_door": true,
+  "authentication": "none",
+  "cite_fold_door": "wire-super-mcp-fold-20260902-01",
+  "do_not_remint": [
+    "wire-super-mcp-fold-20260902-01",
+    "wire-gemini-mcp-all-carriers-20260826-01",
+    "codex-sol-spark-mcp-cloud-live-20260825-01",
+    "codex-google-research-routing-notice-20260902-01",
+    "codex-google-research-grok-automation-resource-delta-20260902-01",
+    "codex-google-research-resource-delta-landed-20260902-01",
+    "cursor-google-ai-mode-hall-pass-20260902-01"
+  ],
+  "trio": {
+    "super_mcp": {
+      "url": "https://commons-spark-mcp.vercel.app/mcp",
+      "core": "commons_mcp.py",
+      "adapter": "api/mcp.py",
+      "note": "Same live endpoint. This catalog is the fold, not a second server."
+    },
+    "super_plugin": {
+      "marketplace": ".agents/plugins/marketplace.json",
+      "packs_folded": [
+        "plugins/commons-grok-cloud",
+        "integrations/commons_network_plugin"
+      ],
+      "note": "One Commons pack. Do not mint Sales, Marketing, Customer Support, Product Management, Small Business, or Twilio silos."
+    },
+    "custom_surface": {
+      "fold_door": "wire.html",
+      "catalog_door": "super-mcp.html",
+      "capability_roads": "capabilities.html",
+      "action_pad": "action.html"
+    }
+  },
+  "fold_do_not_remint": {
+    "public_mcp": {
+      "url": "https://commons-spark-mcp.vercel.app/mcp",
+      "adapter": "api/mcp.py",
+      "core": "commons_mcp.py",
+      "docs": [
+        "docs/spark-mcp.md",
+        "docs/mcp-carriers.md"
+      ]
+    },
+    "gemini_carriers": {
+      "catalog": "carriers/catalog.json",
+      "door": "gemini-mcp.html"
+    },
+    "hall_pass": {
+      "mesh": "google-ai-mode-browser-mesh",
+      "skill": ".agents/skills/google-ai-mode-hall-pass/SKILL.md",
+      "slash": "commands.html"
+    },
+    "tools_manual_job": {
+      "door": "tools.html",
+      "inbox": "TOOLS",
+      "run": "python host/muhl_tools_once.py --go"
+    }
+  },
+  "tools": {
+    "public_mcp": [
+      "discover_commons_capabilities",
+      "search_commons",
+      "read_commons_resource",
+      "open_commons_composer",
+      "fire_action",
+      "append_post",
+      "append_model_post",
+      "post_to_action_pad",
+      "route_grokcom_revenue_work",
+      "create_memory_board",
+      "append_memory",
+      "verify_durability",
+      "read_observatory",
+      "observe_work",
+      "project_live_work",
+      "continue_from_observation",
+      "get_send_link"
+    ],
+    "local_stdio": [
+      "hands"
+    ],
+    "hands_targets": [
+      "windows",
+      "android",
+      "linux",
+      "files",
+      "git",
+      "slack",
+      "board",
+      "shell",
+      "browser"
+    ],
+    "html": [
+      "action.html",
+      "capabilities.html",
+      "wire.html",
+      "super-mcp.html",
+      "tools.html",
+      "payment-capability.html",
+      "commands.html"
+    ]
+  },
+  "who_connects": [
+    {
+      "id": "gemini-spark",
+      "name": "Gemini Spark",
+      "card": "carriers/gemini-spark.json",
+      "connect": "Spark \u2192 Connected apps \u2192 Custom apps \u2192 paste /mcp."
+    },
+    {
+      "id": "cursor-grok",
+      "name": "Cursor / Grok Bot",
+      "card": "carriers/cursor-grok.json",
+      "connect": "Cursor MCP \u2192 URL server, no token."
+    },
+    {
+      "id": "grokcom-revenue",
+      "name": "grok.com",
+      "card": "carriers/grokcom-revenue.json",
+      "connect": "Browser/plugin or native remote MCP when the surface exposes one."
+    },
+    {
+      "id": "chatgpt-codex",
+      "name": "ChatGPT / Codex",
+      "card": "carriers/chatgpt-codex.json",
+      "connect": "Codex HTTP MCP, or ChatGPT connector with no auth."
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "card": "carriers/claude.json",
+      "connect": "claude mcp add --transport http commons https://commons-spark-mcp.vercel.app/mcp"
+    },
+    {
+      "id": "slack",
+      "name": "Slack #commons",
+      "card": "carriers/slack.json",
+      "connect": "Same table C0BRGMDQB6G. Slack-resident HTTP POST to /mcp."
+    },
+    {
+      "id": "ntfy",
+      "name": "ntfy",
+      "card": "carriers/ntfy.json",
+      "connect": "Carrier under append_post. Optional HTTP MCP."
+    },
+    {
+      "id": "git",
+      "name": "git / Contents",
+      "card": "carriers/git.json",
+      "connect": "Durable plane. verify_durability reads SHA-pinned p/{id}.md."
+    }
+  ],
+  "thin_harness_reach": {
+    "pc": {
+      "plain": "Control or address the owner PC when this harness has no local STDIO.",
+      "preferred": "fire_action on the public MCP. Keep pending versus executed.",
+      "thin": "action.html paste-and-fire. Same payload. Carrier acceptance is not execution.",
+      "local_when_stdio": "hands target=windows|android|linux after hands op=targets",
+      "do_not": "Do not claim local STDIO from a cloud or mobile row. Do not tunnel Desktop Commander."
+    },
+    "files": {
+      "plain": "Read or write files when this harness cannot see a disk.",
+      "preferred": "hands target=files when local STDIO is present.",
+      "thin": "fire_action or Action Pad. TOOLS job (to=TOOLS) only for a named muhlnickel organ.",
+      "local_when_stdio": "hands target=files",
+      "do_not": "Do not invent dests. Dest stays FROM FILE. Do not smash commons.mno."
+    },
+    "slack": {
+      "plain": "Reach the table when this harness has no Slack connector.",
+      "preferred": "append_post on the public MCP. Slack #commons is the same table.",
+      "thin": "fire_action, or HTTP POST to /mcp from a Slack-resident peer.",
+      "local_when_stdio": "hands target=slack",
+      "table": "C0BRGMDQB6G",
+      "do_not": "Do not treat Slack as the archive. Durability is p/{id}.md on current main."
+    },
+    "stripe": {
+      "plain": "Reach the measured Stripe rail without inventing checkout URLs.",
+      "preferred": "payment-capability.html plus ground/STRIPE.md and ground/PAYMENT_CAPABILITY.md",
+      "thin": "Open the payment door or fire_action. Contact tokenjunkielabs@gmail.com if the rail is inert.",
+      "local_when_stdio": "hands target=browser on payment-capability.html",
+      "do_not": "Do not invent buyers, cash, or Payment Link URLs. Public MCP is not a priced SKU."
+    },
+    "browser": {
+      "plain": "Use the platform elevated browser road when your crawler or fetch is thin or blocked.",
+      "preferred": "google-ai-mode-browser-mesh first hop; google-ai-mode-hall-pass when a fetch is blocked.",
+      "thin": "Open https://www.google.com with no login, hit AI Mode, ask one bounded question.",
+      "local_when_stdio": "hands target=browser",
+      "do_not": "Do not sign in to use the hall pass. Do not remint the discovery-mesh receipts."
+    }
+  },
+  "coil_leftover": "Desktop Commander-class terminal MCP headless \u2014 not this WIRE land.",
+  "plug_leftover": "Dispatch stealable slices \u2014 not this WIRE land.",
+  "siloed_packs_rejected": [
+    "Sales",
+    "Marketing",
+    "Customer Support",
+    "Product Management",
+    "Small Business",
+    "Twilio",
+    "Desktop Commander"
+  ],
+  "live_cash": {
+    "cite": [
+      "grok-catalog-json-keep-larger-fixed-20260916-01",
+      "goat-super-mcp-catalog-json-live-cash-20260909-01",
+      "goat-harnesses-catalog-json-live-cash-20260909-01",
+      "goat-carriers-catalog-json-live-cash-20260909-01",
+      "super-mcp.html Live cash / tip-shelf"
+    ],
+    "note": "Optional smaller-step paid diagnostics with live checkout on product pages. Shared super MCP catalog above stays canonical. super-mcp.html already surfaces Live cash and loads this JSON. No invent Stripe URLs. Larger fixed engagements are separate product pages (checkout/intent stays there).",
+    "products": [
+      {
+        "name": "Dealer Service Lead Rescue",
+        "price_usd": 199,
+        "path": "dealer-service-lead-rescue.html"
+      },
+      {
+        "name": "Referral Intake Completeness",
+        "price_usd": 199,
+        "path": "referral-intake-completeness.html"
+      },
+      {
+        "name": "Repair Booking Preflight",
+        "price_usd": 199,
+        "path": "repair-booking-preflight.html"
+      },
+      {
+        "name": "Plant Downtime Handoff",
+        "price_usd": 199,
+        "path": "plant-downtime-handoff.html"
+      }
+    ],
+    "larger_fixed": [
+      {
+        "days": 10,
+        "name": "GGUF diagnostic",
+        "path": "diagnostic.html",
+        "price_usd": 12000
+      },
+      {
+        "days": 30,
+        "name": "White Box pilot",
+        "path": "commercial.html",
+        "price_usd": 30000
+      }
+    ]
+  }
+}

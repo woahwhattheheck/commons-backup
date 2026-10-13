@@ -1,0 +1,87 @@
+name: titan-s09-regret-macro-mix
+
+on:
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/macro_mix.py
+      - revenue/kaggriculture/cloud-execution-lab/test_macro_mix.py
+      - .github/workflows/titan-s09-regret-macro-mix.yml
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-macro-mix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Identity-free macro-mix contracts
+        run: python3 -B -m unittest -v test_macro_mix
+
+      - name: Deterministic repeat and 8 MiB / 5 ms admission
+        run: |
+          python3 - <<'PY'
+          import json
+          import time
+          import tracemalloc
+          from macro_mix import MACROS, MacroMixer, compare_policies
+
+          def loss(step):
+              return {
+                  'conservative_expansion': (step * 811) % 10001,
+                  'production_acceleration': (step * 613 + 17) % 10001,
+                  'market_pressure': (step * 421 + 29) % 10001,
+                  'survival': (step * 277 + 43) % 10001,
+              }
+
+          rows = [{'step': step, 'loss_bp': loss(step)} for step in range(1, 65)]
+          held_out = [
+              {'conservative_expansion': 0, 'production_acceleration': 7000, 'market_pressure': 9000, 'survival': 9000},
+              {'conservative_expansion': 7000, 'production_acceleration': 0, 'market_pressure': 9000, 'survival': 9000},
+              {'conservative_expansion': 8000, 'production_acceleration': 8000, 'market_pressure': 0, 'survival': 6000},
+              {'conservative_expansion': 8000, 'production_acceleration': 8000, 'market_pressure': 6000, 'survival': 0},
+          ]
+          canonical = {macro: 250000 for macro in MACROS}
+
+          started_ns = time.perf_counter_ns()
+          timed_a = MacroMixer.uniform().observe_many(rows)
+          timed_b = MacroMixer.uniform().observe_many(rows)
+          elapsed_ns = time.perf_counter_ns() - started_ns
+          assert timed_a == timed_b
+          assert elapsed_ns <= 5_000_000, elapsed_ns
+
+          # Memory admission covers learning replay AND comparison, not compare-only.
+          tracemalloc.start()
+          a = MacroMixer.uniform().observe_many(rows)
+          b = MacroMixer.uniform().observe_many(rows)
+          report = compare_policies(a, canonical, held_out)
+          _, peak = tracemalloc.get_traced_memory()
+          tracemalloc.stop()
+          assert a == b == timed_a
+          assert peak <= 8 * 1024 * 1024, peak
+          report.update({
+              'repeat_equal': timed_a == timed_b and a == b,
+              'elapsed_ns_two_64_observation_replays': elapsed_ns,
+              'time_limit_ns': 5_000_000,
+              'peak_bytes_replay_and_compare': peak,
+              'memory_limit_bytes': 8 * 1024 * 1024,
+          })
+          with open('s09-macro-mix-report.json', 'w', encoding='utf-8') as fh:
+              json.dump(report, fh, indent=2, sort_keys=True)
+              fh.write('\n')
+          print(json.dumps(report, sort_keys=True))
+          PY
+
+      - name: Upload S09 receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-s09-macro-mix-${{ github.run_id }}-${{ github.run_attempt }}
+          path: revenue/kaggriculture/cloud-execution-lab/s09-macro-mix-report.json
+          if-no-files-found: error

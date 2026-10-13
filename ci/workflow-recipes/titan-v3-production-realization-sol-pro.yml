@@ -1,0 +1,198 @@
+name: titan-v3-production-realization-sol-pro
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v3-production-realization-sol-pro/**"
+      - ".github/workflows/titan-v3-production-realization-sol-pro.yml"
+  workflow_dispatch:
+    inputs:
+      base_head:
+        description: "40-hex base commit used for the bounded-diff receipt"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  exact-head-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Assert exact checkout and bounded diff
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_HEAD: ${{ github.event.pull_request.base.sha || inputs.base_head }}
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$BASE_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test -z "$(git status --porcelain)"
+          out="$RUNNER_TEMP/titan-v3-production-realization"
+          mkdir -p "$out"
+          printf '%s\n' "$EXPECTED_HEAD" > "$out/EXACT_HEAD"
+          git cat-file -e "$BASE_HEAD^{commit}"
+          git diff --name-only "$BASE_HEAD...HEAD" | LC_ALL=C sort > "$out/CHANGED_PATHS.txt"
+          test -s "$out/CHANGED_PATHS.txt"
+          while IFS= read -r path; do
+            case "$path" in
+              revenue/kaggriculture/cloud-execution-lab/candidates/v3-production-realization-sol-pro/*) ;;
+              .github/workflows/titan-v3-production-realization-sol-pro.yml) ;;
+              *) printf 'out-of-scope path: %s\n' "$path" >&2; exit 1 ;;
+            esac
+          done < "$out/CHANGED_PATHS.txt"
+      - name: Parse and compile exact candidate copies
+        shell: bash
+        run: |
+          set -euo pipefail
+          case_dir="revenue/kaggriculture/cloud-execution-lab/candidates/v3-production-realization-sol-pro"
+          out="$RUNNER_TEMP/titan-v3-production-realization"
+          cp "$case_dir/production_realization.py" "$out/production_realization.py"
+          cp "$case_dir/test_production_realization.py" "$out/test_production_realization.py"
+          python -B -m py_compile \
+            "$out/production_realization.py" \
+            "$out/test_production_realization.py"
+      - name: Run 34 adversarial transaction contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          case_dir="revenue/kaggriculture/cloud-execution-lab/candidates/v3-production-realization-sol-pro"
+          out="$RUNNER_TEMP/titan-v3-production-realization"
+          (
+            cd "$case_dir"
+            python -B -m unittest -v test_production_realization.py
+          ) 2>&1 | tee "$out/TEST.log"
+          grep -Eq '^Ran 34 tests in [0-9.]+s$' "$out/TEST.log"
+          grep -qx 'OK' "$out/TEST.log"
+          test "$(grep -cE '^test_.* \.\.\. ok$' "$out/TEST.log")" -eq 34
+          ! grep -Eq '^FAILED|skipped=' "$out/TEST.log"
+      - name: Emit and validate exact-head evidence receipt
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_HEAD: ${{ github.event.pull_request.base.sha || inputs.base_head }}
+        run: |
+          set -euo pipefail
+          case_dir="revenue/kaggriculture/cloud-execution-lab/candidates/v3-production-realization-sol-pro"
+          out="$RUNNER_TEMP/titan-v3-production-realization"
+          python - "$case_dir" "$out" "$EXPECTED_HEAD" "$BASE_HEAD" <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import re
+          import subprocess
+          import sys
+
+          case_dir = Path(sys.argv[1])
+          out = Path(sys.argv[2])
+          workflow = Path(".github/workflows/titan-v3-production-realization-sol-pro.yml")
+          expected = sys.argv[3]
+          base = sys.argv[4] or None
+          actual = subprocess.check_output(
+              ["git", "rev-parse", "HEAD"], text=True
+          ).strip()
+
+          def file_row(path: Path) -> dict[str, object]:
+              assert path.is_file() and not path.is_symlink()
+              payload = path.read_bytes()
+              return {
+                  "path": path.as_posix(),
+                  "bytes": len(payload),
+                  "sha256": hashlib.sha256(payload).hexdigest(),
+              }
+
+          log = (out / "TEST.log").read_text(encoding="utf-8")
+          match = re.search(r"^Ran (\d+) tests in ([0-9.]+)s$", log, re.MULTILINE)
+          assert match is not None
+          assert int(match.group(1)) == 34
+          assert re.search(r"^OK$", log, re.MULTILINE)
+          changed = (out / "CHANGED_PATHS.txt").read_text(encoding="utf-8").splitlines()
+          receipt = {
+              "schema": "titan-v3-production-realization-exact-head/v1",
+              "expected_head": expected,
+              "actual_head": actual,
+              "base_head": base,
+              "exact_head": actual == expected,
+              "candidate_default_off": True,
+              "canonical_runtime_mutated": False,
+              "changed_paths": changed,
+              "files": [
+                  file_row(workflow),
+                  file_row(case_dir / "README.md"),
+                  file_row(case_dir / "production_realization.py"),
+                  file_row(case_dir / "test_production_realization.py"),
+              ],
+              "tests": {
+                  "count": int(match.group(1)),
+                  "ok_lines": len(re.findall(r"^test_.* \.\.\. ok$", log, re.MULTILINE)),
+                  "seconds": float(match.group(2)),
+                  "status": "PASS",
+                  "log_sha256": hashlib.sha256(log.encode("utf-8")).hexdigest(),
+              },
+              "claims": {
+                  "source_contracts": True,
+                  "official_engine_adapter": False,
+                  "hosted_strength": False,
+                  "release_selection": False,
+              },
+          }
+          assert receipt["exact_head"] is True
+          (out / "RECEIPT.json").write_text(
+              json.dumps(receipt, sort_keys=True, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+          python - "$out/RECEIPT.json" "$EXPECTED_HEAD" <<'PY'
+          import json
+          from pathlib import Path
+          import re
+          import sys
+
+          value = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          assert value["schema"] == "titan-v3-production-realization-exact-head/v1"
+          assert value["expected_head"] == sys.argv[2]
+          assert value["actual_head"] == sys.argv[2]
+          assert value["exact_head"] is True
+          assert value["candidate_default_off"] is True
+          assert value["canonical_runtime_mutated"] is False
+          assert re.fullmatch(r"[0-9a-f]{40}", value["base_head"])
+          assert value["tests"]["count"] == 34
+          assert value["tests"]["ok_lines"] == 34
+          assert value["tests"]["status"] == "PASS"
+          assert value["claims"] == {
+              "hosted_strength": False,
+              "official_engine_adapter": False,
+              "release_selection": False,
+              "source_contracts": True,
+          }
+          assert len(value["files"]) == 4
+          assert all(re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) for row in value["files"])
+          PY
+      - name: Prove checkout remained immutable
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/titan-v3-production-realization"
+          test -z "$(git status --porcelain)"
+          test -s "$out/EXACT_HEAD"
+          test -s "$out/CHANGED_PATHS.txt"
+          test -s "$out/TEST.log"
+          test -s "$out/RECEIPT.json"
+          sha256sum "$out/EXACT_HEAD" "$out/CHANGED_PATHS.txt" "$out/TEST.log" "$out/RECEIPT.json" \
+            > "$out/SHA256SUMS"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-production-realization-exact-head
+          path: ${{ runner.temp }}/titan-v3-production-realization/*
+          if-no-files-found: error
+          retention-days: 30

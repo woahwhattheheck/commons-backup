@@ -1,0 +1,62 @@
+name: TITAN S03 exact UCT smoke and runtime export
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-s03-uct.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/s03-uct-20260909/**'
+permissions:
+  contents: read
+jobs:
+  s03-exact-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact engine dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+      - name: Materialize pinned S03 runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          DISPATCH=ff5ff0197def292d0d86b22091ad67dc84ba5547
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          git worktree add --detach /tmp/s03-dispatch "$DISPATCH"
+          cd /tmp/s03-dispatch/$ROOT
+          python build_integrated.py --check
+          test "$(sha256sum exports/titan-current.tar.gz | awk '{print $1}')" = '3b4b083ec2647bb0e715978c2565e916da0ee94c08b234902e3a7e4d3418c320'
+          rm -rf /tmp/s03-runtime && mkdir /tmp/s03-runtime
+          tar -xzf exports/titan-current.tar.gz -C /tmp/s03-runtime
+          test "$(sha256sum /tmp/s03-runtime/SOURCE.json | awk '{print $1}')" = 'c0778c8286fbf7450137c9473abde6302eb9e37ca0428aab50c8cd90e2cc30c8'
+      - name: Stage S03 experiment
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="$GITHUB_WORKSPACE/revenue/kaggriculture/cloud-execution-lab/s03-uct-20260909"
+          cp "$SRC"/*.py /tmp/s03-runtime/
+      - name: Focused UCT contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/s03-runtime
+          S03_RUNTIME_ROOT=/tmp/s03-runtime PYTHONPATH=. python test_s03_uct.py -v
+      - name: Exact-current one-seed smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/s03-runtime
+          PYTHONPATH=. python run_s03_hosted_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-s03-exact-runtime-smoke
+          path: |
+            /tmp/S03-HOSTED-SMOKE.json
+            /tmp/s03-dispatch/revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz
+            /tmp/s03-runtime/SOURCE.json
+          if-no-files-found: error
+          retention-days: 30

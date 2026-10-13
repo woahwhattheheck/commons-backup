@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "bidbridge.review-input/v1",
+  "opportunity": {
+    "opportunityId": "synthetic-city-analytics-rfp",
+    "revision": 3,
+    "sourceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "sourceRef": "synthetic/demo-rfp-rev3",
+    "capturedAt": "2026-09-13T12:00:00.000Z",
+    "opensAt": "2026-09-12T12:00:00.000Z",
+    "questionsDueAt": "2026-09-14T16:00:00.000Z",
+    "submissionDueAt": "2026-09-18T16:00:00.000Z",
+    "submissionMode": "PORTAL",
+    "currency": "USD",
+    "referenceAmountCents": 18000000,
+    "requirements": [
+      {
+        "requirementId": "req-certification",
+        "class": "CERTIFICATION",
+        "dueAt": "2026-09-18T12:00:00.000Z",
+        "evidenceRequired": true,
+        "teamingAllowed": false,
+        "effortHours": 2
+      },
+      {
+        "requirementId": "req-technical-plan",
+        "class": "TECHNICAL",
+        "dueAt": "2026-09-17T20:00:00.000Z",
+        "evidenceRequired": true,
+        "teamingAllowed": false,
+        "effortHours": 7
+      },
+      {
+        "requirementId": "req-field-capacity",
+        "class": "TEAMING",
+        "dueAt": "2026-09-17T16:00:00.000Z",
+        "evidenceRequired": true,
+        "teamingAllowed": true,
+        "effortHours": 5
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "eventId": "ev-cert-3",
+      "requirementId": "req-certification",
+      "opportunityRevision": 3,
+      "status": "SATISFIED",
+      "observedAt": "2026-09-13T12:20:00.000Z",
+      "evidenceDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "evidenceRef": "evidence/certification-current",
+      "naAuthorityDigest": null
+    },
+    {
+      "eventId": "ev-tech-3",
+      "requirementId": "req-technical-plan",
+      "opportunityRevision": 3,
+      "status": "PARTIAL",
+      "observedAt": "2026-09-13T12:30:00.000Z",
+      "evidenceDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "evidenceRef": "evidence/technical-plan-draft",
+      "naAuthorityDigest": null
+    },
+    {
+      "eventId": "ev-field-3",
+      "requirementId": "req-field-capacity",
+      "opportunityRevision": 3,
+      "status": "NEEDS_EXTERNAL_PARTNER",
+      "observedAt": "2026-09-13T12:40:00.000Z",
+      "evidenceDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "evidenceRef": "evidence/field-capacity-gap",
+      "naAuthorityDigest": null
+    }
+  ],
+  "teaming": [
+    {
+      "requirementId": "req-field-capacity",
+      "partnerCandidateId": "candidate-field-partner-01",
+      "state": "IDENTIFIED",
+      "observedAt": "2026-09-13T12:50:00.000Z",
+      "evidenceDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    }
+  ],
+  "capacityPolicy": {
+    "availablePrepHours": 28,
+    "reserveHours": 6,
+    "minSubmissionBufferMinutes": 240,
+    "maxEvidenceAgeMinutes": 4320,
+    "questionWarningMinutes": 1800
+  }
+}

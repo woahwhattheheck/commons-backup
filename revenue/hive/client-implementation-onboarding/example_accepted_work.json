@@ -1,0 +1,75 @@
+{
+  "acceptedAt": "2026-09-16T13:00:00Z",
+  "acceptedScopeSha256": "f40bba703e4f34fc4c054228129078657617e29de389764d6f98eba88ec5e5e0",
+  "clientRef": "client.synthetic",
+  "currency": "USD",
+  "referenceMinor": 250000,
+  "scope": {
+    "acceptanceCriteria": [
+      {
+        "deliverableId": "kickoff-plan",
+        "id": "criterion-plan",
+        "text": "Plan is locally reviewed against the accepted scope"
+      },
+      {
+        "deliverableId": "handoff-package",
+        "id": "criterion-handoff",
+        "text": "Handoff package is locally reviewed against the current scope generation"
+      }
+    ],
+    "assumptions": [
+      "Customer inputs are supplied through an authorized local operator"
+    ],
+    "deliverables": [
+      {
+        "id": "kickoff-plan",
+        "title": "Kickoff implementation plan"
+      },
+      {
+        "id": "handoff-package",
+        "title": "Final implementation handoff package"
+      }
+    ],
+    "exclusions": [
+      "No provider or customer-system mutation",
+      "No external sending from this workspace"
+    ],
+    "milestones": [
+      {
+        "deliverableIds": [
+          "kickoff-plan"
+        ],
+        "dependsOn": [],
+        "id": "kickoff",
+        "sequence": 1,
+        "title": "Kickoff preparation"
+      },
+      {
+        "deliverableIds": [
+          "handoff-package"
+        ],
+        "dependsOn": [
+          "kickoff"
+        ],
+        "id": "delivery",
+        "sequence": 2,
+        "title": "Implementation delivery"
+      }
+    ],
+    "requiredInputs": [
+      {
+        "id": "client-brief",
+        "roleRef": "role.client-owner",
+        "title": "Accepted client brief"
+      },
+      {
+        "id": "source-export",
+        "roleRef": "role.implementation-owner",
+        "title": "Required source export"
+      }
+    ]
+  },
+  "scopeRevision": 1,
+  "workRef": "work.synthetic.example",
+  "workspaceId": "ws-demo-example"
+}

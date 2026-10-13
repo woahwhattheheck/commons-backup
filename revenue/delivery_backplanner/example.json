@@ -1,0 +1,21 @@
+{
+  "version": "delivery-backplanner/v1",
+  "horizon_start": "2026-09-21",
+  "deadline": "2026-11-20",
+  "search_limit": 100000,
+  "calendars": [
+    {"id": "standard", "weekdays": [0, 1, 2, 3, 4], "holidays": ["2026-10-12"]}
+  ],
+  "resources": [
+    {"id": "engineer", "daily_capacity": 2},
+    {"id": "reviewer", "daily_capacity": 1}
+  ],
+  "commitments": [
+    {"id": "retained-client", "start": "2026-10-01", "end": "2026-10-02", "resources": {"engineer": 1}}
+  ],
+  "tasks": [
+    {"id": "paperwork", "duration_workdays": 1, "calendar": "standard", "release_date": "2026-09-21", "resources": {"reviewer": 1}},
+    {"id": "implementation", "duration_workdays": 10, "calendar": "standard", "release_date": "2026-10-01", "resources": {"engineer": 2}, "dependencies": [{"task_id": "paperwork", "lag_workdays": 0}]},
+    {"id": "acceptance", "duration_workdays": 2, "calendar": "standard", "release_date": "2026-09-21", "resources": {"engineer": 1, "reviewer": 1}, "dependencies": [{"task_id": "implementation", "lag_workdays": 1}]}
+  ]
+}

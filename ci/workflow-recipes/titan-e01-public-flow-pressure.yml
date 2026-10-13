@@ -1,0 +1,48 @@
+name: titan-e01-public-flow-pressure
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-e01-public-flow-pressure.yml'
+      - 'revenue/kaggriculture/cloud-opponent-league/lark-responsive/pressure_priority.py'
+      - 'revenue/kaggriculture/cloud-opponent-league/lark-responsive/test_pressure_priority.py'
+      - 'revenue/kaggriculture/cloud-opponent-league/lark-responsive/test_pressure_priority_public_flow.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  public-flow-pressure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Run E01 public-flow contracts
+        working-directory: revenue/kaggriculture/cloud-opponent-league/lark-responsive
+        run: |
+          python3 -m py_compile pressure_priority.py test_pressure_priority_public_flow.py
+          python3 -B -m unittest -v test_pressure_priority_public_flow.py
+      - name: Run E01-relevant legacy invariants
+        working-directory: revenue/kaggriculture/cloud-opponent-league/lark-responsive
+        run: |
+          python3 -B -m unittest -v \
+            test_pressure_priority.PressureTests.test_pressure_not_absolute_quote \
+            test_pressure_priority.PressureTests.test_quantity_is_explicit_proxy \
+            test_pressure_priority.PressureTests.test_equal_scores_stable \
+            test_pressure_priority.PressureTests.test_current_public_quote_must_match \
+            test_pressure_priority.PressureTests.test_public_override_passed_explicitly \
+            test_pressure_priority.PressureTests.test_no_private_rival_or_future_reads \
+            test_pressure_priority.PressureTests.test_non_sell_barriers_keep_index_and_units \
+            test_pressure_priority.PressureTests.test_suffix_never_moves_into_prefix \
+            test_pressure_priority.PressureTests.test_oversize_quantity_is_barrier_not_clamped \
+            test_pressure_priority.PressureTests.test_missing_or_malformed_market_identity \
+            test_pressure_priority.ActorTests.test_actual_activation \
+            test_pressure_priority.ActorTests.test_existing_quote_arm_composes_without_double_transform

@@ -1,0 +1,174 @@
+{
+  "schema": "uiowa.sample-bundle-inputs.v1",
+  "scope": "Checked-in synthetic command inputs only. Local flat Python imports are resolved by the existing portability source_closure; dynamic imports and external dependencies require explicit adaptation.",
+  "assets": {
+    "workshare_compiler": {
+      "working_dir": "revenue/uiowa_rfq_18649_workshare",
+      "sample_commands": [
+        [
+          "compiler.py",
+          "compile",
+          "fixtures/synthetic_packet.json",
+          "fixtures/synthetic_authority.json",
+          "${OUT}/workshare-report.json"
+        ],
+        [
+          "compiler.py",
+          "verify",
+          "${OUT}/workshare-report.json"
+        ],
+        [
+          "compiler.py",
+          "render",
+          "${OUT}/workshare-report.json",
+          "${OUT}/workshare-report.md"
+        ]
+      ],
+      "files": [
+        "fixtures/synthetic_packet.json",
+        "fixtures/synthetic_authority.json",
+        "README.md"
+      ]
+    },
+    "rating_composition": {
+      "working_dir": "revenue/uiowa_rfq_18649_rating_model",
+      "sample_commands": [
+        [
+          "rating_model.py",
+          "synthetic_case_critical_gap.json",
+          "--json-out",
+          "${OUT}/rating-critical-gap.json",
+          "--markdown-out",
+          "${OUT}/rating-critical-gap.md"
+        ]
+      ],
+      "files": [
+        "synthetic_case_critical_gap.json"
+      ]
+    },
+    "security_event_review": {
+      "working_dir": "revenue/uiowa_rfq_18649_security_event_review",
+      "sample_commands": [
+        [
+          "assess_security_events.py",
+          "fixtures/synthetic_events.json",
+          "--json-out",
+          "${OUT}/security-event-assessment.json",
+          "--csv-out",
+          "${OUT}/security-event-matrix.csv",
+          "--md-out",
+          "${OUT}/security-event-timeline.md"
+        ]
+      ],
+      "files": [
+        "fixtures/synthetic_events.json",
+        "README.md"
+      ]
+    },
+    "observability": {
+      "working_dir": "revenue/uiowa_rfq_18649_observability",
+      "sample_commands": [
+        [
+          "observability.py",
+          "examples.json",
+          "--out",
+          "${OUT}/observability.json"
+        ]
+      ],
+      "files": [
+        "examples.json",
+        "README.md"
+      ]
+    },
+    "handoff_readiness": {
+      "working_dir": "revenue/uiowa_rfq_18649_handoff",
+      "sample_commands": [
+        [
+          "handoff.py",
+          "validate",
+          "examples/planned_release.json"
+        ],
+        [
+          "handoff.py",
+          "render",
+          "examples/planned_release.json",
+          "--output",
+          "${OUT}/handoff-readiness.md"
+        ]
+      ],
+      "files": [
+        "examples/planned_release.json",
+        "README.md"
+      ]
+    },
+    "recommendation_prioritization": {
+      "working_dir": "revenue/uiowa_rfq_18649_prioritization",
+      "sample_commands": [
+        [
+          "prioritize.py",
+          "recommendations.synthetic.csv",
+          "weights.json",
+          "--out-dir",
+          "${OUT}/prioritization"
+        ]
+      ],
+      "files": [
+        "recommendations.synthetic.csv",
+        "weights.json",
+        "README.md"
+      ]
+    },
+    "outcome_measurement": {
+      "working_dir": "revenue/uiowa_rfq_18649_outcome_measurement",
+      "sample_commands": [
+        [
+          "analyze.py",
+          "validate",
+          "--recommendations",
+          "recommendations.csv",
+          "--register",
+          "measure_register.csv",
+          "--measurements",
+          "examples/measurements.csv"
+        ],
+        [
+          "analyze.py",
+          "report",
+          "--recommendations",
+          "recommendations.csv",
+          "--register",
+          "measure_register.csv",
+          "--measurements",
+          "examples/measurements.csv",
+          "--output",
+          "${OUT}/outcome-measurement.md"
+        ]
+      ],
+      "files": [
+        "recommendations.csv",
+        "measure_register.csv",
+        "examples/measurements.csv",
+        "README.md"
+      ]
+    },
+    "traceability_rehearsal": {
+      "working_dir": "revenue/uiowa_rfq_18649_traceability_rehearsal",
+      "sample_commands": [
+        [
+          "validate_trace.py",
+          "."
+        ]
+      ],
+      "files": [
+        "evidence.csv",
+        "findings.csv",
+        "recommendations.csv",
+        "trace-map.csv",
+        "executive-summary.md",
+        "final-report.md",
+        "README.md",
+        "VALIDATOR.md"
+      ]
+    }
+  }
+}

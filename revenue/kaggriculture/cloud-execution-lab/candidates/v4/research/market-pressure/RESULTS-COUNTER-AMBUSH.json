@@ -1,0 +1,89 @@
+{
+  "apex_contract": {
+    "clone_min_opponent_hands": 3,
+    "clone_min_opponent_structures": 1,
+    "clone_window": [2, 10],
+    "events": [
+      {"item": "MELON", "max_sell": 12, "min_shed": 6, "steps": [249]},
+      {"item": "STRAWBERRY", "max_sell": 8, "min_shed": 6, "steps": [381]},
+      {"item": "STRAWBERRY", "max_sell": 8, "min_shed": 6, "steps": [403]},
+      {"item": "STRAWBERRY", "max_sell": 8, "min_shed": 8, "steps": [499, 500, 501]},
+      {"item": "FERTILIZER", "max_sell": 4, "min_shed": 18, "quantity_rule": "min(fert - 16, 4)", "steps": [522]}
+    ]
+  },
+  "engine_contract": {
+    "buy_product_quote": "post-buy inventory",
+    "market_rows_per_callback_default": 10,
+    "quote_rule": "both players quote from the same pre-commit inventory for each unit",
+    "sell_at_price_floor_adds_market_inventory": false,
+    "sell_buy_product_execution": "per-unit lockstep"
+  },
+  "fertilizer_523_sponge": {
+    "apex_max_sell_units": 4,
+    "at_I0": {
+      "apex_market_units_added": 4,
+      "apex_sell_cash": 399,
+      "buy_cost_after_apex_sell": 399,
+      "buy_cost_before_apex_sell": 402,
+      "buy_quantity": 4,
+      "direct_quote_savings": 3,
+      "non_attributable_units": 0,
+      "opponent_attributable_units": 4,
+      "start_inventory": 10000
+    },
+    "boundary": "Only up to Apex's market_units_added can be attributed to the ambush. Buying more is an independent fertilizer policy and requires its own capacity, cash, crop-yield, and terminal-value economics.",
+    "buy_quantity_attributed": 4,
+    "floor_example": {
+      "apex_market_units_added": 0,
+      "apex_sell_cash": 4,
+      "buy_cost_after_apex_sell": 8,
+      "buy_cost_before_apex_sell": 8,
+      "buy_quantity": 4,
+      "direct_quote_savings": 0,
+      "non_attributable_units": 4,
+      "opponent_attributable_units": 0,
+      "start_inventory": 10493
+    },
+    "max_observed_direct_quote_savings": 4,
+    "max_savings_start_inventory": 9003,
+    "sweep_start_inventory": [9000, 10600],
+    "verdict": "falsified_as_massive_opponent_subsidy"
+  },
+  "promotion": {
+    "default_change": false,
+    "recommended_next_gate": "Run current-native both seats versus authenticated Apex and compare BASE vs opponent-conditioned strawberry-only 380/402 candidate. Do not field the fertilizer sponge as an Apex-specific response.",
+    "runtime_change": false
+  },
+  "schema": "titan.v4.apex-counter-ambush.v1",
+  "sources": {
+    "apex_main_sha256": "1f7cd5fb8a16585936d2562a3667f85bb6661688718ef58f73006de66148354a",
+    "engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4"
+  },
+  "strawberry_380_402_cut": {
+    "apex_quantity": 8,
+    "at_I0": {
+      "apex_cash_change": -121,
+      "front_run_end_inventory": 10016,
+      "late_end_inventory": 10016,
+      "our_after_cash": 784,
+      "our_cash_gain": 121,
+      "our_front_run_cash": 905,
+      "start_inventory": 10000
+    },
+    "boundary": "This measures only ordering of two isolated eight-unit SELL blocks. It does not price TITAN's crop/shop shadow value, displaced authored orders, later rebound, or natural stock at steps 380/402.",
+    "floor_example": {
+      "apex_cash_change": 0,
+      "front_run_end_inventory": 10062,
+      "late_end_inventory": 10062,
+      "our_after_cash": 8,
+      "our_cash_gain": 0,
+      "our_front_run_cash": 8,
+      "start_inventory": 10062
+    },
+    "max_observed_gross_cash_transfer_to_us": 193,
+    "max_transfer_start_inventory": 9992,
+    "our_quantity": 8,
+    "sweep_start_inventory": [9800, 10080],
+    "verdict": "mechanically_real_cash_transfer_policy_unproven"
+  }
+}

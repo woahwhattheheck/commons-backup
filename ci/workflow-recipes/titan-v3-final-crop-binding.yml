@@ -1,0 +1,71 @@
+name: TITAN V3 final crop-binding contracts
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-final-crop-binding.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3-final-crop-binding/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-final-crop-binding-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  final-crop-binding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify immutable triggering head
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          [[ "$EXPECTED_HEAD" =~ ^[0-9a-f]{40}$ ]]
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compile candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab/candidates/v3-final-crop-binding
+          python -m py_compile candidate_main.py candidate_runtime.py test_final_crop_binding.py
+
+      - name: Run predecessor-discriminating contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB="$GITHUB_WORKSPACE/revenue/kaggriculture/cloud-execution-lab"
+          cd "$LAB/candidates/v3-final-crop-binding"
+          PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="$LAB:$PWD" \
+            python -m unittest -v test_final_crop_binding.py
+
+      - name: Preserve canonical crop and finalizer contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab
+          PYTHONDONTWRITEBYTECODE=1 python -m unittest -v \
+            test_crop_release.py \
+            test_final_market_pressure_entrypoint.py \
+            test_entrypoint_deadline.py
+
+      - name: Verify unchanged canonical package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab
+          python build_integrated.py --check

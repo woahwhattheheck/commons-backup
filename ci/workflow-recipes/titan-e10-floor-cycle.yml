@@ -1,0 +1,31 @@
+name: titan-e10-floor-cycle
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-e10-floor-cycle.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/e10_floor_cycle.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_e10_floor_cycle.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/evaluator/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/engine/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  exact-engine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Run bounded floor-cycle helper and exact-engine regressions
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: python3 -B test_e10_floor_cycle.py -v

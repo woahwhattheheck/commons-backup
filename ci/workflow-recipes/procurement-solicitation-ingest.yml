@@ -1,0 +1,35 @@
+name: Procurement solicitation ingest
+on:
+  pull_request:
+    paths:
+      - "revenue/procurement_solicitation_ingest/**"
+      - ".github/workflows/procurement-solicitation-ingest.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/procurement_solicitation_ingest/**"
+      - ".github/workflows/procurement-solicitation-ingest.yml"
+concurrency:
+  group: procurement-solicitation-ingest-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/procurement_solicitation_ingest/ingest.py revenue/procurement_solicitation_ingest/test_ingest.py
+      - run: python -m unittest -v revenue.procurement_solicitation_ingest.test_ingest
+      - run: python -O -m unittest -v revenue.procurement_solicitation_ingest.test_ingest
+      - run: |
+          rm -rf /tmp/psi
+          python -m revenue.procurement_solicitation_ingest.ingest compile --pack revenue/procurement_solicitation_ingest/fixtures/synthetic_pack.json --out-dir /tmp/psi
+          python -m revenue.procurement_solicitation_ingest.ingest verify --pack revenue/procurement_solicitation_ingest/fixtures/synthetic_pack.json --selector /tmp/psi/selector.json --active-set /tmp/psi/active_set.json --gaps /tmp/psi/gaps.json --markdown /tmp/psi/gaps.md --readiness /tmp/psi/readiness.json --receipt /tmp/psi/receipt.json

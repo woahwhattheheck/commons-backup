@@ -1,0 +1,234 @@
+{
+  "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+  "label": "FICTION. Invented requirements, data flows, design decisions and artifacts, written to exercise the instrument. Nothing here was observed anywhere.",
+  "data_flows": [
+    {
+      "flow_id": "FLOW-SYN-01",
+      "description": "Student record extract from the student system to a reporting store",
+      "source": "student system (fictional)",
+      "destination": "reporting store (fictional)",
+      "data_class": "identifiable records",
+      "crosses_trust_boundary": true
+    },
+    {
+      "flow_id": "FLOW-SYN-02",
+      "description": "Build artifacts pushed from the pipeline to the deployment target",
+      "source": "build pipeline (fictional)",
+      "destination": "deployment target (fictional)",
+      "data_class": "software artifacts",
+      "crosses_trust_boundary": true
+    },
+    {
+      "flow_id": "FLOW-SYN-03",
+      "description": "Diagnostic export pulled by a support engineer to a local workstation",
+      "source": "application support console (fictional)",
+      "destination": "engineer workstation (fictional)",
+      "data_class": "identifiable records",
+      "crosses_trust_boundary": true
+    },
+    {
+      "flow_id": "FLOW-SYN-04",
+      "description": "Scheduled job reading configuration from the shared configuration service",
+      "source": "shared configuration service (fictional)",
+      "destination": "scheduled job (fictional)",
+      "data_class": "configuration",
+      "crosses_trust_boundary": false
+    },
+    {
+      "flow_id": "FLOW-SYN-05",
+      "description": "Nightly copy of the reporting store to an analytics sandbox",
+      "source": "reporting store (fictional)",
+      "destination": "analytics sandbox (fictional)",
+      "data_class": "identifiable records",
+      "crosses_trust_boundary": true
+    }
+  ],
+  "requirements": [
+    {
+      "requirement_id": "SEC-REQ-SYN-01",
+      "current_version": 3,
+      "statement": "Identifiable records leaving the student system must be reduced to the fields the receiving purpose needs, and the reduction must be stated in the design.",
+      "ssdf_references": [
+        "PO.1.1",
+        "PW.1.2"
+      ],
+      "applies_to_flows": [
+        "FLOW-SYN-01"
+      ],
+      "change_history": [
+        "v1 (fictional): required encryption in transit only.",
+        "v2 (fictional): added the field-reduction obligation.",
+        "v3 (fictional): required the reduction to be stated in the design record, not only performed. This is the change that makes a v2 trace stale rather than merely old."
+      ]
+    },
+    {
+      "requirement_id": "SEC-REQ-SYN-02",
+      "current_version": 1,
+      "statement": "Artifacts promoted to a deployment target must be attributable to the build that produced them.",
+      "ssdf_references": [
+        "PW.1.2"
+      ],
+      "applies_to_flows": [
+        "FLOW-SYN-02"
+      ],
+      "change_history": []
+    },
+    {
+      "requirement_id": "SEC-REQ-SYN-03",
+      "current_version": 2,
+      "statement": "A design that moves identifiable records across a trust boundary must have a data-flow model and a recorded design review.",
+      "ssdf_references": [
+        "PW.1.1",
+        "PW.2.1"
+      ],
+      "applies_to_flows": [
+        "FLOW-SYN-01",
+        "FLOW-SYN-03"
+      ],
+      "change_history": [
+        "v1 (fictional): required a data-flow model.",
+        "v2 (fictional): added the recorded design review."
+      ]
+    },
+    {
+      "requirement_id": "SEC-REQ-SYN-04",
+      "current_version": 1,
+      "statement": "Scheduled jobs must read configuration through the shared service rather than embedding values.",
+      "ssdf_references": [
+        "PO.1.1"
+      ],
+      "applies_to_flows": [
+        "FLOW-SYN-04"
+      ],
+      "change_history": []
+    }
+  ],
+  "design_decisions": [
+    {
+      "decision_id": "DD-SYN-01",
+      "summary": "Reporting extract selects a fixed column list rather than the full record",
+      "flow_id": "FLOW-SYN-01",
+      "decided_on": "2026-04-14",
+      "governing_requirements": [
+        "SEC-REQ-SYN-01",
+        "SEC-REQ-SYN-03"
+      ]
+    },
+    {
+      "decision_id": "DD-SYN-02",
+      "summary": "Promotion copies the artifact and records the originating build identifier",
+      "flow_id": "FLOW-SYN-02",
+      "decided_on": "2026-05-02",
+      "governing_requirements": [
+        "SEC-REQ-SYN-02"
+      ]
+    },
+    {
+      "decision_id": "DD-SYN-03",
+      "summary": "Support diagnostic export runs against a filtered view",
+      "flow_id": "FLOW-SYN-03",
+      "decided_on": "2026-06-20",
+      "governing_requirements": [
+        "SEC-REQ-SYN-03"
+      ]
+    },
+    {
+      "decision_id": "DD-SYN-04",
+      "summary": "Scheduled job reads its connection settings at start-up",
+      "flow_id": "FLOW-SYN-04",
+      "decided_on": "2026-07-08",
+      "governing_requirements": [
+        "SEC-REQ-SYN-04",
+        "SEC-REQ-SYN-99"
+      ]
+    },
+    {
+      "decision_id": "DD-SYN-05",
+      "summary": "Reporting store retains the extract for the full academic year",
+      "flow_id": "FLOW-SYN-01",
+      "decided_on": "2026-04-14",
+      "governing_requirements": [
+        "SEC-REQ-SYN-01"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EV-SD-SYN-01",
+      "kind": "written_standard",
+      "statement": "A published secure-design standard requires a data-flow model for any design crossing a trust boundary",
+      "locator": "synthetic-secure-design-standard-v4.pdf",
+      "requirement_id": "SEC-REQ-SYN-03"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-02",
+      "kind": "design_template",
+      "statement": "The design record template, in use for this decision, contains a 'security requirements considered' section",
+      "locator": "synthetic-design-template-v2.docx",
+      "decision_id": "DD-SYN-01"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-03",
+      "kind": "design_decision_record",
+      "requirement_id": "SEC-REQ-SYN-01",
+      "decision_id": "DD-SYN-01",
+      "flow_id": "FLOW-SYN-01",
+      "cites_requirement_version": 2,
+      "statement": "Design record states the extract was reduced to a fixed column list, citing the requirement at v2",
+      "locator": "synthetic-design-record-DD-SYN-01#security"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-04",
+      "kind": "data_flow_diagram",
+      "requirement_id": "SEC-REQ-SYN-03",
+      "decision_id": "DD-SYN-01",
+      "flow_id": "FLOW-SYN-01",
+      "cites_requirement_version": 2,
+      "statement": "Data-flow model covering the student system to reporting store path",
+      "locator": "synthetic-dfd-FLOW-SYN-01-v3.png"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-05",
+      "kind": "design_review_record",
+      "requirement_id": "SEC-REQ-SYN-03",
+      "decision_id": "DD-SYN-01",
+      "cites_requirement_version": 2,
+      "statement": "Design review recorded, reviewer named, requirement confirmed considered",
+      "locator": "synthetic-design-review-2026-04-16"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-06",
+      "kind": "design_decision_record",
+      "requirement_id": "SEC-REQ-SYN-02",
+      "decision_id": "DD-SYN-02",
+      "flow_id": "FLOW-SYN-02",
+      "cites_requirement_version": 1,
+      "statement": "Design record states the originating build identifier is carried with the artifact",
+      "locator": "synthetic-design-record-DD-SYN-02#security"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-07",
+      "kind": "threat_model_record",
+      "requirement_id": "SEC-REQ-SYN-03",
+      "flow_id": "FLOW-SYN-03",
+      "cites_requirement_version": 2,
+      "statement": "A threat model covering the diagnostic export exists but names no design decision",
+      "locator": "synthetic-threat-model-support-export"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-08",
+      "kind": "policy_statement",
+      "statement": "A published policy requires scheduled jobs to use the shared configuration service",
+      "locator": "synthetic-configuration-policy-v1.pdf",
+      "requirement_id": "SEC-REQ-SYN-04"
+    },
+    {
+      "evidence_id": "EV-SD-SYN-09",
+      "kind": "requirement_change_record",
+      "requirement_id": "SEC-REQ-SYN-01",
+      "cites_requirement_version": 3,
+      "statement": "Change record for SEC-REQ-SYN-01 v2 to v3, adding the obligation to state the reduction in the design",
+      "locator": "synthetic-requirement-change-2026-06-01"
+    }
+  ]
+}

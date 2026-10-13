@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UIOWA-047 Test Data Readiness Catalog",
+  "type": "object",
+  "required": ["as_of", "datasets"],
+  "properties": {
+    "label": {"type": "string"},
+    "as_of": {"type": "string", "format": "date"},
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dataset_id", "service", "purpose"],
+        "properties": {
+          "dataset_id": {"type": "string"},
+          "service": {"type": "string", "enum": ["ESS", "RIS", "IAM"]},
+          "purpose": {"type": "string"},
+          "owner_role": {"type": "string"},
+          "data_origin": {"type": "string"},
+          "handling_reference": {"type": "string"},
+          "last_refreshed": {"type": ["string", "null"], "format": "date"},
+          "refresh_cadence_days": {"type": ["integer", "null"], "minimum": 1},
+          "fixture_interface_version": {"type": "string"},
+          "current_interface_version": {"type": "string"},
+          "required_boundary_cases": {"type": "array", "items": {"type": "string"}},
+          "covered_boundary_cases": {"type": "array", "items": {"type": "string"}},
+          "cleanup_required": {"type": "boolean"},
+          "cleanup_last_verified": {"type": ["string", "null"], "format": "date"},
+          "retention_days": {"type": ["integer", "null"], "minimum": 0},
+          "estimated_refresh_hours": {"type": ["number", "null"], "minimum": 0}
+        }
+      }
+    }
+  }
+}

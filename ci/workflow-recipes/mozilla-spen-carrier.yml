@@ -1,0 +1,45 @@
+name: mozilla-spen-carrier
+
+on:
+  pull_request:
+    paths:
+      - 'research/mozilla-lost-in-transcription-sp-en/**'
+      - '.github/workflows/mozilla-spen-carrier.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/mozilla-lost-in-transcription-sp-en/**'
+      - '.github/workflows/mozilla-spen-carrier.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  carrier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: research/mozilla-lost-in-transcription-sp-en
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile core.py build_prior.py submission_main.py pack.py experiment.py
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Optimized-mode unit tests
+        run: python -O -m unittest discover -s tests -v
+      - name: Synthetic mechanism receipt
+        run: |
+          python experiment.py fixtures/hypotheses.json --output synthetic-ci-report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('synthetic-ci-report.json').read_text())
+          assert report['evidence_class'] == 'SYNTHETIC_ONLY'
+          assert report['consensus_wer'] <= report['baseline_wer']
+          print(report)
+          PY

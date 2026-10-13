@@ -1,0 +1,35 @@
+{
+  "schema": "titan.v3.feature-port.v1",
+  "operation": "titan-v3-p07-current-hire-existing-worker-window-20260910-01",
+  "feature": {
+    "key": "p07_current_hire_existing_workers",
+    "default": false,
+    "exclusive_with": [
+      "joint_actors"
+    ]
+  },
+  "requires": [
+    {
+      "path": "candidates/v3-p07-joint-actors/joint_actors.py",
+      "git_blob_sha1": "129e70bc8f54101726e3a1794d4480749fd88408"
+    },
+    {
+      "path": "candidates/v3-p07-current-hire-window-crosswind/current_hire_window.py",
+      "sha256": "efaa4cff14852b894b6f9f8c68bc2b3f3b4d7467e29628710d550dfd3e48a8fd"
+    },
+    {
+      "path": "candidates/v3-p07-current-hire-window-crosswind/current_hire_joint_actors.py",
+      "sha256": "3f2694b89aeffb15dffe31515ebab010f2dc84d1b4e2c8e286aa5e0045450828"
+    }
+  ],
+  "required_gates": [
+    "exact_source_pins",
+    "source_bound_contracts",
+    "all_off_archive_identity",
+    "candidate_action_activation_gt_zero",
+    "paired_own_cash_matched_and_holdout",
+    "zero_timeout_invalid_or_nonpair_byte_drift"
+  ],
+  "promotion": false,
+  "kaggle_upload_authorized": false
+}

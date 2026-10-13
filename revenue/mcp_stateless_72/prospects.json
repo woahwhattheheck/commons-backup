@@ -1,0 +1,341 @@
+{
+  "$schema": "https://woahwhattheheck.github.io/commons/revenue/mcp_stateless_72/prospects.schema.json",
+  "schema_version": "1.0.0",
+  "kind": "MCP_STATELESS_72_VERIFIED_STATIC_SIGNAL_PACK",
+  "generated_at": "2026-08-26T23:39:00Z",
+  "generated_from_main": "6827afadf7428e2139299da704a0821567b0037f",
+  "schema_sha256": "c9a6b2747b8026733b81c335021c6747d233ad5b7019889fd02688ccd7d48e50",
+  "owner": "COMMONS_ANY_PEER",
+  "scope": "Public, commit-pinned static compatibility signals for the MCP 2026-07-28 stateless protocol transition; no runtime or commercial inference.",
+  "official_sources": [
+    {
+      "id": "mcp-2026-07-28-changelog",
+      "repository": "modelcontextprotocol/modelcontextprotocol",
+      "commit": "5f5440bb26a62e2cf3440b92da5a667efa03b267",
+      "path": "docs/specification/2026-07-28/changelog.mdx",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/5f5440bb26a62e2cf3440b92da5a667efa03b267/docs/specification/2026-07-28/changelog.mdx",
+      "commit_url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/5f5440bb26a62e2cf3440b92da5a667efa03b267/docs/specification/2026-07-28/changelog.mdx",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 11714,
+      "sha256": "ba4d0ba299ff0b45d26c52111d41dc0c862dd04ef973f63f93570c2b020f3974",
+      "git_blob_sha1": "dc5c9a9cf3e6895504534cf3f300514394d8c6ae",
+      "newline": "LF",
+      "line_count": 121,
+      "facts": [
+        {
+          "line": 12,
+          "statement": "The 2026-07-28 changelog removes protocol-level sessions and the Mcp-Session-Id header.",
+          "excerpt": "1. Remove protocol-level sessions and the `Mcp-Session-Id` header from the Streamable HTTP transport. List endpoints (`tools/list`, `resources/list`, `prompts/list`) no longer vary per-connection. Servers that need cross-call state use explicit, server-minted handles passed as ordinary tool arguments ([SEP-2567](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2567))."
+        },
+        {
+          "line": 14,
+          "statement": "The 2026-07-28 changelog removes the initialization handshake and carries version and capabilities per request.",
+          "excerpt": "2. Make MCP stateless: remove the `initialize`/`notifications/initialized` handshake. Every request now carries its protocol version and client capabilities in `_meta` (`io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientCapabilities`). Clients SHOULD identify themselves on each request (`io.modelcontextprotocol/clientInfo`), and servers SHOULD identify themselves in each result's `_meta` (`io.modelcontextprotocol/serverInfo`). Version mismatches return `UnsupportedProtocolVersionError` ([SEP-2575](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2575))."
+        },
+        {
+          "line": 16,
+          "statement": "The 2026-07-28 changelog adds server/discover.",
+          "excerpt": "3. Add `server/discover`: servers MUST implement this RPC to advertise their supported protocol versions, capabilities, and identity. Clients MAY call it before any other request for up-front version selection, or use it as a backward-compatibility probe on STDIO ([SEP-2575](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2575))."
+        },
+        {
+          "line": 35,
+          "statement": "The 2026-07-28 changelog requires Mcp-Method and conditionally Mcp-Name on Streamable HTTP POST requests.",
+          "excerpt": "4. Require standard MCP request headers (`Mcp-Method`, `Mcp-Name`) on Streamable HTTP POST requests, and add support for custom headers from tool parameters via `x-mcp-header` ([SEP-2243](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2243))."
+        }
+      ]
+    },
+    {
+      "id": "mcp-2026-07-28-streamable-http",
+      "repository": "modelcontextprotocol/modelcontextprotocol",
+      "commit": "5f5440bb26a62e2cf3440b92da5a667efa03b267",
+      "path": "docs/specification/2026-07-28/basic/transports/streamable-http.mdx",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/5f5440bb26a62e2cf3440b92da5a667efa03b267/docs/specification/2026-07-28/basic/transports/streamable-http.mdx",
+      "commit_url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/5f5440bb26a62e2cf3440b92da5a667efa03b267/docs/specification/2026-07-28/basic/transports/streamable-http.mdx",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 31155,
+      "sha256": "22574bf11e004068493787203ce92be1162107cad717bcb805a15780d4fa69c9",
+      "git_blob_sha1": "7b9813d67a9d8b90a496a6c251193a70ce79c657",
+      "newline": "LF",
+      "line_count": 739,
+      "facts": [
+        {
+          "line": 258,
+          "statement": "The current transport carries protocolVersion in the request body metadata.",
+          "excerpt": "`io.modelcontextprotocol/protocolVersion` field carried in the request body's"
+        },
+        {
+          "line": 290,
+          "statement": "The current transport specifies Mcp-Method on all requests.",
+          "excerpt": "| `Mcp-Method` | `method`                      | All requests                                           |"
+        },
+        {
+          "line": 685,
+          "statement": "A current server ignores rather than mints or echoes a legacy session header.",
+          "excerpt": "- An `Mcp-Session-Id` header on a request: ignore it, and do not mint or echo"
+        }
+      ]
+    }
+  ],
+  "truth": {
+    "static_protocol_signal_only": true,
+    "defect_confirmed": false,
+    "vulnerability_confirmed": false,
+    "buyer_confirmed": false,
+    "pain_confirmed": false,
+    "demand_confirmed": false,
+    "willingness_to_pay_confirmed": false,
+    "contact_permission_confirmed": false,
+    "delivery_readiness_confirmed": false,
+    "acceptance_confirmed": false,
+    "revenue_confirmed": false,
+    "cash_received_usd": 0
+  },
+  "unapproved_candidate_material": {
+    "present": false,
+    "owner_approved": false
+  },
+  "omitted_private_fields": [
+    "contact_email",
+    "contact_phone",
+    "credentials",
+    "mailing_addresses",
+    "payment_routing",
+    "personal_names",
+    "private_urls",
+    "tokens"
+  ],
+  "prospects": [
+    {
+      "id": "modelcontextprotocol-python-sdk",
+      "repository": "modelcontextprotocol/python-sdk",
+      "commit": "6705402e246dc4eb1fcdf4d9902b78d3c9c36e1b",
+      "path": "src/mcp/client/streamable_http.py",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/python-sdk/6705402e246dc4eb1fcdf4d9902b78d3c9c36e1b/src/mcp/client/streamable_http.py",
+      "commit_url": "https://github.com/modelcontextprotocol/python-sdk/blob/6705402e246dc4eb1fcdf4d9902b78d3c9c36e1b/src/mcp/client/streamable_http.py",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 32909,
+      "sha256": "6cc73f8ec7d270bf30433a85c5b05a6384afdd08d543368c54187f94840e04e5",
+      "git_blob_sha1": "226b0fecf900b1e11968688496d9fac3648f165b",
+      "newline": "LF",
+      "line_count": 710,
+      "signals": {"mcp_session_id": true, "legacy_initialize": true, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "MCP_SESSION_ID", "line": 49, "excerpt": "MCP_SESSION_ID = \"mcp-session-id\""},
+        {"signal": "LEGACY_INITIALIZE", "line": 135, "excerpt": "        return isinstance(message, JSONRPCRequest) and message.method == \"initialize\""},
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 378, "excerpt": "            # Per https://modelcontextprotocol.io/specification/2025-06-18/basic#notifications:"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains three legacy-protocol compatibility signals; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "modelcontextprotocol-typescript-sdk",
+      "repository": "modelcontextprotocol/typescript-sdk",
+      "commit": "7b781ed4e25355a25d15974f3c76de81299694ed",
+      "path": "packages/server/src/server/streamableHttp.ts",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/typescript-sdk/7b781ed4e25355a25d15974f3c76de81299694ed/packages/server/src/server/streamableHttp.ts",
+      "commit_url": "https://github.com/modelcontextprotocol/typescript-sdk/blob/7b781ed4e25355a25d15974f3c76de81299694ed/packages/server/src/server/streamableHttp.ts",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 55644,
+      "sha256": "705ed91214514f0b1841c111ab640891487906c03be171794cf1216950fddd19",
+      "git_blob_sha1": "ce73cf8a20b47b52a1f66f8fb6df74f8b2530602",
+      "newline": "LF",
+      "line_count": 1264,
+      "signals": {"mcp_session_id": true, "legacy_initialize": false, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "MCP_SESSION_ID", "line": 536, "excerpt": "            headers['mcp-session-id'] = this.sessionId;"},
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 814, "excerpt": "            // https://spec.modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle/"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains session-header and legacy-version references; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "modelcontextprotocol-go-sdk",
+      "repository": "modelcontextprotocol/go-sdk",
+      "commit": "2732839dbadd2c31651234e49199e6871b026754",
+      "path": "mcp/streamable.go",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/go-sdk/2732839dbadd2c31651234e49199e6871b026754/mcp/streamable.go",
+      "commit_url": "https://github.com/modelcontextprotocol/go-sdk/blob/2732839dbadd2c31651234e49199e6871b026754/mcp/streamable.go",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 102765,
+      "sha256": "1ac23ee37ee23764b2bc9a3f60cf5820f3d87622f0d2ef87996ada512567e6d3",
+      "git_blob_sha1": "8729bb7c74cacb872902a71a3e19875dc441e6c0",
+      "newline": "LF",
+      "line_count": 2828,
+      "signals": {"mcp_session_id": true, "legacy_initialize": false, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "MCP_SESSION_ID", "line": 131, "excerpt": "\t// A stateless server does not read or set the Mcp-Session-Id header, and"},
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 153, "excerpt": "\t// [§2.1.5]: https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#sending-messages-to-the-server"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains session-header and legacy-version references; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "modelcontextprotocol-conformance",
+      "repository": "modelcontextprotocol/conformance",
+      "commit": "74edef34d674f563537be8c6587cebaa58e830ca",
+      "path": "src/scenarios/server/lifecycle.ts",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/conformance/74edef34d674f563537be8c6587cebaa58e830ca/src/scenarios/server/lifecycle.ts",
+      "commit_url": "https://github.com/modelcontextprotocol/conformance/blob/74edef34d674f563537be8c6587cebaa58e830ca/src/scenarios/server/lifecycle.ts",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 5994,
+      "sha256": "166cb745be5053af825e265b8db8141d5f35b7eba119651a9af7ebfa5432fb58",
+      "git_blob_sha1": "7be721b10adc2ffc14c98871f7d4e15787f547b8",
+      "newline": "LF",
+      "line_count": 186,
+      "signals": {"mcp_session_id": true, "legacy_initialize": true, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 21, "excerpt": "    url: 'https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#session-management'"},
+        {"signal": "MCP_SESSION_ID", "line": 95, "excerpt": "    // Use a raw fetch to inspect the MCP-Session-Id response header,"},
+        {"signal": "LEGACY_INITIALIZE", "line": 109, "excerpt": "          method: 'initialize',"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned conformance source contains three legacy-protocol signals; current production behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "modelcontextprotocol-java-sdk",
+      "repository": "modelcontextprotocol/java-sdk",
+      "commit": "bb0ca87da5361d21d277bdb65587427d60c6bb90",
+      "path": "mcp-core/src/main/java/io/modelcontextprotocol/client/transport/HttpClientStreamableHttpTransport.java",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/java-sdk/bb0ca87da5361d21d277bdb65587427d60c6bb90/mcp-core/src/main/java/io/modelcontextprotocol/client/transport/HttpClientStreamableHttpTransport.java",
+      "commit_url": "https://github.com/modelcontextprotocol/java-sdk/blob/bb0ca87da5361d21d277bdb65587427d60c6bb90/mcp-core/src/main/java/io/modelcontextprotocol/client/transport/HttpClientStreamableHttpTransport.java",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 41013,
+      "sha256": "9740234f57b51cdcde9380de42b9b4fbcb1b47c4745bb49fb40cb2c330c1aee5",
+      "git_blob_sha1": "07a8f5e23b0a2109e780e5f18a4347a701b8559d",
+      "newline": "LF",
+      "line_count": 1005,
+      "signals": {"mcp_session_id": true, "legacy_initialize": false, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 60, "excerpt": " * <code>2025-03-26</code> version of the MCP specification."},
+        {"signal": "MCP_SESSION_ID", "line": 236, "excerpt": "\t\t\t\t.header(HttpHeaders.MCP_SESSION_ID, sessionId)"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains session-header and legacy-version references; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "modelcontextprotocol-rust-sdk",
+      "repository": "modelcontextprotocol/rust-sdk",
+      "commit": "78cf9f1cb654bcc7b6c8d60e40a8ff527bd0e542",
+      "path": "crates/rmcp/src/transport/streamable_http_server/session.rs",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/rust-sdk/78cf9f1cb654bcc7b6c8d60e40a8ff527bd0e542/crates/rmcp/src/transport/streamable_http_server/session.rs",
+      "commit_url": "https://github.com/modelcontextprotocol/rust-sdk/blob/78cf9f1cb654bcc7b6c8d60e40a8ff527bd0e542/crates/rmcp/src/transport/streamable_http_server/session.rs",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 6811,
+      "sha256": "aa3f798d4c6eecc6682134f43438adcc5d4ff1640a202109843d48d276b5fc30",
+      "git_blob_sha1": "ea2e85b240b120fe79337b401e8c14730cb6a8b5",
+      "newline": "LF",
+      "line_count": 174,
+      "signals": {"mcp_session_id": true, "legacy_initialize": false, "legacy_protocol_version": false},
+      "observations": [
+        {"signal": "MCP_SESSION_ID", "line": 6, "excerpt": "//! `Mcp-Session-Id` response header) and the client includes that ID on every"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains a session-header reference; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "mark3labs-mcp-go",
+      "repository": "mark3labs/mcp-go",
+      "commit": "56af04b2a9aedefa7756d9eef77065e4275a7ae6",
+      "path": "server/streamable_http.go",
+      "raw_url": "https://raw.githubusercontent.com/mark3labs/mcp-go/56af04b2a9aedefa7756d9eef77065e4275a7ae6/server/streamable_http.go",
+      "commit_url": "https://github.com/mark3labs/mcp-go/blob/56af04b2a9aedefa7756d9eef77065e4275a7ae6/server/streamable_http.go",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 74662,
+      "sha256": "4e8f3937969c14e9140615a6e02fb3b452793d32c5cdcd172e1305bedba498a7",
+      "git_blob_sha1": "6111eb666c25d75c91688a40f16113eb3e4c0b5a",
+      "newline": "LF",
+      "line_count": 2198,
+      "signals": {"mcp_session_id": true, "legacy_initialize": false, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 263, "excerpt": "// https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http"},
+        {"signal": "MCP_SESSION_ID", "line": 646, "excerpt": "\t\t// The Mcp-Session-Id header is ignored, and no session ID is minted."}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains session-header and legacy-version references; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "openai-agents-python",
+      "repository": "openai/openai-agents-python",
+      "commit": "a40ae9803e6b7a79faa246293f56adb100d5868b",
+      "path": "src/agents/mcp/server.py",
+      "raw_url": "https://raw.githubusercontent.com/openai/openai-agents-python/a40ae9803e6b7a79faa246293f56adb100d5868b/src/agents/mcp/server.py",
+      "commit_url": "https://github.com/openai/openai-agents-python/blob/a40ae9803e6b7a79faa246293f56adb100d5868b/src/agents/mcp/server.py",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 112055,
+      "sha256": "adb1e12e2fc93f22dec4607a19a3bfc916c64560a743879524d139b317e58b5b",
+      "git_blob_sha1": "cdc8927b55b45a5bf8d027011f55ae74ac452523",
+      "newline": "LF",
+      "line_count": 2600,
+      "signals": {"mcp_session_id": true, "legacy_initialize": true, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "LEGACY_INITIALIZE", "line": 380, "excerpt": "            and method == \"initialize\""},
+        {"signal": "MCP_SESSION_ID", "line": 383, "excerpt": "            session_id = response.headers.get(\"mcp-session-id\")"},
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 1890, "excerpt": "    (https://spec.modelcontextprotocol.io/specification/2024-11-05/basic/transports/#stdio) for"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains three legacy-protocol compatibility signals; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "modelcontextprotocol-kotlin-sdk",
+      "repository": "modelcontextprotocol/kotlin-sdk",
+      "commit": "cf5cca553b81fb78c9dcf444463a89793caa4e98",
+      "path": "kotlin-sdk-server/src/commonMain/kotlin/io/modelcontextprotocol/kotlin/sdk/server/StreamableHttpServerTransport.kt",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/kotlin-sdk/cf5cca553b81fb78c9dcf444463a89793caa4e98/kotlin-sdk-server/src/commonMain/kotlin/io/modelcontextprotocol/kotlin/sdk/server/StreamableHttpServerTransport.kt",
+      "commit_url": "https://github.com/modelcontextprotocol/kotlin-sdk/blob/cf5cca553b81fb78c9dcf444463a89793caa4e98/kotlin-sdk-server/src/commonMain/kotlin/io/modelcontextprotocol/kotlin/sdk/server/StreamableHttpServerTransport.kt",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 42189,
+      "sha256": "4effc99c6836af30c7ea545f2c5968c87da171a4991df4ca25d1059bf68529ea",
+      "git_blob_sha1": "dcba84873711271eb998c9ecc7d243c6e85a3811",
+      "newline": "LF",
+      "line_count": 950,
+      "signals": {"mcp_session_id": true, "legacy_initialize": false, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "MCP_SESSION_ID", "line": 52, "excerpt": "internal const val MCP_SESSION_ID_HEADER = \"mcp-session-id\""},
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 55, "excerpt": "private const val MIN_PRIMING_EVENT_PROTOCOL_VERSION = \"2025-11-25\""}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains session-header and legacy-version references; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    },
+    {
+      "id": "modelcontextprotocol-csharp-sdk",
+      "repository": "modelcontextprotocol/csharp-sdk",
+      "commit": "609499b2988e3f4a4c732552290bc9241fb90db9",
+      "path": "src/ModelContextProtocol.AspNetCore/HttpServerTransportOptions.cs",
+      "raw_url": "https://raw.githubusercontent.com/modelcontextprotocol/csharp-sdk/609499b2988e3f4a4c732552290bc9241fb90db9/src/ModelContextProtocol.AspNetCore/HttpServerTransportOptions.cs",
+      "commit_url": "https://github.com/modelcontextprotocol/csharp-sdk/blob/609499b2988e3f4a4c732552290bc9241fb90db9/src/ModelContextProtocol.AspNetCore/HttpServerTransportOptions.cs",
+      "checked_at": "2026-08-26T23:39:00Z",
+      "byte_count": 15419,
+      "sha256": "e305dd09ad512877e1abf5fc805e0e742cdadac47e5e653ac5cbd438fb681c99",
+      "git_blob_sha1": "7ecfc0748969e52275283bfad5d79d6b6bc84049",
+      "newline": "LF",
+      "line_count": 250,
+      "signals": {"mcp_session_id": true, "legacy_initialize": false, "legacy_protocol_version": true},
+      "observations": [
+        {"signal": "LEGACY_PROTOCOL_VERSION", "line": 9, "excerpt": "/// See the protocol specification for details on the Streamable HTTP transport. <see href=\"https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#streamable-http\"/>"},
+        {"signal": "MCP_SESSION_ID", "line": 67, "excerpt": "    /// \"MCP-Session-Id\" header will not be used, the <see cref=\"RunSessionHandler\"/> will be called once for"}
+      ],
+      "evidence_state": "VERIFIED_STATIC_SIGNAL",
+      "owner": "COMMONS_ANY_PEER",
+      "analysis": "ANALYSIS: Commit-pinned source contains session-header and legacy-version references; runtime behavior and migration need are not established.",
+      "nonclaims": ["No defect, buyer, demand, contact permission, readiness, acceptance, or revenue is inferred."]
+    }
+  ]
+}

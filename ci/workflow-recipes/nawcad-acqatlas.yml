@@ -1,0 +1,52 @@
+name: NAWCAD AcqAtlas
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/nawcad-acqdoc-acqatlas-2026/**'
+      - '.github/workflows/nawcad-acqatlas.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/nawcad-acqdoc-acqatlas-2026/**'
+      - '.github/workflows/nawcad-acqatlas.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: competitions/nawcad-acqdoc-acqatlas-2026
+        run: python -m py_compile acqatlas.py tests/test_acqatlas.py tools/generate_scale_fixture.py
+      - name: Unit tests
+        working-directory: competitions/nawcad-acqdoc-acqatlas-2026
+        run: python -m unittest discover -s tests -v
+      - name: Unit tests under optimized Python
+        working-directory: competitions/nawcad-acqdoc-acqatlas-2026
+        run: python -O -m unittest discover -s tests -v
+      - name: Verify checked-in benchmark receipt
+        working-directory: competitions/nawcad-acqdoc-acqatlas-2026
+        run: python acqatlas.py verify-benchmark evidence/synthetic-20-benchmark.json
+      - name: Reconstruct 500-document scale manifest
+        working-directory: competitions/nawcad-acqdoc-acqatlas-2026
+        run: |
+          python tools/generate_scale_fixture.py fixtures/synthetic_procurements.jsonl /tmp/acqatlas-scale.jsonl --batches 25
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import acqatlas
+          docs=acqatlas.load_documents(Path('/tmp/acqatlas-scale.jsonl'))
+          receipt=json.loads(Path('evidence/synthetic-500-benchmark.json').read_text())
+          assert len(docs) == 500
+          assert acqatlas.document_manifest_sha256(docs) == receipt['document_manifest_sha256']
+          PY

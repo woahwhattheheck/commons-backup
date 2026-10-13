@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/opportunity_registry.schema.json",
+  "title": "Commons Non-Dilutive Opportunity Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "as_of",
+    "scope",
+    "nonclaims",
+    "legal_scope",
+    "omitted_private_fields",
+    "compose",
+    "capabilities",
+    "counts",
+    "opportunities"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-opportunity-registry/v1"},
+    "kind": {"const": "OPPORTUNITY_REGISTRY"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "generated_from_main": {"$ref": "#/$defs/git_sha"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "scope": {"type": "string", "minLength": 1},
+    "nonclaims": {"$ref": "#/$defs/nonempty_strings"},
+    "legal_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicant_eligibility_adjudicated",
+        "submission_readiness_claimed",
+        "application_submitted",
+        "award_claimed",
+        "partnership_claimed",
+        "ip_rights_claimed",
+        "funding_success_claimed",
+        "cash_received_claimed"
+      ],
+      "properties": {
+        "applicant_eligibility_adjudicated": {"type": "boolean", "const": false},
+        "submission_readiness_claimed": {"type": "boolean", "const": false},
+        "application_submitted": {"type": "boolean", "const": false},
+        "award_claimed": {"type": "boolean", "const": false},
+        "partnership_claimed": {"type": "boolean", "const": false},
+        "ip_rights_claimed": {"type": "boolean", "const": false},
+        "funding_success_claimed": {"type": "boolean", "const": false},
+        "cash_received_claimed": {"type": "boolean", "const": false}
+      }
+    },
+    "omitted_private_fields": {
+      "type": "array",
+      "minItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "application_draft",
+          "bank_details",
+          "collaboration_letter_files",
+          "contact_email",
+          "contact_phone",
+          "entity_identifier",
+          "payout_details",
+          "research_portal_identity",
+          "tax_identifier"
+        ]
+      }
+    },
+    "compose": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "role", "sha256"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "status", "receipts"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "name": {"type": "string", "minLength": 1},
+          "status": {"enum": ["SHIPPED_ON_MAIN", "UNVERIFIED_ON_THIS_MAIN"]},
+          "receipts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path", "sha256", "bytes"],
+              "properties": {
+                "path": {"type": "string", "minLength": 1},
+                "sha256": {"$ref": "#/$defs/sha256"},
+                "bytes": {"type": "integer", "minimum": 1}
+              }
+            }
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "opportunities",
+        "grants",
+        "pilots",
+        "licensing",
+        "procurement",
+        "research",
+        "submitted",
+        "awarded",
+        "cash_received_usd",
+        "none_ready"
+      ],
+      "properties": {
+        "opportunities": {"type": "integer", "minimum": 1},
+        "grants": {"type": "integer", "minimum": 0},
+        "pilots": {"type": "integer", "minimum": 0},
+        "licensing": {"type": "integer", "minimum": 0},
+        "procurement": {"type": "integer", "minimum": 0},
+        "research": {"type": "integer", "minimum": 0},
+        "submitted": {"type": "integer", "const": 0},
+        "awarded": {"type": "integer", "const": 0},
+        "cash_received_usd": {"type": "integer", "const": 0},
+        "none_ready": {"type": "integer", "minimum": 0}
+      }
+    },
+    "opportunities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/opportunity"}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{7,79}$"},
+    "https_url": {
+      "type": "string",
+      "pattern": "^https://(?![^/?#]*@)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))+(?:[/?#]\\S*)?$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "nonempty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "urls": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/https_url"}
+    },
+    "deadline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["date", "time", "timezone_basis"],
+      "properties": {
+        "date": {"$ref": "#/$defs/date"},
+        "time": {"type": "string", "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"},
+        "timezone_basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "opportunity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "lane",
+        "name",
+        "funder_or_counterparty",
+        "official_urls",
+        "evidence_urls",
+        "composed_from",
+        "checked_at",
+        "application_state",
+        "application_state_basis",
+        "opens_date",
+        "deadline",
+        "deadline_freshness",
+        "deadline_freshness_basis",
+        "program_eligibility_text",
+        "program_eligibility_evidence_state",
+        "applicant_eligibility_state",
+        "fit",
+        "owner_action",
+        "owner",
+        "required_artifacts",
+        "stated_funding_text",
+        "stated_funding_evidence_state",
+        "expected_value_usd",
+        "expected_value_state",
+        "probability_state",
+        "packet_id",
+        "submission_status",
+        "award_status",
+        "cash_received_usd",
+        "contacted",
+        "partnership_claimed",
+        "private_blockers",
+        "nonclaims"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "lane": {"enum": ["GRANT", "PILOT", "LICENSING", "PROCUREMENT", "RESEARCH"]},
+        "name": {"type": "string", "minLength": 1},
+        "funder_or_counterparty": {"type": "string", "minLength": 1},
+        "official_urls": {"$ref": "#/$defs/urls"},
+        "evidence_urls": {"$ref": "#/$defs/urls"},
+        "composed_from": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "sha256": {"$ref": "#/$defs/sha256"}
+            }
+          }
+        },
+        "checked_at": {"type": "string", "format": "date-time"},
+        "application_state": {"enum": ["OPEN", "UPCOMING", "ROLLING", "CLOSED", "UNKNOWN", "NOT_APPLICABLE"]},
+        "application_state_basis": {"type": "string", "minLength": 1},
+        "opens_date": {
+          "oneOf": [
+            {"const": "UNKNOWN"},
+            {"$ref": "#/$defs/date"}
+          ]
+        },
+        "deadline": {
+          "oneOf": [
+            {"const": "UNKNOWN"},
+            {"$ref": "#/$defs/deadline"}
+          ]
+        },
+        "deadline_freshness": {"enum": ["URGENT", "SOON", "SCHEDULED", "ROLLING", "PAST", "UNKNOWN", "NOT_APPLICABLE"]},
+        "deadline_freshness_basis": {"type": "string", "minLength": 1},
+        "program_eligibility_text": {"type": "string"},
+        "program_eligibility_evidence_state": {"enum": ["VERIFIED", "PARTIAL", "CONFLICT", "UNKNOWN"]},
+        "applicant_eligibility_state": {"const": "UNKNOWN"},
+        "fit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "note", "capability_ids"],
+          "properties": {
+            "state": {"enum": ["ANALYSIS_ONLY", "BLOCKED", "LIVE_OFFER"]},
+            "note": {"type": "string", "pattern": "^ANALYSIS:[ \\t]*\\S.*$"},
+            "capability_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/id"}
+            }
+          }
+        },
+        "owner_action": {"type": "string", "minLength": 1},
+        "owner": {"type": "string", "pattern": "^COMMONS_ANY_[A-Z0-9_]+$"},
+        "required_artifacts": {"$ref": "#/$defs/nonempty_strings"},
+        "stated_funding_text": {"type": "string", "minLength": 1},
+        "stated_funding_evidence_state": {"enum": ["VERIFIED", "PARTIAL", "CONFLICT", "UNKNOWN"]},
+        "expected_value_usd": {"const": "UNKNOWN"},
+        "expected_value_state": {"const": "UNKNOWN"},
+        "probability_state": {
+          "enum": [
+            "NONE_READY",
+            "PACKET_READY_NOT_SUBMITTED",
+            "BLOCKED_LICENSE_UNKNOWN",
+            "BLOCKED_EVIDENCE",
+            "BLOCKED_REGISTRATION",
+            "LIVE_OFFER_NOT_AN_APPLICATION",
+            "RESEARCHED_NOT_CONTACTED"
+          ]
+        },
+        "packet_id": {"$ref": "#/$defs/id"},
+        "submission_status": {"enum": ["NOT_SUBMITTED", "NOT_APPLICABLE"]},
+        "award_status": {"const": "NOT_AWARDED"},
+        "cash_received_usd": {"const": 0},
+        "contacted": {"type": "boolean", "const": false},
+        "partnership_claimed": {"type": "boolean", "const": false},
+        "private_blockers": {"$ref": "#/$defs/nonempty_strings"},
+        "nonclaims": {"$ref": "#/$defs/nonempty_strings"}
+      }
+    }
+  }
+}

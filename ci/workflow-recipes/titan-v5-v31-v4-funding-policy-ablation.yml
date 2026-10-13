@@ -1,0 +1,101 @@
+name: TITAN V5 V3.1-V4 funding-policy ablation
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/v31-v4-funding-policy-ablation/**'
+      - '.github/workflows/titan-v5-v31-v4-funding-policy-ablation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-gate:
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    runs-on: ubuntu-latest
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact event head
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Focused source and result contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v31-v4-funding-policy-ablation
+        run: |
+          python -B -m unittest -v test_ablation test_paired
+          python -O -B -m unittest -v test_ablation test_paired
+          python -m py_compile ablation.py paired.py test_ablation.py test_paired.py test_queue_witness.py
+      - name: Audit exact submitted V3.1 and V4 funding surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          root='revenue/kaggriculture/cloud-execution-lab'
+          v31='a90d888f03987ef0b35cfd20ec3519c6144db08a'
+          v4='4af1113154e78c662780e6658cd920daac7902e3'
+          git show "$v31:$root/frozen_selected.py" > /tmp/funding-v31-frozen.py
+          git show "$v4:$root/frozen_selected.py" > /tmp/funding-v4-frozen.py
+          PYTHONPATH="$root/candidates/v5/v31-v4-funding-policy-ablation" python - <<'PY'
+          from pathlib import Path
+          import ablation
+          import paired
+
+          assert paired.HELPER_GIT_BLOB == '719e3514d72bc7ea4c3e505836d16fcddae11019'
+          paired.capture_git_blob(Path('revenue/kaggriculture') / paired.HELPER,
+                                  paired.HELPER_GIT_BLOB)
+
+          v31 = Path('/tmp/funding-v31-frozen.py').read_bytes()
+          v4 = Path('/tmp/funding-v4-frozen.py').read_bytes()
+
+          assert b"minimum=current[item] if farm['money']<budget else 0" in v31
+          assert b"funded_minimum_now" not in v31
+          assert b"fund_same_turn_acquisition" not in v31
+          assert v4.count(ablation._MINIMUM_TARGET) == 1
+          assert v4.count(ablation._REORDER_TARGET) == 1
+          assert v4.count(ablation._MINIMUM_PROVIDER) == 1
+          assert v4.count(ablation._REORDER_PROVIDER) == 1
+
+          members = {
+              'main.py': b'exact-source-audit-placeholder\n',
+              'frozen_selected.py': v4,
+          }
+          arms, receipts = ablation.build_arms(members)
+          assert arms['control'] == members
+          assert receipts['control']['changed_members'] == []
+          for arm in ('min_v31', 'no_reorder', 'funding_pair_v31'):
+              assert receipts[arm]['changed_members'] == ['frozen_selected.py']
+              assert arms[arm]['main.py'] == members['main.py']
+          assert ablation._REORDER_TARGET in arms['min_v31']['frozen_selected.py']
+          assert ablation._MINIMUM_TARGET in arms['no_reorder']['frozen_selected.py']
+          assert ablation._MINIMUM_TARGET not in arms['funding_pair_v31']['frozen_selected.py']
+          assert ablation._REORDER_TARGET not in arms['funding_pair_v31']['frozen_selected.py']
+          PY
+      - name: Exact submitted-V4 queue witnesses
+        shell: bash
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v31-v4-funding-policy-ablation
+        run: |
+          set -euo pipefail
+          repo_root="$(git rev-parse --show-toplevel)"
+          v4='4af1113154e78c662780e6658cd920daac7902e3'
+          exact_root="$RUNNER_TEMP/titan-v4-exact"
+          git -C "$repo_root" worktree add --detach "$exact_root" "$v4"
+          trap 'git -C "$repo_root" worktree remove --force "$exact_root" >/dev/null 2>&1 || true' EXIT
+          exact_lab="$exact_root/revenue/kaggriculture/cloud-execution-lab"
+          TITAN_EXACT_V4_ROOT="$exact_lab" python -B -m unittest -v test_queue_witness
+          TITAN_EXACT_V4_ROOT="$exact_lab" python -O -B -m unittest -v test_queue_witness
+      - name: Clean-tree guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"

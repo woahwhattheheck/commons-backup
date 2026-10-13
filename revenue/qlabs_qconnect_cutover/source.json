@@ -1,0 +1,140 @@
+{
+  "id": "qlabs-qconnect-cutover-verification-lims-01",
+  "buyer": "Q Laboratories / Jeff Knowles",
+  "role": "Q Connect cutover verification — complement incumbent portal, no replacement claim",
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "interfaces": "SIMULATED",
+  "shadowing": "READ_ONLY",
+  "production_write": false,
+  "live_reporting": false,
+  "outreach": false,
+  "automatic_release": false,
+  "cash_usd": 0,
+  "named_human_qa": "SYN-QA-OFFICER",
+  "human_role": "HUMAN_QA",
+  "catalog_version": "2026.08",
+  "prior_catalog_version": "2024.11",
+  "product_classes": ["personal_care", "pharma"],
+  "departments": ["MICROBIOLOGY", "CHEMISTRY"],
+  "accounts": {
+    "ACCT-PC-01": {
+      "product_class": "personal_care",
+      "users": ["USR-PC-01A", "USR-PC-01B"]
+    },
+    "ACCT-PC-02": {
+      "product_class": "personal_care",
+      "users": ["USR-PC-02A"]
+    },
+    "ACCT-PH-01": {
+      "product_class": "pharma",
+      "users": ["USR-PH-01A", "USR-PH-01B"]
+    },
+    "ACCT-PH-02": {
+      "product_class": "pharma",
+      "users": ["USR-PH-02A"]
+    }
+  },
+  "users": {
+    "USR-PC-01A": {"account_id": "ACCT-PC-01", "credential_kind": "per_user"},
+    "USR-PC-01B": {"account_id": "ACCT-PC-01", "credential_kind": "per_user"},
+    "USR-PC-02A": {"account_id": "ACCT-PC-02", "credential_kind": "per_user"},
+    "USR-PH-01A": {"account_id": "ACCT-PH-01", "credential_kind": "per_user"},
+    "USR-PH-01B": {"account_id": "ACCT-PH-01", "credential_kind": "per_user"},
+    "USR-PH-02A": {"account_id": "ACCT-PH-02", "credential_kind": "per_user"}
+  },
+  "shared_legacy": {
+    "account_id": "SHARED-PORTAL",
+    "user_id": "shared-qlabs-login",
+    "credential_kind": "shared",
+    "migration_targets": ["USR-PC-01A", "USR-PH-01A"],
+    "denied": true
+  },
+  "catalog": {
+    "QC-PC-ML61": {
+      "department": "MICROBIOLOGY",
+      "product_class": "personal_care",
+      "label": "Microbial Limits",
+      "route": "MICROBIOLOGY:personal_care:QC-PC-ML61"
+    },
+    "QC-PC-ML62": {
+      "department": "MICROBIOLOGY",
+      "product_class": "personal_care",
+      "label": "Objectionable Organisms",
+      "route": "MICROBIOLOGY:personal_care:QC-PC-ML62"
+    },
+    "QC-PC-PET51": {
+      "department": "MICROBIOLOGY",
+      "product_class": "personal_care",
+      "label": "Preservative Efficacy",
+      "route": "MICROBIOLOGY:personal_care:QC-PC-PET51"
+    },
+    "QC-PC-HM": {
+      "department": "CHEMISTRY",
+      "product_class": "personal_care",
+      "label": "Heavy Metals",
+      "route": "CHEMISTRY:personal_care:QC-PC-HM"
+    },
+    "QC-PC-PH": {
+      "department": "CHEMISTRY",
+      "product_class": "personal_care",
+      "label": "pH",
+      "route": "CHEMISTRY:personal_care:QC-PC-PH"
+    },
+    "QC-PH-STER": {
+      "department": "MICROBIOLOGY",
+      "product_class": "pharma",
+      "label": "Sterility",
+      "route": "MICROBIOLOGY:pharma:QC-PH-STER"
+    },
+    "QC-PH-ENDO": {
+      "department": "MICROBIOLOGY",
+      "product_class": "pharma",
+      "label": "Bacterial Endotoxin",
+      "route": "MICROBIOLOGY:pharma:QC-PH-ENDO"
+    },
+    "QC-PH-ASSAY": {
+      "department": "CHEMISTRY",
+      "product_class": "pharma",
+      "label": "Assay",
+      "route": "CHEMISTRY:pharma:QC-PH-ASSAY"
+    },
+    "QC-PH-ID": {
+      "department": "CHEMISTRY",
+      "product_class": "pharma",
+      "label": "Identity",
+      "route": "CHEMISTRY:pharma:QC-PH-ID"
+    },
+    "QC-PH-RS": {
+      "department": "CHEMISTRY",
+      "product_class": "pharma",
+      "label": "Residual Solvents",
+      "route": "CHEMISTRY:pharma:QC-PH-RS"
+    }
+  },
+  "obsolete_catalog": {
+    "QC-PC-TPC-OLD": {
+      "superseded_by": "QC-PC-ML61",
+      "department": "MICROBIOLOGY",
+      "product_class": "personal_care",
+      "retired_in": "2024.11"
+    },
+    "QC-PH-BIOB-OLD": {
+      "superseded_by": "QC-PH-STER",
+      "department": "MICROBIOLOGY",
+      "product_class": "pharma",
+      "retired_in": "2024.11"
+    },
+    "QC-PC-MET-OLD": {
+      "superseded_by": "QC-PC-HM",
+      "department": "CHEMISTRY",
+      "product_class": "personal_care",
+      "retired_in": "2024.11"
+    },
+    "QC-PH-HPLC-OLD": {
+      "superseded_by": "QC-PH-ASSAY",
+      "department": "CHEMISTRY",
+      "product_class": "pharma",
+      "retired_in": "2024.11"
+    }
+  }
+}

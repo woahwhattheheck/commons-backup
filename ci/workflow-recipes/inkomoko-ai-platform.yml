@@ -1,0 +1,55 @@
+name: Inkomoko response carrier
+
+on:
+  pull_request:
+    paths:
+      - 'opportunities/inkomoko_ai_platform/**'
+      - '.github/workflows/inkomoko-ai-platform.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'opportunities/inkomoko_ai_platform/**'
+      - '.github/workflows/inkomoko-ai-platform.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile opportunities/inkomoko_ai_platform/*.py
+      - name: Unit tests
+        run: python -m unittest -v opportunities.inkomoko_ai_platform.test_carrier
+      - name: Optimized unit tests
+        run: python -O -m unittest -v opportunities.inkomoko_ai_platform.test_carrier
+      - name: Public-reproduction fixture remains fail-closed
+        shell: bash
+        run: |
+          set +e
+          python -m opportunities.inkomoko_ai_platform.cli compile \
+            opportunities/inkomoko_ai_platform/fixtures/public_hold_packet.json \
+            opportunities/inkomoko_ai_platform/fixtures/synthetic_acceptance.json \
+            --evaluated-at 2026-09-15T07:30:00Z > /tmp/inkomoko-report.json
+          code=$?
+          set -e
+          test "$code" -eq 3
+          python - <<'PY'
+          import json
+          report = json.load(open('/tmp/inkomoko-report.json', encoding='utf-8'))
+          p = report['projection']
+          assert p['pursuit_posture'] == 'TEAMING_CANDIDATE'
+          assert p['proposal_state'] == 'HOLD_CONTROLLING_SOURCE'
+          assert p['proposal_submission_authorized'] is False
+          assert p['external_contact_authorized'] is False
+          assert p['synthetic_acceptance']['passed'] is True
+          PY

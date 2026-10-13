@@ -1,0 +1,25 @@
+name: KY financial reporting discovery
+
+on:
+  pull_request:
+    paths:
+      - "revenue/opportunities/ky_rfi_758_2700000006_fin_reporting/**"
+      - ".github/workflows/ky-fin-reporting-discovery.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify
+        working-directory: revenue/opportunities/ky_rfi_758_2700000006_fin_reporting
+        run: |
+          python -m py_compile ky_fin_reporting_rfi.py test_ky_fin_reporting_rfi.py
+          python -m unittest -v test_ky_fin_reporting_rfi.py
+          python -O -m unittest -v test_ky_fin_reporting_rfi.py

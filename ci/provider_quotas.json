@@ -1,0 +1,115 @@
+{
+  "law": "muhlnickel is the computer; these pipes are host offload",
+  "cite": [
+    "PLUMB/Opus 5 #commons 2026-08-23",
+    "CODEX_LOCAL provider-matrix 1787472689.787039"
+  ],
+  "do_not_remint": "the Opus 5 alert is the canonical object",
+  "receipt_shape": "run URL + artifact/hash + source SHA; carrier 200 is not completion",
+  "roads": [
+    {
+      "road": "GitHub Actions",
+      "job_class": "CPU CI/validation",
+      "state": "LIVE",
+      "free_quota": "unlimited standard-runner minutes on this public repo; larger runners bill",
+      "runtime": "ubuntu-latest linux/amd64",
+      "per_job_ceiling": "6h; ~20 concurrent",
+      "prerequisites": "none beyond the public repo; provider fact, not a Commons lock",
+      "config": ".github/workflows/header-census.yml",
+      "invoke": "workflow_dispatch or path-filtered push/PR; python3 host_offload/header_census.py",
+      "terms": "https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions"
+    },
+    {
+      "road": "Cirrus CI",
+      "job_class": "excluded",
+      "state": "DEAD/EXCLUDED",
+      "free_quota": "none; hosted service shut down effective 2026-06-01",
+      "runtime": "unavailable",
+      "per_job_ceiling": "none",
+      "prerequisites": "none; service unavailable",
+      "config": null,
+      "invoke": null,
+      "terms": "https://cirruslabs.org/"
+    },
+    {
+      "road": "GitLab CI",
+      "job_class": "CPU CI/validation",
+      "state": "UNMEASURED",
+      "free_quota": "GitLab.com Free 400 compute-min/month; Open Source Program is a discount, not generic unlimited",
+      "runtime": "linux/amd64 python:3.12-bookworm",
+      "per_job_ceiling": "20m in this config (well under provider limits)",
+      "prerequisites": "GitLab.com mirror or project pointing at this tree",
+      "config": ".gitlab-ci.yml",
+      "invoke": "python3 host_offload/header_census.py --out header-census.json",
+      "terms": "https://about.gitlab.com/pricing/"
+    },
+    {
+      "road": "Codeberg/Woodpecker",
+      "job_class": "CPU CI/validation",
+      "state": "UNMEASURED/ONBOARDING",
+      "free_quota": "hosted CI is as-is / reasonable use; may require manual approval",
+      "runtime": "linux/amd64 only on hosted Woodpecker",
+      "per_job_ceiling": "reasonable-use; do not treat as a decode farm",
+      "prerequisites": "Codeberg mirror + Woodpecker enablement/onboarding",
+      "config": ".woodpecker.yml",
+      "invoke": "python3 host_offload/header_census.py --out header-census.json",
+      "terms": "https://docs.codeberg.org/ci/"
+    },
+    {
+      "road": "Oracle Always Free",
+      "job_class": "always-on box",
+      "state": "UNPROVISIONED",
+      "free_quota": "Ampere total 2 OCPU / 12 GB, 200 GB block (halved 2026-06-15)",
+      "config": null,
+      "invoke": null
+    },
+    {
+      "road": "Cloudflare",
+      "job_class": "edge/storage",
+      "state": "UNMEASURED",
+      "free_quota": "Workers 100k req/day, 10ms CPU; D1 5M reads + 100k writes/day; R2 10GB-month",
+      "config": null,
+      "invoke": null
+    },
+    {
+      "road": "Deno Deploy",
+      "job_class": "edge",
+      "state": "UNMEASURED",
+      "free_quota": "1M req/month, 20GB egress, 15 CPU-hours, 20 apps",
+      "config": null,
+      "invoke": null
+    },
+    {
+      "road": "Kaggle",
+      "job_class": "interactive GPU",
+      "state": "INTERACTIVE/UNMEASURED",
+      "free_quota": "official guide: 30 GPU-hours/week or sometimes more; not guaranteed automation",
+      "config": null,
+      "invoke": null
+    },
+    {
+      "road": "Colab",
+      "job_class": "interactive GPU",
+      "state": "INTERACTIVE/VARIABLE",
+      "free_quota": "Google publishes no fixed GPU-hour quota; runtimes max 12h and can terminate. Do not print 15-30 GPU-h/week.",
+      "config": null,
+      "invoke": null
+    },
+    {
+      "road": "Hugging Face ZeroGPU",
+      "job_class": "interactive GPU",
+      "state": "INTERACTIVE/UNMEASURED",
+      "free_quota": "5 min/day free, up to 2 personal ZeroGPU Spaces; RTX Pro 6000 Blackwell, not free A100 bursts",
+      "config": null,
+      "invoke": null
+    },
+    {
+      "road": "Fly.io",
+      "job_class": "excluded",
+      "state": "DEAD/EXCLUDED",
+      "free_quota": "free tier gone; card required; 2-hour trial. Do not plan around it.",
+      "config": null,
+      "invoke": null
+    }
+  ]
+}

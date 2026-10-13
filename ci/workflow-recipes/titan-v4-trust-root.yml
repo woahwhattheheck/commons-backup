@@ -1,0 +1,70 @@
+name: titan-v4-trust-root
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+    branches:
+      - titan/v4-20260911
+
+# External control-plane support for Titan V4. This workflow must live on the
+# trusted default branch and be paired with server-enforced branch/ruleset policy.
+# It never executes, sources, imports, or checks out PR-head content.
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v4-trust-root-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  workflow-custody:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      # Pin actions/checkout v4 by exact commit. Explicitly checkout trusted main,
+      # never the pull-request head or merge ref. Full commit graph is needed for
+      # an exact ancestry proof; blob filtering + sparse checkout bound payload.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/titan-v4-trust-root.yml
+            /host/titan_v4_trust_root.py
+
+      - name: Authenticate candidate workflow as Git data only
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          WORKFLOW: .github/workflows/titan-v4-plumbing.yml
+          # Frozen candidate-side evidence workflow. Any approved migration is a
+          # deliberate trusted-control-plane change, never an ordinary V4 PR edit.
+          APPROVED_WORKFLOW_BLOB: 2a1800c02d2a4c11293bdccc7914ab8f6fd93321
+        run: |
+          set -euo pipefail
+
+          # Fetch PR HEAD into the object database only. Do not checkout it and do
+          # not execute any file obtained from the candidate commit.
+          git fetch --no-tags --filter=blob:none origin \
+            "+refs/pull/${PR_NUMBER}/head:refs/remotes/origin/titan-v4-candidate"
+          CANDIDATE_SHA="$(git rev-parse refs/remotes/origin/titan-v4-candidate^{commit})"
+          if [[ "$CANDIDATE_SHA" != "$HEAD_SHA" ]]; then
+            echo "candidate ref/SHA mismatch: expected=$HEAD_SHA observed=$CANDIDATE_SHA" >&2
+            exit 1
+          fi
+
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            git fetch --no-tags --filter=blob:none origin "$BASE_SHA"
+          fi
+          if ! git merge-base --is-ancestor "$BASE_SHA" "$HEAD_SHA"; then
+            echo "refusing diverged V4 candidate: BASE_SHA is not an ancestor of HEAD_SHA" >&2
+            exit 1
+          fi
+
+          python3 host/titan_v4_trust_root.py --self-test
+          python3 host/titan_v4_trust_root.py

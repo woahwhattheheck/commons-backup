@@ -1,0 +1,80 @@
+{
+  "id": "ASTRA-M1-DAY-CANONICAL-INTEGRATION-20260911-01",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "source_path": "donor/overlay/r04_m1_wheat_trade.py",
+  "source_order": [
+    {
+      "role": "canonical_preimage",
+      "git_blob": "c258552a87ab39f4d49648735cc0fddbd5019e04"
+    },
+    {
+      "role": "preserved_huge_money_and_exact_two_seat_postimage",
+      "git_blob": "d4d068d62ffc8fcd25842193bc7031f764630262",
+      "path": "repairs/gameplay/m1-two-seat/r04_m1_wheat_trade.py"
+    },
+    {
+      "role": "exact_complete_day_transformer",
+      "git_blob": "1014d235909bcf694dad1c620195e11981adb07f",
+      "upstream_receipt": "https://github.com/woahwhattheheck/commons/pull/12605#issuecomment-5642641130"
+    },
+    {
+      "role": "executed_composed_postimage",
+      "git_blob": "87eb8ccbee13b33ef656ba0a5ba0114ac30f4658",
+      "sha256": "f48adc060c3d1de42d89ddfbdcc5bb48bc8dc6a50f5b4cd07a0cbddc9eadb279"
+    }
+  ],
+  "checks": {
+    "test_v4_m1_money_overflow.py": "5695a41e8baca3da1b0b730ebcb3c27e6fa0bc8d",
+    "test_v4_m1_complete_day.py": "db0cc52f70be6908816f5dc52c1eed5e0eae691d",
+    "test_v4_m1_day_integration.py": "d6b8d3313e8f68780053f5b7aa9b11544e946187"
+  },
+  "validation": {
+    "scope": "isolated component and public-helper entrypoint; actual donor/overlay/checks layout also executed",
+    "normal": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0
+    },
+    "optimized": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0
+    },
+    "canonical_preimage_negative_control": {
+      "tests": 8,
+      "failures": 3,
+      "errors": 1,
+      "modes": [
+        "normal",
+        "optimized"
+      ]
+    },
+    "two_seat_postimage_negative_control": {
+      "tests": 8,
+      "failures": 1,
+      "errors": 0,
+      "failed_contract": "truncated day tape cannot certify pickup funding"
+    },
+    "py_compile": "PASS",
+    "exact_transformer_double_apply": "rejected",
+    "run_from": "donor/overlay",
+    "command": "python -B -m unittest -v checks.test_v4_m1_money_overflow checks.test_v4_m1_complete_day checks.test_v4_m1_day_integration",
+    "optimized_command": "python -O -B -m unittest -v checks.test_v4_m1_money_overflow checks.test_v4_m1_complete_day checks.test_v4_m1_day_integration"
+  },
+  "preserved_contracts": [
+    "same-day full cash horizon",
+    "ten raw market slots without compaction",
+    "both legal player seats",
+    "exact parent when disabled or declined",
+    "1000 cash reserve plus 25 per-unit surcharge",
+    "self-induced scarcity suppression",
+    "literal pickup reachability and end-of-day veto"
+  ],
+  "production_activation": false,
+  "production_runtime_or_archive_changed": false,
+  "legacy_materializer_executed": false,
+  "new_key_or_default_change": false,
+  "full_runtime_or_economic_gate_claimed": false,
+  "note": "This folds recovered verified source into the one canonical donor workspace. Preserved source and historical donor manifests remain evidence; no production archive manifest is regenerated."
+}

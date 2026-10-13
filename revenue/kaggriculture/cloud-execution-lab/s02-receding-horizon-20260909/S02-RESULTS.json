@@ -1,0 +1,346 @@
+{
+  "artifacts": {
+    "raw/control.json.gz.b64": {
+      "bytes": 15857,
+      "decoded_gzip_sha256": "90e522b99a0668f635b1e9bb3d818f6f3ab353c57f07b1234904a00110057141",
+      "games": 32,
+      "raw_json_sha256": "71cdb690b704d1e9f1914041978bc63168eaef250abb76750a458aa39d3d070b",
+      "sha256": "1e9ee2635087d16c4c12732c11452b3ef90994c01e78bb1b15003269a35d802a"
+    },
+    "raw/h12.json.gz.b64": {
+      "bytes": 15897,
+      "decoded_gzip_sha256": "bf979dbf525f0e16f980e9c8a1a4b15e33bee415b898910e139a4194048fcde8",
+      "games": 32,
+      "raw_json_sha256": "833c92ffae33bb67b699a38f6a30039f89b0a634237db2da311b638e39c617c5",
+      "sha256": "0c6b246bd6e65e0fffcb69c3c05174b446402793f6521d540800f2020d52945d"
+    },
+    "raw/h24.json.gz.b64": {
+      "bytes": 15869,
+      "decoded_gzip_sha256": "af2b1993f2a9d02e274245d3f433b58a5d03ef24ea92296078ac5bb56c649822",
+      "games": 32,
+      "raw_json_sha256": "0551d464e2bc0b0ba1568578b1e70eee2acf2cd704b79278c754339fda9f1cac",
+      "sha256": "9535809e8ba97cdfb1c89510c628a732027d4d6ef83cf22c66a41f5372b6bda8"
+    },
+    "raw/h6.json.gz.b64": {
+      "bytes": 15905,
+      "decoded_gzip_sha256": "6a7167f144eab912cad0c901430c6fce1c87ace7f497ff2a8b79fbc991097d4f",
+      "games": 32,
+      "raw_json_sha256": "0090499a915a3f92f64cc2a497f206cbfb7a4951d35e46b05acd1d81e8e6235a",
+      "sha256": "d88d6ed8b2fba0d03361b0ab020e1e490b280547ab1c4ae3a1b7bd5d7f23a1a2"
+    },
+    "run_s_screen.used.py": {
+      "bytes": 2873,
+      "sha256": "d1198f14fa5c888eb9e565494e57c305cd25a4c4457c07aef333824bfca45cbe"
+    },
+    "s02_agent_h12.py": {
+      "bytes": 508,
+      "sha256": "9cfddc64e6006eca2d220bce7c4f0800bb646b1d83e837f507407b7933b065f2"
+    },
+    "s02_agent_h24.py": {
+      "bytes": 508,
+      "sha256": "7dd28eba4c9622da0b17b48911c414142417ff4a9c91249a1ca0eb2c70e851ce"
+    },
+    "s02_agent_h6.py": {
+      "bytes": 507,
+      "sha256": "7ad8b201747671637b1b8ca53c10fc11dc8060317f51909e116b2bba2f3244dc"
+    },
+    "s02_mpc.py": {
+      "bytes": 5967,
+      "sha256": "f0b06155a268a754d606eb5c65e08c9146206c4c122cac78bf1d4ec396c76d8d"
+    },
+    "test_s02_mpc.py": {
+      "bytes": 3121,
+      "sha256": "21da727575e6a8f45963833ab98fa0a156f705d314f5029190349398e71e6568"
+    }
+  },
+  "candidate": {
+    "decision_steps": [
+      226,
+      360,
+      433
+    ],
+    "exact_rollout_policy": "fail_closed_to_incumbent",
+    "horizons": [
+      6,
+      12,
+      24
+    ],
+    "response_models_requested": [
+      "incumbent",
+      "conservative_market",
+      "adversarial_feasible"
+    ],
+    "short_horizon_liquidation_guard": "reject when owned sale strands route FEED/FERTILIZE/PLANT obligation without crediting hypothetical receipts",
+    "visibility_blockers": [
+      "missing_rival_private_for_exact_reacting_transition",
+      "hidden_end_of_day_rng_seed for every 24-transition real branch rollout"
+    ]
+  },
+  "decision": {
+    "canonical_integration": false,
+    "kaggle_submission": false,
+    "leaderboard_claim": false,
+    "next_discriminating_experiment": "Use a public-observation-only surrogate/hypothesis value model at the same existing branch seam, train/calibrate offline if desired, but never feed rival private state or replay suffix future into the live decision. Validate activation before another full search panel.",
+    "reason": "Exact reacting official-engine rollout is not observable from the live competition observation at the only real prefix-compatible route branch points. The safe implementation always falls back and has zero measured game effect."
+  },
+  "dispatch": {
+    "archive_bytes": 409345,
+    "canonical_archive_git_blob": "97b3c18b52359b03c5bd396d970ff50dc0b3c518",
+    "canonical_archive_sha256": "f8f1750266b3cfaea0ebfe663f287aa9c5a2682f6fc47bc932957e1d48e63f1c",
+    "main": "fb449442fe515b7912d81d886402e54a990b6d3c",
+    "runtime_files": 104,
+    "source_manifest_sha256": "41d545a1ff863c655a0a27af0aa65fff9ebdc27cd82866c2a53a6f8122d43c93",
+    "tree": "461afc4d16086390e2b53efd5bdc867a9b642993"
+  },
+  "environment": {
+    "cpu_count": 5,
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "zlib": "1.3.1"
+  },
+  "harness_notes": [
+    {
+      "classification": "harness configuration error; corrected by pinning checks/reference/evaluator/loader.py",
+      "count": 1,
+      "game_attempts": 0,
+      "kind": "pre_game_loader_path"
+    },
+    {
+      "classification": "launcher cutoff after partial smoke; replaced by per-game process isolation; not counted as a semantic game attempt in the completed 128-game screen",
+      "kind": "outer_orchestrator_timeout"
+    }
+  ],
+  "microbench": {
+    "calls_per_horizon": 10000,
+    "h12_max_us": 696.358,
+    "h12_mean_us": 2.2636272,
+    "h12_p99_us": 2.884,
+    "h24_max_us": 192.394,
+    "h24_mean_us": 2.1039111,
+    "h24_p99_us": 2.494,
+    "h6_max_us": 199.344,
+    "h6_mean_us": 1.8181624,
+    "h6_p99_us": 2.423,
+    "memory_budget_mib": 256,
+    "trial_budget_ms": 45
+  },
+  "official_engine": {
+    "evaluator_sha256": "e30b3108e0027477ab7ddbc057892a241c41a1f2b38f72caf267477877c4333c",
+    "kaggriculture_json_sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "kaggriculture_py_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "ref": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+    "utils_py_sha256": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+  },
+  "operation": "titan-v25-orders-20260909-S02",
+  "outcome": "negative_fail_closed_exact_rollout_unobservable",
+  "raw_result_parts": {
+    "control": {
+      "b64_bytes": 15857,
+      "b64_sha256": "1e9ee2635087d16c4c12732c11452b3ef90994c01e78bb1b15003269a35d802a",
+      "games": 32,
+      "gzip_bytes": 11891,
+      "gzip_sha256": "90e522b99a0668f635b1e9bb3d818f6f3ab353c57f07b1234904a00110057141",
+      "raw_bytes": 164330,
+      "raw_sha256": "71cdb690b704d1e9f1914041978bc63168eaef250abb76750a458aa39d3d070b"
+    },
+    "h12": {
+      "b64_bytes": 15897,
+      "b64_sha256": "0c6b246bd6e65e0fffcb69c3c05174b446402793f6521d540800f2020d52945d",
+      "games": 32,
+      "gzip_bytes": 11920,
+      "gzip_sha256": "bf979dbf525f0e16f980e9c8a1a4b15e33bee415b898910e139a4194048fcde8",
+      "raw_bytes": 164332,
+      "raw_sha256": "833c92ffae33bb67b699a38f6a30039f89b0a634237db2da311b638e39c617c5"
+    },
+    "h24": {
+      "b64_bytes": 15869,
+      "b64_sha256": "9535809e8ba97cdfb1c89510c628a732027d4d6ef83cf22c66a41f5372b6bda8",
+      "games": 32,
+      "gzip_bytes": 11901,
+      "gzip_sha256": "af2b1993f2a9d02e274245d3f433b58a5d03ef24ea92296078ac5bb56c649822",
+      "raw_bytes": 164324,
+      "raw_sha256": "0551d464e2bc0b0ba1568578b1e70eee2acf2cd704b79278c754339fda9f1cac"
+    },
+    "h6": {
+      "b64_bytes": 15905,
+      "b64_sha256": "d88d6ed8b2fba0d03361b0ab020e1e490b280547ab1c4ae3a1b7bd5d7f23a1a2",
+      "games": 32,
+      "gzip_bytes": 11927,
+      "gzip_sha256": "6a7167f144eab912cad0c901430c6fce1c87ace7f497ff2a8b79fbc991097d4f",
+      "raw_bytes": 164264,
+      "raw_sha256": "0090499a915a3f92f64cc2a497f206cbfb7a4951d35e46b05acd1d81e8e6235a"
+    }
+  },
+  "runtime_identity": {
+    "local_source_manifest_sha256": "41d545a1ff863c655a0a27af0aa65fff9ebdc27cd82866c2a53a6f8122d43c93",
+    "note": "All 104 unpacked runtime files match the f8 CURRENT-SOURCE manifest byte-for-byte. The connector binary surface rejected gzip blob decoding, so the published compressed archive SHA was not claimed as locally materialized; gameplay used the byte-identical unpacked runtime.",
+    "unpacked_runtime_entries_verified": 104,
+    "unpacked_runtime_mismatches": []
+  },
+  "schema": 1,
+  "screen": {
+    "changed_routes": 0,
+    "complete_games": 128,
+    "design": "16 fixed seeds x both seats per variant against reacting exact current canonical; control+h6+h12+h24",
+    "failures": 0,
+    "holdout_reason": "No horizon activated or differed from control, so no setting was promising/statistically competitive to advance to H.",
+    "holdout_run": false,
+    "paired_vs_control": {
+      "h12": {
+        "branch_audits": 96,
+        "candidate_call_cpu_delta_seconds_per_game": {
+          "max": 0.2959241329999953,
+          "mean": 0.016747061281250607,
+          "min": -0.1784552340000043
+        },
+        "cash_delta": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "nonzero_cells": 0
+        },
+        "cells": 32,
+        "changed_routes": 0,
+        "fallbacks": 96,
+        "score_mismatches": 0,
+        "trace_mismatches": 0
+      },
+      "h24": {
+        "branch_audits": 96,
+        "candidate_call_cpu_delta_seconds_per_game": {
+          "max": 0.15879022000000864,
+          "mean": -0.0716318951874996,
+          "min": -0.19234756099999673
+        },
+        "cash_delta": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "nonzero_cells": 0
+        },
+        "cells": 32,
+        "changed_routes": 0,
+        "fallbacks": 96,
+        "score_mismatches": 0,
+        "trace_mismatches": 0
+      },
+      "h6": {
+        "branch_audits": 96,
+        "candidate_call_cpu_delta_seconds_per_game": {
+          "max": 0.10214654199999762,
+          "mean": -0.033288280906250294,
+          "min": -0.22961973100000543
+        },
+        "cash_delta": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "nonzero_cells": 0
+        },
+        "cells": 32,
+        "changed_routes": 0,
+        "fallbacks": 96,
+        "score_mismatches": 0,
+        "trace_mismatches": 0
+      }
+    },
+    "seeds": [
+      194505610,
+      142330331,
+      344548109,
+      1660410103,
+      2103800402,
+      2138871119,
+      1165719565,
+      266784790,
+      1014893561,
+      28184900,
+      621755270,
+      1452690782,
+      1513194591,
+      5429143,
+      510855780,
+      1454334853
+    ],
+    "total_games": 128,
+    "total_search_branch_audits": 288,
+    "total_search_fallbacks": 288,
+    "variant_summary": {
+      "control": {
+        "best_margin": 74.0,
+        "complete": 32,
+        "failures": 0,
+        "games": 32,
+        "max_candidate_call_seconds": 0.1237054220000573,
+        "max_peak_rss_kib": 105208,
+        "mean_candidate_call_cpu_seconds_per_game": 1.9378943541874998,
+        "mean_candidate_cash": 87775.6875,
+        "mean_candidate_process_cpu_seconds_per_game": 3.04151203125,
+        "worst_margin": -74.0,
+        "wtl": [
+          1,
+          30,
+          1
+        ]
+      },
+      "h12": {
+        "best_margin": 74.0,
+        "complete": 32,
+        "failures": 0,
+        "games": 32,
+        "max_candidate_call_seconds": 0.17635009100013121,
+        "max_peak_rss_kib": 105252,
+        "mean_candidate_call_cpu_seconds_per_game": 1.9546414154687504,
+        "mean_candidate_cash": 87775.6875,
+        "mean_candidate_process_cpu_seconds_per_game": 3.08138709375,
+        "worst_margin": -74.0,
+        "wtl": [
+          1,
+          30,
+          1
+        ]
+      },
+      "h24": {
+        "best_margin": 74.0,
+        "complete": 32,
+        "failures": 0,
+        "games": 32,
+        "max_candidate_call_seconds": 0.12409817199977624,
+        "max_peak_rss_kib": 105236,
+        "mean_candidate_call_cpu_seconds_per_game": 1.866262459,
+        "mean_candidate_cash": 87775.6875,
+        "mean_candidate_process_cpu_seconds_per_game": 2.967945125,
+        "worst_margin": -74.0,
+        "wtl": [
+          1,
+          30,
+          1
+        ]
+      },
+      "h6": {
+        "best_margin": 74.0,
+        "complete": 32,
+        "failures": 0,
+        "games": 32,
+        "max_candidate_call_seconds": 0.14461106099997778,
+        "max_peak_rss_kib": 105196,
+        "mean_candidate_call_cpu_seconds_per_game": 1.9046060732812495,
+        "mean_candidate_cash": 87775.6875,
+        "mean_candidate_process_cpu_seconds_per_game": 3.03339840625,
+        "worst_margin": -74.0,
+        "wtl": [
+          1,
+          30,
+          1
+        ]
+      }
+    },
+    "wall_seconds": 250.20514178276062
+  },
+  "tests": {
+    "command": "PYTHONPATH=. python checks/test_s02_mpc.py",
+    "contracts": 6,
+    "failed": 0,
+    "passed": 6
+  }
+}

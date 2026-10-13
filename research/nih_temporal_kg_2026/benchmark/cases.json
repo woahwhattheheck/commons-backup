@@ -1,0 +1,195 @@
+{
+  "schema": "temporal-kg-benchmark/v1",
+  "description": "Synthetic, non-PHI temporal reasoning cases. Names and relationships are fictional and are not biomedical claims.",
+  "cases": [
+    {
+      "id": "path_current_after_retraction",
+      "family": "relationship_chain",
+      "error_class": "control",
+      "mode": "path",
+      "facts": [
+        {"name":"ab","subject":"node:A","predicate":"links","object":"node:B","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-current:ab","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","confidence":1.0},
+        {"name":"bc","subject":"node:B","predicate":"links","object":"node:C","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-current:bc","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","confidence":1.0}
+      ],
+      "events": [
+        {"action":"retract","target":"bc","observed_at":"2026-09-01T00:00:00Z","source_id":"synthetic:path-current:retract","source_sha256":"3333333333333333333333333333333333333333333333333333333333333333"}
+      ],
+      "query": {"start":"node:A","goal":"node:C","earliest":"2026-01-01T00:00:00Z","latest":"2026-10-01T00:00:00Z","known_at":"2026-10-01T00:00:00Z","predicates":["links"],"max_hops":4},
+      "expected": {"path_exists": false}
+    },
+    {
+      "id": "path_future_observed_edge",
+      "family": "relationship_chain",
+      "error_class": "future_leakage",
+      "mode": "path",
+      "facts": [
+        {"name":"ab","subject":"node:A","predicate":"links","object":"node:B","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-future:ab","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","confidence":1.0},
+        {"name":"bc","subject":"node:B","predicate":"links","object":"node:C","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-09-01T00:00:00Z","source_id":"synthetic:path-future:bc","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"start":"node:A","goal":"node:C","earliest":"2026-01-01T00:00:00Z","latest":"2026-06-01T00:00:00Z","known_at":"2026-06-01T00:00:00Z","predicates":["links"],"max_hops":4},
+      "expected": {"path_exists": false}
+    },
+    {
+      "id": "path_historical_before_retraction",
+      "family": "relationship_chain",
+      "error_class": "stale_retracted_fact",
+      "mode": "path",
+      "facts": [
+        {"name":"ab","subject":"node:A","predicate":"links","object":"node:B","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-history:ab","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","confidence":1.0},
+        {"name":"bc","subject":"node:B","predicate":"links","object":"node:C","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-history:bc","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","confidence":1.0}
+      ],
+      "events": [
+        {"action":"retract","target":"bc","observed_at":"2026-09-01T00:00:00Z","source_id":"synthetic:path-history:retract","source_sha256":"3333333333333333333333333333333333333333333333333333333333333333"}
+      ],
+      "query": {"start":"node:A","goal":"node:C","earliest":"2026-01-01T00:00:00Z","latest":"2026-06-01T00:00:00Z","known_at":"2026-08-01T00:00:00Z","predicates":["links"],"max_hops":4},
+      "expected": {"path_exists": true}
+    },
+    {
+      "id": "path_overlapping_chain_control",
+      "family": "relationship_chain",
+      "error_class": "control",
+      "mode": "path",
+      "facts": [
+        {"name":"ab","subject":"node:A","predicate":"links","object":"node:B","valid_from":"2026-01-01T00:00:00Z","valid_to":"2026-04-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-control:ab","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","confidence":1.0},
+        {"name":"bc","subject":"node:B","predicate":"links","object":"node:C","valid_from":"2026-02-01T00:00:00Z","valid_to":"2026-05-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-control:bc","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"start":"node:A","goal":"node:C","earliest":"2026-01-01T00:00:00Z","latest":"2026-05-01T00:00:00Z","known_at":"2026-05-01T00:00:00Z","predicates":["links"],"max_hops":4},
+      "expected": {"path_exists": true}
+    },
+    {
+      "id": "path_temporally_impossible_chain",
+      "family": "relationship_chain",
+      "error_class": "impossible_path",
+      "mode": "path",
+      "facts": [
+        {"name":"ab","subject":"node:A","predicate":"links","object":"node:B","valid_from":"2026-03-01T00:00:00Z","valid_to":"2026-04-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-impossible:ab","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","confidence":1.0},
+        {"name":"bc","subject":"node:B","predicate":"links","object":"node:C","valid_from":"2026-01-01T00:00:00Z","valid_to":"2026-02-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-impossible:bc","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"start":"node:A","goal":"node:C","earliest":"2026-01-01T00:00:00Z","latest":"2026-04-01T00:00:00Z","known_at":"2026-04-01T00:00:00Z","predicates":["links"],"max_hops":4},
+      "expected": {"path_exists": false}
+    },
+    {
+      "id": "path_validity_window_expired",
+      "family": "relationship_chain",
+      "error_class": "validity_window",
+      "mode": "path",
+      "facts": [
+        {"name":"ab","subject":"node:A","predicate":"links","object":"node:B","valid_from":"2026-01-01T00:00:00Z","valid_to":"2026-02-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-expired:ab","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","confidence":1.0},
+        {"name":"bc","subject":"node:B","predicate":"links","object":"node:C","valid_from":"2026-01-01T00:00:00Z","valid_to":"2026-02-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:path-expired:bc","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"start":"node:A","goal":"node:C","earliest":"2026-03-01T00:00:00Z","latest":"2026-04-01T00:00:00Z","known_at":"2026-04-01T00:00:00Z","predicates":["links"],"max_hops":4},
+      "expected": {"path_exists": false}
+    },
+    {
+      "id": "snapshot_current_after_retraction",
+      "family": "evolving_evidence",
+      "error_class": "control",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"watch","subject":"signal:alpha","predicate":"status","object":"watch","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-02T00:00:00Z","source_id":"synthetic:current-retract:watch","source_sha256":"4444444444444444444444444444444444444444444444444444444444444444","confidence":1.0}
+      ],
+      "events": [
+        {"action":"retract","target":"watch","observed_at":"2026-09-01T00:00:00Z","source_id":"synthetic:current-retract:event","source_sha256":"5555555555555555555555555555555555555555555555555555555555555555"}
+      ],
+      "query": {"valid_at":"2026-06-01T00:00:00Z","known_at":"2026-10-01T00:00:00Z","subject":"signal:alpha","predicate":"status"},
+      "expected": {"objects": []}
+    },
+    {
+      "id": "snapshot_future_fact_not_yet_known",
+      "family": "evolving_evidence",
+      "error_class": "future_leakage",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"future","subject":"signal:beta","predicate":"status","object":"present","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-08-01T00:00:00Z","source_id":"synthetic:future-only","source_sha256":"6666666666666666666666666666666666666666666666666666666666666666","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"valid_at":"2026-02-01T00:00:00Z","known_at":"2026-03-01T00:00:00Z","subject":"signal:beta","predicate":"status"},
+      "expected": {"objects": []}
+    },
+    {
+      "id": "snapshot_known_before_future_update",
+      "family": "evolving_evidence",
+      "error_class": "future_leakage",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"old","subject":"guideline:alpha","predicate":"position","object":"recommended","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-02T00:00:00Z","source_id":"synthetic:guideline-old","source_sha256":"7777777777777777777777777777777777777777777777777777777777777777","confidence":1.0},
+        {"name":"new","subject":"guideline:alpha","predicate":"position","object":"not_recommended","valid_from":"2026-06-01T00:00:00Z","valid_to":null,"observed_at":"2026-06-15T00:00:00Z","source_id":"synthetic:guideline-new","source_sha256":"8888888888888888888888888888888888888888888888888888888888888888","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"valid_at":"2026-07-01T00:00:00Z","known_at":"2026-05-01T00:00:00Z","subject":"guideline:alpha","predicate":"position"},
+      "expected": {"objects": ["recommended"]}
+    },
+    {
+      "id": "snapshot_late_retraction_historical_view",
+      "family": "evolving_evidence",
+      "error_class": "stale_retracted_fact",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"watch","subject":"signal:gamma","predicate":"status","object":"watch","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-02T00:00:00Z","source_id":"synthetic:late-retract:watch","source_sha256":"9999999999999999999999999999999999999999999999999999999999999999","confidence":1.0}
+      ],
+      "events": [
+        {"action":"retract","target":"watch","observed_at":"2026-09-01T00:00:00Z","source_id":"synthetic:late-retract:event","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+      ],
+      "query": {"valid_at":"2026-06-01T00:00:00Z","known_at":"2026-08-01T00:00:00Z","subject":"signal:gamma","predicate":"status"},
+      "expected": {"objects": ["watch"]}
+    },
+    {
+      "id": "snapshot_supersession_current_view",
+      "family": "evolving_evidence",
+      "error_class": "control",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"old","subject":"guideline:delta","predicate":"position","object":"version_1","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-02T00:00:00Z","source_id":"synthetic:sup-current:old","source_sha256":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","confidence":1.0},
+        {"name":"new","subject":"guideline:delta","predicate":"position","object":"version_2","valid_from":"2026-07-01T00:00:00Z","valid_to":null,"observed_at":"2026-07-02T00:00:00Z","source_id":"synthetic:sup-current:new","source_sha256":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","confidence":1.0}
+      ],
+      "events": [
+        {"action":"supersede","target":"old","replacement":"new","observed_at":"2026-07-02T00:00:00Z","source_id":"synthetic:sup-current:event","source_sha256":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}
+      ],
+      "query": {"valid_at":"2026-08-01T00:00:00Z","known_at":"2026-08-01T00:00:00Z","subject":"guideline:delta","predicate":"position"},
+      "expected": {"objects": ["version_2"]}
+    },
+    {
+      "id": "snapshot_supersession_historical_view",
+      "family": "evolving_evidence",
+      "error_class": "future_leakage",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"old","subject":"guideline:epsilon","predicate":"position","object":"version_1","valid_from":"2026-01-01T00:00:00Z","valid_to":null,"observed_at":"2026-01-02T00:00:00Z","source_id":"synthetic:sup-history:old","source_sha256":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","confidence":1.0},
+        {"name":"new","subject":"guideline:epsilon","predicate":"position","object":"version_2","valid_from":"2026-07-01T00:00:00Z","valid_to":null,"observed_at":"2026-07-02T00:00:00Z","source_id":"synthetic:sup-history:new","source_sha256":"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff","confidence":1.0}
+      ],
+      "events": [
+        {"action":"supersede","target":"old","replacement":"new","observed_at":"2026-07-02T00:00:00Z","source_id":"synthetic:sup-history:event","source_sha256":"1212121212121212121212121212121212121212121212121212121212121212"}
+      ],
+      "query": {"valid_at":"2026-06-01T00:00:00Z","known_at":"2026-06-01T00:00:00Z","subject":"guideline:epsilon","predicate":"position"},
+      "expected": {"objects": ["version_1"]}
+    },
+    {
+      "id": "snapshot_validity_window_control",
+      "family": "validity_interval",
+      "error_class": "control",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"active","subject":"state:zeta","predicate":"status","object":"active","valid_from":"2026-01-01T00:00:00Z","valid_to":"2026-03-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:valid-control","source_sha256":"3434343434343434343434343434343434343434343434343434343434343434","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"valid_at":"2026-02-01T00:00:00Z","known_at":"2026-02-01T00:00:00Z","subject":"state:zeta","predicate":"status"},
+      "expected": {"objects": ["active"]}
+    },
+    {
+      "id": "snapshot_validity_window_expired",
+      "family": "validity_interval",
+      "error_class": "validity_window",
+      "mode": "snapshot",
+      "facts": [
+        {"name":"active","subject":"state:eta","predicate":"status","object":"active","valid_from":"2026-01-01T00:00:00Z","valid_to":"2026-03-01T00:00:00Z","observed_at":"2026-01-01T00:00:00Z","source_id":"synthetic:valid-expired","source_sha256":"5656565656565656565656565656565656565656565656565656565656565656","confidence":1.0}
+      ],
+      "events": [],
+      "query": {"valid_at":"2026-04-01T00:00:00Z","known_at":"2026-04-01T00:00:00Z","subject":"state:eta","predicate":"status"},
+      "expected": {"objects": []}
+    }
+  ]
+}

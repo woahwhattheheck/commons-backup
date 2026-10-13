@@ -1,0 +1,41 @@
+name: paid-pilot-admission
+
+on:
+  push:
+    branches:
+      - main
+    paths: &paid_pilot_paths
+      - 'revenue/paid_pilot_admission/**'
+      - '.github/workflows/paid-pilot-admission.yml'
+  pull_request:
+    paths: *paid_pilot_paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile paid-pilot admission authority surfaces
+        run: >-
+          python -m py_compile
+          revenue/paid_pilot_admission/gate.py
+          revenue/paid_pilot_admission/authority.py
+          revenue/paid_pilot_admission/cli.py
+          revenue/paid_pilot_admission/acceptance.py
+          revenue/paid_pilot_admission/tests/test_gate.py
+          revenue/paid_pilot_admission/tests/test_current_authority.py
+      - name: Paid-pilot admission tests
+        run: python -m unittest -q revenue.paid_pilot_admission.tests.test_gate revenue.paid_pilot_admission.tests.test_current_authority
+      - name: Paid-pilot admission optimized tests
+        run: python -O -m unittest -q revenue.paid_pilot_admission.tests.test_gate revenue.paid_pilot_admission.tests.test_current_authority

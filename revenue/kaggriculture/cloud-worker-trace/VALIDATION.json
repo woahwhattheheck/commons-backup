@@ -1,0 +1,73 @@
+{
+  "operation_id": "titan-worker-trace-lines-20260908-01",
+  "compatibility_main": "1a4c1da3f5caa0f832de5b2e1773bc8583b69cec",
+  "target": "revenue/kaggriculture/cloud-execution-lab/reference/titan-current/deadline_adapter.py",
+  "baseline": {
+    "bytes": 12701,
+    "sha256": "6e677016ac93350a5eb0b6f3345fb94726e78d5416d20bb81e7e5bc8ffdc8da2",
+    "git_blob": "184ff5354451d764df95ffb5c952eecd0f4266f0"
+  },
+  "candidate": {
+    "bytes": 15458,
+    "sha256": "7f70a25dfb703f50aa83cd281a9722d575571da1073e605c5927fc35453ab486",
+    "git_blob": "664aa4f8a21368c388dfa6714406519b6535ef7f"
+  },
+  "publication_files": {
+    "probe_trace_flags.py": {
+      "bytes": 2533,
+      "sha256": "8d9ba7b02ede7e078983e3edaf01f39623d8e7f736fe062e61a2dc2c3f8fbfda",
+      "git_blob": "cf0c80f5d8936ca756ab2ea17cd0d0c26a862ce0"
+    },
+    "trace_compatibility_check.py": {
+      "bytes": 15762,
+      "sha256": "8cb2b0476832babd1679558ac4de68002255e38d5ded8eeda930fcda99d53dc4",
+      "git_blob": "8fe9fa239d5cd3eb75b69f28d88f6c6f9e0cea8f"
+    },
+    "worker-trace-lines.patch": {
+      "bytes": 5270,
+      "sha256": "23c86dfba1fa82723b2d2a5b5830fa0e0207f06157e4f812d73c8e9588bdd021",
+      "git_blob": "623fdec3859586f5dfab6f3597d868eaa2e1aad8"
+    }
+  },
+  "python": "CPython 3.13.5 on Linux",
+  "publication_recheck": {
+    "baseline": {
+      "tests": 23,
+      "failures": 9,
+      "errors": 0,
+      "passed": false,
+      "elapsed_seconds": 13.649993125999998,
+      "completed_report_sha256": "7b7573e59cb01837c136995474aa37259fd55d132d81faa9e0194d1aaa0e9f50"
+    },
+    "candidate": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "passed": true,
+      "elapsed_seconds": 10.876177782000013,
+      "completed_report_sha256": "dc024da6a5d21a914431dde8d09a0e780923570f778bce092120e81baf7d6b03"
+    }
+  },
+  "baseline_failing_methods": [
+    "test_callee_dynamically_mutes_lines",
+    "test_local_none_return_matches_cpython",
+    "test_muted_callee_deadline",
+    "test_muted_caller_deadline",
+    "test_muted_without_global_tracer",
+    "test_nested_inner_identity",
+    "test_nested_outer_identity",
+    "test_suspended_generator_trace_restoration",
+    "test_untraced_suspended_generator_restores_flags"
+  ],
+  "orchestration_note": "Combined shell tool call returned a timeout. Both complete reports and final unittest summaries exist. No successful wrapper exit is claimed.",
+  "historical_entrypoint_evidence": {
+    "calls_per_arm": 6,
+    "all_completed": true,
+    "identical_actions": true,
+    "rerun_for_publication": false
+  },
+  "full_games_executed": 0,
+  "canonical_source_changed": false,
+  "current_archive_rebuilt": false,
+  "private_game_data_in_publication": false
+}

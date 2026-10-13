@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://commons.invalid/schemas/revenue-underwriter-output-v1.json",
+  "title": "Commons revenue underwriter receipt v1",
+  "type": "object",
+  "required": ["schema", "candidate_id", "canonical_url", "observed_at", "currency", "advertised_amount", "disposition", "reasons", "expected_cash_planning_range", "evidence", "input_sha256", "receipt_sha256", "booking_authority", "external_action_authority"],
+  "properties": {
+    "schema": {"const": "commons-revenue-underwriter/v1"},
+    "disposition": {"enum": ["pursue", "watch", "reject"]},
+    "booking_authority": {"const": false},
+    "external_action_authority": {"const": false},
+    "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

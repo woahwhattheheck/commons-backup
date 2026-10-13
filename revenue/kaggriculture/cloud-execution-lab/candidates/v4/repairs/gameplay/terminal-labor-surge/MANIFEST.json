@@ -1,0 +1,24 @@
+{
+  "schema": "titan-v4-component-manifest/v1",
+  "component": "terminal-labor-surge",
+  "owner": "ASTRA-TERMINUS",
+  "kind": "gameplay-source-component",
+  "status": "tested_default_off",
+  "files": [
+    "terminal_labor_surge.py",
+    "test_terminal_labor_surge.py",
+    "README.md",
+    "RECEIPT.json",
+    "MANIFEST.json"
+  ],
+  "source_sha256": "e90763f448f9c3a3ea622ce2c849872dd0c5127a9da6998dda43544749c7919d",
+  "test_sha256": "1c02234d5b7e04dd54bba4e69a2cb2da15c815185b8e6336d8b07dfea32be7c6",
+  "engine_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "composition": {
+    "requires": ["terminal.py assign_routes at step697 OR terminal-composition/T05 committed route + before-market snapshots at step698+"],
+    "superseded_donor_pr": 12762,
+    "before": ["downstream terminal SELL execution"],
+    "conflicts": ["future executable HIRE reindexing", "cash-spending current terminal market prefix"],
+    "activation": "default_off"
+  }
+}

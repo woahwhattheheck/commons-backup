@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/architecture/path-manifest.schema.json",
+  "title": "Commons path and subsystem manifest",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "participation_effect",
+    "evaluation",
+    "classes",
+    "rules",
+    "fallback"
+  ],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema": {"const": "commons-path-manifest-v1"},
+    "schema_version": {"const": 1},
+    "participation_effect": {"const": "NONE"},
+    "evaluation": {"const": "FIRST_MATCH"},
+    "classes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "generator_contracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "symbol", "producer", "tests"],
+        "properties": {
+          "id": {"type": "string"},
+          "source": {"type": "string"},
+          "symbol": {"type": "string"},
+          "producer": {"type": "string"},
+          "path_semantics": {"enum": ["MIXED_STAGING_AND_GENERATED"]},
+          "tests": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/rule"}
+    },
+    "fallback": {"$ref": "#/$defs/rule"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "patterns",
+        "classification",
+        "subsystem",
+        "producer",
+        "tests",
+        "flags"
+      ],
+      "properties": {
+        "id": {"type": "string"},
+        "patterns": {"type": "array", "items": {"type": "string"}},
+        "classification": {"type": "string"},
+        "subsystem": {"type": "string"},
+        "producer": {"type": ["string", "null"]},
+        "tests": {"type": "array", "items": {"type": "string"}},
+        "flags": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

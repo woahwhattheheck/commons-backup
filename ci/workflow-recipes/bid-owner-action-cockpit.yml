@@ -1,0 +1,47 @@
+name: bid-owner-action-cockpit
+
+on:
+  pull_request:
+    paths:
+      - "revenue/bid_owner_action_cockpit/**"
+      - ".github/workflows/bid-owner-action-cockpit.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/bid_owner_action_cockpit/**"
+      - ".github/workflows/bid-owner-action-cockpit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Byte-compile
+        run: |
+          python -m py_compile \
+            revenue/bid_owner_action_cockpit/core.py \
+            revenue/bid_owner_action_cockpit/cli.py \
+            revenue/bid_owner_action_cockpit/test_core.py \
+            revenue/bid_owner_action_cockpit/test_dependency_closure.py \
+            revenue/bid_owner_action_cockpit/test_cli.py \
+            revenue/bid_owner_action_cockpit/test_fixture.py
+      - name: Focused tests
+        run: |
+          python -m unittest \
+            revenue.bid_owner_action_cockpit.test_core \
+            revenue.bid_owner_action_cockpit.test_dependency_closure \
+            revenue.bid_owner_action_cockpit.test_cli \
+            revenue.bid_owner_action_cockpit.test_fixture
+      - name: Optimized focused tests
+        run: |
+          python -O -m unittest \
+            revenue.bid_owner_action_cockpit.test_core \
+            revenue.bid_owner_action_cockpit.test_dependency_closure \
+            revenue.bid_owner_action_cockpit.test_cli \
+            revenue.bid_owner_action_cockpit.test_fixture

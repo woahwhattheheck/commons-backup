@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/production_survival/acceptance.schema.json",
+  "title": "Production survival buyer acceptance event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "stage",
+    "state",
+    "offer_id",
+    "currency",
+    "fixed_amount",
+    "buyer_ref",
+    "idempotency_key",
+    "created_at",
+    "source",
+    "terms",
+    "lineage",
+    "facts",
+    "next_stage"
+  ],
+  "properties": {
+    "schema_version": {"const": "production-survival-acceptance/v1"},
+    "kind": {"const": "PRODUCTION_SURVIVAL_ACCEPTANCE_RECEIPT"},
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^(purchase-intent|terms-issued|acceptance)-[0-9a-f]{24}$",
+      "maxLength": 40
+    },
+    "stage": {"enum": ["PURCHASE_INTENT", "TERMS_ISSUED", "ACCEPTANCE"]},
+    "state": {"enum": ["RECORDED", "ACCEPTED"]},
+    "offer_id": {"const": "same-day-agent-survival-proof"},
+    "currency": {"const": "USD"},
+    "fixed_amount": {"const": 2500},
+    "buyer_ref": {
+      "type": "string",
+      "pattern": "^buyer_[0-9a-f]{32,64}$",
+      "maxLength": 70
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "maxLength": 71
+    },
+    "created_at": {"type": "string", "format": "date-time", "maxLength": 40},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "message_ref",
+        "message_sha256",
+        "received_at",
+        "classification",
+        "operator_attestation"
+      ],
+      "properties": {
+        "message_ref": {
+          "type": "string",
+          "pattern": "^opaque:[A-Za-z0-9._-]{8,200}$",
+          "maxLength": 207
+        },
+        "message_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "received_at": {"type": "string", "format": "date-time", "maxLength": 40},
+        "classification": {"enum": ["POSITIVE", "TERMS_ISSUED", "WRITTEN_ACCEPTANCE"]},
+        "operator_attestation": {
+          "enum": [
+            "AUTHORIZED_OPERATOR_VERIFIED_POSITIVE_SIGNAL",
+            "AUTHORIZED_OPERATOR_VERIFIED_TERMS_SENT",
+            "AUTHORIZED_OPERATOR_VERIFIED_EXACT_TERMS_ACCEPTANCE"
+          ]
+        }
+      }
+    },
+    "terms": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "offer_id",
+            "currency",
+            "fixed_amount",
+            "given",
+            "when",
+            "then",
+            "environment",
+            "terms_sent_at",
+            "window_start",
+            "window_end",
+            "timezone",
+            "refund_choice",
+            "proof_claims",
+            "exclusions",
+            "contract_nonce"
+          ],
+          "properties": {
+            "offer_id": {"const": "same-day-agent-survival-proof"},
+            "currency": {"const": "USD"},
+            "fixed_amount": {"const": 2500},
+            "given": {"type": "string", "minLength": 1, "maxLength": 600},
+            "when": {"type": "string", "minLength": 1, "maxLength": 600},
+            "then": {"type": "string", "minLength": 1, "maxLength": 600},
+            "environment": {"type": "string", "minLength": 1, "maxLength": 600},
+            "terms_sent_at": {"type": "string", "format": "date-time", "maxLength": 40},
+            "window_start": {"type": "string", "format": "date-time", "maxLength": 40},
+            "window_end": {"type": "string", "format": "date-time", "maxLength": 40},
+            "timezone": {"const": "America/New_York"},
+            "refund_choice": {
+              "enum": ["REFUND_IF_MISSED", "ONE_FREE_NEXT_BUSINESS_DAY_REPAIR"]
+            },
+            "proof_claims": {
+              "const": [
+                "synthetic file-backed effect",
+                "intentional process crash",
+                "static public receipt"
+              ]
+            },
+            "exclusions": {
+              "const": [
+                "authentication",
+                "billing",
+                "credentials",
+                "ongoing hosting or SLA",
+                "PII or PHI",
+                "private data",
+                "production migration",
+                "White Box or model-file work"
+              ]
+            },
+            "contract_nonce": {"type": "string", "pattern": "^nonce_[0-9a-f]{32}$"}
+          }
+        }
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intent_receipt_id",
+        "terms_receipt_id",
+        "prior_receipt_sha256",
+        "terms_packet_sha256",
+        "contract_id",
+        "contract_sha256"
+      ],
+      "properties": {
+        "intent_receipt_id": {
+          "type": ["string", "null"],
+          "pattern": "^purchase-intent-[0-9a-f]{24}$",
+          "maxLength": 40
+        },
+        "terms_receipt_id": {
+          "type": ["string", "null"],
+          "pattern": "^terms-issued-[0-9a-f]{24}$",
+          "maxLength": 37
+        },
+        "prior_receipt_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "terms_packet_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "contract_id": {
+          "type": ["string", "null"],
+          "pattern": "^contract-[0-9a-f]{24}$",
+          "maxLength": 33
+        },
+        "contract_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "buyer_signal",
+        "legal_acceptance",
+        "invoice_state",
+        "authorization_state",
+        "settlement_state",
+        "payout_state",
+        "bank_available_state",
+        "delivery_started",
+        "clock_started",
+        "collected_cash_usd"
+      ],
+      "properties": {
+        "buyer_signal": {
+          "enum": ["PURCHASE_INTENT", "TERMS_ISSUED", "EXACT_WRITTEN_ACCEPTANCE"]
+        },
+        "legal_acceptance": {"enum": ["NOT_LANDED", "OWNER_REPORTED"]},
+        "invoice_state": {"const": "NOT_LANDED"},
+        "authorization_state": {"const": "NOT_LANDED"},
+        "settlement_state": {"const": "NOT_LANDED"},
+        "payout_state": {"const": "NOT_LANDED"},
+        "bank_available_state": {"const": "NOT_LANDED"},
+        "delivery_started": {"const": false},
+        "clock_started": {"const": false},
+        "collected_cash_usd": {"const": 0}
+      }
+    },
+    "next_stage": {
+      "enum": ["ISSUE_BINARY_TERMS", "EXACT_WRITTEN_ACCEPTANCE", "OWNER_HOSTED_INVOICE"]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"stage": {"const": "PURCHASE_INTENT"}}, "required": ["stage"]},
+      "then": {
+        "properties": {
+          "state": {"const": "RECORDED"},
+          "terms": {"type": "null"},
+          "next_stage": {"const": "ISSUE_BINARY_TERMS"},
+          "facts": {
+            "properties": {
+              "buyer_signal": {"const": "PURCHASE_INTENT"},
+              "legal_acceptance": {"const": "NOT_LANDED"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stage": {"const": "TERMS_ISSUED"}}, "required": ["stage"]},
+      "then": {
+        "properties": {
+          "state": {"const": "RECORDED"},
+          "terms": {"type": "object"},
+          "next_stage": {"const": "EXACT_WRITTEN_ACCEPTANCE"},
+          "facts": {
+            "properties": {
+              "buyer_signal": {"const": "TERMS_ISSUED"},
+              "legal_acceptance": {"const": "NOT_LANDED"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stage": {"const": "ACCEPTANCE"}}, "required": ["stage"]},
+      "then": {
+        "properties": {
+          "state": {"const": "ACCEPTED"},
+          "terms": {"type": "object"},
+          "next_stage": {"const": "OWNER_HOSTED_INVOICE"},
+          "facts": {
+            "properties": {
+              "buyer_signal": {"const": "EXACT_WRITTEN_ACCEPTANCE"},
+              "legal_acceptance": {"const": "OWNER_REPORTED"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

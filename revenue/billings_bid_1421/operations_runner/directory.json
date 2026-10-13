@@ -1,0 +1,84 @@
+{
+  "schema": "commons-billings-bid-1421-operations-runner-directory-v1",
+  "leftover_id": "billings-bid-1421-operations-runner-20260831-01",
+  "environment": "NONPRODUCTION",
+  "clock": "2026-08-31T12:00:00Z",
+  "cash_usd": 0,
+  "actors": {
+    "SYN-DISABLED": {
+      "role": "field_collector",
+      "disabled": true,
+      "sites": ["WEST"]
+    },
+    "SYN-FIELD-WEST": {
+      "role": "field_collector",
+      "disabled": false,
+      "sites": ["WEST"]
+    },
+    "SYN-FIELD-EAST": {
+      "role": "field_collector",
+      "disabled": false,
+      "sites": ["EAST"]
+    },
+    "SYN-ANALYST-PH": {
+      "role": "analyst",
+      "disabled": false,
+      "methods": [
+        {"method_id": "SM-4500-H+", "expires_at": "2027-12-31T00:00:00Z"}
+      ]
+    },
+    "SYN-ANALYST-EXPIRED": {
+      "role": "analyst",
+      "disabled": false,
+      "methods": [
+        {"method_id": "SM-4500-H+", "expires_at": "2026-01-01T00:00:00Z"}
+      ]
+    },
+    "SYN-QA-1": {
+      "role": "qa_reviewer",
+      "disabled": false
+    },
+    "SYN-REPORTER-1": {
+      "role": "reporting_approver",
+      "disabled": false
+    },
+    "SYN-INTEG-PH": {
+      "role": "integration",
+      "disabled": false,
+      "adapters": ["fixture-ph-meter-1"]
+    },
+    "SYN-SUPPORT-EXPIRED": {
+      "role": "support",
+      "disabled": false,
+      "window_start": "2026-01-01T00:00:00Z",
+      "window_end": "2026-06-01T00:00:00Z",
+      "approved_by": "SYN-ADMIN-1"
+    },
+    "SYN-SUPPORT-ACTIVE": {
+      "role": "support",
+      "disabled": false,
+      "window_start": "2026-08-01T00:00:00Z",
+      "window_end": "2026-09-30T00:00:00Z",
+      "approved_by": "SYN-ADMIN-1"
+    },
+    "SYN-PROPOSER-1": {
+      "role": "configurator",
+      "disabled": false
+    },
+    "SYN-ADMIN-1": {
+      "role": "administrator",
+      "disabled": false
+    }
+  },
+  "resources": {
+    "SAMPLE-EAST": {"kind": "sample", "site": "EAST"},
+    "SAMPLE-WEST": {"kind": "sample", "site": "WEST"},
+    "RESULT-PH-1": {"kind": "result", "method_id": "SM-4500-H+", "entered_by": "SYN-ANALYST-PH", "site": "WEST"},
+    "RESULT-TOC-1": {"kind": "result", "method_id": "SM-5310-B", "entered_by": "SYN-ANALYST-PH", "site": "WEST"},
+    "REPORT-DRAFT-1": {"kind": "report", "reconciled": false, "approved": false},
+    "REPORT-READY-REPLAY": {"kind": "report", "reconciled": true, "approved": true},
+    "CHANGE-001": {"kind": "change", "proposer": "SYN-PROPOSER-1", "status": "proposed"},
+    "TICKET-1": {"kind": "ticket"},
+    "AUDIT-LOG": {"kind": "audit_log"}
+  }
+}

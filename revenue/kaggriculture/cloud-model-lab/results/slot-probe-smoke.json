@@ -1,0 +1,684 @@
+{
+ "summary": {
+  "cards": 3,
+  "decoded": 3,
+  "syntax_rejections": 0,
+  "slots_authored": 12,
+  "slots_passed": 12,
+  "slots_engine_acted": 0,
+  "slots_paying_effect": 0,
+  "cards_disturbing_route": 0,
+  "wall_s": 311.0,
+  "mean_inference_s": 100.61
+ },
+ "cards_meta": {
+  "9600011": {
+   "cash": 1798.0,
+   "opponent_cash": 1798.0,
+   "opponent": {
+    "kind": "builtin",
+    "spec": "arlene",
+    "label": "arlene"
+   },
+   "steps": 240,
+   "cards": 38
+  }
+ },
+ "rows": [
+  {
+   "seed": 9600011,
+   "seat": 0,
+   "step": 20,
+   "day": 0,
+   "hour": 20,
+   "idle_units": [
+    0,
+    1,
+    4,
+    5
+   ],
+   "offered": [
+    {
+     "unit": 0,
+     "op": [
+      "HARVEST"
+     ],
+     "why": "plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue"
+    },
+    {
+     "unit": 5,
+     "op": [
+      "HARVEST"
+     ],
+     "why": "plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue"
+    }
+   ],
+   "prompt": "RULES AND ECONOMY\nscore = CASH at the end; shed and carried stock score 0. 699 decisions left, last is step 718; 4 turns left today; 24 turns per day.\ncrops  WHEAT seed$10 first2d cap6 window2-4d | CARROT seed$20 first2d cap4 window2-3d | TOMATO seed$50 first8d cap4 ongoing every1d | STRAWBERRY seed$100 first10d cap4 ongoing every2d | MELON seed$80 first10d cap6 window6-12d\nanimals  GOOSE $300 on COOP gives EGG first4d every1d hold4 | COW $400 on PASTURE gives MILK first8d every2d hold6 | SHEEP $500 on PASTURE gives WOOL first6d every3d hold6\nshops  BAKERY:EGG+WHEAT | PIZZA_SHOP:MILK+TOMATO+WHEAT | BRUNCH_SPOT:EGG+WHEAT+STRAWBERRY | YARN_STORE:WOOL | ICE_CREAM_SHOP:STRAWBERRY+MILK+WHEAT | PET_CAFE:CARROT | SMOOTHIE_SHOP:STRAWBERRY+MILK | FARMERS_MARKET:WHEAT+CARROT+TOMATO+STRAWBERRY\nland NW free then NE $1000, SW $2000, SE $4000; HIRE 1,1,2,3,5,... per extra worker that day, workers released each night\na plant dies at the refresh after 2 unwatered days; a new plant's planting day already counts as one\nOPCODES (each stated once)\n  WATER t      resets that plant's unwatered streak; on a one-harvest crop inside its bonus window it also raises yield\n  HARVEST t    takes the tile's yield into the acting worker's hands; a one-harvest crop's tile is then cleared\n  PLANT c t    needs a seed of c and an EMPTY tile; the seed budget is joint across all workers this turn\n  FEED t       spends 1 WHEAT from the acting worker's hands and feeds that animal\n  CARE t       sets cared_today; the care bonus is granted at the daily refresh only if the animal is ALSO fed that day\n  COLLECT_FERTILIZER t  takes the fertilizer that animal has ready\n  FERTILIZE t  spends 1 FERTILIZER from the acting worker's hands\n  DIG t        removes a plant, a weed, or an EMPTY coop/pasture; it does NOT remove an installed animal\n  BUILD_COOP / BUILD_PASTURE t   needs an EMPTY tile; pays nothing until an animal is installed on it and fed\n  PLACE x      installs animal x when the worker stands on an EMPTY matching structure; otherwise it only deposits x into the shed\n  PICKUP x n   moves n of x from the shed into the worker's hands; shed access tiles only\n  DROP         moves everything the worker carries into the shed; shed access tiles only\n  NORTH/SOUTH/EAST/WEST  move one tile; PASS spends the worker's turn\n  ORDER: workers act in order (farmer, then hand0, hand1, ...), each on the tile as the previous workers left it. Sharing a tile is NOT a conflict: FEED then CARE on one animal both apply; FERTILIZE then WATER both apply, and watering a fertilized plant inside its window adds 2 instead of 1; HARVEST of a one-harvest crop clears the tile so a later worker can PLANT there. What does nothing is repeating the SAME action whose flag is already set (a second CARE, a second WATER), or a second PLACE of an animal once the structure is occupied\n\nOBJECTIVE  cash 24 vs opponent 24; unsold 3 in shed, 0 carried\nPLAN  none yet - set one in the plan field\n\nSTATE  day 0 hour 20, farm 10x10, quadrants NW\nshed 3/100 used, 97 room: WHEAT3\nseeds WHEAT1\nsell price CARROT35, EGG50, FERTILIZER100, MELON256, MILK169, STRAWBERRY128, TOMATO60, WHEAT28, WOOL206\ntown no shops yet\nTILES (declared once; ops below reference these ids)\n  t00 (0,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t10 (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t30 (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t40 (4,0) PLANT MELON age0d ripe_at10d yield1 not_watered_today; decays from step312, unwatered1, DIES at this refresh unless watered\n  t01 (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t11 (1,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t21 (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t31 (3,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t41 (4,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t02 (0,2) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t12 (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t22 (2,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t32 (3,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t03 (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t13 (1,3) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t23 (2,3) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t33 (3,3) SHEEP on PASTURE yield0 fed_today cared_today\n  t43 (4,3) COW on PASTURE yield0 not_fed_today cared_today\n  t04 (0,4) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t14 (1,4) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t34 (3,4) SHEEP on PASTURE yield0 fed_today cared_today\n  t44 (4,4) COW on PASTURE yield0 not_fed_today cared_today  [shed access]\n  empty tiles: t20, t42, t24\n  locked tiles: t50, t60, t70, t80, t90, t51, t61, t71, t81, t91, t52, t62, t72, t82, t92, t53, t63, t73, t83, t93, t54, t64, t74, t84, t94, t05, t15, t25, t35, t45, t55, t65, t75, t85, t95, t06, t16, t26, t36, t46, t56, t66, t76, t86, t96, t07, t17, t27, t37, t47, t57, t67, t77, t87, t97, t08, t18, t28, t38, t48, t58, t68, t78, t88, t98, t09, t19, t29, t39, t49, t59, t69, t79, t89, t99\nWORKERS (position, what each carries, and the tile each stands on)\n  farmer on t23; carries nothing\n  hand0 on t02; carries nothing\n  hand1 on t40; carries nothing\n  hand2 on t10; carries nothing\n  hand3 on t11; carries nothing\n  hand4 on t13; carries nothing\nFEEDING (an installed animal pays its care bonus at the refresh only if FED that same day; FEED spends 1 WHEAT from the hands of the worker standing on it)\n  farmer holds 0 WHEAT; hand0 holds 0 WHEAT; hand1 holds 0 WHEAT; hand2 holds 0 WHEAT; hand3 holds 0 WHEAT; hand4 holds 0 WHEAT\n  shed holds 3 WHEAT; PICKUP WHEAT at a shed access tile to carry it to an animal\n  t33 SHEEP yield0 fed_today cared_today\n  t43 COW yield0 NOT fed today cared_today\n  t34 SHEEP yield0 fed_today cared_today\n  t44 COW yield0 NOT fed today cared_today\nTURN RULES\n  joint seed budget WHEAT1; exceeding a crop's seeds turns EVERY PLANT of it into PASS\n  all worker actions resolve before any market order: goods dropped this turn can be sold this turn, a seed bought this turn cannot be planted until next\n  market orders run in sequence on one cash balance and 97 shed room, repricing per unit; at most 10 orders\nALLOWED THIS TURN (ids refer to the tiles above)\n  farmer: DIG@t23 | EAST->to (3,3) SHEEP on PASTURE yield0 fed_today cared_today | NORTH->to (2,2) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | SOUTH->to (2,4) empty | WEST->to (1,3) PLANT MELON age0d ripe_at10d yield1 watered_today, where hand4 already stands\n  hands[0]: DIG@t02 | EAST->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | NORTH->to (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today | PASS | SOUTH->to (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[1]: DIG@t40 | EAST->to (5,0) LOCKED | PASS | SOUTH->to (4,1) PLANT MELON age0d ripe_at10d yield1 watered_today | WATER@t40 | WEST->to (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today\n  hands[2]: DIG@t10 | EAST->to (2,0) empty | PASS | SOUTH->to (1,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today, where hand3 already stands | WEST->to (0,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[3]: DIG@t11 | EAST->to (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today | NORTH->to (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today, where hand2 already stands | PASS | SOUTH->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[4]: DIG@t13 | EAST->to (2,3) PLANT MELON age0d ripe_at10d yield1 watered_today, where farmer already stands | NORTH->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | SOUTH->to (1,4) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  market: BUY_SEED CARROT | BUY_SEED WHEAT n<=2 | HIRE | SELL WHEAT n<=3\n\nOPEN SLOTS (the route is not using these; the engine would ignore what it plays there)\n  farmer on t23:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\n  hand0: open, nothing on its tile pays right now\n  hand3: open, nothing on its tile pays right now\n  hand4 on t13:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\nChoose one op per open slot from that slot's ALLOWED list above. PASS is allowed and is the right answer when nothing pays.\n",
+   "raw_output": "{\"plan\":\"Plant WHEAT at t20, Plant MELON at t42, Plant CARROT at t24, Plant MELON at t05, Plant MELON at t15, Plant MELON at t25, Plant MELON at t35, Plant MELON at t45, Plant MELON at t55, Plant MELON at t65,\",\"slots\":[{\"unit\":0,\"op\":[\"PASS\"]},{\"unit\":1,\"op\":[\"PASS\"]},{\"unit\":4,\"op\":[\"PASS\"]},{\"unit\":5,\"op\":[\"PASS\"]}]}",
+   "error": null,
+   "rejected": null,
+   "slots": {
+    "0": [
+     "PASS"
+    ],
+    "1": [
+     "PASS"
+    ],
+    "4": [
+     "PASS"
+    ],
+    "5": [
+     "PASS"
+    ]
+   },
+   "plan": "Plant WHEAT at t20, Plant MELON at t42, Plant CARROT at t24, Plant MELON at t05, Plant MELON at t15, Plant MELON at t25, Plant MELON at t35, Plant MELON at t45, Plant MELON at t55, Plant MELON at t65,",
+   "timing_s": {
+    "constraint_calculation": 1.1535,
+    "prompt_build": 0.0014,
+    "model_inference": 246.185,
+    "decode_validation": 0.0003
+   },
+   "engine_counters": {
+    "init_time_in_second": 201.868995679,
+    "time_to_first_token_in_second": 159.1641810215,
+    "last_prefill_token_count": 3327,
+    "last_prefill_tokens_per_second": 20.999409056557575,
+    "last_decode_token_count": 120,
+    "last_decode_tokens_per_second": 1.3677060443718645
+   },
+   "engine": {
+    "slots": [
+     {
+      "unit": 0,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 1,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 4,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 5,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      }
+     }
+    ],
+    "disturbed_route_slots": [],
+    "merged_action": {
+     "farmer": [
+      "PASS"
+     ],
+     "hands": [
+      [
+       "PASS"
+      ],
+      [
+       "WATER"
+      ],
+      [
+       "EAST"
+      ],
+      [
+       "PASS"
+      ],
+      [
+       "PASS"
+      ]
+     ],
+     "market": []
+    }
+   }
+  },
+  {
+   "seed": 9600011,
+   "seat": 0,
+   "step": 21,
+   "day": 0,
+   "hour": 21,
+   "idle_units": [
+    0,
+    1,
+    2,
+    4
+   ],
+   "offered": [
+    {
+     "unit": 0,
+     "op": [
+      "HARVEST"
+     ],
+     "why": "plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue"
+    },
+    {
+     "unit": 2,
+     "op": [
+      "HARVEST"
+     ],
+     "why": "plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue"
+    }
+   ],
+   "prompt": "RULES AND ECONOMY\nscore = CASH at the end; shed and carried stock score 0. 698 decisions left, last is step 718; 3 turns left today; 24 turns per day.\ncrops  WHEAT seed$10 first2d cap6 window2-4d | CARROT seed$20 first2d cap4 window2-3d | TOMATO seed$50 first8d cap4 ongoing every1d | STRAWBERRY seed$100 first10d cap4 ongoing every2d | MELON seed$80 first10d cap6 window6-12d\nanimals  GOOSE $300 on COOP gives EGG first4d every1d hold4 | COW $400 on PASTURE gives MILK first8d every2d hold6 | SHEEP $500 on PASTURE gives WOOL first6d every3d hold6\nshops  BAKERY:EGG+WHEAT | PIZZA_SHOP:MILK+TOMATO+WHEAT | BRUNCH_SPOT:EGG+WHEAT+STRAWBERRY | YARN_STORE:WOOL | ICE_CREAM_SHOP:STRAWBERRY+MILK+WHEAT | PET_CAFE:CARROT | SMOOTHIE_SHOP:STRAWBERRY+MILK | FARMERS_MARKET:WHEAT+CARROT+TOMATO+STRAWBERRY\nland NW free then NE $1000, SW $2000, SE $4000; HIRE 1,1,2,3,5,... per extra worker that day, workers released each night\na plant dies at the refresh after 2 unwatered days; a new plant's planting day already counts as one\nOPCODES (each stated once)\n  WATER t      resets that plant's unwatered streak; on a one-harvest crop inside its bonus window it also raises yield\n  HARVEST t    takes the tile's yield into the acting worker's hands; a one-harvest crop's tile is then cleared\n  PLANT c t    needs a seed of c and an EMPTY tile; the seed budget is joint across all workers this turn\n  FEED t       spends 1 WHEAT from the acting worker's hands and feeds that animal\n  CARE t       sets cared_today; the care bonus is granted at the daily refresh only if the animal is ALSO fed that day\n  COLLECT_FERTILIZER t  takes the fertilizer that animal has ready\n  FERTILIZE t  spends 1 FERTILIZER from the acting worker's hands\n  DIG t        removes a plant, a weed, or an EMPTY coop/pasture; it does NOT remove an installed animal\n  BUILD_COOP / BUILD_PASTURE t   needs an EMPTY tile; pays nothing until an animal is installed on it and fed\n  PLACE x      installs animal x when the worker stands on an EMPTY matching structure; otherwise it only deposits x into the shed\n  PICKUP x n   moves n of x from the shed into the worker's hands; shed access tiles only\n  DROP         moves everything the worker carries into the shed; shed access tiles only\n  NORTH/SOUTH/EAST/WEST  move one tile; PASS spends the worker's turn\n  ORDER: workers act in order (farmer, then hand0, hand1, ...), each on the tile as the previous workers left it. Sharing a tile is NOT a conflict: FEED then CARE on one animal both apply; FERTILIZE then WATER both apply, and watering a fertilized plant inside its window adds 2 instead of 1; HARVEST of a one-harvest crop clears the tile so a later worker can PLANT there. What does nothing is repeating the SAME action whose flag is already set (a second CARE, a second WATER), or a second PLACE of an animal once the structure is occupied\n\nOBJECTIVE  cash 24 vs opponent 24; unsold 3 in shed, 0 carried\nPLAN  Plant WHEAT at t20, Plant MELON at t42, Plant CARROT at t24, Plant MELON at t05, Plant MELON at t15, Plant MELON at t25, Plant MELON at t35, Plant MELON at t45, Plant MELON at t55, Plant MELON at t65,\n\nSTATE  day 0 hour 21, farm 10x10, quadrants NW\nshed 3/100 used, 97 room: WHEAT3\nseeds WHEAT1\nsell price CARROT35, EGG50, FERTILIZER100, MELON256, MILK169, STRAWBERRY128, TOMATO60, WHEAT28, WOOL206\ntown no shops yet\nTILES (declared once; ops below reference these ids)\n  t00 (0,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t10 (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t30 (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t40 (4,0) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t01 (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t11 (1,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t21 (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t31 (3,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t41 (4,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t02 (0,2) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t12 (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t22 (2,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t32 (3,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t03 (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t13 (1,3) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t23 (2,3) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t33 (3,3) SHEEP on PASTURE yield0 fed_today cared_today\n  t43 (4,3) COW on PASTURE yield0 not_fed_today cared_today\n  t04 (0,4) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t14 (1,4) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t34 (3,4) SHEEP on PASTURE yield0 fed_today cared_today\n  t44 (4,4) COW on PASTURE yield0 not_fed_today cared_today  [shed access]\n  empty tiles: t20, t42, t24\n  locked tiles: t50, t60, t70, t80, t90, t51, t61, t71, t81, t91, t52, t62, t72, t82, t92, t53, t63, t73, t83, t93, t54, t64, t74, t84, t94, t05, t15, t25, t35, t45, t55, t65, t75, t85, t95, t06, t16, t26, t36, t46, t56, t66, t76, t86, t96, t07, t17, t27, t37, t47, t57, t67, t77, t87, t97, t08, t18, t28, t38, t48, t58, t68, t78, t88, t98, t09, t19, t29, t39, t49, t59, t69, t79, t89, t99\nWORKERS (position, what each carries, and the tile each stands on)\n  farmer on t23; carries nothing\n  hand0 on t02; carries nothing\n  hand1 on t40; carries nothing\n  hand2 on t20; carries nothing\n  hand3 on t11; carries nothing\n  hand4 on t13; carries nothing\nFEEDING (an installed animal pays its care bonus at the refresh only if FED that same day; FEED spends 1 WHEAT from the hands of the worker standing on it)\n  farmer holds 0 WHEAT; hand0 holds 0 WHEAT; hand1 holds 0 WHEAT; hand2 holds 0 WHEAT; hand3 holds 0 WHEAT; hand4 holds 0 WHEAT\n  shed holds 3 WHEAT; PICKUP WHEAT at a shed access tile to carry it to an animal\n  t33 SHEEP yield0 fed_today cared_today\n  t43 COW yield0 NOT fed today cared_today\n  t34 SHEEP yield0 fed_today cared_today\n  t44 COW yield0 NOT fed today cared_today\nTURN RULES\n  joint seed budget WHEAT1; exceeding a crop's seeds turns EVERY PLANT of it into PASS\n  all worker actions resolve before any market order: goods dropped this turn can be sold this turn, a seed bought this turn cannot be planted until next\n  market orders run in sequence on one cash balance and 97 shed room, repricing per unit; at most 10 orders\nALLOWED THIS TURN (ids refer to the tiles above)\n  farmer: DIG@t23 | EAST->to (3,3) SHEEP on PASTURE yield0 fed_today cared_today | NORTH->to (2,2) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | SOUTH->to (2,4) empty | WEST->to (1,3) PLANT MELON age0d ripe_at10d yield1 watered_today, where hand4 already stands\n  hands[0]: DIG@t02 | EAST->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | NORTH->to (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today | PASS | SOUTH->to (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[1]: DIG@t40 | EAST->to (5,0) LOCKED | PASS | SOUTH->to (4,1) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today\n  hands[2]: BUILD_COOP@t20 | BUILD_PASTURE@t20 | EAST->to (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | PLANT WHEAT@t20 | SOUTH->to (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[3]: DIG@t11 | EAST->to (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today | NORTH->to (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today | PASS | SOUTH->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[4]: DIG@t13 | EAST->to (2,3) PLANT MELON age0d ripe_at10d yield1 watered_today, where farmer already stands | NORTH->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | SOUTH->to (1,4) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  market: BUY_SEED CARROT | BUY_SEED WHEAT n<=2 | HIRE | SELL WHEAT n<=3\n\nOPEN SLOTS (the route is not using these; the engine would ignore what it plays there)\n  farmer on t23:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\n  hand0: open, nothing on its tile pays right now\n  hand1 on t40:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\n  hand3: open, nothing on its tile pays right now\n  hand4 on t13:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\nChoose one op per open slot from that slot's ALLOWED list above. PASS is allowed and is the right answer when nothing pays.\n",
+   "raw_output": "{\"plan\":\"farmer: PASS, hand0: PASS, hand1: PASS, hand2: PASS, hand3: PASS, hand4: PASS, market: PASS\",\"slots\":[{\"unit\":0,\"op\":[\"PASS\"]},{\"unit\":1,\"op\":[\"PASS\"]},{\"unit\":2,\"op\":[\"PASS\"]},{\"unit\":4,\"op\":[\"PASS\"]}]}",
+   "error": null,
+   "rejected": null,
+   "slots": {
+    "0": [
+     "PASS"
+    ],
+    "1": [
+     "PASS"
+    ],
+    "2": [
+     "PASS"
+    ],
+    "4": [
+     "PASS"
+    ]
+   },
+   "plan": "farmer: PASS, hand0: PASS, hand1: PASS, hand2: PASS, hand3: PASS, hand4: PASS, market: PASS",
+   "timing_s": {
+    "constraint_calculation": 0.0303,
+    "prompt_build": 0.0005,
+    "model_inference": 30.022,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 200.858590184,
+    "time_to_first_token_in_second": 23.2002526065,
+    "last_prefill_token_count": 3482,
+    "last_prefill_tokens_per_second": 150.70769072434598,
+    "last_decode_token_count": 72,
+    "last_decode_tokens_per_second": 10.424912484369134
+   },
+   "engine": {
+    "slots": [
+     {
+      "unit": 0,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 1,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 2,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 4,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      }
+     }
+    ],
+    "disturbed_route_slots": [],
+    "merged_action": {
+     "farmer": [
+      "PASS"
+     ],
+     "hands": [
+      [
+       "PASS"
+      ],
+      [
+       "PASS"
+      ],
+      [
+       "PLANT",
+       "WHEAT"
+      ],
+      [
+       "PASS"
+      ],
+      [
+       "PASS"
+      ]
+     ],
+     "market": []
+    }
+   }
+  },
+  {
+   "seed": 9600011,
+   "seat": 0,
+   "step": 22,
+   "day": 0,
+   "hour": 22,
+   "idle_units": [
+    0,
+    1,
+    2,
+    4
+   ],
+   "offered": [
+    {
+     "unit": 0,
+     "op": [
+      "HARVEST"
+     ],
+     "why": "plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue"
+    },
+    {
+     "unit": 2,
+     "op": [
+      "HARVEST"
+     ],
+     "why": "plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue"
+    }
+   ],
+   "prompt": "RULES AND ECONOMY\nscore = CASH at the end; shed and carried stock score 0. 697 decisions left, last is step 718; 2 turns left today; 24 turns per day.\ncrops  WHEAT seed$10 first2d cap6 window2-4d | CARROT seed$20 first2d cap4 window2-3d | TOMATO seed$50 first8d cap4 ongoing every1d | STRAWBERRY seed$100 first10d cap4 ongoing every2d | MELON seed$80 first10d cap6 window6-12d\nanimals  GOOSE $300 on COOP gives EGG first4d every1d hold4 | COW $400 on PASTURE gives MILK first8d every2d hold6 | SHEEP $500 on PASTURE gives WOOL first6d every3d hold6\nshops  BAKERY:EGG+WHEAT | PIZZA_SHOP:MILK+TOMATO+WHEAT | BRUNCH_SPOT:EGG+WHEAT+STRAWBERRY | YARN_STORE:WOOL | ICE_CREAM_SHOP:STRAWBERRY+MILK+WHEAT | PET_CAFE:CARROT | SMOOTHIE_SHOP:STRAWBERRY+MILK | FARMERS_MARKET:WHEAT+CARROT+TOMATO+STRAWBERRY\nland NW free then NE $1000, SW $2000, SE $4000; HIRE 1,1,2,3,5,... per extra worker that day, workers released each night\na plant dies at the refresh after 2 unwatered days; a new plant's planting day already counts as one\nOPCODES (each stated once)\n  WATER t      resets that plant's unwatered streak; on a one-harvest crop inside its bonus window it also raises yield\n  HARVEST t    takes the tile's yield into the acting worker's hands; a one-harvest crop's tile is then cleared\n  PLANT c t    needs a seed of c and an EMPTY tile; the seed budget is joint across all workers this turn\n  FEED t       spends 1 WHEAT from the acting worker's hands and feeds that animal\n  CARE t       sets cared_today; the care bonus is granted at the daily refresh only if the animal is ALSO fed that day\n  COLLECT_FERTILIZER t  takes the fertilizer that animal has ready\n  FERTILIZE t  spends 1 FERTILIZER from the acting worker's hands\n  DIG t        removes a plant, a weed, or an EMPTY coop/pasture; it does NOT remove an installed animal\n  BUILD_COOP / BUILD_PASTURE t   needs an EMPTY tile; pays nothing until an animal is installed on it and fed\n  PLACE x      installs animal x when the worker stands on an EMPTY matching structure; otherwise it only deposits x into the shed\n  PICKUP x n   moves n of x from the shed into the worker's hands; shed access tiles only\n  DROP         moves everything the worker carries into the shed; shed access tiles only\n  NORTH/SOUTH/EAST/WEST  move one tile; PASS spends the worker's turn\n  ORDER: workers act in order (farmer, then hand0, hand1, ...), each on the tile as the previous workers left it. Sharing a tile is NOT a conflict: FEED then CARE on one animal both apply; FERTILIZE then WATER both apply, and watering a fertilized plant inside its window adds 2 instead of 1; HARVEST of a one-harvest crop clears the tile so a later worker can PLANT there. What does nothing is repeating the SAME action whose flag is already set (a second CARE, a second WATER), or a second PLACE of an animal once the structure is occupied\n\nOBJECTIVE  cash 24 vs opponent 24; unsold 3 in shed, 0 carried\nPLAN  farmer: PASS, hand0: PASS, hand1: PASS, hand2: PASS, hand3: PASS, hand4: PASS, market: PASS\n\nSTATE  day 0 hour 22, farm 10x10, quadrants NW\nshed 3/100 used, 97 room: WHEAT3\nseeds none\nsell price CARROT35, EGG50, FERTILIZER100, MELON256, MILK169, STRAWBERRY128, TOMATO60, WHEAT28, WOOL206\ntown no shops yet\nTILES (declared once; ops below reference these ids)\n  t00 (0,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t10 (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t20 (2,0) PLANT WHEAT age0d ripe_at2d yield1 not_watered_today; decays from step120, unwatered1, DIES at this refresh unless watered\n  t30 (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t40 (4,0) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t01 (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t11 (1,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t21 (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t31 (3,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t41 (4,1) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t02 (0,2) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t12 (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t22 (2,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t32 (3,2) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t03 (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today; decays from step120, unwatered1\n  t13 (1,3) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t23 (2,3) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t33 (3,3) SHEEP on PASTURE yield0 fed_today cared_today\n  t43 (4,3) COW on PASTURE yield0 not_fed_today cared_today\n  t04 (0,4) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t14 (1,4) PLANT MELON age0d ripe_at10d yield1 watered_today; decays from step312, unwatered1\n  t34 (3,4) SHEEP on PASTURE yield0 fed_today cared_today\n  t44 (4,4) COW on PASTURE yield0 not_fed_today cared_today  [shed access]\n  empty tiles: t42, t24\n  locked tiles: t50, t60, t70, t80, t90, t51, t61, t71, t81, t91, t52, t62, t72, t82, t92, t53, t63, t73, t83, t93, t54, t64, t74, t84, t94, t05, t15, t25, t35, t45, t55, t65, t75, t85, t95, t06, t16, t26, t36, t46, t56, t66, t76, t86, t96, t07, t17, t27, t37, t47, t57, t67, t77, t87, t97, t08, t18, t28, t38, t48, t58, t68, t78, t88, t98, t09, t19, t29, t39, t49, t59, t69, t79, t89, t99\nWORKERS (position, what each carries, and the tile each stands on)\n  farmer on t23; carries nothing\n  hand0 on t02; carries nothing\n  hand1 on t40; carries nothing\n  hand2 on t20; carries nothing\n  hand3 on t11; carries nothing\n  hand4 on t13; carries nothing\nFEEDING (an installed animal pays its care bonus at the refresh only if FED that same day; FEED spends 1 WHEAT from the hands of the worker standing on it)\n  farmer holds 0 WHEAT; hand0 holds 0 WHEAT; hand1 holds 0 WHEAT; hand2 holds 0 WHEAT; hand3 holds 0 WHEAT; hand4 holds 0 WHEAT\n  shed holds 3 WHEAT; PICKUP WHEAT at a shed access tile to carry it to an animal\n  t33 SHEEP yield0 fed_today cared_today\n  t43 COW yield0 NOT fed today cared_today\n  t34 SHEEP yield0 fed_today cared_today\n  t44 COW yield0 NOT fed today cared_today\nTURN RULES\n  joint seed budget none; exceeding a crop's seeds turns EVERY PLANT of it into PASS\n  all worker actions resolve before any market order: goods dropped this turn can be sold this turn, a seed bought this turn cannot be planted until next\n  market orders run in sequence on one cash balance and 97 shed room, repricing per unit; at most 10 orders\nALLOWED THIS TURN (ids refer to the tiles above)\n  farmer: DIG@t23 | EAST->to (3,3) SHEEP on PASTURE yield0 fed_today cared_today | NORTH->to (2,2) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | SOUTH->to (2,4) empty | WEST->to (1,3) PLANT MELON age0d ripe_at10d yield1 watered_today, where hand4 already stands\n  hands[0]: DIG@t02 | EAST->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | NORTH->to (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today | PASS | SOUTH->to (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[1]: DIG@t40 | EAST->to (5,0) LOCKED | PASS | SOUTH->to (4,1) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today\n  hands[2]: DIG@t20 | EAST->to (3,0) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | SOUTH->to (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today | WATER@t20 | WEST->to (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[3]: DIG@t11 | EAST->to (2,1) PLANT MELON age0d ripe_at10d yield1 watered_today | NORTH->to (1,0) PLANT WHEAT age0d ripe_at2d yield1 watered_today | PASS | SOUTH->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (0,1) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  hands[4]: DIG@t13 | EAST->to (2,3) PLANT MELON age0d ripe_at10d yield1 watered_today, where farmer already stands | NORTH->to (1,2) PLANT MELON age0d ripe_at10d yield1 watered_today | PASS | SOUTH->to (1,4) PLANT MELON age0d ripe_at10d yield1 watered_today | WEST->to (0,3) PLANT WHEAT age0d ripe_at2d yield1 watered_today\n  market: BUY_SEED CARROT | BUY_SEED WHEAT n<=2 | HIRE | SELL WHEAT n<=3\n\nOPEN SLOTS (the route is not using these; the engine would ignore what it plays there)\n  farmer on t23:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\n  hand0: open, nothing on its tile pays right now\n  hand1 on t40:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\n  hand3: open, nothing on its tile pays right now\n  hand4 on t13:\n    HARVEST -- plant holds 1/6 MELON; HARVEST DESTROYS a non-ongoing crop (467-468). age 0d, max_yield_day 12: 5 more unit(s) would still accrue [not covered again this rest of episode]\nChoose one op per open slot from that slot's ALLOWED list above. PASS is allowed and is the right answer when nothing pays.\n",
+   "raw_output": "{\"plan\":\"farmer: PASS, hand0: PASS, hand1: PASS, hand2: PASS, hand3: PASS, hand4: PASS, market: PASS\",\"slots\":[{\"unit\":0,\"op\":[\"PASS\"]},{\"unit\":1,\"op\":[\"PASS\"]},{\"unit\":2,\"op\":[\"PASS\"]},{\"unit\":4,\"op\":[\"PASS\"]}]}",
+   "error": null,
+   "rejected": null,
+   "slots": {
+    "0": [
+     "PASS"
+    ],
+    "1": [
+     "PASS"
+    ],
+    "2": [
+     "PASS"
+    ],
+    "4": [
+     "PASS"
+    ]
+   },
+   "plan": "farmer: PASS, hand0: PASS, hand1: PASS, hand2: PASS, hand3: PASS, hand4: PASS, market: PASS",
+   "timing_s": {
+    "constraint_calculation": 0.0264,
+    "prompt_build": 0.0004,
+    "model_inference": 25.629,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 200.49386950099998,
+    "time_to_first_token_in_second": 19.223843745499998,
+    "last_prefill_token_count": 3460,
+    "last_prefill_tokens_per_second": 180.83273145349392,
+    "last_decode_token_count": 72,
+    "last_decode_tokens_per_second": 11.093914473662036
+   },
+   "engine": {
+    "slots": [
+     {
+      "unit": 0,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 1,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 2,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "MELON",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 312,
+       "fertilized_until_day": -1
+      }
+     },
+     {
+      "unit": 4,
+      "op": [
+       "PASS"
+      ],
+      "baseline_op": [
+       "PASS"
+      ],
+      "baseline_effect": "none",
+      "effect": "none",
+      "acted": false,
+      "tile_before": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      },
+      "tile_after": {
+       "kind": "PLANT",
+       "crop": "WHEAT",
+       "planted_day": 0,
+       "watered_today": true,
+       "consecutive_unwatered": 1,
+       "yield_units": 1,
+       "max_lifespan_step": 120,
+       "fertilized_until_day": -1
+      }
+     }
+    ],
+    "disturbed_route_slots": [],
+    "merged_action": {
+     "farmer": [
+      "PASS"
+     ],
+     "hands": [
+      [
+       "PASS"
+      ],
+      [
+       "PASS"
+      ],
+      [
+       "WATER"
+      ],
+      [
+       "PASS"
+      ],
+      [
+       "PASS"
+      ]
+     ],
+     "market": []
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+  "operation": "uiowa047-cleanup-completion-history-osprey-r2-20260919",
+  "seat": "ZZ-OSPREY-86C1-CLEANUP-R2",
+  "model": "GPT-6 Astra Pro",
+  "base_commit": "a186ac1b42909982830cd8f4ac9e44a9376638cd",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "execution": "ephemeral cloud, exact source subset; not GitHub Actions or whole repository",
+  "suites": {
+    "normal": {"methods": 64, "result": "PASS"},
+    "optimized": {"methods": 64, "result": "PASS"},
+    "resource_warning_strict": {"methods": 64, "result": "PASS"},
+    "negative_baseline": {"methods": 24, "assertion_or_subtest_failures": 91, "result": "EXPECTED_FAILURE"}
+  },
+  "independent_model": {"histories": 343, "cutoffs_per_history": 3, "comparisons": 1029, "result": "PASS"},
+  "existing_example": "JSON equal; Markdown byte-identical",
+  "source_blobs": {
+    "assess.py": "1ca0dca80e711b8f900d9bf2f89286aced6111cc",
+    "test_cleanup_history.py": "8ee92bc210de5765f3d498709540a540116ef0e9",
+    "example.py": "d44f954a80c95b2710ea4df552f72548206f2cda",
+    "test_assess.py": "55cf38b05aebc5d9ce4480f74bdb25f83add875a"
+  },
+  "reproduction": {
+    "synthetic": true,
+    "cutoff": "2026-09-19T12:00:00Z",
+    "before_repair": {
+      "successful_cleanup_only": {"current_evidence_eligible": false, "case_status": "unknown", "supported_cases": 0, "limitations": {"ACTIVE_AFTER_CLEANUP": 1, "CASE_EVIDENCE_LIMITED": 1}},
+      "same_history_plus_failed_retry": {"current_evidence_eligible": true, "case_status": "supported", "supported_cases": 1, "limitations": {}}
+    },
+    "after_repair": {
+      "successful_cleanup_only": {"current_evidence_eligible": false, "case_status": "unknown", "supported_cases": 0, "limitations": {"ACTIVE_AFTER_CLEANUP": 1, "CASE_EVIDENCE_LIMITED": 1}},
+      "same_history_plus_failed_retry": {"current_evidence_eligible": false, "case_status": "unknown", "supported_cases": 0, "limitations": {"ACTIVE_AFTER_CLEANUP": 1, "CASE_EVIDENCE_LIMITED": 1}}
+    }
+  },
+  "log_sha256": {
+    "optimized.log": "aa31913050dac97370694555f3b8db296a487ef22317e0a65ecf9583c4e5c41d",
+    "warnings.log": "24a3b5086e1c375fa2bd5c9e0ea704a5ef866414cf873337c665730e3f385453",
+    "normal.log": "c990af82c0338034eca1d3b816b9abd1a6818a761f9d494a4b9c1a1bd3550019",
+    "negative.log": "d033aed642faae9e763aecb9cc25bf03964859a24cca50421d7a6025c1b8e316"
+  }
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="A browser-local invoice and PO exception diagnostic with crash-safe, duplicate-safe approval receipts. $199, one business day.">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Invoice Exception Pack — $199 diagnostic</title>
+<link rel="stylesheet" href="./commons.css?v=20260823f">
+<style>
+body{max-width:76rem}.hero h1{font-size:clamp(2.3rem,7vw,5.5rem);line-height:.94;max-width:15ch}.lead{font-size:1.2rem;max-width:52rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1rem}.panel,form{border:1px solid #3b3b43;border-radius:12px;padding:1rem;background:#111114;margin:1rem 0}label{display:block;font-weight:800;margin:.7rem 0 .25rem}input,textarea{box-sizing:border-box;width:100%;background:#19191e;color:#f0f0f2;border:1px solid #50505a;border-radius:8px;padding:.65rem}textarea{min-height:14rem;font:700 .8rem/1.4 ui-monospace,monospace}button,.cta{display:inline-block;margin:.2rem .25rem .2rem 0;border:0;border-radius:8px;padding:.7rem .9rem;background:#ececef;color:#09090a;font-weight:850;text-decoration:none;cursor:pointer}.secondary{background:#292930;color:#f0f0f2}.price{font-size:2rem;font-weight:900}.ok{border-left:4px solid #65c486;padding-left:1rem}.warning{border-left:4px solid #d2a34c;padding-left:1rem}code{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<p class="law">PUBLIC OPEN DOOR · NO LOGIN · NO UPLOAD · NO TELEMETRY. The synthetic ledger stays in this browser.</p>
+<p class="nav"><a href="./index.html">Commons</a> · <a href="./right-now.html">right now</a> · <a href="./commerce.html">commerce</a> · <a href="./invoice-exception-pack.json">machine contract</a></p>
+<p id="live-cash" class="note"><strong>Live cash</strong> — <a href="./dealer-service-lead-rescue.html">$199 dealer</a> · <a href="./referral-intake-completeness.html">$199 referral</a> · <a href="./repair-booking-preflight.html">$199 repair</a> · <a href="./plant-downtime-handoff.html">$199 plant</a>.</p>
+<p class="note"><strong>Larger fixed engagements</strong> (separate product pages; checkout/intent stays there): <a href="./diagnostic.html">GGUF diagnostic · $12,000 / 10 days</a> · <a href="./commercial.html">White Box pilot · $30,000 / 30 days</a>. Not remints of tip SKUs.</p>
+<header class="hero">
+  <p class="note">Token Junkie Labs · controller/CFO diagnostic</p>
+  <h1>Know why the invoice stopped—without paying it.</h1>
+  <p class="lead">One invoice and one purchase order become a deterministic match, exception, or missing-data packet. A durable idempotency key prevents a retry, duplicate event, or browser restart from creating a second approval request. This surface never pays an invoice.</p>
+  <p><span class="price">$199</span> · one business day · fixed diagnostic</p>
+  <p><a class="cta" href="https://buy.stripe.com/14A00i84Jdvz36hdxg43S0l" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a></p>
+  <p class="note">Secure Stripe checkout opens in a new tab. A click is intent, not cash. This is the verified Payment Link for offer_id <code>invoice-exception-pack-diagnostic</code>; this page does not invent a checkout URL.</p>
+</header>
+
+<section class="grid">
+  <article class="panel ok"><h2>You receive</h2><ul><li>field and matching contract for one workflow</li><li>10 synthetic replay cases</li><li>exception and approval packet schema</li><li>crash/retry/rollback receipt</li><li>binary pass/fail report in Markdown + JSON</li></ul></article>
+  <article class="panel warning"><h2>Hard boundary</h2><p>No payment execution, bank connection, credential collection, vendor master change, tax advice, or approval authority. Use synthetic values here. A human controller remains the decision maker.</p></article>
+</section>
+<form id="invoice-demo">
+  <h2>Working synthetic demo</h2>
+  <p>Change the values to create an exception. Use <b>Force crash</b>, then <b>Retry</b> or <b>Roll back</b>. Duplicate replay must retain one approval request.</p>
+  <div class="grid">
+    <fieldset><legend>Invoice</legend>
+      <label for="invoice_id">Invoice ID</label><input id="invoice_id" value="INV-DEMO-1042">
+      <label for="invoice_vendor">Vendor</label><input id="invoice_vendor" value="Northstar Paper Co">
+      <label for="invoice_amount">Amount</label><input id="invoice_amount" value="1250.00" inputmode="decimal">
+      <label for="invoice_currency">Currency</label><input id="invoice_currency" value="USD" maxlength="3">
+    </fieldset>
+    <fieldset><legend>Purchase order</legend>
+      <label for="po_id">PO ID</label><input id="po_id" value="PO-DEMO-7701">
+      <label for="po_vendor">Vendor</label><input id="po_vendor" value="Northstar Paper Co">
+      <label for="po_amount">Amount</label><input id="po_amount" value="1250.00" inputmode="decimal">
+      <label for="po_currency">Currency</label><input id="po_currency" value="USD" maxlength="3">
+    </fieldset>
+  </div>
+  <p>
+    <button type="submit">Run once</button>
+    <button type="button" id="force-crash" class="secondary">Force crash</button>
+    <button type="button" id="retry-run" class="secondary">Retry</button>
+    <button type="button" id="rollback-run" class="secondary">Roll back</button>
+    <button type="button" id="duplicate-run" class="secondary">Duplicate replay</button>
+    <button type="button" id="reset-run" class="secondary">Reset local demo</button>
+  </p>
+  <p id="demo-status" class="note">Ready. No financial system is connected.</p>
+  <div class="grid">
+    <div><label for="invoice-receipt">JSON receipt</label><textarea id="invoice-receipt" readonly></textarea><p><button type="button" id="copy-receipt">Copy JSON</button></p></div>
+    <div><label for="invoice-receipt-md">Markdown receipt</label><textarea id="invoice-receipt-md" readonly></textarea></div>
+  </div>
+</form>
+<section class="panel" id="buyer-intake">
+  <h2>Exact buyer intake</h2>
+  <p>Controller, CFO, or AP owner: send only non-confidential or synthetic details for one workflow.</p>
+  <ol><li>organization and named workflow owner</li><li>location count and accounting/ERP family</li><li>required invoice and PO fields</li><li>matching tolerances and exception destinations</li><li>one synthetic happy path, one missing-data case, and one mismatch</li><li>desired acceptance date</li></ol>
+  <p><a class="cta" href="https://buy.stripe.com/14A00i84Jdvz36hdxg43S0l" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a> <a class="cta secondary" href="mailto:tokenjunkielabs@gmail.com?subject=Invoice%20Exception%20Pack%20%E2%80%94%20%24199%20diagnostic&amp;body=Organization%3A%0AWorkflow%20owner%3A%0ALocation%20count%3A%0AERP%20family%3A%0ARequired%20fields%3A%0AMatching%20tolerances%3A%0AException%20destination%3A%0ASynthetic%20cases%3A%0AAcceptance%20date%3A">Request the $199 diagnostic</a></p>
+  <p class="note">The optional $2,500 pilot begins only after the diagnostic is accepted against the same binary replay suite. No purchase, buyer, payment, settlement, or cash is claimed by this page.</p>
+</section>
+<noscript><section class="panel"><h2>JavaScript is off</h2><p>Checkout does not wait on catalog hydration. The complete $199 scope, exact intake, and machine contract remain visible. The interactive local receipt generator requires JavaScript.</p><p><a class="cta" href="https://buy.stripe.com/14A00i84Jdvz36hdxg43S0l" target="_blank" rel="noopener noreferrer">Start the $199 diagnostic</a></p></section></noscript>
+<script src="./invoice-exception-pack.js?v=20260831a" defer></script>
+</body>
+</html>

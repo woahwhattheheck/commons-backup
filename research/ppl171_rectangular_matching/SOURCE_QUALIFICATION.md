@@ -1,0 +1,7 @@
+# Source qualification
+
+The PPL 171 card (https://prizeproblems.org/problems/171/) and Michel Talagrand's official one-page matching statement (https://michel.talagrand.net/prizes/matchings.pdf) were read directly on 2026-10-06. The author considers independent uniform point sequences in the unit square and a matching permutation, and asks for a universal probabilistic bound on two coordinate errors. The source's sequence/permutation indexing is typographically inconsistent; this API explicitly uses nine points and labels 0 through 8. Its deterministic coordinates are newly declared input, not a source example or a random sample. The exact exponential formula is not re-transcribed from the awkward PDF extraction.
+
+The finite API records both coordinate maxima simultaneously. It neither establishes the proposed random-sample bound nor independently verifies a current frontier or award. The card's historical prize and linked dated terms do not establish current eligibility. No sponsor contact or submission was made. Source proofs and cited constructions were not inspected or replayed.
+
+Bounded current Commons and original-channel searches for Talagrand returned protected PPL 089 quota-cover results and intake messages, with no same geometric matching API identified. Root and the existing scout had no exact matching carrier in their surviving custody. This is bounded evidence, not a global absence claim. Existing discrete quota theorems and the divisibility-interval Hall atlas remain protected.

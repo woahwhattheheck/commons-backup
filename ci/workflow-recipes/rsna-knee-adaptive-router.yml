@@ -1,0 +1,31 @@
+name: RSNA Knee Adaptive Router
+
+on:
+  pull_request:
+    paths:
+      - 'research/rsna-knee-adaptive-router/**'
+      - '.github/workflows/rsna-knee-adaptive-router.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/rsna-knee-adaptive-router/**'
+      - '.github/workflows/rsna-knee-adaptive-router.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Data-free synthetic hostiles
+        working-directory: research/rsna-knee-adaptive-router
+        run: |
+          python -m unittest -v
+          python -O -m unittest -v
+          python -m py_compile controller.py data_contract.py test_controller.py test_data_contract.py

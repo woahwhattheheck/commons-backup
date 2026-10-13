@@ -1,0 +1,71 @@
+{
+  "schema_version": "muhlnickel-inference-offer/v1",
+  "kind": "PUBLIC_OUTCOME_OFFER",
+  "product_id": "muhlnickel-attested-inference-run",
+  "public_name": "Muhlnickel Attested Inference Run",
+  "status": "PUBLIC_OFFER",
+  "commerce": {
+    "provider": "shopify",
+    "state": "SHOPIFY_IMPORT_READY",
+    "product_handle": "muhlnickel-attested-inference",
+    "import_path": "revenue/muhlnickel_inference/shopify_products.csv",
+    "storefront_url": null,
+    "note": "The product and three service-level variants are defined in a Shopify-native UTF-8 CSV. A storefront URL is not claimed until the connected store imports and publishes it."
+  },
+  "buyer": "A team with one public or non-confidential model task and an exact evaluation rule.",
+  "entry_offer": {
+    "price_usd": 500,
+    "delivery_window": "one business day after complete inputs",
+    "included": [
+      "one bounded prompt batch against one already-connected model",
+      "raw outputs and a machine-readable run manifest",
+      "prompt, model, output, and receipt hashes",
+      "timing, substrate identity, and reconstruction instructions"
+    ]
+  },
+  "ladder": [
+    {
+      "id": "evaluated-inference-batch",
+      "price_usd": 1500,
+      "outcome": "Up to three prompt variants scored against one buyer-supplied rubric."
+    },
+    {
+      "id": "bespoke-attested-compute-job",
+      "price_usd": 2500,
+      "outcome": "One bounded inference or general-compute job with a bespoke evidence bundle."
+    }
+  ],
+  "required_inputs": [
+    "public or non-confidential prompt or compute input",
+    "one selected already-connected model or deterministic program",
+    "maximum output size",
+    "machine-checkable acceptance rule",
+    "public contact URL"
+  ],
+  "fulfillment": {
+    "machine_path": "host/pfc_harness.py",
+    "operator_surface": "owner-local Muhlnickel and connected model",
+    "public_capability_source": "muhl/docs/WHERE_WE_ARE_AND_WHAT_TO_DO.md",
+    "market_source": "revenue/arbitrage/attested_runs_market_20260830.json",
+    "receipt_required_before_run_claim": true
+  },
+  "acquisition": {
+    "current_buyer_side_opportunity": {
+      "source": "Upwork",
+      "title": "Senior Python Engineer for LLM Cost Optimization Across 4 Production Features",
+      "url": "https://www.upwork.com/freelance-jobs/apply/Senior-Python-Engineer-for-LLM-Cost-Optimization-Across-Production-Features_~022090541330337306259/",
+      "observed_public_pain": "The buyer reports an OpenAI bill increase from USD 2,140 in February to USD 13,890 in July while usage rose about 40%.",
+      "state": "OPEN_LISTING_PLATFORM_APPLICATION_REQUIRED",
+      "buyer_acceptance": "UNKNOWN"
+    }
+  },
+  "truth": {
+    "buyer_contacted_for_this_offer": false,
+    "accepted_scope": false,
+    "paid": false,
+    "cash_usd": 0,
+    "cloud_runtime_executed": false,
+    "shopify_product_published": false,
+    "note": "The owner-local machine is the execution surface. This public offer does not claim that a customer run occurred."
+  }
+}

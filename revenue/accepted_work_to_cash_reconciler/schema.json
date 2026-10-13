@@ -1,0 +1,118 @@
+{
+  "$id": "https://woahwhattheheck.github.io/commons/schemas/accepted-work-to-cash-v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "funnel_input": {
+      "description": "Validated by revenue_funnel_control; caller-authored stage is never accepted.",
+      "type": "object"
+    },
+    "payment_confirmations": {
+      "description": "Retained caller-supplied confirmation assertions bound to upstream payment events. These values are not provider-authenticated and cannot by themselves produce terminal paid truth.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "observed_at": {
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+            "type": "string"
+          },
+          "opportunity_id": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string"
+          },
+          "payment_event_id": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string"
+          },
+          "provider_ref": {
+            "description": "Retained reference label only; not proof of a live/authenticated provider object.",
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "provider_sha256": {
+            "description": "Caller-retained digest label only; the reconciler does not fetch or authenticate provider bytes for this field.",
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "opportunity_id",
+          "payment_event_id",
+          "observed_at",
+          "provider_ref",
+          "provider_sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "routes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "observed_at": {
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+            "type": "string"
+          },
+          "opportunity_id": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string"
+          },
+          "purpose": {
+            "maxLength": 320,
+            "minLength": 1,
+            "type": "string"
+          },
+          "recipient": {
+            "maxLength": 320,
+            "minLength": 1,
+            "type": "string"
+          },
+          "ref": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "source_class": {
+            "enum": [
+              "BUYER_MESSAGE",
+              "SPONSOR_MESSAGE",
+              "PROVIDER_DIRECTORY",
+              "ORGANIZER_RULES"
+            ]
+          }
+        },
+        "required": [
+          "opportunity_id",
+          "recipient",
+          "purpose",
+          "observed_at",
+          "source_class",
+          "ref",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema": {
+      "const": "TJL_ACCEPTED_WORK_TO_CASH_V1"
+    }
+  },
+  "required": [
+    "schema",
+    "funnel_input",
+    "routes",
+    "payment_confirmations"
+  ],
+  "title": "TJL Accepted Work to Cash Reconciler input",
+  "type": "object"
+}

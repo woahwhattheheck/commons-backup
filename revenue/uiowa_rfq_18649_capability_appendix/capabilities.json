@@ -1,0 +1,171 @@
+{
+  "schema": "uiowa.technical-capability-appendix.v1",
+  "work_order": "UIOWA-137",
+  "snapshot_main_sha": "04dfec1281f91b4f050e4b93ac49c5925eb02386",
+  "observed_at": "2026-09-19",
+  "evidence_classification": {
+    "synthetic_demonstrations": "Working examples built for RFQ 18649 rehearsal; not University data or findings.",
+    "original_engineering": "Repository code/artifacts demonstrate implementation capability only.",
+    "client_validation": "No client outcome, institutional endorsement, degree, certification, or University validation is inferred by this appendix."
+  },
+  "capabilities": [
+    {
+      "capability_id": "CAP-EVIDENCE-ORGANIZATION",
+      "title": "Organize heterogeneous assessment evidence without losing uncertainty",
+      "business_use": "Create a stable fact/evidence structure that lets reviewers see source coverage, gaps, and unknowns across service and assessment areas.",
+      "provider_observation": {
+        "method": "GitHub provider readback of pinned source files",
+        "facts": 24,
+        "evidence_documents": 10,
+        "coverage_cells": 12,
+        "fact_state_counts": {
+          "strength": 12,
+          "gap": 9,
+          "unknown": 3
+        },
+        "note": "Every record in the observed corpus is explicitly synthetic."
+      },
+      "reproduction_command": "cd revenue/uiowa_rfq_18649_synthetic_collection && python3 validate_collection.py .",
+      "sources": [
+        {
+          "path": "revenue/uiowa_rfq_18649_synthetic_collection/facts.json",
+          "blob_sha": "d715a392b92b4738070552f7cecb8f32a4ddc765",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_synthetic_collection/facts.json"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_synthetic_collection/evidence_manifest.json",
+          "blob_sha": "551e407700fc16daffdef84d9a65722eda37c017",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_synthetic_collection/evidence_manifest.json"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_synthetic_collection/coverage_matrix.csv",
+          "blob_sha": "eaa12d5491d16fd6417ff2c8059e58546f7fef85",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_synthetic_collection/coverage_matrix.csv"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_synthetic_collection/validate_collection.py",
+          "blob_sha": "ac9c634bbcf2e0a92eab3c2c0127aaf8f35f383f",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_synthetic_collection/validate_collection.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "CAP-COMPARISON",
+      "title": "Compare observations without hiding critical gaps or missing coverage",
+      "business_use": "Show decision-makers an interpretable distribution and evidence boundary instead of a misleading single average.",
+      "provider_observation": {
+        "method": "GitHub provider readback of the pinned worked decision table",
+        "worked_cases": 3,
+        "cases": [
+          {
+            "scenario": "strong-average / critical-gap",
+            "expected_composition": "critical_gap_present",
+            "coverage": "100%"
+          },
+          {
+            "scenario": "low coverage",
+            "expected_composition": "insufficient_coverage",
+            "coverage": "40%"
+          },
+          {
+            "scenario": "mixed services",
+            "expected_composition": "mixed_practice",
+            "coverage": "100%"
+          }
+        ],
+        "note": "The model keeps maturity, confidence, coverage, applicability, and material gaps separate."
+      },
+      "reproduction_command": "cd revenue/uiowa_rfq_18649_rating_model && python rating_model.py synthetic_case_critical_gap.json --json-out /tmp/uiowa-137-rating.json --markdown-out /tmp/uiowa-137-rating.md",
+      "sources": [
+        {
+          "path": "revenue/uiowa_rfq_18649_rating_model/22-worked-decision-table.csv",
+          "blob_sha": "33f53771e81ab01acd8c8105ba15ea4ca06b6053",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_rating_model/22-worked-decision-table.csv"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_rating_model/rating_model.py",
+          "blob_sha": "61d98e53631b684ed390b3b6c66f4870a2ad6dd8",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_rating_model/rating_model.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "CAP-TRACEABILITY",
+      "title": "Keep findings and recommendations traceable to exact supporting records",
+      "business_use": "Let a reviewer move from report language to a finding and then to the evidence record/locator without reconstructing provenance from chat or memory.",
+      "provider_observation": {
+        "method": "GitHub provider readback of the pinned traceability rehearsal",
+        "evidence_records": 8,
+        "findings": 3,
+        "recommendations": 2,
+        "report_statements": 5,
+        "note": "The rehearsal includes a supported strength, an evidence gap, and a representative-coverage limitation."
+      },
+      "reproduction_command": "cd revenue/uiowa_rfq_18649_traceability_rehearsal && python validate_trace.py .",
+      "sources": [
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/evidence.csv",
+          "blob_sha": "fe11729edc5ec8c0c6e6adbd6238777118acc16d",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/evidence.csv"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/findings.csv",
+          "blob_sha": "f3dfb204685e72510a4c1bf591e72529702020e9",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/findings.csv"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/recommendations.csv",
+          "blob_sha": "e81ad1fe6cc691ae8b00d47ab3052fca13e4b047",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/recommendations.csv"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/trace-map.csv",
+          "blob_sha": "58feb62c097c7fd39dc18468c60ade50cc069a9a",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/trace-map.csv"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/validate_trace.py",
+          "blob_sha": "bcd82374aea8b854ce91866a628859b090b8bd7e",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/validate_trace.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "CAP-REPORT-PREPARATION",
+      "title": "Carry the same evidence boundary into executive and detailed report language",
+      "business_use": "Prepare concise leadership language while keeping limitations, finding IDs, recommendation IDs, and evidence IDs visible for review.",
+      "provider_observation": {
+        "method": "GitHub provider readback of pinned synthetic report artifacts",
+        "executive_statement_ids": [
+          "S-001",
+          "S-002",
+          "S-003"
+        ],
+        "detailed_recommendation_statement_ids": [
+          "S-004",
+          "S-005"
+        ],
+        "trace_map_statements": 5,
+        "note": "The report explicitly states that it is a rehearsal and not a University assessment."
+      },
+      "reproduction_command": "cd revenue/uiowa_rfq_18649_traceability_rehearsal && python validate_trace.py .",
+      "sources": [
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/executive-summary.md",
+          "blob_sha": "09df50d32c1e1b562cda87fb1ab527b322e638b8",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/executive-summary.md"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/final-report.md",
+          "blob_sha": "de758cbc119c4953984428d989e52ce7f18e95d6",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/final-report.md"
+        },
+        {
+          "path": "revenue/uiowa_rfq_18649_traceability_rehearsal/trace-map.csv",
+          "blob_sha": "58feb62c097c7fd39dc18468c60ade50cc069a9a",
+          "url": "https://github.com/woahwhattheheck/commons/blob/04dfec1281f91b4f050e4b93ac49c5925eb02386/revenue/uiowa_rfq_18649_traceability_rehearsal/trace-map.csv"
+        }
+      ]
+    }
+  ]
+}

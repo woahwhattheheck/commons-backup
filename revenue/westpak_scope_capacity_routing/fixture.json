@@ -1,0 +1,91 @@
+{
+  "demand_id": "westpak-scope-capacity-routing-lims-01",
+  "schema": "commons-westpak-scope-capacity-routing-lims/v1",
+  "buyer": "WESTPAK / Angela Barber",
+  "build": "Scope- and Capacity-Aware Multi-Site Test Routing",
+  "qms": "WPK-QMS-ONE",
+  "sites": ["WPK_SAN_JOSE", "WPK_SAN_DIEGO", "WPK_UNION_CITY"],
+  "site_names": {
+    "WPK_SAN_JOSE": "San Jose",
+    "WPK_SAN_DIEGO": "San Diego",
+    "WPK_UNION_CITY": "Union City"
+  },
+  "programs": ["INTEGRITY", "STABILITY", "CONDITIONING", "VIBRATION", "THERMAL"],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "cash_usd": 0,
+  "pre_sale_transport": "NONE",
+  "interfaces": "SIMULATED_READ_ONLY",
+  "interface_live": false,
+  "live_lims": false,
+  "production_writes": false,
+  "automatic_release": false,
+  "phi": false,
+  "outreach": false,
+  "named_release_role": "NAMED_RELEASE_OFFICER",
+  "named_release_actor": "SYN-WPK-RELEASE-OFFICER",
+  "seed": 20260831,
+  "open_slack_ts": "1788149884.835659",
+  "open_slack_channel": "C0BTRNE6Y58",
+  "job_count": 240,
+  "valid_count": 200,
+  "blocked_count": 40,
+  "program_valid": {
+    "INTEGRITY": 40,
+    "STABILITY": 40,
+    "CONDITIONING": 40,
+    "VIBRATION": 40,
+    "THERMAL": 40
+  },
+  "site_valid": {
+    "WPK_SAN_JOSE": 88,
+    "WPK_SAN_DIEGO": 80,
+    "WPK_UNION_CITY": 32
+  },
+  "authorized_transfers": [
+    {
+      "origin": "WPK_SAN_JOSE",
+      "dest": "WPK_UNION_CITY",
+      "method_id": "ASTM_F88_SEAL",
+      "count": 8
+    },
+    {
+      "origin": "WPK_SAN_DIEGO",
+      "dest": "WPK_UNION_CITY",
+      "method_id": "ASTM_D4332_THERMAL_CYCLE",
+      "count": 16
+    }
+  ],
+  "block_reason_counts": {
+    "HOLD_SCOPE_METHOD_NOT_AT_SITE": 8,
+    "HOLD_CAPACITY_EQUIPMENT_FULL": 8,
+    "HOLD_TRANSFER_NOT_AUTHORIZED": 8,
+    "HOLD_METHOD_MISMATCH": 8,
+    "HOLD_SEQUENCE_UNAVAILABLE": 8
+  },
+  "expected": {
+    "jobs": 240,
+    "valid": 200,
+    "blocked": 40,
+    "integrity": 40,
+    "stability": 40,
+    "conditioning": 40,
+    "vibration": 40,
+    "thermal": 40,
+    "routed_exact": 200,
+    "blocked_expected_reason": 40,
+    "authorized_transfers": 24,
+    "unauthorized_transfers": 0,
+    "method_match": 200,
+    "released_without_named_human": 0,
+    "released_after_named_human": 200,
+    "blocked_released": 0,
+    "replay_duplicate_job_events": 0,
+    "replay_duplicate_custody_events": 0,
+    "production_writes": 0,
+    "live_lims": 0,
+    "cash_usd": 0
+  },
+  "golden_audit_sha256": "ca48bfcc283cc7f014c44cdbb469b3d3b16d553a94ccde0c1a4530ae5d55eb3b",
+  "official_binary": "python3 westpak_scope_capacity_routing.py",
+  "official_test": "python3 test_westpak_scope_capacity_routing.py"
+}

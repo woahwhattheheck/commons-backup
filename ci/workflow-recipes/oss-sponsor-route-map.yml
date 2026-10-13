@@ -1,0 +1,35 @@
+name: OSS sponsor route map
+
+on:
+  pull_request:
+    paths:
+      - "research/oss_sponsor_route_map/**"
+      - ".github/workflows/oss-sponsor-route-map.yml"
+  push:
+    branches: [main]
+    paths:
+      - "research/oss_sponsor_route_map/**"
+      - ".github/workflows/oss-sponsor-route-map.yml"
+
+jobs:
+  validate:
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Validate retained map
+        run: python research/oss_sponsor_route_map/validate.py
+      - name: Hostile tests
+        run: python -m unittest -v research.oss_sponsor_route_map.test_validate
+      - name: Optimized hostile tests
+        run: python -O -m unittest -v research.oss_sponsor_route_map.test_validate
+      - name: Syntax
+        run: >-
+          python -m py_compile
+          research/oss_sponsor_route_map/validate.py
+          research/oss_sponsor_route_map/test_validate.py

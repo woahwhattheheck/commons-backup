@@ -1,0 +1,57 @@
+{
+  "engine_blob_sha": "3c202c7ee921da239356789e266b694635103fc4",
+  "engine_json_blob_sha": "b354d06b742fe48402513792253f1a5c29366b20",
+  "front_run_q64_r64": {
+    "final_inventory": 9936,
+    "margin_swing": 560,
+    "our_cost": 1944,
+    "our_profit": 280,
+    "our_quantity": 64,
+    "our_unwind_revenue": 2224,
+    "rival_baseline_cost": 1944,
+    "rival_cost_under_pressure": 2224,
+    "rival_quantity": 64,
+    "rival_surcharge": 280
+  },
+  "front_run_starting_cash_symmetry": {
+    "final_inventory": 9905,
+    "margin_swing": 1020,
+    "our_cost": 2995,
+    "our_profit": 510,
+    "our_quantity": 95,
+    "our_unwind_revenue": 3505,
+    "rival_baseline_cost": 2995,
+    "rival_cost_under_pressure": 3505,
+    "rival_quantity": 95,
+    "rival_surcharge": 510
+  },
+  "interpretation": {
+    "hinge_direct_buy": "rejected: CARROT/TOMATO/EGG are not legal BUY_PRODUCT targets",
+    "self_squeeze": "rejected: own buy->sell round-trip is exactly reversible absent external flow",
+    "surviving_lane": "stress external WHEAT demand; profit/surcharge can arise when rival net buys between our buy and unwind",
+    "wheat_starvation": "price pressure only: market inventory has no nonnegative availability gate"
+  },
+  "legal_direct_buy_products": [
+    "WHEAT",
+    "FERTILIZER"
+  ],
+  "self_roundtrip_q95": {
+    "cost": 2995,
+    "final_inventory": 10000,
+    "profit": 0,
+    "quantity": 95,
+    "revenue": 2995
+  },
+  "starting_cash_wheat": {
+    "end_inventory": 9905,
+    "money": 2995,
+    "quantity": 95,
+    "start_inventory": 10000
+  },
+  "tests": {
+    "command": "python -B -m unittest -v test_market_pressure.py",
+    "passed": 9,
+    "failed": 0,
+    "errors": 0
+  }
+}

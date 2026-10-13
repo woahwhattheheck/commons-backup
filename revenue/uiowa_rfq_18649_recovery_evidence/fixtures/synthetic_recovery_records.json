@@ -1,0 +1,67 @@
+{
+  "assessment_id": "UIOWA-068-SYNTHETIC-RESTORE-01",
+  "synthetic": true,
+  "services": [
+    {
+      "service_id": "SVC-IAM",
+      "name": "Synthetic sign-in",
+      "business_function": "Authenticate users to in-scope services",
+      "target_rpo_minutes": 15,
+      "target_rto_minutes": 60,
+      "dependencies": [],
+      "backup": {
+        "last_successful_at": "2026-09-17T23:45:00Z",
+        "evidence_id": "EV-SYN-IAM-BACKUP-001"
+      },
+      "exercise": {
+        "exercise_id": "EX-SYN-IAM-001",
+        "disruption_at": "2026-09-18T01:00:00Z",
+        "restored_data_as_of": "2026-09-18T00:50:00Z",
+        "restore_completed_at": "2026-09-18T01:28:00Z",
+        "business_verified_at": null,
+        "business_verification_evidence_id": null,
+        "dependency_results": []
+      }
+    },
+    {
+      "service_id": "SVC-RIS",
+      "name": "Synthetic research submission",
+      "business_function": "Submit and route a research administration packet",
+      "target_rpo_minutes": 60,
+      "target_rto_minutes": 120,
+      "dependencies": ["SVC-IAM"],
+      "backup": {
+        "last_successful_at": "2026-09-17T23:30:00Z",
+        "evidence_id": "EV-SYN-RIS-BACKUP-001"
+      },
+      "exercise": {
+        "exercise_id": "EX-SYN-RIS-001",
+        "disruption_at": "2026-09-18T01:00:00Z",
+        "restored_data_as_of": "2026-09-18T00:30:00Z",
+        "restore_completed_at": "2026-09-18T02:20:00Z",
+        "business_verified_at": "2026-09-18T02:40:00Z",
+        "business_verification_evidence_id": "EV-SYN-RIS-BIZVERIFY-001",
+        "dependency_results": [
+          {
+            "dependency_id": "SVC-IAM",
+            "verified_at": "2026-09-18T02:00:00Z",
+            "evidence_id": "EV-SYN-IAM-DEPVERIFY-001"
+          }
+        ]
+      }
+    },
+    {
+      "service_id": "SVC-REG",
+      "name": "Synthetic registration",
+      "business_function": "Register a student for an eligible course",
+      "target_rpo_minutes": 30,
+      "target_rto_minutes": 90,
+      "dependencies": ["SVC-IAM"],
+      "backup": {
+        "last_successful_at": "2026-09-18T00:10:00Z",
+        "evidence_id": "EV-SYN-REG-BACKUP-001"
+      },
+      "exercise": null
+    }
+  ]
+}

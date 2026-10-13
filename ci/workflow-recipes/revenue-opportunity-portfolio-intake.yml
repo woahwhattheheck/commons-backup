@@ -1,0 +1,31 @@
+name: Revenue opportunity portfolio intake
+
+on:
+  pull_request:
+    paths:
+      - "revenue/opportunity_portfolio_intake/**"
+      - "revenue/opportunity_portfolio/**"
+      - ".github/workflows/revenue-opportunity-portfolio-intake.yml"
+  push:
+    paths:
+      - "revenue/opportunity_portfolio_intake/**"
+      - "revenue/opportunity_portfolio/**"
+      - ".github/workflows/revenue-opportunity-portfolio-intake.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m py_compile revenue/opportunity_portfolio_intake/*.py
+      - run: python -m unittest -v revenue.opportunity_portfolio_intake.test_intake
+      - run: python -O -m unittest -v revenue.opportunity_portfolio_intake.test_intake

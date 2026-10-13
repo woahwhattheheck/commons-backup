@@ -1,0 +1,35 @@
+name: Hive003 Production Queue
+
+on:
+  pull_request:
+    paths:
+      - "revenue/hive/short-video-studio/production_queue.py"
+      - "revenue/hive/short-video-studio/test_production_queue.py"
+      - "revenue/hive/short-video-studio/production.example.json"
+      - ".github/workflows/hive003-production-queue.yml"
+  push:
+    paths:
+      - "revenue/hive/short-video-studio/production_queue.py"
+      - "revenue/hive/short-video-studio/test_production_queue.py"
+      - "revenue/hive/short-video-studio/production.example.json"
+      - ".github/workflows/hive003-production-queue.yml"
+
+jobs:
+  production-queue:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/hive/short-video-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: python -m py_compile production_queue.py test_production_queue.py
+      - name: Validate example manifest
+        run: python production_queue.py validate production.example.json
+      - name: Focused tests
+        run: python -m unittest -v test_production_queue.py
+      - name: Optimized focused tests
+        run: python -O -m unittest -v test_production_queue.py

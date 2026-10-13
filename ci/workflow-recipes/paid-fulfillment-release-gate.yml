@@ -1,0 +1,66 @@
+name: paid-fulfillment-release-gate
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/paid_fulfillment_release_gate/**'
+      - '.github/workflows/paid-fulfillment-release-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/paid_fulfillment_release_gate/**'
+      - '.github/workflows/paid-fulfillment-release-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Unit and hostile-path tests
+        run: python -m unittest discover -s revenue/paid_fulfillment_release_gate -p 'test_*.py' -v
+      - name: Optimized-mode tests
+        run: python -O -m unittest discover -s revenue/paid_fulfillment_release_gate -p 'test_*.py' -v
+      - name: Historical CLI replay fails closed
+        run: |
+          python revenue/paid_fulfillment_release_gate/gate.py revenue/paid_fulfillment_release_gate/example.json --output /tmp/expired-receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path('/tmp/expired-receipt.json').read_text())
+          assert receipt['decision'] == 'HOLD', receipt
+          assert receipt['release_authorized'] is False, receipt
+          assert 'SNAPSHOT_EXPIRED' in receipt['reasons'], receipt
+          assert receipt['authorization']['expired'] is True, receipt
+          assert len(receipt['receipt_sha256']) == 64, receipt
+          PY
+      - name: Current trusted-time fixture releases and verifies
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timedelta
+          import importlib.util
+          import json
+          from pathlib import Path
+          module_path = Path('revenue/paid_fulfillment_release_gate/gate.py')
+          spec = importlib.util.spec_from_file_location('paid_fulfillment_gate_ci', module_path)
+          gate = importlib.util.module_from_spec(spec)
+          assert spec.loader is not None
+          spec.loader.exec_module(gate)
+          payload = json.loads(Path('revenue/paid_fulfillment_release_gate/example.json').read_text())
+          snapshot = datetime.fromisoformat(payload['snapshot_at'].replace('Z', '+00:00'))
+          evaluated_at = snapshot + timedelta(seconds=60)
+          receipt = gate.evaluate(payload, evaluated_at=evaluated_at)
+          assert receipt['decision'] == 'RELEASE', receipt
+          assert receipt['release_authorized'] is True, receipt
+          assert receipt['authorization']['expired'] is False, receipt
+          assert gate.verify_release_receipt(receipt, consumed_at=evaluated_at + timedelta(seconds=1)) is True
+          assert len(receipt['receipt_sha256']) == 64, receipt
+          PY

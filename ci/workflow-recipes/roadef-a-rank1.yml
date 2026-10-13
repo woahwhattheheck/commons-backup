@@ -1,0 +1,143 @@
+name: roadef-a-rank1
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/roadef-a-rank1.yml'
+      - 'revenue/roadef2026/cloud-a-rank1/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: roadef-a-rank1-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rank1:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - name: Checkout rank-one harness
+        uses: actions/checkout@v4
+        with:
+          path: harness
+
+      - name: Checkout frozen portfolio source
+        uses: actions/checkout@v4
+        with:
+          ref: 6feb9c0566b8f203c5d1a2ffdfbf1cb6d11be055
+          path: frozen
+
+      - name: Verify frozen source and prepare native context
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/frozen/revenue/roadef2026/fleet-candidate"
+          baseline_commit=2885d176373c33410148829fef93c310c3752c0b
+          git -C "$GITHUB_WORKSPACE/frozen" fetch --no-tags --depth=1 origin "$baseline_commit"
+          git -C "$GITHUB_WORKSPACE/frozen" show FETCH_HEAD:revenue/roadef2026/fleet-candidate/main.cpp > "$root/main.cpp"
+          test "$(sha256sum "$root/main.cpp" | cut -d' ' -f1)" = 322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1
+          patch_file="$GITHUB_WORKSPACE/frozen/revenue/roadef2026/cloud-kernel-composition/combined.patch"
+          test "$(git hash-object "$patch_file")" = 0ff8d2ee7c4df1022c50484a89e7424329cce0ec
+          (cd "$root" && patch --batch --fuzz=0 -p1 < "$patch_file")
+          test "$(sha256sum "$root/main.cpp" | cut -d' ' -f1)" = 758977095f8f34263bbcd9ed043ac4ab7943f04f65fae530c78ee64787c34f8f
+          python3 "$root/prepare_context.py" --candidate "$root/main.cpp" --output "$RUNNER_TEMP/context"
+          sh "$RUNNER_TEMP/context/build.sh"
+
+      - name: Build and test targeted rank-one source
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/frozen/revenue/roadef2026/fleet-candidate"
+          tool="$GITHUB_WORKSPACE/harness/revenue/roadef2026/cloud-a-rank1"
+          python3 -B "$tool/test_rank1_builder.py" \
+            --builder "$tool/build_rank1_candidate.py" \
+            --source "$root/main.cpp" \
+            --vendor "$RUNNER_TEMP/context/sources/sedge/vendor" -v
+          python3 -B "$tool/build_rank1_candidate.py" "$root/main.cpp" \
+            --expected-sha256 758977095f8f34263bbcd9ed043ac4ab7943f04f65fae530c78ee64787c34f8f \
+            --output "$RUNNER_TEMP/rank1.cpp" \
+            --receipt "$RUNNER_TEMP/rank1-builder.json"
+          g++ -O3 -std=c++20 -DNDEBUG \
+            -I"$RUNNER_TEMP/context/sources/sedge/vendor" \
+            "$RUNNER_TEMP/rank1.cpp" -o "$RUNNER_TEMP/context/bin/candidate"
+
+      - name: Download authoritative selected incumbents
+        uses: actions/download-artifact@v4
+        with:
+          name: roadef-a-sprint-calibration
+          path: ${{ runner.temp }}/calibration
+          run-id: 34197720573
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch only the three exact official set-A cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/official"
+          git -C "$RUNNER_TEMP/official" init -q
+          git -C "$RUNNER_TEMP/official" remote add origin \
+            https://gitlab.com/Orange-OpenSource/network-optimization-tools/challenge-roadef-2026.git
+          git -C "$RUNNER_TEMP/official" fetch --depth=1 origin d84d319a7fdb8de3b1866830d2eaa2937871e5ae
+          git -C "$RUNNER_TEMP/official" checkout -q FETCH_HEAD -- \
+            setA/setA-04-net.json setA/setA-04-tm.json setA/setA-04-scenario.json \
+            setA/setA-14-net.json setA/setA-14-tm.json setA/setA-14-scenario.json \
+            setA/setA-16-net.json setA/setA-16-tm.json setA/setA-16-scenario.json
+
+      - name: Run targeted contributor/diversion search
+        shell: bash
+        env:
+          FLEET_RANK1: '1'
+          FLEET_RANK1_PASSES: '16'
+          FLEET_RANK1_DEMANDS: '32'
+          FLEET_RANK1_PAIR_NODES: '24'
+        run: |
+          set -euo pipefail
+          python3 -B harness/revenue/roadef2026/cloud-a-rank1/run_rank1.py \
+            --context "$RUNNER_TEMP/context" \
+            --official-root "$RUNNER_TEMP/official" \
+            --calibration "$RUNNER_TEMP/calibration" \
+            --candidate-source "$GITHUB_WORKSPACE/frozen/revenue/roadef2026/fleet-candidate/main.cpp" \
+            --output "$RUNNER_TEMP/results" \
+            --seconds 180 --case-timeout 245
+
+      - name: Package exact evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/export"
+          if test -d "$RUNNER_TEMP/results"; then
+            cp -a "$RUNNER_TEMP/results/." "$RUNNER_TEMP/export/"
+          fi
+          cp "$RUNNER_TEMP/rank1.cpp" "$RUNNER_TEMP/export/" 2>/dev/null || true
+          cp "$RUNNER_TEMP/rank1-builder.json" "$RUNNER_TEMP/export/" 2>/dev/null || true
+          cp harness/revenue/roadef2026/cloud-a-rank1/*.py "$RUNNER_TEMP/export/"
+          cp harness/revenue/roadef2026/cloud-a-rank1/README.md "$RUNNER_TEMP/export/"
+          {
+            sha256sum \
+              harness/revenue/roadef2026/cloud-a-rank1/build_rank1_candidate.py \
+              harness/revenue/roadef2026/cloud-a-rank1/test_rank1_builder.py \
+              harness/revenue/roadef2026/cloud-a-rank1/run_rank1.py \
+              harness/revenue/roadef2026/cloud-a-rank1/README.md \
+              harness/.github/workflows/roadef-a-rank1.yml
+            for path in \
+              frozen/revenue/roadef2026/fleet-candidate/main.cpp \
+              "$RUNNER_TEMP/rank1.cpp" \
+              "$RUNNER_TEMP/context/bin/candidate" \
+              "$RUNNER_TEMP/context/bin/checker"; do
+              if test -f "$path"; then sha256sum "$path"; else printf 'MISSING  %s\n' "$path"; fi
+            done
+          } > "$RUNNER_TEMP/export/SOURCE-HASHES.txt"
+
+      - name: Upload rank-one evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roadef-a-rank1
+          path: ${{ runner.temp }}/export
+          if-no-files-found: error
+          retention-days: 90

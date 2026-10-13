@@ -1,0 +1,32 @@
+{
+  "cash_usd": 0,
+  "command": "python3 aquatrace_ops_acceptance.py",
+  "default_state": "NOT_READY",
+  "fail_closed_on": ["missing_hash", "missing_freshness"],
+  "forbidden_labels": [
+    "BUYER_ACCEPTED",
+    "CERTIFIED",
+    "COMPLIANT",
+    "DEPLOYED",
+    "PRODUCTION_READY",
+    "SUBMITTED"
+  ],
+  "id": "AT-GROK-OPS-ACCEPTANCE-01",
+  "named_human_required": true,
+  "never_promote_not_ready": true,
+  "pre_sale_transport": "NONE",
+  "private_cite_sha": "e380a587e1ba12a3a07b248c4054940afa3f61a9",
+  "rows": [
+    "identity_mfa_session",
+    "tenant_lab_rbac",
+    "encryption_secrets",
+    "monitoring",
+    "backup_restore_dr",
+    "support_incident_response",
+    "accessibility",
+    "training_uat",
+    "buyer_signoff"
+  ],
+  "schema": "commons-aquatrace-ops-acceptance/v1",
+  "truth_gate": "HOLD / BUILD-AND-VERIFY"
+}

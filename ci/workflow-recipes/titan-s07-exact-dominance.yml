@@ -1,0 +1,91 @@
+name: titan-s07-exact-dominance
+
+on:
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/dominance_pruning.py
+      - revenue/kaggriculture/cloud-execution-lab/test_dominance_pruning.py
+      - .github/workflows/titan-s07-exact-dominance.yml
+
+permissions:
+  contents: read
+
+jobs:
+  exact-dominance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Exact dominance contracts
+        run: python3 -B -m unittest -v test_dominance_pruning
+
+      - name: Generated frontier trial under 128 MiB
+        run: |
+          python3 - <<'PY'
+          import json
+          import random
+          import time
+          import tracemalloc
+          from dominance_pruning import DominanceNode, prune_frontier
+
+          rng = random.Random(0x507128)
+          nodes = []
+          for group in range(64):
+              identity = {
+                  'physical': {'group': group, 'farmer': [group % 10, (group // 10) % 10]},
+                  'market': {'inventory': {'WHEAT': 10000 + group}, 'rival': ()},
+                  'obligations': {'crop': None, 'sale': None},
+                  'capacity': {'shed_capacity': 100, 'reserved': group % 9},
+                  'care_bonus': {'pending': group % 3},
+                  'order_slots': {'used': group % 5, 'limit': 10},
+                  'occupancy': {'reserved_tiles': [[group % 10, group // 10]]},
+              }
+              for index in range(16):
+                  state = dict(identity)
+                  state.update(
+                      cash=1000 + rng.randrange(8),
+                      inventory={'WHEAT': rng.randrange(5), 'MILK': rng.randrange(4)},
+                      slack={'turns': rng.randrange(5)},
+                      safety={'cash_reserve': rng.randrange(5), 'capacity_headroom': rng.randrange(5)},
+                  )
+                  n = DominanceNode.from_state(state)
+                  nodes.append(n)
+                  if index % 8 == 0:
+                      nodes.append(n)
+
+          tracemalloc.start()
+          started = time.perf_counter()
+          hashed = prune_frontier(nodes, mode='hash')
+          frontier = prune_frontier(nodes, mode='dominance')
+          elapsed = time.perf_counter() - started
+          _, peak = tracemalloc.get_traced_memory()
+          tracemalloc.stop()
+          report = {
+              'seed': '0x507128',
+              'no_prune_nodes': len(nodes),
+              'hash_only_nodes': len(hashed),
+              'dominance_nodes': len(frontier),
+              'elapsed_seconds': round(elapsed, 6),
+              'peak_bytes': peak,
+              'memory_limit_bytes': 128 * 1024 * 1024,
+          }
+          assert len(frontier) <= len(hashed) <= len(nodes)
+          assert peak <= report['memory_limit_bytes'], report
+          with open('s07-dominance-report.json', 'w', encoding='utf-8') as fh:
+              json.dump(report, fh, indent=2, sort_keys=True)
+              fh.write('\n')
+          print(json.dumps(report, sort_keys=True))
+          PY
+
+      - name: Upload generated-state receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-s07-dominance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: revenue/kaggriculture/cloud-execution-lab/s07-dominance-report.json
+          if-no-files-found: error

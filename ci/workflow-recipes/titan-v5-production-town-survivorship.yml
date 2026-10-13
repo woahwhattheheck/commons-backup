@@ -1,0 +1,81 @@
+name: TITAN V5 production town survivorship
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-recovery-survivorship/**"
+      - ".github/workflows/titan-v5-production-town-survivorship.yml"
+  push:
+    branches:
+      - "astra/v5-production-town-survivorship-20260912"
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-recovery-survivorship/**"
+      - ".github/workflows/titan-v5-production-town-survivorship.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  source-and-materialization:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+      - name: Assert exact checked-out head
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED="${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-recovery-survivorship
+        run: |
+          python -m py_compile materialize_town_off.py test_materialize_town_off.py
+          python -B -m unittest -v test_materialize_town_off.py
+          python -O -B -m unittest -v test_materialize_town_off.py
+      - name: Materialize exact public production baseline twice
+        shell: bash
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-recovery-survivorship
+        run: |
+          set -euo pipefail
+          URL="https://github.com/woahwhattheheck/commons/releases/download/titan-kaggriculture-gauntlet-20260912/titan-v5-production-recovery-v2.tar.gz"
+          curl --fail --location --silent --show-error "$URL" --output baseline.tar.gz
+          echo "0aded66a2c393cc60f4f45d10f11c384a7e788182bf5430863829a02b66daf02  baseline.tar.gz" | sha256sum --check -
+          python -B materialize_town_off.py --baseline baseline.tar.gz --out town-off-a.tar.gz --receipt town-off-a.json
+          python -B materialize_town_off.py --baseline baseline.tar.gz --out town-off-b.tar.gz --receipt town-off-b.json
+          cmp town-off-a.tar.gz town-off-b.tar.gz
+          cmp town-off-a.json town-off-b.json
+          mkdir treatment
+          tar -xzf town-off-a.tar.gz -C treatment
+          python -m compileall -q treatment
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          receipt = json.loads(Path("town-off-a.json").read_text())
+          cfg = Path("treatment/TITAN-CONFIG.json").read_bytes()
+          assert hashlib.sha256(cfg).hexdigest() == "70e849ebc9275250f474aa463b8f90862a7c224b10f9b2e91f8b78e04ad94463"
+          assert json.loads(cfg)["town_procurement"] is False
+          assert receipt["changed_members"] == ["TITAN-CONFIG.json"]
+          assert receipt["member_count"] == 92
+          assert receipt["native_economics_status"] == "PENDING_BASE_PRODUCTION_PANEL"
+          assert receipt["kaggle_submission_hold"] is True
+          print(json.dumps({
+              "treatment_archive_sha256": receipt["treatment"]["archive_sha256"],
+              "treatment_config_sha256": receipt["treatment"]["config_sha256"],
+              "member_count": receipt["member_count"],
+          }, sort_keys=True))
+          PY
+      - name: Publish exact treatment bytes for independent review
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v5-production-recovery-town-off
+          path: |
+            revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-recovery-survivorship/town-off-a.tar.gz
+            revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-recovery-survivorship/town-off-a.json
+          if-no-files-found: error
+          compression-level: 0

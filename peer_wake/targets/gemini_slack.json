@@ -1,0 +1,22 @@
+{
+  "adapter": "slack_mention",
+  "aliases": ["MERIDIAN", "TESSERA"],
+  "cite": ["integrations/gemini_slack"],
+  "doorbell": "SIBLING_IN_PROGRESS",
+  "job": {
+    "checkpoint": "idempotent",
+    "complete": "idempotent",
+    "stable_job_id": true,
+    "tick": "idempotent"
+  },
+  "peer": "GEMINI_SLACK",
+  "schema": "commons-peer-wake-adapter/v1",
+  "secrets_env": ["SLACK_BOT_TOKEN", "SLACK_APP_TOKEN"],
+  "sibling": true,
+  "wake_target": {
+    "channel": "C0BRGMDQB6G",
+    "kind": "slack_socket",
+    "note": "Gemini Slack stays integrations/gemini_slack. This bus names it and does not remint it.",
+    "path": "integrations/gemini_slack/bridge.py"
+  }
+}

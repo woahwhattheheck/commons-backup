@@ -1,0 +1,39 @@
+name: Outbound send forensics
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/outbound_send_forensics/**'
+      - 'revenue/outbound_connector_lease/**'
+      - '.github/workflows/outbound-send-forensics.yml'
+  pull_request:
+    paths:
+      - 'revenue/outbound_send_forensics/**'
+      - 'revenue/outbound_connector_lease/**'
+      - '.github/workflows/outbound-send-forensics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: |
+          python -m py_compile \
+            revenue/outbound_send_forensics/audit.py \
+            revenue/outbound_send_forensics/test_audit.py
+      - name: Tests
+        run: python -m unittest -v revenue.outbound_send_forensics.test_audit
+      - name: Optimized tests
+        run: python -O -m unittest -v revenue.outbound_send_forensics.test_audit

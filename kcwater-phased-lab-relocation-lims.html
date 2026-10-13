@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>KC Water phased laboratory routing — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#eef5f5;--ink:#132328;--muted:#53676b;--line:#b9c8c9;--card:#fbfefd;--blue:#1d6081;--teal:#16766a;--amber:#956317}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#d2e9ed,var(--paper) 47%);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
+main{max-width:1080px;margin:auto;padding:28px 16px 72px}a{color:var(--blue)}h1{font:800 clamp(2.2rem,6vw,4.4rem)/.96 system-ui,sans-serif;max-width:960px;margin:.2em 0}
+.kicker{letter-spacing:.14em;text-transform:uppercase;font-size:.76rem;color:var(--teal)}.lede{font-size:1.1rem;max-width:840px;color:var(--muted)}
+.truth{border-left:5px solid var(--amber);padding:10px 14px;background:#fff8e9}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}.wide{grid-column:1/-1}table{width:100%;border-collapse:collapse}th,td{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+button{border:0;border-radius:999px;padding:11px 16px;background:var(--teal);color:white;font-weight:700;cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere;min-height:190px;padding:14px;background:#112629;color:#dff5ee;border-radius:10px}
+.state{display:inline-block;border:1px solid var(--amber);color:var(--amber);border-radius:999px;padding:3px 9px;font-size:.75rem;font-weight:800}.small{color:var(--muted);font-size:.88rem}@media(max-width:760px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="./index.html">← Commons</a> · <a href="./offer.html">offers</a> · <a href="./feature-tracker.html">feature tracker</a></nav>
+<p class="kicker">KC Water Laboratory · phased relocation routing · HOLD / BUILD-AND-VERIFY</p>
+<h1>Keep synthetic accessions tied to the right site, instrument, and staged report.</h1>
+<p class="lede">A frozen 300-submission fixture routes de-identified drinking-water, wastewater, and stormwater work across main, temporary, and contingency sites while preserving custody, method/scope/version, calibration/QC source, and result-report lineage.</p>
+<p class="truth"><strong>Truth boundary:</strong> synthetic lineage evidence only. Interfaces are read-only/simulated. This page makes no public-health, diagnostic, compliance, or production-routing decision and cannot release a report without an authorized named human.</p>
+
+<div class="grid">
+<section class="card">
+<h2>Frozen acceptance</h2>
+<table>
+<thead><tr><th>Check</th><th>Required result</th></tr></thead>
+<tbody>
+<tr><td>Input</td><td>300 synthetic submissions</td></tr>
+<tr><td>READY / HOLD</td><td>240 / 60</td></tr>
+<tr><td>Holds</td><td>20 duplicate containers · 20 site/method-scope mismatches · 20 custody/temperature failures</td></tr>
+<tr><td>Valid routing</td><td>one active site + instrument route for every valid test</td></tr>
+<tr><td>Result attachment</td><td>no cross-site result attachment</td></tr>
+<tr><td>Hashes</td><td>240 source · 240 value · 240 unit · 240 qualifier</td></tr>
+<tr><td>Replay / release</td><td>0 additions · named-human directory only</td></tr>
+</tbody>
+</table>
+<p class="small">Official acceptance: <code>python test_kcwater_phased_lab_relocation_lims.py</code></p>
+</section>
+
+<section class="card">
+<h2>Evidence receipt <span id="state" class="state">NOT LOADED</span></h2>
+<p><button id="load" type="button">Load checked-in receipt</button></p>
+<pre id="output">Load the receipt to verify the exact frozen oracle and evidence hashes.</pre>
+</section>
+
+<section class="card wide">
+<h2>Bound while sites change</h2>
+<p>Each READY accession carries its container and custody evidence into one active main, temporary, or contingency route. The controlled method/scope/version, synthetic calibration/QC source, raw value, unit, qualifier, and staged-report hashes remain explicitly connected. A mismatched route or source is held before any output is created.</p>
+
+</section>
+</div>
+</main>
+<script>
+(() => {
+  const state = document.getElementById("state");
+  const output = document.getElementById("output");
+  const expectedHolds = {
+    HOLD_CUSTODY_TEMPERATURE_FAILURE: 20,
+    HOLD_DUPLICATE_CONTAINER: 20,
+    HOLD_SITE_METHOD_SCOPE_MISMATCH: 20
+  };
+  document.getElementById("load").addEventListener("click", async () => {
+    state.textContent = "READING";
+    try {
+      const response = await fetch("./revenue/kcwater_phased_lab_relocation_lims/receipt.json", {cache:"no-store"});
+      if (!response.ok) throw new Error("receipt HTTP " + response.status);
+      const value = await response.json();
+      const failures = [];
+      if (value.state !== "TESTED") failures.push("state");
+      if (value.input_rows !== 300 || value.ready !== 240 || value.holds !== 60) failures.push("counts");
+      if (value.reports_staged !== 240 || value.reports_released !== 0) failures.push("reports");
+      if (value.replay_additions !== 0) failures.push("replay");
+      if (JSON.stringify(value.hold_counts) !== JSON.stringify(expectedHolds)) failures.push("hold_counts");
+      for (const key of ["fixture_sha256", "manifest_sha256", "audit_sha256"]) {
+        if (!/^[a-f0-9]{64}$/.test(value[key] || "")) failures.push(key);
+      }
+      state.textContent = failures.length ? "FAIL" : "PASS";
+      output.textContent = JSON.stringify({ok: !failures.length, failures, receipt: value}, null, 2);
+    } catch (error) {
+      state.textContent = "UNKNOWN";
+      output.textContent = String(error);
+    }
+  });
+})();
+</script>
+</body>
+</html>

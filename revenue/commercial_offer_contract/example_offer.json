@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "offer_id": "offer-example-001",
+  "opportunity_id": "opportunity-example-001",
+  "buyer_ref": "buyer-opaque-example",
+  "created_at": "2026-09-13T09:00:00Z",
+  "valid_until": "2026-09-20T09:00:00Z",
+  "currency": "USD",
+  "total_amount_minor": 150000,
+  "deliverables": [
+    {
+      "id": "D1",
+      "title": "Implementation",
+      "acceptance_criteria": "All agreed synthetic acceptance cases pass.",
+      "evidence_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "id": "D2",
+      "title": "Handoff",
+      "acceptance_criteria": "Runbook and source manifest delivered.",
+      "evidence_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M1",
+      "deliverable_ids": ["D1"],
+      "amount_minor": 100000,
+      "acceptance_window_hours": 72,
+      "payment_due_days": 7
+    },
+    {
+      "id": "M2",
+      "deliverable_ids": ["D2"],
+      "amount_minor": 50000,
+      "acceptance_window_hours": 48,
+      "payment_due_days": 7
+    }
+  ],
+  "assumptions": ["Buyer supplies agreed test fixtures."],
+  "exclusions": ["No production deployment without a separate authorization."]
+}

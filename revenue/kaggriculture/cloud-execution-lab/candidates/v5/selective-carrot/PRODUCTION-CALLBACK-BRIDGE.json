@@ -1,0 +1,93 @@
+{
+  "schema": "titan-v5-production-recovery-v2-callback-bridge/v1",
+  "production_v1_sha256": "35a4528c482dcd7e5e2b4875927bcf2a22a8b565698c9c10f24eda0ed908a4ab",
+  "production_v2_sha256": "0aded66a2c393cc60f4f45d10f11c384a7e788182bf5430863829a02b66daf02",
+  "delivery_v1_sha256": "4db8d176bd34b219eff62c65e584a0786889065a52467b68f79e01f24af8fb30",
+  "delivery_v2_sha256": "0d42ee5fabb089745fa0064207654bfdf5df9466ba6499d91b6e685d4880cab1",
+  "changed_member": "main.py",
+  "treatment": "Normalize outer observation.step before callback and crop receipt commit",
+  "evidence": "Guard-off callback semantics; not native timing or hosted rating",
+  "cases": [
+    {
+      "case": "production_absent_seat0",
+      "source": "outputs/v5-production-recovery-v2-absent-p0.json",
+      "source_sha256": "ba577d17d53d924899cdaed3085a1b1091d8299b83509619fee9bafacec21239",
+      "actions_sha256": "1b60ab672b7ff215868ba237d9a51c97c54234cdb4973b9f7c5d97819ca7bb60",
+      "margin": 13784.0,
+      "cash": [
+        86084.0,
+        72300.0
+      ],
+      "statuses": {
+        "completed": 719
+      },
+      "fault_injections": [],
+      "decisions": 719
+    },
+    {
+      "case": "production_null_seat1_outer227",
+      "source": "outputs/v5-production-recovery-v2-null-fault-p1.json",
+      "source_sha256": "d506657c975b5a3e98a67097df0b3b33db0bb07db3afe7f3639905767a47ab40",
+      "actions_sha256": "1b60ab672b7ff215868ba237d9a51c97c54234cdb4973b9f7c5d97819ca7bb60",
+      "margin": 13784.0,
+      "cash": [
+        72300.0,
+        86084.0
+      ],
+      "statuses": {
+        "completed": 718,
+        "instance_reset": 1
+      },
+      "fault_injections": [
+        {
+          "step": 227,
+          "route_before_cancellation": "R04-10",
+          "completed_route": "R04-10",
+          "status_before_cancellation": "completed"
+        }
+      ],
+      "decisions": 719
+    },
+    {
+      "case": "production_null_seat0_outer510",
+      "source": "outputs/v5-production-recovery-v2-null-fault510-p0.json",
+      "source_sha256": "dc05546ba98a0771927be17eb27c890ee44c25e1128a84e783b8c1a32536fea9",
+      "actions_sha256": "1b60ab672b7ff215868ba237d9a51c97c54234cdb4973b9f7c5d97819ca7bb60",
+      "margin": 13784.0,
+      "cash": [
+        86084.0,
+        72300.0
+      ],
+      "statuses": {
+        "completed": 718,
+        "instance_reset": 1
+      },
+      "fault_injections": [
+        {
+          "step": 510,
+          "route_before_cancellation": "R04-10",
+          "completed_route": "R04-10",
+          "status_before_cancellation": "completed"
+        }
+      ],
+      "decisions": 719
+    },
+    {
+      "case": "delivery_absent_seat1",
+      "source": "outputs/v4-delivery-carrot-v2-absent-p1.json",
+      "source_sha256": "5154c28d63d1bc12174fbd1fbc1a06967019c1bbeb9cbe09718d75856fcfc2dd",
+      "actions_sha256": "c3b9fc67c7b00efbd9805b5ef5bf70bddfb0b16f036ffef5d403949c04adc105",
+      "margin": 3620.0,
+      "cash": [
+        87746.0,
+        91366.0
+      ],
+      "statuses": {
+        "completed": 719
+      },
+      "fault_injections": [],
+      "decisions": 719
+    }
+  ],
+  "all_action_streams_match_reference": true
+}

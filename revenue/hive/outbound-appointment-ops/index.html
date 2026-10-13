@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Outbound Appointment Operations</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#e7eef5;background:#101821;color-scheme:dark}
+*{box-sizing:border-box}body{max-width:1220px;margin:auto;padding:22px}h1{font-size:2rem;margin:.4rem 0}
+h2{font-size:1.1rem}p{line-height:1.5}.muted{color:#a9b7c6}.notice{border-left:4px solid #52c7ba;padding:12px;background:#1b2935}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:#18232e;border:1px solid #304353;border-radius:10px;padding:18px;margin:16px 0}
+label{display:block;margin:12px 0 4px;font-weight:600}input,textarea,select,button{font:inherit;max-width:100%;border-radius:6px;border:1px solid #496274;padding:10px}
+input,textarea,select{width:100%;background:#111c27;color:inherit}textarea{min-height:92px;resize:vertical}
+button,.link{display:inline-block;background:#a4e3d6;color:#09271f;font-weight:600;cursor:pointer;margin:12px 10px 0 0;text-decoration:none;padding:10px;border-radius:6px}
+button.secondary{background:#283d4b;color:#e6edf5}.error{color:#ffb5b5}.ok{color:#a4e3d6}#status{position:sticky;top:0;z-index:1;background:#101821;padding:12px;white-space:pre-wrap}
+table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{text-align:left;border-bottom:1px solid #304353;padding:9px;overflow-wrap:anywhere}
+.scroll{overflow:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere}.badge{padding:3px 8px;background:#263f4c;border-radius:20px}.full{grid-column:1/-1}
+@media(max-width:760px){.grid{grid-template-columns:1fr}body{padding:12px}h1{font-size:1.7rem}td,th{padding:6px}}
+</style>
+</head>
+<body>
+<header>
+<p class="muted">HIVE / LOCAL OPERATOR CONSUMER</p>
+<h1>Outbound Appointment Operations</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+
+<p>Review lawful-source prospects, create unsent drafts, record actual replies, and prepare local booking/CRM handoffs.</p>
+</header>
+<p class="notice">This workspace wraps the landed Hive028 <code>OutboundDesk</code>. It does not send email, mutate a live calendar/CRM, enrich contacts, or infer consent. Route/source/relevance facts must come from an authorized operator input.</p>
+<div id="status" role="status" aria-live="polite">Loading workspace…</div>
+<nav><button id="refresh" class="secondary">Refresh</button><a id="crmLink" class="link" href="#">Current campaign CRM CSV</a></nav>
+<div class="grid">
+<section class="panel">
+<h2>1 / Campaign and offer</h2>
+<form id="campaignForm">
+<label for="campaignId">Campaign ID</label><input id="campaignId" required value="demo-campaign">
+<label for="customerName">Customer name</label><input id="customerName" required>
+<label for="offer">Actual offer</label><textarea id="offer" required></textarea>
+<label for="sourcePolicy">Lawful-source policy</label><textarea id="sourcePolicy" required>customer-provided lawful source only</textarea>
+<button>Create campaign</button>
+</form>
+</section>
+<section class="panel">
+<h2>2 / Prospect intake</h2>
+<label for="campaign">Current campaign</label><select id="campaign"></select>
+<form id="prospectForm">
+<label for="prospectId">Prospect ID</label><input id="prospectId" required>
+<label for="organization">Organization</label><input id="organization" required>
+<label for="contactName">Contact name</label><input id="contactName" required>
+<label for="routeRef">Opaque route reference</label><input id="routeRef" required>
+<label for="sourceRef">Source reference</label><input id="sourceRef" required>
+<label for="lawfulNote">Lawful-source note</label><textarea id="lawfulNote" required></textarea>
+<label for="relevance">Relevance note</label><textarea id="relevance" required></textarea>
+<button>Add prospect</button>
+</form>
+</section>
+<section class="panel full">
+<h2>3 / Prospect queue</h2>
+<div class="scroll"><table><thead><tr><th>Prospect</th><th>Organization</th><th>Status</th><th>Latest reply</th><th>Draft</th><th></th></tr></thead><tbody id="prospects"></tbody></table></div>
+</section>
+<section class="panel">
+<h2>4 / Unsent draft</h2>
+<p id="selected" class="muted">Select a prospect.</p>
+<pre id="provenance"></pre>
+<button id="draft">Create/retrieve unsent draft</button>
+<pre id="draftView"></pre>
+<p class="muted">The landed desk constructs the draft from stored customer/offer/relevance facts and always marks transport <strong>NONE</strong>. Review externally before any authorized provider step.</p>
+</section>
+<section class="panel">
+<h2>5 / Record an actual reply</h2>
+<form id="replyForm">
+<label for="replyKind">Manual classification</label>
+<select id="replyKind"><option value="interested">Interested</option><option value="question">Question</option><option value="not_now">Not now</option><option value="opt_out">Opt out</option></select>
+<label for="replyNote">Reply note / source reference</label><textarea id="replyNote" required></textarea>
+<button>Record reply</button>
+</form>
+<p class="muted">Opt-out is durable by route reference and blocks future drafts/bookings in the landed runtime.</p>
+</section>
+<section class="panel">
+<h2>6 / Add an available local slot</h2>
+<form id="slotForm">
+<label for="slotId">Slot ID</label><input id="slotId" required>
+<label for="start">Start with timezone</label><input id="start" placeholder="2030-09-10T14:00:00Z" required>
+<label for="end">End with timezone</label><input id="end" placeholder="2030-09-10T14:30:00Z" required>
+<button>Add local slot</button>
+</form>
+<p class="muted">This is imported/local availability, not a provider reservation.</p>
+</section>
+<section class="panel">
+<h2>7 / Book an agreed slot</h2>
+<form id="bookForm">
+<label for="bookSlot">Available slot</label><select id="bookSlot"></select>
+<button>Create local booking</button>
+</form>
+<p class="muted">The latest recorded reply must be <strong>interested</strong>. Booking produces a local handoff only.</p>
+</section>
+<section class="panel full">
+<h2>Bookings / calendar handoff</h2>
+<div id="bookings"></div>
+</section>
+<section class="panel full">
+<h2>Workspace state</h2>
+<pre id="summary"></pre>
+</section>
+</div>
+<footer><p class="muted">Hive028 composition · MAPLE operator/browser design adapted onto TEMPEST's landed OutboundDesk · no provider transport.</p></footer>
+<script>
+'use strict';
+let state={campaigns:[],prospects:[],slots:[],bookings:[],suppressions:[]}, current='', selected='';
+const $=id=>document.getElementById(id);
+const el=(tag,text)=>{const n=document.createElement(tag);n.textContent=text;return n};
+const op=prefix=>`${prefix}-${crypto.randomUUID()}`;
+const say=(text,bad=false)=>{$('status').textContent=text;$('status').className=bad?'error':'ok'};
+async function request(payload){
+  const r=await fetch('/api',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  const j=await r.json(); if(!r.ok)throw Error(j.error||String(r.status)); return j;
+}
+async function refresh(){
+  const r=await fetch('/state'); const j=await r.json(); if(!r.ok)throw Error(j.error||String(r.status)); state=j; render();
+}
+function chosen(){const p=state.prospects.find(p=>p.prospect_id===selected&&p.campaign_id===current);if(!p)throw Error('Select a prospect first.');return p}
+function render(){
+  const campaigns=$('campaign'); campaigns.replaceChildren();
+  for(const c of state.campaigns){const o=el('option',`${c.campaign_id} / ${c.customer_name}`);o.value=c.campaign_id;campaigns.append(o)}
+  if(!state.campaigns.some(c=>c.campaign_id===current))current=state.campaigns[0]?.campaign_id||'';
+  campaigns.value=current;
+  $('crmLink').href=current?`/crm.csv?campaign_id=${encodeURIComponent(current)}`:'#';
+  const tbody=$('prospects');tbody.replaceChildren();
+  for(const p of state.prospects.filter(p=>p.campaign_id===current)){
+    const tr=document.createElement('tr');
+    const status=p.suppressed?'SUPPRESSED':p.status;
+    for(const v of [`${p.contact_name} / ${p.prospect_id}`,p.organization,status,p.latest_reply||'—',p.draft_state||'—'])tr.append(el('td',v));
+    const td=document.createElement('td'),b=el('button','Open');b.onclick=()=>{selected=p.prospect_id;render()};td.append(b);tr.append(td);tbody.append(tr);
+  }
+  const p=state.prospects.find(p=>p.prospect_id===selected&&p.campaign_id===current);
+  if(!p)selected='';
+  $('selected').textContent=p?`${p.contact_name} / ${p.organization} / ${p.route_ref}`:'Select a prospect.';
+  $('provenance').textContent=p?`Source: ${p.source_ref}\nLawful-source note: ${p.lawful_source_note}\nRelevance: ${p.relevance_note}`:'';
+  $('draftView').textContent=p&&p.draft_subject?`${p.draft_state}: ${p.draft_subject}`:'No draft yet.';
+  const slot=$('bookSlot');slot.replaceChildren();
+  for(const s of state.slots.filter(s=>s.state==='AVAILABLE')){
+    const o=el('option',`${s.slot_id} / ${s.starts_at} → ${s.ends_at}`);o.value=s.slot_id;slot.append(o)
+  }
+  const bookings=$('bookings');bookings.replaceChildren();
+  for(const b of state.bookings){
+    const p=document.createElement('p');p.append(el('span',`${b.organization} / ${b.starts_at} → ${b.ends_at} `));
+    const a=el('a','Download .ics');a.className='link';a.href=`/calendar.ics?booking_id=${encodeURIComponent(b.booking_id)}`;a.download=`${b.booking_id}.ics`;p.append(a);bookings.append(p)
+  }
+  if(!state.bookings.length)bookings.append(el('p','No local bookings yet.'));
+  $('summary').textContent=JSON.stringify({transport:state.transport,provider_mutation:state.provider_mutation,counts:state.status?.counts,suppressions:state.suppressions},null,2);
+}
+async function run(fn){try{await fn()}catch(e){say(e.message,true)}}
+function form(id,fn){$(id).addEventListener('submit',event=>{event.preventDefault();run(fn)})}
+form('campaignForm',async()=>{
+  await request({action:'campaign',operation_id:op('campaign'),campaign_id:$('campaignId').value,customer_name:$('customerName').value,offer:$('offer').value,source_policy:$('sourcePolicy').value});
+  current=$('campaignId').value.trim();await refresh();say('Campaign created locally.');
+});
+form('prospectForm',async()=>{
+  await request({action:'prospect',operation_id:op('prospect'),campaign_id:current,prospect_id:$('prospectId').value,organization:$('organization').value,contact_name:$('contactName').value,route_ref:$('routeRef').value,source_ref:$('sourceRef').value,lawful_source_note:$('lawfulNote').value,relevance_note:$('relevance').value});
+  selected=$('prospectId').value.trim();await refresh();say('Prospect added from operator-supplied source facts.');
+});
+$('draft').onclick=()=>run(async()=>{const p=chosen();const result=await request({action:'draft',operation_id:op('draft'),prospect_id:p.prospect_id});await refresh();$('draftView').textContent=`${result.state}: ${result.subject}\n\n${result.body}`;say('Unsent draft created/retrieved. Nothing sent.')});
+form('replyForm',async()=>{
+  const p=chosen();await request({action:'reply',operation_id:op('reply'),prospect_id:p.prospect_id,reply_id:op('reply-id'),kind:$('replyKind').value,note:$('replyNote').value,received_at:new Date().toISOString()});
+  await refresh();say('Inbound reply recorded manually.');
+});
+form('slotForm',async()=>{
+  await request({action:'slot',operation_id:op('slot'),slot_id:$('slotId').value,starts_at:$('start').value,ends_at:$('end').value});
+  await refresh();say('Local slot added; no calendar provider changed.');
+});
+form('bookForm',async()=>{
+  const p=chosen(),slot=$('bookSlot').value;if(!slot)throw Error('Add an available slot first.');
+  await request({action:'book',operation_id:op('book'),prospect_id:p.prospect_id,slot_id:slot});
+  await refresh();say('Local booking created; review the CRM/ICS handoff.');
+});
+$('campaign').onchange=()=>{current=$('campaign').value;selected='';render()};
+$('refresh').onclick=()=>run(async()=>{await refresh();say('Workspace refreshed from local SQLite state.')});
+run(async()=>{await refresh();say('Ready. Local state only; no sends or provider updates.')});
+</script>
+</body>
+</html>

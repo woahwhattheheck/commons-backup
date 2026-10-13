@@ -1,0 +1,87 @@
+{
+  "authority": {
+    "can_adjudicate_dispute": false,
+    "can_approve_payment_plan": false,
+    "can_make_accounting_conclusion": false,
+    "can_make_legal_conclusion": false,
+    "can_modify_invoice": false,
+    "can_send_buyer_message": false,
+    "can_take_payment": false,
+    "customer_acceptance_claimed": false,
+    "payment_claimed": false,
+    "revenue_claimed": false
+  },
+  "case_id": "case-001",
+  "evaluated_at": "2026-09-17T12:00:00Z",
+  "event_chain": [
+    {
+      "chain_root_sha256": "8098fd2a510df2347d882d0253b2baf7c6faa72b453d780af8212783d02cab67",
+      "event_id": "evt-001",
+      "event_sha256": "138f686636ce7674594ca9666ba6876a7f1ef4ea2c0b4c8a26e08687b266ecfc",
+      "sequence": 1
+    },
+    {
+      "chain_root_sha256": "893febadaf2b2e1aab547d8ed0bf2aea6c2c664e22a6985096d04f3019d9230e",
+      "event_id": "evt-002",
+      "event_sha256": "c29021d17d7a125b11c876354fa90521d1eec78b60bf8bcf89a381f865ce0aec",
+      "sequence": 2
+    }
+  ],
+  "event_chain_root_sha256": "893febadaf2b2e1aab547d8ed0bf2aea6c2c664e22a6985096d04f3019d9230e",
+  "evidence": [
+    {
+      "evidence_class": "CUSTOMER_PROVIDED",
+      "evidence_id": "evidence-001",
+      "evidence_sha256": "48736e58b409ed0241c8d7bed9dc188a59e13002f48e7492850bec15b59147b6",
+      "invoice_binding": {
+        "invoice_id": "INV-1007",
+        "revision": "rev-3",
+        "snapshot_sha256": "7022b56ed06038225f24274d1c85e1dc5e5af8fb0ffff360dc9c9accb139bd7b"
+      },
+      "request_id": "req-001"
+    }
+  ],
+  "holds": [],
+  "invoice": {
+    "amount_minor": 250000,
+    "balance_minor": 250000,
+    "currency": "USD",
+    "customer_ref": "customer-demo-001",
+    "invoice_id": "INV-1007",
+    "observed_at": "2026-09-17T09:00:00Z",
+    "revision": "rev-3",
+    "snapshot_sha256": "7022b56ed06038225f24274d1c85e1dc5e5af8fb0ffff360dc9c9accb139bd7b"
+  },
+  "next_checkpoint": {
+    "chain_root_sha256": "893febadaf2b2e1aab547d8ed0bf2aea6c2c664e22a6985096d04f3019d9230e",
+    "event_count": 2
+  },
+  "owner_review_export": {
+    "customer_response_required_before_execution": false,
+    "decision_authority": "HUMAN_OWNER_REQUIRED",
+    "request_action": "OPEN_DISPUTE",
+    "review_instruction": "Review the bound request and evidence. Record any business decision outside this compiler; this packet grants no payment, dispute, invoice, accounting, or legal authority.",
+    "review_required": true
+  },
+  "product": {
+    "commercial_state": "PROPOSED_NOT_ACCEPTED",
+    "optional_integration_price_usd": 5000,
+    "pilot_price_usd": 2500,
+    "product_id": "invoice-resolution-portal-pilot",
+    "scope": "ONE_INVOICE_ONE_WORKFLOW_ONE_INTAKE_SURFACE"
+  },
+  "receipt_sha256": "28a3fdf7f3e4f1494dd5ecdc4bb7d782c86a19c6ff1d90e1f30fa71ae6c4e31b",
+  "request": {
+    "action": "OPEN_DISPUTE",
+    "identical_replay_count": 0,
+    "invoice_binding": {
+      "invoice_id": "INV-1007",
+      "revision": "rev-3",
+      "snapshot_sha256": "7022b56ed06038225f24274d1c85e1dc5e5af8fb0ffff360dc9c9accb139bd7b"
+    },
+    "request_id": "req-001",
+    "statement_sha256": "a5891355d67e8622dfabcd9322ee700af5453aafc8bc7eebec02dcbfdba731bc"
+  },
+  "schema": "invoice-resolution-pilot-packet/v1",
+  "state": "OWNER_REVIEW_READY"
+}

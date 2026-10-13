@@ -1,0 +1,25 @@
+{
+  "schema": "pilot-renewal-expansion/v1",
+  "engagement": {"id": "engagement-demo", "organization_id": "org-demo", "label": "Synthetic paid pilot", "generation": 1},
+  "sources": [
+    {"id": "commercial", "locator": "repo://synthetic/commercial-receipts.json", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "observed_at": "2026-09-17T14:00:00Z"},
+    {"id": "payment", "locator": "https://provider.example/synthetic-settlement", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "observed_at": "2026-09-17T14:05:00Z"}
+  ],
+  "evidence": [
+    {"id": "baseline-ok", "kind": "BASELINE_ACCEPTANCE", "subject_id": "baseline-1", "source_id": "commercial", "status": "VERIFIED", "observed_at": "2026-09-17T14:00:00Z", "valid_through": "2026-10-01T00:00:00Z", "summary": "Synthetic buyer acceptance receipt"},
+    {"id": "milestone-ok", "kind": "MILESTONE_ACCEPTANCE", "subject_id": "milestone-1", "source_id": "commercial", "status": "VERIFIED", "observed_at": "2026-09-17T14:01:00Z", "summary": "Synthetic milestone acceptance"},
+    {"id": "payment-ok", "kind": "PAYMENT_SETTLED", "subject_id": "invoice-1", "source_id": "payment", "status": "VERIFIED", "observed_at": "2026-09-17T14:05:00Z", "summary": "Synthetic settlement evidence"},
+    {"id": "support-ok", "kind": "SUPPORT_FINDING", "subject_id": "finding-1", "source_id": "commercial", "status": "VERIFIED", "observed_at": "2026-09-17T14:02:00Z", "summary": "Synthetic adjacent workflow observation"},
+    {"id": "gap-ok", "kind": "GAP_STATUS", "subject_id": "gap-1", "source_id": "commercial", "status": "VERIFIED", "observed_at": "2026-09-17T14:03:00Z", "summary": "Synthetic gap closed"},
+    {"id": "window-ok", "kind": "RENEWAL_WINDOW", "subject_id": "engagement-demo", "source_id": "commercial", "status": "VERIFIED", "observed_at": "2026-09-17T14:04:00Z", "valid_through": "2026-09-30T23:59:59Z", "summary": "Synthetic renewal window"}
+  ],
+  "commercial_baseline": {"id": "baseline-1", "generation": 1, "acceptance_evidence_id": "baseline-ok", "approved_change_order_ids": []},
+  "change_orders": [],
+  "milestones": [{"id": "milestone-1", "required": true, "state": "ACCEPTED", "acceptance_evidence_id": "milestone-ok"}],
+  "payments": [{"id": "invoice-1", "required_for_renewal": true, "state": "SETTLED", "settlement_evidence_id": "payment-ok"}],
+  "support_findings": [{"id": "finding-1", "category": "workflow", "state": "OBSERVED", "summary": "Synthetic adjacent workflow", "evidence_id": "support-ok"}],
+  "gaps": [{"id": "gap-1", "kind": "SECURITY", "blocking": true, "state": "CLOSED", "evidence_id": "gap-ok"}],
+  "renewal_window": {"open_at": "2026-09-17T00:00:00Z", "close_at": "2026-09-30T23:59:59Z", "evidence_id": "window-ok"},
+  "expansion_hypotheses": [{"id": "expansion-1", "statement": "Extend evidence automation to a second workflow", "state": "PROPOSED_NOT_ACCEPTED", "supporting_evidence_ids": ["support-ok"]}],
+  "communication": {"muse_key": "demo-renewal", "organization_id": "org-demo", "route_id": "buyer-email", "send_state": "NOT_AUTHORIZED"}
+}

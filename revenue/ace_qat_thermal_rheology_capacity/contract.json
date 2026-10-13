@@ -1,0 +1,57 @@
+{
+  "id": "ace-qat-thermal-rheology-capacity-lims-01",
+  "version": 1,
+  "buyer": "Erick Sharp / ACE Laboratories + Quick Accurate Testing",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "lane": "build-demand"
+  },
+  "methods": [
+    "DSC",
+    "TGA",
+    "DMA",
+    "TMA",
+    "SDT",
+    "AR-G2"
+  ],
+  "workflow": [
+    "customer order intake",
+    "immutable accession",
+    "ACE/QAT provenance stamp",
+    "method/version/capability router onto DSC/TGA/DMA/TMA/SDT/AR-G2",
+    "simulated instrument result",
+    "QC review",
+    "staged report",
+    "named-human release"
+  ],
+  "acceptance": [
+    "120 synthetic orders",
+    "exactly 90 READY staged reports",
+    "exactly 30 HOLD: 10 DUPLICATE_ID, 10 CAPABILITY_MISMATCH, 10 QC_FAIL",
+    "instrument, method, and source hashes match the fixture",
+    "replay creates zero duplicate jobs",
+    "zero reports release without named approval",
+    "human releaser required; autonomous release denied"
+  ],
+  "hold_codes": [
+    "DUPLICATE_ID",
+    "CAPABILITY_MISMATCH",
+    "QC_FAIL"
+  ],
+  "golden": {
+    "fixture_sha256": "019eed67be05ac57b8af5e454390eebd688aedac0e4e0466775672db84c25ab9",
+    "audit_sha256": "63a72dea4306203e2da870a0e9cc657146896965b54943ea096c9a592d29620e",
+    "report_digest": "cfc145784c1e22cc619433d6d0aa541bbb34087e4f186aafde3c8e4a11ec7c22"
+  },
+  "exclusions": [
+    "no autonomous certification or release",
+    "no interface marked live before golden-round-trip validation",
+    "no production writes, outreach, or prospect-facing demo"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake, ACE/QAT provenance, capability routing, QC hold, and human release receipts only; never live instrument I/O, customer CoA issuance, or production LIMS writes",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

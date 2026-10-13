@@ -1,0 +1,33 @@
+name: Sublime cement batch dossier
+
+on:
+  pull_request:
+    paths:
+      - "revenue/sublime_cement_batch_dossier/**"
+      - ".github/workflows/sublime-cement-batch-dossier.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/sublime_cement_batch_dossier/**"
+      - ".github/workflows/sublime-cement-batch-dossier.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/sublime_cement_batch_dossier/engine.py revenue/sublime_cement_batch_dossier/test_engine.py
+      - name: Focused tests
+        run: python -m unittest revenue.sublime_cement_batch_dossier.test_engine
+      - name: Focused tests optimized
+        run: python -O -m unittest revenue.sublime_cement_batch_dossier.test_engine

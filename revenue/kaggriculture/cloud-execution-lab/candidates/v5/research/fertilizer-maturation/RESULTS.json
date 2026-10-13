@@ -1,0 +1,61 @@
+{
+  "cases": [
+    {
+      "after_fertilize": {
+        "fertilized_until_day": 9,
+        "fertilizer_remaining": 4,
+        "max_lifespan_step": 264,
+        "planted_day": 7,
+        "yield_units": 1
+      },
+      "before": {
+        "max_lifespan_step": 264,
+        "planted_day": 7,
+        "yield_units": 1
+      },
+      "crop": "CARROT",
+      "fertilizer_applied": 4,
+      "same_day_harvest_units": 0,
+      "same_day_tile_kind": "PLANT",
+      "same_day_yield_units": 1
+    },
+    {
+      "after_fertilize": {
+        "fertilized_until_day": 9,
+        "fertilizer_remaining": 4,
+        "max_lifespan_step": -1,
+        "planted_day": 7,
+        "yield_units": 0
+      },
+      "before": {
+        "max_lifespan_step": -1,
+        "planted_day": 7,
+        "yield_units": 0
+      },
+      "crop": "TOMATO",
+      "fertilizer_applied": 4,
+      "same_day_harvest_units": 0,
+      "same_day_tile_kind": "PLANT",
+      "same_day_yield_units": 0
+    }
+  ],
+  "checks": {
+    "fertilizer_does_not_change_lifespan_clock": true,
+    "fertilizer_does_not_change_planted_day": true,
+    "fertilizer_does_not_create_yield": true,
+    "repeated_fertilizer_is_consumed_without_extra_window": true,
+    "same_day_fertilizer_window_does_not_stack": true,
+    "same_day_nonongoing_harvest_is_blocked": true,
+    "same_day_ongoing_harvest_is_blocked": true
+  },
+  "engine": {
+    "configuration_sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e"
+  },
+  "hypothesis": "Repeated same-day FERTILIZE can reduce crop maturity below zero or create an instant/infinite harvest",
+  "policy_change": false,
+  "runtime_change": false,
+  "schema": "titan-v5/fertilizer-maturation/v1",
+  "verdict": "FALSIFIED"
+}

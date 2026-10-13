@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>SpoilerShield — Fire TV context companion</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header>
+    <h1>SpoilerShield</h1>
+    <span id="mode" class="badge">OFFLINE DEMO</span>
+  </header>
+  <main class="episode">
+    <h2 id="episode-title"></h2>
+    <div class="timeline">
+      <progress id="progress" value="0" max="360000"></progress>
+      <strong id="position">0:00 / 6:00</strong>
+    </div>
+    <div class="controls" aria-label="Demo playback controls">
+      <button id="back">◀ 30 seconds</button>
+      <button id="forward">30 seconds ▶</button>
+    </div>
+    <div class="questions" aria-label="Spoiler-safe context questions">
+      <button data-kind="WHO">Who is that?</button>
+      <button data-kind="WHY">Why does this matter?</button>
+      <button data-kind="CATCH_UP">Catch me up</button>
+    </div>
+    <section class="output" aria-live="polite">
+      <h3>Context answer</h3>
+      <p id="answer">Ask a spoiler-safe question about what you have completed so far.</p>
+      <p id="evidence"></p>
+    </section>
+  </main>
+  <footer>
+    The context gate admits only transcript cues whose <strong>end timestamp is at or before the current playhead</strong>.
+    Cloud AI is optional; if unavailable, the local deterministic provider keeps the same spoiler boundary.
+  </footer>
+  <script src="./config.js"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

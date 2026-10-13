@@ -1,0 +1,97 @@
+name: pursuit-portfolio
+on:
+  pull_request:
+    paths:
+      - "revenue/pursuit_portfolio/**"
+      - "test_pursuit_portfolio.py"
+      - "test_pursuit_portfolio_current.py"
+      - "test_pursuit_portfolio_host.py"
+      - "test_pursuit_portfolio_host_floor.py"
+      - "test_pursuit_portfolio_host_root.py"
+      - "test_pursuit_portfolio_host_custody.py"
+      - "test_pursuit_portfolio_host_support.py"
+      - "test_pursuit_portfolio_publication.py"
+      - "test_pursuit_portfolio_replay_facade.py"
+      - "test_pursuit_portfolio_fresh_boundary.py"
+      - "ci/workflow-recipes/pursuit-portfolio.yml"
+      - ".github/workflows/pursuit-portfolio.yml"
+  push:
+    branches:
+      - main
+      - "lantern-z/pursuit-portfolio-postmerge-authority-20260914"
+    paths:
+      - "revenue/pursuit_portfolio/**"
+      - "test_pursuit_portfolio.py"
+      - "test_pursuit_portfolio_current.py"
+      - "test_pursuit_portfolio_host.py"
+      - "test_pursuit_portfolio_host_floor.py"
+      - "test_pursuit_portfolio_host_root.py"
+      - "test_pursuit_portfolio_host_custody.py"
+      - "test_pursuit_portfolio_host_support.py"
+      - "test_pursuit_portfolio_publication.py"
+      - "test_pursuit_portfolio_replay_facade.py"
+      - "test_pursuit_portfolio_fresh_boundary.py"
+      - "ci/workflow-recipes/pursuit-portfolio.yml"
+      - ".github/workflows/pursuit-portfolio.yml"
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Normal interpreter
+        run: >-
+          python -m unittest -v
+          test_pursuit_portfolio.py
+          test_pursuit_portfolio_current.py
+          test_pursuit_portfolio_host.py
+          test_pursuit_portfolio_host_floor.py
+          test_pursuit_portfolio_host_root.py
+          test_pursuit_portfolio_host_custody.py
+          test_pursuit_portfolio_publication.py
+          test_pursuit_portfolio_replay_facade.py
+          test_pursuit_portfolio_fresh_boundary.py
+      - name: Optimized interpreter
+        run: >-
+          python -O -m unittest -v
+          test_pursuit_portfolio.py
+          test_pursuit_portfolio_current.py
+          test_pursuit_portfolio_host.py
+          test_pursuit_portfolio_host_floor.py
+          test_pursuit_portfolio_host_root.py
+          test_pursuit_portfolio_host_custody.py
+          test_pursuit_portfolio_publication.py
+          test_pursuit_portfolio_replay_facade.py
+          test_pursuit_portfolio_fresh_boundary.py
+      - name: Compile exact proof surface
+        run: >-
+          python -m py_compile
+          revenue/pursuit_portfolio/core.py
+          revenue/pursuit_portfolio/core_v2.py
+          revenue/pursuit_portfolio/current.py
+          revenue/pursuit_portfolio/floor.py
+          revenue/pursuit_portfolio/host_kernel.py
+          revenue/pursuit_portfolio/host.py
+          revenue/pursuit_portfolio/fresh_exec.py
+          revenue/pursuit_portfolio/fresh_protocol.py
+          revenue/pursuit_portfolio/fresh_boundary.py
+          revenue/pursuit_portfolio/fresh_worker_ops.py
+          revenue/pursuit_portfolio/fresh_worker.py
+          revenue/pursuit_portfolio/publisher.py
+          revenue/pursuit_portfolio/cli.py
+          test_pursuit_portfolio.py
+          test_pursuit_portfolio_current.py
+          test_pursuit_portfolio_host_support.py
+          test_pursuit_portfolio_host.py
+          test_pursuit_portfolio_host_floor.py
+          test_pursuit_portfolio_host_root.py
+          test_pursuit_portfolio_host_custody.py
+          test_pursuit_portfolio_publication.py
+          test_pursuit_portfolio_replay_facade.py
+          test_pursuit_portfolio_fresh_boundary.py

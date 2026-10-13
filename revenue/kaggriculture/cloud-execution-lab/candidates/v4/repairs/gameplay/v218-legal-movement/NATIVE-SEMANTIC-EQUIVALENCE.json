@@ -1,0 +1,42 @@
+{
+  "schema": "titan-v4-v218-native-semantic-equivalence/v1",
+  "status": "checker_authority_hardened_execution_not_rerun",
+  "canonical_main_observed": "5f49d85b20c961ebed2c1c64d71d406cf56bb436",
+  "semantic_checker": {
+    "path": "repairs/gameplay/v218-legal-movement/check_current_native_binding.py",
+    "git_blob": "3252605d49bbbddfcd13a8a9f834333b2a2d04df",
+    "semantic_proof_commit": "ccc31474cf01f14e76cf60c1bf2ff24bdb60d387",
+    "graph_registration_commit": "c7c00fec97edc0bc5ce3a2577f81601c9ad1091e",
+    "semantic_disposition_when_all_fail_closed_probes_pass": "NATIVE_SEMANTIC_EQUIVALENT_REQUIRES_RUNTIME_GATE",
+    "syntactic_source_refs_authorize_wiring": false
+  },
+  "graph_registration": {
+    "component_id": "v218-native-movement-equivalence",
+    "composition_state": "evidence_only",
+    "receipt_path": "repairs/gameplay/v218-legal-movement/NATIVE-SEMANTIC-EQUIVALENCE.json",
+    "transforms": []
+  },
+  "current_source_identities": {
+    "main.py": "a015fef88d855d6d9c50f9d36e2551abd8829996",
+    "titan_runtime.py": "6d9720f4aa1e6b46e92ee5183897074d8e9ea5a0",
+    "TITAN-CONFIG.json": "86c18cee3cec97bbd0e35791fa90b48ecb8925f1",
+    "frozen_selected.py": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+    "scheduler.py": "a483b24dd72b580d7d8811636b54d2d44f391575",
+    "reference/next-panel/vendor/arlene.py": "bdb9cf58148a3c7961c085f4902759537decabf6",
+    "spatial_tempo.py": "edbc423023479dbe2e78131495334384a87b607f"
+  },
+  "semantic_evidence": {
+    "locked_transit": "intact Arlene _noop handles MOVES before its later tile == LOCKED guard, so an in-bounds move is not rejected solely because the destination tile is LOCKED",
+    "four_corner_shed_access": "intact Arlene _shed_adjacent accepts all four central cells",
+    "tile_agnostic_spatial_pathing": "SpatialTempo path/move helpers contain no tile-state gate and operate only on board coordinates",
+    "frozen_nonterminal_config": true
+  },
+  "historical_receipt_relationship": {
+    "CURRENT-NATIVE-BINDING.json": "preserved historical pre-ccc31474 token-only blocker receipt; not authoritative for semantic-equivalence classification",
+    "CURRENT-NATIVE-BINDING-VALIDATION.json": "preserved historical pre-ccc31474 validation; its BLOCKED_AT_NATIVE_ASSEMBLY conclusion predates the semantic checker"
+  },
+  "control_plane_disposition": "evidence_only_no_transform_required",
+  "runtime_promotion_authority": false,
+  "economic_authority": false,
+  "execution_note": "Current production source identities were revalidated after the town-procurement landing. #12923 remains the zero-transform evidence-only graph authority. This receipt pins the fail-closed checker that treats AST import/name/token hits only as DIRECT_BINDING_UNVERIFIED diagnostics: such hits may live in unimported modules, dead branches, dead functions, or unused imports and therefore cannot satisfy --require-wired. Only the authenticated graph/receipt path over the exact six-source semantic chain plus the initial TITAN-CONFIG identity can mint semantic_wired=true, and every proof input is reread before registration returns authority. Runtime/field gates must still execute the checker against the exact mounted current package before any promotion claim."
+}

@@ -1,0 +1,51 @@
+name: Current Readiness Authority Guard
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/**/*.py'
+      - 'tools/current_readiness_guard/**'
+      - '.github/workflows/current-readiness-guard.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile guard
+        run: python -m py_compile tools/current_readiness_guard/*.py
+      - name: Hostile and safe corpus
+        run: >-
+          python -m unittest -v
+          tools.current_readiness_guard.test_guard
+          tools.current_readiness_guard.test_guard_hardening
+          tools.current_readiness_guard.test_guard_compatibility
+          tools.current_readiness_guard.test_guard_review_closure
+          tools.current_readiness_guard.test_guard_review_closure_v2
+          tools.current_readiness_guard.test_guard_review_closure_v3
+      - name: Optimized hostile and safe corpus
+        run: >-
+          python -O -m unittest -v
+          tools.current_readiness_guard.test_guard
+          tools.current_readiness_guard.test_guard_hardening
+          tools.current_readiness_guard.test_guard_compatibility
+          tools.current_readiness_guard.test_guard_review_closure
+          tools.current_readiness_guard.test_guard_review_closure_v2
+          tools.current_readiness_guard.test_guard_review_closure_v3
+      - name: Scan changed revenue Python
+        run: >-
+          python -m tools.current_readiness_guard.cli changed
+          --base '${{ github.event.pull_request.base.sha }}'
+          --head '${{ github.event.pull_request.head.sha }}'

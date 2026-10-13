@@ -1,0 +1,126 @@
+{
+  "schema": "cok-stream-validation-v1",
+  "python": "3.13.5",
+  "tests": {
+    "methods": 11,
+    "result": "passed",
+    "new_scored_games": 0,
+    "engine_replays": 0
+  },
+  "observer_git_blob": "eee78b475e4a9a5e30ac59025e7eeb507d41135b",
+  "observer_sha256": "5c1c75a70af171563485ac019fe3fdb5611204e5cb6261fd1007965cc9e7b03a",
+  "benchmarks": [
+    {
+      "input_sha256": "22b83c940ff26364e8c595a7955cf3392e8e1de92cf98b3b055b224951bed5e5",
+      "input_unchanged": true,
+      "peak_python_memory_reduction_fraction": 0.09752124994540612,
+      "python": "3.13.5",
+      "results": [
+        {
+          "actors": 1,
+          "calls": 1024,
+          "instrumented_seconds": 6.691189113000007,
+          "python_peak_bytes": 19805345,
+          "runner": "baseline",
+          "summary_sha256": "ab558013d8a4182d14a1705b5e1394882e0bda481f84fc1ee014e1201120d086",
+          "telemetry_errors": 0,
+          "telemetry_sha256": "1ce6403facb246c29a3d3ecaeb077a37b6a9f923e63de36ee4d6dd7409837451"
+        },
+        {
+          "actors": 1,
+          "calls": 1024,
+          "instrumented_seconds": 6.856023252999989,
+          "python_peak_bytes": 17873903,
+          "runner": "stream",
+          "summary_sha256": "ab558013d8a4182d14a1705b5e1394882e0bda481f84fc1ee014e1201120d086",
+          "telemetry_errors": 0,
+          "telemetry_sha256": "1ce6403facb246c29a3d3ecaeb077a37b6a9f923e63de36ee4d6dd7409837451"
+        }
+      ],
+      "schema": "cok-stream-benchmark-v1",
+      "scope": "Supplied observation processing in fresh Python processes, with tracemalloc enabled; not scored games or policy action latency.",
+      "summary_bytes_equal": true,
+      "telemetry_bytes_equal": true
+    },
+    {
+      "input_sha256": "9d18c59236c948e790929f1dfc5f6c039597f6f8a060c44d8745a34ecd60bbc6",
+      "input_unchanged": true,
+      "peak_python_memory_reduction_fraction": 0.4725965778242637,
+      "python": "3.13.5",
+      "results": [
+        {
+          "actors": 1,
+          "calls": 8192,
+          "instrumented_seconds": 52.07841346600003,
+          "python_peak_bytes": 33890311,
+          "runner": "baseline",
+          "summary_sha256": "d296d39b05f8f8c0371c44a3bd1802bbc21c323117cb06fee344586bbf26bfaa",
+          "telemetry_errors": 0,
+          "telemetry_sha256": "1ddf0d0bdc2bb79642f593d4c974c0549ff23ff16d9d62bde0fb1ee960081a60"
+        },
+        {
+          "actors": 1,
+          "calls": 8192,
+          "instrumented_seconds": 52.078563323000026,
+          "python_peak_bytes": 17873866,
+          "runner": "stream",
+          "summary_sha256": "d296d39b05f8f8c0371c44a3bd1802bbc21c323117cb06fee344586bbf26bfaa",
+          "telemetry_errors": 0,
+          "telemetry_sha256": "1ddf0d0bdc2bb79642f593d4c974c0549ff23ff16d9d62bde0fb1ee960081a60"
+        }
+      ],
+      "schema": "cok-stream-benchmark-v1",
+      "scope": "Supplied observation processing in fresh Python processes, with tracemalloc enabled; not scored games or policy action latency.",
+      "summary_bytes_equal": true,
+      "telemetry_bytes_equal": true
+    }
+  ],
+  "sparse_checkpoint_consumer": {
+    "schema": "cok-sparse-stream-consumer-v1",
+    "input_records": 18,
+    "input_sha256": "b4205b9ad8043e851befffa529853dd37291b05a5c788e651bc5931d89c0aef9",
+    "input_unchanged": true,
+    "original_archive_sha256": "27294547deb92ae9ddf7f6ffa8860aa2f5744e09ce2674b139904a2092446c8f",
+    "original_log_identities": [
+      {
+        "seat": 0,
+        "sha256": "0df3970a4899e963c21c31e2e4c9e833eb2978562ef3fbaf3d7d394dd7ec1004"
+      },
+      {
+        "seat": 1,
+        "sha256": "b0875efb653238e729f4e048d99e56d02b3eaff82ccddbeb7de8e36d40a658c6"
+      }
+    ],
+    "telemetry_bytes_equal": true,
+    "summary_bytes_equal": true,
+    "telemetry_errors": 0,
+    "full_step_coverage": [
+      false,
+      false
+    ],
+    "interpretation": "Original sparse delivered observation checkpoints only, processed by both consumers. No historical prefix reconstruction, engine replay, original-game action equality claim or new game."
+  },
+  "files": {
+    "stream_observations.py": {
+      "bytes": 7715,
+      "sha256": "90012bc55ecc3092a2cb7aedc72be0330621f6923d94174870adb2fe2ef6ec59",
+      "git_blob": "9a8deee467f0b50974ce31faf6df10d8a173edcc"
+    },
+    "test_stream_observations.py": {
+      "bytes": 10854,
+      "sha256": "196cdaac40bf69b0658ad7a45e38045ea59589b8cc0cf1209a006c29ce254a07",
+      "git_blob": "b5cdf1ab52ea3d3b3f0c2c9ddbf21e92a100d9bc"
+    },
+    "benchmark_stream.py": {
+      "bytes": 3762,
+      "sha256": "4181823c18f531d282bebdfd244e634938878e08c2b5a111b5015a87c4ab3ed9",
+      "git_blob": "5b6bdaeea65d323be8a3874f53d6671898190a6c"
+    },
+    "STREAMING.md": {
+      "bytes": 5866,
+      "sha256": "4800d0c3904166a0f80583cc93964d6cb455dac247a3d5b7c44920a1c37b6be8",
+      "git_blob": "7923120c01d628bd52966e0d704f8d7d9ca2e9af"
+    }
+  },
+  "interpretation": "Consumer processing and output equivalence only. Existing policy, original games, source/loader and accepted observer proofs are unchanged. No hosted CI result is asserted here."
+}

@@ -1,0 +1,40 @@
+{
+  "id": "invoice-exception-pack",
+  "version": 1,
+  "buyer": "controller or CFO of a multi-location operator",
+  "workflow": [
+    "browser-local synthetic invoice and purchase order",
+    "deterministic MATCH / EXCEPTION / MISSING_DATA decision",
+    "durable idempotency key for one workflow",
+    "exactly one synthetic controller approval request for an accepted matched fixture",
+    "timestamped crash, retry, rollback, and final decision receipts",
+    "copyable JSON and Markdown binary report"
+  ],
+  "states": [
+    "MATCH",
+    "EXCEPTION",
+    "MISSING_DATA"
+  ],
+  "acceptance": [
+    "the same input produces the same decision",
+    "a duplicate replay creates no second approval request",
+    "a crash after durable intent can retry to exactly one approval request",
+    "a crash after durable intent can roll back before any approval request",
+    "missing or mismatched data fails before effect",
+    "every run emits a copyable JSON and Markdown receipt",
+    "the diagnostic uses synthetic or non-confidential workflow details only",
+    "payment execution, bank connection, credential collection, vendor-master change, tax advice, and approval authority remain zero"
+  ],
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_pilot_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "browser-local synthetic or non-confidential fixtures only; no upload; no telemetry; no server submission",
+  "decision_boundary": "invoice/PO matching and approval-packet preparation only; never payment execution, bank connection, credential collection, vendor-master change, tax advice, or approval authority"
+}

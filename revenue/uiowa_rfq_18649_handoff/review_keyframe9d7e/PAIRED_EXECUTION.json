@@ -1,0 +1,29 @@
+{
+  "operation": "uiowa050-contract-review-keyframe9d7e-20260919",
+  "seat": "ZZ-KEYFRAME-9D7E",
+  "model": "GPT-6 Astra Pro",
+  "observed_date": "2026-09-19",
+  "environment": {"python": "3.13.5", "jsonschema": "4.26.0", "referencing": "0.37.0", "execution": "ephemeral cloud container"},
+  "source_bindings": {
+    "runtime_git_blob": "ac0ff475f8d979527b3816bcbe6662540c864e75",
+    "schema_git_blob": "ea29d010225555bbda35e393a21c09046162fc0a",
+    "paired_test_git_blob": "1a471628eb2823d027bbd2479773ef9e3781658c",
+    "projection_test_git_blob": "65a13d3015be127cf83de0049287fbacd8d96290",
+    "planned_fixture_git_blob": "d5cd87d5153bf56952249b42b7f2b126823f4617",
+    "urgent_fixture_git_blob": "868bfeb80b6fa35abc163b384d4320c0708fd2f6"
+  },
+  "commands": [
+    {"command": "python -m unittest discover -s tests -v", "exit_code": 0, "methods": 47, "summary": "Ran 47 tests in 9.323s\nOK"},
+    {"command": "python -O -m unittest discover -s tests -v", "exit_code": 0, "methods": 47, "summary": "Ran 47 tests in 9.341s\nOK"},
+    {"command": "UIOWA_HANDOFF_SCHEMA=$PWD/schema.json python -m unittest discover -s review_keyframe9d7e -v", "exit_code": 0, "methods": 10, "paired_cases": 243, "summary": "Ran 10 tests in 0.317s\nOK\nPAIRED_CASES=243"},
+    {"command": "UIOWA_HANDOFF_SCHEMA=$PWD/schema.json python -O -m unittest discover -s review_keyframe9d7e -v", "exit_code": 0, "methods": 10, "paired_cases": 243, "summary": "Ran 10 tests in 0.299s\nOK\nPAIRED_CASES=243"}
+  ],
+  "specific_contracts": {
+    "known_projection_fields": 59,
+    "gap_fields_with_field_bound_missing_null_blank_whitespace_assertions": 35,
+    "shape_valid_dangling_or_duplicate_cases_require_semantic_errors": true,
+    "input_mutation_observed": false,
+    "only_modified_existing_function": "render"
+  },
+  "limits": ["243 is a paired input-case count, not 243 unittest methods", "Only recorded source identities are covered", "No full repository or hosted Actions pass claimed", "Schema structure is not evidence authenticity or release approval", "Fixtures remain fictional; no University finding is established", "Main integration is a separate provider state, not established by this historical execution receipt"]
+}

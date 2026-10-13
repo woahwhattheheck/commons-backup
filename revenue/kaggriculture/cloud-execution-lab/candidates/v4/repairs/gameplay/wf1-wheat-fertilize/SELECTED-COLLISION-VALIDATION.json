@@ -1,0 +1,136 @@
+{
+  "schema": "titan-v4-wf1-selected-collision/v1",
+  "lane": "ASTRA-WF1-COLLISION",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/wf1-wheat-fertilize",
+  "status": "component_tested_default_off_not_runtime_promoted",
+  "source": {
+    "wf1_current_adapter.py": {
+      "bytes": 6420,
+      "git_blob": "5b8f4c0144ce43ae449373a6a188ce03409a16ee",
+      "sha256": "6acf88970c16be94c98faa2a75e8ebf23cafc32a0af929afe138a3b6fe22b39a"
+    },
+    "test_wf1_selected_collision.py": {
+      "bytes": 18207,
+      "git_blob": "fad89b76458d040d607922e5519d7884a6a244eb",
+      "sha256": "a2a7f7fb60403e8f92982b9cb6c9764567f700d5c19c496d43d4efe00fc955fb"
+    }
+  },
+  "preserved": {
+    "r04_wheat_fert.py": {
+      "bytes": 17061,
+      "git_blob": "b35a30431f64c1d6b40d1d599190338a9d50b555",
+      "sha256": "30a646d56bff72758c9ff4f98b4353c9e89b0ada211214add56d773dcee2bda0"
+    },
+    "test_r04_wheat_fert_recovery.py": {
+      "bytes": 5446,
+      "git_blob": "f4d1de68b3c8b7fba94f5325135f0a204804fdd5",
+      "sha256": "2489c968d80d85eabcc3d277e542ed0349c4bff11c1733538bedc57158aa8f31"
+    },
+    "test_wf1_current_adapter.py": {
+      "bytes": 9419,
+      "git_blob": "ddb8e2677cd41d53f59b881add48b59d0ce2ad2d",
+      "sha256": "c5ce5562c788549a0e4b9da07a36986693457fd252ed22835adfa91d970c8a96"
+    }
+  },
+  "predecessor_adapter": {
+    "git_blob": "58bee36ae78454a288cd4492475aae33ca1b6f9f",
+    "commit": "b61786fc612128974915e90b90787a7befbcf3c4",
+    "preserved_peer_repair": "POLAR four-line pre-donor market-budget guard"
+  },
+  "defect": {
+    "condition": "A selected WATER actor carrying fertilizer shares its tile with another selected FERTILIZE actor carrying fertilizer.",
+    "old_behavior": "Donor claimed-set ignores already selected FERTILIZE; WATER becomes a second FERTILIZE and fictitious extra-wheat credit is recorded.",
+    "repair": "Mask fertilizer availability only for colliding WATER actors in a private admission view before invoking the exact donor. Keep original action rows, observation, shed and other actors unchanged.",
+    "unfunded_selected_fertilize_blocks": false,
+    "independent_eligible_tiles_preserved": true
+  },
+  "execution": {
+    "python": "3.13.5",
+    "normal": {
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "optimized": {
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "composition": "10 exact donor recovery tests + 14 exact current adapter tests + 20 new selected-collision tests",
+    "py_compile": "PASS",
+    "engine_pairs_per_mode": 96,
+    "engine_falsifier_triples_per_mode": 8,
+    "complete_interpreter_calls_per_mode": 216,
+    "predecessor_normal": {
+      "tests": 44,
+      "failed_assertions_or_subcases": 123,
+      "errors": 0
+    },
+    "predecessor_optimized": {
+      "tests": 44,
+      "failed_assertions_or_subcases": 123,
+      "errors": 0
+    }
+  },
+  "engine": {
+    "artifact_id": 10285621024,
+    "upstream_commit": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+    "git_blobs": {
+      "kaggriculture.py": "3c202c7ee921da239356789e266b694635103fc4",
+      "kaggriculture.json": "b354d06b742fe48402513792253f1a5c29366b20",
+      "utils.py": "91c8822ee6201ba4a5a8416c7dbe34f95dd61c87"
+    },
+    "loader": "Loads the complete pinned interpreter. Only its external seed-helper import is supplied by compiling the exact resolve_episode_seed function from pinned utils.py. No substitute transition function.",
+    "fixtures": "Constructed non-EOD states, both seats, wheat ages 1/2, 2..7 actors, selected actor order, fertilizer quantities 1/3. Market inventories set for donor admission; weed spawning disabled.",
+    "runtime_from_artifact_not_used": "Artifact runtime a10ad66f is older than main b952c9c2; no current production runtime or full-game claim."
+  },
+  "falsifier": {
+    "cells": 8,
+    "baseline_minus_raw_fertilizer_remaining": 1,
+    "fertilized_coverage_equal": true,
+    "baseline_minus_raw_current_wheat_yield": {
+      "age1": 0,
+      "age2_water_before_fertilize": 1,
+      "age2_fertilize_before_water": 2
+    },
+    "fixed_complete_poststate_equals_baseline": true,
+    "natural_occurrence_count": "NOT_MEASURED"
+  },
+  "mutation_controls": {
+    "ignore_collision_admission": 123,
+    "unfunded_also_blocks": 6,
+    "only_first_actor_can_cover": 69,
+    "all_water_actors_masked": 10,
+    "budget_guard_removed": 5,
+    "unit": "failed assertions/subcases in EACH normal and optimized 44-test run; no errors or skips"
+  },
+  "run": {
+    "working_directory": "this existing WF1 package",
+    "required_env": "TITAN_ENGINE=/absolute/path/to/pinned/kaggriculture.py; exact sibling kaggriculture.json and utils.py required",
+    "normal": "python -m unittest -v test_r04_wheat_fert_recovery test_wf1_current_adapter test_wf1_selected_collision",
+    "optimized": "python -O -m unittest -v test_r04_wheat_fert_recovery test_wf1_current_adapter test_wf1_selected_collision",
+    "compile": "python -m py_compile wf1_current_adapter.py test_wf1_selected_collision.py",
+    "predecessor_control": "In an isolated temporary copy of this package, replace ONLY the adapter with git show b61786fc612128974915e90b90787a7befbcf3c4:<workspace>/wf1_current_adapter.py and rerun both commands. Never restore this predecessor over canonical main."
+  },
+  "limits": {
+    "default_enabled": false,
+    "runtime_wired": false,
+    "production_changed": false,
+    "new_feature_key": false,
+    "legacy_materializer_run": false,
+    "kaggle_upload": false,
+    "hosted_python311": "NOT_RUN",
+    "full_game_economics": "NOT_RUN",
+    "current_main_paired_88_cell_panel": "NOT_RUN",
+    "global_donor_state_isolation": "UNCHANGED_OUT_OF_SCOPE",
+    "gate": "Use this same adapter in the existing WF1 current-stack composition and paired-panel lane. These synthetic interpreter controls do not authorize activation or a win-rate claim."
+  },
+  "coordination": {
+    "claim_ts": "1789179597.342809",
+    "parent_thread_ts": "1789178850.779809",
+    "peer_handoff_consumed_ts": "1789179737.072099"
+  }
+}

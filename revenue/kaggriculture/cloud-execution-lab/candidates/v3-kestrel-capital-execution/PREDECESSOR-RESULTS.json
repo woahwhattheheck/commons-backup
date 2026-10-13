@@ -1,0 +1,177 @@
+{
+  "canonical_predecessor": {
+    "git_blob_sha": "9bb3a0da4359900abda69da4a5e9154adf0818cc",
+    "path": "revenue/kaggriculture/cloud-execution-lab/early_capital.py",
+    "revision": "v2-order-only",
+    "source_sha256": "13dc90de8cd3abbb54a8acba066b9e56f6b50aefb34993d3544bac6e4576f4f6"
+  },
+  "case_meaning": {
+    "buy_then_sell_dependency": "predecessor gains land by destroying an executable BUY_PRODUCT then SELL round trip",
+    "capital_steals_product_cash": "predecessor gains land by making an originally executable WHEAT purchase fail",
+    "inactive_tail_activation": "predecessor promotes orders 10/11 into the engine's live ten-row prefix and displaces original rows 8/9",
+    "sell_funded_free_gain": "both predecessor and candidate retain the legitimate case: an existing sale funds land without losing other execution"
+  },
+  "claims": {
+    "full_games": 0,
+    "leaderboard_observations": 0,
+    "playing_strength": "unmeasured",
+    "scope": "deterministic own-side engine semantics and caller binding only"
+  },
+  "configuration": {
+    "episodeSteps": 720,
+    "farmHandCostMult": 1,
+    "maxMarketOrdersPerTurn": 10,
+    "shedCapacity": 100,
+    "turnsPerDay": 24
+  },
+  "official_engine": {
+    "commit": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+    "source_path": "reference/engine/kaggriculture.py",
+    "source_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "version": "1.32.7"
+  },
+  "operation": "titan-v3-early-capital-execution-repair-20260909-sol-kestrel-01",
+  "reproduced_cases": {
+    "buy_then_sell_dependency": {
+      "candidate_active_original_indices": [
+        0,
+        1,
+        2
+      ],
+      "candidate_changed": false,
+      "candidate_execution": {
+        "BUY_LAND@1": 0,
+        "BUY_PRODUCT@0": 1,
+        "SELL@2": 1
+      },
+      "candidate_reason": "execution_guard_rejected",
+      "original_active_original_indices": [
+        0,
+        1,
+        2
+      ],
+      "original_execution": {
+        "BUY_LAND@1": 0,
+        "BUY_PRODUCT@0": 1,
+        "SELL@2": 1
+      },
+      "predecessor_active_original_indices": [
+        2,
+        1,
+        0
+      ],
+      "predecessor_changed": true,
+      "predecessor_execution": {
+        "BUY_LAND@1": 1,
+        "BUY_PRODUCT@0": 0,
+        "SELL@2": 0
+      }
+    },
+    "capital_steals_product_cash": {
+      "candidate_active_original_indices": [
+        0,
+        1
+      ],
+      "candidate_changed": false,
+      "candidate_execution": {
+        "BUY_LAND@1": 0,
+        "BUY_PRODUCT@0": 1
+      },
+      "candidate_reason": "execution_guard_rejected",
+      "original_active_original_indices": [
+        0,
+        1
+      ],
+      "original_execution": {
+        "BUY_LAND@1": 0,
+        "BUY_PRODUCT@0": 1
+      },
+      "predecessor_active_original_indices": [
+        1,
+        0
+      ],
+      "predecessor_changed": true,
+      "predecessor_execution": {
+        "BUY_LAND@1": 1,
+        "BUY_PRODUCT@0": 0
+      }
+    },
+    "inactive_tail_activation": {
+      "candidate_active_original_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "candidate_changed": false,
+      "candidate_execution": {},
+      "candidate_reason": "no_admitted_capital",
+      "original_active_original_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "original_execution": {},
+      "predecessor_active_original_indices": [
+        11,
+        10,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "predecessor_changed": true,
+      "predecessor_execution": {
+        "BUY_LAND@10": 1,
+        "SELL@11": 1
+      }
+    },
+    "sell_funded_free_gain": {
+      "candidate_active_original_indices": [
+        1,
+        0
+      ],
+      "candidate_changed": true,
+      "candidate_execution": {
+        "BUY_LAND@0": 1,
+        "SELL@1": 1
+      },
+      "candidate_reason": "execution_gain_proved",
+      "original_active_original_indices": [
+        0,
+        1
+      ],
+      "original_execution": {
+        "BUY_LAND@0": 0,
+        "SELL@1": 1
+      },
+      "predecessor_active_original_indices": [
+        1,
+        0
+      ],
+      "predecessor_changed": true,
+      "predecessor_execution": {
+        "BUY_LAND@0": 1,
+        "SELL@1": 1
+      }
+    }
+  },
+  "schema": 1
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "uiowa-096-torque47-execution-summary/v1",
+  "seat": "ZZ-TORQUE-47",
+  "operation": "uiowa-096-torque47-20260919",
+  "local_python": "3.13.5",
+  "node": "v22.16.0",
+  "unit_tests": {
+    "discovered": 37,
+    "passed": 36,
+    "skipped": 1,
+    "failed": 0,
+    "skip": "Full parent compiler closure absent in isolated local checkout; focused CI performs real integration."
+  },
+  "actual_workbench_source_git_blob_sha1": "f180d24e5bb05489774d8c0baa4f60d3fd978656",
+  "transport_source_git_blob_sha1": "735928df43423507dbf8206fb12e3d28112ed613",
+  "transport_result": "REVIEW_REQUIRED",
+  "transport_counts": {
+    "PASS": 11,
+    "FAIL": 4,
+    "REJECTED": 0
+  },
+  "transport_trials": [
+    {"case": "actual-workbench-report", "route": "rows", "result": "PASS", "diagnostics": []},
+    {"case": "actual-workbench-report", "route": "csv", "result": "PASS", "diagnostics": []},
+    {"case": "actual-workbench-handoff", "route": "rows", "result": "PASS", "diagnostics": []},
+    {"case": "actual-workbench-handoff", "route": "csv", "result": "PASS", "diagnostics": []},
+    {"case": "synthetic-evidence-recommendations", "route": "rows", "result": "PASS", "diagnostics": []},
+    {"case": "synthetic-evidence-recommendations", "route": "csv", "result": "PASS", "diagnostics": []},
+    {"case": "integer-over-binary64-exact-range", "route": "rows", "result": "PASS", "diagnostics": []},
+    {"case": "integer-over-binary64-exact-range", "route": "csv", "result": "PASS", "diagnostics": []},
+    {"case": "decimal-precision-boundary", "route": "rows", "result": "FAIL", "diagnostics": [{"pointer": "/value", "code": "VALUE_CHANGED"}]},
+    {"case": "decimal-precision-boundary", "route": "csv", "result": "FAIL", "diagnostics": [{"pointer": "/value", "code": "VALUE_CHANGED"}]},
+    {"case": "decimal-underflow-boundary", "route": "rows", "result": "FAIL", "diagnostics": [{"pointer": "/value", "code": "VALUE_CHANGED"}]},
+    {"case": "decimal-underflow-boundary", "route": "csv", "result": "FAIL", "diagnostics": [{"pointer": "/value", "code": "VALUE_CHANGED"}]},
+    {"case": "negative-zero-boundary", "route": "rows", "result": "PASS", "diagnostics": []},
+    {"case": "negative-zero-boundary", "route": "csv", "result": "PASS", "diagnostics": []},
+    {"case": "returned-report-handoff-join", "route": "csv", "result": "PASS", "diagnostics": []}
+  ],
+  "limits": [
+    "Workbench capture uses a minimal DOM; no visual browser validation.",
+    "UI built-in report is not parent compiler output.",
+    "New parent integration test requires an actual parent checkout and Node; missing dependencies are explicit skips.",
+    "Format consistency is not source authentication, assessment approval, or payment authority.",
+    "The four transport failures describe peer blob 735928df, not a successful full UIOWA-096 delivery."
+  ],
+  "local_source_git_blob_sha1": {
+    "contract.py": "b37cfcd2a444b16339962912cd085e54ffac1403",
+    "capture_workbench.cjs": "7a5b97553411f1577397e936dea2558591c39225",
+    "test_contract.py": "014a9c96e905fb781f7307448668d3e67aa5c8c0",
+    "run_transport.py": "2374acfa787c1af962f58ab0b574e8f95577f97d",
+    "test_parent_integration.py": "fafb699e0f8ebd97a9e63a8937c8a549e710181c",
+    "fixtures/transport_cases.json": "a6850fb081c4fc08af2aea732d1b6be92dcaa739",
+    "fixtures/workbench/report.json": "2a23f75a9ba7e566ddb3624b6989530c4828faf0",
+    "fixtures/workbench/handoff.json": "6f155341d18f7e36f3a07f325e7d7adbac5eba6f",
+    "fixtures/workbench/capture_receipt.json": "4d903292bb19879cb75b3d6e4a66bebbe06f97c0"
+  }
+}

@@ -1,0 +1,178 @@
+name: roadef-after-exhaustion-paired
+run-name: roadef-after-exhaustion-${{ inputs.operation_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation_id:
+        description: 'Unique reviewed operation ID; inspect existing runs before dispatch'
+        required: true
+        type: string
+      integration_ref:
+        description: 'Exact published 40-character commit containing integration and trial files'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: roadef-after-exhaustion-paired
+  cancel-in-progress: false
+
+jobs:
+  cold-pairs:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.run_attempt == '1' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      OPERATION_ID: ${{ inputs.operation_id }}
+      INTEGRATION_REF: ${{ inputs.integration_ref }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Validate immutable manual inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$OPERATION_ID" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{7,79}$ ]]
+          [[ "$INTEGRATION_REF" =~ ^[0-9a-f]{40}$ ]]
+          TRIAL_ROOT="$RUNNER_TEMP/roadef-after-exhaustion"
+          export TRIAL_ROOT
+          printf 'TRIAL_ROOT=%s\n' "$TRIAL_ROOT" >> "$GITHUB_ENV"
+          mkdir "$TRIAL_ROOT"
+          python3 -B - <<'PY'
+          import json, os, pathlib
+          names = ('OPERATION_ID', 'INTEGRATION_REF', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+                   'GITHUB_SHA', 'GITHUB_REF', 'GITHUB_WORKFLOW_REF', 'RUNNER_NAME', 'RUNNER_OS', 'RUNNER_ARCH')
+          record = {name: os.environ.get(name) for name in names}
+          record['artifact_name'] = 'roadef-after-exhaustion-' + os.environ['OPERATION_ID'] + '-' + os.environ['GITHUB_RUN_ID']
+          record['ordered_arms'] = ['A04 baseline', 'A04 new', 'A14 new', 'A14 baseline']
+          record['portfolio_seconds'] = 585
+          record['internal_search_seconds'] = 565
+          record['solver_trials_planned'] = 4
+          record['submission'] = 'paired trial diagnostics; qualification handled separately'
+          pathlib.Path(os.environ['TRIAL_ROOT'], 'RUN.json').write_text(json.dumps(record, indent=2) + '\n')
+          PY
+
+      - name: Checkout exact reviewed integration and trial
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.integration_ref }}
+          path: harness
+          sparse-checkout: |
+            revenue/roadef2026/cloud-after-exhaustion
+            revenue/roadef2026/cloud-after-exhaustion-trial
+            .github/workflows
+
+      - name: Checkout frozen runtime recipe
+        uses: actions/checkout@v4
+        with:
+          ref: 6feb9c0566b8f203c5d1a2ffdfbf1cb6d11be055
+          path: frozen
+          sparse-checkout: |
+            revenue/roadef2026/fleet-candidate
+            revenue/roadef2026/cloud-kernel-composition
+
+      - name: Checkout exact PRISM method source
+        uses: actions/checkout@v4
+        with:
+          ref: 73a805e290cee36981917ac09e7ce2133f35afd7
+          path: prism
+          sparse-checkout: revenue/roadef2026/cloud-a-rank1
+
+      - name: Verify source recipe and build serially
+        shell: bash
+        run: |
+          set -euo pipefail
+          frozen="$GITHUB_WORKSPACE/frozen"
+          root="$frozen/revenue/roadef2026/fleet-candidate"
+          integration="$GITHUB_WORKSPACE/harness/revenue/roadef2026/cloud-after-exhaustion"
+          prism="$GITHUB_WORKSPACE/prism/revenue/roadef2026/cloud-a-rank1/build_rank1_candidate.py"
+          test "$(git -C "$GITHUB_WORKSPACE/harness" rev-parse HEAD)" = "$INTEGRATION_REF"
+          git -C "$frozen" fetch --no-tags --depth=1 origin 2885d176373c33410148829fef93c310c3752c0b
+          git -C "$frozen" show FETCH_HEAD:revenue/roadef2026/fleet-candidate/main.cpp > "$root/main.cpp"
+          test "$(sha256sum "$root/main.cpp" | cut -d' ' -f1)" = 322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1
+          patch_file="$frozen/revenue/roadef2026/cloud-kernel-composition/combined.patch"
+          test "$(git hash-object "$patch_file")" = 0ff8d2ee7c4df1022c50484a89e7424329cce0ec
+          (cd "$root" && patch --batch --fuzz=0 -p1 < "$patch_file")
+          test "$(sha256sum "$root/main.cpp" | cut -d' ' -f1)" = 758977095f8f34263bbcd9ed043ac4ab7943f04f65fae530c78ee64787c34f8f
+          test "$(sha256sum "$root/supervisor.py" | cut -d' ' -f1)" = 182371658e82f9037716e90ea8cd115622d089d02512916c7a7bf3b39fca1c63
+          test "$(sha256sum "$root/compare_checker.py" | cut -d' ' -f1)" = a402a0166b1e52c95dd181e15b8a124504ac78ddea7e815944c754569b323cb8
+          test "$(sha256sum "$root/prepare_context.py" | cut -d' ' -f1)" = b4ccca899888e40dcf44bb6867eb98bc6b3571c2ffc795c762f5884382fcd9a7
+          test "$(sha256sum "$integration/build_after_exhaustion.py" | cut -d' ' -f1)" = 57a97b7384bce27caa96ca0048c4adf1c83fcbddac9c8a59df6c32ea974e915a
+          test "$(git hash-object "$prism")" = 96d457207f1e3a63e8932a20dce8be63e4f87a1d
+          test "$(sha256sum "$prism" | cut -d' ' -f1)" = e5a77185d7126c8e87ab5e54557d7a7ff40a918e2a14646923cc95b0f25b08d6
+          mkdir "$TRIAL_ROOT/source"
+          cp "$patch_file" "$TRIAL_ROOT/source/combined.patch"
+          cp "$prism" "$TRIAL_ROOT/source/build_rank1_candidate.py"
+          cp -a "$integration/." "$TRIAL_ROOT/source/integration"
+          cp -a "$GITHUB_WORKSPACE/harness/revenue/roadef2026/cloud-after-exhaustion-trial" "$TRIAL_ROOT/source/trial"
+          cp "$GITHUB_WORKSPACE/harness/.github/workflows/roadef-after-exhaustion-paired.yml" "$TRIAL_ROOT/source/"
+          python3 -B "$integration/build_after_exhaustion.py" "$root/main.cpp" \
+            --prism-builder "$prism" --output "$TRIAL_ROOT/new.cpp" \
+            --patch "$TRIAL_ROOT/generated.patch" --receipt "$TRIAL_ROOT/integration-receipt.json"
+          test "$(sha256sum "$TRIAL_ROOT/new.cpp" | cut -d' ' -f1)" = e8014d78f40df5546d80f0ff6f1c6bc3a97944a526d7c347eb0dcdbe77728e46
+          cmp "$TRIAL_ROOT/new.cpp" "$integration/main.cpp"
+          python3 -B "$root/prepare_context.py" --candidate "$root/main.cpp" --output "$TRIAL_ROOT/context" \
+            > "$TRIAL_ROOT/prepare.stdout" 2> "$TRIAL_ROOT/prepare.stderr"
+          g++ --version > "$TRIAL_ROOT/compiler-version.txt"
+          sh "$TRIAL_ROOT/context/build.sh" > "$TRIAL_ROOT/build.stdout" 2> "$TRIAL_ROOT/build.stderr"
+          g++ -O3 -std=c++20 -DNDEBUG -I"$TRIAL_ROOT/context/sources/sedge/vendor" \
+            "$TRIAL_ROOT/new.cpp" -o "$TRIAL_ROOT/new-candidate" \
+            > "$TRIAL_ROOT/new-build.stdout" 2> "$TRIAL_ROOT/new-build.stderr"
+
+      - name: Fetch only A04 and A14 from the exact official commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$TRIAL_ROOT/official"
+          git -C "$TRIAL_ROOT/official" init -q
+          git -C "$TRIAL_ROOT/official" remote add origin https://gitlab.com/Orange-OpenSource/network-optimization-tools/challenge-roadef-2026.git
+          git -C "$TRIAL_ROOT/official" fetch --depth=1 origin d84d319a7fdb8de3b1866830d2eaa2937871e5ae
+          git -C "$TRIAL_ROOT/official" checkout -q FETCH_HEAD -- \
+            setA/setA-04-net.json setA/setA-04-tm.json setA/setA-04-scenario.json \
+            setA/setA-14-net.json setA/setA-14-tm.json setA/setA-14-scenario.json
+          git -C "$TRIAL_ROOT/official" rev-parse FETCH_HEAD > "$TRIAL_ROOT/official-commit.txt"
+
+      - name: Execute exactly four sequential cold arms
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B harness/revenue/roadef2026/cloud-after-exhaustion-trial/run_paired_trial.py \
+            --context "$TRIAL_ROOT/context" --official-root "$TRIAL_ROOT/official" \
+            --new-candidate "$TRIAL_ROOT/new-candidate" --new-source "$TRIAL_ROOT/new.cpp" \
+            --integration-receipt "$TRIAL_ROOT/integration-receipt.json" \
+            --expected-new-sha256 e8014d78f40df5546d80f0ff6f1c6bc3a97944a526d7c347eb0dcdbe77728e46 \
+            --operation-id "$OPERATION_ID" --integration-ref "$INTEGRATION_REF" \
+            --output "$TRIAL_ROOT/results" > "$TRIAL_ROOT/trial.stdout" 2> "$TRIAL_ROOT/trial.stderr"
+
+      - name: Retain exact evidence manifest
+        if: always()
+        shell: bash
+        run: |
+          python3 -B - <<'PY'
+          import hashlib, json, os, pathlib
+          root = pathlib.Path(os.environ['TRIAL_ROOT'])
+          if root.is_dir():
+              rows = []
+              for path in sorted(root.rglob('*')):
+                  if path.is_file() and '.git' not in path.relative_to(root).parts and path.name != 'ARTIFACT-MANIFEST.json':
+                      with path.open('rb') as stream:
+                          digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+                      rows.append({'path': path.relative_to(root).as_posix(), 'bytes': path.stat().st_size,
+                                   'sha256': digest})
+              (root / 'ARTIFACT-MANIFEST.json').write_text(json.dumps({'operation_id': os.environ['OPERATION_ID'],
+                  'run_id': os.environ['GITHUB_RUN_ID'], 'files': rows}, indent=2) + '\n')
+          PY
+
+      - name: Upload retained run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roadef-after-exhaustion-${{ inputs.operation_id }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/roadef-after-exhaustion
+            !${{ runner.temp }}/roadef-after-exhaustion/official/.git/**
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90

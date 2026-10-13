@@ -1,0 +1,160 @@
+{
+  "reviewer": "ZZ-RIVET-82 / GPT-6 Astra Pro",
+  "synthetic": true,
+  "original_author": "ANVIL-50",
+  "baseline_commit": "6a70d165a0dcffd6c24bb3444f47c8e097e79881",
+  "baseline_blob": "fe1077df8838275708eacfa92bcab3a657261c46",
+  "repaired_blob": "222263c11ea313200c9bc41e83f5ccec05087061",
+  "regression_test_blob": "bd483e30f0fd40d78d9c8ec114982fb3cd00828f",
+  "normal_tests": 33,
+  "optimized_tests": 33,
+  "original_examples_unchanged": true,
+  "before": [
+    {
+      "case": "pending support with locator",
+      "baseline_observed": "REVIEWABLE_NO_RECORDED_GAPS"
+    },
+    {
+      "case": "complete support missing locator",
+      "baseline_observed": "REVIEWABLE_NO_RECORDED_GAPS"
+    },
+    {
+      "case": "non-string enum",
+      "baseline_observed": "TypeError: unhashable type: 'list'"
+    },
+    {
+      "case": "non-string evidence ref",
+      "baseline_observed": "TypeError: unhashable type: 'dict'"
+    },
+    {
+      "case": "ambiguous readiness id",
+      "baseline_observed": "REVIEWABLE_NO_RECORDED_GAPS"
+    },
+    {
+      "case": "non-boolean synthetic",
+      "baseline_observed": "REVIEWABLE_NO_RECORDED_GAPS"
+    },
+    {
+      "case": "null metadata render",
+      "baseline_observed": "AttributeError: 'NoneType' object has no attribute 'get'"
+    }
+  ],
+  "after": [
+    {
+      "case": "pending support",
+      "assessment_state": "REVIEWABLE_WITH_FOLLOWUP",
+      "findings": [
+        {
+          "level": "INFO",
+          "code": "SYNTHETIC_PACKET",
+          "path": "metadata.synthetic",
+          "message": "Packet is explicitly marked synthetic."
+        },
+        {
+          "level": "WARNING",
+          "code": "SUPPORT_FOLLOWUP_OPEN",
+          "path": "support_readiness[SUP-01]",
+          "message": "Support work remains explicitly open; a locator is not completion."
+        },
+        {
+          "level": "GAP",
+          "code": "FOLLOWUP_TRIGGER_MISSING",
+          "path": "support_readiness[SUP-01]",
+          "message": "Incomplete support item needs a follow-up trigger, even when a locator exists."
+        }
+      ],
+      "rendered_diagnostic": true
+    },
+    {
+      "case": "complete without locator",
+      "assessment_state": "REVIEWABLE_WITH_FOLLOWUP",
+      "findings": [
+        {
+          "level": "INFO",
+          "code": "SYNTHETIC_PACKET",
+          "path": "metadata.synthetic",
+          "message": "Packet is explicitly marked synthetic."
+        },
+        {
+          "level": "GAP",
+          "code": "SUPPORT_LOCATOR_MISSING",
+          "path": "support_readiness[SUP-01]",
+          "message": "Reported completion has no support evidence locator."
+        }
+      ],
+      "rendered_diagnostic": true
+    },
+    {
+      "case": "bad enum",
+      "assessment_state": "UNRELIABLE_PACKET",
+      "findings": [
+        {
+          "level": "ERROR",
+          "code": "EXPECTED_STRING",
+          "path": "metadata.change_type",
+          "message": "Expected text, not a coerced value."
+        }
+      ],
+      "rendered_diagnostic": true
+    },
+    {
+      "case": "bad evidence ref",
+      "assessment_state": "UNRELIABLE_PACKET",
+      "findings": [
+        {
+          "level": "ERROR",
+          "code": "INVALID_REFERENCE_ID",
+          "path": "requirements[0].acceptance_evidence[0]",
+          "message": "Reference IDs must be non-empty strings."
+        }
+      ],
+      "rendered_diagnostic": true
+    },
+    {
+      "case": "shared readiness ID",
+      "assessment_state": "UNRELIABLE_PACKET",
+      "findings": [
+        {
+          "level": "INFO",
+          "code": "SYNTHETIC_PACKET",
+          "path": "metadata.synthetic",
+          "message": "Packet is explicitly marked synthetic."
+        },
+        {
+          "level": "ERROR",
+          "code": "AMBIGUOUS_READINESS_ID",
+          "path": "support_readiness/operational_needs",
+          "message": "Readiness ID names both support and operational records: SUP-01"
+        }
+      ],
+      "rendered_diagnostic": true
+    },
+    {
+      "case": "synthetic string",
+      "assessment_state": "UNRELIABLE_PACKET",
+      "findings": [
+        {
+          "level": "ERROR",
+          "code": "EXPECTED_BOOLEAN",
+          "path": "metadata.synthetic",
+          "message": "Expected JSON true or false."
+        }
+      ],
+      "rendered_diagnostic": true
+    },
+    {
+      "case": "null metadata render",
+      "assessment_state": "UNRELIABLE_PACKET",
+      "findings": [
+        {
+          "level": "ERROR",
+          "code": "EXPECTED_OBJECT",
+          "path": "metadata",
+          "message": "Expected an object."
+        }
+      ],
+      "rendered_diagnostic": true
+    }
+  ],
+  "scope": "Local Python component tests. Not repository-wide CI, University findings, or release approval."
+}

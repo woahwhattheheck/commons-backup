@@ -1,0 +1,73 @@
+{
+  "scope": "synthetic consumer invocation sequences using exact T15 runtime; no game or fill claim",
+  "source_commit": "4d97474b0188b0373be1b52b610c0114ceb033c8",
+  "reference_commit": "4d97474b0188b0373be1b52b610c0114ceb033c8",
+  "reference_source_matches": true,
+  "source_blobs": {
+    "solver.py": "3a6446d96e8470374dd5b5ba72a8e5c6d41a8ad3",
+    "selector.py": "546b71188fd44dc47cac99623d1967bc81413da7"
+  },
+  "changed_continuation": {
+    "admission_only_market": [
+      [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+      ],
+      []
+    ],
+    "wrapped_market": [
+      [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+      ],
+      [
+        "SELL",
+        "EGG",
+        2
+      ]
+    ],
+    "decision": {
+      "reason": "continuation_infeasible",
+      "key": "egg-a",
+      "step": 11,
+      "fallback_preserved": true
+    }
+  },
+  "skipped_due_date": {
+    "admission_only_market": [
+      [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+      ],
+      [
+        "SELL",
+        "EGG",
+        1
+      ]
+    ],
+    "wrapped_market": [
+      [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+      ],
+      [
+        "SELL",
+        "EGG",
+        2
+      ]
+    ],
+    "decision": {
+      "reason": "due_step_not_emitted",
+      "key": "egg-a",
+      "step": 12,
+      "fallback_preserved": true,
+      "missing_steps": [
+        11
+      ]
+    }
+  }
+}

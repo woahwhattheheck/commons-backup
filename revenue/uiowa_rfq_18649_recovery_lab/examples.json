@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "scenarios": [
+    {
+      "id": "R63-CONFIG",
+      "title": "Reversible reader configuration without a data change",
+      "resources": [{"id": "fictional-pool", "capacity": 20, "initial": 2}],
+      "actions": [
+        {"at": 0, "op": "verify", "label": "baseline"},
+        {"at": 1, "op": "runtime", "reader": "v2"},
+        {"at": 1, "op": "incident", "note": "New reader expects a field absent from unchanged storage"},
+        {"at": 2, "op": "verify", "label": "incompatible_reader"},
+        {"at": 3, "op": "runtime", "reader": "v1"},
+        {"at": 4, "op": "verify", "label": "configuration_restored"}
+      ]
+    },
+    {
+      "id": "R63-SNAPSHOT",
+      "title": "A healthy restore can lose acknowledged transactions",
+      "resources": [{"id": "fictional-pool", "capacity": 20, "initial": 2}],
+      "actions": [
+        {"at": 0, "op": "snapshot", "name": "pre-change"},
+        {"at": 1, "op": "submit", "event_id": "ESS-001", "resource": "fictional-pool", "delta": 2},
+        {"at": 1, "op": "deliver", "event_id": "ESS-001"},
+        {"at": 2, "op": "expand"},
+        {"at": 2, "op": "runtime", "reader": "bridge", "writer": "bridge", "worker": "bridge"},
+        {"at": 3, "op": "submit", "event_id": "ESS-002", "resource": "fictional-pool", "delta": 3},
+        {"at": 3, "op": "deliver", "event_id": "ESS-002"},
+        {"at": 4, "op": "incident", "note": "Rollback decision taken after acknowledged writes"},
+        {"at": 5, "op": "restore", "name": "pre-change"},
+        {"at": 5, "op": "runtime", "reader": "v1", "writer": "v1", "worker": "v1"},
+        {"at": 6, "op": "verify", "label": "healthy_but_missing_writes"},
+        {"at": 7, "op": "replay"},
+        {"at": 8, "op": "verify", "label": "log_replayed"}
+      ]
+    },
+    {
+      "id": "R63-FORWARD",
+      "title": "New-format queued work survives a failed rollback",
+      "resources": [{"id": "fictional-pool", "capacity": 20, "initial": 2}],
+      "actions": [
+        {"at": 0, "op": "expand"},
+        {"at": 1, "op": "runtime", "reader": "bridge", "writer": "v2", "worker": "v1"},
+        {"at": 2, "op": "submit", "event_id": "RIS-001", "resource": "fictional-pool", "delta": 4},
+        {"at": 3, "op": "deliver", "event_id": "RIS-001"},
+        {"at": 3, "op": "incident", "note": "Old worker cannot consume a new-format event"},
+        {"at": 4, "op": "contract"},
+        {"at": 5, "op": "runtime", "reader": "v1"},
+        {"at": 6, "op": "verify", "label": "old_binary_is_not_data_rollback"},
+        {"at": 7, "op": "runtime", "reader": "v2", "writer": "v2", "worker": "bridge"},
+        {"at": 8, "op": "replay"},
+        {"at": 9, "op": "verify", "label": "forward_compatibility_repair"}
+      ]
+    },
+    {
+      "id": "R63-REPLAY",
+      "title": "Repeated delivery needs an idempotency record restored with data",
+      "resources": [{"id": "fictional-pool", "capacity": 20, "initial": 2}],
+      "actions": [
+        {"at": 0, "op": "snapshot", "name": "pre-event"},
+        {"at": 1, "op": "submit", "event_id": "IAM-001", "resource": "fictional-pool", "delta": 2},
+        {"at": 2, "op": "deliver", "event_id": "IAM-001"},
+        {"at": 3, "op": "deliver", "event_id": "IAM-001"},
+        {"at": 4, "op": "verify", "label": "duplicate_safely_skipped"},
+        {"at": 5, "op": "deliver", "event_id": "IAM-001", "idempotent": false},
+        {"at": 5, "op": "incident", "note": "A replay without deduplication applies one event twice"},
+        {"at": 6, "op": "verify", "label": "healthy_but_double_applied"},
+        {"at": 7, "op": "restore", "name": "pre-event"},
+        {"at": 8, "op": "replay"},
+        {"at": 9, "op": "replay"},
+        {"at": 10, "op": "verify", "label": "snapshot_and_idempotent_replay"}
+      ]
+    },
+    {
+      "id": "R63-MIXED",
+      "title": "An expanded schema does not make legacy-only writes dual writes",
+      "resources": [{"id": "fictional-pool", "capacity": 20, "initial": 2}],
+      "actions": [
+        {"at": 0, "op": "snapshot", "name": "pre-expansion"},
+        {"at": 1, "op": "expand"},
+        {"at": 2, "op": "submit", "event_id": "MIX-001", "resource": "fictional-pool", "delta": 3},
+        {"at": 3, "op": "deliver", "event_id": "MIX-001"},
+        {"at": 3, "op": "incident", "note": "Legacy worker updated only the old representation"},
+        {"at": 4, "op": "runtime", "reader": "v2"},
+        {"at": 5, "op": "verify", "label": "split_views"},
+        {"at": 6, "op": "runtime", "reader": "bridge", "writer": "bridge", "worker": "bridge"},
+        {"at": 6, "op": "submit", "event_id": "MIX-002", "resource": "fictional-pool", "delta": 1},
+        {"at": 7, "op": "deliver", "event_id": "MIX-002"},
+        {"at": 8, "op": "verify", "label": "bridge_refuses_conflicting_fields"},
+        {"at": 9, "op": "restore", "name": "pre-expansion"},
+        {"at": 10, "op": "expand"},
+        {"at": 11, "op": "replay"},
+        {"at": 12, "op": "verify", "label": "reconciled_dual_representation"},
+        {"at": 13, "op": "contract"},
+        {"at": 14, "op": "runtime", "reader": "v2", "writer": "v2", "worker": "v2"},
+        {"at": 15, "op": "replay"},
+        {"at": 16, "op": "verify", "label": "contracted_and_duplicate_safe"}
+      ]
+    },
+    {
+      "id": "R63-NETZERO",
+      "title": "Correct totals alone cannot prove every accepted event was applied",
+      "resources": [{"id": "fictional-pool", "capacity": 20, "initial": 2}],
+      "actions": [
+        {"at": 1, "op": "submit", "event_id": "NET-001", "resource": "fictional-pool", "delta": 2},
+        {"at": 2, "op": "submit", "event_id": "NET-002", "resource": "fictional-pool", "delta": -2},
+        {"at": 3, "op": "incident", "note": "Two accepted offsetting events remain queued"},
+        {"at": 4, "op": "verify", "label": "totals_match_but_work_is_missing"},
+        {"at": 5, "op": "replay"},
+        {"at": 6, "op": "verify", "label": "each_event_accounted_for"}
+      ]
+    }
+  ]
+}

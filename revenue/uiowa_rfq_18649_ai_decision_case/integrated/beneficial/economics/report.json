@@ -1,0 +1,429 @@
+{
+  "schema_version": "1.0",
+  "kind": "AI_WORKFLOW_ECONOMICS_SCENARIO",
+  "input_basis": "SYNTHETIC",
+  "result_basis": "MODELED_NOT_OBSERVED",
+  "institution_finding": false,
+  "spend_authorized": false,
+  "recognized_revenue": false,
+  "currency": "USD",
+  "horizon_months": 12,
+  "input_sha256": "e18aebabe34098fb52368726baa9b6f429f88d2321b85c9434d9b5c66cefe25e",
+  "model_sha256": "72b1151521a6801890ba3494a3b3b3d3f4f2997350500977eee59bea47748bea",
+  "limitations": [
+    "Independent box ranges are not probability distributions or confidence intervals.",
+    "A single loaded rate values capacity, not individual productivity or guaranteed cash savings.",
+    "Linear steady-state task mix, volume and costs; no discounting, seasonality, ramp or quality valuation.",
+    "Negative capacity requires staffing feasibility assessment even when cash conversion is zero.",
+    "Quality/usefulness evidence and acceptable outputs must be evaluated separately."
+  ],
+  "scenarios": [
+    {
+      "id": "CASE-SYN-ESS-CHANGE-MEMO",
+      "group": "cross-group",
+      "label": "Drafting a service-change memo from an approved change ticket (SYNTHETIC)",
+      "notes": "Fictional effort records mapped to canonical economics. Per-document repair includes post-acceptance maintenance; recurring maintenance_hours excludes that effort.",
+      "missing_inputs": [
+        "cash_conversion_fraction"
+      ],
+      "economic_classification": "POSITIVE_ACROSS_RANGE",
+      "cash_classification": "UNKNOWN",
+      "base": {
+        "assisted_tasks_per_month": "24.0",
+        "baseline_hours_per_month": "49.500",
+        "assisted_hours_per_month": "16.6000",
+        "net_capacity_hours_per_month": "30.9000",
+        "net_capacity_hours_horizon": "362.8000",
+        "external_cash_per_month": "11.920",
+        "external_cash_horizon": "343.040",
+        "setup_economic_value": "880.0",
+        "operating_economic_net_per_month": "2614.58000",
+        "economic_horizon_net": "30494.96000",
+        "cash_conversion_horizon_net": null,
+        "unit_economic_margin": "116.44083333333333333333333333333333333333333333333",
+        "break_even": {
+          "assisted_tasks_per_month_exact": "2.1756399888355316362387192350907828725604563118608",
+          "assisted_tasks_per_month_ceiling": "3",
+          "adoption_fraction_exact": "0.0906516662014804848432799681287826196900190129942",
+          "attainable_with_current_volume": true,
+          "maximum_checking_minutes": "98.992549019607843137254901960784313725490196078432",
+          "nonnegative_checking_feasible": true,
+          "simple_payback_months": "0.33657413427778075254916659654705535879567655225696",
+          "payback_within_horizon": true,
+          "unit_margin_status": "POSITIVE"
+        }
+      },
+      "envelope": {
+        "method": "independent_box_not_probability",
+        "evaluated_points": 8,
+        "economic_horizon_net": {
+          "low": "12370.0800",
+          "high": "59882.0000",
+          "low_witness": {
+            "monthly_tasks": "18.0",
+            "adoption_fraction": "1",
+            "baseline_minutes": "118.0",
+            "author_minutes": "7.0",
+            "checking_minutes": "27.0",
+            "rework_fraction": "1.0",
+            "rework_minutes": "16.0",
+            "attempts_per_task": "1",
+            "generation_cash_per_attempt": "0.12",
+            "loaded_hourly_rate": "70.0",
+            "integration_hours": "12",
+            "setup_cash": "300",
+            "support_hours": "2",
+            "maintenance_hours": "2",
+            "platform_cash": "20",
+            "cash_conversion_fraction": null
+          },
+          "high_witness": {
+            "monthly_tasks": "30.0",
+            "adoption_fraction": "1",
+            "baseline_minutes": "128.0",
+            "author_minutes": "5.0",
+            "checking_minutes": "21.0",
+            "rework_fraction": "1.0",
+            "rework_minutes": "8.0",
+            "attempts_per_task": "1",
+            "generation_cash_per_attempt": "0.05",
+            "loaded_hourly_rate": "110.0",
+            "integration_hours": "6",
+            "setup_cash": "100",
+            "support_hours": "0.5",
+            "maintenance_hours": "0.5",
+            "platform_cash": "5",
+            "cash_conversion_fraction": null
+          }
+        },
+        "cash_conversion_horizon_net": null
+      },
+      "sensitivity": [
+        {
+          "field": "monthly_tasks",
+          "unit": "tasks/month",
+          "input_low": "18.0",
+          "input_high": "30.0",
+          "economic_at_low_input": "22111.22000",
+          "economic_at_high_input": "38878.70000",
+          "economic_swing": "16767.48000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Count comparable eligible tasks, including unsuccessful attempts; record period and exclusions."
+        },
+        {
+          "field": "loaded_hourly_rate",
+          "unit": "currency/hour",
+          "input_low": "70.0",
+          "input_high": "110.0",
+          "economic_at_low_input": "25052.96000",
+          "economic_at_high_input": "39564.96000",
+          "economic_swing": "14512.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Obtain an agreed aggregate loaded-labor valuation; document role mix and valuation basis."
+        },
+        {
+          "field": "baseline_minutes",
+          "unit": "minutes/task",
+          "input_low": "118.0",
+          "input_high": "128.0",
+          "economic_at_low_input": "28148.96000",
+          "economic_at_high_input": "32228.96000",
+          "economic_swing": "4080.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Time the current workflow through accepted output, not first draft, for a comparable task mix."
+        },
+        {
+          "field": "rework_minutes",
+          "unit": "minutes/reworked task",
+          "input_low": "8.0",
+          "input_high": "16.0",
+          "economic_at_low_input": "31820.9600",
+          "economic_at_high_input": "28556.9600",
+          "economic_swing": "3264.0000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Measure extra repair or manual fallback time conditional on rework, without double counting author/checking time."
+        },
+        {
+          "field": "checking_minutes",
+          "unit": "minutes/assisted task",
+          "input_low": "21.0",
+          "input_high": "27.0",
+          "economic_at_low_input": "31820.96000",
+          "economic_at_high_input": "29372.96000",
+          "economic_swing": "2448.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Time verification of every assisted output, including discarded outputs and source checks."
+        },
+        {
+          "field": "maintenance_hours",
+          "unit": "hours/month",
+          "input_low": "0.5",
+          "input_high": "2",
+          "economic_at_low_input": "31004.96000",
+          "economic_at_high_input": "29474.96000",
+          "economic_swing": "1530.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Record recurring updates, evaluation refresh and knowledge maintenance, excluding support."
+        },
+        {
+          "field": "support_hours",
+          "unit": "hours/month",
+          "input_low": "0.5",
+          "input_high": "2",
+          "economic_at_low_input": "31004.96000",
+          "economic_at_high_input": "29474.96000",
+          "economic_swing": "1530.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Record recurring operational support and troubleshooting, excluding per-task rework."
+        },
+        {
+          "field": "author_minutes",
+          "unit": "minutes/assisted task",
+          "input_low": "5.0",
+          "input_high": "7.0",
+          "economic_at_low_input": "30902.96000",
+          "economic_at_high_input": "30086.96000",
+          "economic_swing": "816.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Record prompting, context preparation and editing; exclude checking and rework counted below."
+        },
+        {
+          "field": "integration_hours",
+          "unit": "hours one-time",
+          "input_low": "6",
+          "input_high": "12",
+          "economic_at_low_input": "30664.96000",
+          "economic_at_high_input": "30154.96000",
+          "economic_swing": "510.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Estimate and then record integration, rollout, initial evaluation and training effort."
+        },
+        {
+          "field": "setup_cash",
+          "unit": "currency one-time",
+          "input_low": "100",
+          "input_high": "300",
+          "economic_at_low_input": "30594.96000",
+          "economic_at_high_input": "30394.96000",
+          "economic_swing": "200.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Record incremental setup cash not already represented by integration labor."
+        },
+        {
+          "field": "platform_cash",
+          "unit": "currency/month",
+          "input_low": "5",
+          "input_high": "20",
+          "economic_at_low_input": "30554.96000",
+          "economic_at_high_input": "30374.96000",
+          "economic_swing": "180.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Record incremental fixed recurring cash not already included in generation costs."
+        },
+        {
+          "field": "generation_cash_per_attempt",
+          "unit": "currency/attempt",
+          "input_low": "0.05",
+          "input_high": "0.12",
+          "economic_at_low_input": "30503.60000",
+          "economic_at_high_input": "30483.44000",
+          "economic_swing": "20.16000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Use dated metered cost or a documented cost assumption covering each attempt's actual usage."
+        },
+        {
+          "field": "adoption_fraction",
+          "unit": "fraction",
+          "input_low": "1",
+          "input_high": "1",
+          "economic_at_low_input": "30494.96000",
+          "economic_at_high_input": "30494.96000",
+          "economic_swing": "0.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Measure the fraction of eligible tasks actually attempted with the assisted workflow."
+        },
+        {
+          "field": "attempts_per_task",
+          "unit": "generation attempts/task",
+          "input_low": "1",
+          "input_high": "1",
+          "economic_at_low_input": "30494.96000",
+          "economic_at_high_input": "30494.96000",
+          "economic_swing": "0.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Count all billable attempts including retries and discarded generations."
+        },
+        {
+          "field": "rework_fraction",
+          "unit": "fraction",
+          "input_low": "1.0",
+          "input_high": "1.0",
+          "economic_at_low_input": "30494.96000",
+          "economic_at_high_input": "30494.96000",
+          "economic_swing": "0.00000",
+          "cash_at_low_input": null,
+          "cash_at_high_input": null,
+          "measurement": "Count tasks requiring additional repair after ordinary checking; retain failed and abandoned tasks."
+        }
+      ],
+      "volume_checking_grid": [
+        {
+          "volume_level": "low",
+          "checking_level": "low",
+          "monthly_tasks": "18.0",
+          "checking_minutes": "21.0",
+          "economic_horizon_net": "23105.72000"
+        },
+        {
+          "volume_level": "low",
+          "checking_level": "base",
+          "monthly_tasks": "18.0",
+          "checking_minutes": "24.25",
+          "economic_horizon_net": "22111.22000"
+        },
+        {
+          "volume_level": "low",
+          "checking_level": "high",
+          "monthly_tasks": "18.0",
+          "checking_minutes": "27.0",
+          "economic_horizon_net": "21269.72000"
+        },
+        {
+          "volume_level": "base",
+          "checking_level": "low",
+          "monthly_tasks": "24.0",
+          "checking_minutes": "21.0",
+          "economic_horizon_net": "31820.96000"
+        },
+        {
+          "volume_level": "base",
+          "checking_level": "base",
+          "monthly_tasks": "24.0",
+          "checking_minutes": "24.25",
+          "economic_horizon_net": "30494.96000"
+        },
+        {
+          "volume_level": "base",
+          "checking_level": "high",
+          "monthly_tasks": "24.0",
+          "checking_minutes": "27.0",
+          "economic_horizon_net": "29372.96000"
+        },
+        {
+          "volume_level": "high",
+          "checking_level": "low",
+          "monthly_tasks": "30.0",
+          "checking_minutes": "21.0",
+          "economic_horizon_net": "40536.20000"
+        },
+        {
+          "volume_level": "high",
+          "checking_level": "base",
+          "monthly_tasks": "30.0",
+          "checking_minutes": "24.25",
+          "economic_horizon_net": "38878.70000"
+        },
+        {
+          "volume_level": "high",
+          "checking_level": "high",
+          "monthly_tasks": "30.0",
+          "checking_minutes": "27.0",
+          "economic_horizon_net": "37476.20000"
+        }
+      ],
+      "measurement_plan": [
+        {
+          "field": "cash_conversion_fraction",
+          "reason": "MISSING_INPUT",
+          "measurement": "Document what fraction of the signed capacity value would actually change payroll or contractor cash; zero is not an automatic fact."
+        },
+        {
+          "field": "monthly_tasks",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "16767.48000",
+          "measurement": "Count comparable eligible tasks, including unsuccessful attempts; record period and exclusions."
+        },
+        {
+          "field": "loaded_hourly_rate",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "14512.00000",
+          "measurement": "Obtain an agreed aggregate loaded-labor valuation; document role mix and valuation basis."
+        },
+        {
+          "field": "baseline_minutes",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "4080.00000",
+          "measurement": "Time the current workflow through accepted output, not first draft, for a comparable task mix."
+        },
+        {
+          "field": "rework_minutes",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "3264.0000",
+          "measurement": "Measure extra repair or manual fallback time conditional on rework, without double counting author/checking time."
+        },
+        {
+          "field": "checking_minutes",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "2448.00000",
+          "measurement": "Time verification of every assisted output, including discarded outputs and source checks."
+        },
+        {
+          "field": "maintenance_hours",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "1530.00000",
+          "measurement": "Record recurring updates, evaluation refresh and knowledge maintenance, excluding support."
+        },
+        {
+          "field": "support_hours",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "1530.00000",
+          "measurement": "Record recurring operational support and troubleshooting, excluding per-task rework."
+        },
+        {
+          "field": "author_minutes",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "816.00000",
+          "measurement": "Record prompting, context preparation and editing; exclude checking and rework counted below."
+        },
+        {
+          "field": "integration_hours",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "510.00000",
+          "measurement": "Estimate and then record integration, rollout, initial evaluation and training effort."
+        },
+        {
+          "field": "setup_cash",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "200.00000",
+          "measurement": "Record incremental setup cash not already represented by integration labor."
+        },
+        {
+          "field": "platform_cash",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "180.00000",
+          "measurement": "Record incremental fixed recurring cash not already included in generation costs."
+        },
+        {
+          "field": "generation_cash_per_attempt",
+          "reason": "RANGE_SENSITIVITY",
+          "economic_swing": "20.16000",
+          "measurement": "Use dated metered cost or a documented cost assumption covering each attempt's actual usage."
+        }
+      ]
+    }
+  ]
+}

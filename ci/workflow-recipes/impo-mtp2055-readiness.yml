@@ -1,0 +1,67 @@
+name: IMPO MTP 2055 readiness
+
+"on":
+  push:
+    paths:
+      - "opportunities/impo_mtp_2055/**"
+      - ".github/workflows/impo-mtp2055-readiness.yml"
+  pull_request:
+    paths:
+      - "opportunities/impo_mtp_2055/**"
+      - ".github/workflows/impo-mtp2055-readiness.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-readiness:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile package
+        run: python -m compileall -q opportunities/impo_mtp_2055
+      - name: Run hostile tests
+        run: python -m unittest opportunities.impo_mtp_2055.test_engine -v
+      - name: Run hostile tests with assertions optimized out
+        run: python -O -m unittest opportunities.impo_mtp_2055.test_engine -v
+      - name: Compile and verify shipped owner-review packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(mktemp -d)"
+          python -m opportunities.impo_mtp_2055.cli compile \
+            opportunities/impo_mtp_2055/input.owner-review.json \
+            --output-dir "$output/packet"
+          python -m opportunities.impo_mtp_2055.cli verify \
+            opportunities/impo_mtp_2055/input.owner-review.json \
+            "$output/packet/receipt.json" \
+            "$output/packet/packet.md"
+          python - "$output/packet/receipt.json" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          receipt = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+          if receipt["status"] != "SOURCE_HOLD":
+              raise SystemExit(f"shipped packet must remain SOURCE_HOLD, got {receipt['status']}")
+          if receipt["submission_ready"] is not False:
+              raise SystemExit("shipped packet must not be submission-ready")
+          if any(receipt["authority"].get(key) is not False for key in (
+              "contact_buyer",
+              "register_vendor",
+              "register_prebid",
+              "commit_pricing",
+              "sign_forms",
+              "submit_proposal",
+              "accept_contract",
+              "spend_funds",
+          )):
+              raise SystemExit("shipped packet must carry zero external authority")
+          PY

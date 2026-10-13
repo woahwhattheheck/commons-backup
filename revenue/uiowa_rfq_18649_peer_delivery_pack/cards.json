@@ -1,0 +1,326 @@
+{
+  "pack_id": "UIOWA-015-PEER-DELIVERY-PACK-001",
+  "cards": [
+    {
+      "card_id": "PC-001",
+      "source_id": "SRC-DSU-1410",
+      "practice_area": "code_review",
+      "quote": "Peer code reviews are encouraged for significant changes. If it is not feasible based on the skillsets available within the team, development managers can approve based on documentation review.",
+      "obligation_strength": "ADVISORY",
+      "obligation_basis": "are encouraged",
+      "what_it_says": "Peer review is encouraged rather than required, and an explicit documented fallback exists when the team lacks a second qualified reviewer.",
+      "why_transferable": "A multiple-application organization will have teams too small for independent review of some work. This card shows one peer's published handling of that: a named fallback with an approver, rather than silence.",
+      "transferable_questions": [
+        "For a change nobody else on the team can review, what happens? Is there a written fallback, or does it go out unreviewed?",
+        "Who approves in that case, by role, and is the approval recorded anywhere?",
+        "Can you show me a recent change that took the fallback path?"
+      ],
+      "source_locator": "Policy 14.10, III.6.5.9",
+      "applicability": "DSU development within the policy scope; preserve its tailoring and approved-exception context. TDX is DSU-specific, not an Iowa tool requirement.",
+      "obligation_cases": []
+    },
+    {
+      "card_id": "PC-002",
+      "source_id": "SRC-DSU-1410",
+      "practice_area": "change_control",
+      "quote": "An approved TDX Change request is required for any production deployment. That request shall include a description of the change, UAT results, the deployment plan, rollback procedures, and the scheduled change window.",
+      "obligation_strength": "MANDATORY",
+      "obligation_basis": "is required",
+      "what_it_says": "A production deployment requires an approved change request carrying five named contents, including acceptance results and a rollback procedure.",
+      "why_transferable": "The list of required contents is the useful part: it is a concrete checklist an assessment can compare a real change record against, rather than asking whether change control 'exists'.",
+      "transferable_questions": [
+        "Pull the last production deployment record. Which of these five does it actually contain: change description, acceptance results, deployment plan, rollback procedure, change window?",
+        "Is a rollback procedure recorded for changes that cannot be rolled back, and what is written there instead?",
+        "Are emergency deployments held to the same record, or a different one?"
+      ],
+      "source_locator": "Policy 14.10, III.6.7.1",
+      "applicability": "DSU development within the policy scope; preserve its tailoring and approved-exception context. TDX is DSU-specific, not an Iowa tool requirement.",
+      "obligation_cases": []
+    },
+    {
+      "card_id": "PC-003",
+      "source_id": "SRC-DSU-1410",
+      "practice_area": "testing",
+      "quote": "No code will be moved to production without UAT approvals stored in TDX tickets or projects.",
+      "obligation_strength": "MANDATORY",
+      "obligation_basis": "No code will be moved to production without",
+      "what_it_says": "User acceptance approval is a precondition for production, and it must be stored in a named system.",
+      "why_transferable": "It names where the approval lives. An assessment can ask for the locator rather than accepting that acceptance 'happens'.",
+      "transferable_questions": [
+        "Where is user acceptance recorded, and can you open one for a recent change?",
+        "Who gives that approval, by role?",
+        "Are maintenance changes held to the same rule as project work?"
+      ],
+      "source_locator": "Policy 14.10, III.6.6.6",
+      "applicability": "DSU development within the policy scope; preserve its tailoring and approved-exception context. TDX is DSU-specific, not an Iowa tool requirement.",
+      "obligation_cases": []
+    },
+    {
+      "card_id": "PC-004",
+      "source_id": "SRC-KU-SDLC",
+      "practice_area": "testing",
+      "quote": "Representatives separate from the development group should conduct internal Quality Assurance (QA) testing",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "should conduct",
+      "what_it_says": "Independent QA is a scoped expectation; the global subtask rule changes its force for Level 1 data.",
+      "why_transferable": "Ask which classifications and project conditions affect the practice; do not transplant KU classifications or apply an isolated sentence universally.",
+      "transferable_questions": [
+        "Take the last change that shipped: who wrote it, and who tested it? Can you show me where that is recorded?",
+        "Who tests a change before it ships, and are they the same people who wrote it?",
+        "If testing is done by the author, is that recorded as such anywhere?",
+        "Does independence differ between applications, and what drives that?",
+        "For that example, which data classification and documented exception, if any, determined the expectation?"
+      ],
+      "source_locator": "Statement of Policy, global subtask rule + Testing Phase, independent QA subtask",
+      "applicability": "The isolated should wording is subject to the preceding Level 1 data rule.",
+      "obligation_cases": [
+        {
+          "condition": "KU Level 1 data involved",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Otherwise, within required SDLC phases",
+          "strength": "ADVISORY"
+        }
+      ]
+    },
+    {
+      "card_id": "PC-005",
+      "source_id": "SRC-KU-SDLC",
+      "practice_area": "documentation",
+      "quote": "Documentation during testing should detail and match testing criteria to specific requirements.",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "should detail",
+      "what_it_says": "Requirement-to-test documentation has different force under the global Level 1 data rule.",
+      "why_transferable": "Ask which classifications and project conditions affect the practice; do not transplant KU classifications or apply an isolated sentence universally.",
+      "transferable_questions": [
+        "For a recent change, can you show which test covers which stated requirement?",
+        "If a requirement changed mid-delivery, was the test updated, and how would you know?",
+        "Is that link recorded anywhere, or reconstructed from memory?",
+        "For that example, which data classification and documented exception, if any, determined the expectation?"
+      ],
+      "source_locator": "Statement of Policy, global subtask rule + Testing Phase, requirements-linked test documentation subtask",
+      "applicability": "The isolated should wording is subject to the preceding Level 1 data rule.",
+      "obligation_cases": [
+        {
+          "condition": "KU Level 1 data involved",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Otherwise, within required SDLC phases",
+          "strength": "ADVISORY"
+        }
+      ]
+    },
+    {
+      "card_id": "PC-006",
+      "source_id": "SRC-UMN-SDS",
+      "practice_area": "code_review",
+      "quote": "Document the peer review of the design and the approval to move to the next phase",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "Document the peer review",
+      "what_it_says": "Design-review recording is Required for High, Recommended for Medium and Optional for Low.",
+      "why_transferable": "It separates 'a review happened' from 'the review and its outcome are recorded'. An assessment can ask for the record.",
+      "transferable_questions": [
+        "Where is a design review recorded, and can you open a recent one?",
+        "Does the record show the decision to proceed, or only that a meeting occurred?",
+        "Which changes are large enough to get a design review at all?",
+        "Can you show how the system classification and any applicable exception were determined for that record?"
+      ],
+      "source_locator": "Software Development Standard, SD.B.06, High/Medium/Low columns",
+      "applicability": "Use the table columns and locally established classification; no general claim about non-overridable exceptions.",
+      "obligation_cases": [
+        {
+          "condition": "High",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Medium",
+          "strength": "ADVISORY"
+        },
+        {
+          "condition": "Low (Optional in source)",
+          "strength": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "card_id": "PC-007",
+      "source_id": "SRC-UMN-SDS",
+      "practice_area": "environments",
+      "quote": "Prevent private-highly restricted and/or private-restricted data from appearing in non-production environments unless the environment meets the same requirements as the production environment",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "Prevent",
+      "what_it_says": "The equivalent-controls condition for restricted data is Required for High/Medium and Recommended for Low.",
+      "why_transferable": "It states the condition under which the rule bends, which is the part an assessment can actually check.",
+      "transferable_questions": [
+        "What data is in your test environments today, and how do you know?",
+        "If production data is used for testing, what makes that environment equivalent?",
+        "Who decides, by role, and is that decision recorded?",
+        "Can you show how the system classification and any applicable exception were determined for that record?"
+      ],
+      "source_locator": "Software Development Standard, SD.C.02, High/Medium/Low columns",
+      "applicability": "Use the table columns and locally established classification; no general claim about non-overridable exceptions.",
+      "obligation_cases": [
+        {
+          "condition": "High",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Medium",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Low",
+          "strength": "ADVISORY"
+        }
+      ]
+    },
+    {
+      "card_id": "PC-008",
+      "source_id": "SRC-UMN-SDS",
+      "practice_area": "testing",
+      "quote": "Prohibit deployment when software does not pass security requirements in the testing phase",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "Prohibit deployment",
+      "what_it_says": "The deployment prohibition is Required for High/Medium and Recommended for Low. This row alone does not establish that exceptions cannot exist.",
+      "why_transferable": "Distinguish the stated expectation, applicable classification, decision record and actual enforcement; ask rather than assume whether an exception process applies.",
+      "transferable_questions": [
+        "Has a deployment ever gone ahead with a known failing security requirement? What happened?",
+        "Who can waive that, by role, and where is a waiver recorded?",
+        "Is the gate enforced by a person or by the pipeline?",
+        "Can you show how the system classification and any applicable exception were determined for that record?"
+      ],
+      "source_locator": "Software Development Standard, SD.E.03, High/Medium/Low columns",
+      "applicability": "Use the table columns and locally established classification; no general claim about non-overridable exceptions.",
+      "obligation_cases": [
+        {
+          "condition": "High",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Medium",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Low",
+          "strength": "ADVISORY"
+        }
+      ]
+    },
+    {
+      "card_id": "PC-009",
+      "source_id": "SRC-NEU-SDLC",
+      "practice_area": "documentation",
+      "quote": "Documentation, to include security considerations, must be developed and updated during all phases from Initiation through Maintenance.",
+      "obligation_strength": "MANDATORY",
+      "obligation_basis": "must be developed and updated",
+      "what_it_says": "Documentation is a continuing obligation across the whole lifecycle, including maintenance, not a delivery artifact.",
+      "why_transferable": "Most documentation questions stop at delivery. The maintenance clause is the one that separates current documentation from documentation that was accurate once.",
+      "transferable_questions": [
+        "When was the documentation for a given application last updated, and what triggered it?",
+        "Does a maintenance change update the documentation, and can you show one that did?",
+        "Who would notice if it went stale?"
+      ],
+      "source_locator": "SDLC standard, documentation requirement (original extraction)",
+      "applicability": "Draft intent only; current content not reverified because the official endpoint returned HTTP 502.",
+      "obligation_cases": []
+    },
+    {
+      "card_id": "PC-010",
+      "source_id": "SRC-NEU-SDLC",
+      "practice_area": "environments",
+      "quote": "All tools, code, or access mechanisms used for development or testing of the system or software must be removed from the software that is being moved into a production environment.",
+      "obligation_strength": "MANDATORY",
+      "obligation_basis": "must be removed",
+      "what_it_says": "Development and testing affordances must not travel into production with the code.",
+      "why_transferable": "Ask for concrete production-transition evidence. Similar themes in other sources are context, not independent proof of the same implemented practice.",
+      "transferable_questions": [
+        "How do you know a test account or debug path did not ship with the last release?",
+        "Is that checked by a person, by a tool, or not at all?",
+        "Has one ever been found in production, and how?"
+      ],
+      "source_locator": "SDLC standard, production transition requirement (original extraction)",
+      "applicability": "Draft intent only; current content not reverified because the official endpoint returned HTTP 502.",
+      "obligation_cases": []
+    },
+    {
+      "card_id": "PC-011",
+      "source_id": "SRC-UCOP-SSDS",
+      "practice_area": "security_testing",
+      "quote": "Perform code reviews to reduce cyber risk.",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "Perform",
+      "source_locator": "UC Secure Software Development Standard, section 4.1, printed page 5",
+      "applicability": "Section 2 scope plus Protection Level 3+ or Availability Level 3+.",
+      "obligation_cases": [
+        {
+          "condition": "In scope and PL3+ or AL3+",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Outside that threshold",
+          "strength": "UNKNOWN"
+        }
+      ],
+      "what_it_says": "The scoped code-review requirements include security expertise and automated analysis.",
+      "why_transferable": "Use as an interview prompt, not an Iowa obligation or evidence that a peer implements the practice.",
+      "transferable_questions": [
+        "Can you show the last applicable review record, its reviewers and the checks actually performed?",
+        "Where does the record show disposition of issues and the criteria used to select this review depth?"
+      ]
+    },
+    {
+      "card_id": "PC-012",
+      "source_id": "SRC-UCOP-SSDS",
+      "practice_area": "documentation",
+      "quote": "must create project documentation",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "must",
+      "source_locator": "UC Secure Software Development Standard, section 4.13, printed pages 8-9",
+      "applicability": "Section 2 scope plus Protection Level 3+ or Availability Level 3+.",
+      "obligation_cases": [
+        {
+          "condition": "In scope and PL3+ or AL3+",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Outside that threshold",
+          "strength": "UNKNOWN"
+        }
+      ],
+      "what_it_says": "The documentation requirements cover security decisions, defects, testing and component state.",
+      "why_transferable": "Use as an interview prompt, not an Iowa obligation or evidence that a peer implements the practice.",
+      "transferable_questions": [
+        "Can you show a recent project record linking a defect to its fix and verification?",
+        "Who updates that record after maintenance, and how is current component state established?"
+      ]
+    },
+    {
+      "card_id": "PC-013",
+      "source_id": "SRC-UCOP-SSDS",
+      "practice_area": "change_control",
+      "quote": "Use a software version control system or repository.",
+      "obligation_strength": "CONDITIONAL",
+      "obligation_basis": "Use",
+      "source_locator": "UC Secure Software Development Standard, section 4.14, printed page 9",
+      "applicability": "Section 2 scope plus Protection Level 3+ or Availability Level 3+.",
+      "obligation_cases": [
+        {
+          "condition": "In scope and PL3+ or AL3+",
+          "strength": "MANDATORY"
+        },
+        {
+          "condition": "Outside that threshold",
+          "strength": "UNKNOWN"
+        }
+      ],
+      "what_it_says": "The scoped controls connect deployments and retrievable version labels to a repository.",
+      "why_transferable": "Use as an interview prompt, not an Iowa obligation or evidence that a peer implements the practice.",
+      "transferable_questions": [
+        "Can you show the last deployed revision and retrieve its exact source version?",
+        "What ties the test record to that revision when a deployment is rebuilt?"
+      ]
+    }
+  ]
+}

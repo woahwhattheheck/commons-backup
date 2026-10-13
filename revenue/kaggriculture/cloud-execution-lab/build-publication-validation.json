@@ -1,0 +1,81 @@
+{
+  "schema": "titan-build-publication-v1",
+  "base_main": "01c2b20b990f556ddd190ff5caaa7d8ab55adac1",
+  "sources": {
+    "original_builder": {
+      "bytes": 6056,
+      "git_blob": "30a2b456e347e5f470cda5fc30ab323168957172",
+      "sha256": "066485f1d9b4a747010a4664928183fb1619dd60871090d84ba01d8b10273649"
+    },
+    "builder": {
+      "bytes": 8031,
+      "git_blob": "6e5b452f16ebf60de12dac153ed14a8d3552586a",
+      "sha256": "a8dcaceb7e4f06a77f68f9f3046e684cc55d0574d73b56fd98bb3a2b6363e589"
+    },
+    "test": {
+      "bytes": 14443,
+      "git_blob": "5e66be2eaf8a45977ea88d45481135d22a819142",
+      "sha256": "cbadb632f11fc1358422ea9501b3a854e56dcf9b415376fb144a4898337b0602"
+    }
+  },
+  "unchanged_function_asts": {
+    "source_files": true,
+    "render": true,
+    "verify_current": true
+  },
+  "tests": {
+    "fixed": {
+      "methods": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "original": {
+      "methods": 21,
+      "failing_methods": 16,
+      "failure_records": 18,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "successful_render": {
+    "archive_sha256": "80f91ddb984526280063beaa540049d0040c8a3b7320b16d6e64c41296c47966",
+    "source_files": 58,
+    "bytes": 4952
+  },
+  "hard_exit": {
+    "exit_code": 73,
+    "previous_bundle_preserved": true,
+    "orphan_staging_files": 3
+  },
+  "cli": {
+    "commands": [
+      "python -B build_integrated.py",
+      "python -B build_integrated.py --check"
+    ],
+    "returncodes": [
+      0,
+      0
+    ],
+    "same_receipt": true,
+    "check_changed_files": 0,
+    "receipt": {
+      "path": "exports/titan-current.tar.gz",
+      "entrypoint": "main.py::agent",
+      "config": "TITAN-CONFIG.json",
+      "sha256": "9335804007e90c8a6ece5d7ead72e2f85ac907c47561177a7527f4b025b1e2c8",
+      "bytes": 4938,
+      "runtime_files": 58,
+      "source_manifest": "runtime/integrated-selected/CURRENT-SOURCE.json",
+      "source_manifest_sha256": "293c8157f1c56975298d2008b9fec70b76ba6378a7b3f8b995287953db800ed8"
+    }
+  },
+  "limits": [
+    "Controlled source-tree fixture; no full current-runtime closure execution.",
+    "Real renderer/archive/source map/filesystem and real child process; no policy/engine/game execution.",
+    "Atomic per-file replacement, not a multi-file transaction.",
+    "A stop between replacements is rejected by the existing --check; unreferenced stage files may survive a hard exit.",
+    "No cross-process concurrent-writer serialization or power-loss durability claim.",
+    "No canonical runtime, config, release archive, source manifest or receipt was changed in the repository."
+  ]
+}

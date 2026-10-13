@@ -1,0 +1,28 @@
+{
+  "schema": "commons-fleet-work-order-receipt-v1",
+  "sku": "fleet-work-order-exactly-once",
+  "fixture": "inspection-1042",
+  "input_class": "synthetic",
+  "acceptance": {
+    "happy_path": "PASS",
+    "duplicate_replay": "PASS",
+    "crash_after_prepare_resume": "PASS",
+    "crash_after_effects_resume": "PASS",
+    "incomplete_rollback": "PASS",
+    "same_id_different_bytes": "PASS",
+    "invalid_input_no_effect": "PASS"
+  },
+  "expected_effect_counts": {
+    "work_orders": 1,
+    "escalations": 1,
+    "committed_receipts": 1
+  },
+  "entry_offer_usd": 199,
+  "proof_offer_usd": 2500,
+  "claims": {
+    "production_connected": false,
+    "buyer_delivered": false,
+    "payment_received": false,
+    "cash_usd": 0
+  }
+}

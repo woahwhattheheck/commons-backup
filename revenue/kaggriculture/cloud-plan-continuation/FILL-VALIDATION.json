@@ -1,0 +1,469 @@
+{
+  "scope": "new joined consumer invocations; no engine/game run or cash-receipt claim",
+  "tests": {
+    "run": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "inputs": {
+    "solver.py": {
+      "bytes": 2857,
+      "git_blob": "3a6446d96e8470374dd5b5ba72a8e5c6d41a8ad3",
+      "sha256": "65b394dcfb3de6177f7b5b27b1960dd92db1d8d33dcc04a5c673ce848c8dc404"
+    },
+    "selector.py": {
+      "bytes": 7204,
+      "git_blob": "546b71188fd44dc47cac99623d1967bc81413da7",
+      "sha256": "a54f384fabbedda0b2071beabb280abddcadb8e91a1206321ffaa99d85fce0e1"
+    },
+    "observed_fills.py": {
+      "bytes": 14860,
+      "git_blob": "cabe10ad3d683351077c9597ad7bb36cb58ce9c6",
+      "sha256": "8439d571028e5613bfcd70cfa1428ee86b1c17c89a1297288191c2a833f38857"
+    }
+  },
+  "runtime": {
+    "bytes": 14091,
+    "git_blob": "ac65cd08c4826532d0d34ce5d9c9a6f4156092c6",
+    "sha256": "f4e5a7d66ee2994dd7d4b3422abce662e55341d0dab0e8748ed5b8d21a6d3d86"
+  },
+  "test": {
+    "bytes": 19577,
+    "git_blob": "07cf47708dd5903bd932f370eee77663d24d0cf1",
+    "sha256": "86fab044577851f9b7b35f610196458a8dbc6a046157014b7d9ced6b38052a2f"
+  },
+  "witnesses": [
+    {
+      "case": "filled",
+      "player": 0,
+      "final_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [],
+          [
+            "SELL",
+            "EGG",
+            1
+          ]
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "next_shed": {
+        "EGG": 1
+      },
+      "next_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [],
+          []
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "last_fill": {
+        "status": "filled",
+        "reason": "previous_sale_filled",
+        "key": "lot",
+        "step": 10,
+        "player": 0,
+        "item": "EGG",
+        "slot": 1,
+        "quantity": 1,
+        "verdict": true,
+        "result": {
+          "status": "reconciled",
+          "reason": "compatible_shed_paths",
+          "orders": [
+            {
+              "slot": 0,
+              "type": null,
+              "item": null,
+              "requested": null,
+              "kind": "ignored",
+              "fill_min": 0,
+              "fill_max": 0
+            },
+            {
+              "slot": 1,
+              "type": "SELL",
+              "item": "EGG",
+              "requested": 1,
+              "kind": "sell",
+              "fill_min": 1,
+              "fill_max": 1
+            }
+          ],
+          "cash_receipts": null,
+          "compatible_states": 1,
+          "peak_states": 1,
+          "transitions": 1,
+          "method": "bounded_own_shed_superset",
+          "non_shed_orders_inferred": false,
+          "binding": {
+            "step": 10,
+            "player": 0,
+            "action_sha256": "e0f9ed36ec447536ee99b4624cf22f9c871477b720098a853af7f230b3f77ae5"
+          }
+        }
+      },
+      "draws": 1
+    },
+    {
+      "case": "short",
+      "player": 0,
+      "final_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "EGG",
+            2
+          ],
+          [
+            "SELL",
+            "EGG",
+            1
+          ]
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "next_shed": {
+        "EGG": 0
+      },
+      "next_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [],
+          [
+            "SELL",
+            "EGG",
+            2
+          ]
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "last_fill": {
+        "status": "short_fill",
+        "reason": "previous_sale_short_fill",
+        "key": "lot",
+        "step": 10,
+        "player": 0,
+        "item": "EGG",
+        "slot": 1,
+        "quantity": 1,
+        "verdict": false,
+        "result": {
+          "status": "reconciled",
+          "reason": "compatible_shed_paths",
+          "orders": [
+            {
+              "slot": 0,
+              "type": "SELL",
+              "item": "EGG",
+              "requested": 2,
+              "kind": "sell",
+              "fill_min": 2,
+              "fill_max": 2
+            },
+            {
+              "slot": 1,
+              "type": "SELL",
+              "item": "EGG",
+              "requested": 1,
+              "kind": "sell",
+              "fill_min": 0,
+              "fill_max": 0
+            }
+          ],
+          "cash_receipts": null,
+          "compatible_states": 1,
+          "peak_states": 1,
+          "transitions": 2,
+          "method": "bounded_own_shed_superset",
+          "non_shed_orders_inferred": false,
+          "binding": {
+            "step": 10,
+            "player": 0,
+            "action_sha256": "cb9dfb334ece1a8945b8bd3417f4d5beeb823d7e5bb27f3615d0d426288c056e"
+          }
+        }
+      },
+      "draws": 1
+    },
+    {
+      "case": "filled",
+      "player": 1,
+      "final_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [],
+          [
+            "SELL",
+            "EGG",
+            1
+          ]
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "next_shed": {
+        "EGG": 1
+      },
+      "next_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [],
+          []
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "last_fill": {
+        "status": "filled",
+        "reason": "previous_sale_filled",
+        "key": "lot",
+        "step": 10,
+        "player": 1,
+        "item": "EGG",
+        "slot": 1,
+        "quantity": 1,
+        "verdict": true,
+        "result": {
+          "status": "reconciled",
+          "reason": "compatible_shed_paths",
+          "orders": [
+            {
+              "slot": 0,
+              "type": null,
+              "item": null,
+              "requested": null,
+              "kind": "ignored",
+              "fill_min": 0,
+              "fill_max": 0
+            },
+            {
+              "slot": 1,
+              "type": "SELL",
+              "item": "EGG",
+              "requested": 1,
+              "kind": "sell",
+              "fill_min": 1,
+              "fill_max": 1
+            }
+          ],
+          "cash_receipts": null,
+          "compatible_states": 1,
+          "peak_states": 1,
+          "transitions": 1,
+          "method": "bounded_own_shed_superset",
+          "non_shed_orders_inferred": false,
+          "binding": {
+            "step": 10,
+            "player": 1,
+            "action_sha256": "e0f9ed36ec447536ee99b4624cf22f9c871477b720098a853af7f230b3f77ae5"
+          }
+        }
+      },
+      "draws": 1
+    },
+    {
+      "case": "short",
+      "player": 1,
+      "final_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "EGG",
+            2
+          ],
+          [
+            "SELL",
+            "EGG",
+            1
+          ]
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "next_shed": {
+        "EGG": 0
+      },
+      "next_action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "PASS"
+          ]
+        ],
+        "market": [
+          [],
+          [
+            "SELL",
+            "EGG",
+            2
+          ]
+        ],
+        "keep": {
+          "x": [
+            1,
+            2
+          ]
+        }
+      },
+      "last_fill": {
+        "status": "short_fill",
+        "reason": "previous_sale_short_fill",
+        "key": "lot",
+        "step": 10,
+        "player": 1,
+        "item": "EGG",
+        "slot": 1,
+        "quantity": 1,
+        "verdict": false,
+        "result": {
+          "status": "reconciled",
+          "reason": "compatible_shed_paths",
+          "orders": [
+            {
+              "slot": 0,
+              "type": "SELL",
+              "item": "EGG",
+              "requested": 2,
+              "kind": "sell",
+              "fill_min": 2,
+              "fill_max": 2
+            },
+            {
+              "slot": 1,
+              "type": "SELL",
+              "item": "EGG",
+              "requested": 1,
+              "kind": "sell",
+              "fill_min": 0,
+              "fill_max": 0
+            }
+          ],
+          "cash_receipts": null,
+          "compatible_states": 1,
+          "peak_states": 1,
+          "transitions": 2,
+          "method": "bounded_own_shed_superset",
+          "non_shed_orders_inferred": false,
+          "binding": {
+            "step": 10,
+            "player": 1,
+            "action_sha256": "cb9dfb334ece1a8945b8bd3417f4d5beeb823d7e5bb27f3615d0d426288c056e"
+          }
+        }
+      },
+      "draws": 1
+    }
+  ],
+  "default_differential": {
+    "original_blob": "165890d9e2534785ee4114e39549528e3f14ad82",
+    "sampler_seeds": 32,
+    "scenario_count": 12,
+    "scenarios": [
+      "split",
+      "deferred",
+      "mixed",
+      "missed",
+      "backward",
+      "unknown",
+      "infeasible",
+      "stock",
+      "slot",
+      "terminal",
+      "rollover",
+      "zero"
+    ],
+    "paired_invocations": 1312,
+    "differences": 0,
+    "transcript_sha256": "b398ab5c342f19368155805ca5d8e215edce5781f269f9de85aea2c64a9ca8ed",
+    "scope": "default-mode action/state differential, not game seeds or game runs"
+  }
+}

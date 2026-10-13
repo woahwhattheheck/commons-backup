@@ -1,0 +1,49 @@
+{
+  "schema": "titan-v4-component-validation-v1",
+  "status": "COMBINED_COMPONENT_GREEN",
+  "canonical_branch": "main",
+  "repair": "m1_complete_day_cash_custody",
+  "source_blob": "87eb8ccbee13b33ef656ba0a5ba0114ac30f4658",
+  "source_sha256": "f48adc060c3d1de42d89ddfbdcc5bb48bc8dc6a50f5b4cd07a0cbddc9eadb279",
+  "source_bytes": 15897,
+  "tests": {
+    "test_v4_m1_complete_day.py": "db0cc52f70be6908816f5dc52c1eed5e0eae691d",
+    "test_v4_m1_money_overflow.py": "5695a41e8baca3da1b0b730ebcb3c27e6fa0bc8d",
+    "test_v4_m1_daycoverage_boundaries.py": "023720500168f2e922ab8564a5bfd60b68779a59",
+    "test_v4_m1_evidence_shapes.py": "c1e71d9bab8531c3ea6d41439845e4e7c3a548e6"
+  },
+  "evidence_shape_test_commit": "c373a73666c1192d1e22a1840427b273def49d44",
+  "environment": "cloud container CPython 3.13",
+  "normal": "23/23 unittest methods PASS",
+  "optimized": "23/23 unittest methods PASS under python -O",
+  "compile": "PASS",
+  "inherited_parameterized_cases_per_mode": {
+    "complete_tape": 2660,
+    "truncated_tape": 26740,
+    "cash_owner_hour_opcode_slot": 150
+  },
+  "new_tests": 5,
+  "new_test_scope": [
+    "absent final action fails closed",
+    "malformed live market row declines",
+    "malformed dead market suffix is not validated",
+    "disabled lane does not inspect nonmapping arguments",
+    "truncated tuple tape on seat 1 preserves parent identity, inputs and buy accounting"
+  ],
+  "commands_from_this_directory": [
+    "python -B -m unittest -v test_v4_m1_evidence_shapes test_v4_m1_daycoverage_boundaries test_v4_m1_complete_day test_v4_m1_money_overflow",
+    "python -O -B -m unittest -v test_v4_m1_evidence_shapes test_v4_m1_daycoverage_boundaries test_v4_m1_complete_day test_v4_m1_money_overflow"
+  ],
+  "provenance": {
+    "donor_receipt": "https://github.com/woahwhattheheck/commons/pull/12605#issuecomment-5642641130",
+    "execution_claim": "https://github.com/woahwhattheheck/commons/pull/12605#issuecomment-5642663674",
+    "deconflict_receipt": "https://github.com/woahwhattheheck/commons/pull/12605#issuecomment-5642716462",
+    "deconflict": "A peer landed the identical composed source and broader boundary test while main advanced. Retained those exact bytes and original manifest, discarded overlapping local test package, added only five complementary tests. No source ownership or unique authorship claimed for peer work."
+  },
+  "scope": "Component-only execution; not an official-engine, full-game, profitability, or strength panel.",
+  "production_activation": false,
+  "feature_defaults_changed": false,
+  "economics_changed": false,
+  "legacy_materializer_executed": false,
+  "kaggle_uploaded": false
+}

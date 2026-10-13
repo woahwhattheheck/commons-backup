@@ -1,0 +1,38 @@
+name: Zindi mapping equity scorer
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/zindi-mapping-equity/**'
+      - '.github/workflows/zindi-mapping-equity.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/zindi-mapping-equity/**'
+      - '.github/workflows/zindi-mapping-equity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zindi-mapping-equity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax
+        run: python -m py_compile competitions/zindi-mapping-equity/*.py
+      - name: Contract tests
+        working-directory: competitions/zindi-mapping-equity
+        run: python -m unittest discover -s tests -v
+      - name: Render remote extraction plan without network I/O
+        working-directory: competitions/zindi-mapping-equity
+        run: python build_submission.py --print-sql --region northern-ca > /tmp/northern-ca.sql

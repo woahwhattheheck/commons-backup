@@ -1,0 +1,26 @@
+services:
+  admin:
+    build: .
+    environment:
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:?Set PUBLIC_BASE_URL to the public HTTPS origin}
+      ROUTEFOUNDRY_BRAND: ${ROUTEFOUNDRY_BRAND:-RouteFoundry}
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - routefoundry-data:/data
+    restart: unless-stopped
+
+  public:
+    build: .
+    command: ["python", "app.py", "--host", "0.0.0.0", "--public-only"]
+    environment:
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:?Set PUBLIC_BASE_URL to the public HTTPS origin}
+      ROUTEFOUNDRY_BRAND: ${ROUTEFOUNDRY_BRAND:-RouteFoundry}
+    ports:
+      - "8081:8080"
+    volumes:
+      - routefoundry-data:/data
+    restart: unless-stopped
+
+volumes:
+  routefoundry-data:

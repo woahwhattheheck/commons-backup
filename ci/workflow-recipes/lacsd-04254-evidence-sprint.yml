@@ -1,0 +1,37 @@
+name: LACSD 04254 evidence sprint
+
+on:
+  push:
+    paths:
+      - 'revenue/lacsd_04254_evidence_sprint/**'
+      - '.github/workflows/lacsd-04254-evidence-sprint.yml'
+  pull_request:
+    paths:
+      - 'revenue/lacsd_04254_evidence_sprint/**'
+      - '.github/workflows/lacsd-04254-evidence-sprint.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-sprint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/lacsd_04254_evidence_sprint/evidence_core.py revenue/lacsd_04254_evidence_sprint/evidence_sprint.py revenue/lacsd_04254_evidence_sprint/test_evidence_sprint.py
+      - name: Tests
+        working-directory: revenue/lacsd_04254_evidence_sprint
+        run: python -m unittest -v test_evidence_sprint.py
+      - name: Optimized tests
+        working-directory: revenue/lacsd_04254_evidence_sprint
+        run: python -O -m unittest -v test_evidence_sprint.py
+      - name: Demo receipt
+        working-directory: revenue/lacsd_04254_evidence_sprint
+        run: python evidence_sprint.py demo > /tmp/lacsd-04254-demo.json

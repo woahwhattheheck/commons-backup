@@ -1,0 +1,59 @@
+name: TITAN V4 control-plane hardening
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/CANONICAL.json'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/INTEGRATION.json'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/COMPOSITION.json'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/check_integration_ledger.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/check_composition_graph.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/check_control_plane.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/test_check_control_plane.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/tooling/composition-graph/test_discovery_symlink_census.py'
+      - '.github/workflows/titan-v4-control-plane-hardening.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/CANONICAL.json'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/INTEGRATION.json'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/COMPOSITION.json'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/check_integration_ledger.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/check_composition_graph.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/check_control_plane.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/test_check_control_plane.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/tooling/composition-graph/test_discovery_symlink_census.py'
+      - '.github/workflows/titan-v4-control-plane-hardening.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  control-plane:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Focused contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v4
+        run: |
+          python -B test_check_control_plane.py
+          python -B repairs/tooling/composition-graph/test_discovery_symlink_census.py
+      - name: Focused contracts under optimization
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v4
+        run: |
+          PYTHONOPTIMIZE=1 python -B test_check_control_plane.py
+          PYTHONOPTIMIZE=1 python -B repairs/tooling/composition-graph/test_discovery_symlink_census.py
+      - name: Validate live one-V4 control plane
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v4
+        run: python -B check_control_plane.py --json
+      - name: Prove checkout remained clean
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"

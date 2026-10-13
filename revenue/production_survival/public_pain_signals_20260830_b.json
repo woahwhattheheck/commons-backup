@@ -1,0 +1,118 @@
+{
+  "kind": "PUBLIC_PAIN_SIGNAL_BATCH",
+  "schema_version": "production-survival-signals/v1",
+  "offer_sku": "same-day-agent-survival-proof",
+  "collected_by": "KIMI (K3, Cursor seat) — batch 2, self-executed after grok.com delegation hit the account weekly limit",
+  "collected_at": "2026-08-30T05:55:00Z",
+  "honesty": {
+    "these_are_strangers_public_posts": true,
+    "no_contact_made": true,
+    "no_interest_expressed_by_them": true,
+    "not_leads_not_customers_not_cash": true,
+    "contact_requires_owner_approval": true,
+    "verified_leads_remain": 0
+  },
+  "crm_mapping": "revenue/production_survival/crm.md stage 'Public pain captured': phrase plus source URL. Airtable base JOJO Revenue Recovery CRM is the system of record; this file is research input only, not a second CRM. Batch 1: public_pain_signals_20260830.json — none of these duplicate it.",
+  "signals": [
+    {
+      "signal_id": "sig-langgraph-8653-production-only-erasure",
+      "pain_phrase": "update_state can permanently erase messages when the checkpointer is config-injected — local testing never catches it; the bug only exists in the config-injected shape, i.e. exactly and only in production",
+      "source_url": "https://github.com/langchain-ai/langgraph/issues/8653",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "LangGraph Platform operator; get_state returns messages:[] for a thread with full history, and update_state commits the emptiness forward permanently",
+      "binary_test_fit": "Given a state read that hydrates empty, when update_state runs, then the system refuses to commit against an unverified empty read — a visible stop path instead of permanent erasure",
+      "draft_sentence": "My agent should preserve conversation state across reads, but in production it silently erases the thread and every later run continues from nothing.",
+      "contact_route_status": "NONE — public GitHub issue; owner decision"
+    },
+    {
+      "signal_id": "sig-langgraph-8470-empty-transcript",
+      "pain_phrase": "reading a nested subgraph's state hydrates every DeltaChannel empty, silently — we had 1452 kB of messages blobs in checkpoint_blobs while the API reported messages: []",
+      "source_url": "https://github.com/langchain-ai/langgraph/issues/8470",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "Team running per-run inspection on finished LangGraph runs; every nested agent came back with an empty transcript while the data sat on disk",
+      "binary_test_fit": "Given 1.4 MB of checkpoint blobs on disk, when the state API is read, then the read either returns the data or fails loudly — never a plausible-looking empty transcript",
+      "draft_sentence": "My agent should report the work it actually did, but in production the run history reads empty while the data sits on disk.",
+      "contact_route_status": "NONE — public GitHub issue; owner decision"
+    },
+    {
+      "signal_id": "sig-langgraph-6491-corrupted-checkpoint",
+      "pain_phrase": "invalid state saved to checkpoint without validation, causing permanent corruption — the checkpoint is saved successfully but cannot be retrieved later; unrecoverable graph execution failures",
+      "source_url": "https://github.com/langchain-ai/langgraph/issues/6491",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "LangGraph user whose thread history was permanently corrupted by an unvalidated node output; no native way to pinpoint which node wrote it",
+      "binary_test_fit": "Given a node returning schema-invalid state, when the node completes, then validation fails before the checkpoint write — corruption never becomes permanent",
+      "draft_sentence": "My agent should fail safely on bad state, but in production it saved the corruption and the whole thread became unrecoverable.",
+      "contact_route_status": "NONE — public GitHub issue; owner decision"
+    },
+    {
+      "signal_id": "sig-autogen-7409-healthy-looking-loop",
+      "pain_phrase": "in a multi-agent system I ran in production, the failure signature looked like healthy iteration for a long time — the agents were genuinely doing work, reprocessing the same input from a slightly different angle; the loop terminated on max turns, not on a progress signal",
+      "source_url": "https://github.com/microsoft/autogen/issues/7409",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "Production multi-agent operator commenting on AutoGen's Infinite Agreement Loop proposal; framework has no awareness of semantic progress",
+      "binary_test_fit": "Given agents making state mutations without progress, when N cycles produce no convergence, then a deterministic stop fires — not a max-turns timeout after the budget is gone",
+      "draft_sentence": "My agent should escalate when a path is not working, but in production it iterated healthily on the same input until the turn cap.",
+      "contact_route_status": "NONE — public GitHub issue; owner decision"
+    },
+    {
+      "signal_id": "sig-n8n-255879-four-minute-wall",
+      "pain_phrase": "every time an Agent makes an LLM query that lasts more than 4 minutes (exactly) it crashes — n8n cannot reliably handle very long single-call LLM generations, regardless of model or infra; the workaround is architectural, not configuration-based",
+      "source_url": "https://community.n8n.io/t/problem-in-node-ai-agent1-gateway-timed-out-perhaps-try-again-later/255879",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "Multiple n8n self-hosters (thread January 2026) whose production AI Agent nodes die at exactly 4 minutes; env timeouts documented as having no effect",
+      "binary_test_fit": "Given an LLM call exceeding the stream timeout, when the wall hits, then the workflow fails with a visible receipt and resumes chunked — not a bare 504",
+      "draft_sentence": "My agent should survive long generations, but in production it dies at exactly four minutes no matter what I configure.",
+      "contact_route_status": "NONE — community forum account required; owner decision"
+    },
+    {
+      "signal_id": "sig-n8n-27853-proxy-html-in-stream",
+      "pain_phrase": "reverse proxies like Cloudflare time out the idle connection (~100s) and inject a raw 524 error HTML page into the chat stream — the user sees jumbled HTML markup even though the agent eventually completes successfully",
+      "source_url": "https://github.com/n8n-io/n8n/issues/27853",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "n8n core team documenting a production failure mode: successful agent executions presented to users as garbage HTML",
+      "binary_test_fit": "Given a long tool call behind a proxy, when the proxy times out, then the user sees a held connection or a clean error — never raw error HTML masquerading as the agent's answer",
+      "draft_sentence": "My agent should show its real result, but in production the user gets a Cloudflare error page injected into the chat.",
+      "contact_route_status": "NONE — public GitHub issue; owner decision"
+    },
+    {
+      "signal_id": "sig-jatinbansal-47k-loop",
+      "pain_phrase": "an Analyzer and a Verifier fell into mutual recursion; eleven days later the bill was $47,000 — the dashboard showed the spend climbing, but no enforcement; by the time the page fires, every API call between the alert and the human reading it has already happened",
+      "source_url": "https://jatinbansal.com/ai-engineering/agent-budgets-and-runaway-prevention/",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "November 2025 incident report: team running four LangChain agents; same post cites a 35-engineer SaaS shop with an $87,000 April 2026 bill and one developer's autonomous refactoring weekend burning $4,200",
+      "binary_test_fit": "Given two agents in mutual recursion, when the loop starts, then a hard budget ceiling enforced outside the model halts the run in minutes — not after eleven days",
+      "draft_sentence": "My agent should stop when the budget says stop, but in production two agents looped for eleven days and cost us $47,000.",
+      "contact_route_status": "NONE — blog author; the incident team is unnamed; owner decision"
+    },
+    {
+      "signal_id": "sig-clyro-executing-into-bankruptcy",
+      "pain_phrase": "every API call succeeded, every trace logged correctly — the system was not failing, it was executing successfully into bankruptcy; a per-execution cost ceiling would have halted it in minutes",
+      "source_url": "https://clyro.dev/blog/the-prevention-stack-ai-agent-prevention-beyond-observability/",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "Prevention-stack vendor analyzing the reported $47K loop; the phrase names the exact gap: observability without enforcement",
+      "binary_test_fit": "Given a runaway loop with perfect observability, when spend crosses the ceiling, then enforcement fires inside the execution path — observability alone demonstrably did not",
+      "draft_sentence": "My agent should be stoppable by infrastructure, but in production our dashboards watched it spend for eleven days.",
+      "contact_route_status": "NONE — vendor blog; owner decision"
+    },
+    {
+      "signal_id": "sig-dvara-weekend-retry-loop",
+      "pain_phrase": "247 tool calls across three production services, 38 errors, running since Friday night — a billing-dispute agent stuck in a retry loop over the weekend, hitting payment APIs repeatedly, potentially creating duplicate refund attempts, 50 other leads queued behind the stuck pipeline",
+      "source_url": "https://dvarahq.com/blog/agentic-ai-governance-production",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "DVARA governance writeup of a customer-support agent scenario: structural error misread as transient, discovered Monday morning",
+      "binary_test_fit": "Given a structural API error, when the second identical retry fails, then the agent halts and escalates instead of retrying the whole sequence for a weekend",
+      "draft_sentence": "My agent should know a structural error from a transient one, but in production it retried a billing flow 247 times over a weekend.",
+      "contact_route_status": "NONE — vendor blog; owner decision"
+    },
+    {
+      "signal_id": "sig-conectia-fails-as-a-bill",
+      "pain_phrase": "a multi-agent system can run at roughly 15x the tokens of a plain chat interaction; a loop engineered without an explicit budget ceiling doesn't fail loudly when it hits that multiplier — it fails as a bill, days later, once someone reads the invoice",
+      "source_url": "https://conectia.pro/en/blog/loop-engineering-production-guardrails",
+      "observed_at": "2026-08-30T05:55:00Z",
+      "who": "Practitioner series on production loop guardrails citing Anthropic's published multiplier; names the stuck-loop detector (compare state across iterations, stop when nothing changes)",
+      "binary_test_fit": "Given a 15x token multiplier on multi-agent runs, when the loop misbehaves, then an infrastructure-layer ceiling catches it before the invoice does",
+      "draft_sentence": "My agent should fail loudly, but in production it fails as a bill days later.",
+      "contact_route_status": "NONE — blog author; owner decision"
+    }
+  ]
+}

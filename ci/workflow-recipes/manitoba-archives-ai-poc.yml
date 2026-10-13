@@ -1,0 +1,41 @@
+name: Manitoba Archives AI PoC qualification
+
+on:
+  pull_request:
+    paths:
+      - "revenue/manitoba_archives_ai_poc/**"
+      - ".github/workflows/manitoba-archives-ai-poc.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/manitoba_archives_ai_poc/**"
+      - ".github/workflows/manitoba-archives-ai-poc.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  qualification-and-synthetic-poc:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/manitoba_archives_ai_poc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: python -m py_compile qualification.py poc_acceptance.py test_qualification.py test_poc_acceptance.py
+      - name: Hostile tests
+        run: python -m unittest -v test_qualification.py test_poc_acceptance.py
+      - name: Optimized hostile tests
+        run: python -O -m unittest -v test_qualification.py test_poc_acceptance.py
+      - name: Discovery carrier must remain on HOLD
+        run: |
+          python qualification.py public_notice.json > /tmp/manitoba-archives-ai-receipt.json
+          python - <<'PY'
+          import json
+          receipt = json.load(open('/tmp/manitoba-archives-ai-receipt.json', encoding='utf-8'))
+          assert receipt['status'] == 'HOLD_CONTROLLING_PACK_REQUIRED', receipt
+          PY

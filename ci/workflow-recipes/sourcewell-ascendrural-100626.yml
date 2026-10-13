@@ -1,0 +1,37 @@
+name: Sourcewell AscendRural 100626
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/sourcewell_ascendrural_100626/**'
+      - 'tests/test_sourcewell_ascendrural_100626.py'
+      - '.github/workflows/sourcewell-ascendrural-100626.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/sourcewell_ascendrural_100626/**'
+      - 'tests/test_sourcewell_ascendrural_100626.py'
+      - '.github/workflows/sourcewell-ascendrural-100626.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: >-
+          python -m py_compile
+          revenue/sourcewell_ascendrural_100626/qualification.py
+          revenue/sourcewell_ascendrural_100626/relay.py
+          tests/test_sourcewell_ascendrural_100626.py
+      - name: Tests
+        run: PYTHONPATH=. python -m unittest -v tests/test_sourcewell_ascendrural_100626.py
+      - name: Optimized-mode tests
+        run: PYTHONPATH=. python -O -m unittest -v tests/test_sourcewell_ascendrural_100626.py

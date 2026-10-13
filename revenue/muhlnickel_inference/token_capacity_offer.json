@@ -1,0 +1,82 @@
+{
+  "schema_version": "muhlnickel-token-capacity/v1",
+  "kind": "PREPAID_GENERATED_TOKEN_CREDIT",
+  "product_id": "muhlnickel-generated-token-capacity",
+  "public_name": "Muhlnickel Generated-Token Capacity",
+  "status": "SHOPIFY_IMPORT_READY",
+  "unit": "generated output tokens counted by the selected model tokenizer",
+  "input_pricing": "NO_SEPARATE_INPUT_TOKEN_CHARGE_WITHIN_ACCEPTED_CONTEXT_LIMIT",
+  "variants": [
+    {
+      "sku": "MUHL-TOK-10M",
+      "generated_tokens": 10000000,
+      "price_usd": 1,
+      "usd_per_million_generated_tokens": 0.1
+    },
+    {
+      "sku": "MUHL-TOK-100M",
+      "generated_tokens": 100000000,
+      "price_usd": 5,
+      "usd_per_million_generated_tokens": 0.05
+    },
+    {
+      "sku": "MUHL-TOK-1B",
+      "generated_tokens": 1000000000,
+      "price_usd": 20,
+      "usd_per_million_generated_tokens": 0.02
+    }
+  ],
+  "competitive_snapshot": {
+    "observed_at": "2026-08-30",
+    "comparison_basis": "published USD per one million output tokens; model capability is not asserted equivalent",
+    "providers": [
+      {
+        "provider": "Google",
+        "model": "Gemini 2.5 Flash-Lite batch/flex",
+        "usd_per_million_output_tokens": 0.2,
+        "source": "https://ai.google.dev/gemini-api/docs/pricing"
+      },
+      {
+        "provider": "OpenAI",
+        "model": "GPT-5.6 Luna standard",
+        "usd_per_million_output_tokens": 1.2,
+        "source": "https://openai.com/api/pricing/"
+      },
+      {
+        "provider": "Anthropic",
+        "model": "Claude Haiku 4.5 standard",
+        "usd_per_million_output_tokens": 5,
+        "source": "https://docs.anthropic.com/en/docs/about-claude/pricing"
+      }
+    ],
+    "undercut": "Every Muhlnickel tier is below all three cited published output-token rates; the $1 tier is 50% below the lowest cited rate, the $5 tier is 75% below it, and the $20 tier is 90% below it."
+  },
+  "fulfillment": {
+    "execution_surface": "owner-local Muhlnickel",
+    "model_rule": "One already-connected model family is named in writing before purchase. Frontier-model capability is not claimed unless that exact model has a capacity receipt.",
+    "capacity_rule": "A delivery window, context limit, and maximum parallelism are accepted in writing before checkout. If no capacity window is offered within seven calendar days, the buyer may cancel for a full refund.",
+    "receipt": [
+      "selected model and tokenizer",
+      "accepted input and context limits",
+      "generated-token count",
+      "output and run-manifest hashes",
+      "start and completion timestamps",
+      "substrate identity"
+    ]
+  },
+  "commerce": {
+    "provider": "shopify",
+    "state": "SHOPIFY_IMPORT_READY",
+    "product_handle": "muhlnickel-generated-token-capacity",
+    "import_path": "revenue/muhlnickel_inference/shopify_token_capacity.csv",
+    "storefront_url": null
+  },
+  "truth": {
+    "model_quality_equivalence_claimed": false,
+    "frontier_capacity_claimed": false,
+    "shopify_product_published": false,
+    "buyer_orders": 0,
+    "generated_customer_tokens": 0,
+    "cash_usd": 0
+  }
+}

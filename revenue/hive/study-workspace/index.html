@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Hive Study — source-bound practice</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/workspace.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Hive Study</p>
+      <h1>Practice from your source, not a black box.</h1>
+      <p class="lede">Import notes or a text PDF, review source-linked questions, edit the answer key, and resume the same durable queue later.</p>
+    </div>
+    <div class="privacy-chip" aria-label="Workspace privacy boundary">
+      <strong>Local server</strong>
+      <span>No model API · no telemetry</span>
+    </div>
+  </header>
+
+  <main class="shell" id="workspace">
+    <aside class="sidebar" aria-label="Study library">
+      <section class="panel import-panel" aria-labelledby="import-heading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Add material</p>
+            <h2 id="import-heading">Import a chapter</h2>
+          </div>
+          <span class="pill" id="capability-badge">Checking…</span>
+        </div>
+        <form id="import-form">
+          <label>
+            <span>Optional title</span>
+            <input id="import-title" name="title" maxlength="160" placeholder="e.g. Cell biology — chapter 4">
+          </label>
+          <label class="file-drop" for="import-file">
+            <span id="file-label">Choose .txt, .md, or text-PDF</span>
+            <small id="file-help">The original stays in this workspace and can be downloaded later.</small>
+            <input id="import-file" name="file" type="file" accept=".txt,.md,.markdown,.pdf,text/plain,text/markdown,application/pdf" required>
+          </label>
+          <button class="primary" type="submit" id="import-submit">Import and build practice</button>
+        </form>
+      </section>
+
+      <section class="panel library-panel" aria-labelledby="library-heading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Library</p>
+            <h2 id="library-heading">Your sources</h2>
+          </div>
+          <button class="ghost compact" type="button" id="refresh-library">Refresh</button>
+        </div>
+        <div id="document-list" class="document-list" role="list"></div>
+        <p id="empty-library" class="empty-state">Import a readable source to start a durable practice set.</p>
+      </section>
+    </aside>
+
+    <section class="content" aria-live="polite">
+      <div id="global-status" class="status" role="status" hidden></div>
+
+      <section id="welcome" class="panel welcome-panel">
+        <p class="eyebrow">Ready when you are</p>
+        <h2>One source → editable practice → saved review state.</h2>
+        <p>Generated prompts are inspectable definition and cloze rules. They are not model-authored explanations or semantic grading. Every answer can be checked against the exact source line.</p>
+        <ol class="steps">
+          <li><strong>Import</strong><span>Use UTF-8 notes, Markdown, or a text PDF.</span></li>
+          <li><strong>Inspect</strong><span>Review prompts and edit the tutor key before studying.</span></li>
+          <li><strong>Practice</strong><span>Answer due cards and open the cited source when wording matters.</span></li>
+          <li><strong>Resume</strong><span>The server keeps progress; this browser keeps only your selected source and any in-flight answer.</span></li>
+        </ol>
+      </section>
+
+      <section id="study-view" class="study-view" hidden>
+        <section class="panel document-header" aria-labelledby="document-title">
+          <div>
+            <p class="eyebrow" id="document-kind">Source</p>
+            <h2 id="document-title">Document</h2>
+            <p class="muted" id="document-meta"></p>
+          </div>
+          <div class="document-actions">
+            <a class="ghost button-link" id="original-link" href="#">Original</a>
+            <a class="ghost button-link" id="export-link" href="#" download>Export JSON</a>
+            <button class="danger ghost" type="button" id="delete-document">Delete</button>
+          </div>
+        </section>
+
+        <section id="pending-banner" class="pending-banner" hidden>
+          <div>
+            <strong>Saved answer waiting for a confirmed response.</strong>
+            <p>The same request ID will be reused, so a lost response cannot double-count the attempt.</p>
+          </div>
+          <button class="primary" type="button" id="retry-pending">Retry saved answer</button>
+        </section>
+
+        <section class="panel review-panel" aria-labelledby="practice-heading">
+          <div class="panel-heading review-heading">
+            <div>
+              <p class="eyebrow">Practice</p>
+              <h2 id="practice-heading">Due queue</h2>
+            </div>
+            <div class="segmented" role="group" aria-label="Practice filter">
+              <button type="button" class="segment active" id="show-due" aria-pressed="true">Due</button>
+              <button type="button" class="segment" id="show-all" aria-pressed="false">All cards</button>
+            </div>
+          </div>
+
+          <div id="queue-summary" class="queue-summary"></div>
+          <div id="no-cards" class="empty-state" hidden>
+            <h3>No cards in this view.</h3>
+            <p id="no-cards-copy">Nothing is due right now. You can inspect all cards or return later.</p>
+          </div>
+
+          <article id="card-stage" class="card-stage" hidden>
+            <div class="card-toolbar">
+              <span class="pill" id="card-kind">Card</span>
+              <a id="source-link" class="source-link" href="#" target="_blank" rel="noreferrer">Open cited source ↗</a>
+            </div>
+            <p id="card-prompt" class="prompt"></p>
+            <details class="tutor-editor" id="tutor-editor">
+              <summary>Edit tutor key</summary>
+              <form id="edit-card-form">
+                <label><span>Prompt</span><textarea id="edit-prompt" maxlength="2000" required></textarea></label>
+                <label><span>Answer</span><input id="edit-answer" maxlength="500" required></label>
+                <label><span>Accepted variants <small>one per line</small></span><textarea id="edit-aliases" maxlength="10000"></textarea></label>
+                <label><span>Explanation</span><textarea id="edit-explanation" maxlength="2000" required></textarea></label>
+                <button class="ghost" type="submit">Save key and reschedule</button>
+              </form>
+            </details>
+            <form id="review-form" class="review-form">
+              <label for="review-answer">Your answer</label>
+              <div class="answer-row">
+                <input id="review-answer" autocomplete="off" maxlength="2000" placeholder="Type your answer" required>
+                <button class="primary" id="check-answer" type="submit">Check</button>
+              </div>
+            </form>
+
+            <section id="feedback" class="feedback" tabindex="-1" hidden>
+              <div class="feedback-topline">
+                <strong id="feedback-title">Result</strong>
+                <span id="feedback-schedule" class="pill"></span>
+              </div>
+              <p id="feedback-message"></p>
+              <dl>
+                <div><dt>Editable key</dt><dd id="feedback-answer"></dd></div>
+                <div><dt>Source quote</dt><dd id="feedback-quote"></dd></div>
+                <div class="feedback-explanation"><dt>Tutor explanation</dt><dd id="feedback-explanation"></dd></div>
+              </dl>
+              <div class="feedback-actions">
+                <a id="feedback-source" class="ghost button-link" href="#" target="_blank" rel="noreferrer">Inspect source</a>
+                <button id="next-card" class="primary" type="button">Next due card</button>
+              </div>
+            </section>
+          </article>
+        </section>
+
+        <section class="boundary-note">
+          <strong>What this version does not do</strong>
+          <p>It does not restore exported snapshots, OCR scanned PDFs, submit schoolwork, semantically grade free-form answers, or isolate multiple private user accounts. JSON export is a download only; keep original files separately.</p>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <span>Hive Study · source-bound practice workspace</span>
+    <span>Shared-workspace server: anyone who can reach it can read or change its data.</span>
+  </footer>
+</body>
+</html>

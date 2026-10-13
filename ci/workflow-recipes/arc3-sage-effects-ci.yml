@@ -1,0 +1,48 @@
+name: ARC3 SAGE effect factorizer
+
+on:
+  pull_request:
+    paths:
+      - "competitions/arc-agi-3-2026/effects/**"
+      - ".github/workflows/arc3-sage-effects-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "competitions/arc-agi-3-2026/effects/**"
+      - ".github/workflows/arc3-sage-effects-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile exact source
+        working-directory: competitions/arc-agi-3-2026
+        run: python -m py_compile effects/*.py
+      - name: Hostile and taxonomy tests
+        working-directory: competitions/arc-agi-3-2026/effects
+        run: PYTHONPATH=".:.." python -B -m unittest -v test_effects test_sage_integration
+      - name: Optimized-mode hostile and taxonomy tests
+        working-directory: competitions/arc-agi-3-2026/effects
+        run: PYTHONPATH=".:.." python -O -B -m unittest -v test_effects test_sage_integration
+      - name: Held-out shuffled-semantics taxonomy benchmark
+        working-directory: competitions/arc-agi-3-2026/effects
+        run: PYTHONPATH=. python benchmark.py --seeds 100 | tee /tmp/arc3-effects-benchmark.json
+      - name: Assert benchmark receipt and complete pass
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/arc3-effects-benchmark.json'))
+          assert p['passed'] == p['cases'] == 900
+          assert p['receipt_sha256'] == '399268b72833b5518d39a27cc1a1f55b644d016e7fb71e7ae55ce7181c22a183'
+          assert p['claim_boundary'].startswith('synthetic taxonomy wiring only')
+          PY

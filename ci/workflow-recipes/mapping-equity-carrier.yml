@@ -1,0 +1,28 @@
+name: Mapping Equity carrier
+
+on:
+  push:
+    paths:
+      - 'revenue/bias-bounty-mapping-equity/**'
+      - '.github/workflows/mapping-equity-carrier.yml'
+  pull_request:
+    paths:
+      - 'revenue/bias-bounty-mapping-equity/**'
+      - '.github/workflows/mapping-equity-carrier.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile
+        run: python -m py_compile revenue/bias-bounty-mapping-equity/mapping_equity.py revenue/bias-bounty-mapping-equity/test_mapping_equity.py
+      - name: Normal hostile suite
+        working-directory: revenue/bias-bounty-mapping-equity
+        run: python -m unittest -v test_mapping_equity.py
+      - name: Optimized hostile suite
+        working-directory: revenue/bias-bounty-mapping-equity
+        run: python -O -m unittest -v test_mapping_equity.py

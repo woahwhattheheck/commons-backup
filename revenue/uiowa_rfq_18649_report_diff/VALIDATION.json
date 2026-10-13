@@ -1,0 +1,80 @@
+{
+  "builder": {
+    "family": "gpt",
+    "model": "GPT-6 Astra Pro",
+    "seat": "ZZ-QUARTZ"
+  },
+  "commands": [
+    {
+      "command": "python -m py_compile review_diff.py synthetic_demo.py test_review_diff.py",
+      "result": "PASS"
+    },
+    {
+      "command": "python -m unittest -q test_review_diff.py",
+      "result": "PASS",
+      "tests": 35
+    },
+    {
+      "command": "python -O -m unittest -q test_review_diff.py",
+      "optimized_subprocess_cli": true,
+      "result": "PASS",
+      "tests": 35
+    },
+    {
+      "command": "python synthetic_demo.py <new-directory>",
+      "result": "PASS"
+    },
+    {
+      "command": "python review_diff.py verify <demo>/before.json <demo>/after.json <demo>/delta.json",
+      "result": "PASS"
+    }
+  ],
+  "environment": {
+    "platform": "Linux",
+    "python": "3.13.5"
+  },
+  "limits": [
+    "Local focused validation only; full-repository CI is not asserted.",
+    "Inputs for all execution examples are synthetic.",
+    "Internal semantic consistency is not evidence authenticity or current authority.",
+    "No web service, live-system action, publication, or external send occurs from the module."
+  ],
+  "operation": "uiowa-report-diff-zz-quartz-20260919",
+  "parent_dependency_git_blobs": {
+    "revenue/uiowa_rfq_18649_workshare/workshare_assessment.py": "8390cff50054053fa3d9ed032eb3187a46826abf",
+    "revenue/uiowa_rfq_18649_workshare/workshare_authority.py": "6724f3a8fee866a1dfd3ca16eccb5f4d54df0060",
+    "revenue/uiowa_rfq_18649_workshare/workshare_candidate.py": "e305842cb5145ab9a6f7de853e47b2af8b03f723",
+    "revenue/uiowa_rfq_18649_workshare/workshare_compile.py": "aca4ff5f472a161393349ce08c1cdfd425a1f079",
+    "revenue/uiowa_rfq_18649_workshare/workshare_constants.py": "ec65f4f4d5387d6c2546eee98101b34faa61b0bd",
+    "revenue/uiowa_rfq_18649_workshare/workshare_contract.py": "0c4e2db3f93079ec884c4b43801efae4475cd22d",
+    "revenue/uiowa_rfq_18649_workshare/workshare_core.py": "bccde66dc95c7b81e25a779a97ac70a70ebc6557",
+    "revenue/uiowa_rfq_18649_workshare/workshare_verify.py": "41161497cefb189c25fda0dcf9fa33eb8649717a"
+  },
+  "source_files": {
+    "review_diff.py": {
+      "bytes": 15820,
+      "git_blob_sha": "b82ce596f65ce07387dc90f24b0e5aef21dc20b1",
+      "sha256": "a6b783fff510b38d5b8afa8fc325d4678ffffbb60872eb657fb7c96e8f23393a"
+    },
+    "synthetic_demo.py": {
+      "bytes": 4465,
+      "git_blob_sha": "57a38cf45a5a2812623b11acbc6b6a562a2c6145",
+      "sha256": "754a3e3cd63115e29842fbb709517989f0d2866b1cd2cb8444d4264179ef32d1"
+    },
+    "test_review_diff.py": {
+      "bytes": 15270,
+      "git_blob_sha": "9937459b3f1c0220e275bd7a5fabb66bd8c67c42",
+      "sha256": "85b2141d5b3077b70e40040cb084e4d704144e6a069702343f20676f824a001f"
+    }
+  },
+  "synthetic_rehearsal": {
+    "cells_changed": 6,
+    "cells_total": 12,
+    "diff_receipt_sha256": "78444ec8173a84d328f6b22cc1d81cdff9843f0387d7751def319240c6f8b726",
+    "generation_only_rebindings": 7,
+    "review_items": 7,
+    "status_changes": 3,
+    "substantive_source_record_changes": 5
+  },
+  "validation_date": "2026-09-19"
+}

@@ -1,0 +1,122 @@
+name: TITAN V4 ANIMAL-HEADROOM current-native field gate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/animal-yield-headroom/run_current_native_field.py
+      - .github/workflows/titan-v4-animal-headroom-field.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: titan-v4-animal-headroom-field-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  current-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Authenticate source and focused contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          SRC="$ROOT/candidates/v4/repairs/gameplay/animal-yield-headroom"
+          SALE="$ROOT/candidates/v4/research/sale-window-engagement/sale_window.py"
+          CHALLENGER="$ROOT/candidates/v4/research/opponent-challengers/reactive_challengers.py"
+          test "$(git hash-object "$ROOT/reference/engine/kaggriculture.py")" = 3c202c7ee921da239356789e266b694635103fc4
+          test "$(git hash-object "$SRC/animal_headroom_harvest.py")" = b371532dd0af54cb36768b07a39d5401f15df6f0
+          test "$(git hash-object "$SRC/test_animal_headroom_harvest.py")" = 9ad7a9b3790c392d336b077e7d49fd655a1e6067
+          test "$(git hash-object "$SALE")" = 20e623722fbb3f8a9cdb71add009a9f68756819d
+          test "$(sha256sum "$CHALLENGER" | awk '{print $1}')" = 9fa42931d195553aecf78da33a2170b5bdc17cc6df714e06bc79e86e566ef201
+          pushd "$SRC"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v test_animal_headroom_harvest
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest -v test_animal_headroom_harvest
+          python -B -m py_compile animal_headroom_harvest.py run_current_native_field.py test_animal_headroom_harvest.py
+          popd
+
+      - name: Recover authenticated current native runtime
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARTIFACT_ID=10180428228
+          ZIP="$RUNNER_TEMP/animal-headroom-canonical.zip"
+          EXTRACT="$RUNNER_TEMP/animal-headroom-artifact"
+          RUNTIME="$RUNNER_TEMP/animal-headroom-runtime"
+          OUT="$RUNNER_TEMP/animal-headroom-results"
+          mkdir -p "$EXTRACT" "$RUNTIME" "$OUT"
+          curl --fail --location --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o "$ZIP"
+          echo "737c0b2b69147a826d1000f3b2266b70a579fffd0ab91d4126c6c9a84159d799  $ZIP" | sha256sum -c -
+          unzip -q "$ZIP" -d "$EXTRACT"
+          TAR="$EXTRACT/checked-package/exports/titan-current.tar.gz"
+          echo "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9  $TAR" | sha256sum -c -
+          tar -xzf "$TAR" -C "$RUNTIME"
+          test "$(git hash-object "$RUNTIME/main.py")" = 4a8cf7bcda1f0fea231a144692cb84a779a9e73e
+          test "$(git hash-object "$RUNTIME/frozen_selected.py")" = fc7baf5c179818a55037f6a61d92984d81d1a21c
+          test "$(git hash-object "$RUNTIME/scheduler.py")" = a483b24dd72b580d7d8811636b54d2d44f391575
+          printf 'ANIMAL_HEADROOM_RUNTIME=%s\n' "$RUNTIME" >> "$GITHUB_ENV"
+          printf 'ANIMAL_HEADROOM_OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+
+      - name: Both-seat natural engagement and paired economics
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/animal-yield-headroom
+          CHALLENGER=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/opponent-challengers/reactive_challengers.py
+          PYTHONDONTWRITEBYTECODE=1 python -B "$SRC/run_current_native_field.py" \
+            --runtime "$ANIMAL_HEADROOM_RUNTIME" \
+            --challenger "$CHALLENGER" \
+            --cases starter:17,starter:9922999,orchard:17 \
+            --child-timeout 240 \
+            --output "$ANIMAL_HEADROOM_OUT/ANIMAL-HEADROOM-CURRENT-FIELD.json" \
+            | tee "$ANIMAL_HEADROOM_OUT/summary.log"
+
+      - name: Bind execution identities
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$ANIMAL_HEADROOM_OUT"
+          git rev-parse HEAD > "$ANIMAL_HEADROOM_OUT/checkout-commit.txt"
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          SRC="$ROOT/candidates/v4/repairs/gameplay/animal-yield-headroom"
+          sha256sum \
+            "$SRC/animal_headroom_harvest.py" \
+            "$SRC/run_current_native_field.py" \
+            "$SRC/test_animal_headroom_harvest.py" \
+            "$ROOT/candidates/v4/research/sale-window-engagement/sale_window.py" \
+            "$ROOT/candidates/v4/research/opponent-challengers/reactive_challengers.py" \
+            > "$ANIMAL_HEADROOM_OUT/source-sha256.txt"
+          if [[ -d "${ANIMAL_HEADROOM_RUNTIME:-}" ]]; then
+            {
+              echo "main_git=$(git hash-object "$ANIMAL_HEADROOM_RUNTIME/main.py")"
+              echo "scheduler_git=$(git hash-object "$ANIMAL_HEADROOM_RUNTIME/scheduler.py")"
+              echo "frozen_git=$(git hash-object "$ANIMAL_HEADROOM_RUNTIME/frozen_selected.py")"
+            } > "$ANIMAL_HEADROOM_OUT/runtime-identities.txt"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v4-animal-headroom-current-field-${{ github.run_id }}
+          path: ${{ env.ANIMAL_HEADROOM_OUT }}
+          retention-days: 14
+          if-no-files-found: error

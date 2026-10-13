@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Bid 1421 operations runner — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#f4efe6;--ink:#231c16;--mute:#6a5c4f;--line:#d2c4b0;--card:#fffaf2;--clay:#8a4b24;--ok:#1f7a4d;--stop:#a33b2f}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#e4d3b8 0%,var(--paper) 32%);color:var(--ink);font:16px/1.5 Georgia,serif}
+main{max-width:860px;margin:auto;padding:28px 16px 72px}a{color:var(--clay)}
+.kicker{letter-spacing:.14em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--clay)}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:.95;margin:.2em 0 .35em}
+.lede{color:var(--mute);max-width:720px}
+.bound{border-left:5px solid var(--ok);padding:8px 0 8px 14px}
+.card{background:var(--card);border:1px solid var(--line);padding:16px;margin:16px 0}
+code,pre{font:13px/1.4 ui-monospace,monospace}pre{background:#231c16;color:#f4efe6;padding:12px;overflow:auto}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+.stamp{display:inline-block;border:1px solid var(--ok);color:var(--ok);padding:2px 8px;margin:0 6px 6px 0;font:12px/1.4 system-ui,sans-serif;letter-spacing:.04em}
+.stamp.stop{border-color:var(--stop);color:var(--stop)}
+ol{padding-left:1.2em}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> · <a href="./action.html">Action Pad</a> · </nav>
+<p class="kicker">Commons · billings-bid-1421-operations-runner-20260831-01 · HOLD / BUILD-AND-VERIFY</p>
+<h1>The runner is the product. This page is a window.</h1>
+
+
+
+
+
+<p class="lede">City of Billings Bid 1421 leftover. A working nonproduction RBAC runner that executes the ten denial cases from the already-landed operations package. No login. Synthetic directory only. No City contact. No bid submission. No live LIMS.</p>
+<p>
+<span class="stamp">WORKING_RUNNER</span>
+<span class="stamp stop">NO_CITY_CONTACT</span>
+<span class="stamp stop">NO_BID_SUBMISSION</span>
+<span class="stamp stop">NO_LIVE_LIMS</span>
+<span class="stamp">CASH_USD_0</span>
+</p>
+<p class="bound"><strong>Official command:</strong> <code>python3 billings_bid_1421_operations_runner.py</code><br>
+<strong>Fail-closed unittest:</strong> <code>python3 billings_bid_1421_operations_runner.py --self-test</code><br>
+<strong>Binary:</strong> <code>python3 test_billings_bid_1421_operations_runner.py</code></p>
+<section class="card">
+<h2>What the runner does</h2>
+<p>Loads a synthetic nonproduction directory, then runs the ten planned RBAC cases from operations-package section 6 through a deny-by-default plane. Each refusal and each privileged action writes an attributable audit event. A replayed privileged request keeps a single effect. Production-like verbs need a named human and still fail closed because this runner has no production destination.</p>
+<pre>python3 billings_bid_1421_operations_runner.py
+python3 billings_bid_1421_operations_runner.py --json
+python3 billings_bid_1421_operations_runner.py --self-test
+python3 test_billings_bid_1421_operations_runner.py</pre>
+<p class="small">Pack: <a href="./revenue/billings_bid_1421/operations_runner/source.json">source.json</a> · <a href="./revenue/billings_bid_1421/operations_runner/directory.json">directory.json</a> · <a href="./revenue/billings_bid_1421/operations_runner/cases.json">cases.json</a>. Cite, do not remint:  blob <code>3952a794</code>.</p>
+</section>
+<section class="card">
+<h2>The ten cases</h2>
+<ol>
+<li>Unknown or disabled directory actor is refused.</li>
+<li>Field collector stays in approved site scope and cannot release results.</li>
+<li>Analyst can act only on currently authorized methods.</li>
+<li>QA reviewer can hold or review and cannot erase audit history.</li>
+<li>Reporting approver can release only reconciled, approved reports.</li>
+<li>Integration actor stays in named adapter scope and cannot administer users.</li>
+<li>Support actor is time-bounded, logged, and cannot silently elevate.</li>
+<li>Same actor cannot approve a controlled change they proposed.</li>
+<li>Every refusal and privileged action emits an attributable audit event.</li>
+<li>Duplicate replayed privileged request produces at most one effect.</li>
+</ol>
+</section>
+<section class="card">
+<h2>Contract</h2>
+<ul>
+<li>10/10 cases pass</li>
+<li>16 refusals, 1 privileged allow, 1 effect</li>
+<li>Audit digest locked: <code>31e0fbd9981daa017a914900887335623f849ab12b624202a080946c91e9e3f1</code></li>
+<li>Operations package sha256 stays <code>49d6d56a5726d598966e8185ec84f3401faf405a9f8a0ccb9804248ad13885bc</code></li>
+<li>Named human does not open City contact, bid submission, or live LIMS</li>
+</ul>
+<p class="small">PRE-SALE TRANSPORT: NONE. cash_usd = 0. Off: acceptance-runner (Seth), corpus <code>054e321c</code>, instrument fixtures, partner recon, compliance matrix, canyon / organabio / pcl leftovers.</p>
+</section>
+</main></body></html>

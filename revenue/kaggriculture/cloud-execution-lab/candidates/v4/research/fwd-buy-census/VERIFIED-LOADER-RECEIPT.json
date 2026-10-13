@@ -1,0 +1,96 @@
+{
+  "schema": "titan-v4-fwd-census-loader-repair/v1",
+  "status": "COMPONENT_VERIFIED_NO_CENSUS_OR_ECONOMICS_CLAIM",
+  "canonical_branch": "main",
+  "package": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/fwd-buy-census",
+  "coordination": {
+    "owner_pr": 12684,
+    "claim_comment": 5642856872,
+    "superseded_duplicate_pr": 12687,
+    "duplicate_retirement_comment": 5642848869
+  },
+  "predecessor": {
+    "git_blob": "9946e012fc8ca2d36dbe93cc6d0d128910a9d08d",
+    "sha256": "dcaa7cf76d7942d9f9e0e522ddb021000b4efb8aa2466fa32e1591dd065fd7d8",
+    "bytes": 9550
+  },
+  "decoder": {
+    "git_blob": "bd07049647bed1336616f35595b5f67577ae7594",
+    "sha256": "a5b384cc8125315f37f8d27e7b8eb7dcdbabe5027c84d788b10c4c36fc621062",
+    "bytes": 9722
+  },
+  "test": {
+    "git_blob": "20d86ba0fbea8ffd33c3e74a2cc81aaa39390539",
+    "sha256": "d28104206c82170cd9ab551d41d587971c2421cbeda9611aa4edd1e4ba1cbd65",
+    "bytes": 8427
+  },
+  "existing_contract": {
+    "git_blob": "584a27b9dc91f5612ed14f691552a1e9428d9291",
+    "sha256": "207d832917fb7d9195870f22ebb1da0c7d2af472e0c19f5e3cc5166526b706aa",
+    "bytes": 10133
+  },
+  "interpreter": {
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "bytes": 40356
+  },
+  "engine_transport": {
+    "artifact_id": 10123395668,
+    "member": "final-pressure-runtime/checks/reference/engine/kaggriculture.py",
+    "new_workflow_dispatch": false
+  },
+  "change": "Replace import-loader execution with compile+exec of the same raw bytes already authenticated by the frozen source hash. Preserve import module metadata, decoding semantics, all census/barrier/schema behavior and original source pins.",
+  "regressions": [
+    "same-mtime/same-size timestamp-valid stale pyc executes different load_tapes result despite source hash match",
+    "source replacement after hash but before import reread executes different load_tapes result despite source hash match"
+  ],
+  "executed": {
+    "python": "3.13.5",
+    "source_compile": "PASS",
+    "outside_load_exact_ast_identical": true,
+    "normal": {
+      "loader_tests": 10,
+      "peer_contract_tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "optimized": {
+      "loader_tests": 10,
+      "peer_contract_tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "predecessor_normal": {
+      "loader_tests": 10,
+      "failures": 2,
+      "errors": 0
+    },
+    "predecessor_optimized": {
+      "loader_tests": 10,
+      "failures": 2,
+      "errors": 0
+    },
+    "grammar_scope": "Pinned real _process_market/_parse_order; existing peer adapter stubs commit/pricing. Not full interpreter/economics."
+  },
+  "commands": [
+    "python -B check_verified_loader.py",
+    "python -O -B check_verified_loader.py",
+    "python -B check_fwd_census_engine_contract.py decoder.py --engine /path/to/exact/kaggriculture.py",
+    "python -O -B check_fwd_census_engine_contract.py decoder.py --engine /path/to/exact/kaggriculture.py"
+  ],
+  "not_run": [
+    "frozen 13x719 corpus",
+    "full interpreter game",
+    "current-main full materialized package",
+    "paired economics",
+    "Kaggle submission"
+  ],
+  "integration_boundary": [
+    "No new decoder package or V4 root",
+    "No analysis/barrier/output-schema change",
+    "No production, config, feature-default, workflow or archive mutation",
+    "Full-corpus execution and old-package manifest supersession remain with earlier ASTRA-FWD-RUN owner"
+  ]
+}

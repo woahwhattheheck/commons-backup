@@ -1,0 +1,178 @@
+{
+  "active_callpath": "consumer=frozen -> frozen_selected.optimize_lot -> selected_sell_core.optimize_lot",
+  "baseline_counts_identical_between_modes": true,
+  "baseline_counts_per_mode": {
+    "market_calls": 8487,
+    "mutation_rejections": 4,
+    "optimizer_pairs": 0,
+    "score_comparisons": 1296,
+    "town_calls": 8246,
+    "worlds": 924
+  },
+  "baseline_results_per_mode": {
+    "normal": {
+      "errors": 0,
+      "failures": 0,
+      "passed": 7,
+      "skipped": 1,
+      "tests_run": 8
+    },
+    "optimized": {
+      "errors": 0,
+      "failures": 0,
+      "passed": 7,
+      "skipped": 1,
+      "tests_run": 8
+    }
+  },
+  "calendar_yield": "1789180678.406839",
+  "canonical_branch": "main",
+  "cli_results_per_mode": {
+    "normal": {
+      "actual_cli_invocations": 8,
+      "exit_codes": {
+        "test_01_baseline_is_explicitly_not_a_candidate_pass": 0,
+        "test_02_active_identity_control_exercises_complete_optimizer": 0,
+        "test_03_standalone_identity_control": 0,
+        "test_04_wrong_hash_rejects_before_candidate_compilation": 2,
+        "test_05_missing_hash_rejects": 2,
+        "test_06_wrong_rival_semantics_cannot_pass_engine_gate": 1,
+        "test_07_town_before_market_cannot_pass_engine_gate": 1,
+        "test_08_equal_scores_cannot_hide_optimizer_diagnostic_drift": 1
+      },
+      "unittest": {
+        "errors": 0,
+        "failures": 0,
+        "run": 8,
+        "skipped": 0
+      }
+    },
+    "optimized": {
+      "actual_cli_invocations": 8,
+      "exit_codes": {
+        "test_01_baseline_is_explicitly_not_a_candidate_pass": 0,
+        "test_02_active_identity_control_exercises_complete_optimizer": 0,
+        "test_03_standalone_identity_control": 0,
+        "test_04_wrong_hash_rejects_before_candidate_compilation": 2,
+        "test_05_missing_hash_rejects": 2,
+        "test_06_wrong_rival_semantics_cannot_pass_engine_gate": 1,
+        "test_07_town_before_market_cannot_pass_engine_gate": 1,
+        "test_08_equal_scores_cannot_hide_optimizer_diagnostic_drift": 1
+      },
+      "unittest": {
+        "errors": 0,
+        "failures": 0,
+        "run": 8,
+        "skipped": 0
+      }
+    }
+  },
+  "execution_log_hashes": {
+    "normal": {
+      "stderr_sha256": {
+        "baseline": "7b84349fba185462f857fe60821486135f0269cfb2011bd6676d3ad487124829",
+        "cli_contract": "26e22e6cea942b92c55907bd6f7b22d221f66d979571532328cfe552e6f191f6"
+      },
+      "stdout_sha256": {
+        "baseline": "b7a8449cb7e41198ff0f5f9c1f3501cf433acef72a6fa523e93d8d3b31aa6cc2",
+        "cli_contract": "f0443d74a714f64e19e489e80627dc8127173e171a404c3565671fc35b57b667"
+      }
+    },
+    "optimized": {
+      "stderr_sha256": {
+        "baseline": "faacad341ed6eea5958618fec84eabca609733eeda6ce395286e7a8b3f54ab62",
+        "cli_contract": "1802c2b30305f564f805209bec4c08829911ddc3a2a7b2b0c550e20f9e84f262"
+      },
+      "stdout_sha256": {
+        "baseline": "07f06a02dcadc6544f43f3841bb493231d108388d236dbdde6ac7289e1738240",
+        "cli_contract": "eef28e2e9a6718ed45d0fb7b41cc66318bb226b02d6b587e6fe98d4a2716ad7f"
+      }
+    }
+  },
+  "files": {
+    "test_eventpath_engine.py": {
+      "bytes": 19580,
+      "git_blob": "7779873e04a0e3af5651ef9a9230f391dc51761f",
+      "sha256": "c71f706c2bd693c42fd17510a1524a86508f5e4254bd4e463197346a463a62a6"
+    },
+    "test_eventpath_engine_cli.py": {
+      "bytes": 7092,
+      "git_blob": "83fe530c4983229e8ba3d0517beb2d8fb19bd948",
+      "sha256": "dc226ecec3e9e13a3bb4da511fee5e45c8fbb7c3cc19e6c98ff3b002b9ecd636"
+    }
+  },
+  "identity_controls": {
+    "active_acceptance_rules": [
+      "strict",
+      "expected_downside",
+      "minimax_regret"
+    ],
+    "complete_diagnostics_and_capacity_callback_sequence_compared": true,
+    "full_optimizer_pairs_per_surface_per_mode": 36,
+    "skipped": 0,
+    "surfaces": [
+      "scheduler",
+      "selected_sell_core"
+    ],
+    "tests_each": 8
+  },
+  "limits": [
+    "Oracle uses actual official market and town functions, not a whole-game interpreter run.",
+    "Carry is a separate physical valuation SELL after the last town update, not an authored extra in-horizon action.",
+    "Identity candidate controls are validation of the test gate, not a performance candidate.",
+    "Standalone scheduler prototype timing is not evidence for the active frozen consumer.",
+    "No production/default/archive/Actions/Kaggle changes."
+  ],
+  "negative_controls": {
+    "broken_candidate_modules_rejected_per_mode": 3,
+    "candidate_without_pin_or_wrong_pin_exit_code": 2,
+    "oracle_source_is_itself_pinned_by_cli_suite": true,
+    "runtime_tamper_cases": [
+      "SOURCE.json",
+      "mechanics.py",
+      "checks/reference/engine/kaggriculture.py"
+    ],
+    "semantic_input_mutants_rejected_per_mode": 4
+  },
+  "official_engine_sha256": {
+    "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+  },
+  "owner": "ASTRA-CALENDAR",
+  "primary_matrix": {
+    "baseline_score_comparisons": 1296,
+    "coverage": [
+      "actual market then town functions",
+      "empty/single-step horizons",
+      "duplicate last-row-wins plans",
+      "outside-window rows",
+      "oversell clamp",
+      "floor admission",
+      "market parameter overrides",
+      "duplicate shops",
+      "mutable shop/config/calendar cache inputs",
+      "separate physical residual-carry valuation"
+    ],
+    "factorization": "9 products x 3 inventories x 3 alignments x 4 schedule patterns x 2 seats",
+    "worlds": 648
+  },
+  "publication": {
+    "cli_commit": "afdb6f83f2d48a591939820e12b021d8cd2e2132",
+    "main_blob_readback_matches_executed_bytes": true,
+    "oracle_commit": "3bb365eacafbe78f186f6afabef8c70e2b5d20d2"
+  },
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "runtime": {
+    "archive_bytes": 429604,
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "existing_artifact_id": 10175943272,
+    "runtime_members_verified": 109,
+    "source_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+    "zip_sha256": "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8"
+  },
+  "schema": "titan-v4-calendar-engine-evidence-v1",
+  "scope": "Independent oracle for ASTRA-EVENTPATH, not a second score mechanism",
+  "source_owner_claim": "1789180316.683269",
+  "state": "source-and-baseline-evidence-complete; eventpath-candidate-not-yet-tested"
+}

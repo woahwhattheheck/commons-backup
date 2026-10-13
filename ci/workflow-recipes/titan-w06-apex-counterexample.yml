@@ -1,0 +1,116 @@
+name: titan-w06-apex-counterexample
+
+on:
+  push:
+    paths:
+      - '.github/workflows/titan-w06-apex-counterexample.yml'
+      - 'revenue/kaggriculture/cloud-titan-frontier-w06/**'
+  pull_request:
+    paths:
+      - '.github/workflows/titan-w06-apex-counterexample.yml'
+      - 'revenue/kaggriculture/cloud-titan-frontier-w06/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Bind exact candidate checkout
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$EXPECTED_HEAD"
+          printf '%s\n' "$actual" | tee "$RUNNER_TEMP/titan-w06-checkout.sha"
+
+      - name: Unit contracts
+        run: python3 -B -m unittest discover -s revenue/kaggriculture/cloud-titan-frontier-w06 -p 'test_*.py' -v
+
+      - name: Verify source and release pins
+        shell: python
+        run: |
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          lane = Path('revenue/kaggriculture/cloud-titan-frontier-w06')
+          pin = json.loads((lane/'PIN.json').read_text())
+          release = pin['release']
+          source = Path(release['source_manifest'])
+          digest = hashlib.sha256(source.read_bytes()).hexdigest()
+          if digest != release['source_manifest_sha256']:
+              raise SystemExit(f'current source manifest mismatch: {digest}')
+          archive = Path(release['path'])
+          command = ['python3', '-B', str(lane/'trace_replay.py'), 'verify-release',
+                     '--archive', str(archive), '--pin', str(lane/'PIN.json'),
+                     '--output', os.environ['RUNNER_TEMP']+'/titan-w06-candidate',
+                     '--receipt', os.environ['RUNNER_TEMP']+'/titan-w06-release.json']
+          subprocess.run(command, check=True)
+
+      - name: Compile the pinned Apex opponent
+        shell: bash
+        run: |
+          set -euo pipefail
+          APEX=revenue/kaggriculture/cloud-frontier-policy/next-panel/vendor/apex
+          g++ -O3 -std=c++17 -shared -fPIC -I"$APEX/source/include" -o "$RUNNER_TEMP/apex-agent.so" \
+            "$APEX/source/policy.cpp" "$APEX/submission_bridge.cpp"
+          cp "$RUNNER_TEMP/apex-agent.so" "$APEX/agent.so"
+          sha256sum "$APEX/agent.so" | tee "$RUNNER_TEMP/apex-agent.sha256"
+
+      - name: Replay both seats and screen bounded interventions
+        shell: bash
+        run: |
+          set -euo pipefail
+          LANE=revenue/kaggriculture/cloud-titan-frontier-w06
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          python3 -B "$LANE/trace_replay.py" replay \
+            --pin "$LANE/PIN.json" \
+            --candidate "$RUNNER_TEMP/titan-w06-candidate/main.py" \
+            --apex revenue/kaggriculture/cloud-frontier-policy/next-panel/vendor/apex/main.py \
+            --evaluator revenue/kaggriculture/cloud-eval/evaluate.py \
+            --loader revenue/kaggriculture/20260907-offline-agent/evaluate.py \
+            --engine-dir "$LAB/reference/engine" \
+            --seed 2611002002 \
+            --action-timeout 4 \
+            --startup-timeout 15 \
+            --game-timeout 180 \
+            --max-interventions-per-seat 4 \
+            --output-dir "$RUNNER_TEMP/titan-w06-results" \
+            | tee "$RUNNER_TEMP/titan-w06-run.log"
+
+      - name: Publish readable job summary
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/titan-w06-results/SUMMARY.md" ]]; then
+            cat "$RUNNER_TEMP/titan-w06-results/SUMMARY.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '# Titan W06 did not produce SUMMARY.md' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Retain exact W06 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-w06-apex-counterexample-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/titan-w06-checkout.sha
+            ${{ runner.temp }}/titan-w06-results/
+            ${{ runner.temp }}/titan-w06-release.json
+            ${{ runner.temp }}/titan-w06-run.log
+            ${{ runner.temp }}/apex-agent.sha256
+          if-no-files-found: error
+          retention-days: 14

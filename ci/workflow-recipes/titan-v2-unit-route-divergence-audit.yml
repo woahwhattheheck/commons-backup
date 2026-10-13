@@ -1,0 +1,33 @@
+name: titan-v2-unit-route-divergence-audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/v2-unit-route-divergence/**'
+      - '.github/workflows/titan-v2-unit-route-divergence-audit.yml'
+      - 'p/sol-parallax-titan-v2-hosted-open-loop-route-audit-20260909-01.md'
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/v2-unit-route-divergence/**'
+      - '.github/workflows/titan-v2-unit-route-divergence-audit.yml'
+      - 'p/sol-parallax-titan-v2-hosted-open-loop-route-audit-20260909-01.md'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compile and run fail-closed contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/v2-unit-route-divergence
+        run: |
+          set -euo pipefail
+          python -m py_compile unit_route_audit.py test_unit_route_audit.py test_retained_report.py
+          python -B -m unittest -v test_unit_route_audit.py test_retained_report.py

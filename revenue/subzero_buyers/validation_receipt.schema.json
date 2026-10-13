@@ -1,0 +1,399 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/subzero_buyers/validation_receipt.schema.json",
+  "title": "Subzero validation receipt",
+  "description": "Strict synthetic runtime and buyer acceptance receipts. Presence never escalates. No auth. No gate.",
+  "no_auth": true,
+  "no_gate": true,
+  "login_required": false,
+  "privileged_tier": false,
+  "presence_never_escalates": true,
+  "evidence_classes": [
+    "STRUCTURAL_ONLY",
+    "RUNTIME_MEASURED",
+    "CUSTOMER_READY",
+    "UNKNOWN"
+  ],
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "catalog",
+    "artifact",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "subzero-validation-receipt/v1"
+    },
+    "kind": {
+      "const": "SUBZERO_VALIDATION_RECEIPT"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "catalog": {
+      "$ref": "#/$defs/catalogBinding"
+    },
+    "artifact": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/check"
+      }
+    },
+    "runtime_measurement": {
+      "$ref": "#/$defs/runtimeMeasurement"
+    },
+    "buyer_acceptance": {
+      "$ref": "#/$defs/buyerAcceptance"
+    },
+    "delivered_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "result_address": {
+      "type": "string",
+      "minLength": 1
+    },
+    "payment": {
+      "$ref": "#/$defs/payment"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "buyer_acceptance": {
+            "properties": {
+              "status": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          }
+        },
+        "required": [
+          "buyer_acceptance"
+        ]
+      },
+      "then": {
+        "required": [
+          "delivered_at",
+          "result_address"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitObject": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "runtime_receipt": {
+      "title": "Legacy distinct cross-process runtime receipt compatibility",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "artifact",
+        "sha256",
+        "cross_process",
+        "pid",
+        "host",
+        "no_auth",
+        "no_gate",
+        "login_required",
+        "privileged_tier"
+      ],
+      "properties": {
+        "kind": {
+          "const": "SUBZERO_RUNTIME_RECEIPT"
+        },
+        "artifact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "cross_process": {
+          "const": true
+        },
+        "pid": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "walked": {
+          "type": "boolean"
+        },
+        "no_auth": {
+          "const": true
+        },
+        "no_gate": {
+          "const": true
+        },
+        "login_required": {
+          "const": false
+        },
+        "privileged_tier": {
+          "const": false
+        }
+      }
+    },
+    "buyer_receipt": {
+      "title": "Legacy bound buyer receipt compatibility",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "artifact",
+        "sha256",
+        "status",
+        "bound",
+        "buyer_id",
+        "no_auth",
+        "no_gate",
+        "login_required",
+        "privileged_tier"
+      ],
+      "properties": {
+        "kind": {
+          "const": "SUBZERO_BUYER_VALIDATION"
+        },
+        "artifact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ]
+        },
+        "bound": {
+          "type": "boolean"
+        },
+        "buyer_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_auth": {
+          "const": true
+        },
+        "no_gate": {
+          "const": true
+        },
+        "login_required": {
+          "const": false
+        },
+        "privileged_tier": {
+          "const": false
+        }
+      }
+    },
+    "catalogBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_commit",
+        "source_tree"
+      ],
+      "properties": {
+        "source_commit": {
+          "$ref": "#/$defs/gitObject"
+        },
+        "source_tree": {
+          "$ref": "#/$defs/gitObject"
+        }
+      }
+    },
+    "artifactBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "evidence_path",
+        "evidence_sha256",
+        "observation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ]
+        },
+        "evidence_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "runtimeMeasurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "run_id",
+        "process_id",
+        "observed_at",
+        "runner_path",
+        "runner_sha256",
+        "test_path",
+        "test_sha256",
+        "input_sha256",
+        "output_sha256"
+      ],
+      "properties": {
+        "status": {
+          "const": "PASS"
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "process_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observed_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "runner_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runner_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "test_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "test_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "buyerAcceptance": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "const": "PENDING"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "buyer_reference",
+            "accepted_at"
+          ],
+          "properties": {
+            "status": {
+              "const": "PASS"
+            },
+            "buyer_reference": {
+              "type": "string",
+              "minLength": 1
+            },
+            "accepted_at": {
+              "$ref": "#/$defs/timestamp"
+            }
+          }
+        }
+      ]
+    },
+    "payment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference": {
+          "type": "string"
+        }
+      },
+      "description": "Payment is recorded but never changes an evidence class."
+    }
+  }
+}

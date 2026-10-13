@@ -1,0 +1,36 @@
+name: RFP Addenda Delta Desk
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/rfp_addenda_delta/**'
+      - '.github/workflows/rfp-addenda-delta.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/rfp_addenda_delta/**'
+      - '.github/workflows/rfp-addenda-delta.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/rfp_addenda_delta/*.py
+      - name: Unit and hostile suite
+        run: python -m unittest -v revenue.rfp_addenda_delta.test_delta revenue.rfp_addenda_delta.test_integrity revenue.rfp_addenda_delta.test_authority_transitions
+      - name: Optimized unit and hostile suite
+        run: python -O -m unittest -v revenue.rfp_addenda_delta.test_delta revenue.rfp_addenda_delta.test_integrity revenue.rfp_addenda_delta.test_authority_transitions
+      - name: Synthetic acceptance
+        run: python -m revenue.rfp_addenda_delta.synthetic_acceptance

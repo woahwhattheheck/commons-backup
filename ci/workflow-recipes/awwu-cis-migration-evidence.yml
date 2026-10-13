@@ -1,0 +1,30 @@
+name: AWWU CIS Migration Evidence
+on:
+  pull_request:
+    paths:
+      - 'revenue/awwu_cis_migration_evidence/**'
+      - '.github/workflows/awwu-cis-migration-evidence.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/awwu_cis_migration_evidence/**'
+      - '.github/workflows/awwu-cis-migration-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: python -m py_compile revenue/awwu_cis_migration_evidence/compiler.py revenue/awwu_cis_migration_evidence/test_awwu_cis_migration_evidence.py
+      - name: Unit tests
+        run: python -m unittest -v revenue.awwu_cis_migration_evidence.test_awwu_cis_migration_evidence
+      - name: Optimized unit tests
+        run: python -O -m unittest -v revenue.awwu_cis_migration_evidence.test_awwu_cis_migration_evidence

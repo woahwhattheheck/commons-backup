@@ -1,0 +1,28 @@
+name: funded-work-freshness
+
+on:
+  pull_request:
+    paths:
+      - "tools/funded_work_freshness/**"
+      - ".github/workflows/funded-work-freshness.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: funded-work-freshness-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/funded_work_freshness
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run funded-work freshness unit tests
+        run: python3 -m unittest discover -v
+      - name: Run funded-work freshness unit tests with assertions optimized out
+        run: python3 -O -m unittest discover -v

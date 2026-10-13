@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/outcome_commerce/event.schema.json",
+  "title": "Commons DIO-linked commercial event",
+  "description": "One public-safe append-only transition in the canonical opportunity-to-bank-availability chain.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "kind", "event_id", "job_id", "correlation_id", "parent_event_id",
+    "causation_id", "occurred_at", "observed_at", "from_state", "to_state", "action_type",
+    "idempotency_key", "status", "provider", "amount", "currency", "input_hash", "output_hash",
+    "evidence_refs", "public_safe", "claims", "non_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-commercial-event/v1"},
+    "kind": {"const": "COMMERCIAL_EVENT"},
+    "event_id": {"$ref": "#/$defs/id"},
+    "job_id": {"$ref": "#/$defs/id"},
+    "attempt_id": {"$ref": "#/$defs/nullableId"},
+    "offer_id": {"$ref": "#/$defs/nullableId"},
+    "order_id": {"$ref": "#/$defs/nullableId"},
+    "receipt_id": {"$ref": "#/$defs/nullableId"},
+    "result_address": {"type": ["string", "null"]},
+    "correlation_id": {"$ref": "#/$defs/id"},
+    "parent_event_id": {"$ref": "#/$defs/nullableId"},
+    "causation_id": {"$ref": "#/$defs/nullableId"},
+    "reconciles_event_id": {"$ref": "#/$defs/nullableId"},
+    "occurred_at": {"$ref": "#/$defs/timestamp"},
+    "observed_at": {"$ref": "#/$defs/timestamp"},
+    "from_state": {"anyOf": [{"$ref": "#/$defs/jobState"}, {"type": "null"}]},
+    "to_state": {"$ref": "#/$defs/jobState"},
+    "action_type": {
+      "enum": ["OPPORTUNITY", "QUALIFY", "QUOTE", "FUND", "FULFILL", "DELIVER", "ACCEPT", "EXPIRE", "REFUND", "EMAIL", "DEPLOY", "SETTLE", "PAYOUT", "RECONCILE", "OTHER"]
+    },
+    "idempotency_key": {"$ref": "#/$defs/id"},
+    "status": {"enum": ["REQUESTED", "CONFIRMED", "FAILED", "UNKNOWN_EFFECT"]},
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "external_receipt_id"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 80},
+        "external_receipt_id": {"type": ["string", "null"], "maxLength": 240}
+      }
+    },
+    "amount": {"anyOf": [{"$ref": "#/$defs/money"}, {"type": "null"}]},
+    "currency": {"type": ["string", "null"], "pattern": "^[A-Z][A-Z0-9._-]{1,31}$"},
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "workflow_version", "skill_lock_digest", "workspace_sha"],
+      "properties": {
+        "label": {"type": "string", "minLength": 1},
+        "workflow_version": {"$ref": "#/$defs/digestOrUnmeasured"},
+        "skill_lock_digest": {"$ref": "#/$defs/digestOrUnmeasured"},
+        "workspace_sha": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{40}$"}, {"const": "UNMEASURED"}]}
+      }
+    },
+    "input_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "output_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "trace_id": {"type": ["string", "null"], "maxLength": 128},
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uri", "sha256", "claim"],
+        "properties": {
+          "uri": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "claim": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "public_safe": {"const": true},
+    "claims": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "non_claims": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"amount": {"type": "string"}}, "required": ["amount"]},
+      "then": {"properties": {"currency": {"type": "string"}}},
+      "else": {"properties": {"currency": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "UNKNOWN_EFFECT"}}, "required": ["status"]},
+      "then": {"properties": {"to_state": {"const": "UNKNOWN_EFFECT"}}}
+    }
+  ],
+  "$defs": {
+    "id": {"type": "string", "minLength": 8, "maxLength": 80, "pattern": "^[A-Za-z0-9._-]+$"},
+    "nullableId": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+    "timestamp": {"type": "string", "format": "date-time", "pattern": "(?:Z|[+-][0-9]{2}:[0-9]{2})$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "digestOrUnmeasured": {"anyOf": [{"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}, {"const": "UNMEASURED"}]},
+    "money": {"type": "string", "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,8})?$"},
+    "jobState": {"enum": ["DISCOVERED", "QUALIFIED", "QUOTED", "FUNDED", "RUNNING", "SUBMITTED", "ACCEPTED", "REJECTED", "SETTLED", "BANK_AVAILABLE", "EXPIRED", "REFUNDED", "UNKNOWN_EFFECT"]}
+  }
+}

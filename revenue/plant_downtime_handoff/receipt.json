@@ -1,0 +1,46 @@
+{
+  "receipt_id": "plant-downtime-handoff-20260831-01",
+  "slug": "plant-downtime-handoff",
+  "status": "WORKING_SYNTHETIC_DEMO",
+  "fixture": {
+    "faultId": "FAULT-SYN-7701",
+    "faultClass": "overtemp",
+    "plantId": "PLANT-RIVERBEND-DEMO",
+    "assetId": "ASSET-KILN-04-DEMO",
+    "sensorEventId": "SENSOR-SYN-1001",
+    "reportEventId": "RPT-SYN-2001"
+  },
+  "run": {
+    "status": "DISPATCHED",
+    "lane": "TECH_KILN_THERMAL",
+    "technicianHandoffId": "FAULT-SYN-7701:tech",
+    "partsRequestId": "FAULT-SYN-7701:parts",
+    "statusReceiptId": "FAULT-SYN-7701:status",
+    "dispatches": 1,
+    "processedAt": "2026-08-31T02:00:00Z"
+  },
+  "test_command": "node test_plant_downtime_handoff.js",
+  "expected": "plant-downtime-handoff: 10 scenarios PASS",
+  "binary_scenarios": [
+    "complete overtemp dispatch",
+    "incomplete hold to HELD_INCOMPLETE",
+    "four-class tech/parts matrix",
+    "duplicate sensor ping plus duplicate report",
+    "crash after classify and resume",
+    "crash after tech, worker restart, duplicate report",
+    "crash after parts and worker restart",
+    "rollback to un-dispatched then rerun",
+    "same-id different-bytes conflict",
+    "PII refusal with no dispatch"
+  ],
+  "live_plant_control": 0,
+  "cmms_writes": 0,
+  "purchasing_orders": 0,
+  "safety_decisions": 0,
+  "pii_emitted": 0,
+  "external_messages_sent": 0,
+  "buyer_delivery": false,
+  "payment_verified": false,
+  "cash_usd": 0,
+  "outreach": false
+}

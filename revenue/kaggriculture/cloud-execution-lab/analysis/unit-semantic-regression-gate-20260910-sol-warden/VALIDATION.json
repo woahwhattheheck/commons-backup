@@ -1,0 +1,90 @@
+{
+  "commands": [
+    "python -m py_compile semantic_waste_gate.py verify_delivery.py test_semantic_waste_gate.py",
+    "python -B -m unittest -v test_semantic_waste_gate.py",
+    "python semantic_waste_gate.py historical-witness --microscope-report fixtures/GOLDEN-107130860.json --output /tmp/HISTORICAL-WITNESS.json",
+    "cmp HISTORICAL-WITNESS.json /tmp/HISTORICAL-WITNESS.json",
+    "python semantic_waste_gate.py verify-witness --witness HISTORICAL-WITNESS.json",
+    "python semantic_waste_gate.py historical-corpus-witness --corpus fixtures/CORPUS-AVAILABLE-4.json --microscope-report fixtures/GOLDEN-107113451.json --microscope-report fixtures/GOLDEN-107130860.json --microscope-report fixtures/GOLDEN-107141525.json --microscope-report fixtures/GOLDEN-107150217.json --output /tmp/HISTORICAL-CORPUS-WITNESS.json",
+    "cmp HISTORICAL-CORPUS-WITNESS.json /tmp/HISTORICAL-CORPUS-WITNESS.json",
+    "python semantic_waste_gate.py verify-corpus-witness --witness HISTORICAL-CORPUS-WITNESS.json"
+  ],
+  "date": "2026-09-10",
+  "exact_inputs": {
+    "historical_corpus_witness_embedded_seal": "a30c46816da590edca0601479ef3b9ee3b51f86c33914c81aa103bdfdf694dbc",
+    "historical_corpus_witness_file_sha256": "ec68482eb3f016d82192638eb8d2417d87f2820c151ea2281a029e5c172f40b0",
+    "historical_witness_embedded_seal": "1487f3f228d0a26275e157142a722b605b25f34cab4527b0d7ffb4ec2449bbff",
+    "historical_witness_file_sha256": "390943efff49ed463d39b1fc6c755996e875452fcd6618123a9d21cd29907f2b",
+    "microscope_corpus_embedded_seal": "2fbc7d77e84649aab4188035f6a27e7fec7d596587d175006a03f8fb0aad15a7",
+    "microscope_corpus_file_sha256": "ec01bc80528fb2f9f4e6889c016faae1f1073c5373b3d4c58ea110ca08584282",
+    "microscope_report_embedded_seals": {
+      "107113451": "921316a052a87833a77f7578af42c34dd5ed40fa70bda376643a4c5c99fdb472",
+      "107130860": "e52c191e816c5b18b77c5cef87d9bc2fb89c8cc5f6310069e59f77b8c2c0e945",
+      "107141525": "8f592cc1d2fd6bc33c07fb5df4bcca73cf4de52c6e176a04a18b3a1c03a47e0f",
+      "107150217": "d1ef4864924e4d0699e2b799131330f87a122e46ad041f412df745b73a3b6c8d"
+    },
+    "microscope_report_file_sha256": {
+      "107113451": "8875728e08b8dd1694dc3233ff8934c51e966183b16075c56d338da4f9086ea1",
+      "107130860": "701cb4fec18b20d9a7794e31d033547b3a7d0687a2919b1bf693a19c80e70b1e",
+      "107141525": "e1d21a4b5b687459d5801ba5c630fa3bc79747e534a0a97edbdf6769c19ced33",
+      "107150217": "36b7517f25659e3cfe963e0718b7c128a1042af13f27cf6f2b478a57160b9516"
+    },
+    "replay_compressed_sha256": {
+      "107113451": "e7c8fad30e3014db67bca3691d9947b22874275eeb57ba0f917625a47c29aad0",
+      "107130860": "9337c7c734eff0804400f732d48c155dedb6d6f12b3afdefbc620f78fdfc686b",
+      "107141525": "d60b55ccd1675c4a9e28c316ac93851260b9ffbf3ef849cf3db2dc2a816aee05",
+      "107150217": "29725fd6d06a5a6cf736427a9a64fc0b43b573d469cf47dec2d824a17d7b5f38"
+    }
+  },
+  "implementation": {
+    "semantic_waste_gate_sha256": "79f2f540dbc40350cd48caed7222c6912f86488c406d6c32d2eb64e1f9c3333d",
+    "test_semantic_waste_gate_sha256": "33dade29541a3c8675ec3c26cc11c95164fb77dc22c80af739c1c188c1c8a481",
+    "verify_delivery_sha256": "2317f2ae2eb1a17a26e5bb794bd83276097d1cca7026d727ec513cbbcb1c9731"
+  },
+  "operation": "titan-v3-semantic-execution-debt-gate-20260910-sol-warden-01",
+  "python": "3.13",
+  "results": {
+    "canonical_runtime_changed": false,
+    "coverage_metrics": {
+      "coverage_fraction": true,
+      "strict_scope_rows": true,
+      "unclassified_nonpass_rows": true
+    },
+    "historical_corpus_witness": {
+      "byte_exact_reproduction": true,
+      "candidate": 323,
+      "candidate_better_replays": 1,
+      "candidate_worse_replays": 3,
+      "contains_candidate_loss": true,
+      "contains_candidate_win": true,
+      "delta": 278,
+      "dropped_hand_commands": 111,
+      "reference": 45,
+      "replays": 4,
+      "seal_verified": true,
+      "status": "PASS"
+    },
+    "historical_witness": {
+      "byte_exact_reproduction": true,
+      "candidate": 283,
+      "delta": 264,
+      "episode_id": 107130860,
+      "reference": 19,
+      "seal_verified": true,
+      "status": "PASS"
+    },
+    "kaggle_changed": false,
+    "official_games_run": 0,
+    "py_compile": "PASS",
+    "source_receipt_exact_owned_inventory": true,
+    "unittest": {
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "status": "PASS",
+      "tests": 59
+    }
+  },
+  "schema": "titan.unit-semantic-regression-gate.validation.v1",
+  "truth_boundary": "Local standard-library validation only; historical records compare different public opponents and do not establish matched V3 strength, promotion, leaderboard, provider or submission claims."
+}

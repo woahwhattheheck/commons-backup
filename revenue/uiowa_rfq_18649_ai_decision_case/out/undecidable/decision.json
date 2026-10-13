@@ -1,0 +1,258 @@
+{
+  "input_basis": "SYNTHETIC",
+  "result_basis": "MODELED_NOT_OBSERVED",
+  "institution_finding": false,
+  "spend_authorized": false,
+  "effective_case": {
+    "case_id": "CASE-SYN-IAM-RUNBOOK",
+    "workflow": "Producing an access-review runbook section (SYNTHETIC)",
+    "synthetic": true,
+    "documents": [
+      {
+        "id": "DOC-D-B1",
+        "variant": "BASELINE",
+        "events": [
+          {
+            "id": "EVT-D-B1-1",
+            "kind": "AUTHOR",
+            "day": 1,
+            "minutes": 120.0
+          },
+          {
+            "id": "EVT-D-B1-2",
+            "kind": "CHECK",
+            "day": 2,
+            "minutes": 25.0
+          },
+          {
+            "id": "EVT-D-B1-3",
+            "kind": "ACCEPT",
+            "day": 3,
+            "minutes": 0.0
+          }
+        ]
+      },
+      {
+        "id": "DOC-D-B2",
+        "variant": "BASELINE",
+        "events": [
+          {
+            "id": "EVT-D-B2-1",
+            "kind": "AUTHOR",
+            "day": 1,
+            "minutes": 115.0
+          },
+          {
+            "id": "EVT-D-B2-2",
+            "kind": "CHECK",
+            "day": 2,
+            "minutes": 28.0
+          },
+          {
+            "id": "EVT-D-B2-3",
+            "kind": "ACCEPT",
+            "day": 3,
+            "minutes": 0.0
+          }
+        ]
+      },
+      {
+        "id": "DOC-D-A1",
+        "variant": "ASSISTED",
+        "events": [
+          {
+            "id": "EVT-D-A1-1",
+            "kind": "GENERATE",
+            "day": 1,
+            "minutes": 8.0
+          },
+          {
+            "id": "EVT-D-A1-2",
+            "kind": "CHECK",
+            "day": 1,
+            "minutes": null
+          },
+          {
+            "id": "EVT-D-A1-3",
+            "kind": "ACCEPT",
+            "day": 2,
+            "minutes": 0.0
+          }
+        ]
+      },
+      {
+        "id": "DOC-D-A2",
+        "variant": "ASSISTED",
+        "events": [
+          {
+            "id": "EVT-D-A2-1",
+            "kind": "GENERATE",
+            "day": 1,
+            "minutes": 9.0
+          },
+          {
+            "id": "EVT-D-A2-2",
+            "kind": "CHECK",
+            "day": 1,
+            "minutes": 33.0
+          }
+        ]
+      }
+    ],
+    "quality_measurements": [
+      {
+        "id": "QM-D-A1",
+        "document_id": "DOC-D-A1",
+        "required_elements": 10,
+        "correct_elements": 7,
+        "fabricated_references": 1
+      }
+    ],
+    "assumptions": [
+      {
+        "id": "ASM-D-001",
+        "name": "analyst_hourly_cost",
+        "value": 85.0,
+        "unit": "currency_per_hour",
+        "low": 70.0,
+        "high": 110.0,
+        "basis": "ASSUMED",
+        "source": "synthetic planning assumption"
+      },
+      {
+        "id": "ASM-D-002",
+        "name": "documents_per_month",
+        "value": 10.0,
+        "unit": "documents_per_month",
+        "low": 6.0,
+        "high": 14.0,
+        "basis": "ASSUMED",
+        "source": "synthetic volume assumption"
+      },
+      {
+        "id": "ASM-D-003",
+        "name": "evaluation_horizon_months",
+        "value": 12.0,
+        "unit": "months",
+        "low": 12.0,
+        "high": 12.0,
+        "basis": "ASSUMED",
+        "source": "synthetic one-year evaluation window"
+      }
+    ]
+  },
+  "decision": {
+    "case_id": "CASE-SYN-IAM-RUNBOOK",
+    "verdict": "UNDECIDABLE",
+    "reasons": [
+      "assisted evidence gap at DOC-D-A1/EVT-D-A1-2: an unrecorded step is not zero minutes",
+      "assisted evidence gap at DOC-D-A2/DOC-D-A2:no ACCEPT event: an unrecorded step is not zero minutes"
+    ],
+    "headline_generation_speedup_x": null,
+    "net_minutes_per_document": {
+      "low": null,
+      "mid": null,
+      "high": null
+    },
+    "modeled_capacity_value_over_horizon": {
+      "low": null,
+      "nominal": null,
+      "high": null
+    },
+    "modeled_capacity_hours_over_horizon": null,
+    "cash_cost_over_horizon": null,
+    "cash_savings_over_horizon": null,
+    "realized_opportunity_value_over_horizon": null,
+    "baseline": {
+      "documents": 2,
+      "evidence_gaps": [],
+      "mean_pre_acceptance_minutes": 144.0,
+      "mean_post_acceptance_minutes": 0.0,
+      "mean_generation_minutes": 117.5,
+      "mean_total_minutes": 144.0,
+      "min_total_minutes": 143.0,
+      "max_total_minutes": 145.0,
+      "documents_measured_for_quality": 0,
+      "mean_completeness": null,
+      "fabricated_references_total": 0,
+      "documents_with_fabrications": []
+    },
+    "assisted": {
+      "documents": 2,
+      "evidence_gaps": [
+        "DOC-D-A1/EVT-D-A1-2",
+        "DOC-D-A2/DOC-D-A2:no ACCEPT event"
+      ],
+      "mean_pre_acceptance_minutes": null,
+      "mean_post_acceptance_minutes": null,
+      "mean_generation_minutes": null,
+      "mean_total_minutes": null,
+      "min_total_minutes": null,
+      "max_total_minutes": null,
+      "documents_measured_for_quality": 1,
+      "mean_completeness": 0.7,
+      "fabricated_references_total": 1,
+      "documents_with_fabrications": [
+        "DOC-D-A1"
+      ]
+    },
+    "quality_risk": true
+  },
+  "explanation_audit": {
+    "passed": true,
+    "problems": [],
+    "checked_lines_rule": "every line stating a quantity must cite a record id, and every cited id must resolve to a record in this case"
+  },
+  "assumption_classification": [
+    {
+      "assumption": "analyst_hourly_cost",
+      "id": "ASM-D-001",
+      "declared_range": [
+        70.0,
+        110.0
+      ],
+      "basis": "ASSUMED",
+      "classification": "UNDECIDABLE",
+      "verdict_at_low": "UNDECIDABLE",
+      "verdict_at_high": "UNDECIDABLE",
+      "net_money_at_low": null,
+      "net_money_at_high": null,
+      "note": "missing records prevent a sensitivity conclusion"
+    },
+    {
+      "assumption": "documents_per_month",
+      "id": "ASM-D-002",
+      "declared_range": [
+        6.0,
+        14.0
+      ],
+      "basis": "ASSUMED",
+      "classification": "UNDECIDABLE",
+      "verdict_at_low": "UNDECIDABLE",
+      "verdict_at_high": "UNDECIDABLE",
+      "net_money_at_low": null,
+      "net_money_at_high": null,
+      "note": "missing records prevent a sensitivity conclusion"
+    },
+    {
+      "assumption": "evaluation_horizon_months",
+      "id": "ASM-D-003",
+      "declared_range": [
+        12.0,
+        12.0
+      ],
+      "basis": "ASSUMED",
+      "classification": "UNDECIDABLE",
+      "verdict_at_low": "UNDECIDABLE",
+      "verdict_at_high": "UNDECIDABLE",
+      "net_money_at_low": null,
+      "net_money_at_high": null,
+      "note": "missing records prevent a sensitivity conclusion"
+    }
+  ],
+  "verdict_margin": {
+    "nominal_verdict": "UNDECIDABLE",
+    "flip_delta_minutes": null,
+    "note": "an undecidable case has no margin to measure; supply the missing records first"
+  }
+}

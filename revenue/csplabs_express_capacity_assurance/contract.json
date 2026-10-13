@@ -1,0 +1,52 @@
+{
+  "id": "csplabs-express-capacity-assurance-lims-01",
+  "version": 1,
+  "buyer": "California Seed & Plant Lab / Sukhi Pannu",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788150743.491569"
+  },
+  "workflow": [
+    "Express receipt verification (photo, shipment/barcode, labels, supported sample/test)",
+    "four-assay strawberry routing: FOF, MP, PHY, VD",
+    "SLA class from signed receipt, verification, and 11:00 PT business-day cutoff",
+    "staffing/capacity counts from the accepted-job manifest",
+    "plate QC with one seeded failed negative control holding its batch",
+    "reviewer-gated reporting; autonomous release denied"
+  ],
+  "assays": {
+    "FOF": "Fusarium oxysporum f. sp. fragariae",
+    "MP": "Macrophomina phaseolina",
+    "PHY": "Phytophthora genus",
+    "VD": "Verticillium dahliae"
+  },
+  "sla": {
+    "timezone": "America/Los_Angeles",
+    "same_day_cutoff_hour": 11,
+    "clock": "later of signed_receipt_at and verified_at",
+    "same_day": "weekday before cutoff",
+    "next_business_day": "weekend or at/after cutoff"
+  },
+  "acceptance": [
+    "240 synthetic strawberry Express orders",
+    "exactly 200 valid accessions and 800 test jobs created once",
+    "exactly 40 holds: 10 HOLD_MISSING_PHOTO, 10 HOLD_SHIPMENT_BARCODE_MISMATCH, 10 HOLD_UNSUPPORTED_SAMPLE_TEST, 10 HOLD_INCOMPLETE_LABEL",
+    "SLA 120 SAME_DAY and 80 NEXT_BUSINESS_DAY from signed receipt/verification/business-day rules",
+    "staffing counts equal the accepted-job manifest",
+    "one seeded failed NTC on PLATE-FOF-01 holds its entire 20-job batch",
+    "dashboard and report digests reconcile",
+    "release is reviewer-only; autonomous release denied",
+    "replay creates zero accessions or jobs"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no interface marked live before golden-round-trip validation",
+    "no production writes, outreach, prospect-facing demo, or cash claim"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "receipt, routing, SLA, staffing, plate QC, and reviewer-release receipts only; never diagnosis, certification, or live instrument/portal I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

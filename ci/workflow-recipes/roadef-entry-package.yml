@@ -1,0 +1,33 @@
+name: ROADEF entry package
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/roadef2026/submission/package.py'
+      - '.github/workflows/roadef-entry-package.yml'
+  workflow_dispatch:
+    inputs:
+      team_id:
+        description: 'Organizer-issued team ID; leave blank for clearly unregistered staging'
+        required: false
+        type: string
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Fetch and package exact published sources in the cloud
+        env:
+          METADATA_REVISION: ${{ github.sha }}
+          TEAM_ID: ${{ inputs.team_id }}
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/woahwhattheheck/commons/$METADATA_REVISION/revenue/roadef2026/submission/package.py" -o package.py
+          python3 -m py_compile package.py
+          python3 package.py --metadata-revision "$METADATA_REVISION" --team-id "$TEAM_ID" --output out
+      - name: Retain submission ZIP and byte-preservation manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: roadef-qualification-package
+          path: out/
+          if-no-files-found: error
+          retention-days: 90

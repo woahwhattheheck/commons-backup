@@ -1,0 +1,40 @@
+{
+  "name": "s6-fert-roi",
+  "status": "preserved_additive_repair_donor_not_integrated",
+  "source_pr": 12598,
+  "source_authority_commit": "a6eb5c43bdf783dc9560a3a1661eeaf8e53301d3",
+  "source_helper_blob": "87f85de017ad7b321ae74fb4dbb070f1494842cc",
+  "source_focused_test_blob": "67179dc92255317037229dba1ecb903ccc03ac8c",
+  "additive_bridge_appendix_blob": "6c3c13e92380b77a39054a1e54668fa7b10672a3",
+  "transplant_spec_blob": "bb6b3c6441180786a094198247d3d5f0418f41e2",
+  "synthetic_bridge_test_blob": "167fd9e376e614226d5acd9e9a0a139cbf4bfb77",
+  "full_preservation_commit": "3d167e8bf6f52d11280bb5137c3827e30fcc9139",
+  "full_preservation_tree": "bc9910b66b80f92453450c347d64ae423d27acc8",
+  "full_preservation_paths": [
+    "r04_s6_fert_roi.source.py",
+    "bridge_append.py",
+    "TRANSPLANT.txt",
+    "test_s6_bridge_synthetic.py",
+    "test_v4_s6_fert_roi.source.py"
+  ],
+  "policy_contract": [
+    "S6 never creates a fertilizer hand; the incumbent CARROT hire gate must already qualify",
+    "reserve at most one additional fertilizer unit after the unchanged baseline gate",
+    "CARROT remains absolute execution priority; future/current CARROT ownership suppresses only the S6 extension",
+    "WHEAT/TOMATO extension must satisfy ROI, reachability, episode-horizon, capacity and V219 ownership guards",
+    "the predecessor overlay r04_fert_hand.py must remain byte-exact"
+  ],
+  "integration_contract": [
+    "main/candidates/v4 is the sole integration line",
+    "append bridge_append.py functions into the key-owned r04_s6_fert_roi.py when semantically porting; do not create a second runtime helper",
+    "remove/avoid every S6 materializer transform that reads or writes predecessor r04_fert_hand.py",
+    "wire the positive S6 seam inside the existing FERT_HAND core branch and preserve the incumbent cached branch exactly when S6 is OFF",
+    "do not add S6 to the outer v3_agent fast-path OR solely for liveness",
+    "nonstandard configuration delegates to the exact incumbent fertilizer-hand behavior",
+    "source-focused tests describe the old source authority and must be adapted to the additive bridge topology before promotion"
+  ],
+  "deconflict": {
+    "retracted_state_reset_hold_comment": 5642580096,
+    "reason": "exact appendix uses incumbent module-level r04_fert_hand._STATE; no demonstrated closure-local state reset exists in the published appendix"
+  }
+}

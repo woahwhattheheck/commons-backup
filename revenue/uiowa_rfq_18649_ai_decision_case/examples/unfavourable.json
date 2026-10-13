@@ -1,0 +1,73 @@
+{
+  "case_id": "CASE-SYN-RIS-VENDOR-SUMMARY",
+  "synthetic": true,
+  "_fiction_notice": "Every record below is invented for demonstration. No University of Iowa document, measurement, effort figure, or cost appears here.",
+  "_design_note": "This case has a BETTER generation headline than the beneficial case (22x vs 15.75x) and still loses. That inversion is the point: it is produced by the recorded post-acceptance rework, not by a penalty term.",
+  "workflow": "Summarising a third-party vendor security questionnaire (SYNTHETIC)",
+  "assumptions": [
+    {"id": "ASM-U-001", "name": "analyst_hourly_cost", "value": 85, "low": 70, "high": 110,
+     "unit": "currency_per_hour", "basis": "ASSUMED", "source": "synthetic planning assumption"},
+    {"id": "ASM-U-002", "name": "documents_per_month", "value": 24, "low": 18, "high": 30,
+     "unit": "documents_per_month", "basis": "ASSUMED", "source": "synthetic volume assumption"},
+    {"id": "ASM-U-003", "name": "evaluation_horizon_months", "value": 12, "low": 12, "high": 12,
+     "unit": "months", "basis": "ASSUMED", "source": "synthetic one-year evaluation window"}
+  ],
+  "documents": [
+    {"id": "DOC-U-B1", "variant": "BASELINE", "events": [
+      {"id": "EVT-U-B1-1", "kind": "AUTHOR", "minutes": 86, "day": 1},
+      {"id": "EVT-U-B1-2", "kind": "CHECK", "minutes": 16, "day": 2},
+      {"id": "EVT-U-B1-3", "kind": "REPAIR", "minutes": 5, "day": 2},
+      {"id": "EVT-U-B1-4", "kind": "ACCEPT", "minutes": 0, "day": 3}]},
+    {"id": "DOC-U-B2", "variant": "BASELINE", "events": [
+      {"id": "EVT-U-B2-1", "kind": "AUTHOR", "minutes": 90, "day": 1},
+      {"id": "EVT-U-B2-2", "kind": "CHECK", "minutes": 14, "day": 2},
+      {"id": "EVT-U-B2-3", "kind": "REPAIR", "minutes": 8, "day": 2},
+      {"id": "EVT-U-B2-4", "kind": "ACCEPT", "minutes": 0, "day": 3}]},
+    {"id": "DOC-U-B3", "variant": "BASELINE", "events": [
+      {"id": "EVT-U-B3-1", "kind": "AUTHOR", "minutes": 82, "day": 1},
+      {"id": "EVT-U-B3-2", "kind": "CHECK", "minutes": 18, "day": 2},
+      {"id": "EVT-U-B3-3", "kind": "REPAIR", "minutes": 6, "day": 2},
+      {"id": "EVT-U-B3-4", "kind": "ACCEPT", "minutes": 0, "day": 3}]},
+    {"id": "DOC-U-B4", "variant": "BASELINE", "events": [
+      {"id": "EVT-U-B4-1", "kind": "AUTHOR", "minutes": 94, "day": 1},
+      {"id": "EVT-U-B4-2", "kind": "CHECK", "minutes": 15, "day": 2},
+      {"id": "EVT-U-B4-3", "kind": "REPAIR", "minutes": 4, "day": 2},
+      {"id": "EVT-U-B4-4", "kind": "ACCEPT", "minutes": 0, "day": 3}]},
+
+    {"id": "DOC-U-A1", "variant": "ASSISTED", "events": [
+      {"id": "EVT-U-A1-1", "kind": "GENERATE", "minutes": 4, "day": 1},
+      {"id": "EVT-U-A1-2", "kind": "CHECK", "minutes": 45, "day": 1},
+      {"id": "EVT-U-A1-3", "kind": "REPAIR", "minutes": 31, "day": 2},
+      {"id": "EVT-U-A1-4", "kind": "ACCEPT", "minutes": 0, "day": 3},
+      {"id": "EVT-U-A1-5", "kind": "REWORK_AFTER_ACCEPT", "minutes": 38, "day": 19}]},
+    {"id": "DOC-U-A2", "variant": "ASSISTED", "events": [
+      {"id": "EVT-U-A2-1", "kind": "GENERATE", "minutes": 3, "day": 1},
+      {"id": "EVT-U-A2-2", "kind": "CHECK", "minutes": 49, "day": 1},
+      {"id": "EVT-U-A2-3", "kind": "REPAIR", "minutes": 34, "day": 2},
+      {"id": "EVT-U-A2-4", "kind": "ACCEPT", "minutes": 0, "day": 3},
+      {"id": "EVT-U-A2-5", "kind": "REWORK_AFTER_ACCEPT", "minutes": 41, "day": 22},
+      {"id": "EVT-U-A2-6", "kind": "MAINTENANCE_EDIT", "minutes": 12, "day": 58}]},
+    {"id": "DOC-U-A3", "variant": "ASSISTED", "events": [
+      {"id": "EVT-U-A3-1", "kind": "GENERATE", "minutes": 5, "day": 1},
+      {"id": "EVT-U-A3-2", "kind": "CHECK", "minutes": 46, "day": 1},
+      {"id": "EVT-U-A3-3", "kind": "REPAIR", "minutes": 29, "day": 2},
+      {"id": "EVT-U-A3-4", "kind": "ACCEPT", "minutes": 0, "day": 3},
+      {"id": "EVT-U-A3-5", "kind": "REWORK_AFTER_ACCEPT", "minutes": 36, "day": 25}]},
+    {"id": "DOC-U-A4", "variant": "ASSISTED", "events": [
+      {"id": "EVT-U-A4-1", "kind": "GENERATE", "minutes": 4, "day": 1},
+      {"id": "EVT-U-A4-2", "kind": "CHECK", "minutes": 47, "day": 1},
+      {"id": "EVT-U-A4-3", "kind": "REPAIR", "minutes": 30, "day": 2},
+      {"id": "EVT-U-A4-4", "kind": "ACCEPT", "minutes": 0, "day": 3},
+      {"id": "EVT-U-A4-5", "kind": "REWORK_AFTER_ACCEPT", "minutes": 40, "day": 21}]}
+  ],
+  "quality_measurements": [
+    {"id": "QM-U-B1", "document_id": "DOC-U-B1", "required_elements": 12, "correct_elements": 11, "fabricated_references": 0},
+    {"id": "QM-U-B2", "document_id": "DOC-U-B2", "required_elements": 12, "correct_elements": 12, "fabricated_references": 0},
+    {"id": "QM-U-B3", "document_id": "DOC-U-B3", "required_elements": 12, "correct_elements": 11, "fabricated_references": 0},
+    {"id": "QM-U-B4", "document_id": "DOC-U-B4", "required_elements": 12, "correct_elements": 12, "fabricated_references": 0},
+    {"id": "QM-U-A1", "document_id": "DOC-U-A1", "required_elements": 12, "correct_elements": 9, "fabricated_references": 2},
+    {"id": "QM-U-A2", "document_id": "DOC-U-A2", "required_elements": 12, "correct_elements": 8, "fabricated_references": 3},
+    {"id": "QM-U-A3", "document_id": "DOC-U-A3", "required_elements": 12, "correct_elements": 10, "fabricated_references": 1},
+    {"id": "QM-U-A4", "document_id": "DOC-U-A4", "required_elements": 12, "correct_elements": 9, "fabricated_references": 2}
+  ]
+}

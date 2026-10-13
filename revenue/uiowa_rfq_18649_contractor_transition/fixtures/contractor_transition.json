@@ -1,0 +1,146 @@
+{
+  "packet_id": "UIOWA-108-SYNTHETIC-TRANSITION-001",
+  "work_order": "UIOWA-108",
+  "solicitation_id": "18649",
+  "synthetic": true,
+  "authority": "FICTIONAL_REHEARSAL_ONLY",
+  "content_warning": "FICTIONAL. Every person, application, service identity, runbook and change record here was invented for rehearsal. No real account data appears. Identifiers are SYN-<KIND>-<NNN>, addresses sit under the reserved .invalid TLD, account names are prefixed syn-.",
+  "transition": {
+    "departing_ref": "SYN-PERSON-001",
+    "effective_date": "2026-09-30",
+    "note": "A fictional contract integration developer reaches the end of an engagement."
+  },
+  "people": [
+    {
+      "id": "SYN-PERSON-001",
+      "role": "integration developer (contract)",
+      "employment_type": "contractor",
+      "service": "ESS",
+      "account_name": "syn-contractor-001",
+      "email": "syn-contractor-001@example.invalid",
+      "synthetic": true
+    },
+    {
+      "id": "SYN-PERSON-002",
+      "role": "application services lead",
+      "employment_type": "staff",
+      "service": "ESS",
+      "account_name": "syn-staff-002",
+      "email": "syn-staff-002@example.invalid",
+      "synthetic": true
+    },
+    {
+      "id": "SYN-PERSON-003",
+      "role": "identity services analyst",
+      "employment_type": "staff",
+      "service": "IAM",
+      "account_name": "syn-staff-003",
+      "email": "syn-staff-003@example.invalid",
+      "synthetic": true
+    }
+  ],
+  "applications": [
+    {
+      "id": "SYN-APP-001",
+      "name": "Course Fee Reconciler (fictional)",
+      "service": "ESS",
+      "owner_ref": "SYN-PERSON-001",
+      "successor_ref": "SYN-PERSON-002",
+      "synthetic": true
+    },
+    {
+      "id": "SYN-APP-002",
+      "name": "Vendor File Loader (fictional)",
+      "service": "ESS",
+      "owner_ref": "SYN-PERSON-001",
+      "successor_ref": null,
+      "synthetic": true
+    }
+  ],
+  "service_identities": [
+    {
+      "id": "SYN-SVC-001",
+      "account_name": "syn-svc-reconciler",
+      "service": "ESS",
+      "owner_ref": "SYN-PERSON-001",
+      "successor_ref": "SYN-PERSON-002",
+      "used_by_app_ref": "SYN-APP-001",
+      "synthetic": true
+    },
+    {
+      "id": "SYN-SVC-002",
+      "account_name": "syn-svc-vendorload",
+      "service": "IAM",
+      "owner_ref": "SYN-PERSON-001",
+      "successor_ref": "SYN-PERSON-003",
+      "used_by_app_ref": "SYN-APP-002",
+      "synthetic": true
+    }
+  ],
+  "runbooks": [
+    {
+      "id": "SYN-RB-001",
+      "title": "Nightly reconciliation restart (fictional)",
+      "service": "ESS",
+      "owner_ref": "SYN-PERSON-001",
+      "successor_ref": "SYN-PERSON-002",
+      "covers_app_ref": "SYN-APP-001",
+      "last_updated": "2026-09-17",
+      "synthetic": true
+    },
+    {
+      "id": "SYN-RB-002",
+      "title": "Vendor file failure triage (fictional)",
+      "service": "ESS",
+      "owner_ref": "SYN-PERSON-001",
+      "successor_ref": null,
+      "covers_app_ref": "SYN-APP-002",
+      "last_updated": "2026-06-02",
+      "synthetic": true
+    }
+  ],
+  "access_changes": [
+    {
+      "id": "SYN-CHG-001",
+      "subject_ref": "SYN-PERSON-001",
+      "target_ref": "SYN-APP-001",
+      "action": "REASSIGN_OWNER",
+      "status": "COMPLETED",
+      "completed_at": "2026-09-15",
+      "evidence_ref": "synthetic://uiowa-rfq18649/108/change-record-001",
+      "synthetic": true
+    },
+    {
+      "id": "SYN-CHG-002",
+      "subject_ref": "SYN-PERSON-001",
+      "target_ref": "SYN-SVC-001",
+      "action": "ROTATE_CREDENTIAL",
+      "status": "COMPLETED",
+      "completed_at": "2026-09-16",
+      "evidence_ref": "synthetic://uiowa-rfq18649/108/rotation-log-001",
+      "synthetic": true
+    },
+    {
+      "id": "SYN-CHG-003",
+      "subject_ref": "SYN-PERSON-001",
+      "target_ref": "SYN-SVC-002",
+      "action": "REASSIGN_OWNER",
+      "status": "REQUESTED",
+      "completed_at": null,
+      "evidence_ref": null,
+      "synthetic": true,
+      "note": "A successor is named on the identity, but the request has not been actioned."
+    },
+    {
+      "id": "SYN-CHG-004",
+      "subject_ref": "SYN-PERSON-001",
+      "target_ref": "SYN-RB-001",
+      "action": "UPDATE_RUNBOOK",
+      "status": "COMPLETED",
+      "completed_at": "2026-09-17",
+      "evidence_ref": null,
+      "synthetic": true,
+      "note": "Marked complete by hand with nothing attached."
+    }
+  ]
+}

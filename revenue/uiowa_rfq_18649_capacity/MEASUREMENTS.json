@@ -1,0 +1,181 @@
+{
+  "analyst_work": {
+    "basis": "Current workbench README operator flow; duration not estimated or fabricated.",
+    "operator_step_count": 6
+  },
+  "baseline_commit": "05e578767791b1ea66e74e0ff4698dbf1bbe9db1",
+  "environment": {
+    "cpu_count_visible": 5,
+    "implementation": "CPython",
+    "machine": "x86_64",
+    "memory_metric": "tracemalloc Python allocation peak; measured separately from timing",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "timing_clock": "time.perf_counter_ns"
+  },
+  "large_input_fraction_of_2MiB_ceiling": 0.070765,
+  "measurement_scope": "Synthetic import -> untrusted compile -> semantic verify -> canonical JSON export -> integrity-checking Markdown render. No live systems or University evidence.",
+  "optimization_decision": {
+    "production_compiler_change_applied": false,
+    "reason": "At the largest supported near-ceiling fixture (240 of 256 sources), the bounded pipeline remains comfortably below the 2 MiB HTTP intake ceiling and preserves all correctness invariants. The dominant stage is semantic verification/rendering, which intentionally recompiles before human-readable output. Skipping that safety boundary would trade evidence integrity for latency; no production compiler shortcut is justified by this benchmark.",
+    "recommended_follow_up_trigger": "Revisit indexing/batching only if real authorized collections approach the 256-source contract ceiling and measured operator latency becomes material."
+  },
+  "schema": "uiowa-rfq18649-capacity-benchmark/v1",
+  "sizes": [
+    {
+      "authority_bytes": 7452,
+      "candidate_bytes": 428,
+      "correctness": {
+        "assessment_cells": 12,
+        "current_review_authority": false,
+        "json_roundtrip_receipt_preserved": true,
+        "markdown_receipt_present": true,
+        "receipt_stable": true,
+        "untrusted_mode_only": true
+      },
+      "input_bytes_total": 7880,
+      "iterations": 25,
+      "operator_step_count": 6,
+      "python_allocation_peak_bytes": 156642,
+      "report_json_bytes": 16514,
+      "report_markdown_bytes": 1956,
+      "source_count": 12,
+      "timing": {
+        "dominant_stage_by_median": "verify_ms",
+        "pipeline_median_ms": 3.1485,
+        "pipeline_p95_ms": 3.5662,
+        "stages": {
+          "compile_ms": {
+            "median_ms": 0.7818,
+            "p95_ms": 0.8434
+          },
+          "import_ms": {
+            "median_ms": 0.0392,
+            "p95_ms": 0.0578
+          },
+          "json_export_ms": {
+            "median_ms": 0.1048,
+            "p95_ms": 0.1392
+          },
+          "markdown_render_ms": {
+            "median_ms": 1.1068,
+            "p95_ms": 1.2241
+          },
+          "verify_ms": {
+            "median_ms": 1.1189,
+            "p95_ms": 1.3518
+          }
+        }
+      }
+    },
+    {
+      "authority_bytes": 58384,
+      "candidate_bytes": 1268,
+      "correctness": {
+        "assessment_cells": 12,
+        "current_review_authority": false,
+        "json_roundtrip_receipt_preserved": true,
+        "markdown_receipt_present": true,
+        "receipt_stable": true,
+        "untrusted_mode_only": true
+      },
+      "input_bytes_total": 59652,
+      "iterations": 25,
+      "operator_step_count": 6,
+      "python_allocation_peak_bytes": 887437,
+      "report_json_bytes": 91974,
+      "report_markdown_bytes": 1956,
+      "source_count": 96,
+      "timing": {
+        "dominant_stage_by_median": "verify_ms",
+        "pipeline_median_ms": 19.8467,
+        "pipeline_p95_ms": 23.8548,
+        "stages": {
+          "compile_ms": {
+            "median_ms": 5.1685,
+            "p95_ms": 8.5243
+          },
+          "import_ms": {
+            "median_ms": 0.215,
+            "p95_ms": 0.2715
+          },
+          "json_export_ms": {
+            "median_ms": 0.5484,
+            "p95_ms": 0.6061
+          },
+          "markdown_render_ms": {
+            "median_ms": 6.8713,
+            "p95_ms": 7.9858
+          },
+          "verify_ms": {
+            "median_ms": 7.005,
+            "p95_ms": 8.4695
+          }
+        }
+      }
+    },
+    {
+      "authority_bytes": 145697,
+      "candidate_bytes": 2708,
+      "correctness": {
+        "assessment_cells": 12,
+        "current_review_authority": false,
+        "json_roundtrip_receipt_preserved": true,
+        "markdown_receipt_present": true,
+        "receipt_stable": true,
+        "untrusted_mode_only": true
+      },
+      "input_bytes_total": 148405,
+      "iterations": 25,
+      "operator_step_count": 6,
+      "python_allocation_peak_bytes": 2147465,
+      "report_json_bytes": 221335,
+      "report_markdown_bytes": 1956,
+      "source_count": 240,
+      "timing": {
+        "dominant_stage_by_median": "verify_ms",
+        "pipeline_median_ms": 47.8302,
+        "pipeline_p95_ms": 49.5104,
+        "stages": {
+          "compile_ms": {
+            "median_ms": 12.5893,
+            "p95_ms": 13.2578
+          },
+          "import_ms": {
+            "median_ms": 0.5255,
+            "p95_ms": 0.553
+          },
+          "json_export_ms": {
+            "median_ms": 1.3066,
+            "p95_ms": 1.4539
+          },
+          "markdown_render_ms": {
+            "median_ms": 16.5888,
+            "p95_ms": 17.0258
+          },
+          "verify_ms": {
+            "median_ms": 16.7674,
+            "p95_ms": 17.224
+          }
+        }
+      }
+    }
+  ],
+  "source_provenance": {
+    "git_blob_algorithm": "sha1('blob ' + byte_length + NUL + bytes)",
+    "pinned_semantic_blobs_verified": true,
+    "semantic_blobs": {
+      "workshare_assessment.py": "8390cff50054053fa3d9ed032eb3187a46826abf",
+      "workshare_authority.py": "6724f3a8fee866a1dfd3ca16eccb5f4d54df0060",
+      "workshare_candidate.py": "e305842cb5145ab9a6f7de853e47b2af8b03f723",
+      "workshare_compile.py": "aca4ff5f472a161393349ce08c1cdfd425a1f079",
+      "workshare_constants.py": "ec65f4f4d5387d6c2546eee98101b34faa61b0bd",
+      "workshare_contract.py": "0c4e2db3f93079ec884c4b43801efae4475cd22d",
+      "workshare_core.py": "bccde66dc95c7b81e25a779a97ac70a70ebc6557",
+      "workshare_engine.py": "14cb2e1fc96b1888c4ac8030adeca48889bb0cc7",
+      "workshare_render.py": "ec2cffb48e0e82557626dba04fbbf02739282322",
+      "workshare_verify.py": "41161497cefb189c25fda0dcf9fa33eb8649717a"
+    }
+  },
+  "work_order": "UIOWA-095"
+}

@@ -1,0 +1,38 @@
+name: AR Leakage Desk
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/accounts_receivable_leakage_desk/**'
+      - '.github/workflows/ar-leakage-desk.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/accounts_receivable_leakage_desk/**'
+      - '.github/workflows/ar-leakage-desk.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/accounts_receivable_leakage_desk/*.py
+      - name: Unit and hostile tests
+        run: python -m unittest -q revenue.accounts_receivable_leakage_desk.test_engine
+      - name: Optimized unit and hostile tests
+        run: python -O -m unittest -q revenue.accounts_receivable_leakage_desk.test_engine
+      - name: Synthetic compile and verify
+        run: |
+          d="$(mktemp -d)"
+          python -m revenue.accounts_receivable_leakage_desk.cli compile --input revenue/accounts_receivable_leakage_desk/example.json --report "$d/report.json" --markdown "$d/report.md"
+          python -m revenue.accounts_receivable_leakage_desk.cli verify --input revenue/accounts_receivable_leakage_desk/example.json --report "$d/report.json"

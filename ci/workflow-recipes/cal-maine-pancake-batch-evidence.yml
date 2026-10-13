@@ -1,0 +1,33 @@
+name: Cal-Maine pancake batch evidence
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/cal_maine_pancake_batch_evidence/**'
+      - '.github/workflows/cal-maine-pancake-batch-evidence.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/cal_maine_pancake_batch_evidence/**'
+      - '.github/workflows/cal-maine-pancake-batch-evidence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax
+        run: python -m py_compile revenue/cal_maine_pancake_batch_evidence/gate.py revenue/cal_maine_pancake_batch_evidence/test_gate.py
+      - name: Normal hostile suite
+        run: python -m unittest -v revenue.cal_maine_pancake_batch_evidence.test_gate
+      - name: Optimized hostile suite
+        run: python -O -m unittest -v revenue.cal_maine_pancake_batch_evidence.test_gate
+      - name: Frozen acceptance
+        run: python -m revenue.cal_maine_pancake_batch_evidence.gate acceptance

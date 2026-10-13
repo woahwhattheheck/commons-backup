@@ -1,0 +1,90 @@
+{
+  "schema": "titan-v4-cropscale-validation/v4",
+  "status": "source_derived_research_no_activation",
+  "engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "configuration_git_blob": "b354d06b742fe48402513792253f1a5c29366b20",
+  "documentation_git_blob": "0464586fe653ebbf0b2432ec9f48830fd891951a",
+  "executed": {
+    "normal_tests": {
+      "count": 27,
+      "status": "pass"
+    },
+    "optimized_tests": {
+      "count": 27,
+      "status": "pass"
+    },
+    "py_compile": {
+      "status": "pass"
+    },
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "files": {
+    "crop_service_capacity.py": {
+      "git_blob": "7b6b04534b8d8dff487448800382883e2528b0c3",
+      "bytes": 11682,
+      "sha256": "3e9f7f41db9bb434776a380db0830ad555237647585267eb695f1b13533eacb9"
+    },
+    "test_crop_service_capacity.py": {
+      "git_blob": "56202f24597b7d2e0b12d8550e34e9d28b4f2df7",
+      "bytes": 10758,
+      "sha256": "be046eb35977f224b3127bdc0fb11f66a709677a787051283d078d3fb74c719e"
+    }
+  },
+  "historical_donor": {
+    "pr": 9806,
+    "reported_paired_dev_mean_delta": 5315.75,
+    "role": "evidence_only"
+  },
+  "theorem": [
+    "new plants initialize consecutive_unwatered=1 and watered_today=false",
+    "if same-day EOD executes, an unwatered new plant increments again and becomes WEED at consecutive_unwatered>=2, so a surviving new plant needs at least PLANT+WATER unit actions",
+    "if the episode terminal horizon arrives before same-day EOD, that weed transition cannot execute, so the hard action-budget lower bound is only the PLANT action",
+    "the official interpreter's final executable callback is episodeSteps-2; callbacks credited by the envelope are capped by the earlier of same-day EOD and that terminal callback",
+    "observation hour is bound to step modulo turnsPerDay before a one-sided ceiling is emitted",
+    "BUY_LAND executes in market phase and immediately unlocks the next quadrant for later callbacks, so current empty-owned cells cannot be a hard future cap",
+    "total observed board cells is a safe physical overestimate for simultaneous surviving new plants",
+    "turnsPerDay, episodeSteps, and maxMarketOrdersPerTurn influence one-sided impossibility ceilings; explicit caller configuration cannot certify IMPOSSIBLE_ACTION_BUDGET without separate configuration custody"
+  ],
+  "predecessor_bugs": [
+    {
+      "kind": "false_impossibility_current_empty_tile_cap",
+      "cause": "future BUY_LAND can unlock LOCKED cells after unit phase for later same-day callbacks; DIG/HARVEST can reclaim cells",
+      "repair": "cap one-sided impossibility ceilings by total observed rectangular board cells while preserving current empty-owned count as telemetry"
+    },
+    {
+      "kind": "false_impossibility_unauthenticated_configuration",
+      "cause": "caller-supplied turnsPerDay/maxMarketOrdersPerTurn could shrink the action ceiling without proof those values belonged to the evaluated interpreter",
+      "witness": "hour=0, one actor, proposed_new_plants=1, caller turnsPerDay=1 and maxMarketOrdersPerTurn=1 manufactured a zero-plant ceiling",
+      "repair": "direct capacity_envelope refuses explicit unauthenticated configuration; assess_proposed_expansion returns NOT_CERTIFIED with ceiling/envelope null until configuration_authenticated is literally true"
+    },
+    {
+      "kind": "false_impossibility_terminal_partial_day",
+      "cause": "the stale bound charged PLANT+WATER through a nominal same-day EOD even when episodeSteps terminated the interpreter before that EOD could execute",
+      "witness": "under standard episodeSteps=720, step696/hour0 has 23 executable callbacks through step718 and no hour-23 EOD; one actor can issue thirteen PLANT actions without a same-day watering obligation, while the stale 24-slot divide-by-two bound falsely capped at 12",
+      "repair": "bind hour to step, cap callback credit at episodeSteps-2, and charge one action per surviving new plant when terminal precedes same-day EOD; retain the two-action charge when EOD is reachable"
+    }
+  ],
+  "covered_edges": [
+    "pinned-default opening envelope remains 12 plants for one actor when EOD is reachable",
+    "authenticated custom turnsPerDay and maxMarketOrdersPerTurn remain supported",
+    "direct envelope rejects explicit unauthenticated configuration",
+    "unauthenticated explicit configuration cannot emit IMPOSSIBLE_ACTION_BUDGET",
+    "authenticated one-turn custom configuration can certify the exact zero-plant bound",
+    "standard terminal partial day step696/hour0 exposes 23 callbacks, no EOD, one-action plant cost, and does not falsely reject proposal13",
+    "last real standard EOD step695/hour23 preserves the two-action PLANT+WATER charge",
+    "post-terminal step719 is refused",
+    "hour/step mismatch is refused",
+    "engine/config/donor provenance is exposed",
+    "input immutability"
+  ],
+  "limits": [
+    "no current-native economics claim",
+    "no movement, seed, land-purchase, or reclamation feasibility claim",
+    "no runtime/config/default/archive/Kaggle mutation",
+    "omitted configuration uses pinned official defaults; explicit configuration is accepted only after caller custody binding with configuration_authenticated=True",
+    "absolute_action_ceiling intentionally overcredits future HIRE and potentially plantable board cells and is only an impossibility bound",
+    "current_labor_ceiling is conditional on no future HIRE credit only; it does not assume no future BUY_LAND/DIG/HARVEST",
+    "empty_owned_tiles is telemetry and is not used as a hard future impossibility cap"
+  ]
+}

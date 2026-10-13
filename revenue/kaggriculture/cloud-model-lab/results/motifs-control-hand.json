@@ -1,0 +1,159 @@
+{
+ "motifs": [
+  {
+   "id": "c000",
+   "op": [
+    "CARE"
+   ],
+   "when": {
+    "tile": "ANIMAL",
+    "cared_today": false,
+    "fed_today": true
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "worker"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 0,
+    "teacher": 0,
+    "hand": 1,
+    "total": 1
+   },
+   "provenance": [
+    "engine-derived-control"
+   ],
+   "authored": "hand",
+   "rule": "the daily refresh pays care only on an animal already fed today (kaggriculture.py 829-830); this is the fed half of that pair",
+   "sources": []
+  },
+  {
+   "id": "c001",
+   "op": [
+    "HARVEST"
+   ],
+   "when": {
+    "tile": "ANIMAL",
+    "yield_units>=1": true
+   },
+   "effect": "harvested",
+   "role": "worker",
+   "observed_roles": [
+    "worker"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 0,
+    "teacher": 0,
+    "hand": 1,
+    "total": 1
+   },
+   "provenance": [
+    "engine-derived-control"
+   ],
+   "authored": "hand",
+   "rule": "HARVEST on an animal takes its held units and leaves the animal in place (469-472), so it forfeits nothing",
+   "sources": []
+  },
+  {
+   "id": "c002",
+   "op": [
+    "COLLECT_FERTILIZER"
+   ],
+   "when": {
+    "tile": "ANIMAL",
+    "fertilizer_available": true
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "worker"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 0,
+    "teacher": 0,
+    "hand": 1,
+    "total": 1
+   },
+   "provenance": [
+    "engine-derived-control"
+   ],
+   "authored": "hand",
+   "rule": "fertilizer standing available on an animal is collected outright",
+   "sources": []
+  },
+  {
+   "id": "c003",
+   "op": [
+    "FEED"
+   ],
+   "when": {
+    "tile": "ANIMAL",
+    "fed_today": false,
+    "carry.WHEAT>=1": true
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "worker"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 0,
+    "teacher": 0,
+    "hand": 1,
+    "total": 1
+   },
+   "provenance": [
+    "engine-derived-control"
+   ],
+   "authored": "hand",
+   "rule": "FEED sets fed_today and consumes one carried WHEAT (508-513); it is the precondition the refresh pays production and care against",
+   "sources": []
+  },
+  {
+   "id": "c004",
+   "op": [
+    "WATER"
+   ],
+   "when": {
+    "tile": "PLANT",
+    "watered_today": false,
+    "unwatered_run": 1
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "worker"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 0,
+    "teacher": 0,
+    "hand": 1,
+    "total": 1
+   },
+   "provenance": [
+    "engine-derived-control"
+   ],
+   "authored": "hand",
+   "rule": "an unwatered plant loses growth at the refresh; WATER costs nothing carried",
+   "sources": []
+  }
+ ],
+ "meta": {
+  "lane": "hand-authored engine-derived controls",
+  "authored": "hand",
+  "provenance": "engine-derived-control",
+  "engine_pin": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "note": "these are NOT model output and must not be reported as model-produced"
+ }
+}

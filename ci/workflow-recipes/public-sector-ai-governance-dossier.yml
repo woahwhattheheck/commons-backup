@@ -1,0 +1,37 @@
+name: Public-sector AI governance dossier
+
+on:
+  push:
+    paths:
+      - 'revenue/public_sector_ai_governance_dossier/**'
+      - '.github/workflows/public-sector-ai-governance-dossier.yml'
+  pull_request:
+    paths:
+      - 'revenue/public_sector_ai_governance_dossier/**'
+      - '.github/workflows/public-sector-ai-governance-dossier.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile module
+        run: python -m py_compile revenue/public_sector_ai_governance_dossier/ai_governance_dossier.py
+      - name: Run hostile unit tests
+        run: python -m unittest discover -s revenue/public_sector_ai_governance_dossier -p 'test_*.py' -v
+      - name: Compile and verify synthetic municipal example
+        run: |
+          python revenue/public_sector_ai_governance_dossier/ai_governance_dossier.py compile \
+            --input revenue/public_sector_ai_governance_dossier/examples/municipal_wastewater_synthetic.json \
+            --json-out /tmp/ai-governance.json \
+            --markdown-out /tmp/ai-governance.md
+          python revenue/public_sector_ai_governance_dossier/ai_governance_dossier.py verify \
+            --input revenue/public_sector_ai_governance_dossier/examples/municipal_wastewater_synthetic.json \
+            --dossier /tmp/ai-governance.json

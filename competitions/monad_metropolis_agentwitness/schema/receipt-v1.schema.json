@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentwitness.example/schema/receipt-v1.schema.json",
+  "title": "AgentWitness public receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "event_key", "claimant", "intent_hash", "outcome", "outcome_hash", "resolution", "resolution_hash"],
+  "properties": {
+    "version": {"const": "agentwitness-receipt-v1"},
+    "event_key": {"type": "string", "pattern": "^0x[0-9a-f]{64}$"},
+    "claimant": {"type": "string", "pattern": "^0x[0-9a-f]{40}$"},
+    "intent_hash": {"type": "string", "pattern": "^0x[0-9a-f]{64}$"},
+    "outcome": {"enum": ["NONE", "COMPLETED", "REJECTED", "OUTCOME_UNKNOWN", "HELD"]},
+    "outcome_hash": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^0x[0-9a-f]{64}$"}]},
+    "resolution": {"enum": ["NONE", "COMPLETED", "REJECTED", "HELD"]},
+    "resolution_hash": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^0x[0-9a-f]{64}$"}]}
+  }
+}

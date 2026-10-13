@@ -1,0 +1,43 @@
+name: TITAN three-way regression delta microscope
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-version-regression-microscope/**"
+      - ".github/workflows/titan-version-regression-microscope.yml"
+  push:
+    branches:
+      - "sol-trace/titan-v3-version-regression-microscope-20260910-01"
+    paths:
+      - "revenue/kaggriculture/cloud-version-regression-microscope/**"
+      - ".github/workflows/titan-version-regression-microscope.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact event head
+        shell: bash
+        run: |
+          expected="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse HEAD)" = "$expected"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile diagnostic consumer
+        working-directory: revenue/kaggriculture/cloud-version-regression-microscope
+        run: python -B -m py_compile regression_microscope.py test_regression_microscope.py
+      - name: Three-way predecessor contracts
+        working-directory: revenue/kaggriculture/cloud-version-regression-microscope
+        run: python -B -m unittest -v test_regression_microscope.py

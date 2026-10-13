@@ -1,0 +1,58 @@
+name: Outbound send guard current authority
+
+on:
+  pull_request:
+    paths:
+      - "tools/outbound_send_guard/**"
+      - ".github/workflows/outbound-send-guard-current.yml"
+  push:
+    branches: [main]
+    paths:
+      - "tools/outbound_send_guard/**"
+      - ".github/workflows/outbound-send-guard-current.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  current-authority:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: |
+          python -m py_compile \
+            tools/outbound_send_guard/_guard_core.py \
+            tools/outbound_send_guard/guard.py \
+            tools/outbound_send_guard/guard_legacy.py \
+            tools/outbound_send_guard/current.py \
+            tools/outbound_send_guard/current_impl.py \
+            tools/outbound_send_guard/current_worker.py \
+            tools/outbound_send_guard/cli.py \
+            tools/outbound_send_guard/__init__.py \
+            tools/outbound_send_guard/__main__.py \
+            tools/outbound_send_guard/test_guard.py \
+            tools/outbound_send_guard/test_current.py \
+            tools/outbound_send_guard/test_current_entrypoint.py \
+            tools/outbound_send_guard/test_current_clock_boundary.py
+      - name: Normal tests
+        run: |
+          python -m unittest -v \
+            tools.outbound_send_guard.test_guard \
+            tools.outbound_send_guard.test_current \
+            tools.outbound_send_guard.test_current_entrypoint \
+            tools.outbound_send_guard.test_current_clock_boundary
+      - name: Optimized tests
+        run: |
+          python -O -m unittest -v \
+            tools.outbound_send_guard.test_guard \
+            tools.outbound_send_guard.test_current \
+            tools.outbound_send_guard.test_current_entrypoint \
+            tools.outbound_send_guard.test_current_clock_boundary

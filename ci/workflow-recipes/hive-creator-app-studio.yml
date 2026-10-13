@@ -1,0 +1,41 @@
+name: Hive creator app studio
+on:
+  pull_request:
+    paths:
+      - 'revenue/hive/creator-app-studio/**'
+      - '.github/workflows/hive-creator-app-studio.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/hive/creator-app-studio/**'
+      - '.github/workflows/hive-creator-app-studio.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  product:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: revenue/hive/creator-app-studio
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Real SQLite, HTTP, packaging and JavaScript regressions
+        run: python -B -m unittest discover -v
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium
+      - name: Browser and exported standalone app acceptance
+        run: python -B browser_check.py --output browser-results
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: hive-creator-app-studio-browser-${{ github.run_id }}
+          path: revenue/hive/creator-app-studio/browser-results/
+          if-no-files-found: warn
+          retention-days: 14

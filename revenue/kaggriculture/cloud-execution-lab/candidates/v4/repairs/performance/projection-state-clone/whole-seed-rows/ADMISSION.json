@@ -1,0 +1,62 @@
+{
+  "schema": "titan-v4-source-admission/v1",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "authority": "projection-state-clone / early-capital",
+  "status": "source_candidate_awaiting_exact_head_execution_not_composed",
+  "legacy_provenance": {
+    "pull_request": 12114,
+    "donor_head": "eef44eb74e427a2cfd96eedece6f99ed41ad330a",
+    "donor_source_blob": "ac464f49934d9cd0547e4c4f772a7758f47db6e7",
+    "rule": "consume repaired theorem and focused witnesses only; do not revive the V3 branch"
+  },
+  "current_source": {
+    "path": "revenue/kaggriculture/cloud-execution-lab/early_capital.py",
+    "git_blob": "1161859ac5af617eca65aec3f732b5c1396cad37",
+    "preimage_function_sha256": {
+      "_rank": "4e851011d2d9e909fd0232041fa8c77fe991c630cf55a7ca60476ca67dcbd99e",
+      "order_early_capital": "b1751a833a2b1d3d24534581908aec7380f4fd474c26c30c38e617ab7ae78d6b"
+    }
+  },
+  "defects": [
+    "each positive BUY_SEED row for one crop independently claims the same represented unmet seed demand",
+    "a market BUY_SEED row is indivisible in the official executable prefix but the predecessor rank can effectively certify an oversized row from a smaller deficit",
+    "the current unit stage is already represented in post_private yet predecessor seed demand passes selected into _plant_demand and can count that current PLANT again"
+  ],
+  "repair": {
+    "whole_row_rule": "for each crop choose the subset of positive authored BUY_SEED rows with maximum total quantity not exceeding represented future deficit; earliest authored index tuple breaks ties",
+    "future_only_rule": "after post-unit projection, seed demand is computed from future route only via _plant_demand(None, route, now, horizon)",
+    "preserves": [
+      "all authored market rows and quantities",
+      "market executable-prefix length and suffix",
+      "existing funding SELL certification",
+      "existing capital admission and payback thresholds",
+      "projection-state-clone ownership of _project_post_unit_private"
+    ]
+  },
+  "source_candidate": {
+    "adapter": "apply_whole_seed_rows.py",
+    "focused_test": "test_whole_seed_rows.py",
+    "activation": false,
+    "composed": false,
+    "production_promotion": false,
+    "fail_closed_on_target_span_drift": true,
+    "accepts_disjoint_projection_span_composition": true
+  },
+  "expected_focused_gate": {
+    "tests_per_mode": 7,
+    "modes": ["normal", "PYTHONOPTIMIZE=1"],
+    "compile": ["apply_whole_seed_rows.py", "test_whole_seed_rows.py"],
+    "key_killers": [
+      "two quantity-one seed rows for one-unit deficit: only earliest row may outrank land",
+      "quantity-two seed row for one-unit deficit: row remains indivisible and may not claim operating rank",
+      "current callback PLANT represented in post_private: no second future seed claim",
+      "whole-row subset maximizes covered quantity and uses earliest authored-index tuple tie break"
+    ]
+  },
+  "forbidden": [
+    "new V4 root or controller",
+    "direct mutation of root early_capital.py from this carrier",
+    "COMPOSITION.json activation before exact-head source execution and authenticated materialized postimage binding",
+    "runtime/default/config/archive/Kaggle/submission mutation"
+  ]
+}

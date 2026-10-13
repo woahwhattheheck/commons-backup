@@ -1,0 +1,95 @@
+name: TITAN V4 market-order budget audit
+on:
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-order-budget/**
+      - .github/workflows/titan-v4-market-order-budget.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: titan-v4-market-order-budget-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Pin official engine and run focused tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          SRC="$ROOT/candidates/v4/research/market-order-budget"
+          test "$(git hash-object "$ROOT/reference/engine/kaggriculture.py")" = 3c202c7ee921da239356789e266b694635103fc4
+          pushd "$SRC"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v test_market_order_budget
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest -v test_market_order_budget
+          python -B -m py_compile market_order_budget.py audit_authored_routes.py market_budget_native_entry.py run_current_native_census.py test_market_order_budget.py
+          popd
+      - name: Recover authenticated canonical runtime
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARTIFACT_ID=10180428228
+          ZIP="$RUNNER_TEMP/orderbudget-canonical.zip"
+          EXTRACT="$RUNNER_TEMP/orderbudget-artifact"
+          RUNTIME="$RUNNER_TEMP/orderbudget-runtime"
+          OUT="$RUNNER_TEMP/orderbudget-results"
+          mkdir -p "$EXTRACT" "$RUNTIME" "$OUT"
+          curl --fail --location --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o "$ZIP"
+          echo "737c0b2b69147a826d1000f3b2266b70a579fffd0ab91d4126c6c9a84159d799  $ZIP" | sha256sum -c -
+          unzip -q "$ZIP" -d "$EXTRACT"
+          TAR="$EXTRACT/checked-package/exports/titan-current.tar.gz"
+          echo "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9  $TAR" | sha256sum -c -
+          tar -xzf "$TAR" -C "$RUNTIME"
+          printf 'ORDERBUDGET_TAR=%s\n' "$TAR" >> "$GITHUB_ENV"
+          printf 'ORDERBUDGET_RUNTIME=%s\n' "$RUNTIME" >> "$GITHUB_ENV"
+          printf 'ORDERBUDGET_OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+      - name: Authored-route budget census
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-order-budget
+          python -B "$SRC/audit_authored_routes.py" \
+            --archive "$ORDERBUDGET_TAR" \
+            --output "$ORDERBUDGET_OUT/authored-route-census.json"
+      - name: Current-native telemetry census
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-order-budget
+          cp "$SRC/market_order_budget.py" "$ORDERBUDGET_RUNTIME/market_order_budget.py"
+          cp "$SRC/market_budget_native_entry.py" "$ORDERBUDGET_RUNTIME/market_budget_native_entry.py"
+          python -B "$SRC/run_current_native_census.py" \
+            --runtime "$ORDERBUDGET_RUNTIME" \
+            --output "$ORDERBUDGET_OUT/current-native" \
+            --seed 2026091223
+      - name: Pin checkout and source hashes
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$ORDERBUDGET_OUT"
+          git rev-parse HEAD > "$ORDERBUDGET_OUT/checkout-commit.txt"
+          SRC=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-order-budget
+          sha256sum "$SRC"/*.py "$SRC/README.md" "$SRC/VALIDATION.json" > "$ORDERBUDGET_OUT/source-sha256.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v4-market-order-budget-${{ github.run_id }}
+          path: ${{ env.ORDERBUDGET_OUT }}
+          retention-days: 14
+          if-no-files-found: error

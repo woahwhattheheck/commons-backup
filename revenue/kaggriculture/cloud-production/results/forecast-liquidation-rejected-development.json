@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "status": "REJECTED_NOT_PROMOTED",
+  "selected_candidate_sha256": "0fbe51eea32be64a2441c60ba7867d532614812cbb9823bbc9087fb6aecdd7d5",
+  "shared_forecast": {
+    "pull_request": 9807,
+    "merge": "0563531b2b0d6b918f44833d8e8b699463f65fea",
+    "estimator_sha256": "2e75d4742866b66feee816e8ed2f262890593a6d5d5d327821648fc55897c093"
+  },
+  "new_frontier_panel": {
+    "pull_request": 9809,
+    "merge": "52b71bf15433cf6831e4373d4fd84fb9ffcbcf05",
+    "arlene_main_sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4",
+    "apex_main_sha256": "1f7cd5fb8a16585936d2562a3667f85bb6661688718ef58f73006de66148354a"
+  },
+  "normal_game_runtime": {
+    "metric": "candidate actor call_cpu_seconds / calls, measured inside normal full evaluator games",
+    "forecast_price_9200191": {"games":2,"calls":1438,"call_cpu_seconds":17.873476,"weighted_mean_call_seconds":0.012429399,"max_call_seconds":0.116793012},
+    "forecast_price_9200229": {"games":6,"calls":4314,"call_cpu_seconds":73.400422,"weighted_mean_call_seconds":0.017014470,"max_call_seconds":0.928679161},
+    "partial_liquidation_9200251_checkpoint": {"games":2,"calls":1438,"call_cpu_seconds":17.953000,"weighted_mean_call_seconds":0.012484701,"max_call_seconds":0.123277727},
+    "partial_liquidation_9200251_strong": {"games":4,"calls":2876,"call_cpu_seconds":51.924579,"weighted_mean_call_seconds":0.018054443,"max_call_seconds":0.099011500},
+    "partial_liquidation_9600109_frontier": {"games":4,"calls":2876,"call_cpu_seconds":53.943485,"weighted_mean_call_seconds":0.018756427,"max_call_seconds":0.178971672},
+    "decision": "Do not invoke the intermediate-step forecast on every action; no forecast runtime bytes are promoted. Any future integration must cache at observation/horizon granularity."
+  },
+  "arms": {
+    "forecast_price": {
+      "candidate_sha256": "0d6f5cd5a3e74249558ab93fae8baeb8bf915b4ed2a984631c781fabec0b567c",
+      "description": "SORREL maintained-buffered crop quotes replace approximate crop demand; legacy crop demand multipliers removed.",
+      "checkpoint_mean_margin": 3645.75,
+      "kaito_mean_margin": -20626.75,
+      "kaito_checkpoint_mean_margin": -14840.75,
+      "igor_mean_margin": -23694.0,
+      "igor_checkpoint_mean_margin": -16491.0
+    },
+    "forecast_partial_liquidation": {
+      "candidate_sha256": "3e920d9740658ee819e3a50e8536b8f9aec5732b75eb0495b862c3bfe441973a",
+      "wrapper_sha256": "dcab573b6976eea6bada41b27afeeabafcf7ab96874fd1b1e38b6f149b586707",
+      "description": "Exact sequential partial crop sales fund visible seed/feed/Fibonacci labor commitments and configured shed-capacity headroom.",
+      "checkpoint_mean_margin": 1683.5,
+      "kaito_margin": -37935.0,
+      "kaito_checkpoint_margin": -34241.0,
+      "igor_margin": -55207.0,
+      "igor_checkpoint_margin": -34329.0,
+      "arlene_margin": -67621.0,
+      "arlene_checkpoint_margin": -51577.0,
+      "apex_margin": -60125.0,
+      "apex_checkpoint_margin": -51606.0
+    }
+  },
+  "games": [
+    {"arm":"forecast_price","opponent":"checkpoint","seed":9200191,"seat":0,"scores":[104098,104147]},
+    {"arm":"forecast_price","opponent":"checkpoint","seed":9200191,"seat":1,"scores":[104394,104163]},
+    {"arm":"forecast_price","opponent":"checkpoint","seed":9200229,"seat":0,"scores":[89787,83748]},
+    {"arm":"forecast_price","opponent":"checkpoint","seed":9200229,"seat":1,"scores":[86732,95556]},
+    {"arm":"forecast_price","opponent":"kaito","seed":9200191,"seat":0,"scores":[63534,87595]},
+    {"arm":"forecast_price","opponent":"kaito","seed":9200191,"seat":1,"scores":[84850,59976]},
+    {"arm":"forecast_price","opponent":"kaito","seed":9200229,"seat":0,"scores":[124241,138067]},
+    {"arm":"forecast_price","opponent":"kaito","seed":9200229,"seat":1,"scores":[138993,119247]},
+    {"arm":"forecast_price","opponent":"igor","seed":9200191,"seat":0,"scores":[114050,138018]},
+    {"arm":"forecast_price","opponent":"igor","seed":9200191,"seat":1,"scores":[116476,94757]},
+    {"arm":"forecast_price","opponent":"igor","seed":9200229,"seat":0,"scores":[82195,104513]},
+    {"arm":"forecast_price","opponent":"igor","seed":9200229,"seat":1,"scores":[108153,81382]},
+    {"arm":"forecast_partial_liquidation","opponent":"checkpoint","seed":9200251,"seat":0,"scores":[89487,88226]},
+    {"arm":"forecast_partial_liquidation","opponent":"checkpoint","seed":9200251,"seat":1,"scores":[87513,89619]},
+    {"arm":"forecast_partial_liquidation","opponent":"kaito","seed":9200251,"seat":0,"scores":[63418,101249]},
+    {"arm":"forecast_partial_liquidation","opponent":"kaito","seed":9200251,"seat":1,"scores":[101008,62969]},
+    {"arm":"forecast_partial_liquidation","opponent":"igor","seed":9200251,"seat":0,"scores":[60257,115464]},
+    {"arm":"forecast_partial_liquidation","opponent":"igor","seed":9200251,"seat":1,"scores":[115464,60257]},
+    {"arm":"forecast_partial_liquidation","opponent":"arlene","seed":9600109,"seat":0,"scores":[55020,122641]},
+    {"arm":"forecast_partial_liquidation","opponent":"arlene","seed":9600109,"seat":1,"scores":[122641,55020]},
+    {"arm":"forecast_partial_liquidation","opponent":"apex","seed":9600109,"seat":0,"scores":[57417,117542]},
+    {"arm":"forecast_partial_liquidation","opponent":"apex","seed":9600109,"seat":1,"scores":[117542,57417]}
+  ],
+  "report_sha256": {
+    "forecast_price_9200191": "4bef0960fe22589f606962bfb9df3a0ce87eac87d825095d8aa4ae407faa6442",
+    "forecast_strong_9200191": "7f9ede2d8fb9d5d370a355771d1e881a7b1714cd3f9f06afe3ddacb3623b6b7b",
+    "checkpoint_strong_9200191": "3ac4a57ecc903e56ef8e613459cdc30a8664e8d6de99a705bbac3ddbc573f9c8",
+    "forecast_panel_9200229": "b726829a9648fe8b7173bacb03fec18f7e8798bc68c7d46e38cd569dde58fde9",
+    "checkpoint_strong_9200229": "8aa500626799a39945de805596f2531efc586af215790aba006bd7fe9ac5a057",
+    "partial_checkpoint_9200251": "57627c5db9c37bc518457db6424006d314a7b5f12bb546f2fe3e14defcb459a7",
+    "partial_strong_9200251": "6dc205159d43039b66bc9ced1b9b57b92b03576be16310b367e8a2ae6af359ac",
+    "checkpoint_strong_9200251": "ea4034d4a51f0c018ffd447c9df906e19fa7915e46c50c85979ed0d978641e9a"
+  },
+  "selection": "Reject both arms: paired checkpoint gains did not survive strong-parent or frontier-panel margin comparison."
+}

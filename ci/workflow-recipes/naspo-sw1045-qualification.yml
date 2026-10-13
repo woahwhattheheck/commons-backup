@@ -1,0 +1,32 @@
+name: NASPO SW1045 qualification
+
+on:
+  pull_request:
+    paths:
+      - "opportunities/naspo_sw1045_qualification_2026/**"
+      - ".github/workflows/naspo-sw1045-qualification.yml"
+  push:
+    branches: [main]
+    paths:
+      - "opportunities/naspo_sw1045_qualification_2026/**"
+      - ".github/workflows/naspo-sw1045-qualification.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  qualification:
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m py_compile opportunities/naspo_sw1045_qualification_2026/qualification.py opportunities/naspo_sw1045_qualification_2026/test_qualification.py
+      - run: python -B -m unittest -v opportunities.naspo_sw1045_qualification_2026.test_qualification
+      - run: python -O -B -m unittest -v opportunities.naspo_sw1045_qualification_2026.test_qualification
+      - run: |
+          python opportunities/naspo_sw1045_qualification_2026/qualification.py verify             --source opportunities/naspo_sw1045_qualification_2026/source_snapshot.json             --attachments opportunities/naspo_sw1045_qualification_2026/attachment_manifest.json             --requirements opportunities/naspo_sw1045_qualification_2026/requirements.json             --owner opportunities/naspo_sw1045_qualification_2026/repo_evidence_candidate.json             --receipt opportunities/naspo_sw1045_qualification_2026/current_qualification_receipt.json             --trusted-now 2026-09-13T11:15:00Z

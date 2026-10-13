@@ -1,0 +1,63 @@
+name: titan-w08-capacity-throughput
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-w08-capacity-throughput.yml"
+      - "p/titan-frontier-W08-shed-capacity-throughput-20260909-01.md"
+      - "revenue/kaggriculture/cloud-w08-capacity-throughput/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-w08-capacity-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prove-capacity-ledger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert triggering source identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Run W08 exhaustive contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="revenue/kaggriculture/cloud-w08-capacity-throughput"
+          OUT="$RUNNER_TEMP/titan-w08-capacity-throughput"
+          mkdir -p "$OUT"
+          cd "$ROOT"
+          python3 -B -m unittest -v 2>&1 | tee "$OUT/unittest.log"
+          python3 -B - <<'PY'
+          from pathlib import Path
+          for name in ("capacity_ledger.py", "test_capacity_ledger.py", "test_engine_parity.py", "run_witnesses.py"):
+              compile(Path(name).read_text(encoding="utf-8"), name, "exec")
+          print("syntax-compile: 4 files OK")
+          PY
+          python3 -B run_witnesses.py --output "$OUT/witness-a.json"
+          python3 -B run_witnesses.py --output "$OUT/witness-b.json"
+          cmp "$OUT/witness-a.json" "$OUT/witness-b.json"
+          sha256sum capacity_ledger.py test_capacity_ledger.py test_engine_parity.py run_witnesses.py \
+            README.md RESULTS.json "$OUT/witness-a.json" | tee "$OUT/SHA256SUMS"
+      - name: Retain W08 proof outputs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-w08-capacity-throughput-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/titan-w08-capacity-throughput
+          if-no-files-found: error
+          retention-days: 14

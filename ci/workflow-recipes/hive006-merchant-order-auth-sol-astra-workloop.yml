@@ -1,0 +1,64 @@
+name: hive006 merchant order authorization
+
+on:
+  pull_request:
+    paths:
+      - "revenue/hive/voice-support-desk/merchant_auth.py"
+      - "revenue/hive/voice-support-desk/test_merchant_auth.py"
+      - "revenue/hive/voice-support-desk/merchant-access.example.csv"
+      - "revenue/hive/voice-support-desk/MERCHANT-AUTH.md"
+      - ".github/workflows/hive006-merchant-order-auth-sol-astra-workloop.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  merchant-order-auth:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      CASE: revenue/hive/voice-support-desk
+    steps:
+      - name: Check out exact proposed head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Bind exact proposed bytes
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git hash-object "$CASE/merchant_auth.py")" = "8c98004cf909d96dca771d447c4b583a37713d32"
+          test "$(git hash-object "$CASE/test_merchant_auth.py")" = "f7e8e9cd8de4110ab4038f47b3c5436523ba7f05"
+          test "$(git hash-object "$CASE/merchant-access.example.csv")" = "9c6a80cb6181d63fb469e02ea89c5466a190242c"
+          test "$(git hash-object "$CASE/MERCHANT-AUTH.md")" = "deb78a5af9f0068848f7ec86950993a7ecec8923"
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile original desk and merchant edge
+        working-directory: revenue/hive/voice-support-desk
+        run: python -B -m py_compile desk.py merchant_auth.py test_desk.py test_merchant_auth.py
+
+      - name: Run original regression suite plus merchant authorization contracts
+        working-directory: revenue/hive/voice-support-desk
+        run: python -B -m unittest -v test_desk.py test_merchant_auth.py
+
+      - name: Assert exact head stayed clean
+        if: always()
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain --untracked-files=all)"

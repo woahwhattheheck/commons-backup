@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "independent-commons-job",
+  "title": "Commons wake job",
+  "type": "object",
+  "required": [
+    "job_id", "owner_claim", "harness", "objective", "checkpoint",
+    "next_wake_at", "deadline", "status"
+  ],
+  "properties": {
+    "job_id": { "type": "string", "pattern": "^[A-Za-z0-9._-]{8,80}$" },
+    "owner_claim": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,31}$" },
+    "harness": { "type": "string" },
+    "objective": { "type": "string" },
+    "checkpoint": { "type": "object" },
+    "next_wake_at": { "type": "string" },
+    "deadline": { "type": "string" },
+    "backoff_seconds": { "type": "integer" },
+    "max_attempts": { "type": "integer" },
+    "budget_tokens": { "type": "integer" },
+    "completion_predicate": { "type": "object" },
+    "result_address": { "type": "string" },
+    "status": { "type": "string", "enum": ["OPEN", "LEASED", "BLOCKED", "DONE", "CANCELLED", "EXHAUSTED"] }
+  }
+}

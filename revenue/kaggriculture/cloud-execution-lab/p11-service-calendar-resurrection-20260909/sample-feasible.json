@@ -1,0 +1,81 @@
+{
+  "state": {
+    "current_turn": 10,
+    "terminal_turn": 18,
+    "cash": 12,
+    "inventory": {"water": 1},
+    "room_used": {"plot": 0, "shed": 0},
+    "room_capacity": {"plot": 1, "shed": 2},
+    "actor_capacity": {"farmer": 1, "system": 1},
+    "machine_capacity": {"well": 1},
+    "completed": []
+  },
+  "obligations": [
+    {
+      "key": "buy-seed",
+      "kind": "purchase",
+      "earliest_turn": 10,
+      "latest_turn": 10,
+      "phase": "buy",
+      "actor_demand": {"system": 1},
+      "cash_delta": -4,
+      "inventory_delta": {"seed": 1}
+    },
+    {
+      "key": "place-seed",
+      "kind": "place",
+      "earliest_turn": 10,
+      "latest_turn": 11,
+      "phase": "place",
+      "depends_on": ["buy-seed"],
+      "actor_demand": {"farmer": 1},
+      "inventory_delta": {"seed": -1},
+      "room_delta": {"plot": 1}
+    },
+    {
+      "key": "water-crop",
+      "kind": "service",
+      "earliest_turn": 11,
+      "latest_turn": 12,
+      "phase": "service",
+      "depends_on": ["place-seed"],
+      "actor_demand": {"farmer": 1},
+      "machine_demand": {"well": 1},
+      "inventory_delta": {"water": -1}
+    },
+    {
+      "key": "harvest-crop",
+      "kind": "harvest",
+      "earliest_turn": 12,
+      "latest_turn": 15,
+      "phase": "harvest",
+      "depends_on": ["water-crop"],
+      "actor_demand": {"farmer": 1},
+      "inventory_delta": {"wheat": 2},
+      "room_delta": {"plot": -1}
+    },
+    {
+      "key": "drop-crop",
+      "kind": "drop",
+      "earliest_turn": 12,
+      "latest_turn": 16,
+      "phase": "drop",
+      "depends_on": ["harvest-crop"],
+      "actor_demand": {"farmer": 1},
+      "inventory_delta": {"wheat": -2},
+      "room_delta": {"shed": 2}
+    },
+    {
+      "key": "sell-crop",
+      "kind": "sell",
+      "earliest_turn": 12,
+      "latest_turn": 17,
+      "phase": "sell",
+      "depends_on": ["drop-crop"],
+      "actor_demand": {"system": 1},
+      "cash_delta": 9,
+      "room_delta": {"shed": -2},
+      "settlement_lag": 1
+    }
+  ]
+}

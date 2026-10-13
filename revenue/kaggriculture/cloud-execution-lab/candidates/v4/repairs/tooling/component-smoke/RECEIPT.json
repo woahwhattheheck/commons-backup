@@ -1,0 +1,115 @@
+{
+  "canonical_ref": "main",
+  "canonical_root": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "e20": {
+    "blob_identity_verified": true,
+    "bound_helper_unchanged": true,
+    "helper": {
+      "bytes": 5995,
+      "git_blob": "9aaba92c5888df854f309b7d4a515ec1bf82020c",
+      "sha256": "59a3ebfe98ebfc9ef849e8b91999daf38ca74517e6511cabd8581bda362f4966"
+    },
+    "matrix_cases_per_mode": 9604,
+    "modes": [
+      0,
+      1
+    ],
+    "provenance": "Exact main file reads via GitHub connector, reproduced locally with verified Git blob hashes; not a full checkout or official-engine game run.",
+    "selected_tests_per_mode": 14,
+    "status": "passed",
+    "test": {
+      "bytes": 11566,
+      "git_blob": "b01fe1bfce779ce8178913547f0e8edbfefc2961",
+      "sha256": "36c6ec45b7506cabe635cad8d4db25851a7208d001e9f22f307825ea25d6b2c2"
+    }
+  },
+  "evidence": {
+    "e20-component-receipt.json": {
+      "bytes": 6672,
+      "git_blob": "85332511c4b912706e18ff32aed3377361bf9b30",
+      "sha256": "42b1e7df0c851ac4f346984a85e6151cf76528f0a82d08a8f0696232178ed580"
+    },
+    "missing-s1-selector-receipt.json": {
+      "bytes": 6577,
+      "git_blob": "4a7cffa36be60782e03c857995c5630909b7c064",
+      "sha256": "784937e23b459a41892ef07c61677187ad598cae88b51a252bd1d648f6df7cd2"
+    },
+    "runner-normal.log": {
+      "bytes": 2540,
+      "git_blob": "0ff24881f03f32e9a0f9284eab02a11cf687cf20",
+      "sha256": "388e6b590857c0fde336b210f921d31b846bca6f4e51b4464d36580a95d671c1"
+    },
+    "runner-optimized.log": {
+      "bytes": 2540,
+      "git_blob": "3365e8880406d34246f1fbdaa8f4ece2585c4fdf",
+      "sha256": "417b79132c8e662873ee62dcdf682ed0293231af26cb27906222b32c57bef375"
+    }
+  },
+  "legacy_ci": {
+    "base": "465f4263da1c98acf78889d67cdd21b61dbba145",
+    "diagnosis": "Both failures precede Python/gameplay execution. No guard weakening or current-main gameplay rollback justified by these runs.",
+    "error": "refusing diverged V4 candidate: BASE_SHA is not an ancestor of HEAD_SHA",
+    "head": "6b7a9813a00ef9321405d7388b5a4228f31d0c4a",
+    "runs": [
+      {
+        "job": 103477416567,
+        "lane": "E20",
+        "pr": 12643,
+        "run": 34665837414
+      },
+      {
+        "job": 103477606902,
+        "lane": "S1",
+        "pr": 12630,
+        "run": 34665902561
+      }
+    ]
+  },
+  "no_changes": [
+    "gameplay source",
+    "production defaults",
+    "trust-root workflow",
+    "archive",
+    "Kaggle submission"
+  ],
+  "owner": "ASTRA-CI-FORGE",
+  "s1": {
+    "current_manifest_blob": "f1489ef4d7cec18fa4cda6f858353ed63d4530a9",
+    "current_manifest_status": "donor_only_default_off",
+    "mixed_e20_s1_exit_code": 1,
+    "mixed_e20_s1_gate_status": "failed",
+    "observation": "Current directory listing contained MANIFEST.json only; original test path returned 404. No repository-wide absence claim. No donor substitution.",
+    "path": "repairs/gameplay/s1-fert-sweep",
+    "status": "not_executed",
+    "unmatched_selectors": [
+      "repairs/gameplay/s1-fert-sweep/test_*.py"
+    ]
+  },
+  "schema": "titan-v4-component-smoke-delivery/v1",
+  "scope": "isolated unittest correctness only; no production, gameplay-strength, whole-package, hosted CI or promotion claim",
+  "selftests": {
+    "normal": {
+      "command": "/usr/bin/python3 -S -B -m unittest -v test_run_components",
+      "status": "passed",
+      "tests": 18
+    },
+    "optimized": {
+      "command": "/usr/bin/python3 -S -B -O -m unittest -v test_run_components",
+      "status": "passed",
+      "tests": 18
+    },
+    "qualification": "Initial 10-second CLI harness budget was too short for nested interpreter startup; increased to 60 and reran both modes. -S is inherited only when explicitly used by caller."
+  },
+  "source": {
+    "run_components.py": {
+      "bytes": 11108,
+      "git_blob": "61632937b0a1f71876e796751d7f61f1a751a5f0",
+      "sha256": "8999b764345d6cfa392605cd96b9a03a049f8e3c8cdb11096658aa28ade1d9b0"
+    },
+    "test_run_components.py": {
+      "bytes": 7855,
+      "git_blob": "1d17b97a048a949d1637c20e20061510e382e292",
+      "sha256": "2f734909e7365102bda1a06b282e2b8c53ff169dd43c0278e76af64b519deae7"
+    }
+  }
+}

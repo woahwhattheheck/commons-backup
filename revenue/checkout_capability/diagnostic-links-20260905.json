@@ -1,0 +1,159 @@
+{
+  "schema": "commons.existing_diagnostic_payment_links_readback.v1",
+  "read_timestamp_utc": "2026-09-05T11:29:50.741356+00:00",
+  "result": "success",
+  "source": "Already-observed direct provider GET response; no provider call repeated when recording this receipt.",
+  "credential_reference": "stripe/commerce",
+  "provider_calls": [
+    {
+      "method": "GET",
+      "endpoint": "/v1/payment_links",
+      "query": {
+        "limit": 100
+      },
+      "http_status": 200,
+      "pages_read": 1
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v1/payment_links/plink_1UArwVATH4EDE7XDQJprRcM2/line_items",
+      "query": {
+        "limit": 100
+      },
+      "http_status": 200,
+      "pages_read": 1
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v1/payment_links/plink_1UArxFATH4EDE7XD0Fwah6Ib/line_items",
+      "query": {
+        "limit": 100
+      },
+      "http_status": 200,
+      "pages_read": 1
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v1/payment_links/plink_1UArxCATH4EDE7XDM9RJRXCv/line_items",
+      "query": {
+        "limit": 100
+      },
+      "http_status": 200,
+      "pages_read": 1
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v1/payment_links/plink_1UArxDATH4EDE7XDFJmHaUtl/line_items",
+      "query": {
+        "limit": 100
+      },
+      "http_status": 200,
+      "pages_read": 1
+    }
+  ],
+  "pagination": {
+    "payment_links_max_pages": 3,
+    "payment_links_limit_per_page": 100,
+    "payment_links_pages_read": 1,
+    "resolution_stop": "all four exact URLs found",
+    "whole_account_catalog_exhaustiveness": "not claimed",
+    "line_items_limit_per_link": 100,
+    "line_items_pages_per_link": 1,
+    "all_four_line_item_lists_complete": true
+  },
+  "links": {
+    "dealer": {
+      "url": "https://buy.stripe.com/3cIdR8gBf6379uF1Oy43S0b",
+      "payment_link_id": "plink_1UArwVATH4EDE7XDQJprRcM2",
+      "price_id": "price_1UArw8ATH4EDE7XDenkhMfO5",
+      "product_id": "prod_VBEOgKb8rvlt0i",
+      "active": true,
+      "livemode": true,
+      "currency": "usd",
+      "unit_amount": 19900,
+      "unit_amount_decimal": "19900",
+      "price_type": "one_time",
+      "one_time": true,
+      "recurring": null,
+      "quantity": 1,
+      "amount_subtotal": 19900,
+      "amount_total": 19900,
+      "tax_behavior": "unspecified",
+      "adjustable_quantity": null,
+      "line_item_count": 1,
+      "line_items_complete": true
+    },
+    "plant": {
+      "url": "https://buy.stripe.com/14AfZgckZ0IN0Y99h043S0e",
+      "payment_link_id": "plink_1UArxFATH4EDE7XD0Fwah6Ib",
+      "price_id": "price_1UArwuATH4EDE7XD2F2xPvIn",
+      "product_id": "prod_VBEPKBbm82VRup",
+      "active": true,
+      "livemode": true,
+      "currency": "usd",
+      "unit_amount": 19900,
+      "unit_amount_decimal": "19900",
+      "price_type": "one_time",
+      "one_time": true,
+      "recurring": null,
+      "quantity": 1,
+      "amount_subtotal": 19900,
+      "amount_total": 19900,
+      "tax_behavior": "unspecified",
+      "adjustable_quantity": null,
+      "line_item_count": 1,
+      "line_items_complete": true
+    },
+    "referral": {
+      "url": "https://buy.stripe.com/9B600i98N77b9uFeBk43S0c",
+      "payment_link_id": "plink_1UArxCATH4EDE7XDM9RJRXCv",
+      "price_id": "price_1UArwrATH4EDE7XD2COCVmJ5",
+      "product_id": "prod_VBEPsfvtmzL1vk",
+      "active": true,
+      "livemode": true,
+      "currency": "usd",
+      "unit_amount": 19900,
+      "unit_amount_decimal": "19900",
+      "price_type": "one_time",
+      "one_time": true,
+      "recurring": null,
+      "quantity": 1,
+      "amount_subtotal": 19900,
+      "amount_total": 19900,
+      "tax_behavior": "unspecified",
+      "adjustable_quantity": null,
+      "line_item_count": 1,
+      "line_items_complete": true
+    },
+    "repair": {
+      "url": "https://buy.stripe.com/9B66oGacR2QVdKVeBk43S0d",
+      "payment_link_id": "plink_1UArxDATH4EDE7XDFJmHaUtl",
+      "price_id": "price_1UArwsATH4EDE7XD7VajGLjJ",
+      "product_id": "prod_VBEPWEKQSZtg9X",
+      "active": true,
+      "livemode": true,
+      "currency": "usd",
+      "unit_amount": 19900,
+      "unit_amount_decimal": "19900",
+      "price_type": "one_time",
+      "one_time": true,
+      "recurring": null,
+      "quantity": 1,
+      "amount_subtotal": 19900,
+      "amount_total": 19900,
+      "tax_behavior": "unspecified",
+      "adjustable_quantity": null,
+      "line_item_count": 1,
+      "line_items_complete": true
+    }
+  },
+  "limitations": {
+    "tax": "Each price tax_behavior was unspecified. The observed line-item subtotal and total do not establish tax treatment for a future checkout.",
+    "adjustable_quantity": "adjustable_quantity was absent or null in returned line items; buyer adjustment behavior is unverified. Observed quantity was 1.",
+    "account_identity": "No account endpoint called. Account binding remains the existing UI/capability snapshot; no fresh account API identity verification is claimed.",
+    "purchase": "No purchase, checkout completion, paid demand, fulfillment or refund was executed or verified by this read."
+  },
+  "provider_mutations": false,
+  "customer_data_recorded": false,
+  "credential_values_recorded": false
+}

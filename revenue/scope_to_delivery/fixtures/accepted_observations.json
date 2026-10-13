@@ -1,0 +1,57 @@
+{
+  "schema_version": "commons-scope-observations/v1",
+  "kind": "EXECUTION_OBSERVATIONS",
+  "agreement_id": "agr-synthetic-production-survival-20260828-01",
+  "observations": [
+    {
+      "observation_id": "obs-work-started-20260828-01",
+      "kind": "WORK_STARTED",
+      "row_id": null,
+      "result": "UNMEASURED",
+      "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-happy-path.txt",
+      "sha256": "7d82130263dc884893160594a8f0fc7f12d55b07e03376e7c2f6731de7a84b69",
+      "observed_at": "2026-08-28T13:05:00-04:00",
+      "note": "Synthetic work started inside the window."
+    },
+    {
+      "observation_id": "obs-happy-20260828-01",
+      "kind": "ACCEPTANCE_ROW",
+      "row_id": "happy-path",
+      "result": "PASS",
+      "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-happy-path.txt",
+      "sha256": "7d82130263dc884893160594a8f0fc7f12d55b07e03376e7c2f6731de7a84b69",
+      "observed_at": "2026-08-28T14:00:00-04:00",
+      "note": "Happy path recovered with one external effect."
+    },
+    {
+      "observation_id": "obs-fail-20260828-01",
+      "kind": "ACCEPTANCE_ROW",
+      "row_id": "failure-or-stop-path",
+      "result": "PASS",
+      "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-failure-path.txt",
+      "sha256": "82018ee45019ff45e141f7463f22867516359abcfc749cc8fff0107d87a80280",
+      "observed_at": "2026-08-28T14:20:00-04:00",
+      "note": "Forced crash stop path visible."
+    },
+    {
+      "observation_id": "obs-roll-20260828-01",
+      "kind": "ACCEPTANCE_ROW",
+      "row_id": "rollback-or-reset",
+      "result": "PASS",
+      "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-rollback.txt",
+      "sha256": "90ea46a12d45ba02458b8e5b6d9d368488155687094feb87a0fb1ed0e588df16",
+      "observed_at": "2026-08-28T14:40:00-04:00",
+      "note": "Idempotency key reused; dedupe hit recorded."
+    },
+    {
+      "observation_id": "obs-receipt-20260828-01",
+      "kind": "ACCEPTANCE_ROW",
+      "row_id": "durable-receipt",
+      "result": "PASS",
+      "public_ref": "revenue/scope_to_delivery/fixtures/synthetic-receipt.txt",
+      "sha256": "5dd3fa5c5ce97ab5dd8dc91cf82644eef78830af3ed35fd4e0780c85762333ee",
+      "observed_at": "2026-08-28T15:00:00-04:00",
+      "note": "Receipt links proof and states limits."
+    }
+  ]
+}

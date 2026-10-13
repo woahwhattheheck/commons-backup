@@ -1,0 +1,132 @@
+{
+  "schema": "titan.completed-route-recovery.v1",
+  "source_ref": "9db2f2f94666b3ca126f97ab98d28f9a3814de4f",
+  "default_features": {
+    "consumer": "frozen",
+    "seed": true,
+    "funding": true,
+    "terminal_route": false,
+    "committed": true,
+    "budget_seconds": 1.0,
+    "reserve_seconds": 0.01,
+    "terminal_history": false,
+    "history_hypotheses": null,
+    "terminal_tie_break": "baseline"
+  },
+  "cases": {
+    "production-entry-434-p1.json": {
+      "player": 1,
+      "boundary": "production_entry",
+      "cancel_step": 434,
+      "through": 436,
+      "route_continuity": false,
+      "counts": {
+        "reference": {
+          "act": 437,
+          "parent": 437,
+          "initialization": 1
+        },
+        "cancelled": {
+          "act": 437,
+          "parent": 436,
+          "initialization": 2
+        }
+      },
+      "report_sha256": "5a10cc507d474264bfdc4b20a02eab1e4acc45405cfbccdc09b8cc9b5646dcd9"
+    },
+    "production-return-433-p1.json": {
+      "player": 1,
+      "boundary": "production_return",
+      "cancel_step": 433,
+      "through": 435,
+      "route_continuity": true,
+      "counts": {
+        "reference": {
+          "act": 436,
+          "parent": 436,
+          "initialization": 1
+        },
+        "cancelled": {
+          "act": 436,
+          "parent": 436,
+          "initialization": 2
+        }
+      },
+      "report_sha256": "1ea811e9ac6bab012bbce35a15f3ce77e437cff6ce13e2b2b336b44e74554e16"
+    },
+    "selected-433-p1.json": {
+      "player": 1,
+      "boundary": "selected_transform",
+      "cancel_step": 433,
+      "through": 435,
+      "route_continuity": false,
+      "counts": {
+        "reference": {
+          "act": 436,
+          "parent": 436,
+          "initialization": 1
+        },
+        "cancelled": {
+          "act": 436,
+          "parent": 436,
+          "initialization": 2
+        }
+      },
+      "report_sha256": "f7eb19e4b865c530d5e091e9cd74e5c06392fe68f5bb2f07b0fafc32101f451d"
+    },
+    "selected-434-p0.json": {
+      "player": 0,
+      "boundary": "selected_transform",
+      "cancel_step": 434,
+      "through": 578,
+      "route_continuity": false,
+      "counts": {
+        "reference": {
+          "act": 579,
+          "parent": 579,
+          "initialization": 1
+        },
+        "cancelled": {
+          "act": 579,
+          "parent": 579,
+          "initialization": 2
+        }
+      },
+      "report_sha256": "7dd954c8ce97129fa21fca5a3f0434f292293b72680d6f93e5f8a17fe914f764"
+    },
+    "selected-434-p1.json": {
+      "player": 1,
+      "boundary": "selected_transform",
+      "cancel_step": 434,
+      "through": 578,
+      "route_continuity": false,
+      "counts": {
+        "reference": {
+          "act": 579,
+          "parent": 579,
+          "initialization": 1
+        },
+        "cancelled": {
+          "act": 579,
+          "parent": 579,
+          "initialization": 2
+        }
+      },
+      "report_sha256": "a9152c565b4e9dd9dd7123885dede91f6900bd8827774b8e7b44ea07c2ef6389"
+    }
+  },
+  "case_count": 5,
+  "route_lost_cases": 4,
+  "actual_agent_calls": 4934,
+  "parent_profile_call_events": 4933,
+  "new_games": 0,
+  "new_engine_transitions": 0,
+  "natural_timeout_reproduction": false,
+  "source_sha256": {
+    "SOURCE-PINS.json": "5cd80a3699e0529f77f2bca7d041f02ae90d96cb406da4a4017206a3013cd030",
+    "ROUTE-RECOVERY.md": "b78b1820a77b80cc138e808c193a0cdad64a74305e570df77a09ae033f2beb3d",
+    "check_route_recovery.py": "349d04fe447c1628ccc9bed5c3c9b8464df87eab2143628a3ae66188b5c88601"
+  },
+  "input_archive_sha256": "b64a2363365b4e6711c08c38b3398bc44466994ef3d4d75da2a35be9d8488568",
+  "interpretation": "Completed-route recovery defect under controlled timer-sentinel injection; fixed own observations after the intervention, not a responsive game or economic loss."
+}

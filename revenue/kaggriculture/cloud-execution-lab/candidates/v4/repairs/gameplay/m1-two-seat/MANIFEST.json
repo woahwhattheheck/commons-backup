@@ -1,0 +1,30 @@
+{
+  "repair": "m1_two_seat_public_schema",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "status": "preserved_verified_donor_repair",
+  "source_order": "after M1 huge-int money hardening",
+  "canonical_baseline": {
+    "commit": "15b2b5d2025a7c6976557b5ec3e458a3f09f412b",
+    "tree": "79d122d9a73592dd11b6911852c0f0162b2f8713"
+  },
+  "donor_lineage": {
+    "bridge": "c52d5093a1fca5d8efb7d6987abb3cc34226c5ed",
+    "huge_int_child": "7f54f16b2ab85f1b614c1395334b0d03841b6027",
+    "input_source_blob": "429e32b3eb0ac9fa7bb440dce8fdf3c882210a6a"
+  },
+  "artifacts": {
+    "two_seat_patch_blob": "cf9ebb5890262c2e04d21a557009d564851d214d",
+    "postimage_blob": "d4d068d62ffc8fcd25842193bc7031f764630262",
+    "combined_regression_blob": "5695a41e8baca3da1b0b730ebcb3c27e6fa0bc8d"
+  },
+  "contract": [
+    "require exactly two public farm seats before any M1 scarcity-state mutation",
+    "require player to be exactly integer seat 0 or 1",
+    "malformed public seat/player shape returns the parent action before _observe_scarcity",
+    "retain hostile huge-int money fail-close semantics from the immediate donor",
+    "do not change feature key defaults, economics, router topology, or production activation",
+    "do not execute the legacy r04 materializer against the current production runtime"
+  ],
+  "legacy_detached_lineage_authority": false,
+  "production_activation": false
+}

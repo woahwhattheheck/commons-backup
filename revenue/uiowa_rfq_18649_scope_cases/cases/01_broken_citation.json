@@ -1,0 +1,37 @@
+{
+  "schema": "uiowa-139-scope-cases/1",
+  "id": "CASE-01",
+  "title": "Broken citation in a draft finding",
+  "request": {
+    "from": "prospective_prime",
+    "class": "broken_citation",
+    "summary": "Draft finding ESS-SEC-F03 cites SRC-404, which is not in the delivered evidence register.",
+    "exact_edit": "Replace `[SRC-404]` on ESS-SEC-F03 with an explicit HOLD. Do not invent a substitute observation."
+  },
+  "artifact": {
+    "phase": "draft",
+    "id": "ESS-SEC-F03",
+    "cell": "ESS/security",
+    "before_state": "supported",
+    "after_state": "hold",
+    "technical_conclusion_changed": true,
+    "before": "ESS / security / F-03: Privileged-access reviews are performed annually. [SRC-404]",
+    "after": "ESS / security / F-03: HOLD — citation SRC-404 is not present in the delivered evidence register. No substitute observation is invented. Cell remains HOLD until a register source ID is supplied."
+  },
+  "source_clauses": [
+    "S5_2_1_TRACE",
+    "S5_2_3_NO_PROMOTE",
+    "S7_CURE_NOT_SCOPE",
+    "S2_TRIGGERS"
+  ],
+  "disposition": "ARTIFACT_CURE_IN_SCOPE",
+  "rationale": "Section 5.2.1 requires every populated technical conclusion to trace to a source ID in the delivered register. SRC-404 is absent, so the populated conclusion is genuine TJLabs artifact nonconformance. Section 7 says a small correction of that kind is not new scope. Section 2 is unchanged: draft remains delivery-triggered; this cure is not a payment event.",
+  "effort": {
+    "class": "in_scope_defect_correction",
+    "hours_hypothetical": 1,
+    "usd_incremental": 0,
+    "label": "HYPOTHETICAL / NOT ACCEPTED"
+  },
+  "commercial_triggers_preserved": true,
+  "payment_effect": "NONE_SECTION_2_UNCHANGED"
+}

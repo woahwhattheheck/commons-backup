@@ -1,0 +1,57 @@
+name: TITAN V5 fertilizer floor current ABI
+
+on:
+  push:
+    branches:
+      - astra/titan-v5-fert-floor-arbitrage-current-abi-20260912
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/fert-floor-arbitrage-current-abi/**
+      - .github/workflows/titan-v5-fert-floor-arbitrage-current-abi.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12']
+    steps:
+      - name: Resolve exact source head
+        id: source
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "sha=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.source.outputs.sha }}
+          fetch-depth: 1
+      - name: Assert exact head
+        shell: bash
+        run: test "$(git rev-parse HEAD)" = "${{ steps.source.outputs.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Focused contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/fert-floor-arbitrage-current-abi
+        run: |
+          python -B -m py_compile \
+            fert_floor_current.py fert_floor_engagement.py \
+            test_fert_floor_current.py test_fert_floor_engagement.py
+          python -B -m unittest -v \
+            test_fert_floor_current.py test_fert_floor_engagement.py
+          python -O -B -m unittest -v \
+            test_fert_floor_current.py test_fert_floor_engagement.py
+      - name: Repository guards
+        shell: bash
+        run: |
+          git diff --check
+          test -z "$(git status --porcelain)"

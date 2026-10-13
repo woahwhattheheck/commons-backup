@@ -1,0 +1,121 @@
+{
+  "additional_fert_operating_stock_regression": {
+    "normal_passed": 31,
+    "optimized_passed": 31,
+    "test_blob": "6f17352352f3c40612d306aa2ef9ac0c390b538c"
+  },
+  "artifact_id": 10123395668,
+  "canonical_branch": "main",
+  "claim_slack_ts": "1789179888.849939",
+  "execution_outputs": {
+    "results-normal.json": {
+      "bytes": 27451,
+      "sha256": "2301414ee7bf7c5f0fa0cdd541f6912b79692fbf2e20b1475054cffb9236baf7"
+    },
+    "results-optimized.json": {
+      "bytes": 27450,
+      "sha256": "d6ba8b4e6072c5b027ccf7546de86f748f3cb429f9cfaf7cdeac4dca12cbe225"
+    },
+    "results-predecessor-optimized.json": {
+      "bytes": 1428,
+      "sha256": "845c2aec51580ac0d0e8ce46a9a62dce6a71acf99f84cb04b2600fc7a35b1541"
+    },
+    "results-predecessor.json": {
+      "bytes": 1429,
+      "sha256": "d8e97e66cbb574c73f1170a2641d7ec9166457fc640a70aaf8ac47464da7b279"
+    }
+  },
+  "files": {
+    "README.md": {
+      "bytes": 5320,
+      "git_blob": "b44c0b5aec0222b82062de419780d92455432339",
+      "sha256": "deacbf743bbce38eeee741b715012013aa5d658f3641f1abbc106531accfbb1d"
+    },
+    "repair_feed_harvest.py": {
+      "bytes": 3431,
+      "git_blob": "9e842916795c23b8f819f6c1064ad669a26613ed",
+      "sha256": "65224faa1bfcb5796ac90a16a1d2fd10be17754613e0d8173d457b63c93af058"
+    },
+    "test_feed_harvest.py": {
+      "bytes": 18998,
+      "git_blob": "9c63b21f72bdf141f14529e790b6a99fb159da73",
+      "sha256": "73156d3bd27a4391bf61c08dfd0a957aea77d31eaf440ebab3af1dcdd8924d74"
+    }
+  },
+  "inputs": {
+    "checks/reference/engine/kaggriculture.json": "b354d06b742fe48402513792253f1a5c29366b20",
+    "checks/reference/engine/kaggriculture.py": "3c202c7ee921da239356789e266b694635103fc4",
+    "checks/reference/engine/utils.py": "91c8822ee6201ba4a5a8416c7dbe34f95dd61c87",
+    "checks/reference/evaluator/evaluate.py": "1fb6b655bb4ca1e1684be165a8ef513e2e6c2325",
+    "checks/reference/evaluator/loader.py": "23948e10cfc3d32f46c9abb1321b0d8fc8db21d5",
+    "checks/test_engine_semantics.py": "5fc139742d1fb8cc757e9bf58c033794b7f8ec5f",
+    "checks/test_feed_stock.py": "ebdefd88e59c0a0c3fce8514edf792e92664ef5d",
+    "mechanics.py": "044a4f9c0a4a44dde10ada57563238bcaf82075d",
+    "operating_stock.py": "781aa90da0d85d0ba23c665e29d6087d182c085e",
+    "titan_runtime.py": "b952c9c228ecbde592bf3d2df01638677abb0d24"
+  },
+  "isolated_repaired_operating_stock_blob": "fc7c95b8d779d8d46b22a22f9553d8d57befcd94",
+  "mutants": [
+    "omit_harvest_record",
+    "wrong_crop",
+    "reverse_time",
+    "ignore_farmer",
+    "cross_actor_veto"
+  ],
+  "next_integration": "Sole current-runtime serializer: apply repair_source to the current operating_stock text, preserve disjoint FERT-prefix work, rerun package and field gates.",
+  "normal": {
+    "errors": 0,
+    "grid_cells": 144,
+    "interpreter_calls": 9300,
+    "mutants_rejected": 5,
+    "tests_passed": 39
+  },
+  "optimized": {
+    "errors": 0,
+    "grid_cells": 144,
+    "interpreter_calls": 9300,
+    "mutants_rejected": 5,
+    "tests_passed": 39
+  },
+  "owner": "ASTRA-PASTURE",
+  "predecessor_negative_control_each_mode": {
+    "errors": 0,
+    "exit_code": 1,
+    "failed_assertions_or_subcases": 149,
+    "tests_run": 39
+  },
+  "python": "3.13.5",
+  "recorded_at_utc": "2026-09-12T02:43:17.199180+00:00",
+  "scope_limits": [
+    "Constructed trajectories, not a natural replay corpus",
+    "No complete agent initialization or whole-game win-rate/EV panel",
+    "Conservative identity fallback may decline a harvest that would fail; field gates remain",
+    "Only pinned used artifact inputs are claimed current",
+    "No production source/default/archive/Actions dispatch/Kaggle changes by this lane"
+  ],
+  "source_commit": "b3cc232d91a6ad9b4fa2c8f08b164d1f76da781b",
+  "status": "SOURCE_AND_TESTS_LANDED_CURRENT_NATIVE_REPAIR_NOT_PRODUCTION_PROMOTION",
+  "tests_commit": "c42f8bea0604ef4a37ced51105ffb9e6f3c84a32",
+  "witness_each_seat": {
+    "feeds_succeeded_parent_and_predecessor": 2,
+    "parent_end": {
+      "FERTILIZER": 8,
+      "MILK": 92,
+      "WHEAT": 0,
+      "cash": 49407
+    },
+    "predecessor_end": {
+      "FERTILIZER": 8,
+      "MILK": 91,
+      "WHEAT": 1,
+      "cash": 49361
+    },
+    "repaired_full_engine_state_equals_parent": true,
+    "step_interval": [
+      460,
+      479
+    ]
+  },
+  "workflow_run_id": 34400824037,
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/feed-stock-harvest"
+}

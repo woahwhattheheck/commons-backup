@@ -1,0 +1,115 @@
+{
+  "activation_authorized": false,
+  "authenticated_runtime_archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+  "canonical_family": "candidates/v4/repairs/gameplay/b7-shed-overflow",
+  "current_abi_witness": {
+    "calls": 2,
+    "engine_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "fallbacks": 0,
+    "runtime_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+    "scheduler_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+    "scope": "current ABI + constructed EOD capacity witness; no economics/default activation",
+    "seats": [
+      {
+        "baseline_eod_wheat": 10,
+        "candidate_eod_wheat": 20,
+        "candidate_fertilizer": 10,
+        "cash": 10,
+        "proposal": [
+          "SELL",
+          "FERTILIZER",
+          10
+        ],
+        "public_inventory_after_floor_sale": 10493,
+        "seat": 0
+      },
+      {
+        "baseline_eod_wheat": 10,
+        "candidate_eod_wheat": 20,
+        "candidate_fertilizer": 10,
+        "cash": 10,
+        "proposal": [
+          "SELL",
+          "FERTILIZER",
+          10
+        ],
+        "public_inventory_after_floor_sale": 10493,
+        "seat": 1
+      }
+    ]
+  },
+  "economic_authorization": false,
+  "engine_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "engine_witness": {
+    "conclusion": "floor SELL is paid disposal, not recoverable market custody",
+    "engine_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "fert_floor_inventory": 10493,
+    "single_seat": {
+      "buyback_cost_100": 1150.0,
+      "inventory_after_buyback": 10393,
+      "inventory_after_sale": 10493,
+      "sale_cash": [
+        101.0,
+        0.0
+      ],
+      "two_seat": false
+    },
+    "two_seat_lockstep": {
+      "buyback_cost_100": 1130.0,
+      "inventory_after_buyback": 10394,
+      "inventory_after_sale": 10494,
+      "sale_cash": [
+        101.0,
+        101.0
+      ],
+      "two_seat": true
+    },
+    "warehouse_claim": false
+  },
+  "forbidden": [
+    "no Features/config/default/archive/Kaggle mutation",
+    "do not call floor sales recoverable custody",
+    "do not replace existing FERT seller/HERDSCALE/operating-stock owners"
+  ],
+  "kind": "titan-v4-b7-fert-floor-disposal-correction",
+  "runtime_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+  "scheduler_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+  "source_files": {
+    "FERT_FLOOR_DISPOSAL.md": {
+      "bytes": 4478,
+      "git_blob": "1508ae340149793684b779b662ea3c2c24583ac9",
+      "sha256": "c08ff3184b19f67bfc0299b0d036c5c72c91b7dc1854f20160b28a613cca6213"
+    },
+    "check_fert_floor_current_abi.py": {
+      "bytes": 4031,
+      "git_blob": "e925c7ef3ca49862044d05058ee0464dd3b65e74",
+      "sha256": "63d9cb534428e090bcfa5594d6d402a5c36c99390a4ddbc862ad3650ae4d14a3"
+    },
+    "check_fert_floor_engine.py": {
+      "bytes": 3775,
+      "git_blob": "bcd9148b424f0ca18679d681dc7ed0dffd17b6ba",
+      "sha256": "9a3b67beffa53c9b9bec1e15bfcec8d9d61c0a9cfd9f55bbf505145a41b7780a"
+    },
+    "fert_floor_disposal.py": {
+      "bytes": 7409,
+      "git_blob": "79c172c5c72a84463851b5eecd71789bc1d4fcfb",
+      "sha256": "dafc50c09a84cbb16be87262c83e3083ece544d4d502cc54a722402495297612"
+    },
+    "test_fert_floor_disposal.py": {
+      "bytes": 3640,
+      "git_blob": "cc1d1f408eecee285649e9ef223fb0b27f2caab7",
+      "sha256": "cf37df6b55be95630c729994f2f3b5761a07567a01f6efdafc07d9a647e52a82"
+    }
+  },
+  "status": "source-bound-capacity-analyzer-not-activation",
+  "tests": {
+    "current_abi_normal": "2/2 seats pass",
+    "current_abi_optimized": "2/2 seats pass_byte_identical_stdout",
+    "engine_normal": "pass",
+    "engine_optimized": "pass_byte_identical_stdout",
+    "py_compile": "pass",
+    "unit_normal": "12/12",
+    "unit_optimized": "12/12"
+  },
+  "warehouse_claim": false
+}

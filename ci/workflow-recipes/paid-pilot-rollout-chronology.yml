@@ -1,0 +1,36 @@
+name: Paid Pilot Rollout Chronology
+
+on:
+  push:
+    paths:
+      - 'revenue/hive/paid-pilot-rollout-desk/**'
+      - '.github/workflows/paid-pilot-rollout-chronology.yml'
+  pull_request:
+    paths:
+      - 'revenue/hive/paid-pilot-rollout-desk/**'
+      - '.github/workflows/paid-pilot-rollout-chronology.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  chronology-contract:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile source and tests
+        working-directory: revenue/hive/paid-pilot-rollout-desk
+        run: python -m py_compile rollout_desk.py test_rollout_desk.py
+      - name: Run chronology and predecessor contract
+        working-directory: revenue/hive/paid-pilot-rollout-desk
+        run: python -m unittest -v test_rollout_desk.py
+      - name: Run optimized chronology and predecessor contract
+        working-directory: revenue/hive/paid-pilot-rollout-desk
+        run: python -O -m unittest -q test_rollout_desk.py

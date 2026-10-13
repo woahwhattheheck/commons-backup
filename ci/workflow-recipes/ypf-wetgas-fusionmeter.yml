@@ -1,0 +1,51 @@
+name: ypf-wetgas-fusionmeter
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/ypf-wet-gas-fusionmeter-2026/**'
+      - '.github/workflows/ypf-wetgas-fusionmeter.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/ypf-wet-gas-fusionmeter-2026/**'
+      - '.github/workflows/ypf-wetgas-fusionmeter.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: competitions/ypf-wet-gas-fusionmeter-2026
+        run: python -m compileall -q fusionmeter tests
+      - name: Unit and hostile tests
+        working-directory: competitions/ypf-wet-gas-fusionmeter-2026
+        run: PYTHONPATH=. python -m unittest discover -s tests -v
+      - name: Optimized-Python hostile tests
+        working-directory: competitions/ypf-wet-gas-fusionmeter-2026
+        run: PYTHONPATH=. python -O -m unittest discover -s tests -v
+      - name: Checked-in readiness must fail closed
+        working-directory: competitions/ypf-wet-gas-fusionmeter-2026
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=. python -m fusionmeter.cli readiness fixtures/synthetic_certificate.json readiness.json > /tmp/readiness.json
+          rc=$?
+          set -e
+          test "$rc" -eq 2
+          python - <<'PY'
+          import json
+          value=json.load(open('/tmp/readiness.json'))
+          assert value['status']=='BLOCKED'
+          assert value['blockers']
+          PY

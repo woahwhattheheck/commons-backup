@@ -1,0 +1,45 @@
+name: Public procurement comparable corpus
+on:
+  pull_request:
+    paths:
+      - "revenue/procurement_award_price_intelligence/comparable_corpus_20260916/**"
+      - "revenue/procurement_award_price_intelligence/adapters.py"
+      - "revenue/procurement_award_price_intelligence/engine.py"
+      - ".github/workflows/public-procurement-comparable-corpus.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/procurement_award_price_intelligence/comparable_corpus_20260916/**"
+      - "revenue/procurement_award_price_intelligence/adapters.py"
+      - "revenue/procurement_award_price_intelligence/engine.py"
+      - ".github/workflows/public-procurement-comparable-corpus.yml"
+jobs:
+  validate:
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Validate corpus
+        run: python revenue/procurement_award_price_intelligence/comparable_corpus_20260916/assemble_corpus.py
+      - name: Hostile tests
+        run: python -m unittest -v revenue.procurement_award_price_intelligence.comparable_corpus_20260916.test_corpus
+      - name: Optimized hostile tests
+        run: python -O -m unittest -v revenue.procurement_award_price_intelligence.comparable_corpus_20260916.test_corpus
+      - name: Ready-only query remains fail closed before hydration
+        run: >-
+          test "$(python revenue/procurement_award_price_intelligence/comparable_corpus_20260916/query_corpus.py
+          --buyer MWRD --price-kind AWARD --ready-only)" = "NO_READY_COMPARABLES"
+      - name: Syntax
+        run: >-
+          python -m py_compile
+          revenue/procurement_award_price_intelligence/comparable_corpus_20260916/__init__.py
+          revenue/procurement_award_price_intelligence/comparable_corpus_20260916/validate_corpus.py
+          revenue/procurement_award_price_intelligence/comparable_corpus_20260916/assemble_corpus.py
+          revenue/procurement_award_price_intelligence/comparable_corpus_20260916/test_corpus.py
+          revenue/procurement_award_price_intelligence/comparable_corpus_20260916/query_corpus.py
+          revenue/procurement_award_price_intelligence/comparable_corpus_20260916/hydrate_corpus.py

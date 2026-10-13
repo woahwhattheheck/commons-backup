@@ -1,0 +1,243 @@
+name: TITAN V4 H3S420 current-native field gate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/sale-window-engagement/run_h3s420_current_field.py
+      - .github/workflows/titan-v4-h3s420-field.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: titan-v4-h3s420-field-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  current-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Authenticate source graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4
+          SALE="$V4/research/sale-window-engagement"
+          FUND="$V4/repairs/performance/funding-replay"
+          UNIT="$V4/repairs/runtime/joint-unit-projection/compose.py"
+          SPINDLE="$V4/repairs/performance/compose_scoped_constructor.py"
+          LIVE="$V4/repairs/performance/projection-state-clone/compose.py"
+          HELPER=revenue/kaggriculture/cloud-quickstep/scoped_method_cache.py
+          CHALLENGER="$V4/research/opponent-challengers/reactive_challengers.py"
+
+          test "$(git hash-object "$SALE/compose_current_h3s420.py")" = 7c5778b4d6d7c47f8feca7e800fc8093267b66f8
+          test "$(git hash-object "$SALE/test_compose_current_h3s420.py")" = 58cdeedfe251c408ab3f5d1186159a3d910da359
+          test "$(git hash-object "$FUND/apply_town_funding.py")" = 527811763c80e627895d8e11319f8877b18105e6
+          test "$(git hash-object "$UNIT")" = e1127c4aad842278a9e617903b0718d21c00f348
+          test "$(git hash-object "$FUND/apply_funding_replay.py")" = d579759e8f6bd6c4649d58f220b1b193a9bda491
+          test "$(git hash-object "$FUND/compose_funding_capacity.py")" = d8aa0a6cde7ec74142b806d29d1dca5201d9757a
+          test "$(git hash-object "$SPINDLE")" = 4267520ae966b16bad33083aaa9fb7772f7de045
+          test "$(git hash-object "$HELPER")" = 1438a95e69e76c97542b9b95bff1ca3745fa284e
+          test "$(git hash-object "$LIVE")" = 3f53a5c74c369be0555d63c470bb0519bcb3e306
+          test "$(sha256sum "$CHALLENGER" | awk '{print $1}')" = 9fa42931d195553aecf78da33a2170b5bdc17cc6df714e06bc79e86e566ef201
+          python -B -m py_compile "$SALE/run_h3s420_current_field.py" "$SALE/compose_current_h3s420.py"
+
+      - name: Focused H3S420 source regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          SALE=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/sale-window-engagement
+          pushd "$SALE"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v test_compose_current_h3s420
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest -v test_compose_current_h3s420
+          popd
+
+      - name: Recover authenticated b567 runtime
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARTIFACT_ID=10175943272
+          ZIP="$RUNNER_TEMP/h3s420-canonical.zip"
+          EXTRACT="$RUNNER_TEMP/h3s420-artifact"
+          BASE="$RUNNER_TEMP/h3s420-base"
+          mkdir -p "$EXTRACT" "$BASE"
+          curl --fail --location --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o "$ZIP"
+          echo "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8  $ZIP" | sha256sum -c -
+          unzip -q "$ZIP" -d "$EXTRACT"
+          TAR="$EXTRACT/checked-package/exports/titan-current.tar.gz"
+          echo "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9  $TAR" | sha256sum -c -
+          tar -xzf "$TAR" -C "$BASE"
+          test "$(git hash-object "$BASE/frozen_selected.py")" = fc7baf5c179818a55037f6a61d92984d81d1a21c
+          test "$(git hash-object "$BASE/scheduler.py")" = a483b24dd72b580d7d8811636b54d2d44f391575
+          test "$(git hash-object "$BASE/main.py")" = 4a8cf7bcda1f0fea231a144692cb84a779a9e73e
+          printf 'H3_BASE=%s\n' "$BASE" >> "$GITHUB_ENV"
+
+      - name: Materialize exact LOOM-4 postimage
+        shell: bash
+        run: |
+          set -euo pipefail
+          V4="$GITHUB_WORKSPACE/revenue/kaggriculture/cloud-execution-lab/candidates/v4"
+          FUND="$V4/repairs/performance/funding-replay"
+          UNIT="$V4/repairs/runtime/joint-unit-projection/compose.py"
+          SPINDLE="$V4/repairs/performance/compose_scoped_constructor.py"
+          HELPER="$GITHUB_WORKSPACE/revenue/kaggriculture/cloud-quickstep/scoped_method_cache.py"
+          LIVE="$V4/repairs/performance/projection-state-clone/compose.py"
+          COMBINED="$RUNNER_TEMP/h3s420-combined"
+          cp -a "$H3_BASE" "$COMBINED"
+
+          python - "$COMBINED" "$FUND" "$UNIT" <<'PY'
+          import importlib.util
+          from pathlib import Path
+          import sys
+
+          runtime = Path(sys.argv[1])
+          fund = Path(sys.argv[2])
+          unit_path = Path(sys.argv[3])
+
+          def load(name, path):
+              spec = importlib.util.spec_from_file_location(name, path)
+              module = importlib.util.module_from_spec(spec)
+              spec.loader.exec_module(module)
+              return module
+
+          town = load('_h3_town', fund / 'apply_town_funding.py')
+          unit = load('_h3_unit', unit_path)
+          perf = load('_h3_perf', fund / 'apply_funding_replay.py')
+          cap = load('_h3_cap', fund / 'compose_funding_capacity.py')
+
+          scheduler = (runtime / 'scheduler.py').read_text()
+          frozen = (runtime / 'frozen_selected.py').read_text()
+          frozen = town.apply(frozen)
+          scheduler, frozen = unit.compose_sources(scheduler, frozen)
+          frozen = perf.apply(frozen)
+          frozen = cap.apply(frozen)
+          (runtime / 'scheduler.py').write_text(scheduler)
+          (runtime / 'frozen_selected.py').write_text(frozen)
+          PY
+
+          test "$(git hash-object "$COMBINED/scheduler.py")" = eb289f87adebb7dc7e90046bfbec31a307cb5aaa
+          test "$(git hash-object "$COMBINED/frozen_selected.py")" = ef090f6731c2d1ee648e2caaf3e215641b006518
+
+          python "$SPINDLE" \
+            --source "$COMBINED/scheduler.py" \
+            --helper "$HELPER" \
+            --out "$RUNNER_TEMP/h3s420-scheduler-spindle.py" \
+            > "$RUNNER_TEMP/h3s420-spindle-receipt.json"
+          mv "$RUNNER_TEMP/h3s420-scheduler-spindle.py" "$COMBINED/scheduler.py"
+          cp "$HELPER" "$COMBINED/scoped_method_cache.py"
+          test "$(git hash-object "$COMBINED/scheduler.py")" = b29d1e9887f517506c5b3d858baa9bda5848e73f
+
+          python "$LIVE" --package "$COMBINED" --output "$RUNNER_TEMP/h3s420-livepath" \
+            > "$RUNNER_TEMP/h3s420-livepath-stdout.json"
+          cp "$RUNNER_TEMP/h3s420-livepath/frozen_selected.py" "$COMBINED/frozen_selected.py"
+          cp "$RUNNER_TEMP/h3s420-livepath/early_capital.py" "$COMBINED/early_capital.py"
+          cp "$RUNNER_TEMP/h3s420-livepath/projection_clone.py" "$COMBINED/projection_clone.py"
+          test "$(git hash-object "$COMBINED/frozen_selected.py")" = 4a5d3d5f4bed04acf73c7339e41fed56badf34c9
+          test "$(git hash-object "$COMBINED/early_capital.py")" = 460355e30349de19f7e51f8b7c30e2751c18c6f9
+          test "$(sha256sum "$COMBINED/projection_clone.py" | awk '{print $1}')" = f5916d47e01d37d848047930b397003632b98042a53dfc6c027dd85c7ef1c87e
+
+          printf 'H3_COMBINED=%s\n' "$COMBINED" >> "$GITHUB_ENV"
+
+      - name: Materialize byte-identical OFF and H3S420 ON arms
+        shell: bash
+        run: |
+          set -euo pipefail
+          SALE="$GITHUB_WORKSPACE/revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/sale-window-engagement"
+          OFF="$RUNNER_TEMP/h3s420-off"
+          ON="$RUNNER_TEMP/h3s420-on"
+          cp -a "$H3_COMBINED" "$OFF"
+          cp -a "$H3_COMBINED" "$ON"
+
+          python "$SALE/compose_current_h3s420.py" \
+            "$H3_COMBINED/frozen_selected.py" "$RUNNER_TEMP/h3s420-off-frozen.py" \
+            --scheduler "$H3_COMBINED/scheduler.py" \
+            --receipt "$RUNNER_TEMP/H3S420-OFF.json"
+          cmp "$H3_COMBINED/frozen_selected.py" "$RUNNER_TEMP/h3s420-off-frozen.py"
+          cp "$RUNNER_TEMP/h3s420-off-frozen.py" "$OFF/frozen_selected.py"
+
+          python "$SALE/compose_current_h3s420.py" \
+            "$H3_COMBINED/frozen_selected.py" "$RUNNER_TEMP/h3s420-on-frozen.py" \
+            --scheduler "$H3_COMBINED/scheduler.py" \
+            --enable-current-h3s420 \
+            --receipt "$RUNNER_TEMP/H3S420-ON.json"
+          cp "$RUNNER_TEMP/h3s420-on-frozen.py" "$ON/frozen_selected.py"
+
+          test "$(git hash-object "$OFF/frozen_selected.py")" = 4a5d3d5f4bed04acf73c7339e41fed56badf34c9
+          test "$(git hash-object "$OFF/scheduler.py")" = b29d1e9887f517506c5b3d858baa9bda5848e73f
+          test "$(git hash-object "$ON/scheduler.py")" = b29d1e9887f517506c5b3d858baa9bda5848e73f
+          python -B -m py_compile "$OFF/frozen_selected.py" "$ON/frozen_selected.py" "$ON/scheduler.py"
+
+          printf 'H3_OFF=%s\n' "$OFF" >> "$GITHUB_ENV"
+          printf 'H3_ON=%s\n' "$ON" >> "$GITHUB_ENV"
+          printf 'H3_RESULTS=%s\n' "$RUNNER_TEMP/h3s420-results" >> "$GITHUB_ENV"
+
+      - name: Both-seat current-native economics and exact fill audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          SALE=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/sale-window-engagement
+          CHALLENGER=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/opponent-challengers/reactive_challengers.py
+          mkdir -p "$H3_RESULTS"
+          PYTHONDONTWRITEBYTECODE=1 python -B "$SALE/run_h3s420_current_field.py" \
+            --off-runtime "$H3_OFF" \
+            --on-runtime "$H3_ON" \
+            --challenger "$CHALLENGER" \
+            --cases starter:17,starter:9922999,orchard:17 \
+            --child-timeout 240 \
+            --output "$H3_RESULTS/H3S420-CURRENT-FIELD.json" \
+            | tee "$H3_RESULTS/summary.log"
+
+      - name: Bind composition and checkout identities
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$H3_RESULTS"
+          cp "$RUNNER_TEMP/H3S420-OFF.json" "$H3_RESULTS/H3S420-OFF.json" 2>/dev/null || true
+          cp "$RUNNER_TEMP/H3S420-ON.json" "$H3_RESULTS/H3S420-ON.json" 2>/dev/null || true
+          cp "$RUNNER_TEMP/h3s420-spindle-receipt.json" "$H3_RESULTS/SPINDLE-RECEIPT.json" 2>/dev/null || true
+          cp "$RUNNER_TEMP/h3s420-livepath/PROJECTION-CLONE.json" "$H3_RESULTS/LIVEPATH-RECEIPT.json" 2>/dev/null || true
+          git rev-parse HEAD > "$H3_RESULTS/checkout-commit.txt"
+          V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4
+          sha256sum \
+            "$V4/research/sale-window-engagement/compose_current_h3s420.py" \
+            "$V4/research/sale-window-engagement/run_h3s420_current_field.py" \
+            "$V4/repairs/performance/funding-replay/compose_funding_capacity.py" \
+            "$V4/repairs/performance/compose_scoped_constructor.py" \
+            "$V4/repairs/performance/projection-state-clone/compose.py" \
+            > "$H3_RESULTS/source-sha256.txt"
+          if [[ -n "${H3_COMBINED:-}" && -d "$H3_COMBINED" ]]; then
+            {
+              echo "combined_scheduler_git=$(git hash-object "$H3_COMBINED/scheduler.py")"
+              echo "combined_frozen_git=$(git hash-object "$H3_COMBINED/frozen_selected.py")"
+              echo "combined_early_capital_git=$(git hash-object "$H3_COMBINED/early_capital.py")"
+              echo "off_frozen_git=$(git hash-object "$H3_OFF/frozen_selected.py")"
+              echo "on_frozen_git=$(git hash-object "$H3_ON/frozen_selected.py")"
+              echo "on_scheduler_git=$(git hash-object "$H3_ON/scheduler.py")"
+            } > "$H3_RESULTS/composition-identities.txt"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v4-h3s420-current-field-${{ github.run_id }}
+          path: ${{ env.H3_RESULTS }}
+          retention-days: 14
+          if-no-files-found: error

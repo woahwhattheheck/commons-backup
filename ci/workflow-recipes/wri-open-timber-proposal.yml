@@ -1,0 +1,52 @@
+name: WRI Open Timber source-bound carrier
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/wri_open_timber_portal/**'
+      - '.github/workflows/wri-open-timber-proposal.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/wri_open_timber_portal/**'
+      - '.github/workflows/wri-open-timber-proposal.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/wri_open_timber_portal/*.py
+      - name: Source-bound contract tests
+        run: python -m unittest -v revenue.wri_open_timber_portal.test_engine revenue.wri_open_timber_portal.test_cli
+      - name: Optimized source-bound contract tests
+        run: python -O -m unittest -v revenue.wri_open_timber_portal.test_engine revenue.wri_open_timber_portal.test_cli
+      - name: Public fixture must stay submission-held
+        shell: bash
+        run: |
+          set +e
+          python -m revenue.wri_open_timber_portal.cli compile \
+            revenue/wri_open_timber_portal/fixtures/public_known.json > /tmp/wri.json
+          code=$?
+          set -e
+          test "$code" -eq 2
+          python - <<'PY'
+          import json
+          result = json.load(open("/tmp/wri.json", encoding="utf-8"))
+          assert result["technical_readiness"] == "TECHNICALLY_READY_SOURCE_BOUND"
+          assert result["submission_readiness"] == "HOLD_CONTROLLING_SOURCE"
+          assert result["external_submission_authorized"] is False
+          assert result["repo_evidence"]["commit_sha"] == "dc9f33b1d54c6765af67187e4e055125ec952ade"
+          assert result["repo_evidence"]["registry_sha256"] == "4dbbcad844eb7a63902952ab78780d16cac4f8ad46d43bd60a6f9c7b6331dcd2"
+          assert result["authority"] and not any(result["authority"].values())
+          PY

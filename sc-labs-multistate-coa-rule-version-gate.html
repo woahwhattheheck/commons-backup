@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>SC Labs multistate COA rule-version gate — Commons</title>
+<style>
+:root{color-scheme:dark;--bg:#071311;--panel:#10231f;--line:#31564d;--ink:#f3fff9;--muted:#a9c5bc;--mint:#79e3b7;--amber:#ffc46c;--red:#ff8d82}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#174037,var(--bg) 36rem);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
+main{max-width:1120px;margin:auto;padding:28px 16px 80px}a{color:var(--mint)}h1{font-size:clamp(2.4rem,7vw,5rem);line-height:.92;margin:.2em 0;max-width:960px}
+.kicker{color:var(--mint);letter-spacing:.15em;text-transform:uppercase;font-size:.76rem}.lede{max-width:780px;color:var(--muted);font-size:1.08rem}
+.truth{border-left:5px solid var(--amber);padding:11px 15px;background:#2a2112}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}.wide{grid-column:1/-1}
+table{width:100%;border-collapse:collapse}th,td{padding:7px 5px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+button,.button{display:inline-block;border:1px solid var(--mint);border-radius:999px;background:var(--mint);color:#062119;padding:10px 14px;font-weight:800;text-decoration:none;cursor:pointer;margin:3px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;min-height:180px;background:#050b0a;padding:14px;border-radius:10px;color:#d8f7ea}
+.state{display:inline-block;padding:3px 9px;border:1px solid var(--amber);border-radius:999px;color:var(--amber);font-size:.75rem;font-weight:800}
+.small{font-size:.88rem;color:var(--muted)}@media(max-width:780px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="./index.html">← Commons</a> · <a href="./offer.html">offers</a> · <a href="./feature-tracker.html">feature tracker</a></nav>
+<p class="kicker">SC Labs · multistate COA rule-version gate · validation overlay</p>
+<h1>One evidence manifest. Five rule packs. Zero autonomous COA releases.</h1>
+
+
+
+
+<p class="lede">The dependency-light runner accepts normalized/redacted CSV or JSON, joins release evidence, and emits deterministic decision CSV/JSON, a hash-linked evidence manifest, and a human-readable exception report.</p>
+<p class="truth"><strong>Truth boundary:</strong> output is only RELEASEABLE or HOLD for named-human review. This does not interpret chemistry, decide compliance or accreditation, alter results, replace a LIMS, or autonomously release a COA.</p>
+
+<div class="grid">
+<section class="card">
+<h2>Frozen acceptance</h2>
+<table>
+<thead><tr><th>Outcome</th><th>Count</th></tr></thead>
+<tbody>
+<tr><td>Input / RELEASEABLE / HOLD</td><td>150 / 120 / 30</td></tr>
+<tr><td>Expired rule pack</td><td>5</td></tr>
+<tr><td>Jurisdiction/panel mismatch</td><td>5</td></tr>
+<tr><td>Method/limit mismatch</td><td>5</td></tr>
+<tr><td>Custody gap</td><td>5</td></tr>
+<tr><td>Duplicate release identity</td><td>5</td></tr>
+<tr><td>Scope/signer mismatch</td><td>5</td></tr>
+</tbody>
+</table>
+<p class="small"><code>python3 sc_labs_multistate_coa_gate.py --input records.csv --write-artifacts output --evaluation-time 2026-09-01T00:00:00Z</code></p>
+</section>
+
+<section class="card">
+<h2>Tested receipt <span id="state" class="state">NOT LOADED</span></h2>
+<p><button id="load" type="button">Validate receipt</button></p>
+<pre id="output">Load the exact checked-in receipt and artifact hashes.</pre>
+</section>
+
+<section class="card wide">
+<h2>Frozen CSV / JSON / reports</h2>
+<p>
+<a class="button" href="./revenue/sc_labs_multistate_coa_gate/v2/fixture.csv">input CSV</a>
+<a class="button" href="./revenue/sc_labs_multistate_coa_gate/v2/fixture.json">input JSON</a>
+<a class="button" href="./revenue/sc_labs_multistate_coa_gate/v2/decisions.csv">decision CSV</a>
+<a class="button" href="./revenue/sc_labs_multistate_coa_gate/v2/decisions.json">decision JSON</a>
+<a class="button" href="./revenue/sc_labs_multistate_coa_gate/v2/evidence-manifest.json">evidence manifest</a>
+<a class="button" href="./revenue/sc_labs_multistate_coa_gate/v2/exception-report.txt">exception report</a>
+</p>
+<p class="small">Any override is a separate append-only, hash-linked record containing the original HOLD reason, named reviewer, reason, timestamp, and previous-entry hash. Validation output remains immutable. Synthetic fixtures only. No outreach. PRE-SALE TRANSPORT: NONE. cash_usd=0.</p>
+</section>
+</div>
+</main>
+<script>
+(() => {
+  const state = document.getElementById("state");
+  const output = document.getElementById("output");
+  const expected = {
+    RULE_VERSION_EXPIRED:5,
+    PANEL_NOT_VALID_FOR_JURISDICTION:5,
+    METHOD_LIMIT_MISMATCH:5,
+    CUSTODY_GAP:5,
+    DUPLICATE_RELEASE_ID:5,
+    SCOPE_OR_SIGNER_MISMATCH:5
+  };
+  document.getElementById("load").addEventListener("click", async () => {
+    state.textContent = "READING";
+    try {
+      const response = await fetch("./revenue/sc_labs_multistate_coa_gate/v2/receipt.json", {cache:"no-store"});
+      if (!response.ok) throw new Error("receipt HTTP " + response.status);
+      const receipt = await response.json();
+      const failures = [];
+      if (receipt.state !== "TESTED") failures.push("state");
+      if (receipt.input_records !== 150 || receipt.releaseable !== 120 || receipt.held !== 30) failures.push("counts");
+      if (JSON.stringify(receipt.hold_counts) !== JSON.stringify(expected)) failures.push("hold_counts");
+      if (!/^[a-f0-9]{64}$/.test(receipt.evidence_manifest_sha256 || "")) failures.push("manifest");
+      if (!/^[a-f0-9]{64}$/.test(receipt.audit_sha256 || "")) failures.push("audit");
+      if (receipt.autonomous_releases !== 0 || receipt.result_alterations !== 0) failures.push("boundary");
+      state.textContent = failures.length ? "FAIL" : "PASS";
+      output.textContent = JSON.stringify({ok: !failures.length, failures, receipt}, null, 2);
+    } catch (error) {
+      state.textContent = "UNKNOWN";
+      output.textContent = String(error);
+    }
+  });
+})();
+</script>
+
+
+
+</body>
+</html>

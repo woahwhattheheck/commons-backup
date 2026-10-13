@@ -1,0 +1,55 @@
+{
+  "authenticated_baseline_census": {
+    "cells": [
+      {"actual_pickup_events":161,"actual_shed_write_events":117,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":0,"seed":1},
+      {"actual_pickup_events":161,"actual_shed_write_events":117,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":1,"seed":1},
+      {"actual_pickup_events":161,"actual_shed_write_events":116,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":0,"seed":2},
+      {"actual_pickup_events":161,"actual_shed_write_events":116,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":1,"seed":2},
+      {"actual_pickup_events":161,"actual_shed_write_events":116,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":0,"seed":3},
+      {"actual_pickup_events":161,"actual_shed_write_events":116,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":1,"seed":3},
+      {"actual_pickup_events":161,"actual_shed_write_events":116,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":0,"seed":4},
+      {"actual_pickup_events":161,"actual_shed_write_events":116,"callbacks":719,"causal_same_item_links":0,"drop_actions":19,"earlier_write_before_later_pickup_pairs_any_item":7,"place_actions":108,"same_item_links":0,"seat":1,"seed":4}
+    ],
+    "opponent": "official starter",
+    "process_isolation": "fresh Python process per cell",
+    "seats": [0,1],
+    "seeds": [1,2,3,4],
+    "totals": {"actual_pickup_events":1288,"actual_shed_write_events":930,"callbacks":5752,"causal_same_item_links":0,"cells":8,"drop_actions":152,"earlier_write_before_later_pickup_pairs_any_item":56,"place_actions":864,"same_item_links":0}
+  },
+  "authority": {
+    "archive_member": "checked-package/exports/titan-current.tar.gz",
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "census_sha256": "4f0fd08c488849642fa65c1d5bd7ccec4faab1a024bcc326c53232346f7fd072",
+    "github_actions_artifact_id": 10180428228,
+    "probe_sha256": "d3ce3cbf2ae2314505186dac04ee255b3251064761d3953f61521010af19fb27",
+    "reference_engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "reference_engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "source_manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2"
+  },
+  "disposition": {
+    "current_main_postimage_claim": false,
+    "reason": "The engine supports same-callback shed relay semantics, but the authenticated b567 route baseline has zero same-item and zero causal relay links across the executed 8-cell census. The 56 earlier-write/later-pickup pairs are all cross-item and therefore not inventory handoffs.",
+    "required_next_step": "Do not add a second scheduler or runtime hook from this evidence. Re-open only on the sole current one-stack postimage if a logistics/unit owner can construct an output-changing, capacity-safe same-item relay witness with exact OFF identity and fresh economics.",
+    "runtime_admission_authorized": false
+  },
+  "oracle": {
+    "cases": {
+      "drop_capacity_loss": {"cargo_lost":2,"pass":true},
+      "forward_drop_pickup": {"pass":true},
+      "forward_place_pickup": {"pass":true},
+      "item_mismatch": {"pass":true},
+      "reader_not_adjacent": {"pass":true},
+      "reverse_pickup_drop": {"pass":true},
+      "writer_not_adjacent": {"pass":true}
+    },
+    "pass": true,
+    "theorem": [
+      "Unit actions are applied in actor-index order (farmer, then hands) against shared mutable private.shed state before market processing.",
+      "A legal shed-adjacent DROP or shed-path PLACE performed by an earlier actor can be observed by a later same-callback PICKUP of the same item.",
+      "Reverse PICKUP-before-DROP cannot observe the future deposit.",
+      "DROP is destructive above remaining shed capacity: source inventory is cleared even when only a prefix fits."
+    ]
+  },
+  "schema": "titan-v4-shed-relay-validation/v1",
+  "status": "MECHANISM_PROVEN_BASELINE_COLD"
+}

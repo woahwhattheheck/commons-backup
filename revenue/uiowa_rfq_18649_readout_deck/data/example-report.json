@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "report_id": "AIS-ASSESS-EXAMPLE-2026",
+    "title": "Administrative Information Systems assessment - example report (SYNTHETIC)",
+    "status": "draft-example",
+    "fiction_notice": "FICTION. Northgate State University does not exist. Every finding, figure, record and locator below is invented to exercise the deck-agreement engine. Nothing here is a University of Iowa finding or a real assessment result.",
+    "assessed_window": "fictional 2026-01-01 .. 2026-06-30"
+  },
+  "groups": [
+    {"id": "ESS", "name": "Enterprise Service Systems (fictional)"},
+    {"id": "RIS", "name": "Research Information Systems (fictional)"},
+    {"id": "IAM", "name": "Identity and Access Management (fictional)"}
+  ],
+  "evidence": [
+    {"id": "EV-001", "source": "ESS change record export (fictional)", "locator": "ess-change-export-2026H1.csv rows 2-13", "version": "2026-07-01"},
+    {"id": "EV-002", "source": "ESS change procedure (fictional)", "locator": "ESS-CM-PROC v4 section 3.2", "version": "v4"},
+    {"id": "EV-003", "source": "IAM deployment procedure (fictional)", "locator": "IAM-DEP-PROC v2 section 5.1", "version": "v2"},
+    {"id": "EV-004", "source": "IAM deployment record export (fictional)", "locator": "iam-deploy-export-2026H1.csv rows 2-13", "version": "2026-07-01"},
+    {"id": "EV-005", "source": "RIS backup job log (fictional)", "locator": "ris-backup-joblog-2025H2-2026H1.txt lines 1-360", "version": "2026-07-02"},
+    {"id": "EV-006", "source": "ESS alert routing table (fictional)", "locator": "ess-alert-routing.csv rows 2-10", "version": "2026-06-15"},
+    {"id": "EV-007", "source": "IAM access review record, single cycle only (fictional)", "locator": "iam-access-review-2026Q1.pdf p.1-2", "version": "2026-04-03"}
+  ],
+  "findings": [
+    {
+      "id": "F-001", "group": "ESS", "area": "change_management", "kind": "strength",
+      "validated": true, "priority": "none",
+      "statement": "Every sampled ESS change carries a recorded test result before release.",
+      "evidence": ["EV-001", "EV-002"],
+      "measures": {
+        "changes_with_recorded_test_result": {"value": 12, "unit": "of 12 sampled changes", "basis": "fictional sample of 12 changes drawn from EV-001"}
+      }
+    },
+    {
+      "id": "F-002", "group": "IAM", "area": "change_management", "kind": "gap",
+      "validated": true, "priority": "high",
+      "statement": "The written IAM deployment procedure requires two approvals; most sampled deployments record one.",
+      "evidence": ["EV-003", "EV-004"],
+      "measures": {
+        "deployments_with_single_approval": {"value": 7, "unit": "of 12 sampled deployments", "basis": "fictional sample of 12 deployments drawn from EV-004"},
+        "single_approval_rate_pct": {"value": 58, "unit": "percent", "basis": "7 of 12, rounded to the nearest percent"}
+      }
+    },
+    {
+      "id": "F-003", "group": "RIS", "area": "service_recovery", "kind": "gap",
+      "validated": true, "priority": "high",
+      "statement": "RIS backup jobs complete, but no restoration exercise is recorded in the assessed window, so recovery is not demonstrated.",
+      "evidence": ["EV-005"],
+      "measures": {
+        "backup_completion_rate_pct": {"value": 99, "unit": "percent", "basis": "fictional job log EV-005"},
+        "demonstrated_recovery_time_hours": {"value": "UNKNOWN", "unit": "hours", "basis": "no restoration exercise recorded in the assessed window; not assessed"}
+      }
+    },
+    {
+      "id": "F-004", "group": "ESS", "area": "monitoring", "kind": "gap",
+      "validated": true, "priority": "medium",
+      "statement": "Two ESS services have no recorded alert routing owner.",
+      "evidence": ["EV-006"],
+      "measures": {
+        "services_without_recorded_alert_owner": {"value": 2, "unit": "of 9 services", "basis": "fictional routing table EV-006"}
+      }
+    },
+    {
+      "id": "F-005", "group": "IAM", "area": "access_review", "kind": "strength",
+      "validated": false, "priority": "none",
+      "statement": "A quarterly IAM access review appears to run, but only one cycle's record was supplied, so this is not corroborated.",
+      "evidence": ["EV-007"],
+      "measures": {
+        "review_cycles_evidenced": {"value": 1, "unit": "of 2 cycles requested", "basis": "only EV-007 supplied"},
+        "review_completion_rate_pct": {"value": "UNKNOWN", "unit": "percent", "basis": "a single supplied cycle cannot establish a rate; not assessed"}
+      }
+    }
+  ],
+  "recommendations": [
+    {"id": "R-001", "addresses": ["F-002"], "owner_role": "IAM service owner, with the change-management lead",
+     "statement": "Enforce the existing two-approval rule in the IAM deployment pipeline and record the approver pair on every deployment."},
+    {"id": "R-002", "addresses": ["F-003"], "owner_role": "RIS service owner, with infrastructure operations",
+     "statement": "Run one documented restoration exercise per critical RIS dataset and record the measured recovery time."},
+    {"id": "R-003", "addresses": ["F-004"], "owner_role": "ESS monitoring owner",
+     "statement": "Record a named routing owner for each ESS service alert and review the table at each service change."},
+    {"id": "R-004", "addresses": ["F-002", "F-003"], "owner_role": "AIS leadership, with the service owners",
+     "statement": "Extend the approval-record and restoration-evidence practice to the remaining AIS service groups once the first two phases have reported results."}
+  ],
+  "roadmap": {
+    "progression_note": "Each phase states the evidence it is expected to produce. It does not assert a maturity level, a score, or a transformation outcome; whether practice improves is judged from the evidence the phase produces.",
+    "phases": [
+      {"id": "0-90", "label": "Days 0-90"},
+      {"id": "90-180", "label": "Days 90-180"},
+      {"id": "180+", "label": "Day 180 and beyond"}
+    ],
+    "items": [
+      {"rec": "R-001", "phase": "0-90"},
+      {"rec": "R-003", "phase": "0-90"},
+      {"rec": "R-002", "phase": "90-180"},
+      {"rec": "R-004", "phase": "180+"}
+    ]
+  },
+  "resource_implications": [
+    {"id": "RES-001", "rec": "R-001", "measures": {
+      "one_time_effort": {"value": 80, "unit": "staff-hours", "basis": "fictional estimate: pipeline change plus backfill of approver records"},
+      "recurring_effort": {"value": 4, "unit": "staff-hours per month", "basis": "fictional estimate: monthly exception review"}}},
+    {"id": "RES-002", "rec": "R-002", "measures": {
+      "one_time_effort": {"value": "UNKNOWN", "unit": "staff-hours", "basis": "depends on dataset sizes and the restore target, neither of which was supplied; not assessed"},
+      "recurring_effort": {"value": "UNKNOWN", "unit": "staff-hours per month", "basis": "exercise cadence not agreed; not assessed"}}},
+    {"id": "RES-003", "rec": "R-003", "measures": {
+      "one_time_effort": {"value": 16, "unit": "staff-hours", "basis": "fictional estimate: complete and verify the routing table"},
+      "recurring_effort": {"value": "UNKNOWN", "unit": "staff-hours per month", "basis": "review cadence not agreed; not assessed"}}}
+  ],
+  "decisions": [
+    {"id": "D-001", "recommendation": "R-001", "phase": "0-90",
+     "question": "Do we enforce the existing two-approval rule in the IAM deployment pipeline?",
+     "options": ["Enforce in the 0-90 window", "Enforce with a documented exception path", "Defer until a wider change window is sampled"]},
+    {"id": "D-002", "recommendation": "R-002", "phase": "90-180",
+     "question": "Do we fund a documented restoration exercise for the critical RIS datasets?",
+     "options": ["Fund one exercise per critical dataset", "Fund a single pilot dataset first", "Defer until the dataset inventory is supplied"]},
+    {"id": "D-003", "recommendation": "R-003", "phase": "0-90",
+     "question": "Who owns alert routing for the two ESS services with no recorded owner?",
+     "options": ["Assign to the existing service owners", "Assign to the monitoring team pending service-owner confirmation", "Defer to the next service review"]}
+  ],
+  "open_inputs": [
+    "Whether the fictional 12-deployment IAM sample is representative of the full change window.",
+    "Measured RIS recovery time for any critical dataset (no restoration exercise was recorded).",
+    "The second IAM access-review cycle record needed to corroborate F-005.",
+    "Restoration effort and cadence for RES-002, and the alert-review cadence for RES-003."
+  ]
+}

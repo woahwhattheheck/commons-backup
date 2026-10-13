@@ -1,0 +1,59 @@
+{
+  "source_freeze_sha256": "f776369103f877c68a4b3df79d8851595686af1b52bf5a49e2ec740b0884422a",
+  "summary": {
+    "dev_arlene": {"games": 12, "wins": 6, "ties": 4, "losses": 2, "failures": 0},
+    "dev_sell": {"games": 18, "wins": 12, "ties": 4, "losses": 2, "failures": 0},
+    "dev_weed": {"games": 18, "wins": 13, "ties": 4, "losses": 1, "failures": 0},
+    "dev_seed": {"games": 18, "wins": 16, "ties": 0, "losses": 2, "failures": 0},
+    "held_arlene": {"games": 12, "wins": 4, "ties": 4, "losses": 4, "failures": 0},
+    "held_sell": {"games": 12, "wins": 8, "ties": 4, "losses": 0, "failures": 0},
+    "held_seed": {"games": 12, "wins": 10, "ties": 2, "losses": 0, "failures": 0}
+  },
+  "full_report_hashes": {
+    "dev0-arlene.json": {"bytes": 7940106, "sha256": "506a01087492a4ccbb14b4e51950396b13dc8fc715375f11f6a28494e2bd1be3"},
+    "dev12-arlene.json": {"bytes": 15727625, "sha256": "1ed0d4d1849ee3829cbd16f712c3009378b23e2cb1857a65faab450e795ff7e5"},
+    "dev0-sell-import.json": {"bytes": 7940508, "sha256": "7713b6e71051b785389a3b86c4a04cde1d24557f6b90e4a9d0d83176c61cf19b"},
+    "dev12-sell.json": {"bytes": 15728285, "sha256": "a99345a4e42a678708151a084596cd0808d072738eec371df8c37a44b93fc453"},
+    "dev-frozen-sell.json": {"bytes": 11800850, "sha256": "3f3a6a00bf2a4cfaa4b2de03c74b75934b06d3cf3633d6136f048eab3502063b"},
+    "dev0-recovery.json": {"bytes": 7944784, "sha256": "70bb9ac7d3cf5c23a293b98e6ea452ddb40e8a91e082892e08d82b3f0a668cea"},
+    "dev12-recovery.json": {"bytes": 15728299, "sha256": "aa2a188013468b1026d152e5f370dab170ad64cc6ee4f3a6029cb95825588668"},
+    "dev-frozen-recovery.json": {"bytes": 11803026, "sha256": "67e3907c7602d64e81cae0c6de48ef06590347794317aaff2b8abf068641d419"},
+    "dev-seed.json": {"bytes": 35459575, "sha256": "6c6f18c078861d5806ceb3f5e891327f8dec78fefd3774ec58c8c988a280b502"},
+    "held-arlene.json": {"bytes": 23472424, "sha256": "3264db99cf5e7eeaaa669df584f25cc0cabf8599fc41bb0cc4abbc44c11b116e"},
+    "held-sell.json": {"bytes": 23473005, "sha256": "a68768d950e727a5483334551a8cb1e904f83a3130b6cf950bc512c0a82687c4"},
+    "held-seed.json": {"bytes": 23472366, "sha256": "bae81766d7446542a193e03a805ccf9bd286da75b12392469c74fe7dab324503"}
+  },
+  "valid_game_count": 102,
+  "reproduction_smoke": {
+    "independent_sample": false,
+    "seed": 9850101,
+    "opponent": "arlene",
+    "seat": 0,
+    "status": "complete",
+    "trace_matches_original": true,
+    "trace_sha256": "6b2ab99336cb19d50d610e91bd838e144651dad87c5fde595b4ddd8eb2f61e87"
+  },
+  "excluded_initial_loader_attempts": {
+    "file": "dev0-sell.json",
+    "count": 4,
+    "failure": "raw-file consumer lacked __file__; all failed before action0; corrected importer controls are included instead",
+    "sha256": "fd13ed5218ebf3f72ae56bf8168d7124171e804b12d9816f4c516aed33c4ca83"
+  },
+  "experimental_weed": {
+    "held_tested": false,
+    "hosted_interventions": 0,
+    "production_changes_alter_later_rng_consumption": true
+  },
+  "inference_limit": "Two independent held seeds, both seats, three opponents. Paired cases share seeds; no general win-rate estimate or hosted promotion is asserted.",
+  "paired_seed_audit": {
+    "cases": 30,
+    "all_rival_cash_deltas_zero": true,
+    "own_cash_delta_min": 0.0,
+    "own_cash_delta_max": 340.0,
+    "all_sampled_state_checks_pass": true,
+    "total_compared_state_samples": 1140,
+    "all_both_player_unit_action_frequencies_equal": true,
+    "state_comparison_exclusions": "Only own money, own seed inventory and the original BUY_SEED slots; worker actions, other market slots, farms, inventories, prices, shops and rival state remain compared. These are the existing evaluator timeline snapshots, not every transition.",
+    "scores": "games.csv"
+  }
+}

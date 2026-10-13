@@ -1,0 +1,28 @@
+{
+  "schema": "turnbench-trace/v1",
+  "scenario_id": "barge-in-ticket-01",
+  "provider": "assemblyai-voice-agent-api",
+  "evidence_class": "SYNTHETIC",
+  "events": [
+    {"seq": 0, "at_ms": 0, "type": "harness.session.configured", "data": {"resolved_config_sha256": "7d0a516ae2c2b0cd861b9141aa82b9afbefe62e6491ab8520188a2f129b0b48b", "min_silence_ms": 300, "max_silence_ms": 1200}},
+    {"seq": 1, "at_ms": 10, "type": "session.ready", "data": {"resolved_config_sha256": "7d0a516ae2c2b0cd861b9141aa82b9afbefe62e6491ab8520188a2f129b0b48b"}},
+    {"seq": 2, "at_ms": 100, "type": "input.speech.started", "data": {}},
+    {"seq": 3, "at_ms": 500, "type": "input.speech.stopped", "data": {}},
+    {"seq": 4, "at_ms": 520, "type": "transcript.user", "data": {"item_id": "item_1", "text": "Please open a SEV one ticket for checkout latency."}},
+    {"seq": 5, "at_ms": 700, "type": "reply.started", "data": {"reply_id": "reply_1", "item_id": "item_1"}},
+    {"seq": 6, "at_ms": 850, "type": "tool.call", "data": {"call_id": "call_1", "name": "open_ticket", "arguments": {"severity": "sev1", "summary": "checkout latency"}}},
+    {"seq": 7, "at_ms": 900, "type": "reply.done", "data": {"reply_id": "reply_1", "status": "completed"}},
+    {"seq": 8, "at_ms": 920, "type": "tool.result", "data": {"call_id": "call_1", "is_error": false}},
+    {"seq": 9, "at_ms": 1000, "type": "reply.started", "data": {"reply_id": "reply_2", "item_id": "item_1"}},
+    {"seq": 10, "at_ms": 1050, "type": "reply.audio", "data": {}},
+    {"seq": 11, "at_ms": 1200, "type": "input.speech.started", "data": {}},
+    {"seq": 12, "at_ms": 1250, "type": "transcript.agent", "data": {"reply_id": "reply_2", "item_id": "item_1", "text": "The ticket has", "interrupted": true}},
+    {"seq": 13, "at_ms": 1270, "type": "reply.done", "data": {"reply_id": "reply_2", "status": "interrupted"}},
+    {"seq": 14, "at_ms": 1500, "type": "input.speech.stopped", "data": {}},
+    {"seq": 15, "at_ms": 1520, "type": "transcript.user", "data": {"item_id": "item_2", "text": "Stop, that's enough."}},
+    {"seq": 16, "at_ms": 1700, "type": "reply.started", "data": {"reply_id": "reply_3", "item_id": "item_2"}},
+    {"seq": 17, "at_ms": 1850, "type": "transcript.agent", "data": {"reply_id": "reply_3", "item_id": "item_2", "text": "Understood.", "interrupted": false}},
+    {"seq": 18, "at_ms": 1900, "type": "reply.done", "data": {"reply_id": "reply_3", "status": "completed"}},
+    {"seq": 19, "at_ms": 2000, "type": "session.ended", "data": {"clean": true}}
+  ]
+}

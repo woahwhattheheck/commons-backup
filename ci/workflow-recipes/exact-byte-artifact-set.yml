@@ -1,0 +1,31 @@
+name: Exact byte artifact set
+
+on:
+  pull_request:
+    paths:
+      - "tools/exact_byte_artifact_set/**"
+      - ".github/workflows/exact-byte-artifact-set.yml"
+  push:
+    branches: [main]
+    paths:
+      - "tools/exact_byte_artifact_set/**"
+      - ".github/workflows/exact-byte-artifact-set.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: python -m py_compile tools/exact_byte_artifact_set/publisher.py tools/exact_byte_artifact_set/test_publisher.py
+      - name: Tests
+        run: python -m unittest tools.exact_byte_artifact_set.test_publisher -v
+      - name: Optimized tests
+        run: python -O -m unittest tools.exact_byte_artifact_set.test_publisher -v

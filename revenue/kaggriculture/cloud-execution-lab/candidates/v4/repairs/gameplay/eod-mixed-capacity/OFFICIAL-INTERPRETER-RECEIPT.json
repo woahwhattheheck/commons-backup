@@ -1,0 +1,79 @@
+{
+  "schema": "titan-v4-eod-official-interpreter-execution-v1",
+  "author_lane": "ASTRA-EOD-ENGINE",
+  "source_pr": 12612,
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "helper_commit": "78477dd5dc13e48f4b83e704fb3b01ba291a552d",
+  "helper_path": "donor/overlay/r04_eod_capacity_rescue.py",
+  "helper_previous_blob": "2c031fcebf397105791a5d775270d452bb4e512b",
+  "helper_tested_and_written_blob": "9ad4092453e2332b0914f90ca89791b18f2229c2",
+  "test_commit": "aa7c2ddc308b481673ad158443e8162a9ec0fbcc",
+  "test_path": "repairs/gameplay/eod-mixed-capacity/test_eod_official_interpreter.py",
+  "test_blob": "c71b0d3cfa54142c27662f5172ec82bd0efb8d67",
+  "test_sha256": "7da4c818c9116aec0c6c49a68fbd080ce7150041fac604453f7a4a98610a8292",
+  "test_bytes": 25029,
+  "runtime": "Python 3.13.5; standard library only; isolated local execution",
+  "engine_transport": {
+    "existing_github_actions_artifact": 10285621024,
+    "artifact_member": "seed-retry-runtime/checks/reference/engine/kaggriculture.py",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "bytes": 40356,
+    "workflow_dispatched_for_this_test": false
+  },
+  "dependency": {
+    "name": "h3c_goose_eod_cap_rescue.py",
+    "tested_blob": "2044d6cf1e0c51f95027229863f910aa43ac7008",
+    "sha256": "582949e1ba4b2f65aa898a362929013fd9b96f8865582884c181972ffcba5fab",
+    "bytes": 10228,
+    "note": "Exact full source loaded, not a reimplementation of H3c helpers. Later dependency revisions require rerun with their explicit expected hash."
+  },
+  "adapter_limits": {
+    "r04_full_router": "Only the literal PRODUCTS tuple is adapted; it matches router blob a3e2fe87c717d128e43c9b65bae2265f40d1d76d and engine PRODUCTS. The full router is not imported or tested.",
+    "kaggle_environments.utils.resolve_episode_seed": "Import-only raising shim. States use official engine constructors. Seed resolution/initialization is forbidden in this initialized-state suite.",
+    "engine_behavior": "No transition mocks or copied drop/market functions. All 942 transitions per mode call the unmodified official interpreter."
+  },
+  "commands": [
+    "python test_eod_official_interpreter.py --engine kaggriculture.py --lane r04_eod_capacity_rescue.py --h3c h3c_goose_eod_cap_rescue.py --receipt receipt-normal.json",
+    "python -O test_eod_official_interpreter.py --engine kaggriculture.py --lane r04_eod_capacity_rescue.py --h3c h3c_goose_eod_cap_rescue.py --receipt receipt-optimized.json"
+  ],
+  "normal": {"tests_run": 24, "passed": true, "failures": 0, "errors": 0, "skipped": 0},
+  "optimized": {"tests_run": 24, "passed": true, "failures": 0, "errors": 0, "skipped": 0},
+  "identical_counts_per_mode": {
+    "activations": 403,
+    "candidate_calls": 498,
+    "negative_controls_rejected": 3,
+    "no_ops": 65,
+    "official_interpreter_calls": 942,
+    "paired_transitions": 468,
+    "product_seat_stock_room_cells": 144,
+    "seeded_world_activations": 190,
+    "seeded_worlds": 240
+  },
+  "tested_transition_contracts": [
+    "Whole per-product private shed, seed state and post-EOD inventories equal baseline",
+    "Both seats; mixed cargo; actor order; dictionary order ambiguity; homogeneous partial boundary",
+    "Raw market order budget, including empty rows and a partial-vector truncation counterexample",
+    "Actual HIRE, BUY_SEED, BUY_LAND and cargo-neutral unit operations, including atomic PLANT",
+    "Rival SELL/BUY_PRODUCT rows, real nonlinear fills, price floor and public supply",
+    "Daily plant/animal refresh, hand reset, source input identity and configured timing guards"
+  ],
+  "measured_witnesses": {
+    "floor_rescue": {"units": 5, "actual_cash_delta": 5.0, "public_market_equal": true},
+    "nonlinear_fill": {"units": 20, "quoted_cash": 500, "actual_cash_delta": 467.0},
+    "rival_response": {"own_cash_delta": 500.0, "rival_cash_delta": 40.0, "one_transition_margin_delta": 460.0}
+  },
+  "interpretation": "The whole-vector helper preserves the tested own private states while realizing positive rescue proceeds. quoted_cash is NOT realized cash; own proceeds are NOT competitive margin. These controlled transitions do not estimate live-game EV or prove a field win rate.",
+  "not_run": [
+    "R04 complete generated-package or install ABI acceptance",
+    "Inherited full package suite or Python 3.11 hosted acceptance",
+    "Paired full-game economic gate against the current field"
+  ],
+  "unchanged": [
+    "Existing feature defaults and production entrypoint",
+    "Shared legacy apply_v4.py and current production ABI",
+    "Production archive, workflows and Kaggle submission",
+    "ASTRA-INTERVAL partial-rescue solver ownership"
+  ]
+}

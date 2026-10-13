@@ -1,0 +1,64 @@
+#cloud-config
+package_update: true
+packages:
+  - git
+  - jq
+  - python3
+  - python3-venv
+  - rclone
+  - xfsprogs
+
+write_files:
+  - path: /usr/local/sbin/commons-mount-cloud-volume
+    owner: root:root
+    permissions: "0755"
+    content: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+      device=/dev/oracleoci/oraclevdb
+      mountpoint=/srv/commons-cloud
+      for _ in $(seq 1 120); do
+        test -b "$device" && break
+        sleep 1
+      done
+      test -b "$device"
+      mkdir -p "$mountpoint"
+      if ! blkid "$device" >/dev/null 2>&1; then
+        mkfs.xfs -L COMMONS_CLOUD "$device"
+      fi
+      uuid=$(blkid -s UUID -o value "$device")
+      grep -q "UUID=$uuid " /etc/fstab || printf 'UUID=%s %s xfs defaults,nofail 0 2\n' "$uuid" "$mountpoint" >> /etc/fstab
+      mountpoint -q "$mountpoint" || mount "$mountpoint"
+      install -d -m 0777 "$mountpoint/work" "$mountpoint/evacuation" "$mountpoint/receipts"
+      cat > "$mountpoint/COMMONS_CLOUD_ROUTE.json" <<'JSON'
+      {
+        "schema": "commons-cloud-route/v1",
+        "provider": "oracle-cloud-always-free",
+        "state": "CLOUD_VOLUME_MOUNTED",
+        "copy_only": true,
+        "local_release_performed": false,
+        "work_root": "/srv/commons-cloud/work",
+        "evacuation_root": "/srv/commons-cloud/evacuation",
+        "receipt_root": "/srv/commons-cloud/receipts"
+      }
+      JSON
+
+  - path: /etc/systemd/system/commons-cloud-volume.service
+    owner: root:root
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=Mount Commons Oracle Always Free data volume
+      After=cloud-init.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/usr/local/sbin/commons-mount-cloud-volume
+      RemainAfterExit=yes
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - [systemctl, daemon-reload]
+  - [systemctl, enable, --now, commons-cloud-volume.service]

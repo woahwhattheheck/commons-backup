@@ -1,0 +1,91 @@
+name: TITAN V4 scheduler prefix current-native
+
+on:
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/scheduler-action-prefix/**
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/sale-window-engagement/compose_current_h3s420.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/performance/funding-replay/**
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/runtime/joint-unit-projection/compose.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/performance/compose_scoped_constructor.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/performance/projection-state-clone/compose.py
+      - revenue/kaggriculture/cloud-execution-lab/scheduler.py
+      - revenue/kaggriculture/cloud-execution-lab/frozen_selected.py
+      - revenue/kaggriculture/cloud-execution-lab/early_capital.py
+      - revenue/kaggriculture/cloud-quickstep/scoped_method_cache.py
+      - .github/workflows/titan-v4-scheduler-prefix-current.yml
+  push:
+    branches: [main]
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/scheduler-action-prefix/**
+      - .github/workflows/titan-v4-scheduler-prefix-current.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v4-scheduler-prefix-current-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Authenticate current source lineage
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          V4="$LAB/candidates/v4"
+          PREFIX="$V4/repairs/scheduler-action-prefix"
+          test "$(git hash-object "$LAB/scheduler.py")" = a483b24dd72b580d7d8811636b54d2d44f391575
+          test "$(git hash-object "$LAB/frozen_selected.py")" = fc7baf5c179818a55037f6a61d92984d81d1a21c
+          test "$(git hash-object "$LAB/early_capital.py")" = 1161859ac5af617eca65aec3f732b5c1396cad37
+          test "$(git hash-object "$PREFIX/scheduler_action_prefix.py")" = 2958bff92c7d95d9e113b2406e7de1bb7a28de08
+          test "$(git hash-object "$PREFIX/compose_current_native.py")" = 6f80447da0250ab120695ddc6871be1c9a3581ce
+          test "$(git hash-object "$V4/repairs/performance/funding-replay/apply_town_funding.py")" = 527811763c80e627895d8e11319f8877b18105e6
+          test "$(git hash-object "$V4/repairs/runtime/joint-unit-projection/compose.py")" = e1127c4aad842278a9e617903b0718d21c00f348
+          test "$(git hash-object "$V4/repairs/performance/funding-replay/apply_funding_replay.py")" = d579759e8f6bd6c4649d58f220b1b193a9bda491
+          test "$(git hash-object "$V4/repairs/performance/funding-replay/compose_funding_capacity.py")" = d8aa0a6cde7ec74142b806d29d1dca5201d9757a
+          test "$(git hash-object "$V4/repairs/performance/compose_scoped_constructor.py")" = 4267520ae966b16bad33083aaa9fb7772f7de045
+          test "$(git hash-object revenue/kaggriculture/cloud-quickstep/scoped_method_cache.py)" = 1438a95e69e76c97542b9b95bff1ca3745fa284e
+          test "$(git hash-object "$V4/repairs/performance/projection-state-clone/compose.py")" = 3f53a5c74c369be0555d63c470bb0519bcb3e306
+          python -B -m py_compile \
+            "$PREFIX/compose_current_native.py" \
+            "$PREFIX/test_compose_current_native.py" \
+            "$PREFIX/test_compose_current_native_custody.py" \
+            "$PREFIX/compose_current_native_strict.py" \
+            "$PREFIX/test_compose_current_native_strict.py"
+
+      - name: Current-native prefix composition regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          PREFIX=revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/scheduler-action-prefix
+          pushd "$PREFIX"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v \
+            test_compose_current_native \
+            test_compose_current_native_custody \
+            test_compose_current_native_strict
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest -v \
+            test_compose_current_native \
+            test_compose_current_native_custody \
+            test_compose_current_native_strict
+          popd
+
+      - name: Preserve original scheduler-prefix suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          PREFIX=revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/scheduler-action-prefix
+          pushd "$PREFIX"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v test_scheduler_action_prefix
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest -v test_scheduler_action_prefix
+          popd

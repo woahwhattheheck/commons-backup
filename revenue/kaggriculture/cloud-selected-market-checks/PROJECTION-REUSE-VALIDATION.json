@@ -1,0 +1,77 @@
+{
+  "schema": "titan.projection-reuse.validation.v1",
+  "source_base": "efd1141f77c6f2151064588c6e10dab90ef48a0a",
+  "reference_runtime_blob": "0336228e166180368570ac8e03f6cd33525e1a29",
+  "reference_runtime_sha256": "dd6b0b52575ad95a975695d372546ebfbdcb829065574d9c94eab5085a44a9fe",
+  "candidate_runtime_blob": "defa9b84c77fff28ae107bce291b6235bec5d26c",
+  "candidate_runtime_sha256": "e16702fd388c2ae0ead9bb59a078e0099e0c149cc39002703b3b7988bb061bd8",
+  "test_blob": "02843012d9c9fcfed3a8592ffc278e832a8b8217",
+  "test_sha256": "8ec5ea3222c1c8323c2e3ed460b4b719e7994a5db922d4019ff8f5581e236f06",
+  "reference_method_blob": "a8dc82ef077157287bdcf9e9c34b724c32fbf574",
+  "reference_method_sha256": "908b8cae58686b3e16cb10ffb939ec6e86cce8a2cb0720efd12d25fbdabe6017",
+  "seller_sha256": "3aa372c563a7cc4c7f5273e9fd1b9652959df301d84652c44be1c5bfeea1500e",
+  "core_sha256": "63198d3b642847a02fee8f3553b9983341b4931b4975013209ad10777b5d1199",
+  "engine_sha256": {
+    "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+  },
+  "focused_tests": {
+    "methods": 17, "failures": 0, "errors": 0, "skipped": 0,
+    "projection_comparisons": 176,
+    "exception_comparisons": 2,
+    "eight_step_farm_private_copies": {"reference": 16, "candidate": 2},
+    "scope": "Exact-source deterministic projection outputs and caller-visible mutation; no full game."
+  },
+  "negative_controls": [
+    {"mutation": "no_reuse", "test": "test_one_detachment_instead_of_every_future_stage", "exit_code": 1, "failures": 1, "errors": 0},
+    {"mutation": "no_initial_detachment", "test": "test_current_market_caller_mutation_boundary", "exit_code": 1, "failures": 1, "errors": 0},
+    {"mutation": "publish_failed_stage", "test": "test_partial_failed_stage_does_not_publish_events", "exit_code": 1, "failures": 1, "errors": 0}
+  ],
+  "whole_agent_workload": {
+    "classification": "retained-public-off-policy",
+    "episode": 106540665, "seat": 0, "observations_per_process": 719,
+    "processes_per_arm": 3, "complete_action_calls": 4314,
+    "action_sequence_sha256": "bcc596cb183ca8c363f1b45c9bdc0c9aad351cd4a02f7ea716d1001e48bcc2ae",
+    "all_actions_match": true,
+    "recorded_status_reason_seed_reason_match": true,
+    "only_between_arm_python_difference": "integrated_selected.py",
+    "runtime_python_files_per_arm": 17,
+    "sources_unchanged": true,
+    "reference_total_action_wall_s": [6.413792412005932, 6.3896955819927825, 6.493859389997851],
+    "candidate_total_action_wall_s": [5.482370031003484, 5.381146527000965, 5.441242711009181],
+    "median_total_action_wall_s": {"reference": 6.413792412005932, "candidate": 5.441242711009181},
+    "median_total_action_time_reduction_fraction": 0.15163410951315515,
+    "reference_p99_action_s": [0.01986736699973335, 0.02004771100018843, 0.020348125000055006],
+    "candidate_p99_action_s": [0.018520482999974774, 0.018024070000137726, 0.017829816000357823],
+    "median_max_action_s": {"reference": 0.02486266899995826, "candidate": 0.029125727000064217},
+    "median_load_through_first_attempt_s": {"reference": 0.04874055499976748, "candidate": 0.04971412800023245},
+    "calls_above_one_second": 0,
+    "incomplete_processes_in_this_comparison": 0,
+    "method": "Three sequential fresh-process ordinary passes per arm through unchanged FINCH worker mode, alternating arm order. Imports/input loading excluded from action sum and measured separately; PYTHONHASHSEED=0.",
+    "profiler_git_blob": "5b68636aac4bd0d1ec8e2e77296aa25921854a1f",
+    "timing_git_blob": "da9ebd2cd4777f1abbb90c4f8718ef61a3257540",
+    "raw_input_sha256": "410e9dc42ffabd02118a5782bc077156f952a094ad2669f64ce85941fd5bd94a",
+    "replay_artifact": 10031480684,
+    "python": "3.13.5",
+    "cpu_quota": "400000 100000",
+    "memory_limit_bytes": 4294967296
+  },
+  "full_evidence": {
+    "library_path": "/WREN_PROJECTION_REUSE_20260908.zip",
+    "file_id": "file_00000000d6fc81f5ab23587d50939f6b",
+    "zip_bytes": 313798,
+    "zip_sha256": "6ae76b9b8b53c95ff2ec40bd21373606765a0d6e9a52bff8d11aac0c4cc3417a",
+    "contents": "Six full timing reports, complete source maps, test/reference, local result and negative-control logs."
+  },
+  "full_games": 0,
+  "game_seeds": [],
+  "limits": [
+    "One off-policy sequence is not a representative runtime distribution, on-policy outcome, or hosted deadline guarantee.",
+    "The median maximum call worsens and no tail/cold-start improvement is claimed.",
+    "Both arms already contain the same ledger/SPRUCE improvements; gains are not added or double counted.",
+    "The default seed callback is unused in this timed workload; its source is unchanged.",
+    "Frozen archives and selected policy are unchanged; these are isolated research source trees.",
+    "Hosted-suite completion is recorded separately only after actual execution."
+  ]
+}

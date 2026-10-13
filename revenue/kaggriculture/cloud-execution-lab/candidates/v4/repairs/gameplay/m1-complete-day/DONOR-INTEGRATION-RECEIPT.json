@@ -1,0 +1,36 @@
+{
+  "schema": "titan-v4-source-consumption-receipt-v1",
+  "session": "ASTRA-DAYCOVER",
+  "canonical_branch": "main",
+  "source_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r04_m1_wheat_trade.py",
+  "source_git_blob": "87eb8ccbee13b33ef656ba0a5ba0114ac30f4658",
+  "source_fold": "Peer completed the identical source fold before this session's expected-blob write. This session yielded that source write and verified the peer result.",
+  "boundary_test_integration_commit": "21f513ae56d8746245f37f71be187cd17cb9e4fb",
+  "test_git_blobs": {
+    "test_v4_m1_complete_day.py": "db0cc52f70be6908816f5dc52c1eed5e0eae691d",
+    "test_v4_m1_money_overflow.py": "5695a41e8baca3da1b0b730ebcb3c27e6fa0bc8d",
+    "test_v4_m1_daycoverage_boundaries.py": "023720500168f2e922ab8564a5bfd60b68779a59",
+    "test_v4_m1_day_integration.py": "d6b8d3313e8f68780053f5b7aa9b11544e946187"
+  },
+  "execution": {
+    "interpreter": "CPython 3.13.5",
+    "environment": "local container, exact Git-blob-verified files in donor/overlay/checks layout",
+    "normal": "30/30 PASS",
+    "optimized": "30/30 PASS",
+    "boundary_full_day_positives_per_mode": 2660,
+    "boundary_truncated_eof_rejections_per_mode": 26740,
+    "boundary_late_cash_live_slot_cases_per_mode": 150,
+    "predecessor_donor_git_blob": "c258552a87ab39f4d49648735cc0fddbd5019e04",
+    "predecessor_normal_only": "20 test methods (original 8 plus peer integration 12): 754 failing subcases and 2 huge-integer errors",
+    "commands_from_donor_overlay": [
+      "PYTHONPATH=checks python -m unittest -q test_v4_m1_complete_day test_v4_m1_money_overflow test_v4_m1_daycoverage_boundaries test_v4_m1_day_integration",
+      "PYTHONPATH=checks python -O -m unittest -q test_v4_m1_complete_day test_v4_m1_money_overflow test_v4_m1_daycoverage_boundaries test_v4_m1_day_integration"
+    ]
+  },
+  "readback": "Source and new boundary-suite Git blobs verified together at immutable commit 21f513ae56d8746245f37f71be187cd17cb9e4fb.",
+  "no_new_branch_or_feature": true,
+  "production_activation": false,
+  "legacy_materializer_executed": false,
+  "economic_or_strength_claim": false,
+  "provenance": "Original complete-day repair and m1-two-seat predecessor remain preserved. EXECUTION-RECEIPT.md records initial recovery; this receipt closes its canonical donor-consumption follow-through."
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "titan-v4-sale-timing-recovery-publication/v1",
+  "status": "historical_source_packet_recovered_to_canonical_v4_default_off",
+  "canonical_home": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/sale-horizon",
+  "recovery_source": {
+    "library_name": "titan-v4-sale-timing-research.patch",
+    "bytes": 378802,
+    "sha256": "7c856cab3266f7ed1ca6f636738e7d832dec7ba2754441c153544433ced268e4",
+    "scope": "lossless 26-file historical packet retained in Library"
+  },
+  "canonical_compact_publication": {
+    "compose_rival_timing.py": "f40ded4a499e90df5f64ea6761ffce1760697202",
+    "SOURCE-PINS.json": "92465def15dd2530fa3d029c5abb16091cf2af00",
+    "EXPERIMENTAL-core.patch": "69431718e11fc791f097610a718ebd0702adf561",
+    "SALE-TIMING-RECEIPT.json": "19ff9bc0046ab4802b2c1c8fe688505b08e41c08"
+  },
+  "historical_execution": {
+    "evidence_status": "authenticated_recovered_receipt_not_fresh_rerun",
+    "source_blob": "f23d3a8b5ee5e82029026e7f8f44eb36c143a5a3",
+    "source_blob_still_retrievable_from_repository_object_store": true,
+    "full_historical_actions_fixture_mountable_in_current_session": false,
+    "reason_not_fresh_rerun": "do not mix today's moved dependencies into a historical source-bound experiment and mislabel it as reproduction",
+    "regression_tests_per_mode": 20,
+    "mutation_rejections_per_mode": 5,
+    "constructed_inputs_per_mode": 10752,
+    "original_unsafe_decisions_per_mode": 21,
+    "experimental_unsafe_decisions_per_mode": 0,
+    "official_interpreter_trajectories_per_audit": 378,
+    "official_cash_and_stock_mismatches": 0,
+    "full_game_count": 0
+  },
+  "custody_boundary": {
+    "existing_MANIFEST_json_changed": false,
+    "manifest_reason": "the existing E184 manifest still correctly awaits its exact original horizon payload; this independent sale-timing experiment is not a reconstruction of that missing payload",
+    "omitted_historical_files": "remain byte-exact inside the Library patch; SALE-TIMING-RECEIPT.json records their hashes and sizes",
+    "default": "OFF"
+  },
+  "current_abi_boundary": {
+    "do_not_add_features": [
+      "r04_sale_horizon",
+      "r04_no_late_sale_advance_step"
+    ],
+    "reason": "current titan_runtime.py::Features does not define these dead-carrier keys; injecting them as config would not constitute the recovered sale-timing semantics and can fail at construction",
+    "microstack_followup": "re-gate the later h3/s420 receipt against current canonical composition through the recovered source semantics and existing composer/native lifecycle; do not carry old keys forward"
+  },
+  "not_claimed": [
+    "fresh current-main dependency composition",
+    "current native-stack execution",
+    "adaptive opponent strength",
+    "field incidence or EV",
+    "hosted deadline or Kaggle result",
+    "runtime activation",
+    "default promotion",
+    "archive mutation",
+    "production change"
+  ]
+}

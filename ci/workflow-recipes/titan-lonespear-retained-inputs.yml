@@ -1,0 +1,65 @@
+name: titan-lonespear-retained-inputs
+
+# Copy already-committed T14 evidence for the assigned lonespear consumer.
+# No policy imports, game execution, installations, or provider requests.
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/titan-lonespear-retained-inputs.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  copy-retained-inputs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 5be6099f5ab2b3a20855bdee1e1e42f336eab678
+          persist-credentials: false
+          sparse-checkout: revenue/kaggriculture/cloud-policy-portfolio
+      - name: Copy the exact committed portfolio evidence and source
+        shell: python
+        run: |
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+          import tarfile
+
+          expected = "5be6099f5ab2b3a20855bdee1e1e42f336eab678"
+          actual = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          if actual != expected:
+              raise SystemExit("Retained input checkout differs from the source pin")
+          out = Path(os.environ["RUNNER_TEMP"]) / "lonespear-retained-inputs"
+          out.mkdir()
+          destination = out / "t14-9975-retained.tar"
+          subprocess.run(["git", "archive", "--format=tar", "--output=" + str(destination),
+                          expected, "--", "revenue/kaggriculture/cloud-policy-portfolio"], check=True)
+          files = {}
+          with tarfile.open(destination) as archive:
+              for member in archive.getmembers():
+                  if member.isdir():
+                      continue
+                  if not member.isfile():
+                      raise SystemExit("Retained input contains a non-regular archive member")
+                  data = archive.extractfile(member).read()
+                  files[member.name] = {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
+                      "git_blob": hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()}
+          report = {"schema": "titan.lonespear-retained-inputs.v1", "source_commit": actual,
+                    "run_id": os.environ["GITHUB_RUN_ID"], "attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+                    "archive": destination.name, "bytes": destination.stat().st_size,
+                    "sha256": hashlib.sha256(destination.read_bytes()).hexdigest(), "files": files,
+                    "interpretation": "Original bytes only; the consumer selects development records. No new games."}
+          (out / "MANIFEST.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps({k: report[k] for k in ("source_commit", "run_id", "archive", "bytes", "sha256")}))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-lonespear-retained-t14-9975
+          path: ${{ runner.temp }}/lonespear-retained-inputs/
+          if-no-files-found: error
+          retention-days: 7

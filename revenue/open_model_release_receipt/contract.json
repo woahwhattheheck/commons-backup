@@ -1,0 +1,40 @@
+{
+  "id": "open-model-release-receipt",
+  "version": 1,
+  "buyer": "open-model release maintainer or release engineer",
+  "input": "one real release manifest declaring exactly eight artifacts, local or HTTP, at most 10 MiB",
+  "workflow": [
+    "verify exactly eight declared artifacts",
+    "recompute every SHA-256",
+    "run one manifest-declared loader",
+    "emit a JSON receipt and a static HTML receipt"
+  ],
+  "acceptance": [
+    "PASS only at 8/8 matching artifacts and loader exit 0",
+    "any missing path, changed byte, timeout, or loader error is FAIL with the exact stage",
+    "inputs are capped at 10 MiB and 60 seconds",
+    "loader exit is the loader-behavior assertion; filesystem, network, database, training, and publication side effects of the manifest-declared loader are outside this receipt's assurance"
+  ],
+  "deliverables": [
+    "independent completeness verdict for one release manifest",
+    "JSON receipt",
+    "static HTML receipt"
+  ],
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_proof_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "local or HTTP artifacts only; manifest-declared loader side effects are outside the completeness receipt's assurance",
+  "decision_boundary": "completeness receipt only; no training-quality or loader-side-effect-safety claim; the receipt does not itself deploy or publish the release",
+  "sources": [
+    "open-model-release-receipt.html",
+    "features/registry/open-model-release-receipt.json",
+    "open_model_release_receipt.py"
+  ]
+}

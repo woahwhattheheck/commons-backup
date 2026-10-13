@@ -1,0 +1,37 @@
+name: outbound-transport-reconcile
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/outbound_transport_reconcile/**'
+      - 'test_outbound_transport_reconcile.py'
+      - 'test_outbound_transport_reconcile_temporal.py'
+      - '.github/workflows/outbound-transport-reconcile.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/outbound_transport_reconcile/**'
+      - 'test_outbound_transport_reconcile.py'
+      - 'test_outbound_transport_reconcile_temporal.py'
+      - '.github/workflows/outbound-transport-reconcile.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile exact source
+        run: python -m py_compile revenue/outbound_transport_reconcile/reconcile.py test_outbound_transport_reconcile.py test_outbound_transport_reconcile_temporal.py
+      - name: Focused tests
+        run: python -m unittest -v test_outbound_transport_reconcile.py test_outbound_transport_reconcile_temporal.py
+      - name: Focused tests optimized
+        run: python -O -m unittest -v test_outbound_transport_reconcile.py test_outbound_transport_reconcile_temporal.py

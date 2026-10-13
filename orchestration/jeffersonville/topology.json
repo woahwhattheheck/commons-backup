@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0.0",
+  "topology_id": "commons.jeffersonville.reference-topology",
+  "deployment_status": "NOT_DEPLOYED",
+  "topology_kind": "REFERENCE_ONLY_ADAPTER_AND_BENCHMARK_CATALOG",
+  "scope_boundary": {
+    "deployment_intent": "NONE",
+    "facility_build_intent": "NONE",
+    "rust_or_go_rewrite_intent": "NONE",
+    "external_code_execution_intent": "NONE",
+    "statement": "This reference topology carries no data-center build, Rust/Go rewrite, external execution, or deployment intent."
+  },
+  "open_door": {
+    "policy": "OPEN_DOOR",
+    "participation_effect": "NONE",
+    "descriptive_only": true,
+    "unknown_capabilities": "ACCEPT_AND_DESCRIBE"
+  },
+  "tiers": [
+    {
+      "id": "control_plane_adapters",
+      "deployment_status": "NOT_DEPLOYED",
+      "mode": "REFERENCE_ONLY",
+      "candidate_ids": [
+        "agent-framework-go"
+      ],
+      "purpose": "Describe control-plane interoperability surfaces."
+    },
+    {
+      "id": "agent_runtime_adapters",
+      "deployment_status": "NOT_DEPLOYED",
+      "mode": "REFERENCE_ONLY",
+      "candidate_ids": [
+        "autoagents"
+      ],
+      "purpose": "Describe agent-runtime compatibility without executing a runtime."
+    },
+    {
+      "id": "durability_adapters",
+      "deployment_status": "NOT_DEPLOYED",
+      "mode": "REFERENCE_ONLY",
+      "candidate_ids": [
+        "sayiir"
+      ],
+      "purpose": "Describe checkpoint and continuation boundaries."
+    },
+    {
+      "id": "benchmark_candidates",
+      "deployment_status": "NOT_DEPLOYED",
+      "mode": "PLAN_ONLY",
+      "candidate_ids": [
+        "graphbit",
+        "multi-agent-engine"
+      ],
+      "purpose": "Emit deterministic local contract-check plans; no candidate code is acquired or run."
+    },
+    {
+      "id": "pattern_references",
+      "deployment_status": "NOT_DEPLOYED",
+      "mode": "REFERENCE_ONLY",
+      "candidate_ids": [
+        "aof",
+        "inception-core",
+        "rusty-agent",
+        "swarms-rs"
+      ],
+      "purpose": "Retain useful schema, messaging, memory, and workflow observations with limitations attached."
+    },
+    {
+      "id": "unverified_lab_references",
+      "deployment_status": "NOT_DEPLOYED",
+      "mode": "UNVERIFIED_REFERENCE_ONLY",
+      "candidate_ids": [
+        "cathedral.fabric",
+        "kumeo"
+      ],
+      "purpose": "Preserve corrected provenance without endorsing or executing the candidates."
+    }
+  ],
+  "plan_flow": [
+    {
+      "order": 1,
+      "deployment_status": "NOT_DEPLOYED",
+      "operation": "READ_LOCAL_CATALOG"
+    },
+    {
+      "order": 2,
+      "deployment_status": "NOT_DEPLOYED",
+      "operation": "NORMALIZE_DESCRIPTIVE_CAPABILITIES"
+    },
+    {
+      "order": 3,
+      "deployment_status": "NOT_DEPLOYED",
+      "operation": "EMIT_DETERMINISTIC_ADAPTER_PLANS"
+    },
+    {
+      "order": 4,
+      "deployment_status": "NOT_DEPLOYED",
+      "operation": "EMIT_DETERMINISTIC_BENCHMARK_PLANS"
+    }
+  ],
+  "probe_non_actions": [
+    "CLONE_REPOSITORY",
+    "INSTALL_DEPENDENCY",
+    "RUN_EXTERNAL_CODE",
+    "DEPLOY"
+  ]
+}

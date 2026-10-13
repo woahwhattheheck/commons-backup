@@ -1,0 +1,59 @@
+{
+  "id": "dealer-service-lead-rescue",
+  "version": 2,
+  "buyer": "dealer service manager / BDC",
+  "workflow": [
+    "synthetic missed web form or after-hours inquiry",
+    "lead-identity idempotency key",
+    "exactly one customer follow-up",
+    "exactly one booked-service / CRM record",
+    "timestamped progress and status receipts",
+    "worker snapshot/restart without a second appointment"
+  ],
+  "lead_classes": {
+    "oil-change": {
+      "follow_up": "FOLLOWUP_EXPRESS",
+      "appointment": "APPT_QUICK_LANE",
+      "required": ["dealerId", "vehicleSlot", "concernCode", "preferredWindow", "mileageBand"]
+    },
+    "brake-service": {
+      "follow_up": "FOLLOWUP_ADVISOR",
+      "appointment": "APPT_SHOP_BAY",
+      "required": ["dealerId", "vehicleSlot", "concernCode", "preferredWindow", "mileageBand"]
+    },
+    "recall-campaign": {
+      "follow_up": "FOLLOWUP_RECALL",
+      "appointment": "APPT_RECALL_LANE",
+      "required": ["dealerId", "vehicleSlot", "concernCode", "preferredWindow", "mileageBand"]
+    },
+    "check-engine": {
+      "follow_up": "FOLLOWUP_DIAG",
+      "appointment": "APPT_DIAG_BAY",
+      "required": ["dealerId", "vehicleSlot", "concernCode", "preferredWindow", "mileageBand"]
+    }
+  },
+  "acceptance": [
+    "lead identity is the idempotency key",
+    "duplicate form submit and after-hours inquiry of the same lead share one store row",
+    "complete leads rescue once to the class follow-up and appointment lanes",
+    "incomplete or hold leads route once to HELD_INCOMPLETE with zero appointments",
+    "worker restart after a mid-rescue crash resumes to one appointment",
+    "rollback of a crashed run returns a clean un-rescued state",
+    "a finished rescue is not rollbackable and stays single-rescued",
+    "same id with different bytes returns LEAD_CONFLICT and keeps the original rescue",
+    "PII-shaped keys and live phone/email/VIN values are refused",
+    "live CRM writes, real dealerships, outreach, and Stripe remain zero"
+  ],
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_pilot_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "browser-local synthetic fixtures only; no real dealership; no PII; no server submission",
+  "decision_boundary": "rescue routing only; never live CRM write, outreach, or a Stripe charge"
+}

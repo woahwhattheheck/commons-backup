@@ -1,0 +1,35 @@
+name: xtech-search10-sustainproof
+
+on:
+  push:
+    paths:
+      - "competitions/xtech-search10-2026/sustainproof/**"
+      - ".github/workflows/xtech-search10-sustainproof.yml"
+  pull_request:
+    paths:
+      - "competitions/xtech-search10-2026/sustainproof/**"
+      - ".github/workflows/xtech-search10-sustainproof.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: xtech-search10-sustainproof-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Test normal interpreter
+        run: python -m unittest discover -s competitions/xtech-search10-2026/sustainproof -p 'test_*.py' -v
+      - name: Test optimized interpreter
+        run: python -O -m unittest discover -s competitions/xtech-search10-2026/sustainproof -p 'test_*.py' -v
+      - name: Compile source
+        run: python -m py_compile competitions/xtech-search10-2026/sustainproof/*.py
+      - name: Validate white-paper source
+        run: python competitions/xtech-search10-2026/sustainproof/cli.py white-paper-check

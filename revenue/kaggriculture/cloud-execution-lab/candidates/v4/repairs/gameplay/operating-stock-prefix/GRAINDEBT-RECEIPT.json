@@ -1,0 +1,55 @@
+{
+  "schema": "titan-v4-graindebt-source-receipt/v1",
+  "status": "DIAGNOSTIC_ONLY_NO_POLICY_MUTATION",
+  "canonical_workspace": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "claim_ts": "1789185731.701719",
+  "source_contract": {
+    "operating_stock_git_blob": "781aa90da0d85d0ba23c665e29d6087d182c085e",
+    "operating_stock_enabled": true,
+    "cap_reason": "feed_reservation_exceeds_two_units",
+    "cap_boundary": "withheld_units > 2 returns original selected action through exception path"
+  },
+  "witness": {
+    "shed_wheat": 5,
+    "offered_wheat_sale": 5,
+    "required_wheat": 3,
+    "returned_wheat_credit": 0,
+    "permitted_sale": 2,
+    "withheld_units": 3,
+    "cap_bypass": true,
+    "claim": "source-level reachability of cap path only; not a natural-event or EV claim"
+  },
+  "artifact": {
+    "module": "grain_debt_audit.py",
+    "module_bytes": 7388,
+    "module_sha256": "13459c025c4dbf6a51d45ecba02806d40914632bac20233b7909dfa6d18933f7",
+    "test": "test_grain_debt_audit.py",
+    "test_bytes": 5538,
+    "test_sha256": "09a1f52e45418f4137161a4b57b540ce68df9f26c131e3cc95bd0e81fb840061"
+  },
+  "isolated_preflight": {
+    "normal": "12 PASS + 1 repository-source test SKIP",
+    "optimized": "12 PASS + 1 repository-source test SKIP",
+    "py_compile": "PASS",
+    "repository_expected": "13 tests, source-custody test must not skip in checkout"
+  },
+  "classification_gate": [
+    "CAP_BYPASS_RETURNED_SALE",
+    "GUARD_RESERVED_FEED",
+    "FEED_ALREADY_COVERED",
+    "BINDING_GAP_RETURNED_SALE",
+    "OTHER_UNCERTIFIED_RETURNED_SALE",
+    "OTHER_CERTIFIED_RETURNED_SALE",
+    "NO_RETURNED_WHEAT_SALE"
+  ],
+  "next_gate": "recover/rerun r04_wheat_merchant native callbacks; correlate any cap-bypass returned sales with downstream FEED/animal/CARE-output losses and cell delta margin",
+  "boundaries": {
+    "runtime_changed": false,
+    "config_changed": false,
+    "policy_changed": false,
+    "cap_changed": false,
+    "field_games_executed": false,
+    "economics_claimed": false,
+    "new_controller": false
+  }
+}

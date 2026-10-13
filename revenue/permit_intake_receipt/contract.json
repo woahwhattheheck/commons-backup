@@ -1,0 +1,81 @@
+{
+  "id": "permit-intake-receipt",
+  "version": 2,
+  "buyer": "permitting director or government CIO",
+  "workflow": [
+    "synthetic or de-identified application packet",
+    "deterministic completeness checklist",
+    "one missing-item notice when incomplete",
+    "one review queue route",
+    "auditable applicant receipt"
+  ],
+  "permit_types": {
+    "residential-remodel": {
+      "queue": "RESIDENTIAL_BUILDING_REVIEW",
+      "required": [
+        "applicant",
+        "parcelId",
+        "siteAddress",
+        "scope",
+        "estimatedCost",
+        "ownerConsent"
+      ]
+    },
+    "commercial-tenant": {
+      "queue": "COMMERCIAL_PLAN_REVIEW",
+      "required": [
+        "applicant",
+        "parcelId",
+        "siteAddress",
+        "scope",
+        "estimatedCost",
+        "planSet",
+        "occupancyType",
+        "contractorLicense"
+      ]
+    },
+    "sign": {
+      "queue": "ZONING_SIGN_REVIEW",
+      "required": [
+        "applicant",
+        "parcelId",
+        "siteAddress",
+        "signDimensions",
+        "sitePlan",
+        "ownerConsent"
+      ]
+    },
+    "demolition": {
+      "queue": "SAFETY_DEMOLITION_REVIEW",
+      "required": [
+        "applicant",
+        "parcelId",
+        "siteAddress",
+        "scope",
+        "utilityDisconnects",
+        "asbestosSurvey"
+      ]
+    }
+  },
+  "acceptance": [
+    "every checklist item comes from the permit-type matrix",
+    "incomplete input creates exactly one missing-item notice",
+    "every recognized type routes exactly once to its review queue",
+    "replay creates no second notice, route, or receipt",
+    "crash/resume and rollback preserve receipts",
+    "same id with different bytes returns APPLICATION_CONFLICT",
+    "approvals and denials remain zero"
+  ],
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_proof_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "browser-local synthetic or de-identified input; no server submission",
+  "decision_boundary": "intake only; never approves or denies"
+}

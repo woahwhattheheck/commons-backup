@@ -1,0 +1,32 @@
+name: conversion-attribution-ledger
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/conversion_attribution_ledger/**'
+      - '.github/workflows/conversion-attribution-ledger.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/conversion_attribution_ledger/**'
+      - '.github/workflows/conversion-attribution-ledger.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/conversion_attribution_ledger
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile conversion_attribution_ledger.py test_conversion_attribution_ledger.py
+      - run: python -m unittest -v test_conversion_attribution_ledger.py
+      - run: python -O -m unittest -v test_conversion_attribution_ledger.py
+      - run: |
+          d=$(mktemp -d)
+          python conversion_attribution_ledger.py compile --input examples/happy.json --json-out "$d/ledger.json" --markdown-out "$d/ledger.md"
+          python conversion_attribution_ledger.py verify --input examples/happy.json --ledger "$d/ledger.json"
+          python -c 'import json,sys; d=json.load(open(sys.argv[1])); assert d["summary"]["cash_collected"] is False; assert d["summary"]["revenue_recognized"] is False' "$d/ledger.json"

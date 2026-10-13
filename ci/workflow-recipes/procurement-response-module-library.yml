@@ -1,0 +1,32 @@
+name: Procurement response module library
+on:
+  pull_request:
+    paths: ['revenue/procurement_response_module_library/**','.github/workflows/procurement-response-module-library.yml']
+  push:
+    branches: [main]
+    paths: ['revenue/procurement_response_module_library/**','.github/workflows/procurement-response-module-library.yml']
+concurrency:
+  group: procurement-response-modules-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: python -m py_compile revenue/procurement_response_module_library/engine.py revenue/procurement_response_module_library/test_engine.py revenue/procurement_response_module_library/materializer.py revenue/procurement_response_module_library/test_materializer.py
+      - run: python -m unittest -v revenue.procurement_response_module_library.test_engine revenue.procurement_response_module_library.test_materializer
+      - run: python -O -m unittest -v revenue.procurement_response_module_library.test_engine revenue.procurement_response_module_library.test_materializer
+      - run: |
+          rm -rf /tmp/prm
+          python -m revenue.procurement_response_module_library.engine compile --library revenue/procurement_response_module_library/catalog.json --solicitation revenue/procurement_response_module_library/solicitation.json --out-dir /tmp/prm
+          python -m revenue.procurement_response_module_library.engine verify --library revenue/procurement_response_module_library/catalog.json --solicitation revenue/procurement_response_module_library/solicitation.json --packet /tmp/prm/packet.json --markdown /tmp/prm/packet.md --receipt /tmp/prm/receipt.json
+      - run: |
+          rm -rf /tmp/prm-materialized /tmp/prm-materialized-packet
+          python -m revenue.procurement_response_module_library.materializer compile --source revenue/procurement_response_module_library/synthetic_materializer_source.json --out-dir /tmp/prm-materialized
+          python -m revenue.procurement_response_module_library.materializer verify --source revenue/procurement_response_module_library/synthetic_materializer_source.json --catalog /tmp/prm-materialized/catalog.json --diff /tmp/prm-materialized/diff.json --receipt /tmp/prm-materialized/receipt.json
+          python -m revenue.procurement_response_module_library.engine compile --library /tmp/prm-materialized/catalog.json --solicitation revenue/procurement_response_module_library/solicitation.json --out-dir /tmp/prm-materialized-packet
+          python -m revenue.procurement_response_module_library.engine verify --library /tmp/prm-materialized/catalog.json --solicitation revenue/procurement_response_module_library/solicitation.json --packet /tmp/prm-materialized-packet/packet.json --markdown /tmp/prm-materialized-packet/packet.md --receipt /tmp/prm-materialized-packet/receipt.json

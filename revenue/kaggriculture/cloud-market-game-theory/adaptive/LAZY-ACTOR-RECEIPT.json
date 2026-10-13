@@ -1,0 +1,160 @@
+{
+  "schema": "titan.lazy-actor-delivery.v1",
+  "author": "COVE-707949",
+  "date": "2026-09-08",
+  "comparison": {
+    "complete_correspondence": true,
+    "issues": [],
+    "calls": 719,
+    "action_differences": [],
+    "state_differences": [],
+    "input_mutations": [],
+    "work_totals": {
+      "lazy": {
+        "captured_windows": 32,
+        "inspected_windows": 32,
+        "compiled_windows": 32,
+        "calls_with_captures": 32,
+        "max_captured_windows": 1
+      },
+      "eager": {
+        "captured_windows": 32,
+        "inspected_windows": 32,
+        "compiled_windows": 32,
+        "calls_with_captures": 32,
+        "max_captured_windows": 1
+      }
+    },
+    "different_compilation_calls": []
+  },
+  "timing": {
+    "lazy": {
+      "passes": 3,
+      "action_hashes": [
+        "2c2f5bbcbc6de28fb92cbd3b91938e59707a6ae8d40ed445bd418a323a75f2aa"
+      ],
+      "total_action_s": [
+        6.7456531260013435,
+        6.649876067999912,
+        6.412444025998525
+      ],
+      "p99_s": [
+        0.022834955999996964,
+        0.023615936000055626,
+        0.02214028399998824
+      ],
+      "max_s": [
+        0.09348464000004242,
+        0.10036761099991054,
+        0.0912340459999541
+      ],
+      "load_through_first_s": [
+        0.0568125139999438,
+        0.05777132499997606,
+        0.05510878999996294
+      ],
+      "expected_action_mismatches": [
+        3,
+        3,
+        3
+      ],
+      "median_total_action_s": 6.649876067999912,
+      "median_p99_s": 0.022834955999996964,
+      "median_max_s": 0.09348464000004242,
+      "median_load_through_first_s": 0.0568125139999438
+    },
+    "eager": {
+      "passes": 3,
+      "action_hashes": [
+        "2c2f5bbcbc6de28fb92cbd3b91938e59707a6ae8d40ed445bd418a323a75f2aa"
+      ],
+      "total_action_s": [
+        6.375077580000493,
+        6.444099574997381,
+        6.726403503000597
+      ],
+      "p99_s": [
+        0.020467569000061303,
+        0.02059062199998607,
+        0.022123458999999457
+      ],
+      "max_s": [
+        0.0905022800000097,
+        0.09264864700003272,
+        0.101970993000009
+      ],
+      "load_through_first_s": [
+        0.054092329000013706,
+        0.051573718999975426,
+        0.052394319999962136
+      ],
+      "expected_action_mismatches": [
+        3,
+        3,
+        3
+      ],
+      "median_total_action_s": 6.444099574997381,
+      "median_p99_s": 0.02059062199998607,
+      "median_max_s": 0.09264864700003272,
+      "median_load_through_first_s": 0.052394319999962136
+    },
+    "all_action_hashes_equal": true,
+    "median_action_time_reduction_pct": -3.1932543966410654
+  },
+  "mechanism": {
+    "admissions": {
+      "aborts": 0,
+      "admissions": 3,
+      "branches": 3,
+      "changed_actions": 3,
+      "economic_branches": 3,
+      "projection_fallbacks": 72,
+      "unknown_states": 0
+    },
+    "unused_tables_saved": 0,
+    "interpretation": "No eliminated offer compilation on this retained workload; three timing pairs do not establish a general regression or speedup."
+  },
+  "independent_readback": {
+    "source_files_each": 29,
+    "differing_source_paths": [
+      "cloud-market-game-theory/adaptive/runtime.py"
+    ],
+    "profile_trace_action_hashes_match": true,
+    "all_ordinary_source_and_input_identities_match": true,
+    "donor_action_mismatch_steps": [
+      545,
+      549,
+      569
+    ]
+  },
+  "test_result": {
+    "methods": 14,
+    "failures": 0,
+    "errors": 0,
+    "log_sha256": "0c70e6ee749d3b372f32d7a93f24f76868b5ce83d573bedd8583e54536722d06"
+  },
+  "source": {
+    "runtime_git_blob": "c9f1e3c974815816159c7dbdfe8da6215e0bfcdc",
+    "runtime_sha256": "2dd2c5b2c4730234aa667a0e4de56029aa5011963c76bf859719f9d23633b977",
+    "eager_runtime_sha256": "8ce5d00c0bf53d8e3c4d9546135d92006879229037995c14a79e13b704781852",
+    "benchmark_sha256": "caf8584ccbd4a29c976864edcb4c3cccdf72f585f08def9ee64b2eef3b87115e",
+    "profiler_sha256": "bb1f2b8045b32d06d1836a53719abd1e508713efbfc6cc4eb9f7e811e7b6cd4a",
+    "timing_source_sha256": "d7ce11607deb9e3cdfece07ffc1483a789a4eeb2313643b9f88ff97f8f907c13"
+  },
+  "library": {
+    "name": "TITAN-COVE-lazy-actor-measurement-20260908.zip",
+    "file_id": "file_00000000d0f881f9b0d25d60ba609e73",
+    "bytes": 9635643,
+    "sha256": "14397393419bd3054f09af56e2147d078a15dcea9ba0773f6cba063c6ab41233",
+    "manifest_members": 72,
+    "full_result_path": "lazy-actor-results.json",
+    "full_result_sha256": "d8be8c961becff456031e33f722218853dc82768baf367d1cf7ad140995b4aae"
+  },
+  "limits": [
+    "Off-policy retained observations, not a new game or strength result.",
+    "Repeated timings are one workload, not independent economic evidence.",
+    "Traced state instrumentation is separate from ordinary timing.",
+    "Eager unused-window errors can change fallback; no general error parity is promised.",
+    "Source closure is explicitly pinned; later main changes are not inherited."
+  ]
+}

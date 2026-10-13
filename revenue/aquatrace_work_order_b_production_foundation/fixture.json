@@ -1,0 +1,189 @@
+{
+  "demand_id": "aquatrace-work-order-b-production-foundation-20260831-01",
+  "schema": "commons-aquatrace-work-order-b-production-foundation/v1",
+  "lane": "B",
+  "build": "AquaTrace production foundation — roster lookup, deny-by-default RBAC, attributable audit, samples/custody/QC, device contracts",
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "program_state": "NOT_READY",
+  "cash_usd": 0,
+  "pre_sale_transport": "NONE",
+  "interfaces": "SIMULATED",
+  "interface_live": false,
+  "live_lims": false,
+  "production_writes": false,
+  "automatic_release": false,
+  "readiness_claim": false,
+  "certification_claim": false,
+  "outreach": false,
+  "city_contact": false,
+  "phi": false,
+  "epoch": "2026-08-31T06:00:00Z",
+  "named_release_role": "REPORTING_APPROVER",
+  "named_release_actor": "reporting-1",
+  "delegations_ts": "1788158009.951179",
+  "delegations_channel": "C0BTB4SUCP9",
+  "cite_billings_instrument_fixtures": "revenue/billings_bid_1421/instrument_fixtures — conceptual cite only; those files are not rewritten",
+  "official_binary": "python3 aquatrace_work_order_b_production_foundation.py",
+  "official_test": "python3 test_aquatrace_work_order_b_production_foundation.py",
+  "actors": {
+    "collector-1": {"role": "COLLECTOR", "enabled": true},
+    "collector-2": {"role": "COLLECTOR", "enabled": true},
+    "analyst-1": {"role": "ANALYST", "enabled": true},
+    "analyst-2": {"role": "ANALYST", "enabled": true},
+    "qa-1": {"role": "QA", "enabled": true},
+    "qa-2": {"role": "QA", "enabled": true},
+    "reporting-1": {"role": "REPORTING_APPROVER", "enabled": true},
+    "integration-1": {"role": "INTEGRATION", "enabled": true},
+    "support-1": {
+      "role": "SUPPORT",
+      "enabled": true,
+      "window_start": "2026-08-31T00:00:00Z",
+      "window_end": "2026-08-31T12:00:00Z"
+    },
+    "support-expired-1": {
+      "role": "SUPPORT",
+      "enabled": true,
+      "window_start": "2026-08-30T00:00:00Z",
+      "window_end": "2026-08-30T12:00:00Z"
+    },
+    "disabled-analyst-1": {"role": "ANALYST", "enabled": false}
+  },
+  "devices": {
+    "SYN-ATB-DEV-PH-01": {
+      "known": true,
+      "model": "SYN-PH-METER-ATB",
+      "software": "syn-ph-fw-1.0.0",
+      "cites": "mock-ph-meter-1 / SM 4500-H+ B"
+    },
+    "SYN-ATB-DEV-IC-01": {
+      "known": true,
+      "model": "SYN-IC-ATB",
+      "software": "syn-ic-fw-1.0.0",
+      "cites": "mock-metrohm-ic / EPA 300.0"
+    },
+    "SYN-ATB-DEV-BAL-01": {
+      "known": true,
+      "model": "SYN-BAL-ATB",
+      "software": "syn-bal-fw-1.0.0",
+      "cites": "mock-analytical-balance-1 / SM 2540 D"
+    }
+  },
+  "samples": [
+    {
+      "sample_id": "SYN-ATB-S01",
+      "plan": "CLEAN",
+      "device_id": "SYN-ATB-DEV-PH-01",
+      "analyte": "pH",
+      "method": "SM 4500-H+ B",
+      "value": 7.2,
+      "spec_lo": 6.5,
+      "spec_hi": 8.5
+    },
+    {
+      "sample_id": "SYN-ATB-S02",
+      "plan": "CLEAN",
+      "device_id": "SYN-ATB-DEV-IC-01",
+      "analyte": "chloride",
+      "method": "EPA 300.0",
+      "value": 12.0,
+      "spec_lo": 0.0,
+      "spec_hi": 250.0
+    },
+    {
+      "sample_id": "SYN-ATB-S03",
+      "plan": "CLEAN",
+      "device_id": "SYN-ATB-DEV-BAL-01",
+      "analyte": "tss",
+      "method": "SM 2540 D",
+      "value": 8.0,
+      "spec_lo": 0.0,
+      "spec_hi": 30.0
+    },
+    {
+      "sample_id": "SYN-ATB-S04",
+      "plan": "CLEAN_UNRECONCILED_PROBE",
+      "device_id": "SYN-ATB-DEV-PH-01",
+      "analyte": "pH",
+      "method": "SM 4500-H+ B",
+      "value": 7.4,
+      "spec_lo": 6.5,
+      "spec_hi": 8.5
+    },
+    {
+      "sample_id": "SYN-ATB-S05",
+      "plan": "QC_FAIL",
+      "device_id": "SYN-ATB-DEV-PH-01",
+      "analyte": "pH",
+      "method": "SM 4500-H+ B",
+      "value": 3.1,
+      "spec_lo": 6.5,
+      "spec_hi": 8.5
+    },
+    {
+      "sample_id": "SYN-ATB-S06",
+      "plan": "UNKNOWN_DEVICE",
+      "device_id": "SYN-ATB-DEV-UNKNOWN",
+      "analyte": "pH",
+      "method": "SM 4500-H+ B",
+      "value": 7.0,
+      "spec_lo": 6.5,
+      "spec_hi": 8.5
+    },
+    {
+      "sample_id": "SYN-ATB-S07",
+      "plan": "INCOMPLETE_CUSTODY",
+      "device_id": "SYN-ATB-DEV-PH-01",
+      "analyte": "pH",
+      "method": "SM 4500-H+ B",
+      "value": 7.1,
+      "spec_lo": 6.5,
+      "spec_hi": 8.5
+    },
+    {
+      "sample_id": "SYN-ATB-S08",
+      "plan": "NO_NAMED_HUMAN",
+      "device_id": "SYN-ATB-DEV-PH-01",
+      "analyte": "pH",
+      "method": "SM 4500-H+ B",
+      "value": 7.3,
+      "spec_lo": 6.5,
+      "spec_hi": 8.5
+    }
+  ],
+  "expected": {
+    "samples": 8,
+    "clean_samples": 4,
+    "hold_samples": 4,
+    "released_after_named_human": 4,
+    "released_without_named_human": 0,
+    "blocked_released": 0,
+    "complete_custody_chains": 7,
+    "incomplete_custody_holds": 1,
+    "unknown_actor_refusals": 1,
+    "disabled_actor_refusals": 1,
+    "self_approve_refusals": 1,
+    "collector_release_refusals": 1,
+    "support_window_refusals": 1,
+    "support_elevate_refusals": 1,
+    "support_reads_allowed": 1,
+    "integration_admin_refusals": 1,
+    "qa_erase_refusals": 1,
+    "unreconciled_release_refusals": 1,
+    "qc_approved": 4,
+    "qc_held": 1,
+    "qc_hold_release_refusals": 1,
+    "unknown_device_holds": 1,
+    "known_device_handshakes": 6,
+    "no_named_human_result_holds": 1,
+    "autonomous_release_refusals": 8,
+    "reconciled_packets": 4,
+    "replay_changed_records": 0,
+    "replay_duplicate_effects": 0,
+    "production_writes": 0,
+    "live_lims": 0,
+    "automatic_releases": 0,
+    "readiness_claims": 0,
+    "cash_usd": 0
+  },
+  "golden_audit_sha256": "669cf3ea966ee6351ffad46bbc0e2ce6854a10ce290bd6faf380b57910f3ec23"
+}

@@ -1,0 +1,44 @@
+name: roadef-resume-initialization
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/roadef2026/fleet-candidate/main.cpp'
+      - 'revenue/roadef2026/fleet-candidate/test_resume_initialization.py'
+      - '.github/workflows/roadef-resume-initialization.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: roadef-resume-initialization-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: candidate
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: parent
+      - name: Install C++ header dependency
+        run: sudo apt-get update && sudo apt-get install -y rapidjson-dev
+      - name: Compare fixed-work runs and constructor calls
+        run: >-
+          python3 candidate/revenue/roadef2026/fleet-candidate/test_resume_initialization.py
+          --parent parent/revenue/roadef2026/fleet-candidate/main.cpp
+          --candidate candidate/revenue/roadef2026/fleet-candidate/main.cpp
+          --output "${{ runner.temp }}/resume-initialization-results.json"
+      - name: Retain exact validation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roadef-resume-initialization-results
+          path: ${{ runner.temp }}/resume-initialization-results.json
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,99 @@
+{
+  "scope": "retain child display diagnostics then propagate original decoding error",
+  "sources": {
+    "before": {
+      "bytes": 16125,
+      "git_blob": "69d8c1a0f8216d53a102c202954e2edb3801eb0c",
+      "sha256": "5365cd471e4c9e4e2499aa521e23d854a009265362bb3dff42c06d88e5bc0d55"
+    },
+    "after": {
+      "bytes": 16556,
+      "git_blob": "d750233ca84477b09ec2b9018a43523fef016d3c",
+      "sha256": "03b9569b1dc186d0feaf57398a1857fc71753df65f92255a2321e8e18390ce9c"
+    },
+    "unchanged_functions": [
+      "sha256",
+      "_entry_identity",
+      "expected_binding",
+      "inspect_report",
+      "valid_report",
+      "write_run_state",
+      "validate_panel_config",
+      "main"
+    ],
+    "changed_functions": [
+      "run_job"
+    ],
+    "official_games": 0
+  },
+  "new_tests": {
+    "run": 8,
+    "failures": 0,
+    "errors": 0,
+    "successful": true
+  },
+  "baseline_same_tests": {
+    "run": 8,
+    "failures": 5,
+    "errors": 0,
+    "successful": false
+  },
+  "unchanged_reuse_tests": {
+    "run": 31,
+    "failures": 0,
+    "errors": 0,
+    "successful": true
+  },
+  "test_source": {
+    "bytes": 7446,
+    "sha256": "dbafea7aa3a58b9692f75f7655b13071dec18f87bb934062751335302fa769c2",
+    "git_blob": "8dbf79df71999adfc87472d923c30f7bdae6deed"
+  },
+  "fixture_source": {
+    "bytes": 19145,
+    "sha256": "72ba325dd31537dd194e373a7e11fcf2f16eed728778f79f546e07803e259a99",
+    "git_blob": "c4769371ea6a8026a3b80d33f8a47b9e9e37a520"
+  },
+  "logs": {
+    "tests.log": {
+      "bytes": 1288,
+      "sha256": "d9e019da313c63f8d9449959f6dfe7146ed718ecaca92ba364600206d2eb04ee",
+      "git_blob": "a5b1dcb5f9806eb5b8953f42683f8cf799c75438"
+    },
+    "original-tests.log": {
+      "bytes": 5477,
+      "sha256": "2d48e9105851e489a80ae1c739d03433dcff6d95c4b9974fe64fbb618c10a13a",
+      "git_blob": "bd4857e298a2a91539f9622dad07cf2d60fce94e"
+    },
+    "reuse-tests.log": {
+      "bytes": 4226,
+      "sha256": "1ff7b1ecfd52036c2e132ebef13c2ea861729ac7d905df8a4d3aeed5c23a6dd9",
+      "git_blob": "433c7f35e486cd98833aa388cacfe8b5fdce0c88"
+    }
+  },
+  "witnesses": [
+    {
+      "case": "actual_cli_two_workers",
+      "exit": 1,
+      "bad_error": "UnicodeDecodeError",
+      "good_status": "complete",
+      "bad_log": "\\xffretained failed-child diagnostic\n",
+      "raw_reports_retained": 2
+    },
+    {
+      "case": "stdout",
+      "error": "UnicodeDecodeError",
+      "display_log": "original\\xffstdout\n",
+      "report_retained": true,
+      "fixture_exit": 7
+    }
+  ],
+  "official_games": 0,
+  "policy_calls_in_new_suite": 0,
+  "registered_game_seeds": [],
+  "limits": [
+    "Escaped display text, not raw-byte archival identity.",
+    "Original decode error still propagates; no successful status or child exit status is inferred from undecodable output.",
+    "Only run_job gains the failure handler; config validation, source/cell checks, main and atomic writer remain unchanged."
+  ]
+}

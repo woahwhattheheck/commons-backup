@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "decision_id": "install-order-1042-release-check",
+  "snapshot_at": "2026-09-13T08:02:00Z",
+  "freshness_window_seconds": 300,
+  "order": {
+    "order_id": "install-order-1042",
+    "currency": "AUD",
+    "required_amount_minor": 150000
+  },
+  "sources": {
+    "PAYMENT_PROVIDER": {"complete": true, "observed_at": "2026-09-13T08:01:50Z"},
+    "OPERATIONS_SYSTEM": {"complete": true, "observed_at": "2026-09-13T08:01:50Z"},
+    "ORDER_SYSTEM": {"complete": true, "observed_at": "2026-09-13T08:01:50Z"},
+    "FULFILLMENT_SYSTEM": {"complete": true, "observed_at": "2026-09-13T08:01:50Z"}
+  },
+  "events": [
+    {
+      "event_id": "provider-event-9001",
+      "kind": "PAYMENT_CAPTURED",
+      "source": "PAYMENT_PROVIDER",
+      "order_id": "install-order-1042",
+      "occurred_at": "2026-09-13T08:00:10Z",
+      "payment_id": "payment-7781",
+      "amount_minor": 150000,
+      "currency": "AUD"
+    },
+    {
+      "event_id": "ops-event-5001",
+      "kind": "FULFILLMENT_READY",
+      "source": "OPERATIONS_SYSTEM",
+      "order_id": "install-order-1042",
+      "occurred_at": "2026-09-13T08:00:20Z"
+    }
+  ]
+}

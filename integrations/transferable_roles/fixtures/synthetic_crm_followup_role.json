@@ -1,0 +1,104 @@
+{
+  "schema": "commons.transferable_role/v1",
+  "role_id": "role-synthetic-crm-followup-20260904",
+  "label": "CRM follow-up operator (SYNTHETIC)",
+  "synthetic": true,
+  "synthetic_note": "SYNTHETIC fixture for R4 handoff tests — not a live customer, promise, or deadline",
+  "purpose": "Continue one existing CRM relationship thread: know what was promised, what remains open, and the next useful action — without inventing contact or reminting credentials.",
+  "knowledge": [
+    {
+      "pointer": "ground/SLACK_SERVICE_TAGS.json",
+      "label": "service tags + GOAT MagicPath/Notion peer routes"
+    },
+    {
+      "pointer": "integrations/gemini_slack/peer_tool_gateway.py",
+      "label": "C1-compatible submit/status/events/recover shape"
+    },
+    {
+      "pointer": "integrations/grokbot_control/",
+      "label": "G2 SPARK control — GrokBotControlClient @ :8881 (PR #8761)"
+    },
+    {
+      "pointer": "p/spark-astra-g2-grokbot-control-20260904-01.md",
+      "label": "G2 receipt — pool_id/session_id/run_id contract"
+    },
+    {
+      "pointer": "Astra CRM6 demand (coordination)",
+      "label": "relationship survives context window — LEDGER lane; do not remint CRM"
+    }
+  ],
+  "obligations": [
+    {
+      "id": "ob-1",
+      "summary": "Successor must identify next CRM action from stored evidence, not guess",
+      "next_action": "Open the relationship evidence pointer already in private CRM; state next useful action from source",
+      "status": "open",
+      "evidence_pointer": "private Airtable revenue-CRM (existing store — not in this public fixture)"
+    }
+  ],
+  "tools": [
+    {
+      "name": "transferable_roles_cli",
+      "entry": "python3 integrations/transferable_roles/cli.py",
+      "notes": "create/equip/transfer/inspect/export"
+    },
+    {
+      "name": "role_export",
+      "entry": "python3 integrations/transferable_roles/cli.py export <role_id>",
+      "notes": "portable package; secrets excluded"
+    },
+    {
+      "name": "grokbot_control_client",
+      "entry": "integrations/grokbot_control/client.py",
+      "notes": "GrokBotControlClient — submit/follow-up/cancel/session recover; not grok.com"
+    }
+  ],
+  "access_routes": [
+    {
+      "name": "grokbot_control_g2",
+      "kind": "grokbot_control",
+      "base_url": "http://127.0.0.1:8881",
+      "pool_id": "grokbot",
+      "client": "integrations/grokbot_control/client.py",
+      "submit": "POST /v1/runs",
+      "status": "GET /v1/runs/{run_id}?wait_ms=",
+      "follow_up": "POST /v1/runs/{run_id}/follow-up",
+      "cancel": "POST /v1/runs/{run_id}/cancel",
+      "recover": "GET /v1/sessions/{session_id}",
+      "events": "GET /v1/events?after=",
+      "note": "SPARK G2 #8761 / 5154aa8f. Point role at pool+session; seat/session_id filled by occupant at equip — never bind role to one chat window. Not grok.com :8788, not C1 :8879. Second pool only via GROKBOT_CONTROL_POOLS when owner names it."
+    },
+    {
+      "name": "gemini_peer_tool_gateway",
+      "kind": "loopback_http",
+      "base_url": "http://127.0.0.1:8778",
+      "submit": "POST /v1/message",
+      "status": "GET /v1/requests/{request_id}",
+      "events": "GET /v1/events?after={cursor}",
+      "recover": "GET /v1/last?peer={peer}",
+      "note": "Mirror of integrations/gemini_slack/peer_tool_gateway.py — do not fork; C1 siblings share this shape"
+    },
+    {
+      "name": "commons_spark_mcp",
+      "kind": "mcp",
+      "base_url": "https://commons-spark-mcp.vercel.app/mcp",
+      "note": "Existing no-auth Commons MCP; KEEP /mcp"
+    },
+    {
+      "name": "service_tag_notion",
+      "kind": "service_tag",
+      "service_tag": "notion",
+      "store": "ground/SLACK_SERVICE_TAGS.json",
+      "note": "GOAT measured Notion peer; missing harness access → shared route or specific repair, not remint"
+    },
+    {
+      "name": "service_tag_magicpath",
+      "kind": "service_tag",
+      "service_tag": "magicpath",
+      "store": "ground/SLACK_SERVICE_TAGS.json",
+      "note": "GOAT measured MagicPath peer; secrets stay in existing stores"
+    }
+  ],
+  "credential_custodian": "existing_secure_stores",
+  "occupant": null
+}

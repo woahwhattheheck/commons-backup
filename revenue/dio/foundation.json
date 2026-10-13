@@ -1,0 +1,101 @@
+{
+  "schema_version": "dio-revenue/v1",
+  "title": "DIO measured-substrate revenue foundation",
+  "purpose": "Bind a customer request, quote, accepted work, and delivery to exact Muhlnickel and artifact evidence without turning payment metadata into proof.",
+  "schemas": {
+    "customer_job": "customer_job.schema.json",
+    "quote": "quote.schema.json",
+    "delivery_receipt": "delivery_receipt.schema.json"
+  },
+  "commercial_offer": {
+    "path": "../../commercial.json",
+    "offer_id": "white-box-gguf-pilot-30d"
+  },
+  "lifecycle": [
+    {
+      "order": 1,
+      "record": "CUSTOMER_JOB",
+      "settled_by": "customer_job.schema.json"
+    },
+    {
+      "order": 2,
+      "record": "QUOTE",
+      "settled_by": "quote.schema.json"
+    },
+    {
+      "order": 3,
+      "record": "ACCEPTED_WORK",
+      "settled_by": "quote.status == ACCEPTED, quote.accepted_work is present, and quote.bazaar.action_id is non-null"
+    },
+    {
+      "order": 4,
+      "record": "DELIVERY_RECEIPT",
+      "settled_by": "delivery_receipt.schema.json plus byte and acceptance evidence"
+    }
+  ],
+  "substrate_required_fields": [
+    "path",
+    "sha256",
+    "bytes",
+    "format",
+    "header",
+    "output_addresses",
+    "wire_plane",
+    "gates"
+  ],
+  "delivery_receipt_fields": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "job_id",
+    "quote_id",
+    "status",
+    "delivered_at",
+    "result_address",
+    "substrate",
+    "artifacts",
+    "acceptance",
+    "bazaar",
+    "payment"
+  ],
+  "payment_statuses": [
+    "NOT_REQUESTED",
+    "REFERENCE_ONLY",
+    "SETTLEMENT_REPORTED",
+    "REFUND_REPORTED",
+    "DISPUTED"
+  ],
+  "payment_contract": {
+    "shape": [
+      "reference",
+      "status"
+    ],
+    "note": "Payment is external metadata only. NOT_REQUESTED requires a null reference; every other status requires a nonempty external reference. No status invokes a rail, and no reference proves delivery."
+  },
+  "bazaar_contract": {
+    "job_and_quote_fields": [
+      "offer_id",
+      "action_id",
+      "result_id",
+      "note"
+    ],
+    "delivery_fields": [
+      "offer_id",
+      "action_id",
+      "result_id",
+      "note"
+    ]
+  },
+  "examples": [
+    "examples/closed_room_model_edit.json",
+    "examples/repo_compute_job.json",
+    "examples/substrate_delivery.json"
+  ],
+  "invariants": [
+    "Every lifecycle record contains measured substrate provenance.",
+    "Accepted work is an accepted quote with a named Bazaar action.",
+    "DELIVERED requires a quote, PASS acceptance, artifacts, Bazaar action/result IDs, a result address, and substrate provenance; MEASURED permits honest null lineage.",
+    "Null remains null when an input, Bazaar ID, amount, or settlement reference does not exist.",
+    "These records describe work; they do not restrict Commons participation or Action Pad capability."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "commands": [
+    "python -B -m unittest -v test_panel_diversity.py",
+    "python -O -B -m unittest -v test_panel_diversity.py",
+    "python -B panel_diversity.py PUBLISHED-TOP30-FAMILIES.json --output PUBLISHED-TOP30-DIVERSITY.json",
+    "python -B panel_diversity.py PUBLISHED-TOP30-FAMILIES.json --require-complete  # expected rc=3 until rank17 resolved"
+  ],
+  "files": {
+    "PUBLISHED-TOP30-DIVERSITY.json": {
+      "bytes": 3388,
+      "sha256": "e0fa0c51781ce60a41069e9f308d281d99cc0d6d5a057ad0c4f7d6f7eba6e4d1"
+    },
+    "PUBLISHED-TOP30-FAMILIES.json": {
+      "bytes": 5124,
+      "sha256": "aeebdd0be9d98677bfdbf64f63b1653c4520360e031eaf2b5182c0df9db5c234"
+    },
+    "README.md": {
+      "bytes": 2328,
+      "sha256": "c5be70e43c3443adeca21620f487b3536fa543cb915c04e71f05ab015137353e"
+    },
+    "panel_diversity.py": {
+      "bytes": 15276,
+      "sha256": "eed785a002ec7440252c956b4895a5cabcf53c4931cdd219f8c6e60bc50e4eb5"
+    },
+    "test_panel_diversity.py": {
+      "bytes": 6633,
+      "sha256": "56f768c9e036fe102119e0cdfc6f0cafc6097126e58ade57562d18b806369b81"
+    }
+  },
+  "limitations": [
+    "The published top-30 fixture is a transcription of Slack labels/family groupings, not independently authenticated source bytes.",
+    "Rank 17 was absent from the published table and is explicitly unresolved; no identity is invented.",
+    "Equal aggregate outcomes never establish policy identity; they are warning-only.",
+    "No engine games, V4 callbacks, competitive EV, promotion, default, archive, workflow, or Kaggle changes are claimed."
+  ],
+  "owner": "ASTRA-SPECTRUM",
+  "published_fixture": {
+    "authoritative": false,
+    "expected_labels": 31,
+    "family_multiplicity_inflation": 2.5,
+    "label_weight_effective_family_count": 8.181818181818182,
+    "max_family_multiplicity": 5,
+    "observed_labels": 31,
+    "resolved_labels": 30,
+    "unique_families": 12,
+    "unique_sources": 12,
+    "unresolved_labels": [
+      "rank17-unresolved"
+    ]
+  },
+  "python": "3.13.5",
+  "schema": "titan.gauntlet.panel-diversity.validation.v1",
+  "scope": "Strict panel identity / alias collapse / family-balanced reporting; no gameplay or engine mutation",
+  "tests": {
+    "normal": {
+      "errors": 0,
+      "failures": 0,
+      "tests": 17
+    },
+    "optimized": {
+      "errors": 0,
+      "failures": 0,
+      "tests": 17
+    }
+  }
+}

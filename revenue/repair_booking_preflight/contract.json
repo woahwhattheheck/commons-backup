@@ -1,0 +1,47 @@
+{
+  "schema": "commons-repair-booking-contract-v1",
+  "id": "repair-booking-exactly-once-v1",
+  "version": 2,
+  "offer": {
+    "diagnostic_price_usd": 199,
+    "diagnostic_delivery": "one business day",
+    "proof_price_usd": 2500,
+    "proof_gate": "only after diagnostic fit",
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "scope": {
+    "public_runner": "synthetic_only",
+    "creates_real_appointments": false,
+    "customer_data_allowed": false,
+    "workflow": "repair request -> scheduling attempt -> terminal receipt"
+  },
+  "accepted_terminal_states": [
+    "BOOKED",
+    "STOPPED",
+    "ROLLED_BACK"
+  ],
+  "acceptance": {
+    "fixture_count": 20,
+    "booking_rule": "Exactly one BOOKING_CREATED event ending BOOKED, or an explicit STOPPED/ROLLED_BACK terminal state.",
+    "duplicate_appointments": 0,
+    "silent_or_ambiguous_terminal_states": 0,
+    "first_unsafe_edge_required_on_failure": true,
+    "durable_json_receipt_required": true
+  },
+  "faults": [
+    "retry_before_call",
+    "timeout_before_call",
+    "timeout_after_commit",
+    "duplicate_client_retry",
+    "network_partition",
+    "provider_unavailable",
+    "crash_before_commit",
+    "crash_after_commit",
+    "duplicate_webhook",
+    "reordered_webhook",
+    "idempotency_collision",
+    "compensating_rollback"
+  ],
+  "entrypoint": "repair-booking-preflight.html",
+  "implementation": "repair-booking-preflight.js"
+}

@@ -1,0 +1,45 @@
+{
+  "receipt_id": "dealer-service-lead-rescue-20260831-01",
+  "slug": "dealer-service-lead-rescue",
+  "status": "WORKING_SYNTHETIC_DEMO",
+  "fixture": {
+    "leadId": "LEAD-SYN-1101",
+    "leadClass": "oil-change",
+    "dealerId": "DEALER-RIVERVIEW-DEMO",
+    "vehicleSlot": "VEH-SYN-F150-04-DEMO",
+    "formInquiryId": "FORM-SYN-2001",
+    "afterHoursInquiryId": "AFT-SYN-3001"
+  },
+  "run": {
+    "status": "RESCUED",
+    "followUpLane": "FOLLOWUP_EXPRESS",
+    "appointmentLane": "APPT_QUICK_LANE",
+    "followUpId": "LEAD-SYN-1101:followup",
+    "appointmentId": "LEAD-SYN-1101:appt",
+    "statusReceiptId": "LEAD-SYN-1101:status",
+    "appointments": 1,
+    "processedAt": "2026-08-31T03:00:00Z"
+  },
+  "test_command": "node test_dealer_service_lead_rescue.js",
+  "expected": "dealer-service-lead-rescue: 10 scenarios PASS",
+  "binary_scenarios": [
+    "complete oil-change rescue",
+    "incomplete hold to HELD_INCOMPLETE",
+    "four-class follow-up/appointment matrix",
+    "duplicate form submit plus after-hours inquiry",
+    "crash after classify and resume",
+    "crash after follow-up, worker restart, after-hours replay",
+    "crash after appointment and worker restart",
+    "rollback to un-rescued then rerun",
+    "same-id different-bytes conflict",
+    "PII refusal with no appointment"
+  ],
+  "live_crm_writes": 0,
+  "real_dealerships": 0,
+  "pii_emitted": 0,
+  "external_messages_sent": 0,
+  "buyer_delivery": false,
+  "payment_verified": false,
+  "cash_usd": 0,
+  "outreach": false
+}

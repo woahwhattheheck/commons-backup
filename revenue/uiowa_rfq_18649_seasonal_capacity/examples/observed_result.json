@@ -1,0 +1,23 @@
+{
+  "schema_version": "uiowa.seasonal-capacity.v1",
+  "classification": "SYNTHETIC",
+  "title": "Fictional academic-cycle dependency planning rehearsal",
+  "input_sha256": "b7ee0f5fe9838a4be3a6ebddfd36cd95b5f4ebe57ba65a1767f1f73ce9407b81",
+  "digest_kind": "canonical-json-utf8-sha256",
+  "interpretation": "Calculated planning assumptions, not measured throughput, outages, maturity or scheduling.",
+  "excess_interpretation": "Positive offered-minus-usable service-call ranges integrated over time; excludes unknown rows; not observed errors, queue lengths or unique users.",
+  "scenarios": [
+    {"id":"baseline","pressure_clock_hours":3.5,"pressure_service_hours":6.5,"unknown_service_hours":7.5,"excess_service_request_equivalents":[235800.0,1688400.0,3904200.0]},
+    {"id":"combined-preparation","pressure_clock_hours":4.5,"pressure_service_hours":7.5,"unknown_service_hours":7.5,"excess_service_request_equivalents":[900.0,846000.0,2925720.0]},
+    {"id":"move-auth-maintenance","pressure_clock_hours":4.5,"pressure_service_hours":7.5,"unknown_service_hours":7.5,"excess_service_request_equivalents":[105300.0,1515600.0,3778200.0]},
+    {"id":"reduce-repeated-reads","pressure_clock_hours":3.5,"pressure_service_hours":6.5,"unknown_service_hours":7.5,"excess_service_request_equivalents":[131400.0,1018800.0,3051720.0]}
+  ],
+  "baseline_1000_utc": [
+    {"service_id":"AUTH","offered_rps":[112.5,210.0,325.0],"usable_capacity_rps":[40.0,48.0,56.0],"status":"PRESSURE_ALL_ASSUMPTIONS"},
+    {"service_id":"DB","offered_rps":[221.0,343.0,467.0],"usable_capacity_rps":[128.0,160.0,192.0],"status":"PRESSURE_ALL_ASSUMPTIONS"},
+    {"service_id":"ESS","offered_rps":[75.0,108.0,142.0],"usable_capacity_rps":[144.0,176.0,208.0],"status":"WITHIN_ASSUMED_ENVELOPE"},
+    {"service_id":"EXT","offered_rps":[27.625,60.0,121.0],"usable_capacity_rps":null,"status":"UNKNOWN_CAPACITY"},
+    {"service_id":"IAM","offered_rps":[50.0,85.0,120.0],"usable_capacity_rps":[128.0,160.0,192.0],"status":"WITHIN_ASSUMED_ENVELOPE"},
+    {"service_id":"RIS","offered_rps":[22.0,39.0,56.0],"usable_capacity_rps":[64.0,80.0,96.0],"status":"WITHIN_ASSUMED_ENVELOPE"}
+  ]
+}

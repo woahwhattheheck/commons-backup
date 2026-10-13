@@ -1,0 +1,57 @@
+{
+  "schema": "titan.v4.goose-acquisition-composition.v1",
+  "status": "research_only_awaiting_occurrence_and_economics",
+  "canonical_workspace": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "source_pins": {
+    "official_engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "native_tapes_git_blob": "a43289b9cc5e34a2481fddf652762a7d92f427ef",
+    "router_git_blob_at_current_v4_runner_handoff": "a3e2fe87c717d128e43c9b65bae2265f40d1d76d",
+    "native_tape_census_script_git_blob": "d11606a4322a8edd6afc9309d800d6c98c307e7e",
+    "engine_lifecycle_contract_git_blob": "bcf9f90780b6ca1d78e339d43ddccb989291085f"
+  },
+  "engine_facts": {
+    "goose_cost": 300,
+    "buy_destination": "private.shed",
+    "unit_actions_execute_before_market_orders": true,
+    "same_callback_buy_then_pickup_possible": false,
+    "pickup_requires_shed_adjacency": true,
+    "place_requires_observed_carried_goose_and_empty_coop": true,
+    "place_consumes_one_goose": true,
+    "first_yield_age_days": 4,
+    "yield_interval_days": 1,
+    "max_held_egg_yield": 4,
+    "two_unfed_days_eject_animal_and_leave_structure": true
+  },
+  "current_router_ownership": {
+    "v231": "bounded SHEEP-to-COW substitution; confirms COW shed delta and redirects inherited SHEEP pickup/place only under its own strict state",
+    "v233": "bounded financed SHEEP investment; owns two SE workers, BUY_LAND/BUY_ANIMAL SHEEP/BUY_PRODUCT WHEAT/HIRE phases, pasture build/place/service and WOOL/FERTILIZER sales",
+    "e184": "outer sale-window layer; intentionally refuses sale reservation when the completed parent action contains animal PLACE because animal placement/fallback is not modeled by projected_shed",
+    "existing_goose_service": "idle-hands/S8/H3d families already cover portions of goose care/feed/harvest behavior; acquisition must not duplicate their service semantics"
+  },
+  "required_seam": {
+    "source_order": "after V233 final action, before E184 reserve_sales observes the action",
+    "reason": "the acquisition phase must see final V231/V233 market+worker ownership, while E184 must still see any injected PLACE GOOSE and conservatively skip reservation on that callback"
+  },
+  "fail_closed_composition_rules": [
+    "Do not append a GOOSE purchase on a callback already containing BUY_ANIMAL; preserve V231 substitutions and V233 sheep purchases unchanged.",
+    "Do not take or rewrite an actor owned by V233 workers; prefer an unowned literal-PASS actor and preserve all non-PASS parent commands.",
+    "Do not infer purchase success from the requested BUY_ANIMAL row; confirm a positive next-observation shed GOOSE delta first.",
+    "Do not infer pickup success from a requested PICKUP; confirm the chosen actor observably carries GOOSE before route/place state advances.",
+    "Do not PLACE unless the current observed tile is an empty COOP and the chosen actor observably carries GOOSE.",
+    "Confirm placement from the next observation before releasing the lifecycle state; requested commands are not receipts.",
+    "Do not add a new goose care/feed/harvest/sale policy in the acquisition controller; stop at confirmed placement and leave service to existing dedicated families until an explicit ablation proves a gap.",
+    "Do not build a COOP in the first acquisition port unless replay/native evidence shows empty-COOP scarcity is the blocker; initial scope is purchase-to-existing-empty-COOP only.",
+    "Do not enable any gameplay key from this contract. Require nonzero opportunity witnesses, both-seat matched economics, OFF identity and current-router composition tests first."
+  ],
+  "open_evidence": {
+    "native_tape_census": "requested; exact runner exists but connector-only seats cannot materialize the compressed tape payload",
+    "leader_replay_mine": "V4-GOOSE-LEADER-REPLAY-MINE-20260911-01; build-demand Slack ts 1789178927.582319",
+    "questions": [
+      "Do strong recorded agents buy GOOSE at all, and how often?",
+      "Is an empty COOP normally pre-existing or built shortly before placement?",
+      "What is the observed BUY-to-PICKUP and BUY-to-PLACE gap?",
+      "Does GOOSE acquisition correlate with positive outcomes after conditioning on team/opponent, or is it merely common behavior?"
+    ]
+  },
+  "promotion_gate": "Evidence only. No source integration/default change until exact occurrence witnesses plus matched both-seat economic evidence exist."
+}

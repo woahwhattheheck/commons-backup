@@ -1,0 +1,51 @@
+{
+  "schema": "titan-v4-intraday-carrybank/v1",
+  "status": "RESEARCH_ONLY_DEFAULT_OFF",
+  "authority": {
+    "official_engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4"
+  },
+  "source_verdict": {
+    "multi_quantity_pickup": true,
+    "carried_inventory_capacity_guard": false,
+    "safe_same_day_sinks": [
+      "WHEAT->FEED",
+      "FERTILIZER->FERTILIZE"
+    ],
+    "seeds_use_shed": false,
+    "drop_overflow_is_discarded": true,
+    "end_of_day_inventory_overflow_is_discarded": true,
+    "generic_backpack_safe": false
+  },
+  "admission_contract": {
+    "replaces_only": "PASS",
+    "requires_shed_adjacency": true,
+    "requires_positive_projected_capacity_pressure": true,
+    "requires_actor_local_same_day_consumption": true,
+    "quantity_bounds": [
+      "shed_availability",
+      "projected_capacity_pressure",
+      "additional_same_day_consumption_after_existing_inventory"
+    ],
+    "eligible_items": [
+      "WHEAT",
+      "FERTILIZER"
+    ]
+  },
+  "local_helper_test_receipt": {
+    "command_shape": "python -m unittest -v",
+    "passed": 12,
+    "failed": 0
+  },
+  "promotion": {
+    "authorized": false,
+    "reason": "Current TITAN replans online; production wiring must preserve the proved consumption continuation or add a sticky carry-consumption obligation, then pass paired economic gates.",
+    "required_metrics": [
+      "prevented_capacity_blocked_harvest_collect",
+      "extra_productive_units",
+      "pickup_and_route_displacement",
+      "feed_fertilizer_starvation_delta",
+      "eod_carried_inventory_from_admitted_hoists_must_equal_zero",
+      "terminal_margin_both_seats"
+    ]
+  }
+}

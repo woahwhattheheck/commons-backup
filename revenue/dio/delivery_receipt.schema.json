@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/dio/delivery_receipt.schema.json",
+  "title": "DIO delivery receipt",
+  "description": "Exact output shape shared with the substrate receipt producer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "job_id",
+    "quote_id",
+    "status",
+    "delivered_at",
+    "result_address",
+    "substrate",
+    "artifacts",
+    "acceptance",
+    "bazaar",
+    "payment"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "dio-revenue/v1"
+    },
+    "kind": {
+      "const": "DELIVERY_RECEIPT"
+    },
+    "receipt_id": {
+      "$ref": "customer_job.schema.json#/$defs/id"
+    },
+    "job_id": {
+      "$ref": "customer_job.schema.json#/$defs/id"
+    },
+    "quote_id": {
+      "$ref": "customer_job.schema.json#/$defs/nullableId"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "MEASURED",
+        "DELIVERED",
+        "PARTIAL",
+        "FAILED"
+      ]
+    },
+    "delivered_at": {
+      "$ref": "customer_job.schema.json#/$defs/timestamp"
+    },
+    "result_address": {
+      "type": "string",
+      "minLength": 1
+    },
+    "substrate": {
+      "$ref": "customer_job.schema.json#/$defs/substrate"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "bytes"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "$ref": "customer_job.schema.json#/$defs/sha256"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "evidence"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "MEASURED",
+            "PASS",
+            "FAIL",
+            "PARTIAL",
+            "UNMEASURED"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "condition_id",
+                  "path",
+                  "sha256",
+                  "observation"
+                ],
+                "properties": {
+                  "condition_id": {
+                    "$ref": "customer_job.schema.json#/$defs/id"
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "$ref": "customer_job.schema.json#/$defs/sha256"
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "status",
+                  "substrate_sha256",
+                  "actual_bytes",
+                  "expected_bytes",
+                  "output_addresses",
+                  "wire_plane_bytes",
+                  "gate_records",
+                  "gate_record_format"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "MHA_STRUCTURE"
+                  },
+                  "status": {
+                    "const": "MATCH"
+                  },
+                  "substrate_sha256": {
+                    "$ref": "customer_job.schema.json#/$defs/sha256"
+                  },
+                  "actual_bytes": {
+                    "type": "integer",
+                    "minimum": 8
+                  },
+                  "expected_bytes": {
+                    "type": "integer",
+                    "minimum": 8
+                  },
+                  "output_addresses": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "wire_plane_bytes": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "gate_records": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "gate_record_format": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "status",
+                  "count",
+                  "sha256"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "DELIVERED_ARTIFACT_HASHES"
+                  },
+                  "status": {
+                    "const": "RECORDED"
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "sha256": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "customer_job.schema.json#/$defs/sha256"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "status",
+                  "value"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "ACCEPTANCE_NOTE"
+                  },
+                  "status": {
+                    "const": "RECORDED"
+                  },
+                  "value": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "bazaar": {
+      "$ref": "customer_job.schema.json#/$defs/bazaarLink"
+    },
+    "payment": {
+      "$ref": "customer_job.schema.json#/$defs/payment"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "DELIVERED"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "quote_id": {
+            "$ref": "customer_job.schema.json#/$defs/id"
+          },
+          "result_address": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifacts": {
+            "type": "array",
+            "minItems": 1
+          },
+          "acceptance": {
+            "properties": {
+              "status": {
+                "const": "PASS"
+              }
+            }
+          },
+          "bazaar": {
+            "properties": {
+              "action_id": {
+                "$ref": "customer_job.schema.json#/$defs/id"
+              },
+              "result_id": {
+                "$ref": "customer_job.schema.json#/$defs/id"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

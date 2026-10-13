@@ -1,0 +1,147 @@
+{
+  "schema": "costed-work-batch/v1",
+  "scenario_id": "synthetic-batch-versus-penny-work",
+  "currency": "USD",
+  "start_at": "2026-09-15T08:00:00Z",
+  "horizon_minutes": 240,
+  "cash_budget_minor": 10000,
+  "effort_cost_minor_per_minute": 100,
+  "minimum_net_minor": 20000,
+  "node_budget": 100000,
+  "families": [
+    {
+      "id": "one-off",
+      "setup_minutes": 35,
+      "setup_cash_minor": 0
+    },
+    {
+      "id": "data-batch",
+      "setup_minutes": 25,
+      "setup_cash_minor": 3000
+    },
+    {
+      "id": "discovery",
+      "setup_minutes": 20,
+      "setup_cash_minor": 0
+    }
+  ],
+  "jobs": [
+    {
+      "operation_id": "tiny-unbatched",
+      "family_id": "one-off",
+      "availability": "AVAILABLE",
+      "work_units": 1,
+      "minutes": 30,
+      "cash_cost_minor": 0,
+      "reward_minor": 200,
+      "collection_probability_bp": 10000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:tiny-unbatched",
+      "deadline_at": null
+    },
+    {
+      "operation_id": "discovery-hypothesis",
+      "family_id": "discovery",
+      "availability": "AVAILABLE",
+      "work_units": 1,
+      "minutes": 180,
+      "cash_cost_minor": 0,
+      "reward_minor": 150000,
+      "collection_probability_bp": 2000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:discovery-hypothesis",
+      "deadline_at": null
+    },
+    {
+      "operation_id": "data-batch-1",
+      "family_id": "data-batch",
+      "availability": "AVAILABLE",
+      "work_units": 100,
+      "minutes": 35,
+      "cash_cost_minor": 500,
+      "reward_minor": 18000,
+      "collection_probability_bp": 8000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:data-batch-1",
+      "deadline_at": "2026-09-15T10:30:00Z"
+    },
+    {
+      "operation_id": "data-batch-2",
+      "family_id": "data-batch",
+      "availability": "AVAILABLE",
+      "work_units": 100,
+      "minutes": 35,
+      "cash_cost_minor": 500,
+      "reward_minor": 18000,
+      "collection_probability_bp": 8000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:data-batch-2",
+      "deadline_at": "2026-09-15T10:59:00Z"
+    },
+    {
+      "operation_id": "data-batch-3",
+      "family_id": "data-batch",
+      "availability": "AVAILABLE",
+      "work_units": 100,
+      "minutes": 35,
+      "cash_cost_minor": 500,
+      "reward_minor": 18000,
+      "collection_probability_bp": 8000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:data-batch-3",
+      "deadline_at": "2026-09-15T11:30:00Z"
+    },
+    {
+      "operation_id": "data-batch-4",
+      "family_id": "data-batch",
+      "availability": "AVAILABLE",
+      "work_units": 100,
+      "minutes": 35,
+      "cash_cost_minor": 500,
+      "reward_minor": 18000,
+      "collection_probability_bp": 8000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:data-batch-4",
+      "deadline_at": "2026-09-15T11:59:00Z"
+    },
+    {
+      "operation_id": "unvalued-token-award",
+      "family_id": "one-off",
+      "availability": "AVAILABLE",
+      "work_units": 1,
+      "minutes": 10,
+      "cash_cost_minor": 0,
+      "reward_minor": null,
+      "collection_probability_bp": null,
+      "valuation_basis": "UNVALUED",
+      "evidence_ref": "synthetic:unvalued-token-award",
+      "deadline_at": null
+    },
+    {
+      "operation_id": "peer-owned-urgent",
+      "family_id": "one-off",
+      "availability": "OWNED_ELSEWHERE",
+      "work_units": 1,
+      "minutes": 10,
+      "cash_cost_minor": 0,
+      "reward_minor": 999999,
+      "collection_probability_bp": 10000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:peer-owned-urgent",
+      "deadline_at": null
+    },
+    {
+      "operation_id": "missed-deadline",
+      "family_id": "one-off",
+      "availability": "AVAILABLE",
+      "work_units": 1,
+      "minutes": 10,
+      "cash_cost_minor": 0,
+      "reward_minor": 1000,
+      "collection_probability_bp": 10000,
+      "valuation_basis": "OWNER_SCENARIO",
+      "evidence_ref": "synthetic:missed-deadline",
+      "deadline_at": "2026-09-15T07:00:00Z"
+    }
+  ]
+}

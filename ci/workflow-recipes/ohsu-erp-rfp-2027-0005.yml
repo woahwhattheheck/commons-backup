@@ -1,0 +1,33 @@
+name: OHSU ERP RFP 2027-0005
+
+on:
+  push:
+    paths:
+      - 'revenue/ohsu_erp_rfp_2027_0005/**'
+      - '.github/workflows/ohsu-erp-rfp-2027-0005.yml'
+  pull_request:
+    paths:
+      - 'revenue/ohsu_erp_rfp_2027_0005/**'
+      - '.github/workflows/ohsu-erp-rfp-2027-0005.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/ohsu_erp_rfp_2027_0005/*.py
+      - name: Tests
+        run: python -m unittest revenue.ohsu_erp_rfp_2027_0005.test_qualification
+      - name: Optimized tests
+        run: python -O -m unittest revenue.ohsu_erp_rfp_2027_0005.test_qualification

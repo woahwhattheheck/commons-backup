@@ -1,0 +1,49 @@
+{
+  "$defs": {
+    "segment": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted": {"$ref": "#/$defs/uint"},
+        "attempts": {"$ref": "#/$defs/uint"},
+        "audience_label": {"maxLength": 240, "minLength": 1, "type": "string"},
+        "available_candidates": {"$ref": "#/$defs/uint"},
+        "collision_events": {"$ref": "#/$defs/uint"},
+        "delivered": {"$ref": "#/$defs/uint"},
+        "dnr_events": {"$ref": "#/$defs/uint"},
+        "evidence_observed_at": {"pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$", "type": "string"},
+        "evidence_ref": {"maxLength": 1024, "minLength": 1, "type": "string"},
+        "evidence_sha256": {"$ref": "#/$defs/sha256"},
+        "fresh_census_complete": {"type": "boolean"},
+        "human_replies": {"$ref": "#/$defs/uint"},
+        "offer_id": {"maxLength": 160, "minLength": 1, "type": "string"},
+        "paid": {"$ref": "#/$defs/uint"},
+        "positive_replies": {"$ref": "#/$defs/uint"},
+        "proposals": {"$ref": "#/$defs/uint"},
+        "retained_cash_cents": {"$ref": "#/$defs/uint"},
+        "route_available": {"type": "boolean"},
+        "route_kind": {"enum": ["EMAIL", "CONTACT_FORM", "DIRECT_MESSAGE", "PORTAL_MESSAGE"]},
+        "segment_id": {"maxLength": 120, "minLength": 1, "type": "string"},
+        "unresolved_collision": {"type": "boolean"}
+      },
+      "required": ["segment_id", "offer_id", "route_kind", "audience_label", "evidence_observed_at", "evidence_ref", "evidence_sha256", "available_candidates", "attempts", "delivered", "human_replies", "positive_replies", "proposals", "accepted", "paid", "retained_cash_cents", "dnr_events", "collision_events", "fresh_census_complete", "route_available", "unresolved_collision"],
+      "type": "object"
+    },
+    "sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "uint": {"maximum": 1000000000000, "minimum": 0, "type": "integer"}
+  },
+  "$id": "https://tokenjunkielabs.invalid/schemas/revenue-experiment-allocator-v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "batch_size": {"maximum": 10000, "minimum": 0, "type": "integer"},
+    "evaluation_at": {"pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$", "type": "string"},
+    "exploration_slots": {"maximum": 10000, "minimum": 0, "type": "integer"},
+    "max_evidence_age_hours": {"maximum": 8760, "minimum": 1, "type": "integer"},
+    "max_segment_share_bps": {"maximum": 10000, "minimum": 0, "type": "integer"},
+    "schema": {"const": "TJL_REVENUE_EXPERIMENT_ALLOCATOR_V1"},
+    "segments": {"items": {"$ref": "#/$defs/segment"}, "type": "array"}
+  },
+  "required": ["schema", "evaluation_at", "batch_size", "max_segment_share_bps", "exploration_slots", "max_evidence_age_hours", "segments"],
+  "title": "Revenue experiment allocator v1 input",
+  "type": "object"
+}

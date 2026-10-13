@@ -1,0 +1,45 @@
+{
+  "id": "ait-mn-metrc-capacity-gate-lims-01",
+  "version": 1,
+  "buyer": "Adams Independent Testing / Mark Adams",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "demand_id": "ait-mn-metrc-capacity-gate-lims-01"
+  },
+  "workflow": [
+    "read-only QBench order fetch",
+    "read-only Metrc/state-monitoring package fetch",
+    "physical accession reconciliation",
+    "visibly separate compliance and R&D queues",
+    "immutable QBench/Metrc/physical source pointers",
+    "reviewer-controlled staging",
+    "named human release only; R&D cannot enter the compliance-release queue"
+  ],
+  "acceptance": [
+    "120 synthetic input rows",
+    "80 valid licensed-compliance accession once onto the compliance queue",
+    "20 valid R&D accession once onto the R&D queue",
+    "exactly 100 accession and 20 HOLD",
+    "8 HOLD INVALID_OR_MISSING_LICENSE",
+    "6 HOLD DUPLICATE_PACKAGE_OR_SAMPLE",
+    "6 HOLD DESIGNATION_MISMATCH",
+    "all 20 R&D remain segregated and cannot enter the compliance-release queue",
+    "replay creates zero new accessions or holds",
+    "every accession and HOLD has source hash/provenance",
+    "named human release only; autonomous result/CoA release denied"
+  ],
+  "exclusions": [
+    "no Metrc/state write",
+    "no compliance decision",
+    "no automatic result or CoA release",
+    "no outreach",
+    "no prospect-facing demo",
+    "no live interface"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "reconciliation, queue segregation, staging, and human-release receipts only; never a Metrc write, compliance decision, or automatic CoA",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

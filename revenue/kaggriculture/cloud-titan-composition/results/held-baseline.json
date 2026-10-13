@@ -1,0 +1,2156 @@
+{
+  "arm": "baseline",
+  "engine_ref": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "engine_sha256": {
+    "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+  },
+  "evaluator_sha256": "e30b3108e0027477ab7ddbc057892a241c41a1f2b38f72caf267477877c4333c",
+  "source_files": {
+    "analyze.py": "db48eb4ce2d131f99c97ab87718215008b6aedc1b22ff69e2030c91fd7141aa0",
+    "arms/baseline.py": "21ee146f14c202a0984d50a7535163f5de0485f6a3405aaa92fa3cc651c77196",
+    "arms/cap.py": "cc173288b89842f95cfb6443bc9328d77f74e02e873fd48fde61c0df5c5a5b84",
+    "arms/carrot.py": "a5f54eba3776812ee0f6024f280fd8e82def7180003127cc82b141fbd851866b",
+    "arms/carrot_cap.py": "9bf5391b8d9f072c8bbc9e64e524fb3fbf69db0986ec733395ad750f47ad951d",
+    "arms/carrot_cap_sell_conserved.py": "992d31e74abaa042efbca796b8d9990be212eea40ef8824629003c7440456e3e",
+    "arms/carrot_cap_sell_dated.py": "3900cf173e912c7fe05f83745617e4a6d36a49164c7e42923d44f06e2b7ad71c",
+    "arms/carrot_cap_sell_safe.py": "1d84c0f7c77a994f332f30b19db2ca0e12fa8e047de3037b0daeef8bf6689aa7",
+    "arms/carrot_sell.py": "c991528f087c6fd66d19979320809a2287fd3f2bbd27a415f53c343dde26974d",
+    "arms/flora.py": "9afb66e6cc424e52f53fa26e8940e3989d3454d404da249838c946ad03a14397",
+    "arms/sell.py": "401ad5051a5100875b029eec5ec75bce77b385b8906e3172230d564512179178",
+    "benchmark.py": "c5ecd4356f7e611fc1b438d7bdcdfa50bc8d162b201af95d9d864a446d02799f",
+    "build.py": "e550205db04cd5a1e7c334df3ccccd6c242d5cc4bedcc09fc038272158b09313",
+    "conserved_sell_adapter.py": "0df166b296b0f24e04620ae14c34031a5201c082da677f2c22005ce9d9d3ae4f",
+    "controller.py": "0b4de0527624353585cebc90efe4e0b677b7d419abbd7c245d927a968e0eaed8",
+    "dated_sell_adapter.py": "6242305f0259a47a0f3ebf95c006a53eef72a3cc9cd28f57d1c85dae22b49148",
+    "main.py": "345921ab449141dd5caf2b48d8bbfefe6c5bc0c27f66b8eedbfa693c0f2e0307",
+    "sell_adapter.py": "81fc6050460efe4e943148abce7d60192690eb9a997c32c86d3156ffe7f80bc4",
+    "test_composition.py": "6fade7816428c8c9687c161b658292c0858d0b569f38ba9e4050f7bf3929e5fe",
+    "vendor/base/arlene.py": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4",
+    "vendor/carrot/carrot_demand.py": "ffcea52d086283d4b466f26ccec1e0d563687a7dab225f9c528c8313138a2cd0",
+    "vendor/claude/arlene_arm.py": "c9b97c34de3362517bba77b0c16f7378572a910126f350544b2f0926923647e3",
+    "vendor/claude/arlene_plan.py": "68a7f53710f12ab51330411a12d7c849dba62e6be8add14c07b592b8d7f302d5",
+    "vendor/claude/cap_loss.py": "ab92570dc989c6cb03aef29176d6c22411620403c551b2612364645a8d984e77",
+    "vendor/claude/cards.py": "1628a09048a8fdbc1a83468d039cd4d357646f75f72144bb60d4b3d9792a91e3",
+    "vendor/claude/constraints.py": "bb248713dfa97abc05c341ae0929d891454bcf9fc37f7b292e8323c137ee2cd1",
+    "vendor/claude/continuation.py": "d78c2dd4da44db07ae926345e885058e4b827e827d2650e57b4d17c3dfcc5deb",
+    "vendor/claude/engine_pin.py": "677984da568dd728a94d67cb3fdc8bb7e1fe50732d16108c215fdfe2df9d106a",
+    "vendor/claude/native_motifs.py": "3d8c36830c6ce4fb95f3113034aaaf60b6d8aa40016542734fd783f866e5c9e8",
+    "vendor/claude/route_cards.py": "939ba25f48e2457efb2e3063576da09e21cee59d09c1f37d70b87496277f8c65",
+    "vendor/claude/run_cards.py": "27ea6a7489aa7606f4ace4450efad28a120eefcf7bc150630f47ffd062938600",
+    "vendor/flora/build.py": "74f5e61046a7b3d8576aa10daeeed4cb14eecc6b65882e332f81de00f6db3dff",
+    "vendor/flora/candidate.py": "87aed426f965e8ac542c32b748b7d58847ced19b2681c862c10820b698c46ee7",
+    "vendor/flora/overlay.py": "03f1a321936a4e2cf42efc5eb5a5c545f60affce8b6e4590c27132a7c4331867",
+    "vendor/sell/mechanics.py": "579965e589237d1e5bbcc8b8448188f91b173d4480430d34b3a7f0e07e0c48d3",
+    "vendor/sell/reference/decision/decision.py": "9d78406668c927785b29f5bf2b5a67f0263bfcd63f626c881a60bad5f8293c52",
+    "vendor/sell/reference/next-panel/vendor/arlene.py": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4",
+    "vendor/sell/scheduler.py": "32c8610c9827d1686a6f831e2c4b6af4c00d32d2aa04dcf25699d976d6d97dd9"
+  },
+  "games": [
+    {
+      "seed": 9780101,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        71185.0,
+        71185.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            610.0,
+            610.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            298.0,
+            298.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            928.0,
+            928.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1826.0,
+            1826.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            15333.0,
+            15333.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            14450.0,
+            14450.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            18300.0,
+            18300.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            20692.0,
+            20692.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            25479.0,
+            25479.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            28086.0,
+            28086.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            35253.0,
+            35253.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            40561.0,
+            40561.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            46954.0,
+            46954.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            50150.0,
+            50150.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            53016.0,
+            53016.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            55007.0,
+            55007.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            55589.0,
+            55589.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            56367.0,
+            56367.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            56881.0,
+            56881.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            58371.0,
+            58371.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            60306.0,
+            60306.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            62072.0,
+            62072.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            64953.0,
+            64953.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            71185.0,
+            71185.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.03448359599999998,
+          "cpu_seconds": 0.488369,
+          "peak_rss_kib": 19872,
+          "exit_code": -9,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.10879058999853441,
+          "max_call_seconds": 0.00828641299449373,
+          "mean_call_seconds": 4.934552300498615e-05,
+          "max_rpc_seconds": 0.008761942001001444,
+          "mean_rpc_seconds": 0.0010239513336445408
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.30529094300000104,
+          "cpu_seconds": 0.70807,
+          "peak_rss_kib": 21248,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.09835913899587467,
+          "max_call_seconds": 0.02665655499731656,
+          "mean_call_seconds": 0.0004336878887904868,
+          "max_rpc_seconds": 0.027138543999171816,
+          "mean_rpc_seconds": 0.0012213358636263833
+        }
+      ],
+      "wall_seconds": 2.144476918001601,
+      "driver_cpu_seconds": 0.581803938,
+      "bank_snapshot": [
+        71185.0,
+        71185.0
+      ],
+      "trace_sha256": "720504b9d81c365b90f76ae426df380a60fb1c50fb0da391109bfa9f4f3ab8a7",
+      "opponent": "arlene"
+    },
+    {
+      "seed": 9780101,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        71185.0,
+        71185.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            610.0,
+            610.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            298.0,
+            298.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            928.0,
+            928.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1826.0,
+            1826.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            15333.0,
+            15333.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            14450.0,
+            14450.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            18300.0,
+            18300.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            20692.0,
+            20692.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            25479.0,
+            25479.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            28086.0,
+            28086.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            35253.0,
+            35253.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            40561.0,
+            40561.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            46954.0,
+            46954.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            50150.0,
+            50150.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            53016.0,
+            53016.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            55007.0,
+            55007.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            55589.0,
+            55589.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            56367.0,
+            56367.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            56881.0,
+            56881.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            58371.0,
+            58371.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            60306.0,
+            60306.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            62072.0,
+            62072.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            64953.0,
+            64953.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            71185.0,
+            71185.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.2744324690000003,
+          "cpu_seconds": 0.5825589999999999,
+          "peak_rss_kib": 21248,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.05047170800389722,
+          "max_call_seconds": 0.017071531001420226,
+          "mean_call_seconds": 0.00038208127945218876,
+          "max_rpc_seconds": 0.017484525000327267,
+          "mean_rpc_seconds": 0.0010734623674212946
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.032727511999999695,
+          "cpu_seconds": 0.40102099999999996,
+          "peak_rss_kib": 19872,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.06674628300243057,
+          "max_call_seconds": 0.007232841999211814,
+          "mean_call_seconds": 5.3865826135045966e-05,
+          "max_rpc_seconds": 0.009333592002803925,
+          "mean_rpc_seconds": 0.0008668041292507388
+        }
+      ],
+      "wall_seconds": 1.8176873630000046,
+      "driver_cpu_seconds": 0.533759065,
+      "bank_snapshot": [
+        71185.0,
+        71185.0
+      ],
+      "trace_sha256": "720504b9d81c365b90f76ae426df380a60fb1c50fb0da391109bfa9f4f3ab8a7",
+      "opponent": "arlene"
+    },
+    {
+      "seed": 9780101,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        69932.0,
+        64153.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            50.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            143.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            126.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            143.0,
+            48.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            213.0,
+            211.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            613.0,
+            607.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            301.0,
+            295.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            931.0,
+            925.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1834.0,
+            1619.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            15338.0,
+            14810.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            14455.0,
+            14069.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            18298.0,
+            17714.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            20690.0,
+            20202.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            25474.0,
+            25203.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            28048.0,
+            31063.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            35119.0,
+            36506.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            40273.0,
+            40627.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            46285.0,
+            45981.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            49508.0,
+            48440.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            52613.0,
+            50279.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            54968.0,
+            51798.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            55666.0,
+            51988.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            56511.0,
+            52113.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            56837.0,
+            52407.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            58282.0,
+            53142.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            59647.0,
+            54540.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            60896.0,
+            56062.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            63708.0,
+            58278.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            69932.0,
+            64153.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.03139770599999983,
+          "cpu_seconds": 0.58863,
+          "peak_rss_kib": 19872,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.1958816870028386,
+          "max_call_seconds": 0.007025270999292843,
+          "mean_call_seconds": 4.4423171030215e-05,
+          "max_rpc_seconds": 0.01027035700099077,
+          "mean_rpc_seconds": 0.0009799060011907547
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.42124681699999905,
+          "cpu_seconds": 0.816143,
+          "peak_rss_kib": 19840,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.11678437399677932,
+          "max_call_seconds": 0.018036614994343836,
+          "mean_call_seconds": 0.0005953232653111009,
+          "max_rpc_seconds": 0.018465875000401866,
+          "mean_rpc_seconds": 0.0013872369471678357
+        }
+      ],
+      "wall_seconds": 2.291809333997662,
+      "driver_cpu_seconds": 0.589798107,
+      "bank_snapshot": [
+        69932.0,
+        64153.0
+      ],
+      "trace_sha256": "380c7641051f16740a97f346e1a424bb05d78825eb1cfb6cfc4eb9d52c8d9196",
+      "opponent": "apex"
+    },
+    {
+      "seed": 9780101,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        64153.0,
+        69932.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            50.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            143.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            126.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            48.0,
+            143.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            211.0,
+            213.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            607.0,
+            613.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            295.0,
+            301.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            925.0,
+            931.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1619.0,
+            1834.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14810.0,
+            15338.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            14069.0,
+            14455.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17714.0,
+            18298.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            20202.0,
+            20690.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            25203.0,
+            25474.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            31063.0,
+            28048.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            36506.0,
+            35119.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            40627.0,
+            40273.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            45981.0,
+            46285.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            48440.0,
+            49508.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            50279.0,
+            52613.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            51798.0,
+            54968.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            51988.0,
+            55666.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            52113.0,
+            56511.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            52407.0,
+            56837.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            53142.0,
+            58282.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            54540.0,
+            59647.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            56062.0,
+            60896.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            58278.0,
+            63708.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            64153.0,
+            69932.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.6206128540000008,
+          "cpu_seconds": 1.136995,
+          "peak_rss_kib": 19840,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.09235472599539207,
+          "max_call_seconds": 0.022464303001470398,
+          "mean_call_seconds": 0.0008707573714760626,
+          "max_rpc_seconds": 0.025068825998459943,
+          "mean_rpc_seconds": 0.0019101568885842664
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.04492265799999953,
+          "cpu_seconds": 0.49618,
+          "peak_rss_kib": 19872,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.1282377940005972,
+          "max_call_seconds": 0.01658016999863321,
+          "mean_call_seconds": 6.310315572979546e-05,
+          "max_rpc_seconds": 0.017115536000346765,
+          "mean_rpc_seconds": 0.0010202824770698326
+        }
+      ],
+      "wall_seconds": 2.665782403004414,
+      "driver_cpu_seconds": 0.7327316130000001,
+      "bank_snapshot": [
+        64153.0,
+        69932.0
+      ],
+      "trace_sha256": "f672d19af97db4fa5772dbb56b2a17a56e6cda30a05bee62db2f83c28b86b482",
+      "opponent": "apex"
+    },
+    {
+      "seed": 9780119,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        58245.0,
+        58335.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            613.0,
+            613.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            301.0,
+            301.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            803.0,
+            803.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1723.0,
+            1723.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14953.0,
+            14953.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13883.0,
+            13883.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17531.0,
+            17531.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19727.0,
+            19727.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23496.0,
+            23496.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            25464.0,
+            25464.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            31128.0,
+            31128.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            34542.0,
+            34542.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            37147.0,
+            37147.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            37887.0,
+            37887.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            38932.0,
+            38932.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            40624.0,
+            40624.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            41343.0,
+            41343.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            42189.0,
+            42189.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            42782.0,
+            42782.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            44247.0,
+            44337.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            45478.0,
+            45568.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            46983.0,
+            47073.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            50210.0,
+            50300.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            58245.0,
+            58335.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.030255594999999927,
+          "cpu_seconds": 0.362407,
+          "peak_rss_kib": 19876,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07066252799995709,
+          "max_call_seconds": 0.014451479000854306,
+          "mean_call_seconds": 4.2416973584992175e-05,
+          "max_rpc_seconds": 0.014937483996618539,
+          "mean_rpc_seconds": 0.0008554140861510942
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.2718142150000005,
+          "cpu_seconds": 0.611035,
+          "peak_rss_kib": 21240,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07952137000393122,
+          "max_call_seconds": 0.016179637001187075,
+          "mean_call_seconds": 0.00038495506958191453,
+          "max_rpc_seconds": 0.016600160000962205,
+          "mean_rpc_seconds": 0.0012372629942961966
+        }
+      ],
+      "wall_seconds": 1.8819476770004258,
+      "driver_cpu_seconds": 0.724560785,
+      "bank_snapshot": [
+        58245.0,
+        58335.0
+      ],
+      "trace_sha256": "f4af26ebb80a254241d9639207f68e9d0e18c06842817aa086bbe6dd7f5ba1d0",
+      "opponent": "arlene"
+    },
+    {
+      "seed": 9780119,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        58245.0,
+        58335.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            142.0,
+            142.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            212.0,
+            212.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            613.0,
+            613.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            301.0,
+            301.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            803.0,
+            803.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1723.0,
+            1723.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14953.0,
+            14953.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13883.0,
+            13883.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17531.0,
+            17531.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19727.0,
+            19727.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23496.0,
+            23496.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            25464.0,
+            25464.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            31128.0,
+            31128.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            34542.0,
+            34542.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            37147.0,
+            37147.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            37887.0,
+            37887.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            38932.0,
+            38932.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            40624.0,
+            40624.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            41343.0,
+            41343.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            42189.0,
+            42189.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            42782.0,
+            42782.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            44247.0,
+            44337.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            45478.0,
+            45568.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            46983.0,
+            47073.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            50210.0,
+            50300.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            58245.0,
+            58335.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.5293680290000001,
+          "cpu_seconds": 1.000629,
+          "peak_rss_kib": 21244,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.07321200200385647,
+          "max_call_seconds": 0.12749185700522503,
+          "mean_call_seconds": 0.0007428591308327746,
+          "max_rpc_seconds": 0.13277091400232166,
+          "mean_rpc_seconds": 0.001864350849920181
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.036957878000000194,
+          "cpu_seconds": 0.450534,
+          "peak_rss_kib": 19872,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.06953798400354572,
+          "max_call_seconds": 0.013975570000184234,
+          "mean_call_seconds": 5.198333948987934e-05,
+          "max_rpc_seconds": 0.014654974998848047,
+          "mean_rpc_seconds": 0.001057980260174619
+        }
+      ],
+      "wall_seconds": 2.5076347529975465,
+      "driver_cpu_seconds": 0.65745722,
+      "bank_snapshot": [
+        58245.0,
+        58335.0
+      ],
+      "trace_sha256": "f4af26ebb80a254241d9639207f68e9d0e18c06842817aa086bbe6dd7f5ba1d0",
+      "opponent": "arlene"
+    },
+    {
+      "seed": 9780119,
+      "candidate_seat": 0,
+      "status": "complete",
+      "scores": [
+        57704.0,
+        48247.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            149.0,
+            50.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            144.0,
+            143.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            127.0,
+            126.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            143.0,
+            48.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            213.0,
+            211.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            615.0,
+            610.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            303.0,
+            298.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            805.0,
+            800.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1728.0,
+            1516.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14957.0,
+            14511.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13889.0,
+            13583.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            17529.0,
+            17025.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19725.0,
+            19317.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23491.0,
+            23300.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            25348.0,
+            27535.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            30891.0,
+            31421.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            34366.0,
+            33502.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            36658.0,
+            35462.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            37516.0,
+            36014.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            38772.0,
+            36226.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            40590.0,
+            37265.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            41191.0,
+            37417.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            42104.0,
+            37574.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            42455.0,
+            37923.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            43833.0,
+            38437.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            44974.0,
+            39012.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            46234.0,
+            40579.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            49491.0,
+            42587.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            57704.0,
+            48247.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.0452431910000001,
+          "cpu_seconds": 0.602613,
+          "peak_rss_kib": 19872,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.054332922998582944,
+          "max_call_seconds": 0.006150338995212223,
+          "mean_call_seconds": 6.391481365527639e-05,
+          "max_rpc_seconds": 0.015101846998732071,
+          "mean_rpc_seconds": 0.0012258759317688077
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.4489313450000008,
+          "cpu_seconds": 0.79575,
+          "peak_rss_kib": 19860,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.05217293199530104,
+          "max_call_seconds": 0.016415522004535887,
+          "mean_call_seconds": 0.0006446833825209217,
+          "max_rpc_seconds": 0.017006540001602843,
+          "mean_rpc_seconds": 0.0015611373114381639
+        }
+      ],
+      "wall_seconds": 2.327521182000055,
+      "driver_cpu_seconds": 0.7208042150000002,
+      "bank_snapshot": [
+        57704.0,
+        48247.0
+      ],
+      "trace_sha256": "c3f9519fbdd21eb2645c988f4aa7b0da6a3a97c764fc3c4a161d959696c289f6",
+      "opponent": "apex"
+    },
+    {
+      "seed": 9780119,
+      "candidate_seat": 1,
+      "status": "complete",
+      "scores": [
+        47980.0,
+        57043.0
+      ],
+      "failure": null,
+      "steps": 719,
+      "episode_steps": 720,
+      "daily_bank": [
+        {
+          "step": 23,
+          "bank": [
+            24.0,
+            24.0
+          ]
+        },
+        {
+          "step": 47,
+          "bank": [
+            50.0,
+            149.0
+          ]
+        },
+        {
+          "step": 71,
+          "bank": [
+            143.0,
+            144.0
+          ]
+        },
+        {
+          "step": 95,
+          "bank": [
+            126.0,
+            127.0
+          ]
+        },
+        {
+          "step": 119,
+          "bank": [
+            48.0,
+            143.0
+          ]
+        },
+        {
+          "step": 143,
+          "bank": [
+            211.0,
+            213.0
+          ]
+        },
+        {
+          "step": 167,
+          "bank": [
+            610.0,
+            615.0
+          ]
+        },
+        {
+          "step": 191,
+          "bank": [
+            298.0,
+            303.0
+          ]
+        },
+        {
+          "step": 215,
+          "bank": [
+            800.0,
+            805.0
+          ]
+        },
+        {
+          "step": 239,
+          "bank": [
+            1514.0,
+            1727.0
+          ]
+        },
+        {
+          "step": 263,
+          "bank": [
+            14416.0,
+            14940.0
+          ]
+        },
+        {
+          "step": 287,
+          "bank": [
+            13484.0,
+            13866.0
+          ]
+        },
+        {
+          "step": 311,
+          "bank": [
+            16935.0,
+            17515.0
+          ]
+        },
+        {
+          "step": 335,
+          "bank": [
+            19236.0,
+            19720.0
+          ]
+        },
+        {
+          "step": 359,
+          "bank": [
+            23228.0,
+            23495.0
+          ]
+        },
+        {
+          "step": 383,
+          "bank": [
+            27346.0,
+            25370.0
+          ]
+        },
+        {
+          "step": 407,
+          "bank": [
+            31238.0,
+            30930.0
+          ]
+        },
+        {
+          "step": 431,
+          "bank": [
+            33243.0,
+            34441.0
+          ]
+        },
+        {
+          "step": 455,
+          "bank": [
+            35215.0,
+            36745.0
+          ]
+        },
+        {
+          "step": 479,
+          "bank": [
+            35779.0,
+            37615.0
+          ]
+        },
+        {
+          "step": 503,
+          "bank": [
+            36003.0,
+            38931.0
+          ]
+        },
+        {
+          "step": 527,
+          "bank": [
+            36859.0,
+            40812.0
+          ]
+        },
+        {
+          "step": 551,
+          "bank": [
+            37023.0,
+            41442.0
+          ]
+        },
+        {
+          "step": 575,
+          "bank": [
+            37092.0,
+            42409.0
+          ]
+        },
+        {
+          "step": 599,
+          "bank": [
+            37465.0,
+            42790.0
+          ]
+        },
+        {
+          "step": 623,
+          "bank": [
+            38007.0,
+            44331.0
+          ]
+        },
+        {
+          "step": 647,
+          "bank": [
+            38472.0,
+            45554.0
+          ]
+        },
+        {
+          "step": 671,
+          "bank": [
+            40120.0,
+            46901.0
+          ]
+        },
+        {
+          "step": 695,
+          "bank": [
+            42060.0,
+            50162.0
+          ]
+        },
+        {
+          "step": 718,
+          "bank": [
+            47980.0,
+            57043.0
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.5099959450000014,
+          "cpu_seconds": 0.918177,
+          "peak_rss_kib": 19840,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.05578971600334626,
+          "max_call_seconds": 0.01723859499907121,
+          "mean_call_seconds": 0.0007129506566356129,
+          "max_rpc_seconds": 0.017688334999547806,
+          "mean_rpc_seconds": 0.0017011681445533446
+        },
+        {
+          "calls": 719,
+          "call_cpu_seconds": 0.03603841900000062,
+          "cpu_seconds": 0.44372999999999996,
+          "peak_rss_kib": 19872,
+          "exit_code": 0,
+          "resource_sample": "child_rusage",
+          "startup_seconds": 0.06235717999516055,
+          "max_call_seconds": 0.006767525999748614,
+          "mean_call_seconds": 5.127648118925792e-05,
+          "max_rpc_seconds": 0.007320880999031942,
+          "mean_rpc_seconds": 0.0010188261721736877
+        }
+      ],
+      "wall_seconds": 2.3836001319941715,
+      "driver_cpu_seconds": 0.7563682819999995,
+      "bank_snapshot": [
+        47980.0,
+        57043.0
+      ],
+      "trace_sha256": "bddc013cd13ab1c3e53fd911d0afae5a751d06195a89d77e38e4c988d035d2ef",
+      "opponent": "apex"
+    }
+  ],
+  "summary": {
+    "apex": {
+      "scheduled": 4,
+      "completed": 4,
+      "failed": 0,
+      "wins": 4,
+      "ties": 0,
+      "losses": 0,
+      "mean_margin": 7519.5,
+      "candidate_failures": 0,
+      "opponent_failures": 0
+    },
+    "arlene": {
+      "scheduled": 4,
+      "completed": 4,
+      "failed": 0,
+      "wins": 1,
+      "ties": 2,
+      "losses": 1,
+      "mean_margin": 0.0,
+      "candidate_failures": 0,
+      "opponent_failures": 0
+    }
+  }
+}

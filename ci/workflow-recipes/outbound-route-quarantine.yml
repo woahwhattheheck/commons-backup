@@ -1,0 +1,45 @@
+name: Outbound route quarantine
+
+on:
+  pull_request:
+    paths:
+      - 'tools/outbound_send_guard/guard.py'
+      - 'tools/outbound_send_guard/route_lifecycle.py'
+      - 'tools/outbound_send_guard/route_quarantine.py'
+      - 'tools/outbound_send_guard/test_route_quarantine.py'
+      - 'tools/outbound_send_guard/ROUTE_QUARANTINE.md'
+      - '.github/workflows/outbound-route-quarantine.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/outbound_send_guard/guard.py'
+      - 'tools/outbound_send_guard/route_lifecycle.py'
+      - 'tools/outbound_send_guard/route_quarantine.py'
+      - 'tools/outbound_send_guard/test_route_quarantine.py'
+      - 'tools/outbound_send_guard/ROUTE_QUARANTINE.md'
+      - '.github/workflows/outbound-route-quarantine.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  route-quarantine:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: |
+          python -m py_compile \
+            tools/outbound_send_guard/route_quarantine.py \
+            tools/outbound_send_guard/test_route_quarantine.py
+      - name: Unit + hostile suite
+        run: python -m unittest -v tools.outbound_send_guard.test_route_quarantine
+      - name: Optimized-mode suite
+        run: python -O -m unittest -v tools.outbound_send_guard.test_route_quarantine

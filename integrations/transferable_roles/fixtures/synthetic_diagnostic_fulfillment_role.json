@@ -1,0 +1,217 @@
+{
+  "schema": "commons.transferable_role/v1",
+  "role_id": "role-synthetic-diagnostic-fulfillment-20260905",
+  "label": "$199 diagnostic fulfillment (SYNTHETIC)",
+  "synthetic": true,
+  "synthetic_note": "SYNTHETIC fixture for R4 paid $199 diagnostic fulfillment handoff — tools diagnostic_contract + diagnostic_receipt load landed contract/receipt; diagnostic_fulfill computes delivery_due_at + OPEN|MISSED SLA (do not remint)",
+  "purpose": "Hand off one paid $199 one-business-day diagnostic fulfillment (dealer / referral / repair / plant) between seats without reminting credentials or inventing checkout.",
+  "knowledge": [
+    {
+      "pointer": "dealer-service-lead-rescue.html",
+      "label": "$199 dealer diagnostic — live checkout https://buy.stripe.com/3cIdR8gBf6379uF1Oy43S0b"
+    },
+    {
+      "pointer": "referral-intake-completeness.html",
+      "label": "$199 referral diagnostic — live checkout https://buy.stripe.com/9B600i98N77b9uFeBk43S0c"
+    },
+    {
+      "pointer": "repair-booking-preflight.html",
+      "label": "$199 repair diagnostic — live checkout https://buy.stripe.com/9B66oGacR2QVdKVeBk43S0d"
+    },
+    {
+      "pointer": "plant-downtime-handoff.html",
+      "label": "$199 plant diagnostic — live checkout https://buy.stripe.com/14AfZgckZ0IN0Y99h043S0e"
+    },
+    {
+      "pointer": "payment-capability.html",
+      "label": "public payment rails door — CHARGEABLE only; no invented checkout"
+    },
+    {
+      "pointer": "ground/PAYMENT_CAPABILITY.md",
+      "label": "provider-neutral payment capability card"
+    },
+    {
+      "pointer": "commercial.html",
+      "label": "commercial ladder + miss-remedy / refund terms already on contracts"
+    },
+    {
+      "pointer": "commerce.html",
+      "label": "tip-shelf $199 diagnostic doors (#8905) — point only; live checkout stays on product pages"
+    },
+    {
+      "pointer": "revenue/reply_to_revenue/README.md",
+      "label": "reply→cash operator README — point only; do not remint handoffs"
+    },
+    {
+      "pointer": "revenue/reply_to_revenue/funnel.json",
+      "label": "reply→cash funnel machine — point only"
+    },
+    {
+      "pointer": "revenue/reply_to_revenue/handoffs/future-ford-concord-devin-parker.json",
+      "label": "SENT handoff Future Ford — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/reply_to_revenue/handoffs/mac-haik-chevrolet-mike-sutton.json",
+      "label": "SENT handoff Mac Haik — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/reply_to_revenue/handoffs/lexington-recycle-center-julie-hatter.json",
+      "label": "SENT handoff Lexington — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/reply_to_revenue/handoffs/communitycare-katherine-reyes.json",
+      "label": "SENT handoff CommUnityCare — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/dealer_service_lead_rescue/contract.json",
+      "label": "dealer diagnostic operator contract — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/dealer_service_lead_rescue/receipt.md",
+      "label": "dealer diagnostic receipt template — point only"
+    },
+    {
+      "pointer": "revenue/dealer_service_lead_rescue/receipt.json",
+      "label": "dealer diagnostic receipt machine twin — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/referral_intake_completeness/contract.json",
+      "label": "referral diagnostic operator contract — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/referral_intake_completeness/receipt.md",
+      "label": "referral diagnostic receipt template — point only"
+    },
+    {
+      "pointer": "revenue/referral_intake_completeness/receipt.json",
+      "label": "referral diagnostic receipt machine twin — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/repair_booking_preflight/contract.json",
+      "label": "repair diagnostic operator contract — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/plant_downtime_handoff/contract.json",
+      "label": "plant diagnostic operator contract — point only; do not remint"
+    },
+    {
+      "pointer": "revenue/plant_downtime_handoff/receipt.md",
+      "label": "plant diagnostic receipt template — point only"
+    },
+    {
+      "pointer": "revenue/plant_downtime_handoff/receipt.json",
+      "label": "plant diagnostic receipt machine twin — point only; do not remint"
+    },
+    {
+      "pointer": "integrations/transferable_roles/diagnostic_contract.py",
+      "label": "R4 execute — load landed contract.json by slug (dealer|referral|repair|plant); do not remint contracts"
+    },
+    {
+      "pointer": "integrations/transferable_roles/diagnostic_receipt.py",
+      "label": "R4 execute — load landed receipt.json by slug (dealer|referral|plant); repair has no twin"
+    },
+    {
+      "pointer": "integrations/transferable_roles/diagnostic_fulfill.py",
+      "label": "R4 execute — delivery_due_at + OPEN|MISSED SLA vs as_of + landed refund miss-remedy; do not remint autopsy-fulfill"
+    }
+  ],
+  "obligations": [
+    {
+      "id": "ob-intake",
+      "summary": "Collect buyer packet / which diagnostic slug + agreed synthetic fixtures; never ask for secrets",
+      "next_action": "Confirm diagnostic slug (dealer|referral|repair|plant), gather buyer packet and agreed fixtures — refuse secrets",
+      "status": "open"
+    },
+    {
+      "id": "ob-diagnose",
+      "summary": "Produce the one-business-day diagnostic against agreed synthetic fixtures; evidence-supported only",
+      "next_action": "Run/produce diagnostic for the chosen slug; evidence-supported steps only; no live CRM/PHI",
+      "status": "open"
+    },
+    {
+      "id": "ob-deadline",
+      "summary": "After usable evidence arrives, compute delivery_due_at for the $199 SKU via diagnostic-fulfill-deadline",
+      "next_action": "Run diagnostic-fulfill-deadline --slug <dealer|referral|repair|plant> --usable-evidence-at <iso>",
+      "status": "open"
+    },
+    {
+      "id": "ob-sla",
+      "summary": "Check whether the $199 one-business-day window is OPEN or MISSED vs as_of; surface landed refund miss-remedy",
+      "next_action": "Run diagnostic-fulfill-sla --slug <...> --usable-evidence-at <iso> --as-of <iso>",
+      "status": "open"
+    },
+    {
+      "id": "ob-settle",
+      "summary": "Deliver receipt/report OR route refund per miss-remedy when not delivered in one-business-day window — use live public page checkouts only (do not invent plink)",
+      "next_action": "Deliver buyer-ready receipt or route refund per miss-remedy; checkout URLs are the four live buy.stripe.com CTAs on the product pages",
+      "status": "open",
+      "evidence_pointer": "dealer/referral/repair/plant HTML live Stripe CTAs (verified main)"
+    }
+  ],
+  "tools": [
+    {
+      "name": "transferable_roles_cli",
+      "entry": "python3 integrations/transferable_roles/cli.py",
+      "notes": "create/equip/transfer/advance/export/import/open-obligations/diagnostic-contract/diagnostic-receipt/diagnostic-fulfill-deadline/diagnostic-fulfill-sla"
+    },
+    {
+      "name": "role_export",
+      "entry": "python3 integrations/transferable_roles/cli.py export <role_id>",
+      "notes": "portable package; secrets excluded"
+    },
+    {
+      "name": "grokbot_control_client",
+      "entry": "integrations/grokbot_control/client.py",
+      "notes": "GrokBotControlClient — submit/follow-up/cancel/session recover; not grok.com"
+    },
+    {
+      "name": "diagnostic_contract",
+      "entry": "integrations/transferable_roles/diagnostic_contract.py",
+      "notes": "load landed revenue/*/contract.json by slug dealer|referral|repair|plant; do not remint contracts"
+    },
+    {
+      "name": "diagnostic_receipt",
+      "entry": "integrations/transferable_roles/diagnostic_receipt.py",
+      "notes": "load landed revenue/*/receipt.json by slug dealer|referral|plant; repair has no twin — do not invent"
+    },
+    {
+      "name": "diagnostic_fulfill",
+      "entry": "integrations/transferable_roles/diagnostic_fulfill.py",
+      "notes": "run_deadline + run_sla_status: gate diagnostic_contract; wrap fulfillment.next_business_day; CLI diagnostic-fulfill-deadline / diagnostic-fulfill-sla"
+    }
+  ],
+  "access_routes": [
+    {
+      "name": "grokbot_control_g2",
+      "kind": "grokbot_control",
+      "base_url": "http://127.0.0.1:8881",
+      "pool_id": "grokbot",
+      "client": "integrations/grokbot_control/client.py",
+      "submit": "POST /v1/runs",
+      "status": "GET /v1/runs/{run_id}?wait_ms=",
+      "follow_up": "POST /v1/runs/{run_id}/follow-up",
+      "cancel": "POST /v1/runs/{run_id}/cancel",
+      "recover": "GET /v1/sessions/{session_id}",
+      "events": "GET /v1/events?after=",
+      "note": "SPARK G2 #8761 / 5154aa8f. Point role at pool+session; seat/session_id filled by occupant at equip — never bind role to one chat window. Not grok.com :8788, not C1 :8879. Second pool only via GROKBOT_CONTROL_POOLS when owner names it."
+    },
+    {
+      "name": "gemini_peer_tool_gateway",
+      "kind": "loopback_http",
+      "base_url": "http://127.0.0.1:8778",
+      "submit": "POST /v1/message",
+      "status": "GET /v1/requests/{request_id}",
+      "events": "GET /v1/events?after={cursor}",
+      "recover": "GET /v1/last?peer={peer}",
+      "note": "Mirror of integrations/gemini_slack/peer_tool_gateway.py — do not fork; C1 siblings share this shape"
+    },
+    {
+      "name": "payment_capability",
+      "kind": "public_html",
+      "store": "payment-capability.html",
+      "note": "Also pay.html + commerce.html tip-shelf. Public HTML + live page CTAs only — no secrets, no Stripe tokens, no invented Payment Links. Live $199 CTAs: https://buy.stripe.com/3cIdR8gBf6379uF1Oy43S0b (dealer), https://buy.stripe.com/9B600i98N77b9uFeBk43S0c (referral), https://buy.stripe.com/9B66oGacR2QVdKVeBk43S0d (repair), https://buy.stripe.com/14AfZgckZ0IN0Y99h043S0e (plant)."
+    }
+  ],
+  "credential_custodian": "existing_secure_stores",
+  "occupant": null
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "titan.v4.e20.recovery-verification.v1",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "status": "exact_donor_verification_only_not_current_production_promotion",
+  "tool": {
+    "path": "check_v4_e20_official_market.py",
+    "git_blob": "2705552099025a42bbe6017fb17083874d3ae238",
+    "bytes": 9304,
+    "original_commit": "9ced093dbe65cba3ca66d72fefef9b631254d2c3",
+    "canonical_commit": "7578e4f371cce78ca2c3c177fbc8c760503d8aae",
+    "source_pr": 12643
+  },
+  "source_pins": {
+    "e20_repaired_blob": "cd497140d188794d610d3ae387de8758ecbd0765",
+    "e20_predecessor_blob": "341eed454cae08cfeba31b5205a10263e50999d8",
+    "historical_integrated_tests_blob": "93bc971edc14de3bf60d7a1921bb5d5bbe6df89f",
+    "historical_integrated_tests_bytes": 17713,
+    "historical_integrated_tests_final_newline": false,
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e"
+  },
+  "official_market_results": {
+    "normal": {"result": "PASS", "paired_cases": 3072, "market_executions": 6144},
+    "optimized": {"result": "PASS", "paired_cases": 3072, "market_executions": 6144},
+    "seats": [0, 1],
+    "queue_layouts": 64,
+    "market_caps": [-2, 0, 1, 2, 3, 10],
+    "daily_hire_allowance_cases": 4,
+    "package_files_observed": 126,
+    "package_unchanged": true,
+    "executable_prefix_poststates_equal_to_exact_predecessor": true,
+    "inert_tail_preserved": true,
+    "inputs_unchanged": true,
+    "engine_loading_note": "Only the unrelated external resolve_episode_seed import is omitted and replaced by a fail-on-use sentinel. The pinned official market implementation executes unchanged."
+  },
+  "historical_runtime_results": {
+    "baseline_files_verified_against_historical_FILES_json": 126,
+    "preparation": "Reverse only the documented historical submission r04_sale_window=true edit to its package false value; verify all 126 historical package files, then substitute only the exact repaired E20 helper and integrated test postimages.",
+    "normal": {"result": "PASS", "tests_run": 27},
+    "optimized": {"result": "PASS", "tests_run": 27},
+    "coverage": ["E20 contracts", "TitanAgent._v3_post", "config and OFF identity", "both seller pre-pending seams"],
+    "scope": "Historical V3.1 fixture compatibility, not the current production runtime or assembled V4."
+  },
+  "negative_checks": {
+    "changed_helper_bytes": "REJECTED",
+    "changed_engine_bytes": "REJECTED",
+    "package_symlink": "REJECTED"
+  },
+  "fixture_transport": {
+    "github_workflow_artifact_id": 10169538667,
+    "artifact_member": "checked-package/exports/titan-current.tar.gz",
+    "frozen_base_sha256": "5f6a4153e502713b9467776eafe7464af650584149173ce7507a31a1b2af60f1",
+    "frozen_base_bytes": 428158,
+    "frozen_base_regular_members": 110,
+    "slack_file_id": "F0C18AXAL04",
+    "slack_outer_sha256": "8fb4776b416f32dcd978f57a6f8caf42c84d2245d5f9a08962adbe814dadab8e",
+    "historical_v31_inner_sha256": "e4e5a3acfe4984c89c22c7aa841b4ddd6efe4f4cd71e507d1dabecbb6e865849",
+    "historical_v31_inner_bytes": 528748,
+    "historical_v31_inner_files": 126,
+    "method": "Authenticated GitHub.download_workflow_artifact and Slack.slack_read_file returned mounted binary attachments; no direct container network access was required."
+  },
+  "durable_pr_comment_ids": [5642649516, 5642679418, 5642694248],
+  "superseded_v31_pr": {"number": 12552, "state": "closed_unmerged", "branch_and_history_preserved": true},
+  "commands": [
+    "python -B check_v4_e20_official_market.py --package-tree /path/to/materialized-historical-package-with-reviewed-E20",
+    "python -O -B check_v4_e20_official_market.py --package-tree /path/to/materialized-historical-package-with-reviewed-E20"
+  ],
+  "limits": [
+    "No full games, economic comparison, leaderboard improvement, combined V4 build, or current-production ABI port was executed by this checker.",
+    "No feature default, production runtime, production archive, Kaggle submission, workflow, or legacy materializer is changed by this preservation.",
+    "The old V3/V3.1/V4 refs and PR 12643 are provenance only; main:candidates/v4 is the sole consolidation workspace."
+  ]
+}

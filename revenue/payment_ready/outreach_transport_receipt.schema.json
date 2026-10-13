@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/payment_ready/outreach_transport_receipt.schema.json",
+  "title": "Commons Outreach Transport Receipt",
+  "description": "Append-only evidence that a provider completed transport for one outreach message. This contract deliberately does not assert buyer demand, acceptance, delivery of paid work, or cash.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "campaign_id",
+    "target_id",
+    "organization",
+    "sender_email",
+    "recipient_email",
+    "channel",
+    "provider",
+    "provider_reference",
+    "provider_state",
+    "provider_completed_at",
+    "observed_at",
+    "message_contract",
+    "dedupe",
+    "response_state",
+    "response_reference",
+    "facts",
+    "evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "commons-outreach-transport-receipt/v1"
+    },
+    "kind": {
+      "const": "COMMONS_OUTREACH_TRANSPORT_RECEIPT"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "organization": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sender_email": {
+      "type": "string",
+      "format": "email"
+    },
+    "recipient_email": {
+      "type": "string",
+      "format": "email"
+    },
+    "channel": {
+      "const": "EMAIL"
+    },
+    "provider": {
+      "const": "APOLLO"
+    },
+    "provider_reference": {
+      "type": "string",
+      "pattern": "^apollo:emailer_message:[0-9a-f]{24}$"
+    },
+    "provider_state": {
+      "const": "COMPLETED"
+    },
+    "provider_completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "message_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content_state",
+        "sha256",
+        "prepared_source_reference"
+      ],
+      "properties": {
+        "content_state": {
+          "enum": [
+            "VERIFIED_SHA256",
+            "UNKNOWN_NOT_RECONSTRUCTED"
+          ]
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prepared_source_reference": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "content_state": {
+                "const": "VERIFIED_SHA256"
+              }
+            },
+            "required": [
+              "content_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sha256": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "content_state": {
+                "const": "UNKNOWN_NOT_RECONSTRUCTED"
+              }
+            },
+            "required": [
+              "content_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sha256": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "dedupe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "distinct_contact_key",
+        "do_not_resend",
+        "known_duplicate_or_pending_provider_references"
+      ],
+      "properties": {
+        "distinct_contact_key": {
+          "type": "string",
+          "format": "email"
+        },
+        "do_not_resend": {
+          "const": true
+        },
+        "known_duplicate_or_pending_provider_references": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^apollo:emailer_message:[0-9a-f]{24}$"
+          }
+        }
+      }
+    },
+    "response_state": {
+      "enum": [
+        "UNKNOWN",
+        "NO_RESPONSE",
+        "REFUSED",
+        "REDIRECTED",
+        "INTEREST"
+      ]
+    },
+    "response_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "buyer_authorization",
+        "legal_acceptance",
+        "cash_claimed",
+        "collected_cash_usd"
+      ],
+      "properties": {
+        "buyer_authorization": {
+          "const": "UNKNOWN"
+        },
+        "legal_acceptance": {
+          "const": "NOT_LANDED"
+        },
+        "cash_claimed": {
+          "const": false
+        },
+        "collected_cash_usd": {
+          "const": 0
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apollo_contact_id",
+        "contact_last_activity_at",
+        "contact_updated_at",
+        "public_slack_ts",
+        "public_slack_permalink",
+        "completion_corroborated"
+      ],
+      "properties": {
+        "apollo_contact_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{24}$"
+        },
+        "contact_last_activity_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "contact_updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "public_slack_ts": {
+          "type": "string",
+          "pattern": "^[0-9]{10}\\.[0-9]{6}$"
+        },
+        "public_slack_permalink": {
+          "type": "string",
+          "format": "uri"
+        },
+        "completion_corroborated": {
+          "const": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "commons-strict-receipt-poison/v1",
+  "requested_panel": {"seeds": [101, 102], "opponents": ["alpha", "beta"]},
+  "live_canonical_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "valid_receipt": {
+    "schema": "commons-strict-receipt/v1",
+    "hypothesis_id": "H-demo",
+    "objective": "maximize margin_delta",
+    "canonical_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "panel": {"seeds": [101, 102], "opponents": ["alpha", "beta"]},
+    "cells": [
+      {"seed": 101, "opponent": "alpha", "score": 1.0},
+      {"seed": 101, "opponent": "beta", "score": 2.0},
+      {"seed": 102, "opponent": "alpha", "score": 3.0},
+      {"seed": 102, "opponent": "beta", "score": 4.0}
+    ]
+  },
+  "poisons": [
+    {"name": "bool-seed", "mutation": {"cell": 0, "field": "seed", "value": true}, "error": "strict non-bool integer"},
+    {"name": "duplicate-cell", "mutation": {"append_cell": 0}, "error": "duplicate cell before indexing"},
+    {"name": "missing-cell", "mutation": {"drop_cell": 3}, "error": "cartesian membership mismatch"},
+    {"name": "extra-cell", "mutation": {"append": {"seed": 999, "opponent": "alpha", "score": 0.0}}, "error": "cartesian membership mismatch"},
+    {"name": "stale-canonical", "mutation": {"canonical_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "error": "stale canonical"},
+    {"name": "panel-substitution", "mutation": {"panel_seed": {"index": 1, "value": 999}}, "error": "literal requested panel"}
+  ]
+}

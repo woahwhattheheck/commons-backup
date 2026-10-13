@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "operation_id": "RIDGWAY-ZEROGRAD-NITSCHE-ZSOL-RECOVERY-20260916",
+  "advertised_prize_usd": 1000,
+  "prize_state": "ADVERTISED_NOT_EARNED",
+  "sources": [
+    {
+      "kind": "official_prize_statement",
+      "url": "https://people.cs.uchicago.edu/~ridg/prizes/zerogradprize.pdf",
+      "facts_used": [
+        "$1,000 offered for a published proof that Scott-Vogelius-Nitsche converges",
+        "paper should include computational study of influence of Nitsche penalty parameter",
+        "expected H1 error shape h_Gamma^(3/2) + h_Omega^k for k >= 2",
+        "if expected estimate fails, explain why"
+      ],
+      "direct_pdf_fetch_note": "Search indexing exposed the controlling text; direct PDF open/screenshot in the web harness failed, so this carrier does not claim page-image verification."
+    },
+    {
+      "kind": "primary_problem_paper",
+      "citation": "I. G. Gjerde and L. R. Scott, Verification and validation of cylinder drag: Pressure and stress approximations on curved boundaries, Advances in Computational Science and Engineering 2(3), 295-319 (2024), DOI 10.3934/acse.2024015",
+      "url": "https://www.aimsciences.org/article/doi/10.3934/acse.2024015?viewType=HTML",
+      "facts_used": [
+        "strong Scott-Vogelius on polygonal curved boundary exhibits roughly h^(1/2) H1 error in the manufactured test",
+        "Nitsche table uses k=4, N_Gamma=32 N_Omega, mu=100, with observed rates 2.059, 1.116, 1.834",
+        "published drag computations also use mu=1e6",
+        "published article says relaxing boundary conditions with Nitsche restores high-order approximation"
+      ]
+    },
+    {
+      "kind": "preprint_full_text",
+      "citation": "I. G. Gjerde and L. R. Scott, arXiv:2306.12362v1 (2023)",
+      "url": "https://arxiv.org/abs/2306.12362",
+      "facts_used": [
+        "manufactured divergence-free solution is curl(log r - r^2/2) with constant pressure",
+        "Scott-Vogelius velocity degree k=4 in the reported experiment",
+        "preprint notation defines V_h with zero trace on Gamma_h before later reusing V_h in the Nitsche section",
+        "Nitsche formula uses symmetric-gradient volume energy and partial-normal velocity flux with penalty mu/h"
+      ]
+    },
+    {
+      "kind": "curved_boundary_geometry_reference",
+      "citation": "T. Dupont, J. Guzman, L. R. Scott, Obtaining higher-order Galerkin accuracy when the boundary is polygonally approximated, Journal of Numerical Mathematics 33(1), 55-86 (2025), DOI 10.1515/jnma-2023-0135",
+      "url": "https://doi.org/10.1515/jnma-2023-0135",
+      "facts_used": [
+        "standard strong homogeneous Dirichlet FEM on a polygonal approximation is limited to H1 order h^(3/2) already for scalar quadratics",
+        "boundary corrections based on Nitsche/Taylor ideas can recover higher order",
+        "Nitsche-style methods use the full polynomial space without boundary zero restriction"
+      ]
+    },
+    {
+      "kind": "slip_nitsche_reference",
+      "citation": "I. G. Gjerde and L. R. Scott, Nitsche's method for Navier-Stokes equations with slip boundary conditions, Mathematics of Computation 91(334), 597-622 (2022), DOI 10.1090/mcom/3682",
+      "url": "https://doi.org/10.1090/mcom/3682",
+      "facts_used": [
+        "Nitsche weak enforcement avoids a curved-boundary slip paradox",
+        "normal/tangent geometry approximation controls attainable convergence",
+        "projected true normals/tangents improve over raw polygon normals/tangents"
+      ]
+    },
+    {
+      "kind": "published_reproduction_code",
+      "url": "https://github.com/IngeborgGjerde/drag-evaluation",
+      "facts_used": [
+        "current repository root contains README.md, flow_computation.py, flow_postprocess.py, solvers.py, utils.py",
+        "current solvers.py exposes strong-Dirichlet Stokes/Navier-Stokes solvers but no Scott-Vogelius-Nitsche implementation",
+        "therefore the published Nitsche tables are not reproducible from the current cited repository alone"
+      ]
+    },
+    {
+      "kind": "smooth_domain_divergence_free_reference",
+      "citation": "R. Durst and M. Neilan, General degree divergence-free finite element methods for the Stokes problem on smooth domains, arXiv:2404.14226 (2024)",
+      "url": "https://arxiv.org/abs/2404.14226",
+      "facts_used": [
+        "optimal pressure-robust divergence-free convergence is achievable on smooth domains with curved/isoparametric geometry",
+        "this is a different method and does not by itself prove the polygonal Nitsche prize theorem"
+      ]
+    },
+    {
+      "kind": "scott_vogelius_local_fortin_reference",
+      "citation": "F. Eickmann, J. Guzman, M. Neilan, L. R. Scott, T. Tscherpel, A local Fortin projection for the Scott-Vogelius elements on general meshes, Journal of Numerical Mathematics (2026), DOI 10.1515/jnma-2025-0178; arXiv:2512.18033",
+      "url": "https://arxiv.org/abs/2512.18033",
+      "facts_used": [
+        "constructs a local Fortin projection for Scott-Vogelius degree k >= 4 on general shape-regular 2D triangulations, including singular vertices",
+        "projection preserves divergence in the dual of the pressure space",
+        "projection preserves discrete boundary data and has local stability estimates",
+        "this is the closest current tool for discharging the weak-boundary divergence-preserving approximation gap, but applicability to the Nitsche boundary trace must be checked rather than assumed"
+      ]
+    },
+    {
+      "kind": "inhomogeneous_dirichlet_scott_vogelius_reference",
+      "citation": "F. Eickmann, L. R. Scott, T. Tscherpel, Scott-Vogelius element and iterated penalty method for inhomogeneous Dirichlet boundary conditions, arXiv:2509.17899 (2025)",
+      "url": "https://arxiv.org/abs/2509.17899",
+      "facts_used": [
+        "gives quasi-optimal mixed-FEM estimates for inhomogeneous Dirichlet Stokes problems and pressure-robust Scott-Vogelius estimates",
+        "exact divergence requires a boundary-data compatibility condition",
+        "key tool is a modified Fortin operator preserving that compatibility condition",
+        "supports treating boundary compatibility as a theorem hypothesis rather than assuming arbitrary weak boundary traces are divergence-compatible"
+      ]
+    }
+  ],
+  "authority": {
+    "proof_complete": false,
+    "published_proof": false,
+    "sponsor_contact_authorized": false,
+    "prize_claim_authorized": false,
+    "prize_earned": false,
+    "receivable": false,
+    "cash_received": false
+  }
+}

@@ -1,0 +1,128 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+def titanHandsAbi = project.findProperty('titanHandsAbi')?.toString()?.trim()
+
+android {
+    namespace 'com.local.deviceagent'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.local.deviceagent"
+        minSdk 31
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        // Ship ONLY the phone's ABI (arm64-v8a). The owner's device - and every modern Android phone - is
+        // arm64; bundling x86/x86_64/armeabi-v7a native libs (LiteRT-LM, ML Kit, Vosk each ship several .so
+        // per ABI) just bloats the APK and makes the SIDELOAD TRANSFER slower and more corruption-prone. The
+        // "won't extract/unzip" report was a transfer failure on a needlessly-large APK, not a broken build
+        // (CI's artifact was a healthy, valid-digest ~61MB). arm64-only drops the unused .so and roughly
+        // halves it, so the file that has to survive a Bluetooth/download hop is much smaller.
+        ndk {
+            if (titanHandsAbi) {
+                // Headless colony emulators are x86_64. The ordinary owner build remains arm64-only.
+                abiFilters titanHandsAbi
+            } else {
+                abiFilters 'arm64-v8a'
+            }
+        }
+    }
+
+    // Sign every build with a STABLE debug key committed to the repo, so each CI
+    // build installs as an UPDATE over the previous one (no uninstall needed, and
+    // your granted permissions - accessibility, overlay, mic - are kept).
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug        // STAYS PLAIN — the daily driver the owner installs + iterates on
+        }
+        release {
+            // OBFUSCATION (release-only; debug never minifies). R8 renames the novel-mechanism classes; the whole app +
+            // every native/reflective lib is kept verbatim via proguard-rules.pro (INVERSE scope, so a missed keep can't
+            // exist by construction). FIRST CUT uses proguard-android.txt (has -dontoptimize): rename WITHOUT the
+            // aggressive optimize pass so the kotlinx-coroutines/litertlm close$default interface-static bridge can't be
+            // disturbed. Upgrade to proguard-android-optimize.txt only after an on-device release smoke test is green.
+            // Do NOT add packaging{ excludes 'kotlin/**' | '**/*.kotlin_builtins' } — stripping the Kotlin builtins
+            // metadata was the real cause of the earlier open-then-instant-close crash (a00f9cb). It is absent on purpose.
+            minifyEnabled true
+            shrinkResources false                     // separate failure axis — enable later after the first green
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug        // same committed key => installs as an UPDATE (keeps grants + model + memory)
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    testOptions {
+        unitTests {
+            // Keep the ANDROID-STUB behavior (a called android.* method THROWS, not silently returns 0):
+            // our JVM tests exercise ONLY pure-Kotlin logic (PromptBudget/AgentLanguage), so a test that
+            // accidentally reaches an Android API should FAIL loudly, not pass on a fake default. This is
+            // deliberately the JUnit default — spelled out so nobody flips it to `returnDefaultValues = true`
+            // and turns a real Android-dependency mistake into a green test.
+            returnDefaultValues = false
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    // LiteRT-LM loads the user-imported .litertlm Gemma model (Google AI Edge).
+    // PINNED to 0.14.0 (07-09): `latest.release` is a MOVING ABI. Its `Conversation` was compiled against a
+    // kotlinx-coroutines ABI our runtime didn't match → a `NoSuchMethodError` on EVERY decode (see the
+    // coroutines note below for the real cause + fix). The CI "Print resolved LiteRT-LM..." step reported
+    // latest.release -> 0.14.0, so we pin it; the ABI can no longer move under us. Bump deliberately (re-check
+    // the coroutines requirement — javap `SendChannel` in the target AAR) when adopting a newer LiteRT-LM.
+    implementation("com.google.ai.edge.litertlm:litertlm-android:0.14.0")
+    // ROOT CAUSE (07-09, verified by javap across versions — NOT the earlier "coroutines too old" guess):
+    // LiteRT-LM 0.14.0's `Conversation` bytecode calls `invokestatic SendChannel.close$default(...)` — the
+    // default-arg bridge as a static ON THE INTERFACE. That form FIRST EXISTS in kotlinx-coroutines 1.11.0
+    // (the Kotlin 2.2 `-Xjvm-default` migration). In 1.7.3–1.10.2 `close$default` lives ONLY in
+    // `SendChannel$DefaultImpls`, so ANY version in that range → `NoSuchMethodError: No static method
+    // close$default(...)Z in class SendChannel` from `Conversation$sendMessageAsync$1$1.onDone` on every decode
+    // completion (bumping 1.7.3→1.8→1.9 never helped — wrong axis). 1.11.0 ADDS the interface static AND KEEPS
+    // `DefaultImpls`, so litertlm links and older callers (vosk, our code) are unaffected. Kotlin here is 2.2.21
+    // ≥ coroutines' stdlib 2.2.20, so no metadata clash. Do NOT drop below 1.11.0 while on LiteRT-LM 0.14.0.
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
+    implementation("com.alphacephei:vosk-android:0.3.75")
+    // #1 OCR fallback for accessibility-blind screens (Flutter/games/webviews). The BUNDLED ML Kit
+    // text recognizer ships the model inside the APK and runs 100% on-device - no network, no Play
+    // Services, nothing leaves the phone (consistent with the no-exfiltration rule). Latin script.
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+    // FlatBuffers runtime — used by SelfGrow (INV-60) to read the .litertlm container index + the embedded TFLite
+    // model FlatBuffer when ADDING parameters (a function-preserving MLP widen). Read/build only; on-device.
+    implementation("com.google.flatbuffers:flatbuffers-java:23.5.26")
+    // SHIZUKU — grants the app a SHELL-uid provider so ShellInput can inject taps/swipes/strokes/keys on surfaces
+    // accessibility can't dispatch to (the owner-approved BACKUP actuator; input injection only, never a command
+    // shell — §3). Small pure-Java libs, no heavy transitives. `provider` supplies the manifest ContentProvider that
+    // hands the app Shizuku's binder; `api` is the client (pingBinder / checkSelfPermission / requestPermission).
+    // Fully guarded: with no Shizuku running, ShellInput.available()=false and the agent uses accessibility as today.
+    implementation("dev.rikka.shizuku:api:13.1.5")
+    implementation("dev.rikka.shizuku:provider:13.1.5")
+
+    // JVM UNIT TESTS (host, no device/emulator). CI is the only real compiler here, so a fast pure-JVM
+    // test suite guards the two hand-written CODECS that would fail SILENTLY on a device: PromptBudget
+    // (the OOM-safe priority/dedup admission — a regression here re-overflows the 4096 launcher limit) and
+    // AgentLanguage (the action/perception codec — a decode bug ships a WRONG action, not a crash). org.json
+    // is the SAME manual JSON the app parses (no reflective Gson), so a codec round-trip test is real.
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.json:json:20240303")
+}

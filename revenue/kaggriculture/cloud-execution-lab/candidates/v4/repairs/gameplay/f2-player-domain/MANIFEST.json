@@ -1,0 +1,24 @@
+{
+  "kind": "titan-v4-repair-evidence",
+  "mechanism": "f2-player-domain-custody",
+  "status": "evidence-only-not-production",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "source_receipt": 5642693971,
+  "source_helper_blob": "4d48168dac0ee06d0c7e62cfdb99c99c402f3812",
+  "helper_authority_transformer_blob": "a4d3a0273e21392c9a9f999754cf18c423e8f0f5",
+  "focused_regression_blob": "7c635ae22a819509249ace3e607e0500799de3c3",
+  "required_postconditions": [
+    "_all_pass requires type(player) is int and player in (0, 1)",
+    "player index must still be in range of farms",
+    "do not require len(farms) == 2 because player0/one-farm views are supported",
+    "player2 three-farm poison returns exact parent before future-cash or V217 planning",
+    "bool, negative, and player2 direct _all_pass poisons fail closed"
+  ],
+  "forbidden_actions": [
+    "do not execute legacy apply_v4 materializer against current production runtime",
+    "do not advance retired titan/v4 refs",
+    "do not activate F2 in production from this evidence pack",
+    "do not modify CANONICAL.json, shared routing, defaults, economics, or workflows from this repair"
+  ]
+}

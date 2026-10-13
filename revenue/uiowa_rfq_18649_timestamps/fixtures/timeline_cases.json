@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "title": "SYNTHETIC timeline evidence: never University findings",
+  "events": [
+    {
+      "id": "spring-start",
+      "timestamp": {
+        "value": "2026-03-08T01:30:00",
+        "zone": "America/New_York"
+      },
+      "context": "synthetic recovery"
+    },
+    {
+      "id": "spring-end",
+      "timestamp": {
+        "value": "2026-03-08T03:30:00",
+        "zone": "America/New_York"
+      },
+      "context": "synthetic recovery"
+    },
+    {
+      "id": "spring-gap",
+      "timestamp": {
+        "value": "2026-03-08T02:30:00",
+        "zone": "America/New_York"
+      },
+      "context": "invalid fictional clock record"
+    },
+    {
+      "id": "fall-first",
+      "timestamp": {
+        "value": "2026-11-01T01:30:00",
+        "zone": "America/New_York",
+        "fold": 0
+      },
+      "context": "synthetic deployment"
+    },
+    {
+      "id": "fall-second",
+      "timestamp": {
+        "value": "2026-11-01T01:30:00",
+        "zone": "America/New_York",
+        "fold": 1
+      },
+      "context": "synthetic recovery"
+    },
+    {
+      "id": "fall-ambiguous",
+      "timestamp": {
+        "value": "2026-11-01T01:30:00",
+        "zone": "America/New_York"
+      },
+      "context": "unresolved fictional clock record"
+    },
+    {
+      "id": "joined-india",
+      "timestamp": "2026-09-19T18:30:00+05:30",
+      "context": "synthetic identity lifecycle"
+    },
+    {
+      "id": "departed-utc",
+      "timestamp": "2026-09-19T14:00:00Z",
+      "context": "synthetic identity lifecycle"
+    },
+    {
+      "id": "offset-missing",
+      "timestamp": "2026-09-19T09:30:00",
+      "context": "unresolved fictional clock record"
+    },
+    {
+      "id": "unknown-local-offset",
+      "timestamp": "2026-09-19T13:00:00-00:00",
+      "context": "known UTC, local offset unspecified"
+    },
+    {
+      "id": "offset-conflict",
+      "timestamp": {
+        "value": "2026-09-19T09:00:00-05:00",
+        "zone": "America/New_York"
+      },
+      "context": "contradictory fictional record"
+    },
+    {
+      "id": "blank",
+      "timestamp": null,
+      "context": "missing fictional record"
+    },
+    {
+      "id": "utc-with-zone",
+      "timestamp": {
+        "value": "2026-09-19T13:00:00Z",
+        "zone": "America/New_York"
+      },
+      "context": "known UTC, supplied display zone"
+    }
+  ],
+  "intervals": [
+    {
+      "id": "spring-elapsed",
+      "start": "spring-start",
+      "end": "spring-end"
+    },
+    {
+      "id": "fall-elapsed",
+      "start": "fall-first",
+      "end": "fall-second"
+    },
+    {
+      "id": "mixed-zone-lifecycle",
+      "start": "joined-india",
+      "end": "departed-utc"
+    },
+    {
+      "id": "ambiguous-recovery",
+      "start": "fall-ambiguous",
+      "end": "fall-second"
+    },
+    {
+      "id": "missing-offset-duration",
+      "start": "offset-missing",
+      "end": "departed-utc"
+    },
+    {
+      "id": "contradictory-duration",
+      "start": "offset-conflict",
+      "end": "departed-utc"
+    },
+    {
+      "id": "unknown-source",
+      "start": "not-supplied",
+      "end": "departed-utc"
+    },
+    {
+      "id": "identical-instant",
+      "start": "unknown-local-offset",
+      "end": "utc-with-zone"
+    }
+  ]
+}

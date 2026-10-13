@@ -1,0 +1,44 @@
+name: TITAN paired-ledger custody gate
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/titan_paired_ledger_gate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/test_titan_paired_ledger_gate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/TITAN-PAIRED-LEDGER-GATE.md"
+      - ".github/workflows/titan-paired-ledger-gate.yml"
+  push:
+    branches:
+      - "sol-pro/titan-v3-paired-ledger-custody-20260910-01"
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/titan_paired_ledger_gate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/test_titan_paired_ledger_gate.py"
+      - "revenue/kaggriculture/cloud-execution-lab/TITAN-PAIRED-LEDGER-GATE.md"
+      - ".github/workflows/titan-paired-ledger-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: >-
+          python -B -m py_compile
+          titan_regression_gate.py
+          titan_paired_ledger_gate.py
+          test_titan_paired_ledger_gate.py
+      - name: Predecessor-killing contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: python -B -m unittest -v test_titan_paired_ledger_gate.py

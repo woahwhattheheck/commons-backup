@@ -1,0 +1,29 @@
+{
+  "schema": "uiowa100-verifier-validation/v1",
+  "operation": "uiowa100-verification-reproducibility-quartzv9n2-20260919",
+  "seat": "ZZ-QUARTZ-V9N2",
+  "python": "3.13.5",
+  "scope": "Selective operator-verifier closure and synthetic fixtures; not full Commons or University assessment; not hosted CI authority.",
+  "source_donor": "51b483e1a6c5634482c333f7522ed2177b979745",
+  "commands": [
+    {"command": "python -m unittest test_verify_kit test_verification_artifacts -v", "tests": 50, "result": "PASS", "duration_s": 29.155},
+    {"command": "python -O -m unittest test_verify_kit test_verification_artifacts -v", "tests": 50, "result": "PASS", "duration_s": 28.883}
+  ],
+  "executed_blob_bindings": {
+    "verify_kit.py": "31ba63ecd5e988d441b1cebab839f5a6d7b1e76e",
+    "verification_artifacts.py": "68fc725caaa611f8181f8539080cab2ba70e9af5",
+    "test_verification_artifacts.py": "1b0200c059ad663e1b03a910b4feb38420251524",
+    "render_guide.py": "b8490cf96c5953f96317bda1b842a7fef2d38164",
+    "test_verify_kit.py": "f41949dbb89656f63682d91695f44afa4cb73762",
+    "kit_manifest.json": "99ae5ece588bf22665108161cbd0f06e9bb92fe3",
+    "university_inputs.csv": "1f6ea3081a79d5a5a7cf91e2bcf0f92acc36c018",
+    "fixtures/minikit_manifest.json": "67e48bdfdf7c7deea74e62770e694e07d7b2d82e"
+  },
+  "fixture_tree": "e20b484f446c922c8c549408b0739bf58f048e18",
+  "observations": [
+    "JSON, CSV, Markdown log and normalized guide match byte-for-byte across two relocated fixture roots in each interpreter mode.",
+    "Raw output, argv, cwd, timestamp and durations remain in separate raw-run JSON; normalized output is explicitly marked.",
+    "Changed application diagnostics and source bytes remain visible; full normalized-output hashes cover differences outside the displayed tail.",
+    "Original 24 tests remain byte-exact; 26 additional tests cover projection, real execution, renderer compatibility and actual child -O propagation."
+  ]
+}

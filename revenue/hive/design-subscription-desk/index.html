@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fieldwork — Design subscription desk</title>
+<style>
+:root{--ink:#183b36;--muted:#60716c;--line:#dce4de;--paper:#f6f7f2;--accent:#126b60;--soft:#e9f3e9}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 system-ui,sans-serif}button,input,textarea,select{font:inherit}button,.button{border:0;border-radius:7px;background:var(--accent);color:white;padding:10px 16px;cursor:pointer;text-decoration:none;display:inline-block}button.secondary,.button.secondary{background:var(--soft);color:var(--ink)}button:disabled{opacity:.5;cursor:wait}input,textarea,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;background:white;color:var(--ink)}textarea{resize:vertical;min-height:90px}label{display:block;font-size:13px;font-weight:650;margin:12px 0 6px}a{color:var(--accent)}h1,h2,h3,p{margin-top:0}h1{font-size:30px;letter-spacing:-.04em;margin-bottom:3px}h2{font-size:20px;margin-bottom:12px}h3{font-size:18px;margin:0}header{max-width:1440px;margin:auto;padding:26px 32px;display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid var(--line)}.eyebrow{font-size:11px;font-weight:750;letter-spacing:.19em;text-transform:uppercase;color:var(--accent)}.muted{color:var(--muted)}.layout{max-width:1440px;margin:auto;display:grid;grid-template-columns:315px 1fr;gap:32px;padding:28px 32px}.panel,.card{background:white;border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:20px}.panel p{font-size:13px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row .compact{flex:0 0 auto}.badge{display:inline-block;border-radius:20px;padding:4px 12px;background:var(--soft);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}.card[data-status="complete"],.card[data-status="cancelled"]{opacity:.8}.card-top{display:flex;justify-content:space-between;align-items:start;gap:20px}.brief{white-space:pre-wrap;margin:14px 0;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.actions button,.actions a{font-size:13px;padding:8px 12px}.small{font-size:12px}.notice{padding:10px 14px;border-radius:6px;background:var(--soft);margin-bottom:18px}.notice.error{background:#ffede5;color:#752c17}#notice:empty{display:none}#notice{position:sticky;top:0;z-index:5}summary{cursor:pointer;font-weight:650}details{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}.history{padding-left:18px;font-size:13px}.history li{padding:5px 0}.asset{border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;overflow-wrap:anywhere}.asset code{font-size:10px;color:var(--muted)}.empty{border:1px dashed var(--line);padding:36px;text-align:center;color:var(--muted);border-radius:10px}dialog{border:1px solid var(--line);border-radius:12px;width:min(1100px,95vw);padding:18px}dialog::backdrop{background:#16362bc7}iframe{width:100%;height:72vh;border:1px solid var(--line);margin-top:15px;background:white}footer{max-width:1440px;padding:10px 32px 30px;margin:auto;font-size:12px;color:var(--muted)}[hidden]{display:none!important}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #de9826;outline-offset:3px}@media(max-width:780px){header{padding:20px;display:block}.layout{grid-template-columns:1fr;padding:20px;gap:0}.card-top{flex-direction:column;gap:8px}.panel,.card{padding:18px}h1{font-size:26px}footer{padding:20px}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">Fieldwork / Design operations</div><h1>Good work, one request at a time.</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<div class="muted">A real queue. Editable sources. Every revision kept.</div></div><div class="badge">Local workspace · no messages sent</div></header>
+<div class="layout"><aside>
+<section class="panel"><h2>Your workspace</h2><label for="workspace">Choose customer workspace</label><select id="workspace"><option value="">Create a workspace</option></select><form id="workspace-form"><label for="workspace-name">New workspace name</label><input id="workspace-name" required maxlength="160" placeholder="Example: Northstar sample"><button style="margin-top:12px">Create workspace</button></form><p class="muted" style="margin-top:14px">Workspaces separate customer queues, not user permissions. Use this local installation only with trusted collaborators.</p></section>
+<section class="panel" id="brand-panel" hidden><h2>Brand library</h2><p class="muted">Start with the original fictional sample, or replace every field with your own direction. Changing the brand never overwrites an earlier delivery.</p><form id="brand-form"></form><details><summary>Original brand assets</summary><label for="brand-file">Upload a source asset (4 MiB maximum)</label><input id="brand-file" type="file"><button id="brand-upload" class="secondary" style="margin-top:10px">Keep in library</button><div id="brand-assets"></div></details></section>
+</aside><main>
+<div id="notice" class="notice" role="status" aria-live="polite"></div>
+<div id="welcome" class="empty">Create a customer workspace to submit the first request.<br>The first starts production; the rest stay in the queue.</div>
+<div id="desk" hidden>
+<section class="panel"><div class="row"><div><div class="eyebrow" id="workspace-label"></div><h2>Request something considered.</h2></div><button class="secondary compact" id="refresh">Refresh</button></div><form id="request-form"><label for="request-title">Request title</label><input id="request-title" required maxlength="160" placeholder="Brand and landing-page package"><label for="request-brief">Brief and acceptance criteria</label><textarea id="request-brief" required maxlength="10000" placeholder="Who is it for, what should it say, and what needs to be editable?"></textarea><div class="row"><div><label for="request-priority">Priority (lower starts first)</label><input id="request-priority" type="number" min="0" max="1000000" step="1" value="100" required></div><button class="compact" style="align-self:end">Submit request</button></div></form></section>
+<div class="row"><h2>Your production queue</h2><span class="muted compact small" id="queue-count"></span></div><div id="requests"></div>
+</div>
+</main></div>
+<footer>Fieldwork is a runnable local production desk, not a paid or installed customer account. The starter package is original fictional sample content. No payment processor, hosted identity, email delivery, external model or publishing service is connected. Source downloads retain original bytes and SHA-256 manifests.</footer>
+<dialog id="preview-dialog"><div class="row"><strong>Sandboxed source preview</strong><button id="close-preview" class="secondary compact">Close preview</button></div><p class="small muted">Local HTML/CSS only. Scripts, forms and navigation are disabled. Download the ZIP to edit the complete source package.</p><iframe id="preview" title="Editable landing-page preview" sandbox=""></iframe></dialog>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+let state = null;
+const fields = {name:'Brand name',tagline:'Tagline',accent:'Accent color (#RRGGBB)',headline:'Landing-page headline',body:'Landing-page introduction',cta:'Call to action',voice:'Brand voice'};
+function element(tag, text, cls){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;}
+function message(value,error=false){$('notice').textContent=value;$('notice').className='notice'+(error?' error':'');}
+async function api(path,data){const opts=data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)};const res=await fetch(path,opts);const body=await res.json();if(!res.ok)throw Error(body.error||'Request failed');return body;}
+function run(fn){return async event=>{if(event)event.preventDefault();const button=event&&event.currentTarget;try{if(button&&button.tagName==='BUTTON')button.disabled=true;await fn();}catch(error){message(error.message,true);}finally{if(button&&button.tagName==='BUTTON')button.disabled=false;}};}
+async function loadList(selected){const items=await api('/api/workspaces');$('workspace').replaceChildren(new Option('Choose workspace',''));for(const item of items)$('workspace').append(new Option(item.name,item.id));if(selected&&items.some(w=>w.id===selected)){$('workspace').value=selected;await load(selected);} }
+async function load(id){state=await api('/api/workspaces/'+id);try{localStorage.setItem('fieldwork-workspace',id);}catch(_){}render();}
+function uploadData(file){if(!file)throw Error('Choose a source file first');if(!file.size||file.size>4*1024*1024)throw Error('Files must be nonempty and at most 4 MiB');return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(Error('Could not read file'));reader.onload=()=>resolve({name:file.name,content_base64:reader.result.split(',')[1]});reader.readAsDataURL(file);});}
+function assetLine(asset){const row=element('div',undefined,'asset');const link=element('a',asset.name);link.href='/api/assets/'+asset.id;link.download=asset.name;row.append(link,element('div',asset.size+' bytes · source revision '+asset.revision,'small'),element('code',asset.sha256));return row;}
+async function change(req,data){state=await api('/api/requests/'+req.id,{version:req.version,...data});render();message('Saved. The queue and revision history are up to date.');}
+function render(){
+ $('welcome').hidden=true;$('desk').hidden=false;$('brand-panel').hidden=false;$('workspace-label').textContent=state.name;
+ const form=$('brand-form');form.replaceChildren();for(const [key,label] of Object.entries(fields)){const lab=element('label',label);lab.htmlFor='brand-'+key;const inp=element(key==='body'||key==='voice'?'textarea':'input');inp.id='brand-'+key;inp.value=state.brand[key];inp.required=true;inp.maxLength=2000;form.append(lab,inp);}const save=element('button','Save brand direction');save.style.marginTop='14px';form.append(save);
+ $('brand-assets').replaceChildren(...state.assets.filter(a=>a.request_id===null).map(assetLine));
+ const active=state.requests.filter(r=>['production','revision','review'].includes(r.status)).length;$('queue-count').textContent=active+' active · '+state.requests.filter(r=>r.status==='queued').length+' queued';
+ $('requests').replaceChildren();const order={production:0,revision:0,review:0,queued:1,complete:2,cancelled:2};const requests=[...state.requests].sort((a,b)=>order[a.status]-order[b.status]||a.priority-b.priority||a.created.localeCompare(b.created)||a.id.localeCompare(b.id));
+ for(const req of requests){
+  const card=element('article',undefined,'card');card.dataset.requestId=req.id;card.dataset.status=req.status;const top=element('div',undefined,'card-top');top.append(element('h3',req.title),element('span',req.status,'badge'));card.append(top,element('div',req.brief,'brief'),element('div','Priority '+req.priority+' · version '+req.version,'small muted'));
+  const actions=element('div',undefined,'actions');const add=(label,fn,secondary=true)=>{const b=element('button',label,secondary?'secondary':'');b.onclick=run(fn);actions.append(b);return b;};
+  if(['production','revision'].includes(req.status)){
+   add('Build editable brand + landing sample',()=>change(req,{action:'sample'}),false);
+   const details=element('details');details.append(element('summary','Deliver your own design sources'));const inp=element('input');inp.type='file';inp.setAttribute('aria-label','Request source file');const up=element('button','Upload source','secondary');up.onclick=run(async()=>change(req,{action:'asset',...await uploadData(inp.files[0])}));const note=element('textarea');note.placeholder='Delivery notes';note.setAttribute('aria-label','Delivery notes');const deliver=element('button','Deliver uploaded sources');deliver.onclick=run(()=>change(req,{action:'deliver',note:note.value}));details.append(inp,up,note,deliver);card.append(details);
+  }
+  if(req.status==='review'){
+   const note=element('textarea');note.placeholder='What should change?';note.setAttribute('aria-label','Revision request');card.append(note);add('Request revision',()=>change(req,{action:'revise',note:note.value}));add('Accept & advance queue',()=>change(req,{action:'approve'}),false);
+  }
+  if(req.status==='revision')card.append(element('div','Update the brand direction or upload corrected source files, then deliver the revised design. The next request stays queued.','notice'));
+  if(req.status==='queued'){
+   const priority=element('input');priority.type='number';priority.min='0';priority.max='1000000';priority.step='1';priority.value=req.priority;priority.setAttribute('aria-label','Queue priority');priority.style.maxWidth='140px';actions.append(priority);add('Update priority',()=>change(req,{action:'priority',priority:Number(priority.value)}));
+  }
+  const assets=state.assets.filter(a=>a.request_id===req.id);
+  if(assets.length){const download=element('a','Download editable ZIP','button secondary');download.href='/api/requests/'+req.id+'/export';actions.append(download);if(assets.some(a=>a.name==='landing.html'))add('Preview landing page',()=>preview(req));const list=element('details');list.append(element('summary',assets.length+' preserved source files'));list.append(...assets.map(assetLine));card.append(list);}
+  card.append(actions);
+  if(!['complete','cancelled'].includes(req.status)){const edit=element('details');edit.append(element('summary','Edit the brief'));const brief=element('textarea');brief.value=req.brief;brief.maxLength=10000;brief.setAttribute('aria-label','Updated brief');const save=element('button','Save brief','secondary');save.onclick=run(()=>change(req,{action:'brief',brief:brief.value}));edit.append(brief,save);card.append(edit);}
+  const history=element('details');history.append(element('summary','Revision and queue history'));const ol=element('ol',undefined,'history');for(const ev of req.events){const li=element('li');li.append(element('strong',ev.kind+' · '),element('span',ev.note),element('div',ev.created,'small muted'));ol.append(li);}history.append(ol);card.append(history);$('requests').append(card);
+ }
+ if(!requests.length)$('requests').append(element('div','No requests yet. Submit your first brief above.','empty'));
+}
+async function preview(req){
+ const assets=state.assets.filter(a=>a.request_id===req.id);const latest=name=>assets.filter(a=>a.name===name).at(-1);const page=latest('landing.html'),css=latest('tokens.css');
+ const fetchText=async asset=>{const res=await fetch('/api/assets/'+asset.id);if(!res.ok)throw Error('Source preview unavailable');return res.text();};
+ let source=await fetchText(page);const style=css?await fetchText(css):'';
+ const doc=new DOMParser().parseFromString(source,'text/html');doc.querySelectorAll('script,link,base,meta[http-equiv]').forEach(n=>n.remove());
+ const policy=doc.createElement('meta');policy.httpEquiv='Content-Security-Policy';policy.content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; form-action 'none'";doc.head.prepend(policy);const styleNode=doc.createElement('style');styleNode.textContent=style;doc.head.append(styleNode);
+ $('preview').srcdoc='<!doctype html>'+doc.documentElement.outerHTML;$('preview-dialog').showModal();
+}
+$('workspace-form').onsubmit=run(async()=>{const ws=await api('/api/workspaces',{name:$('workspace-name').value});await loadList(ws.id);$('workspace-name').value='';message('Workspace created. The supplied brand direction is an editable fictional sample.');});
+$('workspace').onchange=run(async()=>{if($('workspace').value)await load($('workspace').value);});
+$('brand-form').onsubmit=run(async()=>{const brand={};for(const key of Object.keys(fields))brand[key]=$('brand-'+key).value;state=await api('/api/workspaces/'+state.id+'/brand',{version:state.version,brand});render();message('Brand direction saved. Earlier deliveries are unchanged.');});
+$('brand-upload').onclick=run(async()=>{const data=await uploadData($('brand-file').files[0]);const result=await api('/api/workspaces/'+state.id+'/assets',data);state=result.workspace;render();$('brand-file').value='';message('Original asset saved with a SHA-256 receipt.');});
+$('request-form').onsubmit=run(async()=>{const result=await api('/api/requests',{workspace_id:state.id,title:$('request-title').value,brief:$('request-brief').value,priority:Number($('request-priority').value)});state=result.workspace;render();$('request-form').reset();message('Request submitted. Only one request is active for this workspace.');});
+$('refresh').onclick=run(async()=>{await load(state.id);message('Reloaded the persisted workspace.');});
+$('close-preview').onclick=()=>{$('preview-dialog').close();$('preview').srcdoc='';};
+let saved='';try{saved=localStorage.getItem('fieldwork-workspace')||'';}catch(_){}run(()=>loadList(saved))();
+</script>
+</body></html>

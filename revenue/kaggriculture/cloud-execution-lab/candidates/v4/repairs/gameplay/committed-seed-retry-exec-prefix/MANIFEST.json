@@ -1,0 +1,58 @@
+{
+  "schema": "titan-v4-repair-manifest/v1",
+  "lane": "committed-seed retry executable-prefix reserve",
+  "status": "current_abi_composed_default_off",
+  "repair_path": "repairs/gameplay/committed-seed-retry-exec-prefix",
+  "production_seam": "cloud-committed-seed-retry/seed_retry.py::apply_committed_seed_retry",
+  "source": {
+    "path": "exec_prefix.py",
+    "git_blob": "dc8a4e0e268b0e488946fcb0fc5282c9a0f3442d",
+    "bytes": 3003,
+    "sha256": "47bb4a12d9a1761c5719cff363f0c480d9628057382ac7ed6ded4f7bd181db89",
+    "commit": "6478b3413fdd8446357023f95d0054fb78398bb1"
+  },
+  "test": {
+    "path": "test_exec_prefix.py",
+    "git_blob": "bb9fea12b215f0e7404d3ccbc12f7390d95ffa79",
+    "bytes": 5371,
+    "sha256": "5843b5bb4081c4f83e9970bea65583e49c1f359a197ac140b88f7d3fb882d238",
+    "commit": "94eafbdeb6cbf4da380888fa669c362ee4efaba8",
+    "normal": "22/22 PASS",
+    "optimized": "22/22 PASS",
+    "py_compile": "PASS"
+  },
+  "receipt_commit": "fd7196971d12b6da94801ed31181ae718bcbbd3a",
+  "composition": {
+    "module_path": "revenue/kaggriculture/cloud-committed-seed-retry/seed_retry.py",
+    "commit": "5cda517342e4881359b493ca6a159c78fa96066b",
+    "git_blob": "710196b428dc60b3ecebd9eeeafc105efca697c1",
+    "focused_test_path": "revenue/kaggriculture/cloud-committed-seed-retry/test_exec_prefix.py",
+    "focused_test_commit": "8f33335723c2b8bcf86af2e3e7f2bbefda8083a6",
+    "focused_test_blob": "3f4680a0e09a78a74f517e37a5344e4942a329d5",
+    "validation": {
+      "existing_seed_retry_suite_normal": "30/30 PASS",
+      "existing_seed_retry_suite_optimized": "30/30 PASS",
+      "runtime_boundary_normal": "3/3 PASS",
+      "runtime_boundary_optimized": "3/3 PASS",
+      "prefix_discriminators_normal": "8/8 PASS",
+      "prefix_discriminators_optimized": "8/8 PASS"
+    },
+    "default_state": "Features.committed_seed_retry remains False"
+  },
+  "problem": "Committed seed retry scans raw future market suffix rows for BUY_PRODUCT and inherited cash reserve scans raw suffix spend, although engine execution and FrozenSelected funding trace use maxMarketOrdersPerTurn executable prefixes.",
+  "semantics": [
+    "dead suffix BUY_PRODUCT rows do not veto committed seed retry",
+    "dead suffix fixed-cost rows do not create phantom reserve",
+    "identical rows inside the configured executable prefix preserve the existing veto/reserve semantics",
+    "non-default market limits are honored exactly",
+    "selected and route market tapes are not mutated"
+  ],
+  "integration": "Composed only into the existing optional committed-seed-retry module; shared SellScheduler.cash_reserve remains unchanged and feature admission/default is unchanged.",
+  "prohibitions": [
+    "do not enable or change committed_seed_retry default from this correctness composition",
+    "do not edit shared SellScheduler.cash_reserve as part of this lane",
+    "do not mutate selected or route suffix rows",
+    "do not move production or Kaggle refs without current-head package and economics gates",
+    "do not create a sibling V4 integration root"
+  ]
+}

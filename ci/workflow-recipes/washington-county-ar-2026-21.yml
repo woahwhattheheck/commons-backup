@@ -1,0 +1,32 @@
+name: Washington County AR 2026-21 carrier
+on:
+  pull_request:
+    paths:
+      - 'revenue/washington_county_ar_2026_21_comms/**'
+      - '.github/workflows/washington-county-ar-2026-21.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/washington_county_ar_2026_21_comms/**'
+      - '.github/workflows/washington-county-ar-2026-21.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/washington_county_ar_2026_21_comms/qualification.py revenue/washington_county_ar_2026_21_comms/acceptance_harness.py revenue/washington_county_ar_2026_21_comms/test_bid_carrier.py
+      - name: Test repository import shape
+        run: python -m unittest -v revenue.washington_county_ar_2026_21_comms.test_bid_carrier
+      - name: Test optimized repository import shape
+        run: python -O -m unittest -v revenue.washington_county_ar_2026_21_comms.test_bid_carrier
+      - name: Current evidence must fail closed
+        run: |
+          python -m revenue.washington_county_ar_2026_21_comms.qualification revenue/washington_county_ar_2026_21_comms/evidence_template.json > /tmp/report.json
+          grep -q 'HOLD_PRIME_OR_PARTNER' /tmp/report.json

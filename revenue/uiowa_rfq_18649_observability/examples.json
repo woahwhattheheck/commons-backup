@@ -1,0 +1,97 @@
+{
+  "schema": "uiowa-065-observability-evidence-v1",
+  "synthetic": true,
+  "services": [
+    {
+      "service_id": "SYN-REG",
+      "service_name": "Fictional course-registration service",
+      "objectives": [
+        {
+          "objective_id": "REG-01",
+          "objective": "Successful eligible registration attempts remain available during the defined registration window.",
+          "window": "rolling 30 days",
+          "target": {"operator": ">=", "value": 0.995},
+          "indicator": {
+            "kind": "ratio",
+            "user_visible": true,
+            "description": "successful eligible registration attempts / eligible registration attempts"
+          },
+          "measurement_evidence": {
+            "source_ref": "SYN-REG-MEASURE-01",
+            "definition_ref": "SYN-REG-DEF-01",
+            "period_start": "2026-07-01T00:00:00Z",
+            "period_end": "2026-07-30T23:59:59Z",
+            "numerator": 19940,
+            "denominator": 20000
+          },
+          "dependencies": [
+            {"name": "fictional student-record dependency", "visibility": "visible"},
+            {"name": "fictional identity dependency", "visibility": "partial"}
+          ],
+          "diagnostic_context": ["request correlation id", "dependency result", "error class"],
+          "decision_evidence": [
+            {
+              "decision_ref": "SYN-REG-DECISION-01",
+              "outcome": "A recurring dependency timeout led to a retry-policy investigation."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service_id": "SYN-RES",
+      "service_name": "Fictional research-submission service",
+      "objectives": [
+        {
+          "objective_id": "RES-01",
+          "objective": "Submitted fictional research packets receive a durable acknowledgement within the intended service interval.",
+          "window": "calendar month",
+          "target": {"operator": ">=", "value": 0.99},
+          "indicator": {
+            "kind": "ratio",
+            "user_visible": true,
+            "description": "acknowledged submissions / accepted submissions"
+          },
+          "measurement_evidence": {
+            "source_ref": "SYN-RES-MEASURE-01",
+            "definition_ref": "SYN-RES-DEF-01",
+            "period_start": "2026-07-01T00:00:00Z",
+            "period_end": "2026-07-31T23:59:59Z",
+            "numerator": 991,
+            "denominator": 1000
+          },
+          "dependencies": null,
+          "diagnostic_context": ["submission id", "processing stage"],
+          "decision_evidence": []
+        }
+      ]
+    },
+    {
+      "service_id": "SYN-SIGNIN",
+      "service_name": "Fictional sign-in service",
+      "objectives": [
+        {
+          "objective_id": "SIGNIN-01",
+          "objective": "Authorized fictional users can complete sign-in within the stated response-time objective.",
+          "window": "rolling 7 days",
+          "target": {"operator": "<=", "value_ms": 1200, "percentile": 95},
+          "indicator": {
+            "kind": "latency",
+            "user_visible": false,
+            "description": "backend authentication handler duration"
+          },
+          "measurement_evidence": {
+            "source_ref": "SYN-SIGNIN-MEASURE-01",
+            "period_start": "2026-07-24T00:00:00Z",
+            "period_end": "2026-07-30T23:59:59Z"
+          },
+          "dependencies": [
+            {"name": "fictional directory dependency", "visibility": "unknown"}
+          ],
+          "diagnostic_context": [],
+          "decision_evidence": null
+        }
+      ]
+    }
+  ]
+}

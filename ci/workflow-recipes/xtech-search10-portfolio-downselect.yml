@@ -1,0 +1,75 @@
+# Archived CI recipe: intentionally inactive under ci/workflow-recipes/.
+# Exact commands are also listed in the portfolio_downselect README and are
+# executed by off-owner-machine exact-head reviewers before merge.
+name: xTech Search 10 portfolio downselect
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/xtech-search10-2026/portfolio_downselect/**'
+      - '.github/workflows/xtech-search10-portfolio-downselect.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/xtech-search10-2026/portfolio_downselect/**'
+      - '.github/workflows/xtech-search10-portfolio-downselect.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: competitions/xtech-search10-2026/portfolio_downselect
+        run: python -m py_compile downselect.py whitepaper.py test_downselect.py test_whitepaper.py
+      - name: Hostile contract tests
+        working-directory: competitions/xtech-search10-2026/portfolio_downselect
+        run: python -m unittest -v test_downselect.py test_whitepaper.py
+      - name: Hostile contract tests under optimized Python
+        working-directory: competitions/xtech-search10-2026/portfolio_downselect
+        run: python -O -m unittest -v test_downselect.py test_whitepaper.py
+      - name: Current portfolio must fail closed
+        working-directory: competitions/xtech-search10-2026/portfolio_downselect
+        run: |
+          python downselect.py portfolio.current.json --pretty > /tmp/xtech-current.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/xtech-current.json').read_text())
+          assert report['state'] == 'HOLD', report
+          assert report['selectedCandidateId'] is None, report
+          assert report['globalBlockers'], report
+          assert report['authority']['submissionAuthorized'] is False, report
+          assert report['authority']['entitySlotConsumed'] is False, report
+          assert report['authority']['awardOrPrizeClaimed'] is False, report
+          assert len(report['inputPacketSha256']) == 64, report
+          assert len(report['retainedEvidenceManifestSha256']) == 64, report
+          assert len(report['officialConstraintPolicySha256']) == 64, report
+          assert report['officialConstraintSnapshot']['weights']['technicalApproach'] == 40, report
+          assert 'does not independently authenticate' in report['evidenceTrustBoundary'], report
+          assert len(report['receiptSha256']) == 64, report
+          PY
+      - name: Current white-paper source packet must stay blocked
+        working-directory: competitions/xtech-search10-2026/portfolio_downselect
+        run: |
+          python whitepaper.py portfolio.current.json > /tmp/xtech-whitepaper.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          packet = json.loads(Path('/tmp/xtech-whitepaper.json').read_text())
+          assert packet['releaseState'] == 'BLOCKED_NO_INTERNAL_SELECTION', packet
+          assert packet['selectedCandidateId'] is None, packet
+          assert packet['officialTemplateApplied'] is False, packet
+          assert packet['pageConformanceDetermined'] is False, packet
+          assert packet['submissionAuthorized'] is False, packet
+          assert len(packet['receiptSha256']) == 64, packet
+          PY

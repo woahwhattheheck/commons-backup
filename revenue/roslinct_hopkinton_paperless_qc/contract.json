@@ -1,0 +1,42 @@
+{
+  "id": "roslinct-hopkinton-paperless-qc-lims-01",
+  "version": 1,
+  "buyer": "RoslinCT US Hopkinton / Lisa Mello",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788149834.560549"
+  },
+  "workflow": [
+    "accession of synthetic raw, in-process, release, retain, and stability samples",
+    "custody recording",
+    "internal instrument and external contract-lab scheduling",
+    "read-only instrument and lab result ingestion",
+    "stability and retain inventory slots",
+    "CoA reconciliation",
+    "Part 11-style audit and e-signature records",
+    "incumbent-LIMS simulated read-only adapter",
+    "named-human QA release"
+  ],
+  "acceptance": [
+    "240 input rows across five classes",
+    "exactly 216 valid samples traverse expected states once",
+    "exactly 24 seeded label/temperature/duplicate/late/OOS holds",
+    "12 mock instruments and 3 mock contract labs are used",
+    "results and custody match canonical digests",
+    "replay creates zero new accessions or holds",
+    "audit and e-signature records complete",
+    "human QA releaser required; autonomous release denied"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no real Part 11 validation claim",
+    "no production writes, reports, billing, transfers, or material disposition",
+    "incumbent LIMS remains authoritative"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic paperless QC orchestration and human-release receipts only; never live instrument, QMS, delivery, or disposition I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

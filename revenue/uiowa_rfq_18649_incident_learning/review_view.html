@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="__POLICY__">
+<title>Incident learning · Review explorer</title>
+<style>__STYLE__</style>
+</head>
+<body>
+<a class="skip" href="#incidents">Skip to incident histories</a>
+<header>
+<div class="eyebrow">TJLabs / Assessment preparation / UIOWA-067</div>
+<h1>Incident learning</h1>
+<p class="subtitle">Follow the record. See what changed. Keep the unknowns visible.</p>
+<p id="classification" class="classification">Loading classification…</p>
+<p id="asof"></p>
+</header>
+<main>
+<noscript><p class="notice">This explorer requires JavaScript. For the same packet without JavaScript, use the existing report.py Markdown or CSV export. No assessment is shown while JavaScript is disabled.</p></noscript>
+<section aria-label="Interpretation limits" class="notice" id="limits"></section>
+<section aria-label="Supplied record counts" class="stats" id="stats"></section>
+<section aria-label="Review controls" class="controls">
+<label>Group<select id="group"><option value="all">All groups</option><option>ESS</option><option>RIS</option><option>IAM</option></select></label>
+<label>Corrective-action view<select id="state"><option value="all">All evidence states</option><option value="unresolved">Unresolved work</option><option value="overdue">Overdue unresolved</option><option value="closure_unverified">Closure unverified</option><option value="implementation_verified">Implementation verified</option><option value="replacement_documented">Replacement documented</option><option value="open_work">Open work</option><option value="replacement_unsubstantiated">Replacement unsubstantiated</option></select></label>
+<label class="search">Search records and cited excerpts<input id="query" type="search" placeholder="Service, action ID, source text…" autocomplete="off"></label>
+<button id="reset" type="button">Reset view</button>
+</section>
+<p class="filter-help">Group and search affect incident and action panels. Action state filters corrective work only. Source and condition appendices remain complete.</p>
+<p id="visible" role="status" aria-live="polite"></p>
+<nav aria-label="Review sections"><a href="#incidents">Incident histories</a><a href="#actions">Corrective work</a><a href="#conditions">Contributing conditions</a><a href="#sources">Source appendix</a></nav>
+<section id="incidents" tabindex="-1"><h2>Incident histories</h2><p>Milestones are ordered by their supplied timestamps, not a prescribed response sequence. An absent milestone does not mean it never happened.</p><div id="incident-list"></div><p id="no-incidents" hidden>No incidents match this view.</p></section>
+<section id="actions"><h2>Corrective work</h2><p>Each action appears once, including actions shared by several incidents. A documented replacement is not a completed replacement action.</p><div id="action-list" class="action-grid"></div><p id="no-actions" hidden>No corrective actions match this view. This is a filter result, not evidence that no unresolved work exists.</p></section>
+<section id="conditions"><h2>Contributing conditions</h2><div id="condition-list"></div></section>
+<section id="sources"><h2>Source appendix</h2><p>These are supplied source records, not authenticated external evidence. Locators are displayed as text and never fetched. Every cited excerpt stays with the page and exports.</p><div id="source-list"></div></section>
+<section class="exports" aria-label="Save this review view"><h2>Carry the review forward</h2><p>The JSON export includes the full unchanged canonical report, original packet bytes and selected record IDs. Filtering never deletes evidence or records a decision.</p><div class="buttons"><button id="export-json" type="button">Export selection + full evidence</button><button id="export-text" type="button">Export visible review summary</button><button id="export-input" type="button">Save original packet</button><button id="print" type="button">Print current view</button></div></section>
+<footer><h2>Source identity</h2><p id="provenance"></p><p>View: ZZ-LANTERN-47R. Canonical assessment and fictional cases: ZZ-Sol and ZZ-HELIODORE-67. No grading, approval, scheduling, network request or upload is performed by this page.</p></footer>
+</main>
+<div id="payload" hidden>__PAYLOAD__</div>
+<script>__SCRIPT__</script>
+</body>
+</html>

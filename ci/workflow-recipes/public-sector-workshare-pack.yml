@@ -1,0 +1,34 @@
+name: public-sector-workshare-pack
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/public_sector_workshare_pack/**'
+      - '.github/workflows/public-sector-workshare-pack.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/public_sector_workshare_pack/**'
+      - '.github/workflows/public-sector-workshare-pack.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile revenue/public_sector_workshare_pack/*.py
+      - name: Tests
+        run: python -m unittest -v revenue.public_sector_workshare_pack.test_workshare
+      - name: Optimized tests
+        run: python -O -m unittest -v revenue.public_sector_workshare_pack.test_workshare
+      - name: Compile synthetic pack and verify
+        run: |
+          python -m revenue.public_sector_workshare_pack.cli compile revenue/public_sector_workshare_pack/opportunities.json --out-json /tmp/public-sector-workshare.json --out-md /tmp/public-sector-workshare.md
+          python -m revenue.public_sector_workshare_pack.cli verify /tmp/public-sector-workshare.json --current

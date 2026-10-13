@@ -1,0 +1,28 @@
+name: Expertise catalog
+on:
+  pull_request:
+    paths:
+      - 'revenue/expertise_catalog/**'
+      - '.github/workflows/expertise-catalog.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/expertise_catalog/**'
+      - '.github/workflows/expertise-catalog.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/expertise_catalog/catalog.py revenue/expertise_catalog/cli.py revenue/expertise_catalog/test_catalog.py
+      - run: python -m unittest revenue.expertise_catalog.test_catalog -v
+      - run: python -O -m unittest revenue.expertise_catalog.test_catalog -v

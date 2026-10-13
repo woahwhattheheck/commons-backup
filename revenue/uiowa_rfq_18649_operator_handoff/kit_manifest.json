@@ -1,0 +1,269 @@
+{
+  "manifest_version": "1.0",
+  "engagement": "University of Iowa RFQ 18649 \u2014 AIS assessment (preparation only; not an awarded engagement)",
+  "lane_prefix": "uiowa_rfq_18649_",
+  "note": "Components are named by their real lane directory name under revenue/. A component listed here that is not present on disk is reported MISSING, not skipped. A lane present on disk but absent from this manifest is reported UNMAPPED, not dropped. A component may declare a `runner`: its documented command line. A runner is only consulted when the component ships no unittest file, and the status reason always states that the evidence came from the runner rather than from a test suite.",
+  "phases": [
+    {
+      "id": "kickoff",
+      "order": 1,
+      "title": "Kickoff and mobilization",
+      "purpose": "Stand the engagement up: scope confirmation, contacts, schedule shape, coordination forms, and the assessment context the whole kit is built against.",
+      "operator_does": [
+        "Read the mobilization plan and hold the scope-confirmation conversation with the University sponsor.",
+        "Fill the coordination forms with real named contacts (all currently UNKNOWN).",
+        "Record the agreed kickoff date; every date in the kit is relative to it."
+      ],
+      "components": [
+        {
+          "lane": "uiowa_rfq_18649_operator_handoff",
+          "role": "This handoff: the six-phase guide, the component verifier, and the UNKNOWN register. Start here.",
+          "runner": {
+            "cmd": [
+              "python3",
+              "verify_kit.py",
+              "--root",
+              "fixtures/minikit",
+              "--manifest",
+              "fixtures/minikit_manifest.json",
+              "--timeout",
+              "30"
+            ],
+            "note": "deterministic self-demo on the synthetic fixture; the lane also ships test_verify_kit.py which the verifier runs in preference to this"
+          }
+        },
+        {
+          "lane": "uiowa_rfq_18649_mobilization",
+          "role": "Eight-week and six-week plan shapes, coordination forms, scope-confirmation agenda."
+        },
+        {
+          "lane": "uiowa_rfq_18649_workshare",
+          "role": "Carrier record and evidence-authority boundary for the whole workstream."
+        },
+        {
+          "lane": "uiowa_rfq_18649_build_board",
+          "role": "Assessment context notes used to brief the team."
+        }
+      ]
+    },
+    {
+      "id": "evidence_collection",
+      "order": 2,
+      "title": "Evidence collection",
+      "purpose": "Gather what the University actually supplies, register it with stable IDs and exact locators, and rehearse the intake path before real documents arrive.",
+      "operator_does": [
+        "Run the intake rehearsal against the synthetic corpus first, so malformed input handling is observed, not assumed.",
+        "Register each supplied artifact with a stable evidence ID and an exact locator.",
+        "Use the per-area interview worksheets to collect evidence for each assessment area.",
+        "Anything not supplied stays UNKNOWN in the register. Never enter a zero for an absent input."
+      ],
+      "components": [
+        {
+          "lane": "uiowa_rfq_18649_synthetic_collection",
+          "role": "Fictional AIS evidence corpus; the safe input for every rehearsal."
+        },
+        {
+          "lane": "uiowa_rfq_18649_intake_rehearsal",
+          "role": "Intake-to-assessment rehearsal; malformed-input handling."
+        },
+        {
+          "lane": "uiowa_rfq_18649_document_extraction",
+          "role": "Locator-preserving extraction from PDF/DOCX/text evidence."
+        },
+        {
+          "lane": "uiowa_rfq_18649_test_data_readiness",
+          "role": "Test-data catalog readiness evidence."
+        },
+        {
+          "lane": "uiowa_rfq_18649_secure_guidance",
+          "role": "Secure-development guidance usability evidence."
+        },
+        {
+          "lane": "uiowa_rfq_18649_security_event_review",
+          "role": "Security-event review and ownership evidence."
+        },
+        {
+          "lane": "uiowa_rfq_18649_observability",
+          "role": "Observability and service-objective evidence."
+        },
+        {
+          "lane": "uiowa_rfq_18649_recovery_evidence",
+          "role": "Backup completion vs demonstrated restoration."
+        },
+        {
+          "lane": "uiowa_rfq_18649_incident_learning",
+          "role": "Incident timelines, postmortems, corrective-action follow-through."
+        },
+        {
+          "lane": "uiowa_rfq_18649_release_provenance",
+          "role": "Deployment record traced to artifact digest and approval evidence."
+        },
+        {
+          "lane": "uiowa_rfq_18649_handoff",
+          "role": "Development-to-operations handoff packet evidence."
+        },
+        {
+          "lane": "uiowa_rfq_18649_ai_use_inventory",
+          "role": "Current AI use: active vs informal experiment vs planned."
+        },
+        {
+          "lane": "uiowa_rfq_18649_knowledge_readiness",
+          "role": "AI knowledge and data readiness evidence."
+        }
+      ]
+    },
+    {
+      "id": "analysis",
+      "order": 3,
+      "title": "Analysis",
+      "purpose": "Turn registered evidence into findings and prioritized recommendations with visible weights and explicit units.",
+      "operator_does": [
+        "Apply the rating model to each assessment area using only supplied evidence.",
+        "Run the prioritization calculator; inspect the sensitivity output before accepting an order.",
+        "Keep every finding pointed at the evidence ID it came from \u2014 the traceability rehearsal is the check."
+      ],
+      "components": [
+        {
+          "lane": "uiowa_rfq_18649_rating_model",
+          "role": "Area rating with an explicit decision table."
+        },
+        {
+          "lane": "uiowa_rfq_18649_prioritization",
+          "role": "Recommendation prioritization with visible weights and sensitivity."
+        },
+        {
+          "lane": "uiowa_rfq_18649_delivery_metrics",
+          "role": "Delivery metric calculation, data dictionary, interpretation notes."
+        },
+        {
+          "lane": "uiowa_rfq_18649_outcome_measurement",
+          "role": "Adoption vs operational outcome, kept separate."
+        },
+        {
+          "lane": "uiowa_rfq_18649_workbench",
+          "role": "Local analyst surface over the workshare compiler."
+        },
+        {
+          "lane": "uiowa_rfq_18649_capacity_benchmark",
+          "role": "Workflow capacity benchmark; measured vs estimated."
+        },
+        {
+          "lane": "uiowa_rfq_18649_ai_opportunity_portfolio",
+          "role": "AI task suitability, benefit, integration effort."
+        },
+        {
+          "lane": "uiowa_rfq_18649_ai_policy_to_workflow",
+          "role": "Policy-to-workflow assessment (NIST AI RMF as reference only)."
+        },
+        {
+          "lane": "uiowa_rfq_18649_adoption_readiness",
+          "role": "Organizational adoption readiness; never rates individuals."
+        },
+        {
+          "lane": "uiowa_rfq_18649_ai_integration",
+          "role": "Integration and portability readiness patterns."
+        },
+        {
+          "lane": "uiowa_rfq_18649_ai_eval_kit",
+          "role": "AI usefulness evaluation tasks with known answers."
+        }
+      ]
+    },
+    {
+      "id": "draft_review",
+      "order": 4,
+      "title": "Draft review",
+      "purpose": "Prove the draft is followable back to source and usable by its readers, and capture feedback without flattening disagreement.",
+      "operator_does": [
+        "Run the traceability validator; a broken trace is a blocker, not a footnote.",
+        "Run the documentation usability method against the draft with a real reviewer task.",
+        "Record unresolved disagreements as unresolved. Do not resolve them by deletion."
+      ],
+      "components": [
+        {
+          "lane": "uiowa_rfq_18649_traceability_rehearsal",
+          "role": "Evidence to finding to recommendation to report-line trace validator.",
+          "runner": {
+            "cmd": [
+              "python3",
+              "validate_trace.py"
+            ],
+            "note": "validates the synthetic evidence->finding->recommendation->report-line trace bundle shipped in the lane"
+          }
+        },
+        {
+          "lane": "uiowa_rfq_18649_doc_usability",
+          "role": "Reviewer usability method and worksheets."
+        },
+        {
+          "lane": "uiowa_rfq_18649_qa_kit",
+          "role": "Evidence-backed discussion and Q&A kit."
+        },
+        {
+          "lane": "uiowa_rfq_18649_interchange",
+          "role": "CSV/JSON/doc interchange verification for review handoffs."
+        }
+      ]
+    },
+    {
+      "id": "final_delivery",
+      "order": 5,
+      "title": "Final delivery",
+      "purpose": "Assemble the RFQ-aligned final report, check its accessible visual language, and close the evidence lifecycle.",
+      "operator_does": [
+        "Assemble the report against the RFQ-aligned structure.",
+        "Check the visual language reads without color alone and that unassessed cells stay visibly distinct from assessed ones.",
+        "Run the closeout validator. It validates disposition records; it deletes nothing."
+      ],
+      "components": [
+        {
+          "lane": "uiowa_rfq_18649_report_structure",
+          "role": "RFQ-aligned final-report structure."
+        },
+        {
+          "lane": "uiowa_rfq_18649_report_visuals",
+          "role": "Accessible visual language; unassessed stays distinct."
+        },
+        {
+          "lane": "uiowa_rfq_18649_integration",
+          "role": "Field-name and taxonomy reconciliation across components.",
+          "runner": {
+            "cmd": [
+              "python3",
+              "integrate_tabular.py",
+              "--repo",
+              "{REPO}",
+              "--out",
+              "{OUT}/integration.json"
+            ],
+            "note": "reconciles field names across component CSV/JSON outputs; --repo takes the repository root (the parent of the survey root), which is what its interface map's relative paths are written against"
+          }
+        },
+        {
+          "lane": "uiowa_rfq_18649_closeout",
+          "role": "Evidence lifecycle and 30-day post-completion closeout templates."
+        }
+      ]
+    },
+    {
+      "id": "readout",
+      "order": 6,
+      "title": "Optional readout",
+      "purpose": "Optional leadership readout. The deck must agree with the delivered report; detail lives in the appendix.",
+      "operator_does": [
+        "Build the deck from the delivered report, not from a parallel narrative.",
+        "Rehearse Q&A only against evidence that is actually in the report."
+      ],
+      "components": [
+        {
+          "lane": "uiowa_rfq_18649_readout_deck",
+          "role": "Deck architecture that agrees with the example report."
+        },
+        {
+          "lane": "uiowa_rfq_18649_qa_kit",
+          "role": "Q&A answers substantiated from supplied evidence."
+        }
+      ]
+    }
+  ]
+}

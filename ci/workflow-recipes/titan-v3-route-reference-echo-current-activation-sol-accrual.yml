@@ -1,0 +1,93 @@
+name: TITAN V3 route-reference echo current activation SOL-ACCRUAL
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-route-reference-echo-current-activation-sol-accrual.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-route-reference-echo-sol-accrual/**"
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-route-reference-echo-current-activation-sol-accrual/**"
+      - "p/sol-accrual-recovery-titan-v3-route-reference-echo-current-activation-20260910-01.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-route-reference-echo-current-activation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-current-action-bound-panel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONHASHSEED: "0"
+      SEEDS: "539131249,1834999074,2609097301,2609097302,2609097303,2609097304,2611092201,2611092207"
+      EXPECTED_CURRENT_MAIN: "21011846096daad1dd487df0efedf209303c1cb5"
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+
+    steps:
+      - name: Checkout exact triggering head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned official-interpreter dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Run source-bound natural-activation and paired gameplay closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          CASE=revenue/kaggriculture/cloud-execution-lab/analysis/v3-route-reference-echo-current-activation-sol-accrual
+          OUT="$RUNNER_TEMP/titan-v3-route-reference-echo-current-activation"
+          bash "$CASE/run_current_panel.sh" "$OUT" 2>&1 | tee "$RUNNER_TEMP/titan-v3-route-reference-echo-current-activation.log"
+
+      - name: Bind normalization before every returned-action and score effect
+        shell: bash
+        run: |
+          set -euo pipefail
+          CASE=revenue/kaggriculture/cloud-execution-lab/analysis/v3-route-reference-echo-current-activation-sol-accrual
+          OUT="$RUNNER_TEMP/titan-v3-route-reference-echo-current-activation"
+          python -B "$CASE/causal_gate.py" --control "$OUT/control.json" --candidate "$OUT/candidate.json" --panel "$OUT/PANEL.json" --output "$OUT/CAUSAL-BOUND.json" --provenance "$OUT/CAUSAL-PROVENANCE.json" | tee "$OUT/CAUSAL-BOUND-STDOUT.json"
+          {
+            printf '\n## Normalization → returned action → score custody\n\n'
+            cat "$OUT/CAUSAL-BOUND-STDOUT.json"
+            printf '\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Retain complete and partial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-route-reference-echo-current-activation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/titan-v3-route-reference-echo-current-activation/
+            ${{ runner.temp }}/titan-v3-route-reference-echo-current-activation.log
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Require terminal evidence envelope
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/titan-v3-route-reference-echo-current-activation"
+          test -s "$RUNNER_TEMP/titan-v3-route-reference-echo-current-activation.log"
+          test -s "$OUT/COMPLETE"
+          test -s "$OUT/PANEL.json"
+          test -s "$OUT/PROVENANCE.json"
+          test -s "$OUT/CAUSAL-BOUND.json"
+          test -s "$OUT/CAUSAL-PROVENANCE.json"
+          test -s "$OUT/CAUSAL-BOUND-STDOUT.json"
+          test "$(cat "$OUT/COMPLETE")" = "$EXPECTED_HEAD"
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain)"

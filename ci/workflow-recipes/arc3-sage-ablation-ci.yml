@@ -1,0 +1,50 @@
+name: ARC3 SAGE ablation harness
+
+on:
+  pull_request:
+    paths:
+      - "competitions/arc-agi-3-2026/ablation/**"
+      - ".github/workflows/arc3-sage-ablation-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "competitions/arc-agi-3-2026/ablation/**"
+      - ".github/workflows/arc3-sage-ablation-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile exact source
+        working-directory: competitions/arc-agi-3-2026
+        run: python -m py_compile ablation/*.py
+      - name: Hostile paired-contract tests
+        working-directory: competitions/arc-agi-3-2026
+        run: python -B -m unittest -v ablation.test_ablation
+      - name: Optimized-mode hostile tests
+        working-directory: competitions/arc-agi-3-2026
+        run: python -O -B -m unittest -v ablation.test_ablation
+      - name: Synthetic paired ablation benchmark
+        working-directory: competitions/arc-agi-3-2026
+        run: |
+          rm -rf /tmp/arc3-sage-ablation
+          python -m ablation.benchmark --seeds 64 --budget 24 --output /tmp/arc3-sage-ablation | tee /tmp/arc3-sage-ablation-summary.json
+      - name: Assert pinned synthetic receipt
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/arc3-sage-ablation-summary.json'))
+          assert p['bundle_digest'] == '78a573d603ade9b02cce16674a934f937b7763980839d64a57b73a80cf79366a'
+          assert len(p['experiments']) == 4
+          assert all(e['aggregate']['pair_count'] == 64 for e in p['experiments'])
+          PY

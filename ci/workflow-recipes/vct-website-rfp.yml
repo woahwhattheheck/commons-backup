@@ -1,0 +1,52 @@
+name: VCT website RFP pursuit carrier
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/vancouver_civic_theatres_website/**'
+      - '.github/workflows/vct-website-rfp.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/vancouver_civic_theatres_website/**'
+      - '.github/workflows/vct-website-rfp.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile modules
+        run: python -m py_compile revenue/vancouver_civic_theatres_website/*.py
+      - name: Contract tests
+        run: python -m unittest -v revenue.vancouver_civic_theatres_website.test_engine
+      - name: Optimized contract tests
+        run: python -O -m unittest -v revenue.vancouver_civic_theatres_website.test_engine
+      - name: Public fixture must remain held
+        shell: bash
+        run: |
+          set +e
+          python -m revenue.vancouver_civic_theatres_website.cli compile \
+            revenue/vancouver_civic_theatres_website/fixtures/company_unknown.json > /tmp/vct.json
+          code=$?
+          set -e
+          test "$code" -eq 2
+          python - <<'PY'
+          import json
+          report = json.load(open('/tmp/vct.json', encoding='utf-8'))
+          assert report['pursuit_posture'] == 'HOLD_CONTROLLING_ATTACHMENTS'
+          assert report['source_readiness'] == 'HOLD_CONTROLLING_ATTACHMENTS'
+          assert report['external_submission_authorized'] is False
+          assert report['commercial']['buyer_facing_price_authorized'] is False
+          assert report['authority'] and not any(report['authority'].values())
+          assert len(report['source_blockers']) == 7
+          PY

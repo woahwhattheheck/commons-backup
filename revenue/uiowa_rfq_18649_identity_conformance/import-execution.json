@@ -1,0 +1,43 @@
+{
+  "schema": "uiowa-identity-import-execution/v1",
+  "operation": "uiowa-103-cirrus-20260919",
+  "executed_at": "2026-09-19T14:37:36.030623+00:00",
+  "python_version": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "synthetic": true,
+  "assessment_authority": false,
+  "hosted_ci_claimed": false,
+  "source_files": {
+    "import_impact.py": {"bytes": 18590, "git_blob_sha": "91055f8a0d1e8d7841a8d36582e9b78c780aa2dd", "sha256": "8ce064de56c49b71586e49662919455d8f18650ae520db23ac9c8c660b6b2958"},
+    "demo_import.py": {"bytes": 4495, "git_blob_sha": "996b24af710fb597c4a04b168a6725336a13a02a", "sha256": "8cc8fd83cd68af9789c2dc1edea52376fd4e73cec392cca3794a8399c7e602ce"},
+    "tests/test_import_impact.py": {"bytes": 10914, "git_blob_sha": "09cb2c359281c16d7d204ab4145c06f41b9aa445", "sha256": "d3c2c463ac892b09da90717be3f7d63a4704b8d9b52385f1f849bf48964ca3ac"}
+  },
+  "runs": [
+    {"command": "python -m unittest discover -s revenue/uiowa_rfq_18649_identity_conformance/tests -v", "exit_code": 0, "tests": 42, "stderr_tail": "Ran 42 tests in 0.342s\n\nOK"},
+    {"command": "python -O -m unittest discover -s revenue/uiowa_rfq_18649_identity_conformance/tests -v", "exit_code": 0, "tests": 42, "stderr_tail": "Ran 42 tests in 0.364s\n\nOK"},
+    {"command": "python -O revenue/uiowa_rfq_18649_identity_conformance/demo_import.py --expect-blob ee97b82d7e198aad99beef961f09b0eee194be48 --output-dir /mnt/data/cirrus/import-demo-final-optimized", "exit_code": 0, "stdout_sha256": "6af83da403c677178fa0fa41d00551b6f845eedb07e42545f227094fcddb8372", "stderr": ""}
+  ],
+  "normal_optimized_demo_files_identical": true,
+  "demo_manifest": {
+    "schema": "uiowa.identity-import-demo.v1",
+    "synthetic": true,
+    "assessment_authority": false,
+    "expected_source_pin_checked": true,
+    "impact_git_blob_sha": "91055f8a0d1e8d7841a8d36582e9b78c780aa2dd",
+    "mapper_git_blob_sha": "ee97b82d7e198aad99beef961f09b0eee194be48",
+    "files": {
+      "import-impact.html": {"bytes": 67964, "sha256": "b660bef6fd0819bac098eb780b0c5d3963e2bccebebfdafb2f65cf938b34c847"},
+      "import-impact.json": {"bytes": 46596, "sha256": "3e4eafcd751af55e24f2301ff0043789c287654f2bb4f14fef70f70d785fd94a"},
+      "snapshot-after.json": {"bytes": 12829, "sha256": "0154d79b9e8f80a3808bc3ca92485ad3121de19fc851a916bf34ead857a3244f"},
+      "snapshot-before.json": {"bytes": 10337, "sha256": "3977556933b28ee9c32ebbb3f0b556fc905d890c6ccf8023577f417f868f1643"}
+    },
+    "summary": {"occurrences_before": 4, "occurrences_after": 6, "occurrences_added": 2, "occurrences_removed": 0, "occurrences_unchanged": 4, "occurrences_changed": 0, "same_key_rekeys": 0, "same_revision_original_changes": 0, "links_before": 4, "links_after": 4, "links_changed": 2, "links_unchanged": 2, "links_added": 0, "links_removed": 0, "newly_unresolved_links": 1, "newly_resolved_links": 1, "unresolved_before": 2, "unresolved_after": 2, "retargeted_endpoints_without_selector_change": 0}
+  },
+  "visual_inspection": {
+    "method": "Chromium page.set_content of exact generated HTML; full-page screenshots opened and visually inspected; no file-URL navigation or browser policy changes",
+    "source_html_sha256": "b660bef6fd0819bac098eb780b0c5d3963e2bccebebfdafb2f65cf938b34c847",
+    "observed": "No overlapping cards, clipped headings or page-level horizontal overflow. The narrow table scrolls within its labelled keyboard-focusable region. Full snapshots remain available in a disclosure.",
+    "limits": ["No screen-reader testing", "No WCAG conformance certification", "Screenshots do not prove source semantics"],
+    "desktop": {"viewport": [1280, 900], "document_size": [1280, 2001], "expanded_document_width": 1280, "table_overflows_its_scroll_region": false, "script_count": 0, "page_errors": [], "external_requests": [], "screenshot_sha256": "b962fb7ce039489a78db0a42c2fed2c8e57d16a38d592fe2a1769f93f2891c0a"},
+    "mobile": {"viewport": [390, 844], "document_size": [390, 2717], "expanded_document_width": 390, "table_overflows_its_scroll_region": true, "script_count": 0, "page_errors": [], "external_requests": [], "screenshot_sha256": "3a367fd52295fb49166d16ae59870120b8423b8ed758177d20030a3ffa1f43ac"}
+  }
+}

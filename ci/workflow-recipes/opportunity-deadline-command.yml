@@ -1,0 +1,45 @@
+name: Opportunity deadline command
+
+on:
+  push:
+    paths:
+      - 'revenue/opportunity_deadline_command/**'
+      - 'test_opportunity_deadline_command.py'
+      - 'test_opportunity_deadline_command_recovery.py'
+      - '.github/workflows/opportunity-deadline-command.yml'
+  pull_request:
+    paths:
+      - 'revenue/opportunity_deadline_command/**'
+      - 'test_opportunity_deadline_command.py'
+      - 'test_opportunity_deadline_command_recovery.py'
+      - '.github/workflows/opportunity-deadline-command.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: >-
+          python -m py_compile
+          revenue/opportunity_deadline_command/engine.py
+          test_opportunity_deadline_command.py
+          test_opportunity_deadline_command_recovery.py
+      - name: Hostile tests
+        run: |
+          python test_opportunity_deadline_command.py
+          python test_opportunity_deadline_command_recovery.py
+      - name: Optimized hostile tests
+        run: |
+          python -O test_opportunity_deadline_command.py
+          python -O test_opportunity_deadline_command_recovery.py

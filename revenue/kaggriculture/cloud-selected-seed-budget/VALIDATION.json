@@ -1,0 +1,64 @@
+{
+  "engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "engine_ref": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "kind": "component_validation_not_game_panel",
+  "limitations": [
+    "Caller must supply all possible future continuations; coverage assertion is not proven by compiler.",
+    "Counting PLANT requests is an upper bound on consumption, not route feasibility.",
+    "Released cash may enable later unchanged purchases/hires and worsen outcomes.",
+    "Repeated requested buys are not treated as filled, so redundant purchases can remain.",
+    "No hosted replay, full-game panel, held evaluation, selected default or Kaggle submission changed."
+  ],
+  "official_engine_fixture_methods": 7,
+  "retained_cases": [
+    {
+      "case": "two_worker_selected_planting",
+      "evidence": "bounded official-interpreter fixture through configured DONE in both seats",
+      "matching_plants": 2,
+      "own_cash_delta": 70,
+      "requested_wheat_seeds": 9,
+      "retained_wheat_seeds": 2
+    },
+    {
+      "case": "failed_early_buy_then_sale_then_buy",
+      "early_bought": 0,
+      "evidence": "actual ordered market and subsequent two-worker PLANT in both seats",
+      "late_bought_seeds": 2,
+      "own_cash_after_market": 29,
+      "wheat_sale_receipt": 49
+    },
+    {
+      "baseline_cash_after_market": 143,
+      "case": "enabled_later_hire",
+      "evidence": "actual interpreter,12 existing hands, both seats; not cash dominance",
+      "next_hire_cost": 233,
+      "own_cash_delta": -143,
+      "prior_hires": 12,
+      "proposal_cash_after_market": 0
+    }
+  ],
+  "runtime_measurement": {
+    "branches": 16,
+    "compile_max_ms": 32.01367700000901,
+    "dated_rows": 11488,
+    "samples": 30,
+    "scope": "warm_compile_and_transform_only_no_import_or_game",
+    "transform_max_ms": 0.14571799999885116
+  },
+  "seats_per_method": 2,
+  "source_files": {
+    "TEST-RESULT.txt": {
+      "git_blob": "6b33426026c6171143216e30ef2f62d4bf71c1d5",
+      "sha256": "ea04f0c54cfd0910f30f78eab78f080df1e22784829b1c847ac48b558e7f278c"
+    },
+    "selected_seed_budget.py": {
+      "git_blob": "78bd08b00a8b7fcf934dcf25c54ece51746a5f5e",
+      "sha256": "8a044091b891efcf841e8bb8e9c7186366b70a1f91c0a23f31cce0db75963b10"
+    },
+    "test_selected_seed_budget.py": {
+      "git_blob": "d787e019dde77ab9757b4d668a70c4f929b2e7a5",
+      "sha256": "9dccf07ab32380f65334af1f8d4efa02149de7a6b2d17fb4343a6c70ea9d13e2"
+    }
+  },
+  "tests_passed": 22
+}

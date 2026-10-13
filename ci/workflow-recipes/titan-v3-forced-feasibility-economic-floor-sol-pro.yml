@@ -1,0 +1,158 @@
+name: titan-v3-forced-feasibility-economic-floor-sol-pro
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-forced-feasibility-economic-floor-sol-pro.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-forced-feasibility-economic-floor-sol-pro/**"
+      - "revenue/kaggriculture/cloud-execution-lab/scheduler.py"
+      - "revenue/kaggriculture/cloud-execution-lab/mechanics.py"
+      - "revenue/kaggriculture/cloud-runtime-pulse/observed_clone.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/next-panel/vendor/arlene.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/decision/decision.py"
+      - "p/sol-pro-titan-v3-forced-feasibility-economic-floor-20260910-01.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  exact-source-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      LAB: revenue/kaggriculture/cloud-execution-lab
+      RUNTIME: revenue/kaggriculture/cloud-runtime-pulse
+      CASE: revenue/kaggriculture/cloud-execution-lab/analysis/v3-forced-feasibility-economic-floor-sol-pro
+      EXPECTED_SCHEDULER_BLOB: a483b24dd72b580d7d8811636b54d2d44f391575
+      EXPECTED_MECHANICS_BLOB: 044a4f9c0a4a44dde10ada57563238bcaf82075d
+      EXPECTED_OBSERVED_CLONE_BLOB: f810d53193d3035655a36c21021e18ba1d415916
+      EXPECTED_ARLENE_BLOB: bdb9cf58148a3c7961c085f4902759537decabf6
+      EXPECTED_DECISION_BLOB: 2931aa55831204fbb473ab85a6f5b81ec947fcf7
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONHASHSEED: "0"
+    steps:
+      - name: Check out exact tested head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Bind exact head and direct theorem dependency closure
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git hash-object "$LAB/scheduler.py")" = "$EXPECTED_SCHEDULER_BLOB"
+          test "$(git hash-object "$LAB/mechanics.py")" = "$EXPECTED_MECHANICS_BLOB"
+          test "$(git hash-object "$RUNTIME/observed_clone.py")" = "$EXPECTED_OBSERVED_CLONE_BLOB"
+          test "$(git hash-object "$LAB/reference/next-panel/vendor/arlene.py")" = "$EXPECTED_ARLENE_BLOB"
+          test "$(git hash-object "$LAB/reference/decision/decision.py")" = "$EXPECTED_DECISION_BLOB"
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile and run predecessor-discriminating contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/v3-forced-feasibility-economic-floor-sol-pro
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B - <<'PY'
+          from pathlib import Path
+          for path in (Path("materialize.py"), Path("test_economic_floor.py")):
+              compile(path.read_text(encoding="utf-8"), str(path), "exec")
+              print("compiled", path)
+          PY
+          python -B -m unittest -v test_economic_floor.py
+
+      - name: Materialize and validate the exact repair receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/titan-v3-forced-feasibility-economic-floor"
+          rm -rf "$OUT"
+          mkdir -p "$OUT"
+          python -B "$CASE/materialize.py" \
+            --source "$LAB/scheduler.py" \
+            --output "$OUT/scheduler.py" \
+            --receipt "$OUT/RECEIPT.json"
+          python -B - "$OUT/RECEIPT.json" "$OUT/scheduler.py" <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import sys
+
+          receipt_path = Path(sys.argv[1])
+          scheduler_path = Path(sys.argv[2])
+
+          def pairs(rows):
+              out = {}
+              for key, value in rows:
+                  if key in out:
+                      raise SystemExit(f"duplicate JSON key: {key}")
+                  out[key] = value
+              return out
+
+          receipt = json.loads(
+              receipt_path.read_text(encoding="utf-8"),
+              object_pairs_hook=pairs,
+              parse_constant=lambda token: (_ for _ in ()).throw(
+                  ValueError(f"non-finite JSON token: {token}")
+              ),
+          )
+          assert receipt["schema_version"] == 1
+          assert receipt["operation"] == (
+              "titan-v3-forced-feasibility-economic-floor-20260910-sol-pro-01"
+          )
+          assert receipt["source"]["git_blob_sha1"] == (
+              "a483b24dd72b580d7d8811636b54d2d44f391575"
+          )
+          repair = receipt["repair"]
+          assert repair["kind"] == "forced_feasibility_economic_floor"
+          assert repair["changed_files"] == ["scheduler.py"]
+          assert len(repair["replacements"]) == 5
+          assert all(
+              row["old_occurrences_before"] == 1
+              and row["old_occurrences_after"] == 0
+              and row["new_occurrences_before"] == 0
+              and row["new_occurrences_after"] == 1
+              for row in repair["replacements"]
+          )
+          assert repair["properties"] == {
+              "canonical_state_mutated": False,
+              "forced_zero_cannot_outrank_positive_gain": True,
+              "negative_forced_plan_ineligible": True,
+              "own_floor_required_for_forced_plan": True,
+              "physical_candidate_census_separate": True,
+          }
+          data = scheduler_path.read_bytes()
+          assert hashlib.sha256(data).hexdigest() == repair["sha256"]
+          compile(data.decode("utf-8"), str(scheduler_path), "exec")
+          print(json.dumps({
+              "repair_git_blob": repair["git_blob_sha1"],
+              "repair_sha256": repair["sha256"],
+              "replacement_count": len(repair["replacements"]),
+          }, sort_keys=True))
+          PY
+
+      - name: Assert exact head stayed clean
+        if: always()
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain --untracked-files=all)"

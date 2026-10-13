@@ -1,0 +1,399 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/outcome_commerce/catalog.schema.json",
+  "title": "Commons Outcome Commerce Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "canonical_page",
+    "manifest",
+    "terms_rule",
+    "economic_truth",
+    "pricing_models",
+    "integration_sources",
+    "listings"
+  ],
+  "properties": {
+    "schema_version": {"const": "outcome-commerce/v1"},
+    "kind": {"const": "OUTCOME_COMMERCE_CATALOG"},
+    "canonical_page": {"type": "string", "minLength": 1},
+    "manifest": {"type": "string", "minLength": 1},
+    "terms_rule": {"type": "string", "minLength": 1},
+    "economic_truth": {"type": "array", "minItems": 7, "uniqueItems": true, "items": {"type": "string"}},
+    "pricing_models": {"type": "array", "minItems": 8, "uniqueItems": true, "items": {"type": "string"}},
+    "integration_sources": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "funnel_stage_order": {
+      "const": [
+        "DISCOVERED",
+        "QUALIFIED",
+        "QUOTED",
+        "FUNDED",
+        "RUNNING",
+        "SUBMITTED",
+        "ACCEPTED",
+        "SETTLED",
+        "BANK_AVAILABLE"
+      ]
+    },
+    "funnel_truth": {"$ref": "#/$defs/funnel_truth"},
+    "funnels": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/funnel"}
+    },
+    "listings": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/listing"}},
+    "live_cash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cite", "note", "products"],
+      "properties": {
+        "cite": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "note": {"type": "string", "minLength": 1},
+        "products": {"type": "array", "items": {"$ref": "#/$defs/live_cash_product"}},
+        "larger_fixed": {"type": "array", "items": {"$ref": "#/$defs/live_cash_larger_fixed"}}
+      }
+    }
+  },
+  "$defs": {
+    "live_cash_product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "price_usd", "path"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "price_usd": {"type": "integer", "minimum": 0},
+        "path": {"type": "string", "minLength": 1}
+      }
+    },
+    "live_cash_larger_fixed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["days", "name", "path", "price_usd"],
+      "properties": {
+        "days": {"type": "integer", "minimum": 1},
+        "name": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "price_usd": {"type": "integer", "minimum": 0}
+      }
+    },
+    "id": {"type": "string", "minLength": 8, "maxLength": 80, "pattern": "^[A-Za-z0-9._-]+$"},
+    "money": {"type": "string", "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,8})?$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "pointer", "blob_sha", "terms_authority"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "pointer": {"type": "string", "pattern": "^(|/.*)$"},
+        "offer_id": {"$ref": "#/$defs/id"},
+        "blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "terms_authority": {"const": "source"}
+      }
+    },
+    "component": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "amount", "basis"],
+          "properties": {
+            "id": {"$ref": "#/$defs/id"},
+            "kind": {"enum": ["fixed", "subscription", "milestone", "license"]},
+            "amount": {"$ref": "#/$defs/money"},
+            "basis": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "meter", "unit_amount"],
+          "properties": {
+            "id": {"$ref": "#/$defs/id"},
+            "kind": {"enum": ["usage", "outcome", "sponsorship"]},
+            "meter": {"type": "string", "minLength": 1},
+            "unit_amount": {"$ref": "#/$defs/money"},
+            "included": {"$ref": "#/$defs/money"},
+            "basis": {"type": "string"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "meter", "rate_bps"],
+          "properties": {
+            "id": {"$ref": "#/$defs/id"},
+            "kind": {"const": "take_rate"},
+            "meter": {"type": "string", "minLength": 1},
+            "rate_bps": {"type": "integer", "minimum": 0, "maximum": 10000},
+            "basis": {"type": "string"}
+          }
+        }
+      ]
+    },
+    "pricing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "mode", "components"],
+      "properties": {
+        "currency": {"type": "string", "pattern": "^[A-Z][A-Z0-9._-]{1,31}$"},
+        "mode": {"type": "string", "minLength": 1},
+        "components": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/component"}}
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["acceptance_source", "evidence_required"],
+      "properties": {
+        "acceptance_source": {"type": "string", "minLength": 1},
+        "receipt_schema": {"type": "string", "minLength": 1},
+        "evidence_required": {"const": true}
+      }
+    },
+    "routes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human", "machine"],
+      "properties": {
+        "human": {"type": "string", "minLength": 1},
+        "machine": {"type": "string", "minLength": 1}
+      }
+    },
+    "follow_on": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source", "term_months", "currency", "amount_from", "amount_to", "separately_scoped"],
+      "properties": {
+        "kind": {"const": "license"},
+        "source": {"type": "string", "minLength": 1},
+        "term_months": {"type": "integer", "minimum": 1},
+        "currency": {"type": "string", "pattern": "^[A-Z][A-Z0-9._-]{1,31}$"},
+        "amount_from": {"$ref": "#/$defs/money"},
+        "amount_to": {"$ref": "#/$defs/money"},
+        "separately_scoped": {"const": true}
+      }
+    },
+    "source_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "blob_sha", "terms_authority"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+(?![\\s\\S])"
+        },
+        "blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}(?![\\s\\S])"},
+        "terms_authority": {"const": "source"}
+      }
+    },
+    "checkout_active_chargeable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "provider",
+        "url",
+        "link_active",
+        "account_charges_enabled",
+        "account_payouts_enabled",
+        "capability_evidence"
+      ],
+      "properties": {
+        "status": {"const": "ACTIVE_CHARGEABLE"},
+        "provider": {"const": "stripe"},
+        "url": {
+          "type": "string",
+          "pattern": "^https://(buy|donate)\\.stripe\\.com/[A-Za-z0-9_-]+(?![\\s\\S])"
+        },
+        "link_active": {"const": true},
+        "account_charges_enabled": {"const": true},
+        "account_payouts_enabled": {"const": true},
+        "capability_evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reference", "observed_at"],
+          "properties": {
+            "reference": {"type": "string", "pattern": "\\S"},
+            "observed_at": {"type": "string", "format": "date-time"}
+          }
+        }
+      }
+    },
+    "checkout_livemode_url_recorded": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "provider", "url", "link_active", "account_charges_enabled"],
+      "properties": {
+        "status": {"const": "LIVEMODE_URL_RECORDED"},
+        "provider": {"const": "stripe"},
+        "url": {
+          "type": "string",
+          "pattern": "^https://(buy|donate)\\.stripe\\.com/[A-Za-z0-9_-]+(?![\\s\\S])"
+        },
+        "link_active": {"const": "UNVERIFIED"},
+        "account_charges_enabled": {"const": false}
+      }
+    },
+    "checkout_not_minted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"const": "NOT_MINTED"}
+      }
+    },
+    "checkout": {
+      "oneOf": [
+        {"$ref": "#/$defs/checkout_active_chargeable"},
+        {"$ref": "#/$defs/checkout_livemode_url_recorded"},
+        {"$ref": "#/$defs/checkout_not_minted"}
+      ]
+    },
+    "string_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "funnel_truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "as_of",
+        "source",
+        "distinct_targets",
+        "delivered_transports",
+        "unclassified_response_signals",
+        "verified_positive_replies",
+        "accepted_scopes",
+        "paid_deliveries",
+        "collected_cash_usd",
+        "next_edge"
+      ],
+      "properties": {
+        "as_of": {"type": "string", "format": "date-time"},
+        "source": {"type": "string", "minLength": 1},
+        "distinct_targets": {"type": "integer", "minimum": 0},
+        "delivered_transports": {"type": "integer", "minimum": 0},
+        "unclassified_response_signals": {"type": "integer", "minimum": 0},
+        "verified_positive_replies": {"type": "integer", "minimum": 0},
+        "accepted_scopes": {"type": "integer", "minimum": 0},
+        "paid_deliveries": {"type": "integer", "minimum": 0},
+        "collected_cash_usd": {"$ref": "#/$defs/money"},
+        "next_edge": {"const": "QUALIFIED_BUYER"}
+      }
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_channel", "alternate_channels", "message", "route", "cta"],
+      "properties": {
+        "primary_channel": {"type": "string", "minLength": 1},
+        "alternate_channels": {"$ref": "#/$defs/string_list"},
+        "message": {"type": "string", "minLength": 1},
+        "route": {"type": "string", "minLength": 1},
+        "cta": {"type": "string", "minLength": 1}
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["route", "required", "state_after"],
+      "properties": {
+        "route": {"type": "string", "minLength": 1},
+        "required": {"$ref": "#/$defs/string_list"},
+        "state_after": {"const": "QUALIFIED"}
+      }
+    },
+    "conversion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "status", "next_step", "state_after", "evidence_required"],
+      "properties": {
+        "mode": {"enum": ["ACTIVE_STRIPE_LINK", "RECORDED_STRIPE_LINK", "CUSTOMER_SPECIFIC_INVOICE"]},
+        "status": {"enum": ["ACTIVE_CHARGEABLE", "CAPABILITY_UNVERIFIED", "NOT_ISSUED"]},
+        "next_step": {"type": "string", "minLength": 1},
+        "state_after": {"const": "FUNDED"},
+        "evidence_required": {"type": "string", "minLength": 1}
+      }
+    },
+    "fulfillment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deliverables", "acceptance", "refund"],
+      "properties": {
+        "deliverables": {"$ref": "#/$defs/string_list"},
+        "acceptance": {"$ref": "#/$defs/string_list"},
+        "refund": {"type": "string", "minLength": 1}
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dom_action", "click_truth", "first_evidence_state", "success_state"],
+      "properties": {
+        "dom_action": {"enum": ["checkout-open", "provider-capability-unverified", "qualification-open"]},
+        "click_truth": {"enum": ["INTENT_ONLY", "NO_CLICK_SURFACE"]},
+        "first_evidence_state": {"enum": ["DISCOVERED", "FUNDED"]},
+        "success_state": {"const": "BANK_AVAILABLE"}
+      }
+    },
+    "funnel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "priority",
+        "readiness",
+        "buyer",
+        "trigger",
+        "acquisition",
+        "qualification",
+        "conversion",
+        "fulfillment",
+        "measurement",
+        "next_offer",
+        "gaps"
+      ],
+      "properties": {
+        "priority": {"type": "integer", "minimum": 1},
+        "readiness": {
+          "enum": ["READY_FOR_CHECKOUT", "READY_FOR_QUALIFICATION", "NEEDS_DEFINITION", "BLOCKED_PROVIDER_CAPABILITY"]
+        },
+        "buyer": {"type": "string", "minLength": 1},
+        "trigger": {"type": "string", "minLength": 1},
+        "acquisition": {"$ref": "#/$defs/acquisition"},
+        "qualification": {"$ref": "#/$defs/qualification"},
+        "conversion": {"$ref": "#/$defs/conversion"},
+        "fulfillment": {"$ref": "#/$defs/fulfillment"},
+        "measurement": {"$ref": "#/$defs/measurement"},
+        "next_offer": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "gaps": {"$ref": "#/$defs/string_list"}
+      }
+    },
+    "listing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "state", "pricing", "outcome", "routes"],
+      "oneOf": [
+        {"required": ["source"]},
+        {"required": ["source_artifact"]}
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "name": {"type": "string", "minLength": 1},
+        "state": {"enum": ["PUBLIC_OFFER", "CANDIDATE", "PROPOSED", "EXAMPLE_ONLY"]},
+        "source": {"$ref": "#/$defs/source"},
+        "source_artifact": {"$ref": "#/$defs/source_artifact"},
+        "pricing": {"$ref": "#/$defs/pricing"},
+        "outcome": {"$ref": "#/$defs/outcome"},
+        "follow_on": {"$ref": "#/$defs/follow_on"},
+        "routes": {"$ref": "#/$defs/routes"},
+        "checkout": {"$ref": "#/$defs/checkout"}
+      }
+    }
+  }
+}

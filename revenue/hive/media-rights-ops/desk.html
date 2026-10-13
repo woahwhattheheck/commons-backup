@@ -1,0 +1,37 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Content Rights & Usage-Window Desk</title>
+<style>
+body{font:15px system-ui,sans-serif;max-width:1100px;margin:2rem auto;padding:0 1rem;background:#f7f7f7;color:#171717}h1,h2{margin:.4rem 0}section{background:white;border:1px solid #ddd;border-radius:10px;padding:1rem;margin:1rem 0}textarea,input{width:100%;box-sizing:border-box;padding:.6rem;margin:.25rem 0 .7rem;font:13px ui-monospace,monospace}button{padding:.55rem .9rem;margin-right:.5rem}pre{white-space:pre-wrap;overflow:auto;background:#111;color:#eee;padding:1rem;border-radius:8px}.warn{border-left:4px solid #b45309;padding-left:.8rem}table{border-collapse:collapse;width:100%;font:13px ui-monospace,monospace}td,th{border-bottom:1px solid #ddd;text-align:left;padding:.35rem .4rem;vertical-align:top}select{padding:.4rem}#batchmeta{overflow-wrap:anywhere}#batchtable{max-width:100%;overflow-x:auto}#batchtable:focus-visible{outline:3px solid #075985;outline-offset:3px}</style>
+<h1>Content Rights & Usage-Window Operations Desk</h1>
+<p class="warn"><strong>Operational gate only.</strong> This desk enforces owner-normalized authority facts. It does not determine ownership, interpret contracts, decide fair use, create rights, publish content, or remove content from providers.</p>
+<section><h2>Evaluate placement intent</h2><textarea id="intent" rows="9">{"asset_id":"cut-a-15s","channel":"instagram","territory":"US","starts_at":"2026-10-01T12:00:00Z","ends_at":"2026-10-15T12:00:00Z"}</textarea><button onclick="post('/api/evaluate',{raw:'intent'})">Evaluate</button></section>
+<section><h2>Batch CSV review</h2>
+<p>Read-only. One snapshot for every row. Malformed rows stay visible and are not dropped. Request ids are not invented and placements are not recorded.</p>
+<textarea id="batchcsv" rows="8">asset_id,channel,territory,starts_at,ends_at
+cut-a-15s,instagram,US,2026-10-01T12:00:00Z,2026-10-15T12:00:00Z
+cut-a-15s,tiktok,US,2026-10-01T12:00:00Z,2026-10-15T12:00:00Z
+,instagram,US,2026-10-01T12:00:00Z,2026-10-15T12:00:00Z</textarea>
+<button onclick="batch()">Review batch</button>
+<label>Show <select id="batchfilter" onchange="renderBatch()"><option value="all">all</option><option value="READY_ON_SUPPLIED_AUTHORITY">READY</option><option value="HOLD">HOLD</option><option value="invalid">invalid</option></select></label>
+<button onclick="downloadBatch('json')">Download JSON</button>
+<button onclick="downloadBatch('csv')">Download CSV</button>
+<div id="batchmeta"></div>
+<div id="batchtable" role="region" aria-label="Batch review results" tabindex="0"></div>
+</section>
+<section><h2>Queues</h2><input id="asof" value="2026-12-10T00:00:00Z"><input id="horizon" value="30"><button onclick="queues()">Refresh queues</button></section>
+<section><h2>Local snapshot</h2><button onclick="getSnap()">Refresh snapshot</button></section>
+<section><h2>Result</h2><pre id="out">Ready.</pre></section>
+<script>
+const out=document.getElementById('out');
+async function post(path,opt){try{let body=opt&&opt.raw?JSON.parse(document.getElementById(opt.raw).value):opt;let r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});out.textContent=JSON.stringify(await r.json(),null,2)}catch(e){out.textContent=String(e)}}
+async function getSnap(){let r=await fetch('/api/snapshot');out.textContent=JSON.stringify(await r.json(),null,2)}
+function queues(){post('/api/queues',{as_of:document.getElementById('asof').value,horizon_days:Number(document.getElementById('horizon').value)})}
+let lastBatch=null;
+async function batch(){try{let r=await fetch('/api/batch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({csv:document.getElementById('batchcsv').value})});lastBatch=await r.json();renderBatch()}catch(e){out.textContent=String(e)}}
+function shownRows(){if(!lastBatch||!lastBatch.rows)return[];let f=document.getElementById('batchfilter').value;return lastBatch.rows.filter(row=>f==='all'||row.status===f)}
+function renderBatch(){if(!lastBatch)return;out.textContent=JSON.stringify(lastBatch,null,2);let meta=document.getElementById('batchmeta');let table=document.getElementById('batchtable');table.textContent='';if(lastBatch.error){meta.textContent=lastBatch.error;return}meta.textContent=`snapshot ${lastBatch.manifest_sha256||'none'} · ${lastBatch.row_count} rows · ready ${lastBatch.ready_count} · hold ${lastBatch.hold_count} · invalid ${lastBatch.invalid_count}`;let html=document.createElement('table');let head=document.createElement('tr');for(const label of ['row','status','intent','grant / reasons']){let th=document.createElement('th');th.textContent=label;head.appendChild(th)}html.appendChild(head);for(const row of shownRows()){let tr=document.createElement('tr');let intent=row.intent?Object.values(row.intent).join(' · '):'';let detail=row.status==='invalid'?(row.errors||[]).join('; '):(row.selected_grant_id||(row.reasons||[]).join(', '));for(const value of [row.row,row.status,intent,detail]){let td=document.createElement('td');td.textContent=value==null?'':String(value);tr.appendChild(td)}html.appendChild(tr)}table.appendChild(html)}
+function csvCell(value){let text=value==null?'':String(value);if(/[",\n]/.test(text))return'"'+text.replaceAll('"','""')+'"';return text}
+function downloadBatch(kind){if(!lastBatch||!lastBatch.rows)return;let name=kind==='csv'?'rights-batch.csv':'rights-batch.json';let text;if(kind==='json'){text=JSON.stringify(lastBatch,null,2)+'\n'}else{let lines=['row,status,asset_id,channel,territory,starts_at,ends_at,selected_grant_id,reasons,errors'];for(const row of lastBatch.rows){let intent=row.intent||{};lines.push([row.row,row.status,intent.asset_id,intent.channel,intent.territory,intent.starts_at,intent.ends_at,row.selected_grant_id,(row.reasons||[]).join('|'),(row.errors||[]).join('|')].map(csvCell).join(','))}text=lines.join('\n')+'\n'}let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:kind==='csv'?'text/csv':'application/json'}));a.download=name;a.click()}
+</script>

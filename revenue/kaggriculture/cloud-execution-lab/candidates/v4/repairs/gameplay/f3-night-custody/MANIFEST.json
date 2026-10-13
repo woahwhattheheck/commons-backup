@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "operation": "ASTRA-F3-NIGHT-CUSTODY-20260911",
+  "status": "SOURCE_REPAIRED_NOT_PROMOTED",
+  "canonical_branch": "main",
+  "coordination_pr": 12638,
+  "claim_comment": 5642720120,
+  "source_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r04_v217_eod_tail.py",
+  "predecessor_blob": "1348e796acba28b22d85fac8a57e080f0504ddff",
+  "source_blob": "1ce3c8fb8b8311c9e7efbcd16964255371b8a4ff",
+  "source_sha256": "7f115ca52f6f2c7b0b9c25c8043202f9f7391208106287f88b81632d812dd25f",
+  "source_commit": "f90d258f2b8250f6b3e4ec57c3ae892bfed2f3f7",
+  "test_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/checks/test_v4_f3_night_custody.py",
+  "test_blob": "33ca0e584036438b01e7087021d7ca93b028b64f",
+  "test_sha256": "7f1802d1269da7b0e3446c2ab600e20cc025030448b0e3fbba3ce2640cadf041",
+  "test_commit": "0c8cb50220ecbff5aece738a6be34b46e85dd053",
+  "engine_reference_path": "revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py",
+  "engine_reference_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "engine_rules": ["nightly reset iff (step + 1) % 24 == 0", "episode terminal at step >= 720 - 2"],
+  "engine_validation_receipt": "ENGINE-RECEIPT.json",
+  "engine_validation_commit": "3052e926e7a066d44d5221cde197ae5bc04b66c7",
+  "repair": [
+    "Reject non-integer, negative and post-terminal step values before pending-action or view work",
+    "Preserve the incumbent hours 16 through 21 admission window",
+    "Authenticate end as the next actual 24-step boundary below 719; reject forged early/late reset boundaries",
+    "Reject final-partial-day work before tape scanning; preserve all existing route, reservation, inventory and target semantics"
+  ],
+  "validation": {
+    "predecessor_regression_exit": 1,
+    "normal_tests_passed": 12,
+    "optimized_tests_passed": 12,
+    "calendar_selector_cases": 5712,
+    "full_planner_actionable_step_cases": 719,
+    "full_planner_calendar_activations": 29,
+    "single_target_helper_differential_cases": 34800,
+    "identical_admitted_tasks": 4524,
+    "different_tasks": 0,
+    "py_compile": "PASS",
+    "local_git_identity_equals_published_source_and_test_blob": true
+  },
+  "evidence_boundary": "The validation object records the initial helper suite. The 34,800-case differential covers 29 real-reset days, six eligible hours, all 100 target tiles and held-WHEAT 0/1. ENGINE-RECEIPT.json adds 108 real interpreter rescue timelines plus controls and edge timelines, with a combined 15 normal/15 optimized tests. Neither receipt is hosted CI, a full-router or full-match test, current-ABI activation, or a leaderboard gain. Outer routers may reject malformed observations earlier.",
+  "preservation": "Exact predecessor bytes remain in the existing main ancestry as Git blob 1348e796acba28b22d85fac8a57e080f0504ddff; no competing helper copy or V4 branch was created.",
+  "run_from_repo_root": [
+    "python revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/checks/test_v4_f3_night_custody.py",
+    "python -O revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/checks/test_v4_f3_night_custody.py"
+  ],
+  "unchanged": ["feature keys and defaults", "shared apply/runtime/config", "legacy refs", "production archive", "Kaggle state"]
+}

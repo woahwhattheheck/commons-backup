@@ -1,0 +1,39 @@
+name: Offering bundle composer
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/offering_bundle_composer/**'
+      - '.github/workflows/offering-bundle-composer.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/offering_bundle_composer/**'
+      - '.github/workflows/offering-bundle-composer.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/offering_bundle_composer/*.py revenue/offering_bundle_composer/tests/test_composer.py
+      - name: Unit tests
+        run: python -m unittest discover -s revenue/offering_bundle_composer/tests -v
+      - name: Optimized unit tests
+        run: python -O -m unittest discover -s revenue/offering_bundle_composer/tests -v
+      - name: Acceptance corpus
+        run: |
+          python revenue/offering_bundle_composer/acceptance.py > /tmp/acceptance.normal.json
+          python -O revenue/offering_bundle_composer/acceptance.py > /tmp/acceptance.optimized.json
+          cmp /tmp/acceptance.normal.json /tmp/acceptance.optimized.json
+          cat /tmp/acceptance.normal.json

@@ -1,0 +1,686 @@
+"""Offline, deterministic claim-aware sprint planner for verified bounty manifests.
+
+No provider calls, GitHub writes, identity switching, secrets, or payout mutations.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+from collections import Counter, defaultdict
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from urllib.parse import urlsplit
+
+ISSUE_RE = re.compile(r"^/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/issues/([1-9][0-9]*)/?$")
+PR_RE = re.compile(r"^/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/pull/([1-9][0-9]*)/?$")
+PLATFORMS = {"algora", "bountyhub", "issuehunt", "grantfox", "proven_payer"}
+FUNDING = {"escrow_verified", "provider_listed", "promised", "conditional", "unverified"}
+ELIGIBILITY = {"eligible", "human_required", "assignment_required", "unknown", "ineligible"}
+STATES = {"open", "closed", "unknown"}
+SOURCES = {"none", "building", "ready", "published"}
+PR_STATES = {"open", "merged", "closed", "unknown"}
+PR_MERGEABILITY = {"mergeable", "conflicting", "unknown"}
+CLAIMS = {"unknown", "not_submitted", "submitted", "accepted", "rejected", "paid"}
+COMPETITION = {"none", "other_pr", "ours", "unknown"}
+
+
+def github_identity(url: str, kind: str) -> tuple[str, str, int]:
+    if not isinstance(url, str):
+        raise ValueError("GitHub URL must be text")
+    u = urlsplit(url)
+    if u.scheme != "https" or u.netloc.lower() != "github.com" or u.query or u.fragment:
+        raise ValueError("canonical HTTPS github.com URL required")
+    match = (ISSUE_RE if kind == "issue" else PR_RE).fullmatch(u.path)
+    if match is None:
+        raise ValueError("invalid GitHub %s URL" % kind)
+    owner, repo, number = match.groups()
+    return owner.lower(), repo.lower(), int(number)
+
+
+def timestamp(raw: str) -> datetime:
+    if not isinstance(raw, str):
+        raise ValueError("timestamp must be timezone-aware ISO 8601 text")
+    try:
+        result = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise ValueError("invalid ISO 8601 timestamp") from error
+    if result.tzinfo is None or result.utcoffset() is None:
+        raise ValueError("timestamp must carry an explicit timezone")
+    return result
+
+
+def enum(record: dict, field: str, choices: set[str]) -> str:
+    value = record.get(field, "unknown")
+    if value not in choices:
+        raise ValueError("invalid %s: %s" % (field, value))
+    return value
+
+
+def normalize(record: dict, now: datetime, max_age_hours: int) -> dict:
+    if not isinstance(record, dict):
+        raise ValueError("each candidate must be an object")
+    owner, repo, number = github_identity(record.get("issue_url"), "issue")
+    platform = enum(record, "platform", PLATFORMS)
+    funding = enum(record, "funding", FUNDING)
+    eligibility = enum(record, "eligibility", ELIGIBILITY)
+    state = enum(record, "issue_state", STATES)
+    source = enum(record, "source_state", SOURCES)
+    competition = enum(record, "competition", COMPETITION)
+    claim = enum(record, "claim_state", CLAIMS)
+    amount = record.get("reward_usd")
+    if amount is not None and (type(amount) not in (float, int) or not 0 <= amount <= 10_000_000):
+        raise ValueError("reward_usd must be a nonnegative finite numeric amount or null")
+    if isinstance(amount, float) and (amount != amount or amount == float("inf")):
+        raise ValueError("reward_usd must be finite")
+    pr = record.get("pr_url")
+    pr_state = record.get("pr_state")
+    if pr_state is not None and (type(pr_state) is not str or pr_state not in PR_STATES):
+        raise ValueError("pr_state must be open, merged, closed, or unknown")
+    if pr_state is not None and not pr:
+        raise ValueError("pr_state requires a sponsor pr_url")
+    pr_mergeability = record.get("pr_mergeability")
+    if pr_mergeability is not None and (
+            type(pr_mergeability) is not str or pr_mergeability not in PR_MERGEABILITY):
+        raise ValueError("pr_mergeability must be mergeable, conflicting, unknown, or null")
+    ancestry: dict[str, object] = {}
+    for field in ("pr_base_sha", "pr_head_sha", "pr_merge_base_sha"):
+        value = record.get(field)
+        if value is not None and (
+                not isinstance(value, str) or not re.fullmatch(r"[a-fA-F0-9]{40}", value)):
+            raise ValueError("%s must be an exact 40-hex commit SHA or null" % field)
+        ancestry[field] = value.lower() if value else None
+    for field in ("pr_ahead_by", "pr_behind_by"):
+        value = record.get(field)
+        if value is not None and (type(value) is not int or value < 0):
+            raise ValueError("%s must be a nonnegative integer or null" % field)
+        ancestry[field] = value
+    if (pr_mergeability is not None or any(v is not None for v in ancestry.values())) and not pr:
+        raise ValueError("PR mergeability/ancestry evidence requires a sponsor pr_url")
+    if pr is not None:
+        pr_owner, pr_repo, _ = github_identity(pr, "pr")
+        if (pr_owner, pr_repo) != (owner, repo):
+            raise ValueError("pr_url must be a sponsor-repository PR; put fork carriers in source_pr_url")
+    author = record.get("pr_author")
+    if author is not None and (not isinstance(author, str) or not re.fullmatch(r"[A-Za-z0-9-]{1,39}", author)):
+        raise ValueError("invalid PR author")
+    if author is not None and pr is None:
+        # Orphan author evidence must not be discarded and silently become a
+        # fresh BUILD opportunity; require the matching sponsor PR reference.
+        raise ValueError("pr_author requires a sponsor pr_url; reconcile PR ownership before BUILD")
+    source_pr = record.get("source_pr_url")
+    source_author = record.get("source_pr_author")
+    if source_pr is not None:
+        src_owner, src_repo, _ = github_identity(source_pr, "pr")
+        if (src_owner, src_repo) == (owner, repo):
+            raise ValueError("source_pr_url must refer to a different, source-carrier repository")
+        if not isinstance(source_author, str) or not re.fullmatch(r"[A-Za-z0-9-]{1,39}", source_author):
+            raise ValueError("source_pr_url needs a valid source_pr_author")
+        if source == "none" and not pr:
+            raise ValueError("fork source requires an explicit building or ready source_state")
+    elif source_author is not None:
+        raise ValueError("source_pr_author requires source_pr_url")
+    if source == "published" and (not pr or not author):
+        raise ValueError("published source needs PR URL and author")
+    if source != "published" and pr:
+        # An upstream PR is an existing contribution even when the input
+        # claims source=none; do not accidentally spawn a duplicate author.
+        source = "published"
+        if not author:
+            raise ValueError("existing PR needs author")
+    verified = timestamp(record.get("checked_at"))
+    age = now - verified
+    fresh = timedelta(0) <= age <= timedelta(hours=max_age_hours)
+    funding_url = record.get("funding_url")
+    if funding_url is not None:
+        if not isinstance(funding_url, str):
+            raise ValueError("funding_url must be a verifiable HTTPS URL or null")
+        parsed_funding = urlsplit(funding_url)
+        if (parsed_funding.scheme != "https" or not parsed_funding.hostname
+                or parsed_funding.username is not None or parsed_funding.password is not None
+                or parsed_funding.fragment):
+            raise ValueError("funding_url must have an HTTPS hostname and no credentials or fragment")
+    # Optional proposed edit scope for the already-merged Slack TAKE preflight.
+    # This is an advisory for a known sponsor PR, not an exclusive lane.
+    take_paths = record.get("take_paths", [])
+    if (not isinstance(take_paths, list) or len(take_paths) > 32
+            or any(not isinstance(p, str) or not p.strip()
+                   or p.startswith(("/", chr(92)))
+                   or any(c in p for c in (chr(10), chr(13)))
+                   for p in take_paths)):
+        raise ValueError("take_paths must be a bounded list of relative source paths")
+    take_head = record.get("take_head", "")
+    if not isinstance(take_head, str) or (take_head and not re.fullmatch(r"[a-fA-F0-9]{8,40}", take_head)):
+        raise ValueError("take_head must be an 8-40 digit source SHA or empty")
+    take_kind = record.get("take_kind", "source")
+    if take_kind not in ("source", "metadata"):
+        raise ValueError("take_kind must be source or metadata")
+    take_operation_id = record.get("take_operation_id", "")
+    if (not isinstance(take_operation_id, str) or len(take_operation_id) > 128
+            or any(c in take_operation_id for c in (chr(10), chr(13)))):
+        raise ValueError("invalid take_operation_id")
+    occupied = record.get("active_owner")
+    if occupied is not None and (not isinstance(occupied, str) or not occupied.strip()):
+        raise ValueError("active_owner must be nonempty text or null")
+
+    # An explicit, evidenced owner hold is independent of bounty status.
+    # Never infer a release merely from fresh funding, a later PR or a stale TAKE.
+    owner_hold = record.get("owner_hold")
+    if owner_hold is not None:
+        if not isinstance(owner_hold, dict):
+            raise ValueError("owner_hold must contain reason and reference")
+        reason = owner_hold.get("reason")
+        reference = owner_hold.get("reference")
+        if (not isinstance(reason, str) or not reason.strip() or len(reason) > 240
+                or any(ch in reason for ch in ("\r", "\n"))):
+            raise ValueError("owner_hold.reason must be bounded single-line text")
+        if not isinstance(reference, str):
+            raise ValueError("owner_hold.reference must be a clean HTTPS evidence URL")
+        hold_url = urlsplit(reference)
+        if (hold_url.scheme != "https" or not hold_url.hostname
+                or hold_url.username or hold_url.password or hold_url.query or hold_url.fragment
+                or any(ord(ch) < 32 for ch in reference)):
+            raise ValueError("owner_hold.reference must be a clean HTTPS evidence URL")
+        owner_hold = {"reason": reason.strip(), "reference": reference}
+
+    # Optional one-shot provider evidence for a stale source lease. The planner
+    # never performs the live read: the recovery/collision/publication boundary
+    # supplies the exact branch head and exhaustive expected..observed paths.
+    lease_recovery = record.get("lease_recovery")
+    if lease_recovery is not None:
+        if not isinstance(lease_recovery, dict):
+            raise ValueError("lease_recovery must be an object or null")
+        if not occupied:
+            raise ValueError("lease_recovery requires the recorded active_owner")
+        branch = lease_recovery.get("branch")
+        if (not isinstance(branch, str) or not branch.strip() or len(branch) > 255
+                or any(ch in branch for ch in (chr(10), chr(13)))):
+            raise ValueError("lease_recovery.branch must be bounded nonempty text")
+        expected_head = lease_recovery.get("expected_head")
+        observed_head = lease_recovery.get("observed_head")
+        for name, value in (("expected_head", expected_head), ("observed_head", observed_head)):
+            if not isinstance(value, str) or not re.fullmatch(r"[a-fA-F0-9]{40}", value):
+                raise ValueError("lease_recovery.%s must be an exact 40-hex SHA" % name)
+        touched_paths = lease_recovery.get("touched_paths", [])
+        if (not isinstance(touched_paths, list) or len(touched_paths) > 64
+                or any(not isinstance(p, str) or not p.strip()
+                       or p.startswith(("/", chr(92)))
+                       or any(ch in p for ch in (chr(10), chr(13)))
+                       for p in touched_paths)):
+            raise ValueError("lease_recovery.touched_paths must be bounded relative paths")
+        for field in ("comparison_complete", "stale"):
+            if not isinstance(lease_recovery.get(field, False), bool):
+                raise ValueError("lease_recovery.%s must be boolean" % field)
+        provider_readback = lease_recovery.get("provider_readback", "")
+        origin = lease_recovery.get("origin", "")
+        source_ref = lease_recovery.get("source", "")
+        for field, value in (
+            ("provider_readback", provider_readback),
+            ("origin", origin),
+            ("source", source_ref),
+        ):
+            if (not isinstance(value, str) or len(value) > 300
+                    or any(ch in value for ch in (chr(10), chr(13)))):
+                raise ValueError("lease_recovery.%s must be bounded single-line text" % field)
+        completion_proof = lease_recovery.get("completion_proof")
+        if completion_proof is not None:
+            if not isinstance(completion_proof, dict):
+                raise ValueError("lease_recovery.completion_proof must be an object or null")
+            verified_completion = completion_proof.get("verified", False)
+            reference = completion_proof.get("reference")
+            if not isinstance(verified_completion, bool):
+                raise ValueError("lease_recovery.completion_proof.verified must be boolean")
+            if reference is not None and (
+                    not isinstance(reference, str) or len(reference) > 300
+                    or any(ch in reference for ch in (chr(10), chr(13)))):
+                raise ValueError("lease_recovery.completion_proof.reference must be bounded single-line text")
+            completion_proof = {
+                "verified": verified_completion,
+                "reference": reference,
+            }
+        lease_recovery = {
+            "branch": branch.strip(),
+            "expected_head": expected_head.lower(),
+            "observed_head": observed_head.lower(),
+            "touched_paths": touched_paths,
+            "comparison_complete": lease_recovery.get("comparison_complete", False),
+            "stale": lease_recovery.get("stale", False),
+            "provider_readback": provider_readback.strip(),
+            "origin": origin.strip(),
+            "source": source_ref.strip(),
+            "completion_proof": completion_proof,
+        }
+    return {
+        "issue_url": "https://github.com/%s/%s/issues/%s" % (owner, repo, number),
+        "issue_key": "%s/%s#%s" % (owner, repo, number),
+        "repo": "%s/%s" % (owner, repo),
+        "number": number, "platform": platform, "funding": funding,
+        "funding_url": funding_url, "eligibility": eligibility,
+        "issue_state": state, "source_state": source, "competition": competition,
+        "claim_state": claim, "reward_usd": amount, "pr_url": pr,
+        "pr_state": pr_state,
+        "pr_mergeability": pr_mergeability,
+        "pr_base_sha": ancestry["pr_base_sha"],
+        "pr_head_sha": ancestry["pr_head_sha"],
+        "pr_merge_base_sha": ancestry["pr_merge_base_sha"],
+        "pr_ahead_by": ancestry["pr_ahead_by"],
+        "pr_behind_by": ancestry["pr_behind_by"],
+        "pr_author": author.lower() if author else None,
+        "source_pr_url": source_pr,
+        "source_pr_author": source_author.lower() if source_author else None,
+        "active_owner": occupied, "owner_hold": owner_hold, "fresh": fresh,
+        "take_paths": take_paths, "take_head": take_head,
+        "take_kind": take_kind, "take_operation_id": take_operation_id,
+        "lease_recovery": lease_recovery,
+        "checked_at": verified.isoformat(),
+        "note": str(record.get("note") or "")[:300],
+    }
+
+
+def mergeability_advisory(item: dict) -> dict | None:
+    """Classify optional same-snapshot PR mergeability evidence without changing work action."""
+    if not item["pr_url"] or item.get("pr_state") == "closed":
+        return None
+    state = item.get("pr_mergeability")
+    if state is None:
+        return None
+    if state == "mergeable":
+        return {
+            "status": "MERGEABLE_CONFIRMED",
+            "guidance": "Provider reports mergeable; still expected-head fence any merge or source write.",
+        }
+    if state == "unknown":
+        return {
+            "status": "REFRESH_MERGEABILITY",
+            "guidance": "Provider mergeability is unknown/recomputing; do not infer a source conflict.",
+        }
+
+    base = item.get("pr_base_sha")
+    merge_base = item.get("pr_merge_base_sha")
+    behind = item.get("pr_behind_by")
+    if base and merge_base and base == merge_base and behind == 0:
+        return {
+            "status": "REFRESH_MERGEABILITY",
+            "guidance": (
+                "Provider conflict signal contradicts linear ancestry "
+                "(current base is merge base and head is not behind); refresh before conflict repair."
+            ),
+        }
+    return {
+        "status": "CONFLICT_REVIEW",
+        "guidance": (
+            "Provider reports a conflict without linear-ancestry evidence; fresh-fence base/head "
+            "and review the actual divergence before any merge or source rewrite."
+        ),
+    }
+
+
+
+def apply_head_reconciliation(item: dict) -> dict | None:
+    """Adopt the canonical one-shot source-lease reconciliation into MOVA."""
+    evidence = item.get("lease_recovery")
+    if evidence is None:
+        return None
+
+    tool_dir = str(Path(__file__).resolve().parents[1] / "swarm_take_collisions")
+    if tool_dir not in sys.path:
+        sys.path.insert(0, tool_dir)
+    from head_reconcile import reconcile
+
+    record = {
+        "operation_id": item["take_operation_id"] or item["operation_id"],
+        "repo": item["repo"],
+        "branch": evidence["branch"],
+        "owner": item["active_owner"],
+        "origin": evidence["origin"],
+        "lease_kind": "source",
+        "expected_head": evidence["expected_head"],
+        "observed_head": evidence["observed_head"],
+        "claimed_paths": item["take_paths"],
+        "touched_paths": evidence["touched_paths"],
+        "comparison_complete": evidence["comparison_complete"],
+        "stale": evidence["stale"],
+        "provider_readback": evidence["provider_readback"],
+    }
+    if evidence["completion_proof"] is not None:
+        record["completion_proof"] = evidence["completion_proof"]
+
+    receipt = reconcile(record)
+    receipt["source"] = evidence["source"] or item["source_pr_url"] or item["pr_url"] or item["issue_url"]
+    item["head_reconciliation"] = receipt
+
+    if receipt["status"] == "VERIFIED_COMPLETION":
+        item["action"] = "SOURCE_LEASE_RETIRED"
+        item["reason"] = receipt["guidance"]
+    elif receipt["status"] == "COLLISION_RECONCILIATION":
+        item["action"] = "COLLISION_RECONCILIATION"
+        item["reason"] = receipt["guidance"]
+    elif receipt["status"] == "ORTHOGONAL_ADVANCE":
+        item["take_head"] = receipt["next_expected_head"] or item["take_head"]
+    elif receipt["status"] == "UNCHANGED_STALE":
+        item["action"] = "STALE_RECOVERY"
+        item["reason"] = receipt["guidance"]
+    elif receipt["status"] in {"INCOMPLETE_EVIDENCE", "SEPARATE_CUSTODY"}:
+        item["action"] = "HEAD_EVIDENCE_HOLD"
+        item["reason"] = receipt["guidance"]
+    return receipt
+
+
+def action(item: dict, min_usd: float, actor: str) -> tuple[str, str]:
+    """Returns a non-mutating action and a precise reason; never awards payout."""
+    if item["owner_hold"] is not None:
+        return "OWNER_PAUSED", "Explicit owner hold: " + item["owner_hold"]["reason"]
+    if not item["fresh"]:
+        return "REFRESH_CANONICAL", "Issue/funding/PR evidence is stale or future-dated"
+    # Source attribution precedes any settlement action. A provider's paid
+    # flag is not proof that its sponsor PR belongs to this original author.
+    if item["source_state"] == "published" and item["pr_author"] != actor.lower():
+        return "PRESERVE_FOREIGN_PR", "Existing PR belongs to another author; do not replace their claim"
+    if item["source_state"] == "published" and item.get("pr_state") == "closed":
+        return ("CLOSED_UNMERGED_REVIEW",
+                "Sponsor PR was closed without merge; preserve contributor claim, check maintainer/portal acceptance, and do not resubmit automatically")
+    if item["source_state"] != "published":
+        if item["source_pr_url"] and item["source_pr_author"] != actor.lower():
+            return "PRESERVE_FOREIGN_PR", "Fork source carrier belongs to another author; keep their attribution and submission path"
+        if item["claim_state"] in {"submitted", "accepted", "rejected", "paid"}:
+            return "CLAIM_SOURCE_HOLD", "Portal claim exists but its upstream PR is not verified; reconcile before payout or publication"
+    if item["claim_state"] == "paid":
+        return "VERIFY_SETTLEMENT", "Our upstream PR is verified and claim says paid; independently verify receiving-rail receipt"
+    if item["source_state"] == "published":
+        if item["eligibility"] != "eligible":
+            return "ELIGIBILITY_HOLD", "Contribution eligibility requires independent confirmation"
+        if item["claim_state"] == "not_submitted":
+            return "SUBMIT_EXISTING_CLAIM", "Original-author PR is published; check same-account portal registration now"
+        if item["claim_state"] == "unknown":
+            return "VERIFY_CLAIM", "Unknown portal state is not proof of missing claim"
+        if item["claim_state"] == "submitted":
+            return "AWAIT_ACCEPTANCE", "Submitted claim is neither awarded nor paid"
+        if item["claim_state"] == "accepted":
+            return "VERIFY_SETTLEMENT", "Accepted claim requires independent payout/receipt evidence"
+        return "REVIEW_REJECTION", "Inspect provider rejection/appeal terms on original PR"
+    if item["issue_state"] != "open":
+        return "ISSUE_STATE_HOLD", "No confirmed open sponsor issue for fresh engineering"
+    if item["funding"] == "unverified" or not item["funding_url"]:
+        return "FUNDING_HOLD", "Verified platform or sponsor payment evidence is missing"
+    if item["eligibility"] != "eligible":
+        return "ELIGIBILITY_HOLD", "Assignment, human-contribution, or program eligibility gate"
+    if item["source_state"] == "ready":
+        if item["active_owner"]:
+            return "OWNER_CONTINUES", "Ready-source publication is already owned; do not assign a second publisher"
+        if not item["source_pr_url"]:
+            return "SOURCE_REFERENCE_HOLD", "Ready source has no verified fork PR; identify the original-author source carrier before publication"
+        if item["competition"] != "none":
+            return "COMPETITION_REVIEW", "Existing or unverified sponsor PR must be reconciled before publishing ready source"
+        return "PUBLISH_EXISTING", "Already-built original-owner source should be submitted, not rebuilt"
+    if item["competition"] in {"ours", "other_pr", "unknown"}:
+        return "COMPETITION_REVIEW", "Current competing work must be resolved before any new build"
+    if item["source_state"] == "building":
+        return "OWNER_CONTINUES", "Build is already in progress; do not double-assign"
+    if item["active_owner"]:
+        return "OWNER_CONTINUES", "Another owner holds the work; do not double-assign"
+    if item["reward_usd"] is None or item["reward_usd"] < min_usd:
+        return "AMOUNT_HOLD", "No verified advertised amount meeting the configured minimum"
+    return "BUILD", "No known owner/PR; eligible for exactly one sourced engineering assignment"
+
+
+def plan(manifest: dict, *, min_usd: float = 15, max_builds: int = 8,
+         per_repo_builds: int = 2, max_age_hours: int = 6,
+         actor: str = "woahwhattheheck") -> dict:
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("records"), list):
+        raise ValueError("manifest must contain a records array")
+    if any(type(x) is not int or x <= 0 for x in (max_builds, per_repo_builds, max_age_hours)):
+        raise ValueError("capacity limits must be positive integers")
+    if type(min_usd) not in (float, int) or not 0 <= min_usd <= 10_000_000:
+        raise ValueError("invalid minimum amount")
+    observed_at = datetime.now(timezone.utc)
+    snapshot_at = timestamp(manifest["as_of"])
+    snapshot_age = observed_at - snapshot_at
+    if not timedelta(minutes=-5) <= snapshot_age <= timedelta(hours=max_age_hours):
+        raise ValueError("manifest as_of must be a fresh, timezone-aware collection timestamp")
+    now = observed_at
+    if len(manifest["records"]) > 5000:
+        raise ValueError("manifest exceeds 5000 records")
+    items = [normalize(r, now, max_age_hours) for r in manifest["records"]]
+    # One sponsor issue has one engineering carrier, but independent funded
+    # listings for that issue still need their own claim/settlement outcomes.
+    for item in items:
+        item["action"], item["reason"] = action(item, min_usd, actor)
+        advisory = mergeability_advisory(item)
+        if advisory is not None:
+            item["mergeability_advisory"] = advisory
+    keyed: dict[str, list[dict]] = defaultdict(list)
+    for item in items:
+        keyed[item["issue_key"]].append(item)
+    portal_actions = {"SUBMIT_EXISTING_CLAIM", "VERIFY_CLAIM",
+                      "AWAIT_ACCEPTANCE", "VERIFY_SETTLEMENT", "REVIEW_REJECTION",
+                      "CLOSED_UNMERGED_REVIEW"}
+    for group in keyed.values():
+        # One evidenced owner hold propagates to every platform listing of the
+        # same canonical issue. Otherwise a second "green" listing can
+        # accidentally re-dispatch held code or re-submit a paused claim.
+        hold = next((x["owner_hold"] for x in group if x["owner_hold"] is not None), None)
+        if hold is not None:
+            for item in group:
+                item["owner_hold"] = hold
+                item["action"] = "OWNER_PAUSED"
+                item["reason"] = "Explicit owner hold: " + hold["reason"]
+            continue
+        if len(group) == 1:
+            continue
+        # Do not build from a second funding listing while any original
+        # source, publication lease, or sponsor PR exists elsewhere. Even a
+        # stale claim/PR snapshot must be reconciled before a fresh BUILD.
+        has_published_pr = any(x["source_state"] == "published" for x in group)
+        has_active_source = any(
+            x["source_state"] in {"building", "ready"} or x["active_owner"]
+            for x in group
+        )
+        build_taken = False
+        publication_taken = False
+        seen_portal_actions: set[tuple] = set()
+        for item in sorted(group, key=lambda x: (-(x["reward_usd"] or 0),
+                                                  x["platform"], x["funding_url"] or "",
+                                                  x["pr_url"] or "")):
+            kind = item["action"]
+            if kind == "BUILD":
+                if has_published_pr:
+                    item["action"] = "RECONCILE_SHARED_PR"
+                    item["reason"] = "Another listing has a published PR; confirm applicability before a new build"
+                elif has_active_source:
+                    item["action"] = "RECONCILE_SHARED_SOURCE"
+                    item["reason"] = "Another listing has source or an active owner; reconcile before new engineering"
+                elif build_taken:
+                    item["action"] = "DUPLICATE_ISSUE_HOLD"
+                    item["reason"] = "Only one engineering build per canonical sponsor issue"
+                else:
+                    build_taken = True
+            elif kind == "PUBLISH_EXISTING":
+                if has_published_pr:
+                    item["action"] = "RECONCILE_SHARED_PR"
+                    item["reason"] = "An upstream PR already exists for this issue; do not republish source"
+                elif publication_taken:
+                    item["action"] = "SOURCE_COLLISION_HOLD"
+                    item["reason"] = "Multiple ready source carriers for one issue; resolve ownership before publishing"
+                else:
+                    publication_taken = True
+            elif kind in portal_actions:
+                # Identical listing/action pairs must not generate duplicate
+                # submissions; different providers remain separately actionable.
+                listing_action = (item["platform"], item["funding_url"], kind)
+                if listing_action in seen_portal_actions:
+                    item["action"] = "DUPLICATE_LISTING_HOLD"
+                    item["reason"] = "Duplicate provider listing/action; reconcile the original claim"
+                else:
+                    seen_portal_actions.add(listing_action)
+    for item in items:
+        kind = item["action"]
+        operation_id = "MOVA-%s-%s-%s" % (
+            item["repo"].replace("/", "-"), item["number"], kind)
+        if kind in portal_actions | {"OWNER_PAUSED", "CLAIM_SOURCE_HOLD", "DUPLICATE_LISTING_HOLD",
+                                    "RECONCILE_SHARED_PR", "RECONCILE_SHARED_SOURCE"}:
+            # Claim actions are per listing, not just per issue; a stable URL
+            # digest keeps IDs distinct even on two listings of one platform.
+            receipt_key = item["funding_url"] or item["issue_url"]
+            receipt_hash = hashlib.sha256(receipt_key.encode("utf-8")).hexdigest()[:10]
+            operation_id += "-%s-%s" % (item["platform"], receipt_hash)
+        item["operation_id"] = operation_id
+
+    # Reconcile stale source leases only after stable operation IDs exist and
+    # before BUILD capacity is allocated. This consumes caller-supplied provider
+    # evidence and performs no live GitHub/Slack requests.
+    for item in items:
+        if item["action"] != "OWNER_PAUSED":
+            apply_head_reconciliation(item)
+
+    # High-value ready engineering first, but bounded to protect shared API
+    # quota and prevent all workers stampeding one sponsor at once.
+    builds = sorted((x for x in items if x["action"] == "BUILD"),
+                    key=lambda x: (-(x["reward_usd"] or 0), x["issue_key"]))
+    admitted = 0
+    repo_count: Counter[str] = Counter()
+    for item in builds:
+        if admitted >= max_builds or repo_count[item["repo"]] >= per_repo_builds:
+            item["action"] = "QUEUED_CAPACITY"
+            item["reason"] = "Engineering candidate preserved for later quota-safe dispatch"
+            item["operation_id"] = "MOVA-%s-%s-QUEUED_CAPACITY" % (item["repo"].replace("/", "-"), item["number"])
+        else:
+            admitted += 1
+            repo_count[item["repo"]] += 1
+    order = {"PUBLISH_EXISTING": 0, "SUBMIT_EXISTING_CLAIM": 1,
+             "VERIFY_CLAIM": 2, "BUILD": 3, "OWNER_CONTINUES": 4,
+             "AWAIT_ACCEPTANCE": 5, "VERIFY_SETTLEMENT": 6}
+    items.sort(key=lambda x: (order.get(x["action"], 20), -(x["reward_usd"] or 0), x["issue_key"], x["platform"]))
+    counts = dict(sorted(Counter(x["action"] for x in items).items()))
+    return {"as_of": now.isoformat(), "actor": actor,
+            "advertised_total_usd": round(sum(x["reward_usd"] or 0 for x in items), 2),
+            "verified_earned_usd": None, "count": len(items), "build_slots_admitted": admitted,
+            "actions": counts, "work_orders": items}
+
+
+def annotate_take_advisories(batch: dict, snapshot_rows: list[dict], *,
+                            as_of_ts: float | None = None) -> dict:
+    """Attach pre-existing Slack TAKE preflight to exact sponsor PRs, offline.
+
+    Reuse the canonical swarm_take_collisions implementation. The batch's
+    payout/engineering actions remain unchanged; a preflight is never an owner
+    lease, a reward check, or authorization to write. Unknown/stale feeds emit
+    REFRESH_FEED rather than claiming a PR is uncontested.
+    """
+    tool_dir = str(Path(__file__).resolve().parents[1] / "swarm_take_collisions")
+    if tool_dir not in sys.path:
+        sys.path.insert(0, tool_dir)
+    from preflight import assess_take  # already merged in Commons PR #32416
+
+    for item in batch["work_orders"]:
+        if not item["pr_url"]:
+            continue  # no verified sponsor PR; never substitute a fork/issue URL
+        report = assess_take(
+            snapshot_rows,
+            pr=item["pr_url"],
+            paths=item["take_paths"],
+            kind=item["take_kind"],
+            head=item["take_head"],
+            operation_id=item["take_operation_id"] or item["operation_id"],
+            as_of_ts=as_of_ts,
+        )
+        item["take_advisory"] = report
+    return batch
+
+
+def render_slack(batch: dict) -> str:
+    lines = ["MOVA REPEATABLE BOUNTY SPRINT | %s" % batch["as_of"],
+             "Advertised inventory $%.2f across %d entries; NOT awarded/paid. Source/build slots: %d." %
+             (batch["advertised_total_usd"], batch["count"], batch["build_slots_admitted"])]
+    for item in batch["work_orders"]:
+        amount = "UNPRICED" if item["reward_usd"] is None else "$%.2f" % item["reward_usd"]
+        lines.append("%s | %s | %s | %s | %s | %s" %
+                     (item["action"], item["issue_key"], amount, item["platform"], item["operation_id"], item["reason"]))
+        # Include existing, already-verified source references so a publisher
+        # can reconcile this order without blindly reopening sponsor searches.
+        owner = " ".join(item["active_owner"].split()) if item["active_owner"] else "UNASSIGNED"
+        refs = ["issue_url=%s" % item["issue_url"],
+                "checked_at=%s" % item["checked_at"],
+                "active_owner=%s" % owner]
+        if item["owner_hold"] is not None:
+            refs.append("owner_hold_reference=%s" % item["owner_hold"]["reference"])
+        for name in (
+                "funding_url", "pr_url", "pr_author", "pr_state", "pr_mergeability",
+                "pr_base_sha", "pr_head_sha", "pr_merge_base_sha",
+                "pr_ahead_by", "pr_behind_by", "source_pr_url", "source_pr_author"):
+            if item.get(name) is not None:
+                refs.append("%s=%s" % (name, item[name]))
+        # URL shape checks are not display escaping: urlsplit accepts raw LF/CR.
+        # Prevent malformed funding_url text from spoofing dispatch lines.
+        safe_refs = [ref.replace("\r", "\\r").replace("\n", "\\n") for ref in refs]
+        lines.append("  source_refs | " + " | ".join(safe_refs))
+        if "mergeability_advisory" in item:
+            advisory = item["mergeability_advisory"]
+            lines.append("  mergeability_advisory | status=%s | guidance=%s" % (
+                advisory["status"], advisory["guidance"]))
+        if "head_reconciliation" in item:
+            recovery = item["head_reconciliation"]
+            lines.append(
+                "  head_reconciliation | status=%s | expected=%s | observed=%s | touched=%s | source_lease_retired=%s" % (
+                    recovery["status"], recovery["expected_head"], recovery["observed_head"],
+                    ",".join(recovery["touched_paths"]) or "NONE", recovery["retire_source_lease"]))
+            lines.append(
+                "    provider_readback=%s | source=%s" % (
+                    recovery["provider_readback"], recovery.get("source") or "UNKNOWN"))
+        if "take_advisory" in item:
+            advisory = item["take_advisory"]
+            # The Slack feed is untrusted text; never allow an active peer's
+            # operation/path to introduce another synthetic work-order line.
+            def printable(value: object) -> str:
+                return str(value).replace(chr(13), " ").replace(chr(10), " ")[:300]
+
+            lines.append("  take_preflight | status=%s | sponsor_pr=%s | active=%d | proposed_head=%s | proposed_scope=%s" % (
+                advisory["status"], printable(item["pr_url"]),
+                len(advisory["peers"]), printable(item["take_head"] or "UNKNOWN"),
+                printable(",".join(item["take_paths"]) or "UNKNOWN")))
+            for peer in advisory["peers"][:4]:
+                lines.append("    active_take=%s | relation=%s | head=%s | scope=%s | same_head=%s" % (
+                    printable(peer["operation"]), peer["relation"],
+                    printable(peer["head"] or "UNKNOWN"),
+                    printable(",".join(peer["paths"]) or "UNKNOWN"),
+                    peer["same_head"]))
+            if len(advisory["peers"]) > 4:
+                lines.append("    additional_active_takes=%d (see JSON output)" % (len(advisory["peers"]) - 4))
+            lines.append("    guidance=%s" % printable(advisory["guidance"]))
+    lines.append("No provider action was executed. Fresh GitHub/marketplace proof and ownership re-fence required before publication or claim.")
+    return "\n".join(lines)
+
+
+def main(argv: list[str] | None = None) -> int:
+    cli = argparse.ArgumentParser(description=__doc__)
+    cli.add_argument("manifest", type=Path, help="Preverified canonical sponsor/platform manifest JSON")
+    cli.add_argument("--format", choices=("json", "slack"), default="slack")
+    cli.add_argument("--min-usd", type=float, default=15)
+    cli.add_argument("--max-builds", type=int, default=8)
+    cli.add_argument("--per-repo-builds", type=int, default=2)
+    cli.add_argument("--max-age-hours", type=int, default=6)
+    cli.add_argument("--actor", default="woahwhattheheck")
+    cli.add_argument("--slack-snapshot", type=Path,
+                     help="Optional already-captured CURRENT Slack JSON/JSONL; offline TAKE advisory")
+    args = cli.parse_args(argv)
+    try:
+        batch = plan(json.loads(args.manifest.read_text(encoding="utf-8")),
+                     min_usd=args.min_usd, max_builds=args.max_builds,
+                     per_repo_builds=args.per_repo_builds, max_age_hours=args.max_age_hours,
+                     actor=args.actor)
+        if args.slack_snapshot is not None:
+            tool_dir = str(Path(__file__).resolve().parents[1] / "swarm_take_collisions")
+            if tool_dir not in sys.path:
+                sys.path.insert(0, tool_dir)
+            from preflight import load_entries
+            annotate_take_advisories(batch, load_entries(args.slack_snapshot))
+    except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
+        print("INPUT_HOLD: %s" % error, file=sys.stderr)
+        return 2
+    print(json.dumps(batch, indent=2, sort_keys=True) if args.format == "json" else render_slack(batch))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

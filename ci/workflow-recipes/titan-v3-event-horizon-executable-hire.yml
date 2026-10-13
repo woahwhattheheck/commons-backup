@@ -1,0 +1,35 @@
+name: titan-v3-event-horizon-executable-hire
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/frozen_selected.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/v3_event_horizon_executable_hire/**'
+      - '.github/workflows/titan-v3-event-horizon-executable-hire.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source-bound contracts
+        run: >-
+          python -m unittest -v
+          revenue/kaggriculture/cloud-execution-lab/analysis/v3_event_horizon_executable_hire/test_event_horizon_executable_hire.py
+      - name: Materialize candidate and receipt
+        run: |
+          mkdir -p /tmp/titan-event-hire
+          python revenue/kaggriculture/cloud-execution-lab/analysis/v3_event_horizon_executable_hire/materialize_event_horizon_executable_hire.py \
+            --source revenue/kaggriculture/cloud-execution-lab/frozen_selected.py \
+            --output /tmp/titan-event-hire/frozen_selected.py \
+            --receipt /tmp/titan-event-hire/receipt.json
+          python -m py_compile /tmp/titan-event-hire/frozen_selected.py
+          cat /tmp/titan-event-hire/receipt.json

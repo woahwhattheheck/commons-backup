@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/whitebox_archive_license_probe.schema.json",
+  "title": "Commons White Box archive GGUF license probe",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "probe_date",
+    "inventory_binding",
+    "scope",
+    "summary",
+    "records",
+    "commercial_readiness"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "commons-whitebox-archive-license-probe/v1"
+    },
+    "probe_date": {
+      "const": "2026-08-26"
+    },
+    "inventory_binding": {
+      "$ref": "#/$defs/inventory_binding"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "$ref": "#/$defs/record"
+      }
+    },
+    "commercial_readiness": {
+      "$ref": "#/$defs/commercial_readiness"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_blob": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "string_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "inventory_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inventory_path", "inventory_blob_sha", "archive_tree_sha256"],
+      "properties": {
+        "inventory_path": {
+          "const": "revenue/ip/whitebox_archive_inventory.json"
+        },
+        "inventory_blob_sha": {
+          "$ref": "#/$defs/git_blob"
+        },
+        "archive_tree_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_location_class",
+        "source_absolute_paths_published",
+        "model_tensor_bytes_loaded",
+        "full_model_sha256_computed",
+        "measured_region"
+      ],
+      "properties": {
+        "source_location_class": {
+          "const": "OWNER_LOCAL_GGUF_MODELS"
+        },
+        "source_absolute_paths_published": {
+          "const": false
+        },
+        "model_tensor_bytes_loaded": {
+          "const": false
+        },
+        "full_model_sha256_computed": {
+          "const": false
+        },
+        "measured_region": {
+          "const": "GGUF_HEADER_METADATA_TENSOR_INDEX_PREFIX"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_models",
+        "located_models",
+        "embedded_license_present",
+        "embedded_license_missing",
+        "embedded_license_counts",
+        "metadata_prefix_total_bytes"
+      ],
+      "properties": {
+        "expected_models": {
+          "const": 8
+        },
+        "located_models": {
+          "const": 8
+        },
+        "embedded_license_present": {
+          "const": 7
+        },
+        "embedded_license_missing": {
+          "const": 1
+        },
+        "embedded_license_counts": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "$ref": "#/$defs/license_count"
+          }
+        },
+        "metadata_prefix_total_bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "license_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["license_id", "models"],
+      "properties": {
+        "license_id": {
+          "enum": ["apache-2.0", "gemma", "llama3.3", "mit"]
+        },
+        "models": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_group",
+        "source_filename",
+        "source_relative_route",
+        "gguf_version",
+        "file_size_bytes",
+        "metadata_prefix_bytes",
+        "metadata_prefix_sha256",
+        "general_name",
+        "general_basename",
+        "embedded_license",
+        "embedded_base_model_repositories",
+        "external_base_model_evidence",
+        "quantized_copy_source_verified",
+        "transfer_cleared"
+      ],
+      "properties": {
+        "archive_group": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_filename": {
+          "type": "string",
+          "pattern": "^[^/\\\\:]+\\.gguf$"
+        },
+        "source_relative_route": {
+          "enum": ["MODELS_ROOT", "MODELS_ROOT_REMOVED_BY_ROUTE"]
+        },
+        "gguf_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "file_size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metadata_prefix_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metadata_prefix_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "general_name": {
+          "type": ["string", "null"]
+        },
+        "general_basename": {
+          "type": ["string", "null"]
+        },
+        "embedded_license": {
+          "$ref": "#/$defs/embedded_license"
+        },
+        "embedded_base_model_repositories": {
+          "$ref": "#/$defs/string_list"
+        },
+        "external_base_model_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/external_evidence"
+          }
+        },
+        "quantized_copy_source_verified": {
+          "const": false
+        },
+        "transfer_cleared": {
+          "const": false
+        }
+      }
+    },
+    "embedded_license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "license_id", "license_link"],
+      "properties": {
+        "status": {
+          "enum": ["PRESENT", "NOT_EMBEDDED"]
+        },
+        "license_id": {
+          "type": ["string", "null"]
+        },
+        "license_link": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "external_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "repository_id",
+        "revision",
+        "license_id",
+        "retrieved_date",
+        "url",
+        "scope"
+      ],
+      "properties": {
+        "provider": {
+          "const": "HUGGING_FACE_MODEL_API"
+        },
+        "repository_id": {
+          "const": "mistralai/Mixtral-8x7B-Instruct-v0.1"
+        },
+        "revision": {
+          "$ref": "#/$defs/git_blob"
+        },
+        "license_id": {
+          "const": "apache-2.0"
+        },
+        "retrieved_date": {
+          "const": "2026-08-26"
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://huggingface\\.co/mistralai/Mixtral-8x7B-Instruct-v0\\.1/tree/[0-9a-f]{40}$"
+        },
+        "scope": {
+          "const": "BASE_MODEL_PRIMARY_SOURCE_ONLY"
+        }
+      }
+    },
+    "commercial_readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transfer_cleared",
+        "archive_license_offer_ready",
+        "pricing_ready",
+        "remaining_evidence"
+      ],
+      "properties": {
+        "transfer_cleared": {
+          "const": false
+        },
+        "archive_license_offer_ready": {
+          "const": false
+        },
+        "pricing_ready": {
+          "const": false
+        },
+        "remaining_evidence": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "EXACT_QUANTIZED_COPY_SOURCE_PROVENANCE",
+              "UPSTREAM_TERMS_AND_NOTICE_REVIEW",
+              "ARCHIVE_REDACTION_AND_MANUAL_SAMPLE_REVIEW"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

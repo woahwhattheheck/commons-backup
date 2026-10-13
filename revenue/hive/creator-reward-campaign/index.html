@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creator reward campaign desk</title>
+<style>
+  :root { color-scheme: light; --ink: #1d2430; --muted: #5b6573; --line: #d9dee6; --ok: #1f7a4d; --warn: #9a6700; --hold: #a12d2d; --panel: #ffffff; --bg: #f5f7fa; }
+  body { margin: 0; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
+  header { padding: 14px 18px; background: #fff; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: baseline; }
+  header h1 { margin: 0; font-size: 20px; }
+  .banner { font-size: 13px; color: var(--muted); }
+  main { max-width: 1240px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  section h2 { margin: 0 0 8px; font-size: 16px; }
+  form { display: grid; gap: 6px; margin: 8px 0 12px; }
+  label { font-size: 13px; color: var(--muted); display: grid; gap: 2px; }
+  input, textarea, select, button { font: inherit; }
+  input, textarea, select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; width: 100%; box-sizing: border-box; }
+  textarea { min-height: 64px; }
+  button { padding: 6px 12px; border-radius: 6px; border: 1px solid #2b3a55; background: #2b3a55; color: #fff; cursor: pointer; }
+  button.secondary { background: #fff; color: #2b3a55; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .card { border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin: 8px 0; }
+  .card h3 { margin: 0 0 4px; font-size: 15px; }
+  .meta { font-size: 13px; color: var(--muted); }
+  .meter { height: 8px; background: #e6eaf0; border-radius: 4px; overflow: hidden; margin: 6px 0; }
+  .meter div { height: 100%; background: var(--ok); }
+  .status { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; border: 1px solid var(--line); }
+  .status.hold { color: var(--hold); border-color: var(--hold); }
+  .status.ok { color: var(--ok); border-color: var(--ok); }
+  .status.warn { color: var(--warn); border-color: var(--warn); }
+  #message { position: sticky; top: 0; z-index: 2; padding: 8px 16px; font-size: 14px; display: none; }
+  #message.error { display: block; background: #fbe9e9; color: var(--hold); }
+  #message.ok { display: block; background: #e6f4ec; color: var(--ok); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .table-scroll { max-width: 100%; overflow-x: auto; }
+  .table-scroll:focus-visible { outline: 2px solid #2b3a55; outline-offset: 3px; }
+  @media (max-width: 480px) { main { padding: 12px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Creator reward campaign desk</h1>
+  <span class="banner" id="mode">Local handoff only. No transfer, platform action, or provider call is performed from this desk.</span>
+</header>
+<div id="message" role="status"></div>
+<main>
+  <section>
+    <h2>Brands and creators</h2>
+    <form id="brandForm">
+      <label>Brand name <input name="name" required maxlength="120"></label>
+      <button>Create brand</button>
+    </form>
+    <div id="brands" class="meta"></div>
+    <form id="creatorForm">
+      <label>Creator handle <input name="handle" required maxlength="64" placeholder="letters, digits, . _ -"></label>
+      <label>Consent recorded on <input name="consent_on" type="date" required></label>
+      <label>Payout route reference (opaque; issued by your payout system, never an account, card, email, link or key) <input name="payout_route_ref" required maxlength="80" pattern="[A-Za-z0-9][A-Za-z0-9._:/-]{0,79}"></label>
+      <button>Add consenting creator</button>
+    </form>
+    <div id="creators" class="meta"></div>
+    <p class="meta">Retry a write that lost its acknowledgement without changing it: <button class="secondary" type="button" id="retry">Retry pending edit</button></p>
+  </section>
+
+  <section>
+    <h2>New campaign</h2>
+    <form id="campaignForm">
+      <label>Brand <select name="brand_id" id="brandSelect" required></select></label>
+      <label>Title <input name="title" required maxlength="200"></label>
+      <label>Brief <textarea name="brief" required></textarea></label>
+      <label>Rights and usage terms <textarea name="rights_terms" required></textarea></label>
+      <div class="row">
+        <label>Currency <input name="currency" value="USD" maxlength="3" required></label>
+        <label>Budget (minor units) <input name="budget_minor" type="number" min="1" step="1" required></label>
+      </div>
+      <label>Reward rule
+        <select name="rule_kind" id="ruleKind">
+          <option value="FIXED_PER_APPROVED">Fixed amount per approved submission</option>
+          <option value="PER_THOUSAND_VIEWS">Rate per thousand verified views, capped</option>
+        </select>
+      </label>
+      <div class="row" id="fixedFields"><label>Amount per approval (minor) <input name="amount_minor" type="number" min="1" step="1" value="20000"></label></div>
+      <div class="row" id="viewFields" hidden>
+        <label>Rate per 1,000 views (minor) <input name="rate_minor_per_thousand" type="number" min="1" step="1" value="500"></label>
+        <label>Cap per submission (minor) <input name="cap_minor" type="number" min="1" step="1" value="30000"></label>
+        <label>Minimum views <input name="minimum_views" type="number" min="0" step="1" value="1000"></label>
+      </div>
+      <label><input type="checkbox" name="allow_partial" checked style="width:auto"> Allow a partial payable when remaining budget is below the computed reward</label>
+      <div class="row">
+        <label><input type="checkbox" name="platforms" value="TIKTOK" checked style="width:auto"> TikTok</label>
+        <label><input type="checkbox" name="platforms" value="INSTAGRAM" checked style="width:auto"> Instagram</label>
+        <label><input type="checkbox" name="platforms" value="YOUTUBE" style="width:auto"> YouTube</label>
+        <label><input type="checkbox" name="platforms" value="X" style="width:auto"> X</label>
+        <label><input type="checkbox" name="platforms" value="OTHER" style="width:auto"> Other</label>
+      </div>
+      <div class="row">
+        <label>Disclosure tag <input name="disclosure_tag" value="#ad" maxlength="40"></label>
+        <label>Window start <input name="window_start" type="date" required></label>
+        <label>Window end <input name="window_end" type="date" required></label>
+      </div>
+      <button>Create campaign (draft)</button>
+    </form>
+  </section>
+
+  <section style="grid-column: 1 / -1">
+    <h2>Campaigns</h2>
+    <div id="campaigns"></div>
+  </section>
+
+  <section style="grid-column: 1 / -1">
+    <h2 id="submissionsHeading">Submissions</h2>
+    <form id="submissionForm" class="row">
+      <label>Campaign <select name="campaign_id" id="campaignSelect" required></select></label>
+      <label>Creator <select name="creator_id" id="creatorSelect" required></select></label>
+      <label>Platform <select name="platform"><option>TIKTOK</option><option>INSTAGRAM</option><option>YOUTUBE</option><option>X</option><option>OTHER</option></select></label>
+      <label>Content URL (retained as scheme, host and path; YouTube video ids kept; tracking parameters dropped; other query material refused) <input name="url" type="url" required placeholder="https://..."></label>
+      <label>Posted on <input name="posted_on" type="date" required></label>
+      <label><input type="checkbox" name="disclosure_present" style="width:auto"> Disclosure present</label>
+      <label><input type="checkbox" name="rights_accepted" style="width:auto"> Creator accepted rights terms</label>
+      <button>Record submission</button>
+    </form>
+    <div id="submissions" class="table-scroll" role="region" aria-labelledby="submissionsHeading" tabindex="0"></div>
+  </section>
+
+  <section style="grid-column: 1 / -1">
+    <h2 id="payablesHeading">Payables</h2>
+    <div id="payables" class="table-scroll" role="region" aria-labelledby="payablesHeading" tabindex="0"></div>
+  </section>
+</main>
+<script>
+(function () {
+  'use strict';
+  var state = null;
+  var message = document.getElementById('message');
+  var PENDING = 'creator-reward-pending-edit';
+
+  function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function money(minor, currency) { return (minor / 100).toFixed(2) + ' ' + (currency || ''); }
+  function say(kind, text) { message.className = kind; message.textContent = text; if (kind === 'ok') { setTimeout(function () { if (message.textContent === text) { message.className = ''; } }, 4000); } }
+  function opId() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2); }
+
+  function post(path, payload) {
+    if (!payload.operation_id) { payload.operation_id = opId(); }
+    try { sessionStorage.setItem(PENDING, JSON.stringify({ path: path, payload: payload })); } catch (e) {}
+    return fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(function (r) { return r.json().then(function (body) { if (!r.ok) { throw new Error(body.error || ('HTTP ' + r.status)); } return body; }); })
+      .then(function (body) { try { sessionStorage.removeItem(PENDING); } catch (e) {} return body; });
+  }
+
+  function load() {
+    return fetch('/api/state').then(function (r) { return r.json(); }).then(function (data) { state = data; render(); });
+  }
+
+  function statusClass(status) {
+    if (/REJECTED|EXHAUSTED/.test(status)) { return 'hold'; }
+    if (/PARTIAL|NO_REWARD|SUBMITTED|DRAFT|CALCULATED|HANDED_OFF/.test(status)) { return 'warn'; }
+    return 'ok';
+  }
+
+  function render() {
+    var brands = state.brands, creators = state.creators;
+    document.getElementById('brands').textContent = brands.length ? 'Brands: ' + brands.map(function (b) { return b.name; }).join(', ') : 'No brands yet.';
+    document.getElementById('creators').textContent = creators.length ? 'Creators: ' + creators.map(function (c) { return c.handle + ' (consent ' + c.consent_on + ')'; }).join(', ') : 'No creators yet.';
+    document.getElementById('brandSelect').innerHTML = brands.map(function (b) { return '<option value="' + esc(b.id) + '">' + esc(b.name) + '</option>'; }).join('');
+    document.getElementById('creatorSelect').innerHTML = creators.map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.handle) + '</option>'; }).join('');
+    document.getElementById('campaignSelect').innerHTML = state.campaigns.filter(function (c) { return c.status === 'OPEN'; }).map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.title) + '</option>'; }).join('');
+
+    document.getElementById('campaigns').innerHTML = state.campaigns.length ? state.campaigns.map(function (c) {
+      var pct = c.budget.budget_minor ? Math.min(100, Math.round(100 * c.budget.committed_minor / c.budget.budget_minor)) : 0;
+      var rule = c.rule.kind === 'FIXED_PER_APPROVED' ? 'Fixed ' + money(c.rule.amount_minor, c.currency) + ' per approved submission' :
+        money(c.rule.rate_minor_per_thousand, c.currency) + ' per 1,000 views, cap ' + money(c.rule.cap_minor, c.currency) + ', minimum ' + c.rule.minimum_views + ' views';
+      var assets = state.assets.filter(function (a) { return a.campaign_id === c.id; }).map(function (a) { return a.name; }).join(', ') || 'none';
+      var actions = '';
+      if (c.status === 'DRAFT') { actions += '<button data-action="open" data-id="' + esc(c.id) + '" data-version="' + c.version + '">Open campaign</button> '; }
+      if (c.status === 'OPEN') { actions += '<button class="secondary" data-action="close" data-id="' + esc(c.id) + '" data-version="' + c.version + '">Close campaign</button> '; }
+      if (c.status !== 'CLOSED') { actions += '<button class="secondary" data-action="asset" data-id="' + esc(c.id) + '" data-version="' + c.version + '">Add asset</button> '; }
+      actions += '<button class="secondary" data-action="handoff" data-id="' + esc(c.id) + '">Hand off calculated payables</button> ';
+      actions += '<a href="/api/export/' + esc(c.id) + '"><button class="secondary" type="button">Export ZIP</button></a>';
+      return '<div class="card"><h3>' + esc(c.title) + ' <span class="status ' + statusClass(c.status) + '">' + esc(c.status) + '</span></h3>' +
+        '<div class="meta">' + esc(rule) + ' · platforms ' + esc(c.eligibility.platforms.join('/')) + ' · window ' + esc(c.eligibility.window_start) + ' to ' + esc(c.eligibility.window_end) + ' · disclosure ' + esc(c.eligibility.disclosure_tag) + ' · assets: ' + esc(assets) + '</div>' +
+        '<div class="meter"><div style="width:' + pct + '%"></div></div>' +
+        '<div class="meta">Budget ' + money(c.budget.budget_minor, c.currency) + ' · committed ' + money(c.budget.committed_minor, c.currency) + ' · remaining ' + money(c.budget.remaining_minor, c.currency) + ' · payables ' + c.budget.payable_count + '</div>' +
+        '<p class="meta">' + esc(c.brief) + '</p><p class="meta"><strong>Rights:</strong> ' + esc(c.rights_terms) + '</p>' +
+        '<div class="row">' + actions + '</div></div>';
+    }).join('') : '<p class="meta">No campaigns yet.</p>';
+
+    var creatorById = {}; creators.forEach(function (c) { creatorById[c.id] = c; });
+    var campaignById = {}; state.campaigns.forEach(function (c) { campaignById[c.id] = c; });
+    document.getElementById('submissions').innerHTML = state.submissions.length ? '<table><thead><tr><th>Campaign</th><th>Creator</th><th>Platform</th><th>URL</th><th>Posted</th><th>Disclosure</th><th>Rights</th><th>Status</th><th>Review</th></tr></thead><tbody>' +
+      state.submissions.map(function (s) {
+        var c = campaignById[s.campaign_id] || {};
+        var review = s.status === 'SUBMITTED' ?
+          '<form class="row reviewForm" data-id="' + esc(s.id) + '" data-version="' + s.version + '" data-rule="' + esc((c.rule || {}).kind || '') + '">' +
+          ((c.rule || {}).kind === 'PER_THOUSAND_VIEWS' ? '<input name="views" type="number" min="0" step="1" placeholder="verified views" required style="width:120px">' : '') +
+          '<input name="note" placeholder="review note" maxlength="5000" style="width:160px">' +
+          '<button name="decision" value="approve">Approve</button><button class="secondary" name="decision" value="reject">Reject</button></form>' :
+          esc(s.review_note) + (s.metrics && s.metrics.views != null ? ' · views ' + esc(s.metrics.views) : '');
+        return '<tr><td>' + esc(c.title || s.campaign_id) + '</td><td>' + esc((creatorById[s.creator_id] || {}).handle || s.creator_id) + '</td><td>' + esc(s.platform) + '</td><td><a href="' + esc(s.url) + '" rel="noopener noreferrer" target="_blank">link</a></td><td>' + esc(s.posted_on) + '</td><td>' + (s.disclosure_present ? 'yes' : 'no') + '</td><td>' + (s.rights_accepted ? 'yes' : 'no') + '</td><td><span class="status ' + statusClass(s.status) + '">' + esc(s.status) + '</span></td><td>' + review + '</td></tr>';
+      }).join('') + '</tbody></table>' : '<p class="meta">No submissions yet.</p>';
+
+    document.getElementById('payables').innerHTML = state.payables.length ? '<table><thead><tr><th>Campaign</th><th>Creator</th><th class="num">Amount</th><th class="num">Proposed admin fee (5%)</th><th>Status</th><th>Handoff</th><th>Settlement</th></tr></thead><tbody>' +
+      state.payables.map(function (p) {
+        var c = campaignById[p.campaign_id] || {};
+        var settle = p.status === 'HANDED_OFF' ? '<form class="row settleForm" data-id="' + esc(p.id) + '" data-version="' + p.version + '"><input name="settlement_ref" placeholder="opaque settlement reference" required maxlength="80" pattern="[A-Za-z0-9][A-Za-z0-9._:/-]{0,79}" style="width:200px"><button class="secondary">Record settlement</button></form>' : esc(p.settlement_ref || '');
+        return '<tr><td>' + esc(c.title || p.campaign_id) + '</td><td>' + esc((creatorById[p.creator_id] || {}).handle || p.creator_id) + '</td><td class="num">' + esc(money(p.amount_minor, c.currency)) + '</td><td class="num">' + esc(money(p.admin_fee_minor, c.currency)) + '</td><td><span class="status ' + statusClass(p.status) + '">' + esc(p.status) + '</span></td><td class="meta">' + esc(p.handoff_id ? p.handoff_id.slice(0, 8) : '') + '</td><td>' + settle + '</td></tr>';
+      }).join('') + '</tbody></table><p class="meta">Amounts are calculated rewards under the campaign rule and budget cap. The administration fee is a proposal (PROPOSED_NOT_ACCEPTED). Handoff writes a local request file for a separately authorized operator; settlement is recorded here by reference only.</p>' : '<p class="meta">No payables yet.</p>';
+  }
+
+  function fields(form) {
+    var data = {}; var fd = new FormData(form);
+    fd.forEach(function (value, key) { if (key !== 'platforms') { data[key] = value; } });
+    return data;
+  }
+
+  function integerField(value, name) {
+    var n = Number(value);
+    if (!Number.isInteger(n)) { throw new Error(name + ' must be a whole number'); }
+    return n;
+  }
+
+  document.getElementById('ruleKind').addEventListener('change', function (e) {
+    var views = e.target.value === 'PER_THOUSAND_VIEWS';
+    document.getElementById('viewFields').hidden = !views;
+    document.getElementById('fixedFields').hidden = views;
+  });
+
+  document.getElementById('brandForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    post('/api/brand/create', fields(e.target)).then(function () { e.target.reset(); say('ok', 'Brand created'); return load(); }).catch(function (err) { say('error', err.message); });
+  });
+
+  document.getElementById('creatorForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    post('/api/creator/create', fields(e.target)).then(function () { e.target.reset(); say('ok', 'Creator added'); return load(); }).catch(function (err) { say('error', err.message); });
+  });
+
+  document.getElementById('campaignForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    try {
+      var f = e.target; var d = fields(f);
+      var rule = { kind: d.rule_kind, allow_partial: !!f.allow_partial.checked };
+      if (rule.kind === 'FIXED_PER_APPROVED') { rule.amount_minor = integerField(d.amount_minor, 'amount'); }
+      else { rule.rate_minor_per_thousand = integerField(d.rate_minor_per_thousand, 'rate'); rule.cap_minor = integerField(d.cap_minor, 'cap'); rule.minimum_views = integerField(d.minimum_views, 'minimum views'); }
+      var platforms = Array.prototype.slice.call(f.querySelectorAll('input[name=platforms]:checked')).map(function (i) { return i.value; });
+      var payload = { brand_id: d.brand_id, title: d.title, brief: d.brief, rights_terms: d.rights_terms, currency: d.currency, budget_minor: integerField(d.budget_minor, 'budget'), rule: rule,
+        eligibility: { platforms: platforms, disclosure_tag: d.disclosure_tag, requires_disclosure: true, requires_rights_acceptance: true, window_start: d.window_start, window_end: d.window_end } };
+      post('/api/campaign/create', payload).then(function () { f.reset(); say('ok', 'Campaign created as draft'); return load(); }).catch(function (err) { say('error', err.message); });
+    } catch (err) { say('error', err.message); }
+  });
+
+  document.getElementById('submissionForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target; var d = fields(f);
+    var payload = { campaign_id: d.campaign_id, creator_id: d.creator_id, platform: d.platform, url: d.url, posted_on: d.posted_on, disclosure_present: !!f.disclosure_present.checked, rights_accepted: !!f.rights_accepted.checked };
+    post('/api/submission/create', payload).then(function () { f.reset(); say('ok', 'Submission recorded'); return load(); }).catch(function (err) { say('error', err.message); });
+  });
+
+  document.getElementById('campaigns').addEventListener('click', function (e) {
+    var button = e.target.closest('button[data-action]'); if (!button) { return; }
+    var action = button.getAttribute('data-action'); var id = button.getAttribute('data-id'); var version = Number(button.getAttribute('data-version'));
+    var payload;
+    if (action === 'handoff') { payload = { campaign_id: id }; }
+    else if (action === 'asset') {
+      var name = window.prompt('Asset file name (.md or .txt)'); if (!name) { return; }
+      var license = window.prompt('License / usage note for this asset'); if (!license) { return; }
+      var content = window.prompt('Asset text content'); if (!content) { return; }
+      payload = { id: id, version: version, action: 'asset', name: name, license: license, content: content };
+    } else { payload = { id: id, version: version, action: action }; }
+    post(action === 'handoff' ? '/api/payable/handoff' : '/api/campaign/action', payload)
+      .then(function (r) { say('ok', action === 'handoff' ? ('Handed off ' + r.count + ' payable(s) locally, total ' + r.total_amount_minor + ' minor units. ' + r.mode) : 'Campaign updated'); return load(); })
+      .catch(function (err) { say('error', err.message); });
+  });
+
+  document.getElementById('submissions').addEventListener('submit', function (e) {
+    var form = e.target.closest('form.reviewForm'); if (!form) { return; }
+    e.preventDefault();
+    var decision = e.submitter ? e.submitter.value : 'approve';
+    var payload = { id: form.getAttribute('data-id'), version: Number(form.getAttribute('data-version')), decision: decision, note: form.note.value || (decision === 'approve' ? 'approved' : 'rejected'), metrics: {} };
+    if (form.views && form.views.value !== '') { try { payload.metrics.views = integerField(form.views.value, 'views'); } catch (err) { say('error', err.message); return; } }
+    post('/api/submission/review', payload).then(function (r) { say('ok', 'Recorded ' + r.status + (r.payable_id ? ' with payable ' + r.amount_minor + ' minor units' : '')); return load(); }).catch(function (err) { say('error', err.message); });
+  });
+
+  document.getElementById('payables').addEventListener('submit', function (e) {
+    var form = e.target.closest('form.settleForm'); if (!form) { return; }
+    e.preventDefault();
+    post('/api/payable/settle', { id: form.getAttribute('data-id'), version: Number(form.getAttribute('data-version')), settlement_ref: form.settlement_ref.value })
+      .then(function () { say('ok', 'Settlement reference recorded'); return load(); }).catch(function (err) { say('error', err.message); });
+  });
+
+  document.getElementById('retry').addEventListener('click', function () {
+    var pending = null;
+    try { pending = JSON.parse(sessionStorage.getItem(PENDING) || 'null'); } catch (e) {}
+    if (!pending) { say('ok', 'No pending edit in this tab'); return; }
+    post(pending.path, pending.payload).then(function () { say('ok', 'Pending edit acknowledged'); return load(); }).catch(function (err) { say('error', err.message); });
+  });
+
+  document.getElementById('mode').textContent = 'Local handoff only. No transfer, platform action, or provider call is performed from this desk. Proposed admin fee 5% (PROPOSED_NOT_ACCEPTED).';
+  load().catch(function (err) { say('error', 'Could not load state: ' + err.message); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+name: Redmond ECM evidence compiler
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/redmond_ecm_evidence/**'
+      - '.github/workflows/redmond-ecm-evidence.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/redmond_ecm_evidence/**'
+      - '.github/workflows/redmond-ecm-evidence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile revenue/redmond_ecm_evidence/compiler.py revenue/redmond_ecm_evidence/test_compiler.py
+      - name: Unit tests
+        run: python revenue/redmond_ecm_evidence/test_compiler.py -v
+      - name: Optimized-mode tests
+        run: python -O revenue/redmond_ecm_evidence/test_compiler.py -v
+      - name: Deterministic example compile
+        run: |
+          td="$(mktemp -d)"
+          python revenue/redmond_ecm_evidence/compiler.py             --input revenue/redmond_ecm_evidence/fixtures/vendor_example.json             --json-out "$td/report.json"             --md-out "$td/report.md"
+          test -s "$td/report.json"
+          test -s "$td/report.md"

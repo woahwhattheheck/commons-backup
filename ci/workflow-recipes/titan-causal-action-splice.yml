@@ -1,0 +1,220 @@
+name: TITAN causal first-action splice
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-causal-action-splice.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/causal_action_splice.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/test_causal_action_splice.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/CAUSAL-ACTION-SPLICE.md"
+  push:
+    branches:
+      - "sol-causal-action-splice-20260910-01"
+    paths:
+      - ".github/workflows/titan-causal-action-splice.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/causal_action_splice.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/test_causal_action_splice.py"
+      - "revenue/kaggriculture/cloud-execution-lab/reference/evaluator/CAUSAL-ACTION-SPLICE.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-causal-action-splice-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact event head
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile splice evaluator
+        working-directory: revenue/kaggriculture/cloud-execution-lab/reference/evaluator
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -B -m py_compile causal_action_splice.py test_causal_action_splice.py
+      - name: Run focused contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/reference/evaluator
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          PYTHONHASHSEED: "0"
+        run: python -B -m unittest -v test_causal_action_splice.py
+      - name: Require clean checkout
+        run: git diff --exit-code -- .
+
+  exact-engine:
+    needs: contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Bind exact event head
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          printf '%s\n' "$EXPECTED_HEAD" > "$RUNNER_TEMP/exact-head.sha"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned official-interpreter dependency
+        run: python -m pip install --disable-pip-version-check "kaggle-environments==1.32.7"
+      - name: Run exact archive self-control and divergent splice
+        working-directory: revenue/kaggriculture/cloud-execution-lab/reference/evaluator
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          PYTHONHASHSEED: "0"
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/titan-causal-action-splice"
+          mkdir -p "$OUT"
+
+          python -B causal_action_splice.py \
+            --engine-dir ../engine \
+            --baseline ../../exports/titan-current.tar.gz \
+            --candidate ../../exports/titan-current.tar.gz \
+            --opponent official_starter \
+            --seeds 2609103201 \
+            --seats 0 \
+            --action-timeout 2.0 \
+            --startup-timeout 20.0 \
+            --game-timeout 240.0 \
+            --output "$OUT/SELF-CONTROL.json"
+
+          python -B causal_action_splice.py \
+            --engine-dir ../engine \
+            --baseline ../../exports/integrated-selected-v1.tar.gz \
+            --candidate ../../exports/titan-current.tar.gz \
+            --opponent official_starter \
+            --seeds 2609103201 \
+            --seats 0 \
+            --action-timeout 2.0 \
+            --startup-timeout 20.0 \
+            --game-timeout 240.0 \
+            --output "$OUT/V1-CURRENT-SPLICE.json"
+      - name: Validate exact-engine receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/titan-causal-action-splice"
+          LAB="revenue/kaggriculture/cloud-execution-lab"
+          python - "$OUT/SELF-CONTROL.json" "$OUT/V1-CURRENT-SPLICE.json" \
+            "$LAB/exports/titan-current.tar.gz" "$LAB/exports/integrated-selected-v1.tar.gz" <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import sys
+
+          self_path, cross_path, current_path, v1_path = map(pathlib.Path, sys.argv[1:])
+          control = json.loads(self_path.read_text(encoding="utf-8"))
+          cross = json.loads(cross_path.read_text(encoding="utf-8"))
+
+          def sha256(path):
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          assert control["schema_version"] == 1
+          assert control["summary"]["scheduled"] == 1
+          assert control["summary"]["classifications"] == {"dormant": 1}
+          assert control["summary"]["causal_cells"] == 0
+          assert control["inputs"]["baseline"]["archive_sha256"] == sha256(current_path)
+          assert control["inputs"]["candidate"]["archive_sha256"] == sha256(current_path)
+          assert control["cells"][0]["runs"]["baseline_discovery"]["status"] == "complete"
+          assert control["cells"][0]["replay"] == {"same_scores": True, "same_trace": True}
+
+          assert cross["schema_version"] == 1
+          assert cross["summary"]["scheduled"] == 1
+          assert cross["summary"]["causal_cells"] == 1
+          assert cross["inputs"]["baseline"]["archive_sha256"] == sha256(v1_path)
+          assert cross["inputs"]["candidate"]["archive_sha256"] == sha256(current_path)
+          assert cross["inputs"]["baseline"]["archive_sha256"] != cross["inputs"]["candidate"]["archive_sha256"]
+          cell = cross["cells"][0]
+          assert cell["classification"] in {"supported", "harmful", "neutral", "mixed"}
+          assert cell["divergence"] is not None
+          assert cell["effects"] is not None
+          assert cell["replay"] == {
+              "candidate_prefix_reproduced": True,
+              "candidate_replay_same_scores": True,
+              "candidate_replay_same_trace": True,
+              "same_scores": True,
+              "same_trace": True,
+              "target_reproduced": True,
+          }
+          for name in (
+              "baseline_discovery",
+              "baseline_replay",
+              "candidate_native",
+              "candidate_replay",
+              "candidate_action_on_baseline",
+              "baseline_action_on_candidate",
+          ):
+              assert cell["runs"][name]["status"] == "complete", (name, cell["runs"][name]["failure"])
+          print(json.dumps({
+              "classification": cell["classification"],
+              "step": cell["divergence"]["step"],
+              "effects": cell["effects"],
+          }, sort_keys=True))
+          PY
+      - name: Publish exact-engine summary
+        if: always()
+        shell: bash
+        run: |
+          OUT="$RUNNER_TEMP/titan-causal-action-splice"
+          if [[ -f "$OUT/V1-CURRENT-SPLICE.json" ]]; then
+            python - "$OUT/V1-CURRENT-SPLICE.json" >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json
+          import sys
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          cell = report["cells"][0]
+          print("# TITAN first-action causal splice")
+          print()
+          print(f"- Classification: `{cell['classification']}`")
+          print(f"- First divergence step: `{cell['divergence']['step']}`")
+          print(f"- Structural action paths: `{cell['divergence']['differing_paths']}`")
+          print(f"- Candidate-action treatment margin: `{cell['effects']['candidate_action_on_baseline']['margin']}`")
+          print(f"- Candidate-action ablation margin: `{cell['effects']['candidate_action_on_candidate']['margin']}`")
+          print()
+          print("Development diagnostic only; this one seed/seat/action is not a feature, package, or leaderboard verdict.")
+          PY
+          else
+            echo "# Exact-engine splice did not produce a complete receipt" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Retain exact evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-causal-action-splice-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/exact-head.sha
+            ${{ runner.temp }}/titan-causal-action-splice/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Require clean checkout
+        if: always()
+        run: git diff --exit-code -- .

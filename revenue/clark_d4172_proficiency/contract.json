@@ -1,0 +1,56 @@
+{
+  "id": "clark-d4172-proficiency-lims-01",
+  "version": 1,
+  "buyer": "Clark Testing / Paul Heffernan",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "demand": "clark-d4172-proficiency-lims-01"
+  },
+  "workflow": [
+    "ASTM D4172 Four-Ball wear proficiency cycle",
+    "blinded participant and sample identities until human disposition",
+    "two-replicate control with six wear-scar measurements per run",
+    "controlled method version D4172-21",
+    "fixture r/R limits 0.12 mm / 0.28 mm",
+    "immutable chain-of-custody and calculation provenance",
+    "staged customer CoA",
+    "human-only disposition"
+  ],
+  "method": {
+    "id": "D4172-21",
+    "procedures": {
+      "A": {"temperature_c": 75, "speed_rpm": 1200, "duration_min": 60, "load_n": 147},
+      "B": {"temperature_c": 75, "speed_rpm": 1200, "duration_min": 60, "load_n": 392}
+    },
+    "rounding": "0.01 mm ROUND_HALF_EVEN",
+    "formula_id": "d4172-wsd-six-measurement-mean/v1",
+    "r_mm": "0.12",
+    "R_mm": "0.28",
+    "r_R_note": "Fixture QC constants from commonly published D4172 precision summaries. Not a copy of the ASTM standard."
+  },
+  "acceptance": [
+    "replay 60 frozen synthetic proficiency sets",
+    "exactly 48 READY_FOR_HUMAN with exact golden WSD/r/R rounding",
+    "exactly 6 HOLD_MISSING_REPLICATE",
+    "exactly 3 HOLD_QC_REPEATABILITY",
+    "exactly 3 HOLD_QC_REPRODUCIBILITY",
+    "zero sample or participant swaps on the frozen fixture",
+    "zero pre-release identity leakage",
+    "deterministic HOLD for missing replicates or breached QC",
+    "immutable custody chain and calculation provenance",
+    "identical results on rerun",
+    "human-only CoA release; autonomous release denied"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no production writes",
+    "no outreach or prospect-facing demo",
+    "adapters remain simulated/read-only until buyer/vendor validation"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "proficiency calculation, QC hold, custody, and human CoA disposition receipts only; never live instrument I/O, accreditation claims, or customer release",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

@@ -1,0 +1,285 @@
+{
+  "schema": "titan-v4-mechanism-claims/v1",
+  "canonical_branch": "main",
+  "claims": [
+    {
+      "id": "animal.alternate-feed-preserves-base-without-care",
+      "status": "CONFIRMED",
+      "proposition": "In the constructed complete-interpreter no-CARE control, an alternating feed cadence that avoids two consecutive unfed days preserves base animal product and fertilizer output while reducing WHEAT feed from 30 to 15 across GOOSE, COW, and SHEEP.",
+      "scope": "Constructed placed-animal 720-step mechanism oracle with CARE disabled; this is not a current-V4 routing, field-EV, storage, deadline, or activation claim.",
+      "disposition": "Treat first-miss feed skipping as a real narrow engine mechanism worth composition/economics work only when CARE, storage, route timing, escape risk, and both-seat runtime gates are satisfied.",
+      "next_gate": "Use the existing STARVE-ACTIVATION-COMPOSE lane to prove current composed-V4 reachability, next-feed timing, CARE safety, storage safety, both-seat economics, and fallback/deadline nonregression before any activation.",
+      "tags": ["animals", "care", "engine", "feed", "wheat"],
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/dead-feed-care/STARVATION.md",
+          "git_blob": "853d25fa0c01143765c4b633f8504c513ea3cd8e",
+          "anchors": [
+            "| COW | 30 | 15 | 12 MILK | 12 MILK | 30 / 30 |",
+            "| GOOSE | 30 | 15 | 27 EGG | 27 EGG | 30 / 30 |",
+            "| SHEEP | 30 | 15 | 9 WOOL | 9 WOOL | 30 / 30 |"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "animal.blanket-alternate-feed-preserves-care-value",
+      "status": "FALSIFIED",
+      "proposition": "A blanket feed-every-other-day policy preserves CARE-enhanced animal output while halving WHEAT feed.",
+      "scope": "Constructed complete-interpreter CARE-every-day counterexample for GOOSE, COW, and SHEEP; narrower CARE-aware first-miss skipping remains outside this falsification.",
+      "disposition": "Do not globally alternate-starve animals or infer same economic output from survival/base production alone; pending/current CARE value must be checked before each skipped FEED.",
+      "next_gate": "Only a CARE-aware current-runtime policy satisfying STARVATION.md admission rules plus both-seat economics may revisit selective FEED skipping.",
+      "tags": ["animals", "care", "engine", "feed", "wheat"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/dead-feed-care/STARVATION.md",
+          "git_blob": "853d25fa0c01143765c4b633f8504c513ea3cd8e",
+          "anchors": [
+            "| COW | 39 MILK | 12 MILK | 27 MILK |",
+            "| GOOSE | 56 EGG | 27 EGG | 29 EGG |",
+            "| SHEEP | 38 WOOL | 13 WOOL | 25 WOOL |"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.buy-product-whitelist",
+      "status": "CONFIRMED",
+      "proposition": "Official direct BUY_PRODUCT quoting accepts only WHEAT and FERTILIZER.",
+      "scope": "Pinned official engine market-order quote stage only; BUY_SEED, BUY_ANIMAL, SELL, town demand, and candidate policy are separate mechanisms.",
+      "disposition": "Treat CARROT, TOMATO, EGG, MILK, WOOL, STRAWBERRY, and MELON direct BUY_PRODUCT hypotheses as engine-invalid unless the official engine changes.",
+      "next_gate": "Re-open only against a new authenticated engine blob whose BUY_PRODUCT quote branch changes.",
+      "tags": ["engine", "market", "orders"],
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py",
+          "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+          "anchors": [
+            "# Quote at post-buy inventory so a buy/sell round-trip",
+            "elif op == \"BUY_PRODUCT\" and item in (\"WHEAT\", \"FERTILIZER\"):"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.coop-pasture-zero-cash-branch",
+      "status": "CONFIRMED",
+      "proposition": "Official BUILD_COOP and BUILD_PASTURE branches place the structure on an empty tile and return without a cash check or deduction.",
+      "scope": "Pinned official unit-action interpreter branch only; this does not imply structures are strategically free because farmer actions, movement, later animal acquisition, feed, care, or opportunity cost remain.",
+      "disposition": "Do not model a direct cash construction fee for COOP or PASTURE in this engine blob; keep action and downstream economic costs separate.",
+      "next_gate": "Re-open only against a new authenticated engine blob or a separate proof about action/opportunity cost.",
+      "tags": ["engine", "structures", "unit-actions"],
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py",
+          "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+          "anchors": [
+            "farm[\"tiles\"][fy][fx] = {\"kind\": \"COOP\"}",
+            "farm[\"tiles\"][fy][fx] = {\"kind\": \"PASTURE\"}",
+            "if op == \"BUILD_COOP\":",
+            "if op == \"BUILD_PASTURE\":"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.fertilizer-floor-sale-recoverable-warehouse",
+      "status": "FALSIFIED",
+      "proposition": "A FERTILIZER unit sold at a $1 quote is added to public market inventory and can be bought back as recoverable off-site custody, making the floor a zero-friction infinite warehouse.",
+      "scope": "Pinned official-engine floor-price SELL custody plus the landed B7 exact-engine/current-ABI correction; paid disposal for shed-capacity relief and above-floor FERT sales are separate mechanisms.",
+      "disposition": "Do not build or revive r04_fert_warehouse, or any policy that counts a $1 FERT SELL as recoverable warehouse stock. Treat floor SELL as destructive shed disposal and consume the existing b7-shed-overflow floor-disposal authority for capacity-relief work.",
+      "next_gate": "Re-open only if an authenticated engine changes the $1 SELL supply exception or BUY_PRODUCT custody semantics, or if a successor engine supplies a distinct recoverable-storage mechanism.",
+      "tags": ["engine", "fertilizer", "market", "storage"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/b7-shed-overflow/FERT_FLOOR_DISPOSAL.md",
+          "git_blob": "1508ae340149793684b779b662ea3c2c24583ac9",
+          "anchors": [
+            "A `$1` sale can still be a **paid disposal** that opens shed room before the EOD inventory sweep.",
+            "Official engine blob `3c202c7ee921da239356789e266b694635103fc4` makes floor-price FERT sales destructive custody:",
+            "Therefore the old “zero-friction infinite off-site warehouse” interpretation is false."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.market-first-commit-seat-advantage",
+      "status": "FALSIFIED",
+      "proposition": "Seat identity receives a structural market-quote advantage solely because player 0 commits market units before player 1 after both have been quoted from the same pre-commit inventory.",
+      "scope": "Source-pinned seat-symmetry oracle covering randomized mixed market queues and weed-off interpreter controls; this does not falsify all market timing strategies or all possible sources of seat asymmetry.",
+      "disposition": "Do not attribute mirror seat tax to market commit order alone; ablate other seat-indexed state transitions and locate the first pre-market divergence before building a seat-order market fix.",
+      "next_gate": "Replay mirror evidence with weeds disabled or paired weed streams while leaving market actions unchanged, then inspect the first state divergence if a seat gap survives.",
+      "tags": ["engine", "market", "seat", "symmetry"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/seat-asymmetry-audit/seat_symmetry_oracle.py",
+          "git_blob": "865778d99c955f6d175bc54b450c89441e7eb78c",
+          "anchors": [
+            "\"market_seat_order_causal\": False,",
+            "_assert_swapped(state_ab, state_ba)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.sell-consumes-shed-only",
+      "status": "CONFIRMED",
+      "proposition": "Official market SELL commits remove product units only from private shed stock; a returned SELL row has no actor or container selector and cannot directly liquidate worker-carried hand inventory.",
+      "scope": "Pinned official _commit_unit SELL branch only; worker DROP/PLACE, end-of-day inventory sweep, and candidate planning are separate mechanisms.",
+      "disposition": "Any SELL planner that reasons about carried inventories must first prove stock reaches the shed or remain fail-closed; do not emit extra SELL rows for hand inventory as if market execution selected a carrier.",
+      "next_gate": "Re-open only if an authenticated engine changes SELL to include an actor/container selector or another direct carried-inventory market path.",
+      "tags": ["engine", "market", "orders", "storage"],
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py",
+          "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+          "anchors": [
+            "if op == \"SELL\":",
+            "if private[\"shed\"].get(item, 0) <= 0:",
+            "private[\"shed\"][item] -= 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.shared-weed-rng-seat-stream",
+      "status": "CONFIRMED",
+      "proposition": "The source-pinned end-of-day weed mechanism can create seat-indexed farm states because both farms consume different segments of one shared episode/day RNG stream.",
+      "scope": "Deterministic mechanism witness with weeds enabled; this is not proof that weeds caused any particular replay loss, seat tax, or field-EV difference.",
+      "disposition": "Treat weed RNG as a real seat-asymmetry candidate that must be controlled before assigning causality to market commit order or policy quality.",
+      "next_gate": "Run paired mirror replays with weedSpawnChance=0 or an equivalent paired weed-stream control and compare the first state/action divergence.",
+      "tags": ["engine", "rng", "seat", "symmetry", "weeds"],
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/seat-asymmetry-audit/seat_symmetry_oracle.py",
+          "git_blob": "865778d99c955f6d175bc54b450c89441e7eb78c",
+          "anchors": [
+            "\"eod_weed_rng_is_seat_indexed\": True,",
+            "if farm0 != farm1:"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.strawberry-wool-not-hinge",
+      "status": "FALSIFIED",
+      "proposition": "STRAWBERRY and WOOL scarcity below T use the hinge price shape in the pinned official market model.",
+      "scope": "Pinned official MARKET_PARAMS below-I0 scarcity shape only; T still parameterizes each resource's configured curve but is not a hinge knee for these two goods.",
+      "disposition": "Do not build a STRAWBERRY/WOOL hinge-knee strategy from T=100/105 on this engine blob; STRAWBERRY uses sqrt below I0 and WOOL uses log.",
+      "next_gate": "Re-open only if authenticated MARKET_PARAMS changes or a different mechanism, not the hinge shape, creates a measured discontinuity.",
+      "tags": ["engine", "market", "pricing"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py",
+          "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+          "anchors": [
+            "\"STRAWBERRY\": {\"base\": 120, \"I0\": MARKET_I0, \"T\": 100, \"below_func\": \"sqrt\"",
+            "\"WOOL\":       {\"base\": 200, \"I0\": MARKET_I0, \"T\": 105, \"below_func\": \"log\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engine.town-center-fertilizer-demand",
+      "status": "FALSIFIED",
+      "proposition": "The town-center demand phase consumes FERTILIZER in the pinned official engine.",
+      "scope": "Pinned official TOWN_CENTER_PRODUCTS membership only; player BUY_PRODUCT/SELL and other town/shop behavior are separate.",
+      "disposition": "Do not forecast town-center FERTILIZER depletion or use it as a funding/price-pressure premise on this engine blob.",
+      "next_gate": "Re-open only if authenticated TOWN_CENTER_PRODUCTS or town-demand logic changes.",
+      "tags": ["engine", "fertilizer", "town"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py",
+          "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+          "anchors": [
+            "TOWN_CENTER_PRODUCTS = [p for p in PRODUCTS if p != \"FERTILIZER\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "market.direct-hinge-buy-carrot-tomato-egg",
+      "status": "FALSIFIED",
+      "proposition": "A player can directly BUY_PRODUCT CARROT, TOMATO, or EGG to force their hinge scarcity prices.",
+      "scope": "Direct market BUY_PRODUCT attack only; production, SELL, external demand, and WHEAT/FERTILIZER purchases are separate.",
+      "disposition": "Do not build or benchmark a direct CARROT/TOMATO/EGG hinge-buyout controller on this engine contract.",
+      "next_gate": "Re-open only if the official direct BUY_PRODUCT eligibility changes.",
+      "tags": ["adversarial", "market", "pricing"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-pressure/README.md",
+          "git_blob": "ae94865af5caaa7f47de968706857c4c3cf38055",
+          "anchors": [
+            "CARROT/TOMATO/EGG hinge-price goods cannot be purchased from the market",
+            "Direct `BUY_PRODUCT` is legal only for **WHEAT** and **FERTILIZER**."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "market.external-wheat-demand-pressure",
+      "status": "CONFIRMED",
+      "proposition": "External net WHEAT demand can make a buy-before-rival and unwind-after-rival pressure position profitable while increasing the rival's acquisition cost.",
+      "scope": "Independent pinned WHEAT pricing model and constructed demand controls; this is a stress mechanism, not a current TITAN production-policy or field-EV claim.",
+      "disposition": "Keep the mechanism as a gauntlet/stress hypothesis and measure both seats against current V4; do not promote the included pressure agent as canonical policy from constructed receipts alone.",
+      "next_gate": "Require current-V4 both-seat gauntlet/replay economics against real external WHEAT demand and neutral controls.",
+      "tags": ["adversarial", "gauntlet", "market", "wheat"],
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-pressure/README.md",
+          "git_blob": "ae94865af5caaa7f47de968706857c4c3cf38055",
+          "anchors": [
+            "**External net demand is the surviving adversarial mechanism.**",
+            "Buy 64, rival net-buys 64, unwind 64: own profit `+$280`, rival surcharge `+$280`, score-margin swing `+$560`."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "market.literal-wheat-stockout",
+      "status": "FALSIFIED",
+      "proposition": "Player buying can make WHEAT literally unavailable by driving market inventory to zero.",
+      "scope": "Pinned official WHEAT BUY_PRODUCT availability semantics only; scarcity pricing can still raise acquisition cost.",
+      "disposition": "Do not build a WHEAT-unavailability/starvation strategy; reason in price pressure rather than stockout.",
+      "next_gate": "Re-open only if a new engine introduces a market-stock availability check.",
+      "tags": ["adversarial", "market", "wheat"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-pressure/README.md",
+          "git_blob": "ae94865af5caaa7f47de968706857c4c3cf38055",
+          "anchors": [
+            "There is no market-stock availability check on WHEAT buys. Inventory can cross zero.",
+            "“Starvation” therefore cannot make WHEAT unavailable; it can only raise the rival's acquisition cost."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "market.self-wheat-roundtrip-profit",
+      "status": "FALSIFIED",
+      "proposition": "A player can profit from a pure self-created WHEAT scarcity position by buying and later selling the same quantity with no intervening market flow.",
+      "scope": "Pinned official per-unit WHEAT quote semantics with no intervening external market flow; external demand is explicitly outside this falsification.",
+      "disposition": "Do not treat self-only WHEAT buy/unwind as an intrinsic money printer; any edge must come from intervening external net flow or another mechanism.",
+      "next_gate": "Re-open only with authenticated engine changes or a witness containing explicit intervening market flow.",
+      "tags": ["adversarial", "market", "wheat"],
+      "do_not_repeat_without_new_evidence": true,
+      "evidence": [
+        {
+          "path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/market-pressure/README.md",
+          "git_blob": "ae94865af5caaa7f47de968706857c4c3cf38055",
+          "anchors": [
+            "A self-created WHEAT squeeze is exactly reversible:",
+            "Pure 95-unit self round-trip: `$0` profit and inventory returns to `10000`."
+          ]
+        }
+      ]
+    }
+  ]
+}

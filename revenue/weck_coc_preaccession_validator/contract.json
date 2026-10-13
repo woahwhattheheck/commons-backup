@@ -1,0 +1,63 @@
+{
+  "id": "weck-coc-preaccession-validator-lims-01",
+  "version": 1,
+  "buyer": "Weck Laboratories / Agustin Pierri",
+  "lead": {
+    "channel": "C0BTURDA3PW",
+    "ts": "1788149923.377649"
+  },
+  "demand": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788149947.021379"
+  },
+  "workflow": [
+    "source-aware COC validation",
+    "unique accession and test mapping",
+    "exception ownership",
+    "receipt acknowledgement",
+    "controlled COA and EDD reconciliation",
+    "named-human release"
+  ],
+  "acceptance": [
+    "400 synthetic COCs: 320 valid, 80 truth-set exceptions",
+    "every valid submission produces exactly one accession with full field parity",
+    "all 80 exceptions block with an exact coded reason",
+    "zero duplicates, zero orphan tests",
+    "source coordinates and hashes remain traceable",
+    "regenerated COA and two designated EDD fixture formats match golden field digests",
+    "replay of the entire corpus is idempotent and keeps the same audit hash",
+    "no automatic result release; named human signature required before COA/EDD is releasable"
+  ],
+  "hold_codes": [
+    "HOLD_MISSING_SAMPLER_SIGNATURE",
+    "HOLD_MISSING_COLLECTION_DATETIME",
+    "HOLD_MISSING_MATRIX",
+    "HOLD_WRONG_PRESERVATIVE",
+    "HOLD_HOLD_TIME_EXCEEDED",
+    "HOLD_TEMPERATURE_OUT_OF_RANGE",
+    "HOLD_BROKEN_CUSTODY_CHAIN",
+    "HOLD_DUPLICATE_SAMPLE_ID",
+    "HOLD_MISSING_REQUESTED_TESTS",
+    "HOLD_UNKNOWN_SOURCE_COORDINATE"
+  ],
+  "edd_formats": ["GEOTRACKER_EDD", "EPA_SEDD"],
+  "audit_sha256": "75c9c6ffa53e9c6cbaa025ad63254f6134ef9f9ba239d546e758c1c15476e5f3",
+  "coa_digest": "99da0445ae1a5df2f33e9cfcd8dbb67de3308706be90ebeade98d7d992efd3d9",
+  "geotracker_digest": "536594f92472322894343b3b02c8138d9d1282dd68e8ed0ed3c552bbfb981ba5",
+  "epa_sedd_digest": "6f5097a0bb7ce70e4f29f182375cb6ea353b472395f271ff0391c7f0abcc8eb7",
+  "exclusions": [
+    "no replacement of incumbent LIMS",
+    "no PHI",
+    "no production write",
+    "no live reporting",
+    "no billing writes",
+    "no automatic result release",
+    "no buyer outreach or contact data"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic COC validation, accession, hold, receipt acknowledgement, and human-release receipts only; never production LIMS write, live COA/EDD delivery, or automatic release",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "titan.full-support.final-pivot-budget.v1",
+  "source": {
+    "repository": "woahwhattheheck/commons",
+    "path": "revenue/kaggriculture/cloud-full-support/full_support.py",
+    "original_git_blob": "7f7e2e9d62a655e24219490e9c54ab23019f1520",
+    "base_commit": "c4f128fbdf9f8d5148d35dd61476cf1f62677282"
+  },
+  "change": {
+    "runtime_scope": "post-pivot max_bits check in _solve_normalized",
+    "status_on_exhaustion": "bit_limit",
+    "fallback_weights": "unchanged zero-row baseline",
+    "algorithm_changed": false,
+    "cache_identity_changed": false,
+    "selected_policy_changed": false
+  },
+  "focused_regression": {
+    "methods": 21,
+    "repaired_failures": 0,
+    "repaired_errors": 0,
+    "original_failing_methods": 8,
+    "discriminator": "independent deterministic tableau probe reaches a final-pivot-only 16-bit overflow"
+  },
+  "comparison_corpus": {
+    "cases": 222,
+    "identical_results": 213,
+    "corrected_limit_boundary_results": 9,
+    "default_budget_cases": 72,
+    "default_budget_identical": 72
+  },
+  "consumer_contract": {
+    "actual_components": [
+      "cloud-market-game-theory/selector.py",
+      "cloud-weighted-plan-selector/weighted_selector.py"
+    ],
+    "limit_result_selectable": false,
+    "fallback_preserved": true,
+    "draws_on_limit": 0
+  },
+  "scope_limits": {
+    "full_games": 0,
+    "engine_transitions": 0,
+    "new_seeds": 0,
+    "probability_claim": false,
+    "performance_claim": false
+  },
+  "reproduce": "python -B -m unittest discover -s revenue/kaggriculture/cloud-full-support -p 'test_final_pivot_budget.py' -v"
+}

@@ -1,0 +1,137 @@
+{
+  "fixed": {
+    "actual_optimizer": {
+      "capturing_cases": 108,
+      "cases": 108,
+      "results_sha256": "8a0446bdf9652ba2deae445edb06d7871612c5b85c9d231800a888816af9d9fc"
+    },
+    "capacity_callbacks": [
+      {
+        "capacity_calls": 27,
+        "direct_calls": 27,
+        "mode": "baseline"
+      },
+      {
+        "capacity_calls": 27,
+        "direct_calls": 27,
+        "mode": "active"
+      },
+      {
+        "capacity_calls": 30,
+        "direct_calls": 27,
+        "mode": "adaptive"
+      }
+    ],
+    "games": 0,
+    "optimizer_sha256": "32c8610c9827d1686a6f831e2c4b6af4c00d32d2aa04dcf25699d976d6d97dd9",
+    "runtime_sha256": "d58f04603cb8bcf411327dfe6d4a092dbf07ea83811609dd1efef94ea19a00e4",
+    "scope": "Agent binding and real-optimizer component checks",
+    "tests": {
+      "errors": 0,
+      "failures": 0,
+      "run": 22,
+      "success": true
+    }
+  },
+  "fixed_runtime_blob": "2408104e5014ed006eea60066c762eaa67dd6a1a",
+  "fresh_base_commit": "c6682ec47a50f32faff9181961f8f5c995f3bf6a",
+  "limitations": [
+    "Boundary harness compiles the exact production Agent class with explicit parent and observation fixtures.",
+    "Actual optimizer comparisons run the unchanged frozen scheduler optimizer; no full integrated-agent game was run.",
+    "Original held9943101 COK timeouts at step540 seat0 and step530 seat1 remain incomplete.",
+    "Binding defect is established; its contribution to those separate timeouts is unmeasured.",
+    "Reentrant lock coordinates parent calls through this runtime module, not unrelated direct seller calls from other threads."
+  ],
+  "optimizer_archive_sha256": "68f78694fa56976fa1476ffd1d1fb6b3bfd4935392dfd0023a170c7efcd35e62",
+  "optimizer_source": "PR9892 frozen scheduler, reused from existing artifact10030763484",
+  "original": {
+    "actual_optimizer": {
+      "capturing_cases": 108,
+      "cases": 108,
+      "results_sha256": "8a0446bdf9652ba2deae445edb06d7871612c5b85c9d231800a888816af9d9fc"
+    },
+    "games": 0,
+    "optimizer_sha256": "32c8610c9827d1686a6f831e2c4b6af4c00d32d2aa04dcf25699d976d6d97dd9",
+    "runtime_sha256": "169835b0b730b694ee3ed848d69033938a80c45f20893988524ad4ae880e7c59",
+    "scope": "Agent binding and real-optimizer component checks",
+    "tests": {
+      "errors": 0,
+      "failures": 18,
+      "run": 22,
+      "success": false
+    }
+  },
+  "original_failing_tests": [
+    "test_baseline_and_active_keep_real_results_with_fewer_callbacks",
+    "test_active_plan_skips_unused_offer_collection",
+    "test_alternating_actors_keep_independent_records",
+    "test_baseline_after_adaptive_does_not_collect_into_either",
+    "test_baseline_skips_unused_offer_collection",
+    "test_constructor_does_not_mutate_shared_optimizer",
+    "test_many_instances_do_not_repeat_capacity_enumeration",
+    "test_nested_actor_calls_restore_outer_capture",
+    "test_nested_actor_construction_does_not_capture_outer",
+    "test_only_current_instance_collects_offers",
+    "test_restores_previous_external_binding",
+    "test_restores_shared_optimizer_after_baseexception",
+    "test_restores_shared_optimizer_after_typeerror",
+    "test_restores_shared_optimizer_on_success",
+    "test_second_instance_does_not_collect_into_first",
+    "test_two_instances_bind_the_same_optimizer",
+    "test_unused_actor_can_be_collected",
+    "test_used_actor_can_be_collected"
+  ],
+  "original_runtime_blob": "580009b4023e17130e7169445aae3639e34529b9",
+  "original_runtime_commit": "a7a422f894050391306af903ea8540f1b65d96ad",
+  "repeated_construction": [
+    {
+      "capacity_checks": 3,
+      "collecting_agents": 1,
+      "constructed_agents": 1,
+      "one_parent_call": 1,
+      "version": "original"
+    },
+    {
+      "capacity_checks": 36,
+      "collecting_agents": 12,
+      "constructed_agents": 12,
+      "one_parent_call": 1,
+      "version": "original"
+    },
+    {
+      "capacity_checks": 192,
+      "collecting_agents": 64,
+      "constructed_agents": 64,
+      "one_parent_call": 1,
+      "version": "original"
+    },
+    {
+      "capacity_checks": 3,
+      "collecting_agents": 1,
+      "constructed_agents": 1,
+      "one_parent_call": 1,
+      "version": "fixed"
+    },
+    {
+      "capacity_checks": 3,
+      "collecting_agents": 1,
+      "constructed_agents": 12,
+      "one_parent_call": 1,
+      "version": "fixed"
+    },
+    {
+      "capacity_checks": 3,
+      "collecting_agents": 1,
+      "constructed_agents": 64,
+      "one_parent_call": 1,
+      "version": "fixed"
+    }
+  ],
+  "scope": "Production Agent binding repair; no full games, no held reruns, no deadline-resolution claim",
+  "unchanged_source_ast": [
+    "AdaptiveTransform",
+    "Agent.capture",
+    "Agent.observe",
+    "Agent.streams"
+  ]
+}

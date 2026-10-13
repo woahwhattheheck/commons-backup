@@ -1,0 +1,144 @@
+{
+  "episode_gap_ms": 60000,
+  "events": [
+    {
+      "assertion": "Route Alpha is clear.",
+      "confidence_milli": 900,
+      "event_id": "evt-001",
+      "kind": "OBSERVATION",
+      "observed_at": "2026-09-16T13:00:00.000Z",
+      "source_id": "text-log",
+      "subject": "route-alpha",
+      "tags": [
+        "route",
+        "phase1"
+      ]
+    },
+    {
+      "assertion": "Proceed through Route Alpha.",
+      "confidence_milli": 880,
+      "event_id": "evt-002",
+      "kind": "DECISION",
+      "observed_at": "2026-09-16T12:59:59.000Z",
+      "source_id": "radio-audio",
+      "subject": "maneuver",
+      "tags": [
+        "decision",
+        "route"
+      ]
+    },
+    {
+      "assertion": "Route Alpha is obstructed.",
+      "confidence_milli": 760,
+      "event_id": "evt-003",
+      "kind": "OBSERVATION",
+      "observed_at": "2026-09-16T13:00:03.000Z",
+      "source_id": "video-feed",
+      "subject": "route-alpha",
+      "tags": [
+        "route",
+        "video"
+      ]
+    },
+    {
+      "assertion": "Vehicle slowed to 5 m/s.",
+      "confidence_milli": 990,
+      "event_id": "evt-004",
+      "kind": "ACTION",
+      "observed_at": "2026-09-16T13:00:05.000Z",
+      "source_id": "sensor-telemetry",
+      "subject": "vehicle-speed",
+      "tags": [
+        "telemetry"
+      ]
+    },
+    {
+      "assertion": "Checkpoint reached <safely> & logged *once*.",
+      "confidence_milli": 940,
+      "event_id": "evt-005",
+      "kind": "OUTCOME",
+      "observed_at": "2026-09-16T13:00:11.000Z",
+      "source_id": "text-log",
+      "subject": "checkpoint",
+      "tags": [
+        "outcome"
+      ]
+    },
+    {
+      "assertion": "Second phase started.",
+      "confidence_milli": 860,
+      "event_id": "evt-006",
+      "kind": "OBSERVATION",
+      "observed_at": "2026-09-16T13:02:10.000Z",
+      "source_id": "radio-audio",
+      "subject": "phase-two",
+      "tags": [
+        "phase2"
+      ]
+    },
+    {
+      "assertion": "Hold position pending confirmation.",
+      "confidence_milli": 910,
+      "event_id": "evt-007",
+      "kind": "DECISION",
+      "observed_at": "2026-09-16T13:02:12.000Z",
+      "source_id": "text-log",
+      "subject": "phase-two",
+      "tags": [
+        "phase2"
+      ]
+    },
+    {
+      "assertion": "Hold completed; no further movement.",
+      "confidence_milli": 900,
+      "event_id": "evt-008",
+      "kind": "OUTCOME",
+      "observed_at": "2026-09-16T13:02:20.000Z",
+      "source_id": "radio-audio",
+      "subject": "phase-two",
+      "tags": [
+        "phase2",
+        "outcome"
+      ]
+    }
+  ],
+  "exercise_id": "synthetic-niwc-digital-scribe-demo",
+  "required_modalities": [
+    "TEXT",
+    "AUDIO",
+    "VIDEO",
+    "SENSOR"
+  ],
+  "schema_version": "evidenceaar-input/v1",
+  "sources": [
+    {
+      "clock_offset_ms": 0,
+      "description": "Synthetic controller log transcript",
+      "modality": "TEXT",
+      "sha256": "30923cd227ac7d3ff6cacfc08039a252324f5d3e781b5049a3a262fb515b7fc3",
+      "source_id": "text-log"
+    },
+    {
+      "clock_offset_ms": 1500,
+      "description": "Synthetic radio transcript with measured +1.5s correction",
+      "modality": "AUDIO",
+      "sha256": "e4ff97ad0e6ce39da809ea45448b5371982c4a75973d65f0efd18ccb40d5ed2d",
+      "source_id": "radio-audio"
+    },
+    {
+      "clock_offset_ms": -500,
+      "description": "Synthetic camera event extraction with measured -0.5s correction",
+      "modality": "VIDEO",
+      "sha256": "64f562759fc75c8a34fdf48e8450f96860af2c7150b11067ac305385aec80454",
+      "source_id": "video-feed"
+    },
+    {
+      "clock_offset_ms": 250,
+      "description": "Synthetic telemetry stream",
+      "modality": "SENSOR",
+      "sha256": "ca944bf447e26d57723aa70c47113c379174cb67a5db94abd457c045fbe24f1f",
+      "source_id": "sensor-telemetry"
+    }
+  ],
+  "synthetic": true
+}

@@ -1,0 +1,15 @@
+"use strict";
+module.exports=function run(api,certificate,input,retain){
+ const reader=api.open(certificate,input),responses=[],requests=[],fixture=[],inverse=[];let nav=null,serial=0;
+ function ask(op,args,fn){const id=++serial,request={id,op,args};retain({phase:"pending",id,request});try{const response=fn();requests.push(request);responses.push(response);retain({phase:"complete",id,request,response,completion_snapshot:reader.snapshot(),navigation_snapshot:nav&&nav.snapshot()});return response;}catch(e){retain({phase:"error",id,request,error:{name:e.name,message:e.message},completion_snapshot:reader.snapshot(),navigation_snapshot:nav&&nav.snapshot()});throw e;}}
+ ask("summary",{},()=>reader.summary());
+ for(const m of[0,128,255])ask("profile",{mask:m},()=>reader.profile(m));
+ for(let m=0;m<256;m++){const values=input.target_fixture.filter((_,j)=>m&(1<<j));fixture.push(ask("solve",{mask:m,values},()=>reader.solve(m,values)));}
+ const index=ask("buildFixtureIndex",{input:"the preceding256 fixture responses in numeric mask order"},()=>api.buildFixtureIndex(fixture));nav=api.openFixtureIndex(index);
+ const conditions=[["all",{}],["empty-mask",{max_size:0}],["singletons",{min_size:1,max_size:1}],["size-four",{min_size:4,max_size:4}],["at-least-six",{min_size:6}],["required-forbidden",{require:1,forbid:128}],["zero-energy",{min_energy:"0",max_energy:"0"}],["energy-at-most-one",{max_energy:"1"}],["energy-at-least-one",{min_energy:"1"}],["conflict",{require:1,forbid:1}],["reversed-energy",{min_energy:"2",max_energy:"1"}]];
+ const counts=[];
+ for(const[name,c]of conditions){const r=ask("condition",{name,condition:c},()=>nav.condition(c));counts.push({name,count:r.count});for(const rank of [...new Set(r.count?[0,Math.floor(r.count/2),r.count-1]:[])]){const s=ask("select",{name,condition:c,rank},()=>nav.select(c,rank));const q=ask("rank",{name,condition:c,mask:s.mask},()=>nav.rank(c,s.mask));inverse.push({name,rank,mask:s.mask,observed:q.rank,matches:q.rank===rank});}}
+ const zero=Array.from({length:8},()=>["0","0"]);ask("solve",{mask:255,values:zero},()=>reader.solve(255,zero));
+ const alternate=Array.from({length:8},(_,j)=>[(j%2?"-":"")+String(j+2)+"/3",String(j-3)+"/5"]);ask("solve",{mask:255,values:alternate},()=>reader.solve(255,alternate));
+ return{schema:"commons.werner_coordinate_completion_consumer/v1",target_fixture:input.target_fixture,requests,responses,fixture_index:index,counts,inverse_checks:inverse,completion_snapshot:reader.snapshot(),navigation_snapshot:nav.snapshot(),summary:{responses:serial,fixture_optimizers:256,other_optimizers:2,cover_edges:index.cover_edges.length,inverse_checks:inverse.length,all_inverse_match:inverse.every(x=>x.matches),all_optimizer_identities:responses.filter(x=>x&&x.identities).every(x=>Object.values(x.identities).every(Boolean)),positive_cover_edges:index.cover_edges.filter(x=>x.increase!=="0").length,zero_cover_edges:index.cover_edges.filter(x=>x.increase==="0").length},work:{completion:reader.work(),navigation:nav.work(),fixture_index:index.work}};
+};

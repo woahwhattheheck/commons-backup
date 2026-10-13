@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Paceboard — private habit companion</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">PRIVATE · LOCAL · YOUR PACE</p>
+      <h1>Paceboard</h1>
+      <p class="lede">Choose a direction, notice what happened, and resume without turning a missed day into a verdict.</p>
+    </div>
+    <div class="privacy-card" aria-label="Privacy boundary">
+      <strong>Runs on this device</strong>
+      <span>No account, cloud sync, ads, analytics, or automatic messages.</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="status-strip" aria-live="polite">
+      <span id="connection-status" class="status-pill">Connecting…</span>
+      <span id="revision-status">Workspace revision —</span>
+      <button id="enable-notifications" class="quiet" type="button">Enable optional local reminders</button>
+    </section>
+
+    <section id="error-banner" class="error-banner hidden" role="alert"></section>
+
+    <section class="summary-grid" aria-label="Progress summary">
+      <article><strong id="summary-active">0</strong><span>active goals</span></article>
+      <article><strong id="summary-done">0</strong><span>done check-ins</span></article>
+      <article><strong id="summary-paused">0</strong><span>pause check-ins</span></article>
+      <article><strong id="summary-focus">0</strong><span>focused minutes</span></article>
+    </section>
+
+    <div class="layout">
+      <div class="primary-column">
+        <section class="panel" aria-labelledby="goals-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">DIRECTION</p>
+              <h2 id="goals-heading">Your goals</h2>
+            </div>
+            <button id="show-goal-form" type="button">Add a goal</button>
+          </div>
+
+          <form id="goal-form" class="stack hidden">
+            <input id="goal-id" type="hidden">
+            <label>
+              Goal name
+              <input id="goal-title" name="title" maxlength="120" required placeholder="Read for ten minutes">
+            </label>
+            <label>
+              Why it matters to you <span class="optional">optional</span>
+              <textarea id="goal-intention" name="intention" maxlength="500" rows="2" placeholder="A calm transition out of work mode"></textarea>
+            </label>
+            <div class="form-row">
+              <label>
+                Reminder while open
+                <select id="goal-reminder" name="reminder_minutes">
+                  <option value="0">Off</option>
+                  <option value="15">15 minutes</option>
+                  <option value="30">30 minutes</option>
+                  <option value="60">1 hour</option>
+                  <option value="180">3 hours</option>
+                  <option value="1440">1 day</option>
+                </select>
+              </label>
+              <label>
+                Focus target
+                <input id="goal-focus" name="target_focus_minutes" type="number" min="1" max="720" value="25" required>
+              </label>
+            </div>
+            <div class="actions">
+              <button type="submit" id="goal-submit">Save goal</button>
+              <button type="button" id="cancel-goal" class="quiet">Cancel</button>
+            </div>
+          </form>
+
+          <div id="reminders" class="reminder-list hidden" aria-live="polite"></div>
+          <div id="goals" class="goal-list"></div>
+          <p id="empty-goals" class="empty">No goals yet. Start with something small enough to begin today.</p>
+        </section>
+
+        <section class="panel" aria-labelledby="focus-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">FOCUS</p>
+              <h2 id="focus-heading">Sessions</h2>
+            </div>
+            <span class="muted">One running session at a time</span>
+          </div>
+          <div id="focus-sessions" class="focus-list"></div>
+          <p id="empty-focus" class="empty">Start a focus session from any active goal.</p>
+        </section>
+      </div>
+
+      <aside class="secondary-column">
+        <section class="panel" aria-labelledby="note-heading">
+          <p class="eyebrow">NOTICE</p>
+          <h2 id="note-heading">Private trigger note</h2>
+          <p class="muted">Write what made the next step easier or harder. This stays in your local SQLite file.</p>
+          <form id="note-form" class="stack">
+            <label>
+              Related goal <span class="optional">optional</span>
+              <select id="note-goal"><option value="">General note</option></select>
+            </label>
+            <label>
+              Note
+              <textarea id="note-body" maxlength="2000" rows="4" required placeholder="I opened the news feed when the task felt unclear…"></textarea>
+            </label>
+            <button type="submit">Save private note</button>
+          </form>
+        </section>
+
+        <section class="panel" aria-labelledby="data-heading">
+          <p class="eyebrow">OWNERSHIP</p>
+          <h2 id="data-heading">Your data</h2>
+          <div class="data-actions">
+            <button id="export-json" type="button">Download backup</button>
+            <button id="export-csv" type="button" class="quiet">Download history CSV</button>
+          </div>
+          <label class="file-label">
+            Restore a Paceboard backup
+            <input id="restore-file" type="file" accept="application/json,.json">
+          </label>
+          <button id="restore-button" type="button" class="quiet">Replace workspace from selected backup</button>
+          <details class="danger-zone">
+            <summary>Erase local Paceboard data</summary>
+            <p>This permanently removes goals, notes, check-ins, focus sessions, and prior retry receipts from this workspace.</p>
+            <label>
+              Type <code>ERASE PACEBOARD</code>
+              <input id="erase-confirm" autocomplete="off">
+            </label>
+            <button id="erase-button" type="button" class="danger">Erase everything</button>
+          </details>
+        </section>
+
+        <section class="panel boundary" aria-labelledby="boundary-heading">
+          <p class="eyebrow">BOUNDARY</p>
+          <h2 id="boundary-heading">A habit utility, not treatment</h2>
+          <p>Paceboard does not diagnose, treat, monitor, or provide crisis support. It never scores your worth, infers a condition, or contacts anyone.</p>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel history-panel" aria-labelledby="history-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">HISTORY</p>
+          <h2 id="history-heading">What happened</h2>
+        </div>
+        <span class="muted">No streaks. No missed-day penalty.</span>
+      </div>
+      <div id="history" class="history-list"></div>
+      <p id="empty-history" class="empty">Check-ins, notes, and focus sessions will appear here.</p>
+    </section>
+  </main>
+
+  <template id="goal-template">
+    <article class="goal-card">
+      <div class="goal-topline">
+        <div>
+          <h3 class="goal-title"></h3>
+          <p class="goal-intention"></p>
+        </div>
+        <span class="goal-state"></span>
+      </div>
+      <p class="latest-checkin"></p>
+      <div class="goal-actions"></div>
+    </article>
+  </template>
+</body>
+</html>

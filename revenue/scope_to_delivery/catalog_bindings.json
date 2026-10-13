@@ -1,0 +1,436 @@
+{
+  "schema_version": "commons-scope-bindings/v1",
+  "kind": "SCOPE_TO_DELIVERY_BINDINGS",
+  "note": "Bindings compose catalog listings and funnels into bounded packets. Source terms still win. This file does not invent buyers, acceptances, or cash.",
+  "skus": {
+    "production-survival-sprint": {
+      "family": "service",
+      "in_scope": [
+        "Measured failure cycle on one buyer-owned workflow",
+        "Retry and rollback implementation",
+        "Durable receipt in the agreed sandbox"
+      ],
+      "out_of_scope": [
+        "credentials",
+        "private-data",
+        "pii-phi",
+        "authentication",
+        "billing",
+        "production-migration",
+        "ongoing-hosting-or-sla",
+        "white-box-or-model-files"
+      ],
+      "deliverables": [
+        "measured-failure-cycle",
+        "retry-and-rollback",
+        "durable-receipt"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "named-workflow-survives",
+          "given": "The named buyer-owned workflow and agreed sandbox",
+          "when": "The agreed failure, retry, and rollback cycle is forced",
+          "then": "The workflow survives and a durable receipt is hashed",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "gguf-diagnostic-10d-12k": {
+      "family": "expertise",
+      "in_scope": [
+        "Original, ablated, and byte-exact restored hashes",
+        "Baseline, ablation, and restore harness logs",
+        "Concise finding and hashed delivery receipt"
+      ],
+      "out_of_scope": [
+        "credentials",
+        "private-data",
+        "pii-phi",
+        "authentication",
+        "billing",
+        "production-migration",
+        "ongoing-hosting-or-sla"
+      ],
+      "deliverables": [
+        "original-hash",
+        "ablated-hash",
+        "restored-hash",
+        "harness-logs",
+        "hashed-receipt"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "at1-at6",
+          "given": "Buyer-controlled GGUF and runnable harness",
+          "when": "AT1 through AT6 are run",
+          "then": "Rollback evidence passes; metric lift is not the rule",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "white-box-gguf-pilot-30d": {
+      "family": "expertise",
+      "in_scope": [
+        "Target-focused model map",
+        "Reversible ablation and targeted-edit artifacts",
+        "Restored artifact and rollback proof",
+        "Comparison report and technical review"
+      ],
+      "out_of_scope": [
+        "credentials",
+        "private-data",
+        "pii-phi",
+        "authentication",
+        "billing",
+        "production-migration",
+        "ongoing-hosting-or-sla"
+      ],
+      "deliverables": [
+        "model-map",
+        "reversible-ablation",
+        "targeted-edit",
+        "rollback-proof",
+        "comparison-report"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "reversible-pilot-package",
+          "given": "Legally controlled GGUF family and customer harness",
+          "when": "The agreed pilot package is delivered",
+          "then": "Ablation and edit are reversible and customer-harness evaluations run",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "ho-issue-to-pr": {
+      "family": "service",
+      "in_scope": [
+        "One pull request for the named public issue"
+      ],
+      "out_of_scope": [
+        "credentials",
+        "private-data",
+        "pii-phi",
+        "authentication",
+        "billing",
+        "style-only-rewrites"
+      ],
+      "deliverables": [
+        "merged-ci-green-pr"
+      ],
+      "refund_text": "If work never starts after written intake, founder refunds the authorized amount. If CI never greens or the PR never merges, the second half is withheld. A style disagreement is not a refund.",
+      "default_acceptance_rows": [
+        {
+          "id": "merged-ci-green",
+          "given": "One named public repository issue",
+          "when": "The pull request is integrated",
+          "then": "PR merged to the default branch, CI green on the integrated SHA, named issue closed by that PR",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "ho-meeting-packet": {
+      "family": "service",
+      "in_scope": [
+        "HTML packet",
+        "Printable packet",
+        "Agenda",
+        "One-page brief",
+        "Source list"
+      ],
+      "out_of_scope": [
+        "credentials",
+        "private-data",
+        "pii-phi",
+        "authentication",
+        "billing"
+      ],
+      "deliverables": [
+        "html-packet",
+        "printable-packet",
+        "agenda",
+        "one-page-brief",
+        "source-list"
+      ],
+      "refund_text": "If the packet is not delivered before the named meeting date because the provider missed the clock, founder refunds. Buyer-late inputs move the clock. A policy disagreement is not a refund.",
+      "default_acceptance_rows": [
+        {
+          "id": "packet-before-meeting",
+          "given": "Named meeting and public source artifact",
+          "when": "The packet is published",
+          "then": "Meeting name and date are written, packet is openly reachable, claims cite public sources or say UNMEASURED",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "ho-security-questionnaire": {
+      "family": "service",
+      "in_scope": [
+        "Filled questionnaire returned through the founder-sent private contact"
+      ],
+      "out_of_scope": [
+        "credentials",
+        "invented-certification",
+        "third-party-audit",
+        "publishing-private-answers-on-main"
+      ],
+      "deliverables": [
+        "filled-questionnaire-private-return",
+        "public-safe-receipt"
+      ],
+      "refund_text": "If the filled copy is not returned in 10 days after complete inputs, founder refunds. Missing buyer attachments move the clock. A failed third-party audit is not this SKU.",
+      "default_acceptance_rows": [
+        {
+          "id": "required-cells",
+          "given": "Named questionnaire and complete inputs",
+          "when": "The filled copy is returned",
+          "then": "Every required cell is filled or UNMEASURED, no certification is invented, public receipt contains no private answers",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "ho-pixel-pack": {
+      "family": "product",
+      "in_scope": [
+        "Sprite",
+        "Walk loop",
+        "Speak line linked to a public post",
+        "Static readable frame"
+      ],
+      "out_of_scope": [
+        "credentials",
+        "private-data",
+        "unbounded-art-direction-churn"
+      ],
+      "deliverables": [
+        "sprite",
+        "walk-loop",
+        "speak-line",
+        "static-frame"
+      ],
+      "refund_text": "If no sprite lands on the named public page in 5 days after intake, founder refunds. Art-direction churn after acceptance is a change order.",
+      "default_acceptance_rows": [
+        {
+          "id": "visible-sprite-pack",
+          "given": "Named public page and sprite job",
+          "when": "The pack is published",
+          "then": "Sprite is visible, walk loop runs, speak line cites p/{id}.md, static frame remains readable without script",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "sku-tip-20260826": {
+      "family": "sponsorship",
+      "in_scope": [
+        "Optional support only; Commons remains open"
+      ],
+      "out_of_scope": [
+        "membership",
+        "gated-entitlement",
+        "private-buyer-data-on-main"
+      ],
+      "deliverables": [
+        "public-safe-support-receipt"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "public-safe-receipt",
+          "given": "A voluntary tip",
+          "when": "A public-safe support receipt is published",
+          "then": "The receipt reconciles without private buyer data",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "sku-seat-20260826": {
+      "family": "sponsorship",
+      "in_scope": [
+        "One calendar month of named presence"
+      ],
+      "out_of_scope": [
+        "claim-purchase",
+        "gated-entitlement",
+        "from-equals-payment"
+      ],
+      "deliverables": [
+        "named-presence-month"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "named-presence",
+          "given": "Chosen public display name and presence target",
+          "when": "The month elapses",
+          "then": "UNKNOWN — binding records the gap; this composer will not invent an acceptance test",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "sku-unlock-20260826": {
+      "family": "product",
+      "in_scope": [
+        "One selected public pack, build bump, or session note"
+      ],
+      "out_of_scope": [
+        "private-deliverable",
+        "unbounded-scope"
+      ],
+      "deliverables": [
+        "selected-public-artifact"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "public-artifact-on-main",
+          "given": "Exactly one selected public door",
+          "when": "The artifact is published",
+          "then": "Selected public artifact is reachable on current main",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "sku-monthly-tip-20260826": {
+      "family": "sponsorship",
+      "in_scope": [
+        "Recurring support with no gated entitlement"
+      ],
+      "out_of_scope": [
+        "seat",
+        "claim",
+        "gated-entitlement"
+      ],
+      "deliverables": [
+        "public-safe-support-receipt"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "public-safe-receipt",
+          "given": "A recurring tip",
+          "when": "A public-safe support receipt is published",
+          "then": "The receipt reconciles without private buyer data",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "sku-boost-20260826": {
+      "family": "sponsorship",
+      "in_scope": [
+        "Recurring support for table upgrades"
+      ],
+      "out_of_scope": [
+        "claim-purchase",
+        "unspecified-upgrade"
+      ],
+      "deliverables": [
+        "table-upgrade-support"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "named-upgrade",
+          "given": "Named public upgrade or published allocation rule",
+          "when": "The month elapses",
+          "then": "UNKNOWN — specific upgrade, cadence, and visible result remain unspecified",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "sku-whitebox-hour-20260826": {
+      "family": "expertise",
+      "in_scope": [
+        "land/session-YYYYMMDD.md with dests, receipts, and what ran"
+      ],
+      "out_of_scope": [
+        "private-session-notes-on-main",
+        "unbounded-follow-on"
+      ],
+      "deliverables": [
+        "dated-public-session-file"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "dated-session-file",
+          "given": "Objective, requested date, timezone, and dests",
+          "when": "The session file is published",
+          "then": "The dated public session file contains the promised fields",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    },
+    "sku-muhlnickel-titan-20260826": {
+      "family": "product",
+      "in_scope": [
+        "One narrow actual-machine keep-or-build engagement",
+        "Receipt files on current main"
+      ],
+      "out_of_scope": [
+        "unbounded-platform-rebuild",
+        "credentials",
+        "private-data",
+        "pii-phi"
+      ],
+      "deliverables": [
+        "narrow-keep-or-build",
+        "receipt-files-on-main"
+      ],
+      "refund_text": "UNKNOWN",
+      "default_acceptance_rows": [
+        {
+          "id": "keep-or-build-receipt",
+          "given": "Written keep-or-build definition and acceptance test",
+          "when": "The engagement completes",
+          "then": "UNKNOWN until buyer class, exact scope, and acceptance are written — this composer will not invent them",
+          "evidence_required": [
+            "public_ref",
+            "sha256"
+          ]
+        }
+      ]
+    }
+  }
+}

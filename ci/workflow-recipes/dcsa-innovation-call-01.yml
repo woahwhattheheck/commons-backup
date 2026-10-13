@@ -1,0 +1,48 @@
+name: dcsa-innovation-call-01
+
+on:
+  pull_request:
+    paths:
+      - "revenue/dcsa_innovation_call_01/**"
+      - ".github/workflows/dcsa-innovation-call-01.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/dcsa_innovation_call_01/**"
+      - ".github/workflows/dcsa-innovation-call-01.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dcsa-innovation-call-01-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/dcsa_innovation_call_01/*.py
+      - name: Normal tests
+        run: python -m unittest -v revenue.dcsa_innovation_call_01.test_source_red_closure
+      - name: Optimized tests
+        run: python -O -m unittest -v revenue.dcsa_innovation_call_01.test_source_red_closure
+      - name: Historical receipt verification
+        run: |
+          python -m revenue.dcsa_innovation_call_01 verify-historical \
+            --candidate revenue/dcsa_innovation_call_01/candidate.example.json \
+            --source revenue/dcsa_innovation_call_01/source_ledger.example.json \
+            --authority revenue/dcsa_innovation_call_01/authority.example.json \
+            --floor revenue/dcsa_innovation_call_01/authority-floor.example.json \
+            --as-of 2026-09-14T04:45:00Z \
+            --report revenue/dcsa_innovation_call_01/historical_report.example.json

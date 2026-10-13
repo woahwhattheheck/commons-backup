@@ -1,0 +1,35 @@
+name: GGUF prospect qualification
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/gguf_prospect_qualification/**'
+      - '.github/workflows/gguf-prospect-qualification.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/gguf_prospect_qualification/**'
+      - '.github/workflows/gguf-prospect-qualification.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/gguf_prospect_qualification
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen artifact hashes
+        run: sha256sum -c MANIFEST.sha256
+      - name: Run hostile qualification tests
+        run: python -m unittest -v test_qualify.py
+      - name: Recompile deterministic receipt
+        run: |
+          python qualify.py prospects.json --pretty > /tmp/compiled.json
+          diff -u compiled.json /tmp/compiled.json

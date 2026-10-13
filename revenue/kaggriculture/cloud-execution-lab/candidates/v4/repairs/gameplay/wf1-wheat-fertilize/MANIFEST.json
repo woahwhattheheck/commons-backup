@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "lane": "WF1_S1_WHEAT_FERTILIZE",
+  "status": "ORIGINAL_MODULE_AND_SPEC_LANDED_DEFAULT_OFF",
+  "canonical_workspace": "main:candidates/v4",
+  "origin": {
+    "slack_channel": "#titan-v25-sim-runs",
+    "handoff_time": "2026-09-11T18:35:05-04:00",
+    "slack_file_id": "F0C19EXC5T8",
+    "archive_name": "s1_wheat_fertilize_handoff.tar.gz",
+    "archive_size_bytes": 88928,
+    "archive_sha256": "d50b080fbd15fe21b62c54649ec336fd69b0a5351c1f0c64110a1417d096b9e1"
+  },
+  "exact_members": {
+    "r04_wheat_fert.py": {
+      "bytes": 17061,
+      "sha256": "30a646d56bff72758c9ff4f98b4353c9e89b0ada211214add56d773dcee2bda0",
+      "git_blob": "b35a30431f64c1d6b40d1d599190338a9d50b555",
+      "materialized_path": "repairs/gameplay/wf1-wheat-fertilize/r04_wheat_fert.py",
+      "materialized_commit": "f79cd4d8cf6f7fa25afb7dec77af3fa65443bdf6"
+    },
+    "patch_v4_seam.py": {
+      "bytes": 3056,
+      "sha256": "bb3f7c1c5cf73fc9b727c8a83109f1dc0ce3c2167e6637ec7079b06eef33a894",
+      "git_blob": "e8f63f2ef6596e7c88a017409ae062cdd96e8628"
+    },
+    "r04_full_router_with_seam.py": {
+      "bytes": 99226,
+      "sha256": "a7788af52540031eceb9b2624fc5f33ad7385202d9986d727a276c75b6c89ff1",
+      "git_blob": "cb8a61f172b62c66274147a6b95db89bf3a07024"
+    },
+    "standalone_wf1.py": {
+      "bytes": 351,
+      "sha256": "8ea09da8ff9c06f9afdf278e8a2c0e639dda91dbf11362673054890cc6ea6bb0",
+      "git_blob": "c7a655e64cdd43be940b722ecc3a5e3e9392c07f"
+    },
+    "wf1_spec.json": {
+      "bytes": 410,
+      "sha256": "38bd76e424fbcd1d187f8bf506c1a0e45f043515a5ebdab81c5f0f0dc78cebee",
+      "git_blob": "39c929904b30d833ab17dfdf44d3354cb2b9493b",
+      "materialized_path": "repairs/gameplay/wf1-wheat-fertilize/wf1_spec.json"
+    },
+    "results/v2b_live.jsonl": {
+      "bytes": 34677,
+      "sha256": "5185c0f1cbd7aa1a67433d7b5314639e2db006e567b1178d630145f587341ada",
+      "git_blob": "3400d8bbe76e748838ce2f2bcb144f56b062390a"
+    }
+  },
+  "bench_receipt": {
+    "paired_cells": 88,
+    "margin_positive": 88,
+    "margin_zero": 0,
+    "margin_negative": 0,
+    "mean_own_delta": 309.3863636363636,
+    "mean_rival_delta": -6.170454545454546,
+    "mean_margin_delta": 315.5568181818182,
+    "median_margin_delta": 350.0,
+    "margin_range": [67.0, 1223.0],
+    "base_wins": 77,
+    "arm_wins": 79,
+    "swap_age1_cells": 88,
+    "swap_age2_cells": 0,
+    "swap_age1_total": 383,
+    "swap_units_total": 708,
+    "source": "exact results/v2b_live.jsonl from the pinned Slack archive; independently recomputed 2026-09-11"
+  },
+  "custody_reconciliation": {
+    "scope": "one original source, two complementary storage paths; not two implementations",
+    "source_git_blob_verified_against_archive": "b35a30431f64c1d6b40d1d599190338a9d50b555",
+    "source_tree_readback": "main path readback exact Git blob b35a30431f64c1d6b40d1d599190338a9d50b555 at commit f79cd4d8cf6f7fa25afb7dec77af3fa65443bdf6",
+    "manifest_and_spec_tree_readback": "eeb3139b8b33004a62fcf31f61e1bb9acccb5589",
+    "instruction": "Use the existing materialized_path entries; do not copy the same original module into another V4 directory. Members without materialized_path remain archive provenance, not proof of Git tree custody.",
+    "independent_arithmetic_audit": "88 distinct tape-seat records; own, rival and margin fields all equal differences recomputed from player-ordered base/arm scores. This was an archived-result audit, not a current-main game rerun."
+  },
+  "original_source_limitations": [
+    "CROPS includes CARROT; a day-1 carrot fixture returns positive swap_gain although this lane is described as wheat-only.",
+    "The original _collect_credit credits two planned units from an observed yield of four without subtracting a parent yield counterfactual.",
+    "The original _window rejects TOMATO and STRAWBERRY, so ALT_GATE cannot reserve fertilizer for those ongoing crops.",
+    "The source-preservation result does not establish safe current-runtime integration or economic promotion."
+  ],
+  "hardened_successor": {
+    "status": "REPORTED_LOCAL_ONLY_EXACT_SOURCE_AND_TEST_BYTES_NOT_RECOVERED_BY_THIS_PASS",
+    "slack_channel_id": "C0C0Z8AHGP2",
+    "slack_message_ts": "1789167070.897079",
+    "reported_bundle_sha256": "357328b3051721027bd9fc2a81bd475aad98ce417b57e05123482bf55964a95c",
+    "reported_module_hash_prefix": "906e8dd6",
+    "reported_test_hash_prefix": "9cd408a4",
+    "reported_tests_passed": 17,
+    "tests_independently_executed_by_this_pass": false,
+    "boundary": "The original b35a3043 source is not this hardened successor. Recover its exact bytes and tests, or explicitly develop and test a new repair; do not relabel the original or reconstruct purported historical bytes from prose."
+  },
+  "boundaries": {
+    "distinct_from": "r04_s1_fert_sweep",
+    "runtime_enabled": false,
+    "default_enabled": false,
+    "production_enabled": false,
+    "legacy_seam_patch_authorized_on_current_runtime": false,
+    "legacy_materializer_authorized": false,
+    "promotion_claim": false,
+    "next_gate": "Use the existing original source custody path without duplication; recover the reported hardened successor source/tests or develop a separately reviewed repair. A current-ABI port and current-main paired panel remain required before activation."
+  }
+}

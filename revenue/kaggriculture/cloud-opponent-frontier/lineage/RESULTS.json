@@ -1,0 +1,84 @@
+{
+  "schema": "titan.static-lineage-receipt.v1",
+  "tool_sha256": "5d7179825eaa6efab4e4e2c54d37205b6311e090e181db9654a4cd6655521b99",
+  "source_head": "4c141d01c9f361856f4e42ed58ba183c6fc1e4d2",
+  "local_python_version": "3.13.5",
+  "policy_execution": false,
+  "games_run": 0,
+  "tests": {
+    "local": 14,
+    "hosted_python_version": "3.11",
+    "hosted_run": 34156985088,
+    "hosted_conclusion": "success",
+    "command": "python -m unittest discover -s revenue/kaggriculture/cloud-opponent-frontier/lineage -p 'test_*.py' -v"
+  },
+  "transport": [
+    {"run":34156092496,"artifact":10031005553,"zip_sha256":"06df0f8dcc38d67720526e804ad9f2ad2d58ed39f26e8cdf4f7b5c2c1534e35c","purpose":"exact public Barnyard V7 notebook and pull"},
+    {"run":34155238754,"artifact":10030763484,"zip_sha256":"68f78694fa56976fa1476ffd1d1fb6b3bfd4935392dfd0023a170c7efcd35e62","purpose":"existing pinned Arlene/Apex source; all 88 manifest members verified"},
+    {"run":34156985088,"artifact":10031295582,"zip_sha256":"0c87ac46133a57d47284488cf9e010cde3779726459853fec2202ec04aa1287d","purpose":"Kaito/Breaking exact historical source; implementation/tests byte equality confirmed"}
+  ],
+  "source_files": [
+    {
+      "id":"barnyard-v7",
+      "files":[{"path":"barnyard-main.py","bytes":27244,"sha256":"997e6bfc5234534e246e945bc61c87858ebf997ab85b0a5c9427dd4ed710f1b6","ast_sha256":"94b1e9747de6455a7a5826b7a328326402629c46303d9507770e05cb541ef168"}],
+      "routes":[{"id":"barnyard-main.py:json@17","turns":719,"sha256":"04354aa03513bfc1dcfbbeaf25a4a2074317681bd3c839a9550db21fa3e0d406"}]
+    },
+    {
+      "id":"arlene-v14",
+      "files":[{"path":"vendor/arlene.py","bytes":46342,"sha256":"1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4","ast_sha256":"74030505d9c454468d72749f0849108baf671a571a50ba5983d02698258fac69"}],
+      "routes":[
+        {"id":"vendor/arlene.py:json@387/7015cc00acfa4922","turns":720,"sha256":"3d635653f186b19dd80cdaacd64e80fb2e3a0a475518bab3ca7cf6f67729bdc2"},
+        {"id":"vendor/arlene.py:json@387/a84d06f1d12add7c","turns":720,"sha256":"0a5e89f932e11874ad1d2c700d12e957515a6b02587299e39533ffd4eccdd39b"},
+        {"id":"vendor/arlene.py:json@387/ab9669b9abfbea4e","turns":720,"sha256":"d885e4f367f7b5530470ddc580d6ad38b0ca4d8547e2e09b92a017f213e47dc4"},
+        {"id":"vendor/arlene.py:json@387/dc76e4003029ac51","turns":720,"sha256":"b5ae17cf8cd83e94fd29567f32b50b5960da4df1eb7175af0fef99bcb5fb0ea6"}
+      ]
+    },
+    {
+      "id":"apex-v7",
+      "files":[
+        {"path":"vendor/apex/main.py","bytes":24996,"sha256":"1f7cd5fb8a16585936d2562a3667f85bb6661688718ef58f73006de66148354a","ast_sha256":"64746dd2bd0d148a121fadb9e64c8464eae43754beab8a0c0d76566a9d39dab4"},
+        {"path":"vendor/apex/source/policy.cpp","bytes":4633,"sha256":"74b5d7e778c0f4a6e2f0e0725077943dbc319b7d0f5ace4c9070a4ae69db51b3"},
+        {"path":"vendor/apex/source/tape.inc","bytes":108478,"sha256":"30b724c3c905d0c03e4ef38d36f96fb7acbd6abef5371abbedee36ea3717e09f"},
+        {"path":"vendor/apex/source/include/runtime_types.hpp","bytes":2914,"sha256":"0010c15079e2114e36b5de8b281375db83f202e769e30b27cc437fc0e3ad11f1"},
+        {"path":"vendor/apex/source/include/six_day_budget_guard.hpp","bytes":8052,"sha256":"6835d614131c6ca6c57d86e941891d1fea3fa44237f61fd1ab9ac876dd4ebc25"},
+        {"path":"vendor/apex/source/include/policy_plugin_abi.hpp","bytes":509,"sha256":"4eb7647da3660688685a8ff032bd1ada6558605a27ae6b86fc338a91f8b45476"},
+        {"path":"vendor/apex/submission_bridge.cpp","bytes":5117,"sha256":"a92ca5b78cae850987a7262122eb83ec9f9a313430e906e1ac08bfe1fd887ff1"}
+      ],
+      "routes":[
+        {"id":"vendor/apex/source/tape.inc:native/0","turns":719,"sha256":"6c56840b9510e0688da2fbec47e8f89583c63a0124fa4c8801fa5d93c197226b"},
+        {"id":"vendor/apex/source/tape.inc:native/1","turns":719,"sha256":"c104d20cb70f2844e259b9b665bf5e42586ef98b53d3721ee5001bc5657b5c0a"}
+      ]
+    },
+    {
+      "id":"kaito-v43",
+      "files":[{"path":"kaito_v43.py","bytes":63309,"sha256":"69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3","ast_sha256":"826f55904f3c0b32a33c4ddff1db506a3d49a008d3fa5973f3e0b7686a0c7824"}],
+      "routes":[
+        {"id":"kaito_v43.py:json@345/default","turns":719,"sha256":"ca788fddbc3ef4b9d4b5f68828f26421cf2e750788827750f6dbef1c913ea5ae"},
+        {"id":"kaito_v43.py:json@345/yarn_first","turns":719,"sha256":"81b1f33b1ec34feb187dd49efa6b406e57f07a1a0fa69fe89435da2a76ab9938"},
+        {"id":"kaito_v43.py:json@345/yarn_second","turns":719,"sha256":"b23527929389d05c08017a2a79bfdb1e09901b0cebcda79f8553e7adda0ca742"}
+      ]
+    },
+    {
+      "id":"breaking-the-tie-v12",
+      "files":[{"path":"submission.py","bytes":26585,"sha256":"df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5","ast_sha256":"bc600d0a9528a8aa3d654a36500f47a3f17ce2075df95441b0bebdc2558b8e7c"}],
+      "routes":[{"id":"submission.py:json@14","turns":720,"sha256":"3f79645a4d86fc07d8c4d97fae2ed7bfd9bd2e4bc2be23aa1345169aa1d2c679"}]
+    }
+  ],
+  "aligned_pair_columns":["reference","route","candidate_turns","reference_turns","aligned_turns","equal_actions","unit_equal_turns","market_equal_turns","identical_full_route"],
+  "aligned_pairs":[
+    ["arlene-v14","vendor/arlene.py:json@387/7015cc00acfa4922",719,720,719,0,2,330,false],
+    ["arlene-v14","vendor/arlene.py:json@387/a84d06f1d12add7c",719,720,719,0,3,325,false],
+    ["arlene-v14","vendor/arlene.py:json@387/ab9669b9abfbea4e",719,720,719,0,2,326,false],
+    ["arlene-v14","vendor/arlene.py:json@387/dc76e4003029ac51",719,720,719,0,2,327,false],
+    ["apex-v7","vendor/apex/source/tape.inc:native/0",719,719,719,0,1,319,false],
+    ["apex-v7","vendor/apex/source/tape.inc:native/1",719,719,719,0,1,310,false],
+    ["kaito-v43","kaito_v43.py:json@345/default",719,719,719,0,1,281,false],
+    ["kaito-v43","kaito_v43.py:json@345/yarn_first",719,719,719,0,1,366,false],
+    ["kaito-v43","kaito_v43.py:json@345/yarn_second",719,719,719,0,1,356,false],
+    ["breaking-the-tie-v12","submission.py:json@14",719,720,719,0,8,333,false]
+  ],
+  "all_reference_code_file_multisets_distinct":true,
+  "byte_identical_files":[],
+  "ast_identical_files":[],
+  "limitations":"Source/data overlap is not authorship, runtime equivalence, strength, or license permission. Unrecognized dynamic data remains unmeasured; evidence documents are hash-preserved, not legally interpreted. Comparisons retain exact list/argument forms and compare same-index turns only. No geometry, actor permutation, time shift, semantic normalization, or source-ancestry inference. Kaito embedded source modules are retained in file hashes, not executed or separately semantically analyzed. AST hash strings depend on the Python AST version; cross-file equality is computed within one interpreter."
+}

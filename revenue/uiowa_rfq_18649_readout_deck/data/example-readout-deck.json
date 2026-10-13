@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "deck_id": "AIS-READOUT-EXAMPLE-2026",
+    "report_ref": "AIS-ASSESS-EXAMPLE-2026",
+    "title": "AIS assessment readout - example deck (SYNTHETIC)",
+    "audience": "AIS leadership, with the service owners in the room",
+    "session_minutes": 45,
+    "fiction_notice": "FICTION. Built only to exercise the deck-agreement engine against the example report. Not a University of Iowa readout and not a real assessment result."
+  },
+  "slides": [
+    {
+      "id": "S-01", "section": "purpose", "track": "core", "minutes": 3,
+      "title": "Why we are in this room",
+      "bullets": [
+        "We assessed three service groups against four areas, using records you supplied.",
+        "This session gives you four decisions, not a document to read later.",
+        "Anything we could not evidence is shown as UNKNOWN rather than estimated."
+      ],
+      "claims": [],
+      "appendix_support": [],
+      "speaker_notes": [
+        "Open by naming the three decisions on the last slide so the room knows where this lands.",
+        "Say plainly that UNKNOWN means we did not have the record, not that the practice is absent."
+      ]
+    },
+    {
+      "id": "S-02", "section": "evidence", "track": "core", "minutes": 4,
+      "title": "What this rests on",
+      "bullets": [
+        "Seven supplied sources, each cited by exact version and locator.",
+        "Two sampled record exports, twelve records each, drawn from the assessed window.",
+        "Where one cycle of a record was supplied, we say so instead of generalising from it."
+      ],
+      "claims": [
+        {"type": "evidence", "cites": "EV-004", "text": "IAM deployment records, twelve sampled."},
+        {"type": "evidence", "cites": "EV-007", "text": "IAM access review, one cycle only."}
+      ],
+      "appendix_support": ["S-A1"],
+      "speaker_notes": [
+        "If anyone challenges a number, go straight to S-A1 and read the locator aloud.",
+        "Prompt: is there a second access-review cycle we did not receive?"
+      ]
+    },
+    {
+      "id": "S-03", "section": "strengths", "track": "core", "minutes": 6,
+      "title": "What is already working",
+      "bullets": [
+        "ESS change management: every sampled change carried a recorded test result.",
+        "That is the practice the two priority gaps should be measured against.",
+        "One further candidate strength is not corroborated yet and is held back."
+      ],
+      "claims": [
+        {"type": "strength", "cites": "F-001", "measure": "changes_with_recorded_test_result", "value": 12,
+         "unit": "of 12 sampled changes", "text": "ESS recorded a test result on every sampled change."}
+      ],
+      "appendix_support": ["S-A6"],
+      "speaker_notes": [
+        "Name the ESS practice as the internal model - it is cheaper to copy a local practice than to import one.",
+        "If asked about IAM access review: one cycle was supplied, so it is a candidate, not a validated strength."
+      ]
+    },
+    {
+      "id": "S-04", "section": "priority_findings", "track": "core", "minutes": 10,
+      "title": "The two gaps worth your time",
+      "bullets": [
+        "IAM deployments: the procedure requires two approvals; most sampled records show one.",
+        "RIS recovery: backups complete, but no restoration was exercised in the window.",
+        "Neither is a finding about individuals; both are about the record the process leaves."
+      ],
+      "claims": [
+        {"type": "gap", "cites": "F-002", "measure": "single_approval_rate_pct", "value": 58, "unit": "percent",
+         "text": "58 percent of sampled IAM deployments record a single approval."},
+        {"type": "gap", "cites": "F-003", "measure": "backup_completion_rate_pct", "value": 99, "unit": "percent",
+         "text": "RIS backup jobs complete at 99 percent, which is not the same as a demonstrated restore."},
+        {"type": "gap", "cites": "F-003", "measure": "demonstrated_recovery_time_hours", "value": "UNKNOWN", "unit": "hours",
+         "text": "Demonstrated recovery time is UNKNOWN - no restoration exercise was recorded."},
+        {"type": "gap", "cites": "F-004", "measure": "services_without_recorded_alert_owner", "value": 2,
+         "unit": "of 9 services", "text": "Two ESS services have no recorded alert routing owner."}
+      ],
+      "appendix_support": ["S-A2", "S-A3", "S-A7"],
+      "speaker_notes": [
+        "Lead with the approval gap: it is the one with a cheap, checkable fix.",
+        "Do not let 99 percent backup completion stand in for recovery - say the difference out loud.",
+        "Prompt: were the five two-approval deployments different in kind, or just better recorded?"
+      ]
+    },
+    {
+      "id": "S-05", "section": "roadmap", "track": "core", "minutes": 8,
+      "title": "Sequence, not a transformation",
+      "bullets": [
+        "0-90: enforce the approval record (R-001) and complete the alert routing table (R-003).",
+        "90-180: one documented restoration exercise per critical dataset (R-002).",
+        "180+: extend both practices to the remaining groups (R-004) once the first phases report."
+      ],
+      "claims": [
+        {"type": "phase", "cites": "R-001", "phase": "0-90", "text": "Approval record enforced in the first phase."},
+        {"type": "phase", "cites": "R-003", "phase": "0-90", "text": "Alert routing owners recorded in the first phase."},
+        {"type": "phase", "cites": "R-002", "phase": "90-180", "text": "Restoration exercise in the second phase."},
+        {"type": "phase", "cites": "R-004", "phase": "180+", "text": "Extension to the remaining groups last."}
+      ],
+      "appendix_support": ["S-A4"],
+      "speaker_notes": [
+        "Say what each phase produces as evidence; do not promise a maturity level.",
+        "R-004 deliberately waits on the first two phases reporting - that is the dependency, not padding."
+      ]
+    },
+    {
+      "id": "S-06", "section": "resources", "track": "core", "minutes": 6,
+      "title": "What it costs, and what we cannot cost yet",
+      "bullets": [
+        "R-001: 80 staff-hours one-time, 4 staff-hours per month recurring.",
+        "R-003: 16 staff-hours one-time; review cadence not agreed, so recurring is UNKNOWN.",
+        "R-002 cannot be costed until dataset sizes and the restore target are supplied."
+      ],
+      "claims": [
+        {"type": "resource", "cites": "RES-001", "measure": "one_time_effort", "value": 80, "unit": "staff-hours",
+         "text": "R-001 one-time effort."},
+        {"type": "resource", "cites": "RES-001", "measure": "recurring_effort", "value": 4, "unit": "staff-hours per month",
+         "text": "R-001 recurring effort."},
+        {"type": "resource", "cites": "RES-003", "measure": "one_time_effort", "value": 16, "unit": "staff-hours",
+         "text": "R-003 one-time effort."},
+        {"type": "resource", "cites": "RES-002", "measure": "one_time_effort", "value": "UNKNOWN", "unit": "staff-hours",
+         "text": "R-002 one-time effort is UNKNOWN pending dataset sizes and restore target."}
+      ],
+      "appendix_support": ["S-A5"],
+      "speaker_notes": [
+        "Give the two real numbers first, then the UNKNOWN, so the gap reads as scope and not as evasion.",
+        "Prompt: who can supply dataset sizes and the restore target, and by when?"
+      ]
+    },
+    {
+      "id": "S-07", "section": "decisions", "track": "core", "minutes": 8,
+      "title": "What we need from you today",
+      "bullets": [
+        "D-001: enforce the two-approval rule in the IAM pipeline (0-90).",
+        "D-002: fund a restoration exercise for critical RIS datasets (90-180).",
+        "D-003: assign alert routing owners for the two unrecorded ESS services (0-90)."
+      ],
+      "claims": [
+        {"type": "decision", "cites": "D-001", "text": "Enforce, enforce with exceptions, or defer pending a wider sample."},
+        {"type": "decision", "cites": "D-002", "text": "Fund per dataset, pilot one, or defer pending the inventory."},
+        {"type": "decision", "cites": "D-003", "text": "Assign to service owners, to monitoring, or defer to the next review."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": [
+        "Take the decisions in order and record the chosen option and its owner on the spot.",
+        "A defer is a legitimate outcome - record what evidence would change it."
+      ]
+    },
+    {
+      "id": "S-A1", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "Appendix - evidence register",
+      "bullets": [
+        "EV-004 iam-deploy-export-2026H1.csv rows 2-13, version 2026-07-01.",
+        "EV-007 iam-access-review-2026Q1.pdf p.1-2, version 2026-04-03, single cycle.",
+        "Each figure in the main body resolves to one of these locators."
+      ],
+      "claims": [
+        {"type": "evidence", "cites": "EV-004", "text": "Sampled IAM deployment records."},
+        {"type": "evidence", "cites": "EV-007", "text": "Single supplied access-review cycle."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": ["Read the locator, not the conclusion, when a number is challenged."]
+    },
+    {
+      "id": "S-A2", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "Appendix - IAM approval sampling detail",
+      "bullets": [
+        "Twelve sampled deployments; seven record one approval, five record two.",
+        "The procedure text requiring two approvals is IAM-DEP-PROC v2 section 5.1.",
+        "The sample is a sample - whether it is representative is an open input."
+      ],
+      "claims": [
+        {"type": "gap", "cites": "F-002", "measure": "deployments_with_single_approval", "value": 7,
+         "unit": "of 12 sampled deployments", "text": "Seven of twelve sampled deployments record one approval."},
+        {"type": "gap", "cites": "F-002", "measure": "single_approval_rate_pct", "value": 58, "unit": "percent",
+         "text": "58 percent, rounded from seven of twelve."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": ["If challenged on representativeness, agree it is open and name the wider window as the test."]
+    },
+    {
+      "id": "S-A3", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "Appendix - RIS backup versus restoration",
+      "bullets": [
+        "Backup completion is read from the job log; restoration is a separate record that does not exist here.",
+        "No restoration exercise appears in the assessed window, so recovery time stays UNKNOWN.",
+        "This is an absent record, not an observed failure to recover."
+      ],
+      "claims": [
+        {"type": "gap", "cites": "F-003", "measure": "backup_completion_rate_pct", "value": 99, "unit": "percent",
+         "text": "Backup jobs complete at 99 percent in the fictional log."},
+        {"type": "gap", "cites": "F-003", "measure": "demonstrated_recovery_time_hours", "value": "UNKNOWN", "unit": "hours",
+         "text": "Recovery time is not assessed."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": ["Make the distinction explicit: a completed backup is an input to recovery, not evidence of it."]
+    },
+    {
+      "id": "S-A4", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "Appendix - phase dependencies",
+      "bullets": [
+        "R-004 depends on R-001 and R-002 having reported, which is why it sits at 180+.",
+        "R-001 and R-003 touch different systems and different owners, so they run in parallel in 0-90.",
+        "Each phase is described by the evidence it produces, not by a maturity level."
+      ],
+      "claims": [
+        {"type": "phase", "cites": "R-004", "phase": "180+", "text": "Extension waits on the first two phases."},
+        {"type": "phase", "cites": "R-001", "phase": "0-90", "text": "Approval enforcement in the first phase."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": ["If leadership wants R-004 pulled forward, name what evidence would be missing."]
+    },
+    {
+      "id": "S-A5", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "Appendix - resource assumptions and open inputs",
+      "bullets": [
+        "R-001 80 staff-hours covers the pipeline change and the backfill of approver records.",
+        "R-002 cannot be estimated without dataset sizes and the restore target.",
+        "Every UNKNOWN here is an input we asked for and did not receive."
+      ],
+      "claims": [
+        {"type": "resource", "cites": "RES-001", "measure": "one_time_effort", "value": 80, "unit": "staff-hours",
+         "text": "Pipeline change plus backfill."},
+        {"type": "resource", "cites": "RES-002", "measure": "recurring_effort", "value": "UNKNOWN",
+         "unit": "staff-hours per month", "text": "Exercise cadence not agreed."},
+        {"type": "resource", "cites": "RES-003", "measure": "one_time_effort", "value": 16, "unit": "staff-hours",
+         "text": "Complete and verify the routing table."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": ["Offer to convert any UNKNOWN into an estimate as soon as the named input arrives."]
+    },
+    {
+      "id": "S-A6", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "Appendix - ESS change sampling detail",
+      "bullets": [
+        "Twelve sampled ESS changes; twelve carry a recorded test result.",
+        "Procedure text is ESS-CM-PROC v4 section 3.2; records are ess-change-export-2026H1.csv.",
+        "This is the practice R-001 asks IAM to match for approvals."
+      ],
+      "claims": [
+        {"type": "strength", "cites": "F-001", "measure": "changes_with_recorded_test_result", "value": 12,
+         "unit": "of 12 sampled changes", "text": "Twelve of twelve sampled ESS changes recorded a test result."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": ["Use this to answer 'can we actually do this here' - the answer is that one group already does."]
+    },
+    {
+      "id": "S-A7", "section": "appendix", "track": "appendix", "minutes": 0,
+      "title": "Appendix - ESS alert routing coverage",
+      "bullets": [
+        "Nine ESS services in the routing table; seven name a routing owner, two do not.",
+        "The two unnamed services are the subject of decision D-003.",
+        "An unrecorded owner is a gap in the record, not proof that nobody responds."
+      ],
+      "claims": [
+        {"type": "gap", "cites": "F-004", "measure": "services_without_recorded_alert_owner", "value": 2,
+         "unit": "of 9 services", "text": "Two of nine ESS services have no recorded alert routing owner."}
+      ],
+      "appendix_support": [],
+      "speaker_notes": ["If someone says 'we all know who responds', ask where that is written down."]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+name: Kaggriculture public-opponent benchmark
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-opponent-bench/**"
+      - ".github/workflows/flora-kag-opponent-bench.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/kaggriculture/cloud-opponent-bench/**"
+      - ".github/workflows/flora-kag-opponent-bench.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  public-panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            revenue/kaggriculture
+            .github/scripts
+      - name: Prepare exact public sources and pinned official engine
+        run: |
+          mkdir -p "$RUNNER_TEMP/pulls" "$RUNNER_TEMP/agents" "$RUNNER_TEMP/engine" "$RUNNER_TEMP/results"
+          curl -fsSL 'https://www.kaggle.com/api/v1/kernels/pull/kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid' -o "$RUNNER_TEMP/pulls/kaito.json"
+          curl -fsSL 'https://www.kaggle.com/api/v1/kernels/pull/flexonafft/kaggriculture-multi-route-farming-agent' -o "$RUNNER_TEMP/pulls/igor.json"
+          python -B revenue/kaggriculture/cloud-opponent-bench/prepare.py \
+            --kaito "$RUNNER_TEMP/pulls/kaito.json" --igor "$RUNNER_TEMP/pulls/igor.json" \
+            --output "$RUNNER_TEMP/agents" > "$RUNNER_TEMP/results/public-source-manifest.json"
+          python -B revenue/kaggriculture/cloud-eval/evaluate.py \
+            --prepare-engine "$RUNNER_TEMP/engine" > "$RUNNER_TEMP/results/engine-source.json"
+          docker pull python:3.11-slim
+          docker image inspect python:3.11-slim --format '{{.Id}}' > "$RUNNER_TEMP/results/runtime-image.txt"
+          git rev-parse HEAD > "$RUNNER_TEMP/results/checkout-commit.txt"
+      - name: Focused tests and both-seat games with no network
+        run: |
+          docker run --rm --network none --read-only --cpus 1.6 --memory 6656m \
+            --pids-limit 128 --cap-drop ALL --security-opt no-new-privileges \
+            --user "$(id -u):$(id -g)" --tmpfs /tmp:rw,nosuid,nodev,size=128m,mode=1777 \
+            -v "$GITHUB_WORKSPACE/revenue/kaggriculture:/work:ro" \
+            -v "$RUNNER_TEMP/agents:/agents:ro" -v "$RUNNER_TEMP/engine:/engine:ro" \
+            -v "$RUNNER_TEMP/results:/results:rw" -w /work/cloud-opponent-bench \
+            -e PYTHONDONTWRITEBYTECODE=1 python:3.11-slim sh -ec '
+              python -B test_opponent_bench.py > /results/tests.log 2>&1
+              python -B benchmark.py --engine-dir /engine --sources-dir /agents \
+                --phase development --output /results/development.json
+              python -B benchmark.py --engine-dir /engine --sources-dir /agents \
+                --phase validation --output /results/validation.json
+            '
+      - name: Current main readback
+        if: github.ref == 'refs/heads/main'
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: |
+          git fetch --filter=blob:none --depth=100 origin main
+          git diff --exit-code HEAD origin/main -- revenue/kaggriculture/cloud-opponent-bench .github/workflows/flora-kag-opponent-bench.yml
+          python .github/scripts/audit_git_terminal.py --target-ref origin/main \
+            --expected-commit "$EXPECTED_COMMIT" \
+            --required-path revenue/kaggriculture/cloud-opponent-bench/prepare.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kaggriculture-public-opponents-${{ github.run_id }}
+          path: ${{ runner.temp }}/results/
+          retention-days: 30
+          if-no-files-found: error

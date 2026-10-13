@@ -1,0 +1,281 @@
+{
+  "opportunities": [
+    {
+      "deadline_utc": "2026-09-14T15:00:00Z",
+      "gates": [
+        {
+          "action_key": "LEGAL_ENTITY_CONFIRM",
+          "action_label": "Confirm current legal entity facts",
+          "blocking": true,
+          "category": "LEGAL",
+          "evidence": [],
+          "generation": 1,
+          "id": "alpha-entity",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "af60830aa073c612eae340d462371859438ca6cfc3aeef537fbc515b7245f73f",
+          "status": "MISSING"
+        },
+        {
+          "action_key": "TAX_VENDOR_FORM",
+          "action_label": "Prepare buyer-specific tax/vendor form",
+          "blocking": true,
+          "category": "TAX",
+          "evidence": [],
+          "generation": 1,
+          "id": "alpha-tax",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "c886c483c61ee11d07b0831b1b76e24e5220d303fdc6ac0911588b2b20d38ed2",
+          "status": "MISSING"
+        }
+      ],
+      "id": "alpha",
+      "owner_ref": "owner-alpha",
+      "route_state": "PRIME",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": true,
+        "packet_id": "pkt-alpha",
+        "packet_sha256": "5cb42539b52ce85b4907941c492ab675370ef0360c9459d5c63952275ab4d9f7"
+      }
+    },
+    {
+      "deadline_utc": "2026-09-15T17:00:00Z",
+      "gates": [
+        {
+          "action_key": "LEGAL_ENTITY_CONFIRM",
+          "action_label": "Confirm current legal entity facts",
+          "blocking": true,
+          "category": "LEGAL",
+          "evidence": [],
+          "generation": 1,
+          "id": "beta-entity",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "af60830aa073c612eae340d462371859438ca6cfc3aeef537fbc515b7245f73f",
+          "status": "MISSING"
+        },
+        {
+          "action_key": "TAX_VENDOR_FORM",
+          "action_label": "Prepare buyer-specific tax/vendor form",
+          "blocking": true,
+          "category": "TAX",
+          "evidence": [],
+          "generation": 1,
+          "id": "beta-tax",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "6c9ac8449bcea67701d82869b803cd5175f9df061496db1c4278ee7257e5f5d4",
+          "status": "MISSING"
+        }
+      ],
+      "id": "beta",
+      "owner_ref": "owner-beta",
+      "route_state": "PRIME",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": true,
+        "packet_id": "pkt-beta",
+        "packet_sha256": "3a446ae901b848197af711271cf4a448b21ac5d46cc75eccd190c60e8d7d9f5c"
+      }
+    },
+    {
+      "deadline_utc": "2026-09-16T20:00:00Z",
+      "gates": [
+        {
+          "action_key": "LEGAL_ENTITY_CONFIRM",
+          "action_label": "Confirm current legal entity facts",
+          "blocking": true,
+          "category": "LEGAL",
+          "evidence": [],
+          "generation": 1,
+          "id": "gamma-entity",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "af60830aa073c612eae340d462371859438ca6cfc3aeef537fbc515b7245f73f",
+          "status": "MISSING"
+        },
+        {
+          "action_key": "PARTNER_COMMITMENT",
+          "action_label": "Await named partner commitment",
+          "blocking": true,
+          "category": "PARTNER",
+          "evidence": [],
+          "generation": 1,
+          "id": "gamma-partner",
+          "owner_required": false,
+          "prerequisites": [],
+          "requirement_sha256": "902752c582f73a1dae821f0e6f20c0e2aff32e111d10f67a8a242baac8f384bf",
+          "status": "PENDING_EXTERNAL"
+        }
+      ],
+      "id": "gamma",
+      "owner_ref": "owner-gamma",
+      "route_state": "TEAMING",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": true,
+        "packet_id": "pkt-gamma",
+        "packet_sha256": "afa242d414731570d97950665ae6c941717cfd6a2ca7ee157a23afcca098cfa4"
+      }
+    },
+    {
+      "deadline_utc": "2026-09-17T20:00:00Z",
+      "gates": [
+        {
+          "action_key": "FINANCIAL_EVIDENCE",
+          "action_label": "Assemble qualifying financial evidence",
+          "blocking": true,
+          "category": "FINANCE",
+          "evidence": [],
+          "generation": 1,
+          "id": "delta-fin",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "78c527d4fb7aa75e8b5fce22f3c2e9d33e1978e5567e1b410524e78ce1748614",
+          "status": "MISSING"
+        },
+        {
+          "action_key": "SIGN_CERTIFICATION",
+          "action_label": "Sign buyer certification",
+          "blocking": true,
+          "category": "SIGNATURE",
+          "evidence": [],
+          "generation": 1,
+          "id": "delta-sign",
+          "owner_required": true,
+          "prerequisites": [
+            "delta-fin"
+          ],
+          "requirement_sha256": "686288053f5439aee7cd70cd238798a722a291e98c3d82109e5227a01e0b1da4",
+          "status": "MISSING"
+        }
+      ],
+      "id": "delta",
+      "owner_ref": "owner-delta",
+      "route_state": "PRIME",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": true,
+        "packet_id": "pkt-delta",
+        "packet_sha256": "1b10f7a55c21bf58f8f1d97522ba8724ef3689f910b9b510a6844c4c2079b430"
+      }
+    },
+    {
+      "deadline_utc": "2026-09-14T12:00:00Z",
+      "gates": [
+        {
+          "action_key": "REFERENCE_PERMISSION",
+          "action_label": "Confirm reference permission",
+          "blocking": true,
+          "category": "REFERENCE",
+          "evidence": [
+            {
+              "ref": "proof-epsilon-proof",
+              "sha256": "53cc2dd0030ae58be587c1c853273f984a901d9cecb02c2aeddd1a0c57e56197"
+            }
+          ],
+          "generation": 1,
+          "id": "epsilon-proof",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "49991e50d7e267d25b5b9bb9f32ae80edd623587edf2a9d696138a7a978a23a6",
+          "status": "PROVEN"
+        }
+      ],
+      "id": "epsilon",
+      "owner_ref": "owner-epsilon",
+      "route_state": "PRIME",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": true,
+        "packet_id": "pkt-epsilon",
+        "packet_sha256": "27fc4b986544a8f843a01ec67259abf24e2fffb159d4df88322fc8ec5fe72416"
+      }
+    },
+    {
+      "deadline_utc": "2026-09-14T10:00:00Z",
+      "gates": [
+        {
+          "action_key": "PORTAL_ACCOUNT",
+          "action_label": "Establish buyer portal account",
+          "blocking": true,
+          "category": "PORTAL",
+          "evidence": [],
+          "generation": 1,
+          "id": "zeta-portal",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "fde0ff7ec5fce59373163640a8609c044d87b54c1288ac476ad660a256d375f8",
+          "status": "MISSING"
+        }
+      ],
+      "id": "zeta",
+      "owner_ref": "owner-zeta",
+      "route_state": "PRIME",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": false,
+        "packet_id": "pkt-zeta",
+        "packet_sha256": "19bfafa7cd19aee2af480693b9a6129df94ebd83a59b21dc7f49d7d7f53dce73"
+      }
+    },
+    {
+      "deadline_utc": "2026-09-18T10:00:00Z",
+      "gates": [
+        {
+          "action_key": "PRICING_APPROVAL",
+          "action_label": "Approve pricing",
+          "blocking": true,
+          "category": "PRICING",
+          "evidence": [],
+          "generation": 1,
+          "id": "eta-price",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "c02af39127d28414f2b86f15a3b35e7dc5e648ba559778252232112d72f56667",
+          "status": "MISSING"
+        }
+      ],
+      "id": "eta",
+      "owner_ref": "owner-eta",
+      "route_state": "NO_BID",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": true,
+        "packet_id": "pkt-eta",
+        "packet_sha256": "2465465e4d8c0f49a64f752624f7705ca485596c0ea16bf87fc73700da3ca3ce"
+      }
+    },
+    {
+      "deadline_utc": "2026-09-13T22:00:00Z",
+      "gates": [
+        {
+          "action_key": "SIGN_CERTIFICATION",
+          "action_label": "Sign expired certification",
+          "blocking": true,
+          "category": "SIGNATURE",
+          "evidence": [],
+          "generation": 1,
+          "id": "theta-sign",
+          "owner_required": true,
+          "prerequisites": [],
+          "requirement_sha256": "8a0c003b9fd23b3efc09df36c7679aa56634d531dc22badbb4be5571ea61ff48",
+          "status": "MISSING"
+        }
+      ],
+      "id": "theta",
+      "owner_ref": "owner-theta",
+      "route_state": "PRIME",
+      "source": {
+        "captured_at": "2026-09-14T01:20:00Z",
+        "complete": true,
+        "packet_id": "pkt-theta",
+        "packet_sha256": "fbf2d1d2cae50b10c1259df5883415803ded14d42d87b1f16921784f4f7a84e9"
+      }
+    }
+  ],
+  "schema_version": 1,
+  "snapshot_id": "synthetic-cross-bid-portfolio-v1"
+}

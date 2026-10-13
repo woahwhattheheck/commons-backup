@@ -1,0 +1,52 @@
+name: Dusty layout revision evidence gate
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/dusty_layout_revision_evidence_gate/**'
+      - '.github/workflows/dusty-layout-revision-evidence-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/dusty_layout_revision_evidence_gate/**'
+      - '.github/workflows/dusty-layout-revision-evidence-gate.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Unit tests
+        run: python -m unittest discover -s revenue/dusty_layout_revision_evidence_gate -p 'test_*.py' -v
+      - name: Optimized-mode tests
+        run: python -O -m unittest discover -s revenue/dusty_layout_revision_evidence_gate -p 'test_*.py' -v
+      - name: Acceptance corpus
+        run: |
+          python revenue/dusty_layout_revision_evidence_gate/acceptance_fixture.py --output /tmp/dusty-120.json
+          python revenue/dusty_layout_revision_evidence_gate/gate.py /tmp/dusty-120.json --output /tmp/dusty-receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path('/tmp/dusty-receipt.json').read_text())
+          expected = {
+              'DESIGN_HASH_MISMATCH', 'DESIGN_REVISION_MISMATCH', 'TRADE_SIGNOFF_STALE',
+              'UNIT_SCALE_MISMATCH', 'CONTROL_POINT_SURVEY_MISMATCH', 'STATION_VERIFICATION_FAILED',
+              'PORTAL_QR_MISMATCH', 'RUNTIME_REPORT_MISMATCH',
+          }
+          assert receipt['jobs_total'] == 120, receipt
+          assert receipt['clean_count'] == 96, receipt
+          assert receipt['exception_count'] == 24, receipt
+          assert len({x['job_id'] for x in receipt['exceptions']}) == 24, receipt
+          assert set(receipt['reason_counts']) == expected, receipt
+          assert all(receipt['reason_counts'][reason] == 3 for reason in expected), receipt
+          assert receipt['control_commands'] == [], receipt
+          assert len(receipt['receipt_sha256']) == 64, receipt
+          PY

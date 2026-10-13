@@ -1,0 +1,90 @@
+
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<!-- AUTHORSHIP: written by an AI assistant, not the owner. Claims about the substrate
+     here are assistant inference unless quoting the owner. -->
+<meta charset="utf-8">
+<title>MUHLNICKEL — live surface</title>
+<style>
+ html,body{margin:0;background:#05070c;color:#c8d4e2;font:12px Consolas,monospace;overflow:hidden}
+ #hud{position:fixed;top:0;left:0;right:0;padding:6px 10px;background:#080d14;
+      border-bottom:1px solid #1c2732;z-index:2;white-space:nowrap;overflow:hidden}
+ #hud b{color:#39efc9;font-weight:400} #hud .w{color:#ffb454}
+ canvas{position:fixed;top:29px;left:0;image-rendering:pixelated}
+</style>
+<div id="hud">…</div>
+<canvas id="c"></canvas>
+<script>
+// THE HOST BLITS. IT DOES NOT COMPUTE THE PICTURE.
+// There is no palette here, no colour ramp, no injectivity check and no per-cell assembly.
+// R, G and B are produced by gates inside titan.gguf: R=(p>>1)&0xFF, G=p&0xFF, B=(~p)&0xFF
+// off each cell's popcount, 24 output wires per cell. This file reads those wires, packs the
+// bit-per-wire plane into bytes, and hands the result to putImageData. Packing bits into a
+// byte is transcription of values the circuit already decided - it is not deciding anything.
+const cv=document.getElementById('c'), ctx=cv.getContext('2d'), hud=document.getElementById('hud');
+let where=null,frames=0,changes=0,lastHex=null,lastMark=null,markMoves=0;
+
+function packRGB(bits,cells){          // 24 wires -> r,g,b per cell. no arithmetic on colour.
+  const out=new Uint8Array(cells*3);
+  for(let c=0;c<cells;c++){
+    for(let k=0;k<3;k++){
+      let v=0, base=c*24+k*8;
+      for(let i=0;i<8;i++) v|=(bits[base+i]&1)<<i;
+      out[c*3+k]=v;
+    }
+  }
+  return out;
+}
+
+function paint(rgb,cells){
+  const aw=innerWidth, ah=innerHeight-29;
+  let cols=Math.ceil(Math.sqrt(cells*aw/ah)); cols=Math.max(1,Math.min(cols,cells));
+  const rows=Math.ceil(cells/cols), s=Math.max(1,Math.floor(Math.min(aw/cols,ah/rows)));
+  cv.width=cols*s; cv.height=rows*s;
+  const img=ctx.createImageData(cv.width,cv.height);
+  let drawn=0;
+  for(let i=0;i<cells;i++){
+    const r=rgb[i*3],g=rgb[i*3+1],b=rgb[i*3+2];
+    const cx=(i%cols)*s, cy=((i/cols)|0)*s;
+    for(let y=0;y<s;y++){
+      let o=((cy+y)*cv.width+cx)*4;
+      for(let x=0;x<s;x++){img.data[o]=r;img.data[o+1]=g;img.data[o+2]=b;img.data[o+3]=255;o+=4;}
+    }
+    drawn++;
+  }
+  ctx.putImageData(img,0,0);
+  return {drawn,cols,rows,cell:s};
+}
+
+async function frame(){
+  try{
+    const d=await (await fetch('/plane',{cache:'no-store'})).json();
+    const n=d.bytes, bits=new Uint8Array(n);
+    for(let i=0;i<n;i++) bits[i]=parseInt(d.hex.substr(i*2,2),16)&1;
+    const cells=where.cells;
+    const r=paint(packRGB(bits,cells),cells);
+    frames++;
+    if(lastHex!==null&&d.hex!==lastHex) changes++;
+    lastHex=d.hex;
+    if(lastMark!==null&&d.marker_before!==lastMark) markMoves++;
+    lastMark=d.marker_before;
+    const covers=where.tiles&&where.uncovered_bytes===0;
+    const pct=where.coverage_fraction*100;
+    hud.innerHTML=
+      (covers?`<b>COMPLETE VIEW</b>`:`<span class=w>TRUNCATED VIEW — `+
+        `${where.uncovered_bytes.toLocaleString()} B of the container reach nothing</span>`)+` · `+
+      `coverage <b>${where.coverage_bytes.toLocaleString()}</b>/`+
+      `<b>${where.container_bytes.toLocaleString()}</b> B `+
+      `(<b>${pct<0.001?pct.toExponential(2):pct.toFixed(4)}%</b>) · `+
+      `palette <b>IN CIRCUIT</b> · ${cells} cells × ${where.window_bytes} B · `+
+      `<b>${where.gates}</b> gates DEPTH <b>${where.depth_ticks}</b> ticks · `+
+      `plane ${d.bytes} wires · grid <b>${r.cols}×${r.rows}</b> · `+
+      `coherent <b>${d.coherent}</b> · frames <b>${frames}</b> · `+
+      `plane changed <b>${changes}</b> · window moved <b>${markMoves}</b>`;
+  }catch(e){ hud.innerHTML='<span class=w>surface error: '+e+'</span>'; }
+  requestAnimationFrame(frame);   // no throttle. the host does not govern the substrate's rate.
+}
+(async()=>{ where=await (await fetch('/where')).json(); frame(); })();
+addEventListener('resize',()=>{lastHex=null;});
+</script>

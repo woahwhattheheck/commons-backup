@@ -1,0 +1,26 @@
+name: Delivery Capacity Allocator
+on:
+  pull_request:
+    paths:
+      - 'revenue/delivery_capacity_allocator/**'
+      - '.github/workflows/delivery-capacity-allocator.yml'
+  push:
+    paths:
+      - 'revenue/delivery_capacity_allocator/**'
+      - '.github/workflows/delivery-capacity-allocator.yml'
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/delivery_capacity_allocator/*.py
+      - run: python -m unittest -v revenue.delivery_capacity_allocator.test_engine
+      - run: python -O -m unittest -v revenue.delivery_capacity_allocator.test_engine

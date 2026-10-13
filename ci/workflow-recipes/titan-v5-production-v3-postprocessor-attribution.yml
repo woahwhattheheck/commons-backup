@@ -1,0 +1,215 @@
+name: TITAN V5 production-v3 postprocessor attribution
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-v3-postprocessor-attribution/**'
+      - '.github/workflows/titan-v5-production-v3-postprocessor-attribution.yml'
+  push:
+    branches:
+      - 'astra/v5-production-v3-consumer-boundary-postmerge-20260912'
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-v3-postprocessor-attribution/**'
+      - '.github/workflows/titan-v5-production-v3-postprocessor-attribution.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v5-production-v3-postprocessor-attribution-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-and-materialization:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    env:
+      SCREEN_DIR: revenue/kaggriculture/cloud-execution-lab/candidates/v5/production-v3-postprocessor-attribution
+      CANDIDATE_DIR: revenue/kaggriculture/cloud-execution-lab/candidates/v5/selective-carrot
+      RELEASE_BASE: https://github.com/woahwhattheheck/commons/releases/download/titan-kaggriculture-gauntlet-20260912
+      V31_SHA: 5db3921f85efbc7596e5a1e7e198fc5f4644ceea43d8e8323c74ded7b4ba4361
+      CAP12_SHA: 5bf8e90602e145b353b9ff421fc514f2cf8af77ec549557e5e0acc1bc6bd67aa
+      RECOVERY_SHA: a44bf380cd79f967893ea90273be7dc92d6fd4f5e553aac0b02e457e85cf4ca8
+      DELIVERY_SHA: 0d42ee5fabb089745fa0064207654bfdf5df9466ba6499d91b6e685d4880cab1
+      PRODUCTION_SHA: 20f201161b14af7755146b08207593f9fa5df641d2f31e680792ea62c0e24239
+    steps:
+      - name: Checkout exact event head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+
+      - name: Assert exact checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '${{ github.event.pull_request.head.sha || github.sha }}'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Source contracts
+        working-directory: ${{ env.SCREEN_DIR }}
+        run: |
+          python -B -m py_compile materialize_stage_knockouts.py test_materialize_stage_knockouts.py
+          python -B -m unittest -v test_materialize_stage_knockouts.py
+          python -O -B -m unittest -v test_materialize_stage_knockouts.py
+
+      - name: Fetch immutable production inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          inputs="$RUNNER_TEMP/inputs"
+          mkdir -p "$inputs"
+          curl -fL --retry 3 --retry-all-errors "$RELEASE_BASE/titan-v3.1-56172377-5db3921f.tar.gz" -o "$inputs/v31.tar.gz"
+          curl -fL --retry 3 --retry-all-errors "$RELEASE_BASE/titan-v5-selective-carrot-cap12.tar.gz" -o "$inputs/cap12.tar.gz"
+          curl -fL --retry 3 --retry-all-errors "$RELEASE_BASE/v4-runtime-repair-route-recovery.tar.gz" -o "$inputs/route-recovery.tar.gz"
+          printf '%s  %s\n' "$V31_SHA" "$inputs/v31.tar.gz" | sha256sum -c -
+          printf '%s  %s\n' "$CAP12_SHA" "$inputs/cap12.tar.gz" | sha256sum -c -
+          printf '%s  %s\n' "$RECOVERY_SHA" "$inputs/route-recovery.tar.gz" | sha256sum -c -
+
+      - name: Reproduce exact production-v3
+        shell: bash
+        run: |
+          set -euo pipefail
+          inputs="$RUNNER_TEMP/inputs"
+          work="$RUNNER_TEMP/work"
+          mkdir -p "$work"
+          python -B "$CANDIDATE_DIR/build_delivery.py" \
+            --cap12 "$inputs/cap12.tar.gz" \
+            --route-recovery "$inputs/route-recovery.tar.gz" \
+            --out "$work/delivery" \
+            --tar "$work/delivery.tar.gz"
+          printf '%s  %s\n' "$DELIVERY_SHA" "$work/delivery.tar.gz" | sha256sum -c -
+          python -B "$CANDIDATE_DIR/build_production_recovery.py" \
+            --v31 "$inputs/v31.tar.gz" \
+            --delivery "$work/delivery.tar.gz" \
+            --out "$work/production" \
+            --tar "$work/production.tar.gz"
+          printf '%s  %s\n' "$PRODUCTION_SHA" "$work/production.tar.gz" | sha256sum -c -
+          grep -Fq "town_procurement is the tested nonterminal frozen composition" "$work/production/baseline_main.py"
+
+      - name: Materialize screen twice and verify matched consumer pair
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/work"
+          python -B "$SCREEN_DIR/materialize_stage_knockouts.py" \
+            --baseline "$work/production.tar.gz" \
+            --bundle "$work/screen-a.tar.gz" \
+            --receipt "$work/screen-a.json"
+          python -B "$SCREEN_DIR/materialize_stage_knockouts.py" \
+            --baseline "$work/production.tar.gz" \
+            --bundle "$work/screen-b.tar.gz" \
+            --receipt "$work/screen-b.json"
+          cmp "$work/screen-a.tar.gz" "$work/screen-b.tar.gz"
+          cmp "$work/screen-a.json" "$work/screen-b.json"
+          mkdir "$work/screen"
+          tar -xzf "$work/screen-a.tar.gz" -C "$work/screen"
+          python - "$work" <<'PY'
+          import hashlib, json, pathlib, sys, tarfile
+          root = pathlib.Path(sys.argv[1])
+
+          def digest(raw):
+              return hashlib.sha256(raw).hexdigest()
+
+          def file_digest(path):
+              return digest(path.read_bytes())
+
+          baseline_root = root / 'production'
+          baseline = {
+              path.relative_to(baseline_root).as_posix(): file_digest(path)
+              for path in sorted(baseline_root.rglob('*')) if path.is_file()
+          }
+          assert len(baseline) == 92, len(baseline)
+
+          receipt = json.loads((root / 'screen-a.json').read_text())
+          expected_arms = {
+              'seed_hire_off',
+              'inventory_spatial_off',
+              'late_market_off',
+              'consumer_boundary_control',
+              'consumer_boundary_parent',
+          }
+          assert receipt['schema'] == 'titan-v5-production-v3-postprocessor-attribution/v3'
+          assert receipt['baseline_archive_sha256'] == '20f201161b14af7755146b08207593f9fa5df641d2f31e680792ea62c0e24239'
+          assert receipt['baseline_members'] == baseline
+          assert set(receipt['arms']) == expected_arms
+          assert receipt['kaggle_submission_hold'] is True
+          pair = receipt['consumer_boundary_pair']
+          assert pair['control'] == 'consumer_boundary_control'
+          assert pair['treatment'] == 'consumer_boundary_parent'
+          assert pair['config_diff_keys'] == ['consumer']
+          assert set(pair['effective_parent_gates']) == {
+              'frozen_selected', 'spatial', 'operating_stock', 'feed_stock', 'early_capital'
+          }
+          bundle_sha = file_digest(root / 'screen-a.tar.gz')
+          assert bundle_sha == receipt['bundle_sha256']
+
+          configs = {}
+          for arm, record in receipt['arms'].items():
+              archive = root / 'screen' / 'arms' / f'{arm}.tar.gz'
+              assert file_digest(archive) == record['archive_sha256']
+              observed = {}
+              with tarfile.open(archive, 'r:gz') as tf:
+                  for member in tf.getmembers():
+                      assert member.isfile(), (arm, member.name)
+                      stream = tf.extractfile(member)
+                      assert stream is not None
+                      observed[member.name] = digest(stream.read())
+              assert len(observed) == 92, (arm, len(observed))
+              assert observed == record['members'], arm
+              assert set(observed) == set(baseline), arm
+              assert record['changed_members'] == ['TITAN-CONFIG.json']
+              assert observed['TITAN-CONFIG.json'] == record['config_sha256']
+              for name, member_sha in baseline.items():
+                  if name != 'TITAN-CONFIG.json':
+                      assert observed[name] == member_sha, (arm, name)
+
+              dest = root / f'unpack-{arm}'
+              dest.mkdir()
+              with tarfile.open(archive, 'r:gz') as tf:
+                  tf.extractall(dest)
+              cfg = json.loads((dest / 'TITAN-CONFIG.json').read_text())
+              configs[arm] = cfg
+              if arm in {'consumer_boundary_control', 'consumer_boundary_parent'}:
+                  assert cfg['redundant_hire'] is False
+                  assert cfg['idle_fertilizer'] is False
+                  assert cfg['crop_release'] is False
+                  assert cfg['town_procurement'] is False
+                  assert cfg['seed'] is True
+                  assert cfg['funding'] is True
+                  assert cfg['operating_stock'] is True
+                  assert cfg['market_pressure'] is True
+                  assert cfg['early_capital'] is True
+              else:
+                  assert cfg['consumer'] == 'frozen'
+                  assert cfg['town_procurement'] is True
+
+          assert configs['consumer_boundary_control']['consumer'] == 'frozen'
+          assert configs['consumer_boundary_parent']['consumer'] == 'parent'
+          keys = set(configs['consumer_boundary_control']) | set(configs['consumer_boundary_parent'])
+          assert [key for key in sorted(keys)
+                  if configs['consumer_boundary_control'].get(key)
+                  != configs['consumer_boundary_parent'].get(key)] == ['consumer']
+
+          print(json.dumps({
+              'baseline_members': len(baseline),
+              'bundle_sha256': bundle_sha,
+              'arms': {name: record['archive_sha256'] for name, record in receipt['arms'].items()},
+              'consumer_boundary_config_diff_keys': pair['config_diff_keys'],
+          }, sort_keys=True))
+          PY
+          for arm in seed_hire_off inventory_spatial_off late_market_off consumer_boundary_control consumer_boundary_parent; do
+            python -m compileall -q "$work/unpack-$arm"
+          done
+          # py_compile writes __pycache__ even with -B; keep the source-clean
+          # assertion meaningful by removing only generated bytecode caches.
+          find "$SCREEN_DIR" -type d -name __pycache__ -prune -exec rm -rf {} +
+          git diff --check
+          test -z "$(git status --porcelain)"

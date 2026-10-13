@@ -1,0 +1,91 @@
+{
+  "schema": "titan-v4.fast-clone-corpus-receipt.v1",
+  "status": "passed_clone_corpus_gate_only",
+  "canonical_branch": "main",
+  "python": "3.13.5",
+  "verifier_git_blob": "d170b5e1ac72d29395cec2e7913e578f5636f1d3",
+  "verifier_sha256": "2387dcb8a2894b54cfbdc0ec2317f6a9e617ce61480cc9fe302b87b5b988a6ac",
+  "verifier_commit": "0cee1918205fd69968a37bf0e40d377bc9b3b0ae",
+  "normal": {
+    "status": "PASS",
+    "python": "3.13.5",
+    "optimized": false,
+    "input_git_blobs": {
+      "hardener": "22acbcc6f1beb0460ba3f796af0e1febf7d94ca1",
+      "helper": "b7c1fd2f7f786c5dc5f8a3b9a7116815ea40607a",
+      "tapes": "a43289b9cc5e34a2481fddf652762a7d92f427ef"
+    },
+    "donors": {
+      "materializer_hardened": {
+        "corpus_actions": 9347,
+        "corpus_fallbacks": 0,
+        "future_schema_cases": 25,
+        "mutation_checks": 9347,
+        "median_speedup": 2.094405943823728
+      },
+      "performance_preserved": {
+        "corpus_actions": 9347,
+        "corpus_fallbacks": 0,
+        "future_schema_cases": 25,
+        "mutation_checks": 9347,
+        "median_speedup": 2.8733938972648048
+      }
+    },
+    "median_seconds": {
+      "deepcopy": 0.11428591200001392,
+      "materializer_hardened": 0.0545672209998429,
+      "performance_preserved": 0.03977384099994197
+    },
+    "timing_repeats": 9,
+    "negative_controls_rejected": 2,
+    "scope": "clone helpers only; no materializer, production runtime, or game gate executed"
+  },
+  "optimized": {
+    "status": "PASS",
+    "python": "3.13.5",
+    "optimized": true,
+    "input_git_blobs": {
+      "hardener": "22acbcc6f1beb0460ba3f796af0e1febf7d94ca1",
+      "helper": "b7c1fd2f7f786c5dc5f8a3b9a7116815ea40607a",
+      "tapes": "a43289b9cc5e34a2481fddf652762a7d92f427ef"
+    },
+    "donors": {
+      "materializer_hardened": {
+        "corpus_actions": 9347,
+        "corpus_fallbacks": 0,
+        "future_schema_cases": 25,
+        "mutation_checks": 9347,
+        "median_speedup": 2.091488540401218
+      },
+      "performance_preserved": {
+        "corpus_actions": 9347,
+        "corpus_fallbacks": 0,
+        "future_schema_cases": 25,
+        "mutation_checks": 9347,
+        "median_speedup": 2.781605185600312
+      }
+    },
+    "median_seconds": {
+      "deepcopy": 0.10862414700000045,
+      "materializer_hardened": 0.05193628600000011,
+      "performance_preserved": 0.03905088600004092
+    },
+    "timing_repeats": 9,
+    "negative_controls_rejected": 2,
+    "scope": "clone helpers only; no materializer, production runtime, or game gate executed"
+  },
+  "closed_blocker": "Exact 9347-action full frozen corpus had not been rerun for the hardened materializer donor because its worker lacked r01_tapes. Both preserved clone helpers now have independent normal and optimized corpus, alias, mutation, edge-case and >=1.50x clone-speed evidence.",
+  "still_required": [
+    "Choose exactly one clone mechanism in the shared composer; do not stack the unkeyed and keyed donor implementations.",
+    "Reconcile the selected source against the current production ABI; no legacy materializer may be run on production.",
+    "Run the actual materialized package/checker and whole-agent gates. These helper-only results do not authorize gameplay defaults, archive replacement, or Kaggle submission."
+  ],
+  "duplicate_resolution": {
+    "local_port_blobs_not_selected": [
+      "c562352136a741f53a0b18a32404ce58e035643d",
+      "baff20ff2eb6f6405c466231108a4a8ed0103a9b",
+      "01762630b64d5c2682d9863800b37b4ec00ceff1"
+    ],
+    "reason": "Use the implementations already preserved in the sole canonical workspace, not a third r04_fast_clone key or a new V4 tree."
+  }
+}

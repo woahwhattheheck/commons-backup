@@ -1,0 +1,122 @@
+{
+  "schema_version": 2,
+  "portfolio": {
+    "name": "Synthetic funded-work truth boundary"
+  },
+  "claims": [
+    {
+      "id": "claim-proof-dollar",
+      "kind": "BOUNTY",
+      "counterparty_ref": "sponsor-synthetic-a",
+      "currency": "USD",
+      "reference_amount_minor": 100,
+      "created_at": "2026-09-13T15:00:00Z",
+      "source_ref": "synthetic://bounty/proof-dollar",
+      "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "id": "claim-pending-bounty",
+      "kind": "BOUNTY",
+      "counterparty_ref": "sponsor-synthetic-b",
+      "currency": "USD",
+      "reference_amount_minor": 9000,
+      "created_at": "2026-09-13T15:00:00Z",
+      "source_ref": "synthetic://bounty/pending",
+      "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ],
+  "events": [
+    {
+      "id": "event-dollar-award",
+      "claim_id": "claim-proof-dollar",
+      "claim_sha256": "755aed32cf919d23b0fbeac3bd01aca8fb56998f258dae94a025e8e48ea2024e",
+      "kind": "AWARD_EVIDENCE",
+      "occurred_at": "2026-09-13T15:09:00Z",
+      "evidence_id": "e-dollar-award",
+      "amount_minor": 100
+    },
+    {
+      "id": "event-dollar-cash",
+      "claim_id": "claim-proof-dollar",
+      "claim_sha256": "755aed32cf919d23b0fbeac3bd01aca8fb56998f258dae94a025e8e48ea2024e",
+      "kind": "PAYMENT_RECEIVED_EVIDENCE",
+      "occurred_at": "2026-09-13T15:19:00Z",
+      "evidence_id": "e-dollar-cash",
+      "amount_minor": 100
+    },
+    {
+      "id": "event-dollar-reconcile",
+      "claim_id": "claim-proof-dollar",
+      "claim_sha256": "755aed32cf919d23b0fbeac3bd01aca8fb56998f258dae94a025e8e48ea2024e",
+      "kind": "RECONCILED_EVIDENCE",
+      "occurred_at": "2026-09-13T15:29:00Z",
+      "evidence_id": "e-dollar-reconcile",
+      "amount_minor": 100
+    },
+    {
+      "id": "event-pending-award",
+      "claim_id": "claim-pending-bounty",
+      "claim_sha256": "aa6bb5c800dfb00bf1d525f56166b2f696620a11fa66df64f9f36f36b1afb1be",
+      "kind": "AWARD_EVIDENCE",
+      "occurred_at": "2026-09-13T15:11:00Z",
+      "evidence_id": "e-pending-award",
+      "amount_minor": 9000
+    },
+    {
+      "id": "event-pending-provider",
+      "claim_id": "claim-pending-bounty",
+      "claim_sha256": "aa6bb5c800dfb00bf1d525f56166b2f696620a11fa66df64f9f36f36b1afb1be",
+      "kind": "PAYMENT_PENDING_EVIDENCE",
+      "occurred_at": "2026-09-13T15:24:00Z",
+      "evidence_id": "e-pending-provider",
+      "amount_minor": 9000
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e-dollar-award",
+      "status": "verified",
+      "authority": "sponsor_evidence",
+      "captured_at": "2026-09-13T15:10:00Z",
+      "reference": "synthetic://sponsor/award/one-dollar",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "event_sha256": "53977485ac29db7533068b3cd88aeb2941f94b6d9ae26edaa24963d2fa6ecfc3"
+    },
+    {
+      "id": "e-dollar-cash",
+      "status": "verified",
+      "authority": "payment_provider_evidence",
+      "captured_at": "2026-09-13T15:20:00Z",
+      "reference": "synthetic://provider/receipt/one-dollar",
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "event_sha256": "f5eb3e5a3cc9339d5b9b7452f59656a4b84f2456c6517d760d7c31cfe82ec30f"
+    },
+    {
+      "id": "e-dollar-reconcile",
+      "status": "verified",
+      "authority": "owner_approved",
+      "captured_at": "2026-09-13T15:30:00Z",
+      "reference": "synthetic://owner/reconcile/one-dollar",
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "event_sha256": "e89604119eaaa688ac42ba75f65659e8c687463b3612566295076ad03245a722"
+    },
+    {
+      "id": "e-pending-award",
+      "status": "verified",
+      "authority": "sponsor_evidence",
+      "captured_at": "2026-09-13T15:12:00Z",
+      "reference": "synthetic://sponsor/award/ninety-dollar",
+      "sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "event_sha256": "f63c44498b29a849524d582c6cbced2c87836df9833594c90d89d07b2a7a3e7a"
+    },
+    {
+      "id": "e-pending-provider",
+      "status": "verified",
+      "authority": "payment_provider_evidence",
+      "captured_at": "2026-09-13T15:25:00Z",
+      "reference": "synthetic://provider/pending/ninety-dollar",
+      "sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "event_sha256": "68b8b63a4bbfea73dc68d2171ad2473ca8b3139cb0b98cce47f8f6dd30c0294f"
+    }
+  ]
+}

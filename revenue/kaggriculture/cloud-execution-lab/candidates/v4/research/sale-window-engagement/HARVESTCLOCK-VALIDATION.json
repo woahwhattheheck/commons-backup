@@ -1,0 +1,198 @@
+{
+  "schema": "titan.sale-window-validation.v1",
+  "author": "ASTRA-HARVESTCLOCK",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/sale-window-engagement",
+  "python_version": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "delivery": "independently authored full-interpreter oracle, native captures and fixed-tape evidence; not a sale policy",
+  "focused_tests": {
+    "normal": 23,
+    "optimized": 23,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "pristine_full_state_pairs_per_mode": 48
+  },
+  "negative_controls": {
+    "semantic_faults_per_mode": 10,
+    "modes": [
+      "normal",
+      "-O"
+    ],
+    "assertion_rejections": 20,
+    "infrastructure_rejections": 0
+  },
+  "native_capture_provenance": {
+    "archive_identity": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "config_sha256": "6096a8f120d79aa1e9fae1aab64e2135de483fb11961ab5062708f7dc9c92b12",
+    "manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+    "native_main_sha256": "c4c22d0f2b1071cadf6a9f74effccc8cb20ea9f4d10ca1cf9f1fe57351709dc1",
+    "runtime_members_verified": 109
+  },
+  "native_captures": [
+    {
+      "seed": 17,
+      "seat": 0,
+      "steps": 719,
+      "money": [
+        105846.0,
+        3741.0
+      ],
+      "statuses": {
+        "completed": 719
+      },
+      "state_sha256": "4fa248958a0d3585ba45944e6759de498bcffd0afacf5363eb17100d4bf6d981",
+      "env_sha256": "4f8f30bd5d5ac8271b957dbe8c8b453cd72ac4606c370c940e9b837df8783ee0",
+      "tape_sha256": "f3e172beec6ee795ea70efdc36b429d2b9d6105602bc83e453e39e1a520a5037",
+      "census": {
+        "exposed_sell_rows": 222,
+        "filled_sell_rows": 221,
+        "filled_units": 1492
+      }
+    },
+    {
+      "seed": 17,
+      "seat": 1,
+      "steps": 719,
+      "money": [
+        3741.0,
+        105846.0
+      ],
+      "statuses": {
+        "completed": 719
+      },
+      "state_sha256": "c83b5aa21fd60f5065de8c71bfe817c0afb0d1760e0b06b34a45889dec35c786",
+      "env_sha256": "4f8f30bd5d5ac8271b957dbe8c8b453cd72ac4606c370c940e9b837df8783ee0",
+      "tape_sha256": "61f44420c9fe5b063caded8a691aae377fcd0e48b7479221299c00a1b78df7cc",
+      "census": {
+        "exposed_sell_rows": 222,
+        "filled_sell_rows": 221,
+        "filled_units": 1492
+      }
+    }
+  ],
+  "recorded_evidence_replay": {
+    "normal": {
+      "schema": "titan.sale-window-evidence-replay.v1",
+      "results": [
+        {
+          "seat": 0,
+          "seed": 17,
+          "exact": true,
+          "interventions": 5,
+          "engine_turns": 7909
+        },
+        {
+          "seat": 1,
+          "seed": 17,
+          "exact": true,
+          "interventions": 5,
+          "engine_turns": 7909
+        }
+      ],
+      "engine_turns": 15818,
+      "native_agent_calls": 0,
+      "scope": "exact stored open-loop results; no adaptive-policy or donor acceptance"
+    },
+    "optimized": {
+      "schema": "titan.sale-window-evidence-replay.v1",
+      "results": [
+        {
+          "seat": 0,
+          "seed": 17,
+          "exact": true,
+          "interventions": 5,
+          "engine_turns": 7909
+        },
+        {
+          "seat": 1,
+          "seed": 17,
+          "exact": true,
+          "interventions": 5,
+          "engine_turns": 7909
+        }
+      ],
+      "engine_turns": 15818,
+      "native_agent_calls": 0,
+      "scope": "exact stored open-loop results; no adaptive-policy or donor acceptance"
+    }
+  },
+  "panel": {
+    "selection": "first actually filled MILK/WOOL/STRAWBERRY/MELON row on days14-16; +/-one turn to free exposed slot",
+    "paired_cells": 10,
+    "both_seats": true,
+    "realized_retiming": {
+      "cells": 8,
+      "zero_margin_delta_cells": 6,
+      "minus_two_margin_delta_cells": 2
+    },
+    "suppressed_sale_not_retimed": {
+      "cells": 2,
+      "margin_delta_each": 1262,
+      "baseline_source_step": 338,
+      "baseline_source_row": 0,
+      "source_MILK_units": 6,
+      "source_sale_cash": 588,
+      "candidate_destination_step": 337,
+      "candidate_destination_row": 3,
+      "destination_filled_units": 0
+    }
+  },
+  "raw_evidence": "All four parts plus manifest are required; full tapes, timing arrays, witnesses and logs retained losslessly. Recorded second tape is a verified seat swap, expanded and hash-checked.",
+  "source_files": {
+    "sale_window.py": {
+      "bytes": 10228,
+      "git_blob": "20e623722fbb3f8a9cdb71add009a9f68756819d"
+    },
+    "run_native.py": {
+      "bytes": 9680,
+      "git_blob": "339dfbe7649febdc086c9538633f93aa3aa909a8"
+    },
+    "test_sale_window.py": {
+      "bytes": 13750,
+      "git_blob": "6ed9d99821fc12d04ff9f7288b4ed95dda3bae7a"
+    },
+    "run_negative_controls.py": {
+      "bytes": 4376,
+      "git_blob": "eeae6ff3d1e417be61d2e3042cbfe8e6f2811f8f"
+    },
+    "replay_evidence.py": {
+      "bytes": 3996,
+      "git_blob": "0ef818ef821fdc09f52518511de3aaf7d973e3d2"
+    },
+    "HARVESTCLOCK-EVIDENCE.json": {
+      "bytes": 309,
+      "git_blob": "b9dfae21fee16bf10364ce71421a88f6f481e384"
+    },
+    "HARVESTCLOCK-EVIDENCE.part0": {
+      "bytes": 8500,
+      "git_blob": "0f630f0ab26f2df5e1409a173efc0aab02e35443"
+    },
+    "HARVESTCLOCK-EVIDENCE.part1": {
+      "bytes": 8500,
+      "git_blob": "e5199eda921f4325ced16f9feaaa502635495cfa"
+    },
+    "HARVESTCLOCK-EVIDENCE.part2": {
+      "bytes": 8500,
+      "git_blob": "34ec8312185e21f4861c5af77a7b70e82759d1c3"
+    },
+    "HARVESTCLOCK-EVIDENCE.part3": {
+      "bytes": 8334,
+      "git_blob": "7ae2a813704711afcd7f46134e995fbde9160d46"
+    },
+    "HARVESTCLOCK.md": {
+      "bytes": 8608,
+      "git_blob": "d1708d2306c5a37db2d3038ba5c49dd784379dca"
+    }
+  },
+  "limits": [
+    "Historical r04_sellby15 donor and original -86 raw gate remain unrecovered; not closed by this independent work.",
+    "Native b567 artifact is not latest composed V4; source/feature defaults unchanged.",
+    "Counterfactuals hold future actions fixed, not adaptive policies or strong-opponent/held-out performance.",
+    "Two actual native games are normal mode; optimized executions are oracle tests and recorded fixed-tape replay.",
+    "Starter RNG and native wall-clock budgets prevent seed-only guarantees for new captures.",
+    "No production/default/archive/configuration/workflow/Kaggle mutation.",
+    "No Python3.11 execution or hosted CI-green claim."
+  ],
+  "peer_preservation": "SELLWINDOW native wiring consumes unchanged oracle20e62372 in this same home; its six files are not overwritten."
+}

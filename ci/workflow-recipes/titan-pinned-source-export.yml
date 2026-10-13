@@ -1,0 +1,393 @@
+name: titan-pinned-source-export
+
+# Transport existing, published bytes to network-isolated cloud builders.
+# Historical modes copy committed bytes. The selected new-replay mode reads
+# two public episodes; no candidate build, game, package install or Kaggle write.
+on:
+  push:
+    paths:
+      - ".github/workflows/titan-pinned-source-export.yml"
+  workflow_dispatch:
+    inputs:
+      bundle:
+        description: Committed bundle or selected public replay batch
+        type: choice
+        default: parents
+        options:
+          - parents
+          - t13-replays
+          - t13-new-replays
+          - widefield-trace
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    if: ${{ !(github.event_name == 'push' && contains(github.event.head_commit.message, '[t13-transport]')) && inputs.bundle != 't13-replays' && !(github.event_name == 'push' && contains(github.event.head_commit.message, '[t13-new-replays]')) && inputs.bundle != 't13-new-replays' && !(github.event_name == 'push' && contains(github.event.head_commit.message, '[widefield-transport]')) && inputs.bundle != 'widefield-trace' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 7f92f6c0f4e3961be8109b2e3dc6da3e4e356d9f
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /revenue/kaggriculture/cloud-titan-composition/
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/vendor/
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/measure.py
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/prepare.py
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/carrot_demand.py
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/UPSTREAM.json
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/NEXT-DISTRIBUTION-NOTICE.txt
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/LICENSE
+            /revenue/kaggriculture/cloud-eval/
+            /revenue/kaggriculture/cloud-pack/
+            /revenue/kaggriculture/cloud-frontier-policy/next-panel/offline.py
+            /revenue/kaggriculture/20260907-offline-agent/
+      - name: Export exact committed sources and preserve the existing archive
+        shell: python
+        env:
+          SOURCE_REF: 7f92f6c0f4e3961be8109b2e3dc6da3e4e356d9f
+        run: |
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import shutil
+          import subprocess
+          import tarfile
+
+          expected = os.environ["SOURCE_REF"]
+          actual = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          if actual != expected:
+              raise SystemExit("checkout does not match the pinned source commit")
+          root = "revenue/kaggriculture/"
+          composition = root + "cloud-titan-composition/"
+          baseline = root + "cloud-frontier-policy/next-panel/"
+          paths = [composition + name for name in (
+              "arms", "vendor", "build.py", "controller.py", "README.md",
+              "NOTICE.md", "SOURCE-PINS.json",
+          )]
+          paths += [baseline + name for name in (
+              "vendor", "measure.py", "prepare.py", "offline.py", "carrot_demand.py",
+              "UPSTREAM.json", "NEXT-DISTRIBUTION-NOTICE.txt", "LICENSE",
+          )]
+          paths += [root + "cloud-pack/" + name for name in (
+              "pack.py", "official.py", "upstream", "README.md",
+              "LICENSE", "LICENSE-CC-BY-4.0.txt", "LICENSE-MIT.txt",
+          )]
+          paths += [root + "cloud-eval", root + "20260907-offline-agent"]
+          out = Path(os.environ["RUNNER_TEMP"]) / "titan-source-export"
+          out.mkdir(parents=True, exist_ok=True)
+          source_tar = out / "titan-reusable-sources.tar"
+          # Same committed-source transport pattern as the COVE backup test job:
+          # git archive reads the commit, never a dirty working-copy substitute.
+          subprocess.run([
+              "git", "archive", "--format=tar", "--output=" + str(source_tar),
+              expected, "--", *paths,
+          ], check=True)
+          with tarfile.open(source_tar, "r:") as archive:
+              files = {}
+              for member in archive.getmembers():
+                  if member.isdir():
+                      continue
+                  if not member.isfile():
+                      raise SystemExit("source archive contains a non-regular member")
+                  stream = archive.extractfile(member)
+                  if stream is None:
+                      raise SystemExit("source archive member could not be read")
+                  data = stream.read()
+                  files[member.name] = {
+                      "size_bytes": len(data),
+                      "sha256": hashlib.sha256(data).hexdigest(),
+                      "git_blob": hashlib.sha1(
+                          b"blob " + str(len(data)).encode() + b"\0" + data
+                      ).hexdigest(),
+                  }
+          if not files:
+              raise SystemExit("source archive is empty")
+          arlene = baseline + "vendor/arlene.py"
+          if files[arlene]["sha256"] != "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4":
+              raise SystemExit("Arlene source differs from the existing frozen parent")
+          frozen = Path(composition) / "artifacts/carrot-cap-checkpoint.tar.gz"
+          frozen_bytes = frozen.read_bytes()
+          frozen_hash = hashlib.sha256(frozen_bytes).hexdigest()
+          if len(frozen_bytes) != 176423 or frozen_hash != "3cb3ecfecfa614f8af65fcaf36b03dd66d4c2d1665de8dcd6a422c6c2e73b856":
+              raise SystemExit("existing T08 runtime archive differs from its published pin")
+          shutil.copyfile(frozen, out / frozen.name)
+          manifest = {
+              "schema": "titan.pinned-source-export.v2",
+              "source_commit": actual,
+              "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "workflow_run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "source_paths": paths,
+              "archives": {
+                  source_tar.name: {"sha256": hashlib.sha256(source_tar.read_bytes()).hexdigest(),
+                                    "size_bytes": source_tar.stat().st_size},
+                  frozen.name: {"sha256": frozen_hash, "size_bytes": len(frozen_bytes)},
+              },
+              "files": files,
+              "engine_artifact": {
+                  "repository": "woahwhattheheck/commons",
+                  "run_id": 34086864911, "artifact_id": 10005621438,
+                  "size_bytes": 280148,
+                  "sha256": "06e526df0a87d1d94e60dd0f2ea380aa099a4f0edd40a604a7c5bd274bd189cc",
+                  "engine_ref": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+                  "cache_subdirectory": "engine",
+                  "note": "Separate existing artifact; use only its pinned engine and loader, not historical policies as current controls.",
+              },
+              "limits": "Transport only. No new simulation, candidate selection, hosted rating, or competition submission.",
+          }
+          (out / "SOURCE-MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+          (out / "REUSE.md").write_text(
+              "# Pinned TITAN source transport\n\n"
+              "This exports existing source bytes, not a new selected policy or benchmark.\n"
+              "Verify the ZIP against its GitHub artifact digest, then verify each archive\n"
+              "and member against SOURCE-MANIFEST.json before using safe extraction.\n\n"
+              "Extract titan-reusable-sources.tar preserving repository-relative paths.\n"
+              "Download the separate engine artifact recorded in the manifest and extract\n"
+              "its engine/ cache. The exported cloud-eval/evaluate.py uses its included\n"
+              "20260907-offline-agent/evaluate.py loader without network preparation.\n\n"
+              "For new runtime adapters, use cloud-pack/pack.py::write_adapter with the\n"
+              "existing cloud-pack/official.py and bundled upstream loading contract.\n"
+              "Arlene is cloud-frontier-policy/next-panel/vendor/arlene.py. Apex is\n"
+              "next-panel/vendor/apex/main.py with its C++ source/include dependencies.\n"
+              "Compile Apex with the existing g++ command in next-panel/prepare.py before\n"
+              "installing its offline.py guard. Do not run the historical prepare.py main\n"
+              "recipe: it also expects older frontier exports/parents outside this pack.\n"
+              "Use only a cloud runtime with an existing compiler; no owner-PC work or\n"
+              "new paid compute is authorized by this archive.\n\n"
+              "The T08 arms live in cloud-titan-composition/arms/. Their controller and\n"
+              "vendor tree are frozen at the manifest source commit. Preserve per-game\n"
+              "fresh state, the official file-loader semantics, and all included licenses.\n"
+              "The separate carrot-cap-checkpoint.tar.gz is copied unchanged, not rebuilt.\n"
+              "No source here changes Kaggle state or authorizes a new submission.\n",
+              encoding="utf-8",
+          )
+          print(json.dumps({"source_commit": actual, "files": len(files), "archives": manifest["archives"]}))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-pinned-source-pack-7f92f6c0
+          path: ${{ runner.temp }}/titan-source-export/
+          if-no-files-found: error
+          retention-days: 7
+
+  export-t13-replays:
+    # A tagged workflow edit selects only this transport; ordinary push/manual
+    # parent-pack exports retain their existing behavior and frozen source.
+    if: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[t13-transport]')) || inputs.bundle == 't13-replays' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 16a2d4a7675c7e27b97bedc00f8073690bf7a763
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /revenue/kaggriculture/cloud-frontier-trace/results/t13-public-inputs/
+      - name: Export ROWAN's four committed replay inputs unchanged
+        shell: python
+        env:
+          SOURCE_REF: 16a2d4a7675c7e27b97bedc00f8073690bf7a763
+        run: |
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          expected = os.environ["SOURCE_REF"]
+          actual = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          if actual != expected:
+              raise SystemExit("checkout does not match the committed replay-input pin")
+          directory = "revenue/kaggriculture/cloud-frontier-trace/results/t13-public-inputs"
+          blobs = {
+              "106540665.raw.gz.b64": "76cea08b0f5c6556cb9392e1a3421c93b46b2028",
+              "106541578.raw.gz.b64": "bcce7ed879c50f51bfa6df394cf82334465dbe83",
+              "decode.py": "e32b9ae196ca311fa3d626381ee0828252971b9b",
+              "receipt.json": "ec6a6a0dadb8490dc105b3880b140817ec495b45",
+          }
+          out = Path(os.environ["RUNNER_TEMP"]) / "titan-t13-replay-export"
+          out.mkdir(parents=True, exist_ok=True)
+          files = {}
+          for name, expected_blob in blobs.items():
+              source_path = directory + "/" + name
+              data = subprocess.check_output(["git", "show", expected + ":" + source_path])
+              blob = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+              if blob != expected_blob:
+                  raise SystemExit("committed replay input blob mismatch: " + name)
+              (out / name).write_bytes(data)
+              files[name] = {"source_path": source_path, "git_blob": blob,
+                             "size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+          manifest = {
+              "schema": "titan.public-replay-transport.v1",
+              "source_commit": actual,
+              "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "workflow_run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "files": files,
+              "consumer": "Verify manifest files; run python decode.py in their common directory. The existing decoder validates raw hashes, episode IDs and terminal cash.",
+              "limits": "Four already-published files copied unchanged. No Kaggle request, policy change, game, seed consumption, dependency install or parent-pack rebuild.",
+          }
+          (out / "TRANSPORT-MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps({"source_commit": actual, "files": files}))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-t13-public-replays-16a2d4a7
+          path: ${{ runner.temp }}/titan-t13-replay-export/
+          if-no-files-found: error
+          retention-days: 7
+
+  fetch-t13-new-replays:
+    # Native replay route follows the retained T13 receipt; old probe stays archived.
+    # Branch publication does not fetch. The marked main merge runs this one
+    # batch; an explicit manual selection can request a later deliberate run.
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[t13-new-replays]')) || inputs.bundle == 't13-new-replays' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /revenue/kaggriculture/cloud-public-replay-transfer/
+      - name: Check the actual transport and offline consumer
+        run: python3 -m unittest discover -s revenue/kaggriculture/cloud-public-replay-transfer -p 'test_*.py' -v
+      - name: Read the two requested public replay bodies once
+        run: python3 revenue/kaggriculture/cloud-public-replay-transfer/fetch_public.py fetch --output "${{ runner.temp }}/titan-t13-new-replays"
+      - name: Retain delivered bodies or explicit failure receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-t13-new-replays-${{ github.run_id }}
+          path: ${{ runner.temp }}/titan-t13-new-replays/
+          if-no-files-found: error
+          retention-days: 7
+
+  export-widefield-trace:
+    # Copy only the requested original member. Branch publication stays idle;
+    # one marked main merge or explicit selection runs this historical export.
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[widefield-transport]')) || inputs.bundle == 'widefield-trace' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 78627f83968a9cb042c5c6093f885f4b9ced499a
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /revenue/kaggriculture/cloud-widefield-lab/results/archive-parts/
+      - name: Export one exact retained WIDEFIELD trace member
+        shell: python
+        run: |
+          """Export one member from an immutable tracked multipart archive; no code execution."""
+          import gzip
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import shutil
+          import subprocess
+          import tarfile
+
+
+          def export_member(checkout, output, *, ref, source_directory, prefix, parts,
+                            expected_archive_sha256, target_name, run_id, attempt):
+              checkout, output = Path(checkout), Path(output)
+              def git(*args):
+                  return subprocess.check_output(['git', '-C', str(checkout), *args])
+              actual = git('rev-parse', 'HEAD').decode().strip()
+              if actual != ref:
+                  raise ValueError('checkout does not match pinned source')
+              paths = [source_directory + '/' + prefix + f'{i:02d}' for i in range(parts)]
+              listed = git('ls-tree', '-r', '-z', ref, '--', source_directory).split(b'\0')
+              entries = {}
+              for line in listed:
+                  if not line:
+                      continue
+                  metadata, path = line.split(b'\t', 1)
+                  mode, kind, blob = metadata.decode().split()
+                  entries[path.decode()] = (mode, kind, blob)
+              actual_parts = sorted(p for p in entries if PurePosixPath(p).name.startswith(prefix))
+              if actual_parts != paths:
+                  raise ValueError('unexpected multipart source set')
+              output.mkdir(parents=True, exist_ok=False)
+              archive_path = output / '_source.tar.gz'
+              digest, records = hashlib.sha256(), {}
+              with archive_path.open('xb') as target:
+                  for path in paths:
+                      mode, kind, expected_blob = entries[path]
+                      if mode not in ('100644', '100755') or kind != 'blob':
+                          raise ValueError('archive part is not a regular tracked file')
+                      data = git('show', ref + ':' + path)
+                      blob = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+                      if blob != expected_blob:
+                          raise ValueError('archive part blob mismatch')
+                      target.write(data)
+                      digest.update(data)
+                      records[path] = {'git_blob': blob, 'size_bytes': len(data),
+                                       'sha256': hashlib.sha256(data).hexdigest()}
+              if digest.hexdigest() != expected_archive_sha256:
+                  raise ValueError('reassembled archive digest mismatch')
+              with tarfile.open(archive_path, 'r:gz') as archive:
+                  selected = [m for m in archive.getmembers()
+                              if PurePosixPath(m.name).name == target_name]
+                  if len(selected) != 1 or not selected[0].isfile():
+                      raise ValueError('expected exactly one regular target member')
+                  member = selected[0]
+                  reader = archive.extractfile(member)
+                  if reader is None:
+                      raise ValueError('target member unreadable')
+                  name = target_name + '.gz'
+                  member_digest, copied = hashlib.sha256(), 0
+                  with reader, (output / name).open('xb') as raw:
+                      with gzip.GzipFile(filename='', fileobj=raw, mode='wb', mtime=0) as encoded:
+                          while True:
+                              block = reader.read(1024 * 1024)
+                              if not block:
+                                  break
+                              encoded.write(block)
+                              member_digest.update(block)
+                              copied += len(block)
+                  if copied != member.size:
+                      raise ValueError('target member size mismatch')
+              source_readme = source_directory + '/README.md'
+              if source_readme in entries:
+                  (output / 'SOURCE-README.md').write_bytes(git('show', ref + ':' + source_readme))
+              compressed = (output / name).read_bytes()
+              manifest = {
+                  'schema': 'titan.committed-archive-member.v1',
+                  'source_commit': ref, 'workflow_run_id': str(run_id), 'workflow_run_attempt': str(attempt),
+                  'archive_sha256': digest.hexdigest(), 'archive_size_bytes': archive_path.stat().st_size,
+                  'parts': records, 'member_path': member.name,
+                  'member_size_bytes': copied, 'member_sha256': member_digest.hexdigest(),
+                  'delivered_file': name, 'delivered_size_bytes': len(compressed),
+                  'delivered_sha256': hashlib.sha256(compressed).hexdigest(),
+                  'encoding': 'gzip of exact original tar member bytes; decompress before the existing replayer',
+                  'limits': 'Committed data transport only. No interpreter, policy, replay, game, seed, Kaggle request or parent-pack export.'
+              }
+              (output / 'TRANSPORT-MANIFEST.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
+              # Remove only this job's newly created temporary copy, never tracked source.
+              archive_path.unlink()
+              return manifest
+
+
+          if __name__ == '__main__':
+              result = export_member('.', Path(os.environ['RUNNER_TEMP']) / 'titan-widefield-member',
+                  ref='78627f83968a9cb042c5c6093f885f4b9ced499a',
+                  source_directory='revenue/kaggriculture/cloud-widefield-lab/results/archive-parts',
+                  prefix='full-results-9921001-9921032.tar.gz.part-', parts=18,
+                  expected_archive_sha256='2859491973c51d21a95ec80135ac7385ce889c335ff619012f9f86dabce55a11',
+                  target_name='integrated-pr9997-fullstate.json',
+                  run_id=os.environ['GITHUB_RUN_ID'], attempt=os.environ['GITHUB_RUN_ATTEMPT'])
+              print(json.dumps({k: v for k, v in result.items() if k != 'parts'}, sort_keys=True))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-widefield-retained-trace-${{ github.run_id }}
+          path: ${{ runner.temp }}/titan-widefield-member/
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,22 @@
+{
+  "schema_version": "commons-payment-defense-roles/v1",
+  "kind": "PAYMENT_DEFENSE_ROLE_MAP",
+  "execution": "ON_DEMAND_PRIVATE_BACKEND",
+  "provider_configuration": "NOT_CHANGED",
+  "financial_decision_owner": "AUTHORIZED_PAYMENT_OPERATOR_PER_CASE",
+  "roles": [
+    {"id": "event-collector", "tool": "host/chargeback_defense.py ingest", "output": "PRIVATE_MINIMAL_EVENT_LEDGER", "provider_writes": false},
+    {"id": "deadline-watcher", "tool": "host/chargeback_defense.py summary", "output": "PRIVATE_OPERATOR_SUMMARY", "provider_writes": false},
+    {"id": "delivery-recorder", "tool": "EXISTING_SCOPE_TO_DELIVERY_PLUS_ACTUAL_PRIVATE_RECORDS", "output": "PRIVATE_FACTUAL_DELIVERY_RECORDS", "provider_writes": false},
+    {"id": "packet-builder", "tool": "host/chargeback_defense.py packet", "output": "PRIVATE_EVIDENCE_PACKET", "provider_writes": false},
+    {"id": "pricing-desk", "tool": "host/chargeback_pricing.py", "output": "ASSUMPTION_LABELED_PRICE_AND_LIQUIDITY_SCENARIO", "provider_writes": false}
+  ],
+  "constraints": [
+    "No customer records, secrets or dispute packets in public Commons.",
+    "No invented payment, receipt, delivery, acceptance or transaction history.",
+    "No autonomous refunds, captures, provider submissions, buyer contact or retaliation.",
+    "No schedule or paid-service enrollment created by this role map.",
+    "No admission controls on Commons posting, source or Action Pad.",
+    "Criticism alone is not payment fraud."
+  ]
+}

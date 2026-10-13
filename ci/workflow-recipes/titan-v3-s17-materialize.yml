@@ -1,0 +1,75 @@
+name: TITAN V3 S17 exact-base materialization
+on:
+  push:
+    branches: [v3/rebase-14dbbc49-20260910-01]
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BASE: 14dbbc4940262790f7e21c0bdc7a941842f238ba
+      BRANCH: v3/rebase-14dbbc49-20260910-01
+      TARGET: revenue/kaggriculture/cloud-execution-lab/candidates/v3
+      CHUNKS: .s17-materialize/chunks
+      CANON: revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reassemble exact source and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          LC_ALL=C cat "$CHUNKS"/part-* > /tmp/missing3.b64
+          test "$(wc -c < /tmp/missing3.b64)" -eq 14296
+          echo '6644418c6d4b1ce60e57f24f6f428a8b128a131242d57149e14873086c9dbf5e  /tmp/missing3.b64' | sha256sum -c -
+          base64 -d /tmp/missing3.b64 > /tmp/missing3.tar.gz
+          echo '77ecd8a6e7d22641228475f3e211638b7105a070366fad69133731a9a6e929a8  /tmp/missing3.tar.gz' | sha256sum -c -
+          python - <<'PY'
+          from pathlib import Path
+          import tarfile
+          target = Path('revenue/kaggriculture/cloud-execution-lab/candidates/v3')
+          expected = {'FILES.json', 'V3-MANIFEST.json', 'overlay/checks/test_v3_r02.py'}
+          with tarfile.open('/tmp/missing3.tar.gz', 'r:gz') as tf:
+              members = tf.getmembers()
+              assert {m.name for m in members} == expected
+              assert all(m.isfile() and not Path(m.name).is_absolute() and '..' not in Path(m.name).parts for m in members)
+              for m in members:
+                  out = target / m.name
+                  out.parent.mkdir(parents=True, exist_ok=True)
+                  out.write_bytes(tf.extractfile(m).read())
+          PY
+          test "$(find "$TARGET" -type f | wc -l)" -eq 18
+          test "$(wc -c < "$CANON")" -eq 429604
+          echo 'b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9  revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz' | sha256sum -c -
+          python -m compileall -q "$TARGET"
+          (cd "$TARGET" && python build_v3.py --check && rm -rf /tmp/titan-v3-tree && python build_v3.py --tree /tmp/titan-v3-tree) 2>&1 | tee /tmp/build.log
+          (cd /tmp/titan-v3-tree && python -m unittest -v checks/test_v3_features.py checks/test_v3_l01.py checks/test_v3_r01.py checks/test_v3_r02.py) 2>&1 | tee /tmp/tests.log
+          grep -F 'V3 CHECK OK 6766c55a80b4cfc95232dd219a11b701121cd21935da5bb38a76dd90bbb9fd5f 122 files 482234 bytes' /tmp/build.log
+          grep -F 'Ran 54 tests' /tmp/tests.log
+          grep -Fx 'OK' /tmp/tests.log
+      - name: Publish one commit whose parent is the dispatched base
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .s17-materialize .github/workflows/titan-v3-s17-materialize.yml
+          git add -A
+          changed=$(git diff --cached --name-only "$BASE")
+          test "$(printf '%s\n' "$changed" | sed '/^$/d' | wc -l)" -eq 18
+          test -z "$(printf '%s\n' "$changed" | grep -v '^revenue/kaggriculture/cloud-execution-lab/candidates/v3/' || true)"
+          tree=$(git write-tree)
+          export GIT_AUTHOR_NAME='GPT-5.6 SOL PRO' GIT_COMMITTER_NAME='GPT-5.6 SOL PRO'
+          export GIT_AUTHOR_EMAIL='commons-board@users.noreply.github.com' GIT_COMMITTER_EMAIL='commons-board@users.noreply.github.com'
+          commit=$(printf '%s\n\n%s\n' 'Land deterministic TITAN V3 integration source tree' 'Exact-base S17 landing: verified bundle, pinned deterministic build, 54/54 checks.' | git commit-tree "$tree" -p "$BASE")
+          git push --force-with-lease="refs/heads/$BRANCH:$GITHUB_SHA" origin "$commit:refs/heads/$BRANCH"
+          printf '### TITAN V3 S17\n- commit: `%s`\n- tree: `%s`\n- base: `%s`\n- build: `6766c55a…fd5f`, 122 files, 482234 bytes\n- tests: 54/54\n' "$commit" "$tree" "$BASE" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-v3-s17-evidence
+          path: |
+            /tmp/build.log
+            /tmp/tests.log
+          retention-days: 30

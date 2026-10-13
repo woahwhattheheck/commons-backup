@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "operation": "ASTRA-PROVENANCE-EXACT-CURRENT-V4-RESULT-PROVENANCE",
+  "scope": "analysis/evidence tooling only",
+  "published_git_blobs": {
+    "bind_result_provenance.py": "b98b06980bcec265b36307c7c5e84fdcc84d8f85",
+    "test_result_provenance.py": "bf7135e0f224b7f982020bafeba5c1e4734e74a3"
+  },
+  "published_sha256": {
+    "bind_result_provenance.py": "426b1c55f2773a3414229eac7383a2d9246f42b3b10e27352ac1867d9be043b6",
+    "test_result_provenance.py": "333176968e45d8ffb86bdcf0b5190227f0a180c2b3256f056bf3e42982810473"
+  },
+  "authored_validation": {
+    "normal": {"passed": 16, "failed": 0},
+    "python_optimized": {"passed": 16, "failed": 0},
+    "py_compile": "PASS"
+  },
+  "predecessor_killers": {
+    "relative_tolerance": "1e20 reward vs 1e20+50000000 redundant candidate_score rejects",
+    "integer_float_collapse": "10**20 reward vs 10**20+1 redundant candidate_score rejects",
+    "derived_overflow": "rewards [1e308,-1e308] reject when target-relative subtraction becomes non-finite"
+  },
+  "measured_large_margin_control": {
+    "rewards_seat0": [168572, 3550],
+    "candidate_margin": 165022,
+    "preserved": true,
+    "score_ceiling_applied": false
+  },
+  "contracts": [
+    "candidate engine and opponent identities are computed from local artifact bytes",
+    "symlinks traversal and mutable file identity fail closed",
+    "margin and score aliases must equal the exact reward-derived value",
+    "integer outcome identity is retained after finite-range validation",
+    "derived target-relative margin must itself remain finite",
+    "non-finite and numeric-overflow inputs fail closed",
+    "duplicate unfinished timeout error and partial-seat cells fail closed",
+    "replicates are disambiguated without changing the legacy four-field pair key"
+  ],
+  "donor": {
+    "pull_request": 11727,
+    "theorem": "exact candidate/engine/seed/opponent/seat provenance before score comparison",
+    "chainlock_successor_of": 12761
+  },
+  "complementary_current_gate": {
+    "name": "QUIETBOX",
+    "purpose": "wall-clock contention trust",
+    "relationship": "separate oracle; not duplicated here"
+  },
+  "side_effects": {
+    "gameplay_changed": false,
+    "defaults_changed": false,
+    "games_launched": 0,
+    "kaggle_submission": false
+  }
+}

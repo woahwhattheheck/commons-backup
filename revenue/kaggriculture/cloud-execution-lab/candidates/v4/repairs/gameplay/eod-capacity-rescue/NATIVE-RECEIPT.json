@@ -1,0 +1,67 @@
+{
+  "schema": "titan-native-eod-port-receipt/v1",
+  "claim": "ASTRA-GRANARY 1789180072.512469",
+  "canonical": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "donor_source": "donor/overlay/r04_eod_capacity_rescue.py",
+  "donor_blob": "9ad4092453e2332b0914f90ca89791b18f2229c2",
+  "h3c_shared_predicate_blob": "79c3fd029054a2db5931609db06f6b9aa4d4be3c",
+  "runtime_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+  "production_changed": false,
+  "existing_feature": "r04_eod_capacity_rescue",
+  "default": false,
+  "normal": {"tests": 16, "failures": 0, "errors": 0, "positive_full_turn_cells": 140, "floor_buy_counterexamples": 4},
+  "optimized": {"tests": 16, "failures": 0, "errors": 0, "positive_full_turn_cells": 140, "floor_buy_counterexamples": 4},
+  "mode_results_equal_except_optimized_field": true,
+  "materialized_helper_blob": "4ac4fbfefa32a026a58464ea032ac7723f5e617b",
+  "materialized_runtime_blob": "bfa25b93c206939ad25a928184d6688718618ca2",
+  "source_pins": {
+    "checks/reference/engine/kaggriculture.json": "b354d06b742fe48402513792253f1a5c29366b20",
+    "checks/reference/engine/kaggriculture.py": "3c202c7ee921da239356789e266b694635103fc4",
+    "checks/reference/engine/utils.py": "91c8822ee6201ba4a5a8416c7dbe34f95dd61c87",
+    "checks/reference/evaluator/evaluate.py": "1fb6b655bb4ca1e1684be165a8ef513e2e6c2325",
+    "checks/reference/evaluator/loader.py": "23948e10cfc3d32f46c9abb1321b0d8fc8db21d5",
+    "mechanics.py": "044a4f9c0a4a44dde10ada57563238bcaf82075d",
+    "titan_runtime.py": "b952c9c228ecbde592bf3d2df01638677abb0d24"
+  },
+  "fertilizer_floor_falsifier": {
+    "step": 119, "public_inventory": 10493, "visible_quote": 1,
+    "own_total_shed": 100, "own_carried_fertilizer": 10, "rival_buy_quantity": 20,
+    "rescued_units": 10, "own_cash_delta": 19, "rival_cash_delta": 23,
+    "margin_delta": -4, "seats": [0, 1], "own_private_equal": true,
+    "baseline_end_inventory": 10473, "candidate_end_inventory": 10482,
+    "interpretation": "One-turn counterexample, not measured field frequency or full-game EV"
+  },
+  "wheat_floor_control": {
+    "public_inventory": 1717032651333, "seats": [0, 1],
+    "scope": "Structural extreme-inventory control only, not normal-season evidence"
+  },
+  "census": {
+    "games": 4, "steps": 2876, "completed_actions": 2876,
+    "hour23": 116, "engagements": 0, "actual_discarded_units": 0,
+    "pre_unit_overflow_rows": 28, "max_pre_unit_shed_plus_carried": 134,
+    "opponent": "official starter, mechanical engagement only",
+    "source_manifest_sha256": "62aa111f9db9400a738935a5d4f04b73e5bbcf77d688e5995a89a0045f16844a",
+    "seed_seat_trace": [
+      {"seed": 20260911, "seat": 0, "trace_sha256": "0c3803c6424886a51bd2e4541f67cf0e709e63cd07b449af25b90a85c8fee15a"},
+      {"seed": 20260911, "seat": 1, "trace_sha256": "ade789f75f8a6aa48a1f872d233fafcbd2213743032969c2f09f08d5eaa7c602"},
+      {"seed": 20260912, "seat": 0, "trace_sha256": "2ffeafd59147e4602696fbcabbd1799cdcc657a59137ec08af9e5b67dfb0fac6"},
+      {"seed": 20260912, "seat": 1, "trace_sha256": "cb3ad6561dc1a3f5b0f82944b5f5e63298b447ae13bcbd26adb6e5a6a87b8f45"}
+    ],
+    "gzip_sha256": "2c11cee21ac9918b53c287f9123fc0fdb74109e003329993a474a04201bfa607",
+    "decompressed_sha256": "d1965bf41af7d13b76941ada83a115efb280639b203cb19d334ae281d4705c3d"
+  },
+  "files": {
+    "port_native_eod_capacity.py": {"bytes": 5639, "git_blob": "4174f69e8cbe456a4e2ccb1160ff3aede2717516", "sha256": "059cd55fe3e6ad3a2ded99fb6d7222bb20d9aaca5f1cda3a642e2ab0653612fe"},
+    "test_native_eod_capacity.py": {"bytes": 22249, "git_blob": "a8a57ce62b2743b898e0a64d9917f7cbbd77d58b", "sha256": "399cfe26c4f83fbc629eb07257b7c81114e412336741ad0d1c03b282c1bbb60f"},
+    "census_native_eod_capacity.py": {"bytes": 6263, "git_blob": "505d45ef30b44d55dcf2233faac5d0cc607d2b7b", "sha256": "25e38796ecf015ef69f883e63667471a223f88a01bc3d07251a784e18f52f6c7"},
+    "NATIVE-CENSUS.json.gz": {"bytes": 6041, "git_blob": "7182a23093b5f0ce8ab3cdf5c908cbe24fa28bd7", "sha256": "2c11cee21ac9918b53c287f9123fc0fdb74109e003329993a474a04201bfa607"}
+  },
+  "limits": [
+    "No full-current-b567 package, gauntlet, field-frequency, expected-value or leaderboard claim.",
+    "Census directly invokes actual native b952 TitanAgent against official starter from existing artifact10123395668; older archive main.py is not used.",
+    "Native runtime hook is exercised as actual _finish_production method with collaborator probes, not activated in census or production.",
+    "H3c full-router composition and partial-vector solver are not run; current donor policy AST is preserved.",
+    "Fertilizer floor-buy subsidy invalidates unconditional all-product activation. Natural census supplies no activation evidence.",
+    "Existing MERIDIAN adversarial matrix and INTERVAL partial solver remain their owners' work within the same mechanism; do not rebuild their policies."
+  ]
+}

@@ -1,0 +1,57 @@
+name: warranty-rma-desk
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/hive/warranty-rma-desk/**'
+      - '.github/workflows/warranty-rma-desk.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/hive/warranty-rma-desk/**'
+      - '.github/workflows/warranty-rma-desk.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/hive/warranty-rma-desk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile app.py test_app.py test_ui_contract.py
+      - name: Focused suite
+        run: python -m unittest -v
+      - name: Optimized suite
+        run: python -O -m unittest -v
+      - name: Browser script syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          text = Path('index.html').read_text()
+          match = re.search(r'<script>\n(.*?)\n</script>', text, re.S)
+          if not match:
+              raise SystemExit('inline script not found')
+          Path('/tmp/warranty-rma-ui.js').write_text(match.group(1))
+          PY
+          node --check /tmp/warranty-rma-ui.js
+      - name: Synthetic end-to-end
+        run: |
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          python app.py demo --db "$tmp/demo.sqlite3" | tee "$tmp/demo.json"
+          python - "$tmp/demo.json" <<'PY'
+          import json, pathlib, sys
+          doc=json.loads(pathlib.Path(sys.argv[1]).read_text())
+          assert doc['final_status']=='CLOSED'
+          assert doc['resolution']=='REPLACEMENT'
+          assert doc['external_actions_performed']==0
+          PY

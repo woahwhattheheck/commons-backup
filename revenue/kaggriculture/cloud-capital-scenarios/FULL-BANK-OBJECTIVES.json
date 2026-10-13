@@ -1,0 +1,170 @@
+{
+  "schema": "titan.amber-cash-full-bank-objectives.v1",
+  "complete": true,
+  "archive": {
+    "file_name": "TITAN-AMBER-cash-scope-20260908.zip",
+    "source_file_id": "file_00000000426481f5abbc7dd2b7a6278f",
+    "sha256": "82573a9463a9c6d5d725610d39ce032551928e0fd0c0fedfc65d1f098b106ca6",
+    "manifest_payloads": 147,
+    "all_manifest_payloads_match": true
+  },
+  "ranker": {
+    "bytes": 17741,
+    "sha256": "69f401934d0ffc71eeb753a73ae2c44c518e438c8e9076c866c4ffc7e381b384",
+    "git_blob": "76bf7b442c725a57a567efbe4de2b11f1915734e"
+  },
+  "bank": {
+    "identity_paths": 32768,
+    "route_cash_records": 65536,
+    "route_ids": [
+      "7015cc00acfa4922",
+      "dc76e4003029ac51"
+    ],
+    "cash_scope": "exhaustive declared shop paths, fixed conditional program quantities; no rival trading or physical fill claim",
+    "probabilities": null,
+    "rival_utility": null,
+    "physical_feasibility_established": false
+  },
+  "objectives": {
+    "robust": {
+      "objective": "robust",
+      "selected": "7015cc00acfa4922",
+      "incumbent": "7015cc00acfa4922",
+      "changed": false,
+      "reason": "no_covered_improvement",
+      "candidate": {
+        "complete": true,
+        "nominal_budget_nonnegative": true,
+        "worst_paired_gain": -16964.0
+      }
+    },
+    "minimax_regret": {
+      "objective": "minimax_regret",
+      "selected": "7015cc00acfa4922",
+      "incumbent": "7015cc00acfa4922",
+      "changed": false,
+      "reason": "no_covered_improvement",
+      "candidate": {
+        "complete": true,
+        "nominal_budget_nonnegative": true,
+        "worst_paired_gain": -16964.0
+      },
+      "objective_values": {
+        "7015cc00acfa4922": {
+          "worst_regret": "10851",
+          "worst_regret_reduction": "0"
+        },
+        "dc76e4003029ac51": {
+          "worst_regret": "16964",
+          "worst_regret_reduction": "-6113"
+        }
+      },
+      "decision_objective": "minimax_regret",
+      "objective_arithmetic": "exact_rational_over_validated_cash_values",
+      "regret_comparator": "best_eligible_whole_route_per_scenario_for_scoring_only",
+      "eligible_routes": [
+        "7015cc00acfa4922",
+        "dc76e4003029ac51"
+      ]
+    },
+    "assumed_independent_uniform_expected_cash": {
+      "objective": "expected_cash",
+      "selected": "7015cc00acfa4922",
+      "incumbent": "7015cc00acfa4922",
+      "changed": false,
+      "reason": "no_covered_improvement",
+      "candidate": {
+        "complete": true,
+        "nominal_budget_nonnegative": true,
+        "worst_paired_gain": -16964.0
+      },
+      "objective_values": {
+        "7015cc00acfa4922": {
+          "expected_own_cash": "1099182829/8192",
+          "expected_paired_gain": "0"
+        },
+        "dc76e4003029ac51": {
+          "expected_own_cash": "4288962017/32768",
+          "expected_paired_gain": "-107769299/32768"
+        }
+      },
+      "decision_objective": "expected_cash",
+      "objective_arithmetic": "exact_rational_over_validated_cash_values",
+      "weight_scope": "caller_assumptions_over_this_complete_bank_not_inferred_probabilities",
+      "eligible_routes": [
+        "7015cc00acfa4922",
+        "dc76e4003029ac51"
+      ],
+      "assumption": "independent uniform over the 32,768 explicit identity paths; not inferred or calibrated",
+      "expected_sheep_minus_main": "-107769299/32768",
+      "expected_sheep_minus_main_decimal": -3288.8580017089844
+    }
+  },
+  "paired_gain": {
+    "minimum": "-16964",
+    "maximum": "10851",
+    "sign_counts": {
+      "positive": 7956,
+      "zero": 1,
+      "negative": 24811
+    },
+    "first_yarn_visible": {
+      "288": {
+        "paths": 4096,
+        "positive": 4096,
+        "zero": 0,
+        "negative": 0,
+        "minimum_paired_gain": "5155",
+        "maximum_paired_gain": "10851"
+      },
+      "360": {
+        "paths": 3584,
+        "positive": 3576,
+        "zero": 0,
+        "negative": 8,
+        "minimum_paired_gain": "-1174",
+        "maximum_paired_gain": "7585"
+      },
+      "432": {
+        "paths": 3136,
+        "positive": 284,
+        "zero": 1,
+        "negative": 2851,
+        "minimum_paired_gain": "-9831",
+        "maximum_paired_gain": "1619"
+      },
+      "504": {
+        "paths": 2744,
+        "positive": 0,
+        "zero": 0,
+        "negative": 2744,
+        "minimum_paired_gain": "-11456",
+        "maximum_paired_gain": "-965"
+      },
+      "576": {
+        "paths": 2401,
+        "positive": 0,
+        "zero": 0,
+        "negative": 2401,
+        "minimum_paired_gain": "-12332",
+        "maximum_paired_gain": "-4161"
+      }
+    }
+  },
+  "execution": {
+    "pricing_calls": 0,
+    "simulation_calls": 0,
+    "actor_calls": 0,
+    "game_calls": 0,
+    "path_generation_calls": 0,
+    "manifest_payloads_verified": 147,
+    "original_author_ingest_and_rank_wall_seconds": 6.49,
+    "publication_readback_wall_seconds": 6.457921862999683
+  },
+  "limits": [
+    "These are saved nominal fixed-quantity own-cash records, not physical fills or rival margin.",
+    "Support signs are not game wins, and independent-uniform weights are not measured probabilities.",
+    "Earlier no-buyer and first-YARN288 physical payoffs are separate and are not copied into this bank.",
+    "No route is promoted and no runtime default is changed by this offline reader."
+  ]
+}

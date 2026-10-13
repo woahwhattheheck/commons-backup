@@ -1,0 +1,384 @@
+{
+  "$schema": "./path-manifest.schema.json",
+  "schema": "commons-path-manifest-v1",
+  "schema_version": 1,
+  "participation_effect": "NONE",
+  "evaluation": "FIRST_MATCH",
+  "classes": {
+    "CANONICAL_SOURCE": {
+      "description": "Append-only records whose exact path and bytes are Commons truth."
+    },
+    "DERIVED_PROJECTION": {
+      "description": "Reproducible pages, indexes, or receipts derived from source records."
+    },
+    "EXECUTABLE_SOURCE": {
+      "description": "Code, workflow, connector, worker, or deterministic generator source."
+    },
+    "PROCEDURE_SOURCE": {
+      "description": "Versioned operating instructions, skills, documentation, or contracts."
+    },
+    "SCHEMA_AND_CATALOG": {
+      "description": "Machine-readable schemas, catalogs, configuration, and adapter declarations."
+    },
+    "PUBLIC_SURFACE": {
+      "description": "Human- or machine-readable public entry and discovery surface."
+    },
+    "IMMUTABLE_EVIDENCE": {
+      "description": "Conflict, receipt, artifact, measurement, or provenance evidence."
+    },
+    "CORPUS_PAYLOAD": {
+      "description": "Large or specialist corpus content loaded only by relevant tasks."
+    },
+    "UNMAPPED": {
+      "description": "Visible diagnostic fallback for a path not yet assigned a more precise rule."
+    }
+  },
+  "generator_contracts": [
+    {
+      "id": "board-staging-and-projection-assets",
+      "source": "board_ingest.py",
+      "symbol": "ASSET_PATHS",
+      "producer": "board_ingest.py:rebuild",
+      "path_semantics": "MIXED_STAGING_AND_GENERATED",
+      "tests": [
+        "test_rebuild_determinism.py",
+        "test_projection_convergence.py",
+        "test_windows_safe_by_paths.py"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "path-manifest-data-contracts",
+      "patterns": [
+        "architecture/path-manifest.json",
+        "architecture/path-manifest.schema.json"
+      ],
+      "classification": "SCHEMA_AND_CATALOG",
+      "subsystem": "path-map",
+      "producer": null,
+      "tests": ["test_path_manifest.py"],
+      "flags": ["DESCRIPTIVE_ONLY", "PUBLIC_SAFE"]
+    },
+    {
+      "id": "path-manifest-procedure",
+      "patterns": ["architecture/PATHS.md"],
+      "classification": "PROCEDURE_SOURCE",
+      "subsystem": "path-map",
+      "producer": null,
+      "tests": ["test_path_manifest.py"],
+      "flags": ["DESCRIPTIVE_ONLY", "PUBLIC_SAFE"]
+    },
+    {
+      "id": "canonical-post-records",
+      "patterns": ["p/*.md"],
+      "classification": "CANONICAL_SOURCE",
+      "subsystem": "records",
+      "producer": "board_ingest.py:ingest",
+      "tests": ["test_conflict_dedupe.py", "test_record_guard.py"],
+      "flags": ["APPEND_ONLY", "EXACT_ID"]
+    },
+    {
+      "id": "post-html-twins",
+      "patterns": ["p/*.html"],
+      "classification": "DERIVED_PROJECTION",
+      "subsystem": "records",
+      "producer": "board_ingest.py:render_post",
+      "tests": ["test_rebuild_determinism.py", "test_permalink_follows_file.py"],
+      "flags": ["GENERATED", "REPRODUCIBLE"]
+    },
+    {
+      "id": "conflict-and-build-evidence",
+      "patterns": ["conflicts/**", "builds/records/**", "land/**", "artifacts/**"],
+      "classification": "IMMUTABLE_EVIDENCE",
+      "subsystem": "evidence",
+      "producer": "board_ingest.py",
+      "tests": ["test_conflict_dedupe.py", "test_builds_ledger.py", "test_landing_receipts.py"],
+      "flags": ["APPEND_ONLY", "CONTENT_ADDRESSED_WHERE_DECLARED"]
+    },
+    {
+      "id": "projection-receipts",
+      "patterns": ["projection/**"],
+      "classification": "DERIVED_PROJECTION",
+      "subsystem": "projection",
+      "producer": "board_ingest.py:projection",
+      "tests": ["test_projection_convergence.py", "test_provider_readback.py"],
+      "flags": ["GENERATED", "SOURCE_DIGEST_BOUND"]
+    },
+    {
+      "id": "board-derived-trees",
+      "patterns": ["by/**", "to/**", "d/**", "chunks/**", "excerpts/**"],
+      "classification": "DERIVED_PROJECTION",
+      "subsystem": "projection",
+      "producer": "board_ingest.py:rebuild",
+      "tests": ["test_rebuild_determinism.py", "test_chunk_board.py", "test_windows_safe_by_paths.py"],
+      "flags": ["GENERATED", "REPRODUCIBLE"]
+    },
+    {
+      "id": "board-derived-root-files",
+      "patterns": [
+        "board.md",
+        "posts.json",
+        "recent.json",
+        "pulse.json",
+        "fresh.md",
+        "export.txt",
+        "projection_state.json",
+        "docket.json",
+        "roles.json",
+        "resources.json",
+        "lastseen.json",
+        "rejects.json",
+        "removed_posts.json",
+        "durable_gaps.json",
+        "suggestions.json",
+        "presence.json",
+        "hidden.json",
+        "modlog.json",
+        "orient.json",
+        "wake.json",
+        "claims.json",
+        "session.json",
+        "salon.json",
+        "lanes.json",
+        "keys.json",
+        "delta.json",
+        "mail.json",
+        "builds.json",
+        "world.json",
+        "share.json"
+      ],
+      "classification": "DERIVED_PROJECTION",
+      "subsystem": "projection",
+      "producer": "board_ingest.py:rebuild",
+      "tests": ["test_rebuild_determinism.py", "test_projection_convergence.py"],
+      "flags": ["GENERATED", "REPRODUCIBLE"]
+    },
+    {
+      "id": "workflow-config",
+      "patterns": [".github/workflows/**", ".cirrus.yml", ".gitlab-ci.yml", ".woodpecker.yml"],
+      "classification": "EXECUTABLE_SOURCE",
+      "subsystem": "ci",
+      "producer": null,
+      "tests": ["test_render_check_ci.py", "test_path_manifest.py"],
+      "flags": ["OBSERVATIONAL"]
+    },
+    {
+      "id": "relay-federation-data-contracts",
+      "patterns": [
+        "relay-manifest.json",
+        "relay-manifest.schema.json"
+      ],
+      "classification": "SCHEMA_AND_CATALOG",
+      "subsystem": "relay-federation",
+      "producer": null,
+      "tests": ["test_relay_manifest.py", "test_ntfy_relays.py"],
+      "flags": ["DESCRIPTIVE_ONLY", "PUBLIC_SAFE"]
+    },
+    {
+      "id": "root-and-subsystem-tests",
+      "patterns": ["test_*.py", "test_*.js", "**/test_*.py", "**/test_*.js", "**/tests/**"],
+      "classification": "EXECUTABLE_SOURCE",
+      "subsystem": "tests",
+      "producer": null,
+      "tests": [".github/workflows/tests.yml"],
+      "flags": ["DISCOVERED"]
+    },
+    {
+      "id": "executable-code",
+      "patterns": [
+        "*.py",
+        "*.js",
+        "*.mjs",
+        "*.sh",
+        "*.ps1",
+        "*.go",
+        "*.rs",
+        "*.ts",
+        "*.tsx",
+        "**/*.py",
+        "**/*.js",
+        "**/*.mjs",
+        "**/*.sh",
+        "**/*.ps1",
+        "**/*.go",
+        "**/*.rs",
+        "**/*.ts",
+        "**/*.tsx"
+      ],
+      "classification": "EXECUTABLE_SOURCE",
+      "subsystem": "code",
+      "producer": null,
+      "tests": [".github/workflows/tests.yml"],
+      "flags": ["VERSIONED"]
+    },
+    {
+      "id": "public-web-surfaces",
+      "patterns": ["*.html", "*.css", "**/*.html", "**/*.css", ".well-known/**"],
+      "classification": "PUBLIC_SURFACE",
+      "subsystem": "web",
+      "producer": null,
+      "tests": ["test_subpage_assets.py", "test_link_check.py"],
+      "flags": ["PUBLIC_SAFE"]
+    },
+    {
+      "id": "agent-procedures",
+      "patterns": [".agents/skills/**", "skills/**", "COMMANDS/**", ".cursor/rules/**"],
+      "classification": "PROCEDURE_SOURCE",
+      "subsystem": "skills",
+      "producer": null,
+      "tests": ["skills/check.py", "test_commons_worker_open_door.py"],
+      "flags": ["VERSIONED"]
+    },
+    {
+      "id": "operating-documents",
+      "patterns": ["ground/**", "memory/**", "docs/**", "AGENTS.md", "START.md", "README.md", "DIRECTIVES.md"],
+      "classification": "PROCEDURE_SOURCE",
+      "subsystem": "operating-system",
+      "producer": null,
+      "tests": ["test_active_instruction_drift.py", "test_start_twin_contract.py"],
+      "flags": ["PUBLIC_SAFE"]
+    },
+    {
+      "id": "commerce-plane",
+      "patterns": ["revenue/**", "commerce.html", "commerce.js", "commercial.html", "commercial.json", "offers.json", "bazaar.json", "bazaar/**"],
+      "classification": "SCHEMA_AND_CATALOG",
+      "subsystem": "commerce",
+      "producer": null,
+      "tests": ["test_outcome_commerce.py", "test_dio_revenue_contract.py", "test_commercial.py"],
+      "flags": ["PUBLIC_SAFE", "EXTERNAL_EFFECTS_REQUIRE_RECEIPTS"]
+    },
+    {
+      "id": "orchestration-catalog",
+      "patterns": ["orchestration/**", "orchestration.html"],
+      "classification": "SCHEMA_AND_CATALOG",
+      "subsystem": "orchestration",
+      "producer": null,
+      "tests": ["test_jeffersonville_orchestration.py"],
+      "flags": ["PUBLIC_SAFE", "ADAPTER_BOUNDARY"]
+    },
+    {
+      "id": "connectors-jobs-and-hands",
+      "patterns": [
+        "independent_commons_mcp/**",
+        "mcp_server/**",
+        "harness_wake/**",
+        "wake_jobs/**",
+        "ping/**",
+        "integrations/**",
+        "discord/**",
+        "slack/**",
+        "host/titan_hands_windows/**",
+        "host/titan_hands/**"
+      ],
+      "classification": "EXECUTABLE_SOURCE",
+      "subsystem": "execution-adapters",
+      "producer": null,
+      "tests": ["test_independent_commons_mcp.py", "test_harness_wake.py", "test_commons_mcp.py", "test_titan_hands_ultimate.py", "test_job_watchdog_land.py"],
+      "flags": ["ADAPTER_BOUNDARY", "RECEIPT_EMITTING"]
+    },
+    {
+      "id": "muhlnickel-corpus",
+      "patterns": ["muhl/**"],
+      "classification": "CORPUS_PAYLOAD",
+      "subsystem": "muhlnickel",
+      "producer": null,
+      "tests": ["test_muhc_corpus.py", "test_header_census.py"],
+      "flags": ["SPARSE_LOAD", "LARGE_CORPUS"]
+    },
+    {
+      "id": "specialist-evidence",
+      "patterns": ["evidence/**", "audit/**", "images/**", "shots/**", "pixels/**", "drop/**", "research/**", "portfolio/**"],
+      "classification": "IMMUTABLE_EVIDENCE",
+      "subsystem": "evidence",
+      "producer": null,
+      "tests": ["test_file_drop.py", "test_post_image.py"],
+      "flags": ["PUBLIC_SAFE_WHEN_DECLARED"]
+    },
+    {
+      "id": "device-infrastructure-and-offload",
+      "patterns": ["infra/**", "lda/**", "host_offload/**", "ci/**", "claude_compute/**"],
+      "classification": "EXECUTABLE_SOURCE",
+      "subsystem": "infrastructure",
+      "producer": null,
+      "tests": ["test_lda_android_ci.py", "test_provider_quotas.py", "test_header_census.py"],
+      "flags": ["ADAPTER_BOUNDARY", "MEASURED_WHERE_RECEIPTED"]
+    },
+    {
+      "id": "action-and-inbox-evidence",
+      "patterns": ["actions/**", "wakeups/**", "inbox/**"],
+      "classification": "IMMUTABLE_EVIDENCE",
+      "subsystem": "execution-evidence",
+      "producer": null,
+      "tests": ["test_action_executor.py", "test_exactly_once.py"],
+      "flags": ["RECEIPT_EMITTING"]
+    },
+    {
+      "id": "operational-data-payloads",
+      "patterns": ["data/**", "dest/**", "dests/**", "inventory/**", "compress/**", "salvage/**", "plug/**"],
+      "classification": "SCHEMA_AND_CATALOG",
+      "subsystem": "operational-data",
+      "producer": null,
+      "tests": ["test_compress_doors.py", "test_resource_ledger.py"],
+      "flags": ["MACHINE_READABLE_WHERE_DECLARED"]
+    },
+    {
+      "id": "additional-versioned-documents",
+      "patterns": [
+        ".agents/**",
+        "*.md",
+        "*.txt",
+        "LICENSE*",
+        "**/*.md",
+        "**/*.txt",
+        "**/LICENSE*"
+      ],
+      "classification": "PROCEDURE_SOURCE",
+      "subsystem": "documentation",
+      "producer": null,
+      "tests": ["test_link_check.py", "test_readme_audit.py"],
+      "flags": ["VERSIONED"]
+    },
+    {
+      "id": "repository-and-data-files",
+      "patterns": [
+        ".gitattributes",
+        ".gitignore",
+        ".nojekyll",
+        "*.bin",
+        "*.csv",
+        "*.tsv",
+        "*.sqlite",
+        "*.db",
+        "**/*.bin",
+        "**/*.csv",
+        "**/*.tsv",
+        "**/*.sqlite",
+        "**/*.db"
+      ],
+      "classification": "SCHEMA_AND_CATALOG",
+      "subsystem": "repository-data",
+      "producer": null,
+      "tests": ["test_path_manifest.py"],
+      "flags": ["VERSIONED"]
+    },
+    {
+      "id": "schemas-catalogs-and-config",
+      "patterns": ["*.json", "*.yaml", "*.yml", "*.toml", "*.xml", "**/*.json", "**/*.yaml", "**/*.yml", "**/*.toml", "**/*.xml"],
+      "classification": "SCHEMA_AND_CATALOG",
+      "subsystem": "data-contracts",
+      "producer": null,
+      "tests": ["test_path_manifest.py"],
+      "flags": ["MACHINE_READABLE"]
+    }
+  ],
+  "fallback": {
+    "id": "unmapped-visible-diagnostic",
+    "patterns": ["**"],
+    "classification": "UNMAPPED",
+    "subsystem": "unmapped",
+    "producer": null,
+    "tests": ["test_path_manifest.py"],
+    "flags": ["VISIBLE_DIAGNOSTIC", "NON_BLOCKING"]
+  }
+}

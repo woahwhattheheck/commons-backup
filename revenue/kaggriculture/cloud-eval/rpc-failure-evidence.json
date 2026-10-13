@@ -1,0 +1,230 @@
+{
+  "scope": "failed RPC request and parent transport evidence; local source-bound validation",
+  "environment": {
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "linux"
+  },
+  "sources": {
+    "evaluator_before": {
+      "bytes": 28527,
+      "sha256": "207345566b5c04426c67aea5b5a719deb2b565079e8c5adcc3fea0dcde3b5799",
+      "git_blob": "0eead824257c0a6bd01b5b8c7828f30410546635"
+    },
+    "evaluator_after": {
+      "bytes": 32685,
+      "sha256": "041eb75afd6b4ff5db7f0dfb2825b0ef7c555b3f0c443e70756da68f112a9347",
+      "git_blob": "ab1ac46a5cd3dd0bfda0afdbaf5a5f73320f863d"
+    },
+    "new_tests": {
+      "bytes": 18112,
+      "sha256": "9dcd4fafc3ac83756ae09e90451ee6dc480f5843d0b23aa67c335f1282240254",
+      "git_blob": "e657a896c2f5deac22505f9b74c1b44fe2825e00"
+    }
+  },
+  "new_tests": {
+    "run": 18,
+    "failures": 0,
+    "errors": 0,
+    "successful": true
+  },
+  "baseline_same_new_tests": {
+    "run": 18,
+    "failures": 18,
+    "errors": 0,
+    "successful": false
+  },
+  "compatibility": {
+    "test_evaluator.ActorTests": 13,
+    "test_evaluator.SummaryTests": 4,
+    "test_final_usage": 8,
+    "total": 25,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "unchanged_bodies": [
+    "Struct",
+    "structify",
+    "encoded",
+    "sha256",
+    "import_file",
+    "verify_sources",
+    "get_engine",
+    "usage",
+    "load_callable",
+    "worker",
+    "play",
+    "summarize",
+    "resolve_spec",
+    "fingerprint",
+    "write_report",
+    "main",
+    "Actor._measure",
+    "Actor._wait_with_usage",
+    "Actor.close",
+    "Actor.report"
+  ],
+  "logs": {
+    "patched-tests.log": {
+      "bytes": 2842,
+      "sha256": "d708433a6d6e9ec34734a3ef9af42828ab4f4b2d899ce166de82719214ab6d48",
+      "git_blob": "c9369506511c40bbb6fa1046d51696a59c0de9fd"
+    },
+    "original-tests.log": {
+      "bytes": 18781,
+      "sha256": "9495a38ba10c896ef0bf3d7e32c20a91b8949c1548e21409328382837ff2d9c3",
+      "git_blob": "b63cda4af449d2f38ec79e6eacae9b97af6f8ded"
+    },
+    "compatibility-tests.log": {
+      "bytes": 2773,
+      "sha256": "507a6395b53df283f38151d75673af1f551fd8e431adc7afd339a68f904bcd66",
+      "git_blob": "99a730ba96f53662458c2749bd796bcdbc3f1f70"
+    }
+  },
+  "witnesses": [
+    {
+      "case": "partial_response",
+      "response": {
+        "kind": "timeout",
+        "error": "Agent RPC wall-clock deadline exceeded",
+        "rpc_failure": {
+          "schema_version": 1,
+          "scope": "parent_observed_failed_rpc",
+          "request": {
+            "disposition": "complete",
+            "wire_bytes": 180,
+            "wire_sha256": "f49b0fcbc3c89610607455722d4f2da3388959b1ceb6e93b4dcf98e32b66756c",
+            "wire_utf8": "{\"configuration\":{\"remaining\":[1,2],\"seed\":null,\"turnsPerDay\":24},\"observation\":{\"day\":0,\"hour\":17,\"marker\":\"unicode: \\u03bb\",\"player\":1,\"private\":{\"shed\":{\"WHEAT\":7}},\"step\":17}}\n"
+          },
+          "transport": {
+            "exchange_seconds": 0.20052490200009743,
+            "request_encoded_seconds": 3.294800001185649e-05,
+            "request_bytes_written": 180,
+            "write_complete_seconds": 8.964200003447331e-05,
+            "response_buffered_at_start": 0,
+            "response_bytes_read": 13,
+            "first_response_seconds": 0.00019692000000759435,
+            "response_complete_seconds": null,
+            "timeout_seconds": 0.2
+          },
+          "response": {
+            "observed_bytes": 13,
+            "observed_sha256": "4b9ee7038d422c04c3ee5c26b30bcd2446691f407b1f2f33adcf344e27986a0f",
+            "prefix_base64": "/wB7InBhcnRpYWwiOg==",
+            "retained_bytes": 13,
+            "truncated": false,
+            "complete_line": false
+          },
+          "worker_call_seconds": null,
+          "worker_call_cpu_seconds": null,
+          "worker_stage": null
+        }
+      }
+    },
+    {
+      "case": "play_report_failure",
+      "failure": {
+        "seat": 1,
+        "step": 0,
+        "phase": "action",
+        "kind": "timeout",
+        "error": "Agent RPC wall-clock deadline exceeded",
+        "rpc_failure": {
+          "schema_version": 1,
+          "scope": "parent_observed_failed_rpc",
+          "request": {
+            "disposition": "complete",
+            "wire_bytes": 191,
+            "wire_sha256": "40e5b3f7fd93378357199f175d99ce3eae7ee867ec9c6b7d19a02d522ea149d6",
+            "wire_utf8": "{\"configuration\":{\"episodeSteps\":3,\"seed\":null,\"turnsPerDay\":24},\"observation\":{\"farms\":[{\"money\":10},{\"money\":20}],\"player\":1,\"private\":{\"seat_marker\":1},\"remainingOverageTime\":0,\"step\":0}}\n"
+          },
+          "transport": {
+            "exchange_seconds": 0.08024445000000924,
+            "request_encoded_seconds": 1.4131000057204801e-05,
+            "request_bytes_written": 191,
+            "write_complete_seconds": 3.9968999999473453e-05,
+            "response_buffered_at_start": 0,
+            "response_bytes_read": 0,
+            "first_response_seconds": null,
+            "response_complete_seconds": null,
+            "timeout_seconds": 0.08
+          },
+          "response": {
+            "observed_bytes": 0,
+            "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "prefix_base64": "",
+            "retained_bytes": 0,
+            "truncated": false,
+            "complete_line": false
+          },
+          "worker_call_seconds": null,
+          "worker_call_cpu_seconds": null,
+          "worker_stage": null
+        }
+      }
+    },
+    {
+      "case": "timeout",
+      "response": {
+        "kind": "timeout",
+        "error": "Agent RPC wall-clock deadline exceeded",
+        "rpc_failure": {
+          "schema_version": 1,
+          "scope": "parent_observed_failed_rpc",
+          "request": {
+            "disposition": "complete",
+            "wire_bytes": 180,
+            "wire_sha256": "f49b0fcbc3c89610607455722d4f2da3388959b1ceb6e93b4dcf98e32b66756c",
+            "wire_utf8": "{\"configuration\":{\"remaining\":[1,2],\"seed\":null,\"turnsPerDay\":24},\"observation\":{\"day\":0,\"hour\":17,\"marker\":\"unicode: \\u03bb\",\"player\":1,\"private\":{\"shed\":{\"WHEAT\":7}},\"step\":17}}\n"
+          },
+          "transport": {
+            "exchange_seconds": 0.08029038799998034,
+            "request_encoded_seconds": 3.348999996433122e-05,
+            "request_bytes_written": 180,
+            "write_complete_seconds": 7.965800000420131e-05,
+            "response_buffered_at_start": 0,
+            "response_bytes_read": 0,
+            "first_response_seconds": null,
+            "response_complete_seconds": null,
+            "timeout_seconds": 0.08
+          },
+          "response": {
+            "observed_bytes": 0,
+            "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "prefix_base64": "",
+            "retained_bytes": 0,
+            "truncated": false,
+            "complete_line": false
+          },
+          "worker_call_seconds": null,
+          "worker_call_cpu_seconds": null,
+          "worker_stage": null
+        }
+      }
+    },
+    {
+      "case": "write_backpressure",
+      "transport": {
+        "exchange_seconds": 0.15100924699993357,
+        "request_encoded_seconds": 0.002704361999917637,
+        "request_bytes_written": 65536,
+        "write_complete_seconds": null,
+        "response_buffered_at_start": 0,
+        "response_bytes_read": 0,
+        "first_response_seconds": null,
+        "response_complete_seconds": null,
+        "timeout_seconds": 0.15
+      },
+      "request_bytes": 1048672
+    }
+  ],
+  "engine_games": 0,
+  "game_seeds": [],
+  "limits": [
+    "The new suite uses real workers and pipes plus one explicitly synthetic play/report-plumbing engine; no scored games or official engine panel.",
+    "The unchanged baseline lacks the new evidence fields: 18 failed assertions are new-contract gaps, not 18 separate policy defects.",
+    "This preserves future failed requests, not missing historical inputs or a persistent actor checkpoint.",
+    "Parent transport counters do not identify child execution stage, failed-call CPU or the cause of prior RPC timeouts.",
+    "Only accepted requests up to MAX_PACKET are retained in full; the response prefix is bounded to 65536 bytes."
+  ]
+}

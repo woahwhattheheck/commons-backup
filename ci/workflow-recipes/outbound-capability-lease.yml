@@ -1,0 +1,40 @@
+name: outbound-capability-lease
+
+on:
+  pull_request:
+    paths:
+      - 'tools/outbound_send_guard/atomic_lease.py'
+      - 'tools/outbound_send_guard/capability_lease.py'
+      - 'tools/outbound_send_guard/test_capability_lease.py'
+      - 'tools/outbound_send_guard/CAPABILITY_LEASE_V2.md'
+      - 'tools/outbound_send_guard/ATOMIC_LEASE.md'
+      - '.github/workflows/outbound-capability-lease.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/outbound_send_guard/atomic_lease.py'
+      - 'tools/outbound_send_guard/capability_lease.py'
+      - 'tools/outbound_send_guard/test_capability_lease.py'
+      - '.github/workflows/outbound-capability-lease.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  possession-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Parse v2 source and hostiles
+        run: >-
+          python -m py_compile
+          tools/outbound_send_guard/capability_lease.py
+          tools/outbound_send_guard/test_capability_lease.py
+      - name: Run v2 possession hostiles
+        run: python -m unittest -v tools.outbound_send_guard.test_capability_lease
+      - name: Run v2 possession hostiles with asserts disabled
+        run: python -O -m unittest -v tools.outbound_send_guard.test_capability_lease

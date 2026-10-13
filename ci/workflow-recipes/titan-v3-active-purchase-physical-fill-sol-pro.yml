@@ -1,0 +1,100 @@
+name: titan-v3-active-purchase-physical-fill-sol-pro
+
+on:
+  push:
+    paths:
+      - '.github/workflows/titan-v3-active-purchase-physical-fill-sol-pro.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3-active-purchase-physical-fill-sol-pro/**'
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-active-purchase-physical-fill-sol-pro.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3-active-purchase-physical-fill-sol-pro/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  exact-source-and-action-bound-panel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONHASHSEED: '0'
+      SEEDS: '539131249,1834999074,2609097301,2609097302,2609097303,2609097304,2611092201,2611092207'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Bind exact checkout
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          printf '%s\n' "$EXPECTED_HEAD" > "$RUNNER_TEMP/head.sha"
+          test -z "$(git status --porcelain)"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pinned official-interpreter dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Run exact source and engine contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          CASE=revenue/kaggriculture/cloud-execution-lab/candidates/v3-active-purchase-physical-fill-sol-pro
+          cd "$CASE"
+          python -m py_compile physical_fill.py materialize.py trace_evaluator.py compare.py audit.py test_physical_fill.py
+          python -m unittest -v test_physical_fill.py
+
+      - name: Run independent-seed action-bound paired panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          CASE=revenue/kaggriculture/cloud-execution-lab/candidates/v3-active-purchase-physical-fill-sol-pro
+          OUT="$RUNNER_TEMP/titan-v3-active-purchase-fill"
+          bash "$CASE/run_panel.sh" "$OUT" 2>&1 | tee "$RUNNER_TEMP/panel.log"
+
+      - name: Verify canonical release remains byte-exact and checkout clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-execution-lab
+          python build_integrated.py --check
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain)"
+
+      - name: Retain complete and partial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-active-purchase-fill-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/head.sha
+            ${{ runner.temp }}/panel.log
+            ${{ runner.temp }}/titan-v3-active-purchase-fill/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Require terminal evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/titan-v3-active-purchase-fill"
+          test -s "$OUT/COMPLETE"
+          test -s "$OUT/SOURCE-AUDIT.json"
+          test -s "$OUT/ACTION-ADMISSION.json"
+          test -s "$OUT/PROVENANCE.json"

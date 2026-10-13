@@ -1,0 +1,37 @@
+name: Offer Outcome Learning
+
+on:
+  push:
+    paths:
+      - 'revenue/offer_outcome_learning/**'
+      - '.github/workflows/offer-outcome-learning.yml'
+  pull_request:
+    paths:
+      - 'revenue/offer_outcome_learning/**'
+      - '.github/workflows/offer-outcome-learning.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: python -m py_compile revenue/offer_outcome_learning/*.py
+      - name: Normal hostiles
+        run: python -m unittest revenue.offer_outcome_learning.test_engine revenue.offer_outcome_learning.test_authority -v
+      - name: Optimized hostiles
+        run: python -O -m unittest revenue.offer_outcome_learning.test_engine revenue.offer_outcome_learning.test_authority -v
+      - name: Historical sample + verifier
+        run: |
+          tmp=$(mktemp -d)
+          python -m revenue.offer_outcome_learning.cli build --input revenue/offer_outcome_learning/example.json --json-out "$tmp/p.json" --markdown-out "$tmp/p.md" --historical-at 2026-09-13T23:40:00Z
+          python -m revenue.offer_outcome_learning.cli verify --input revenue/offer_outcome_learning/example.json --package "$tmp/p.json"

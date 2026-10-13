@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/marketing_sales/account_universe.schema.json",
+  "title": "Commons public marketing and sales research universe",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "observed_at", "source", "truth", "entities"],
+  "properties": {
+    "schema_version": {"const": "commons-marketing-sales-account-universe/v1"},
+    "kind": {"const": "MARKETING_SALES_RESEARCH_UNIVERSE"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "source": {"type": "string", "minLength": 1},
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_queries", "source_results", "research_entities", "github_organization_entities", "evidence_qualified_accounts", "verified_business_routes", "transport_actions", "cash_usd"],
+      "properties": {
+        "source_queries": {"type": "integer", "minimum": 1},
+        "source_results": {"type": "integer", "minimum": 0},
+        "research_entities": {"type": "integer", "minimum": 0},
+        "github_organization_entities": {"type": "integer", "minimum": 0},
+        "evidence_qualified_accounts": {"const": 0},
+        "verified_business_routes": {"const": 0},
+        "transport_actions": {"const": 0},
+        "cash_usd": {"const": 0}
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["entity_id", "entity_name", "owner_type", "qualification_state", "research_score", "source_query_ids", "repositories"],
+        "properties": {
+          "entity_id": {"type": "string", "pattern": "^github:[A-Za-z0-9][A-Za-z0-9-]{0,38}$"},
+          "entity_name": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}$"},
+          "owner_type": {"enum": ["Organization", "User"]},
+          "qualification_state": {"const": "RESEARCH_REQUIRED"},
+          "research_score": {"type": "integer", "minimum": 0, "maximum": 10},
+          "source_query_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+          "repositories": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["full_name", "url", "pushed_at", "stars", "query_id"],
+              "properties": {
+                "full_name": {"type": "string", "minLength": 3},
+                "url": {"type": "string", "pattern": "^https://github\\.com/"},
+                "pushed_at": {"type": "string", "format": "date-time"},
+                "stars": {"type": "integer", "minimum": 0},
+                "query_id": {"type": "string", "minLength": 3}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Caption intake · Batch workbench</title>
+<style>
+:root{color-scheme:light;--ink:#142c3b;--paper:#f3f4ee;--line:#d6ded8;--muted:#51636c;--accent:#17684c;--error:#982f2f}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,sans-serif}header{padding:32px max(24px,calc((100vw - 1320px)/2));background:var(--ink);color:white}header small{letter-spacing:.15em;text-transform:uppercase;color:#b9d7c7}h1{font-size:clamp(26px,4vw,42px);line-height:1.15;margin:10px 0}header p{max-width:780px;color:#d2e2df;margin-bottom:0}main{max-width:1368px;margin:auto;padding:24px}button,.file-button{border:1px solid var(--line);border-radius:7px;background:white;color:var(--ink);padding:10px 14px;font:inherit;cursor:pointer}button:hover,.file-button:hover{border-color:var(--accent)}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #e7ab48;outline-offset:3px}input,select{padding:9px;border:1px solid #9aafa4;border-radius:5px;font:inherit;max-width:100%;color:var(--ink);background:white}input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}fieldset{border:0;padding:0;margin:0;min-width:0}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar .grow{flex:1}.drop{padding:24px;border:2px dashed #8ca399;background:#fff;border-radius:12px;margin-bottom:16px}.drop.drag{border-color:var(--accent);background:#e7f3eb}.drop p{margin:8px 0 0;color:var(--muted);font-size:14px}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;margin-top:18px}.panel{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}.panel h2{margin:0 0 8px;font-size:21px}.file-list{list-style:none;padding:0;margin:16px 0}.file-row{display:grid;grid-template-columns:22px minmax(0,1fr) 30px;gap:8px;align-items:center;margin-bottom:8px;border:1px solid var(--line);border-radius:8px;padding:8px}.file-row.active{border-color:var(--accent);background:#eff7f1}.file-row button.pick{text-align:left;border:0;background:none;padding:0;overflow-wrap:anywhere;min-width:0}.file-row .remove{padding:2px;border:0;background:none}.file-row small{display:block;color:var(--muted);font-size:12px}.file-row .bad{color:var(--error)}.settings{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.settings label{display:flex;flex-direction:column;gap:5px;font-size:14px}.settings .wide{grid-column:1/-1}.check-label{display:flex!important;flex-direction:row!important;align-items:center;gap:10px!important}.hint{font-size:13px;color:var(--muted)}.message{padding:12px 16px;border-left:4px solid var(--accent);background:#e9f1eb;margin:14px 0;overflow-wrap:anywhere}.message.error{border-color:var(--error);background:#fff0ec;color:#792727}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.metric{background:var(--paper);padding:12px;border-radius:7px}.metric strong{font-size:22px;display:block}.metric span{font-size:12px;color:var(--muted)}.source{font-size:13px;overflow-wrap:anywhere;color:var(--muted)}.source code{font-size:12px}#cues{margin-top:14px}.cue{border-top:1px solid var(--line);padding:14px 0}.cue h3{margin:0;font-size:15px}.cue p{margin:8px 0;white-space:pre-wrap;overflow-wrap:anywhere}.cue summary{font-size:13px;color:var(--muted);cursor:pointer}.cue pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--paper);padding:12px;font-size:13px}.page-bar{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:18px}.quiet{color:var(--muted)}footer{max-width:1320px;margin:10px auto 32px;padding:0 24px;color:var(--muted);font-size:13px}[hidden]{display:none!important}@media(max-width:850px){.layout{grid-template-columns:1fr}.file-list{max-height:280px;overflow:auto}.settings{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}main{padding:14px}.panel{padding:16px}}@media(max-width:480px){.metrics{grid-template-columns:1fr}.toolbar button{flex:1}header{padding:26px 20px}.metric strong{font-size:18px}}
+</style>
+<script src="/workbench.js" defer></script>
+</head>
+<body>
+<header><small>Local media handoff</small><h1>Caption intake workbench</h1><p>Turn supplied SRT and WebVTT files into clear, source-preserving handoffs. Preview the captions, resolve the exceptions, and download the originals with their editable transcript.</p></header>
+<main>
+<div id="global-status" class="message" role="status" aria-live="polite">Starting the local workbench…</div>
+<fieldset id="workspace">
+<section id="drop" class="drop" aria-label="Add caption files">
+<div class="toolbar"><label class="file-button" for="files">Choose caption files</label><input class="visually-hidden" id="files" type="file" accept=".srt,.vtt" multiple><span>or drop caption files here</span><label class="file-button" for="handoff-file">Reopen saved handoff</label><input class="visually-hidden" id="handoff-file" type="file" accept=".zip"><span class="grow"></span><button id="clear" type="button">Clear selection</button></div>
+<p>Up to 20 files · 2 MB each · 20 MB per batch · 50,000 cues per batch. Files stay in this tab and the local server’s request memory.</p>
+<p>Reopen an individual or complete batch ZIP from this converter to restore its originals, retained options and cue previews. Saved ZIP limit: 64 MB.</p>
+</section>
+<div class="toolbar"><button id="preview-all" class="primary" type="button">Preview selected</button><button id="export-batch" type="button">Download selected batch</button><span class="grow"></span><span id="selection-count" class="quiet">No files selected</span></div>
+<div class="layout">
+<aside class="panel"><h2>Caption files</h2><p class="hint">A checkmark includes a file in batch actions. Click its name to inspect or change its intake options.</p><ul id="file-list" class="file-list"></ul><p id="empty-list" class="quiet">Choose files to begin. Duplicate names remain separate entries.</p></aside>
+<section class="panel" aria-label="Selected caption details">
+<div id="empty-detail"><h2>Make the handoff traceable</h2><p>Every export retains the original file byte for byte, normalized segments, source cue IDs, timing lines, and a content manifest.</p><p class="quiet">No audio is uploaded or transcribed. A successful parse does not verify words against a recording.</p></div>
+<div id="detail" hidden>
+<h2 id="file-name"></h2><p id="file-size" class="hint"></p>
+<div class="settings">
+<label class="wide">Handoff title<input id="title" maxlength="300" autocomplete="off"></label>
+<label>Caption format<select id="format"><option value="vtt">WebVTT (.vtt)</option><option value="srt">SubRip (.srt)</option><option value="">Choose a format</option></select></label>
+<label>Known text encoding<input id="encoding" list="encodings" maxlength="80" autocomplete="off"><datalist id="encodings"><option value="utf-8-sig"><option value="utf-8"><option value="cp1252"><option value="utf-16"></datalist></label>
+<label>Default speaker label<input id="speaker" maxlength="200" autocomplete="off"></label>
+<label>Known recording duration (seconds)<input id="duration" inputmode="decimal" maxlength="64" placeholder="Optional; never inferred" autocomplete="off"></label>
+<label class="wide check-label"><input type="checkbox" id="synthetic">Label the optional episode import as a fictional demonstration</label>
+<p class="wide hint">Leave duration empty for a generic, overlap-preserving transcript. An explicit duration requests podcast/clipping import JSON; incompatible overlaps or consumer limits stay visible instead of dropping cues. WebVTT requires UTF-8. The default speaker is a supplied label, not an identified voice.</p>
+</div>
+<div class="toolbar"><button id="preview-one" class="primary" type="button">Preview this file</button><button id="export-one" type="button">Download this handoff</button></div>
+<div id="file-status" class="message" role="status"></div>
+<div id="summary" hidden><div id="metrics" class="metrics"></div><div id="source-info" class="source"></div></div>
+<div id="preview" hidden>
+<div class="toolbar"><label for="query">Find a cue</label><input id="query" maxlength="256" placeholder="Text, speaker, or cue ID"><button id="search" type="button">Find</button></div>
+<div id="cues"></div><div class="page-bar"><button id="previous" type="button">Previous</button><span id="page-label" class="hint"></span><button id="next" type="button">Next</button></div>
+</div>
+</div>
+</section>
+</div>
+</fieldset>
+</main>
+<footer>Downloads are local files, not submissions or deliveries. Keep the original handoff beside any edited copy. Closing or reloading this tab clears its selection; the server has no upload database or autosave.</footer>
+</body>
+</html>

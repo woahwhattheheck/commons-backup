@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/ci/federated/schema/job_manifest.v1.json",
+  "title": "Commons federated job manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "job_id",
+    "source_sha",
+    "repository",
+    "tests",
+    "shard_count",
+    "command_template",
+    "providers",
+    "timeout_s",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": { "const": "commons-federated-job-manifest/v1" },
+    "kind": { "const": "FEDERATED_JOB_MANIFEST" },
+    "job_id": { "type": "string", "minLength": 1 },
+    "source_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "repository": { "const": "woahwhattheheck/commons" },
+    "tests": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "shard_count": { "type": "integer", "minimum": 1 },
+    "command_template": { "type": "object" },
+    "providers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "timeout_s": { "type": "integer", "minimum": 1 },
+    "claim_boundary": { "type": "object" }
+  }
+}

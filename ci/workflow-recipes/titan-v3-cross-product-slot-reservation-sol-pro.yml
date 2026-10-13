@@ -1,0 +1,106 @@
+name: TITAN V3 cross-product SELL slot reservation SOL-PRO
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-cross-product-slot-reservation-sol-pro.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-reservation-sol-pro/**"
+      - "p/sol-pro-titan-v3-cross-product-sell-slot-reservation-20260910-01.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-cross-product-slot-reservation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-source-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      LAB: revenue/kaggriculture/cloud-execution-lab
+      CASE: revenue/kaggriculture/cloud-execution-lab/analysis/v3-cross-product-slot-reservation-sol-pro
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+
+    steps:
+      - name: Checkout exact triggering head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Bind exact head and compile additive carrier
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          python -B -m py_compile "$CASE"/*.py
+
+      - name: Run reservation and materializer contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH="$CASE" python -B -m unittest discover -s "$CASE" -p 'test_*.py' -v
+
+      - name: Materialize exact scheduler twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/slot-a" "$RUNNER_TEMP/slot-b"
+          python -B "$CASE/materialize.py" \
+            --source "$LAB/scheduler.py" \
+            --output "$RUNNER_TEMP/slot-a/scheduler.py" \
+            --receipt "$RUNNER_TEMP/slot-a/RECEIPT.json"
+          python -B "$CASE/materialize.py" \
+            --source "$LAB/scheduler.py" \
+            --output "$RUNNER_TEMP/slot-b/scheduler.py" \
+            --receipt "$RUNNER_TEMP/slot-b/RECEIPT.json"
+          cmp "$RUNNER_TEMP/slot-a/scheduler.py" "$RUNNER_TEMP/slot-b/scheduler.py"
+          cmp "$RUNNER_TEMP/slot-a/RECEIPT.json" "$RUNNER_TEMP/slot-b/RECEIPT.json"
+          python -B -m py_compile "$RUNNER_TEMP/slot-a/scheduler.py"
+
+      - name: Build deterministic predecessor witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B "$CASE/slot_reservation.py" --output "$RUNNER_TEMP/slot-a/WITNESS.json"
+          python -B "$CASE/slot_reservation.py" --output "$RUNNER_TEMP/slot-b/WITNESS.json"
+          cmp "$RUNNER_TEMP/slot-a/WITNESS.json" "$RUNNER_TEMP/slot-b/WITNESS.json"
+          python - "$RUNNER_TEMP/slot-a/WITNESS.json" <<'PY'
+          import json, sys
+          row=json.load(open(sys.argv[1], encoding='utf-8'))
+          assert row['current_turn']['predecessor_admits'] is True
+          assert row['current_turn']['chosen_item_emitted'] is False
+          assert row['current_turn']['successor']['feasible'] is False
+          assert row['future_turn']['predecessor_admits'] is True
+          assert row['future_turn']['successor']['feasible'] is False
+          assert row['overdue_future_turn']['predecessor_admits'] is True
+          assert row['overdue_future_turn']['successor']['feasible'] is False
+          PY
+
+      - name: Require source-tree nonmutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- .
+          test -z "$(git status --porcelain)"
+
+      - name: Retain exact evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-cross-product-slot-reservation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/slot-a/
+            ${{ runner.temp }}/slot-b/
+          if-no-files-found: error
+          retention-days: 30

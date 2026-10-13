@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "candidate_id": "S139-fleet-20260908-75897709",
+  "team_id": "S139",
+  "submission_hold": true,
+  "selection": "Three independent single-threaded lanes: unchanged SEDGE, unchanged FLORA, and the original fleet candidate with the WREN/DELVE/KESTREL computational composition. No later neighborhoods or contributor-prefix change.",
+  "repository": "woahwhattheheck/commons",
+  "runtime_root": "revenue/roadef2026/fleet-candidate",
+  "base_source_commit": "2885d176373c33410148829fef93c310c3752c0b",
+  "runtime_files": [
+    {
+      "path": "Dockerfile",
+      "bytes": 685,
+      "sha256": "dec02ce52ccdd180a431f558891d515e79c914e0302a4be838da7b298a87e205",
+      "commit": "2885d176373c33410148829fef93c310c3752c0b"
+    },
+    {
+      "path": "build.sh",
+      "bytes": 491,
+      "sha256": "5cc5ff201799a4a36fc3d83d5d8b4e5ed4c763f895ce33bba3abae4e1e3f2eae",
+      "commit": "2885d176373c33410148829fef93c310c3752c0b"
+    },
+    {
+      "path": "run.sh",
+      "bytes": 246,
+      "sha256": "cda09a1e58f6f4c512b950bc5a56fba3e29b4f5c2357668f31f08c43e08ec1b7",
+      "commit": "2885d176373c33410148829fef93c310c3752c0b"
+    },
+    {
+      "path": ".dockerignore",
+      "bytes": 63,
+      "sha256": "5f6037f339d62040843e26eac0f4ae45a517b56640e777c9c281244822d6a584",
+      "commit": "2885d176373c33410148829fef93c310c3752c0b"
+    },
+    {
+      "path": "ATTRIBUTION.md",
+      "bytes": 904,
+      "sha256": "b8d164ea1ab3c3f4b15ac59ef92e9a9542e69abd0f5cc46abcac308c2e70d673",
+      "commit": "2885d176373c33410148829fef93c310c3752c0b"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1085,
+      "sha256": "6695de0415214b1e01ea31a8d3d8c6e7f7933e3db88d80b92adaf0b388d006e8",
+      "commit": "2885d176373c33410148829fef93c310c3752c0b"
+    },
+    {
+      "path": "supervisor.py",
+      "commit": "2f80acee348a9f4f96bb089a343dd090f20ac2a0",
+      "git_blob_sha1": "6a32f242aeaa85da70942e39aa1ea2a3c781d383",
+      "bytes": 26757,
+      "sha256": "182371658e82f9037716e90ea8cd115622d089d02512916c7a7bf3b39fca1c63"
+    },
+    {
+      "path": "compare_checker.py",
+      "commit": "177286851f786ee8a3821a9c1936ec940d6807ff",
+      "git_blob_sha1": "6d6812e1e3d682103f90efa0b817c867555d74a7",
+      "bytes": 13802,
+      "sha256": "a402a0166b1e52c95dd181e15b8a124504ac78ddea7e815944c754569b323cb8"
+    }
+  ],
+  "preparer": {
+    "path": "prepare_context.py",
+    "commit": "ef0e1ddc5fc55a7550362202afa2f5dc12bcd43e",
+    "git_blob_sha1": "88814648c97149d6e2bba7b4cbd465b1d7a3d375",
+    "bytes": 12160,
+    "sha256": "b4ccca899888e40dcf44bb6867eb98bc6b3571c2ffc795c762f5884382fcd9a7"
+  },
+  "candidate_source": {
+    "parent_path": "main.cpp",
+    "parent_commit": "2885d176373c33410148829fef93c310c3752c0b",
+    "parent_sha256": "322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1",
+    "patch_path": "revenue/roadef2026/cloud-kernel-composition/combined.patch",
+    "patch_commit": "f5c21009231a76c4c4a84bab9a15ab86ecab82d9",
+    "patch_git_blob_sha1": "0ff8d2ee7c4df1022c50484a89e7424329cce0ec",
+    "apply": "Apply the exact patch without fuzz to the exact parent; require the complete resulting source identity before building.",
+    "result_bytes": 37251,
+    "result_sha256": "758977095f8f34263bbcd9ed043ac4ab7943f04f65fae530c78ee64787c34f8f",
+    "authors": [
+      "SEDGE",
+      "FLORA",
+      "root candidate contributors",
+      "WREN",
+      "DELVE",
+      "KESTREL",
+      "CEDAR-JOIN"
+    ]
+  },
+  "dependencies": {
+    "sedge_commit": "c7c8679bb0330c932413e85f8f0646b30501cf07",
+    "flora_commit": "fe4b29a3a2e08f251e5cd07e075d27279d154907",
+    "challenge_commit": "d84d319a7fdb8de3b1866830d2eaa2937871e5ae",
+    "networktools_commit": "aebafc9ee91891e5d721bb86725e8cf1533877d1",
+    "checker_version": "1.2.2",
+    "rule": "Use the preparer's pinned archives, verified extraction and retained licenses. Reuse an existing verified context only after exact source/member readback. No additional runtime dependency."
+  },
+  "configuration": {
+    "env": {
+      "PORTFOLIO_SECONDS": "585",
+      "FLEET_DIRECTED": "1",
+      "FLEET_JOINT": "1",
+      "FLEET_WAYPOINT_LIMIT": "0"
+    },
+    "unset": [
+      "SEDGE_MAX_ROUNDS",
+      "SEDGE_STATS",
+      "CLOUD_INITIAL_SOLUTION"
+    ],
+    "search_seconds": 565,
+    "checker_decimals": 6,
+    "diagnostic_checker_decimals": 12,
+    "ranking": "Complete descending official checker vector, preserving every exact Decimal token; no rescaling and no total-cost tiebreak.",
+    "lanes": [
+      "sedge",
+      "flora",
+      "candidate"
+    ],
+    "input_mode": "cold start; no saved public solution is a program input",
+    "external_guard": "SIGTERM at590 seconds; SIGKILL at600 seconds. Record whether either fires."
+  },
+  "documentation": {
+    "method_source": "S139-method.md",
+    "method_bytes": 6072,
+    "method_sha256": "75e774c94af52fe339f6cfbbe3fcbb5cd50209d25a93cbab211a586ad76671fa",
+    "generator": "build_method_pdf.py",
+    "generator_bytes": 4489,
+    "generator_sha256": "c68467d1a3fe2d8d60237ea081a3a45dd807fe505862b333de1323ec34a39453",
+    "pdf_requirement": "Generate in existing cloud capacity, confirm exactly two pages, render and inspect both pages before packaging.",
+    "held_package": "Package this exact source context with method.pdf and a complete SHA-256 inventory; keep the existing S139 email draft and attachment unchanged. No send or submission."
+  },
+  "validation_plan": {
+    "public_instances": "setB-01 through setB-12, exact pinned official inputs",
+    "arms": "Unchanged SEDGE565 versus this portfolio585; sequential within each existing worker, alternating order by case, new output paths.",
+    "shard_owners": {
+      "QUARTZ": [
+        "B01",
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "LANDING": [
+        "B05",
+        "B06",
+        "B07",
+        "B08"
+      ],
+      "LARCH": [
+        "B09",
+        "B10",
+        "B11",
+        "B12"
+      ]
+    },
+    "evidence": "Retain actual complete vectors, coordinate identities, input/source/binary/output hashes, stop and checker timing, host quotas and external resource observations. Earlier source results remain separate.",
+    "docker": "One RENEW execution: enforced4GiB build memory/no additional swap with limit/peak readback; B01/B11/B12 normal30s; accepted-checkpoint SIGTERM exit within10s; required UID, disabled network, readonly inputs and cleanup.",
+    "status": "Frozen inputs for separately recorded final validation; this manifest does not assert the pending broad panel or container run has passed."
+  }
+}

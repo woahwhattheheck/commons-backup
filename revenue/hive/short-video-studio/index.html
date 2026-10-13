@@ -1,0 +1,22 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Short Video Studio</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1000px;margin:40px auto;padding:0 18px;background:#11151a;color:#eef2f5}textarea{box-sizing:border-box;width:100%;min-height:430px;background:#0b0e11;color:#dce6ee;border:1px solid #38434e;border-radius:10px;padding:12px;font:14px ui-monospace,monospace}button{padding:10px 14px;margin:10px 8px 10px 0;border:0;border-radius:8px;font-weight:700}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b0e11;padding:12px;border-radius:10px}.note{color:#a9bac8}</style>
+<h1>Short Video Studio</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+
+<p>Local-first script → storyboard → editable captions → MP4. Use only media you own or are licensed to use. This desk does not upload or publish anything.</p>
+<textarea id="project"></textarea>
+<div><button id="validate">Validate</button><button id="render">Render MP4</button></div>
+<p class="note">Renders are written under <code>workspace/exports/</code>. Captions remain editable as a sibling <code>.srt</code>.</p>
+<pre id="out">Ready.</pre>
+<script>
+const sample={title:"Workflow tip",preset:"vertical",fps:12,audio:{kind:"tone",frequency:220,volume:0.03},segments:[{duration:10,text:"Hook: start with the outcome.",color:"#16324f"},{duration:10,text:"Step: show one action at a time.",color:"#245b47"},{duration:10,text:"Close: give the next concrete move.",color:"#63372c"}]};
+project.value=JSON.stringify(sample,null,2);
+async function call(path){out.textContent="Working…";let r=await fetch(path,{method:"POST",headers:{"Content-Type":"application/json","X-Output-Name":"browser-demo.mp4"},body:project.value});out.textContent=JSON.stringify(await r.json(),null,2)}
+validate.onclick=()=>call("/api/validate");render.onclick=()=>call("/api/render");
+</script>

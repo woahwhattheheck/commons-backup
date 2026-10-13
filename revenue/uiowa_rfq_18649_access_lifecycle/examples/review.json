@@ -1,0 +1,751 @@
+{
+  "cases": [
+    {
+      "case_id": "CASE-SYN-LEAVER-01",
+      "case_status": "POLICY_ONLY",
+      "case_status_basis": "the weakest system is deployment pipeline at POLICY_ONLY. The case status is the weakest system, not an average: an access change that reached three systems and missed a fourth has not been made.",
+      "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+      "event_on": "2026-08-31",
+      "interview_prompts": [
+        "For this departure, which systems were in scope, and who decided the list?",
+        "How are accounts created outside the identity provider brought into offboarding?",
+        "Can you show the pipeline's own account listing as at a date after 31 August?"
+      ],
+      "lifecycle_event": "leaver",
+      "notes": "The case the order names. The central identity account was confirmed disabled; the deployment pipeline carries a separate local account that nobody has looked at. An aggregate 'access removed' would have hidden that entirely.",
+      "per_system": [
+        {
+          "case_id": "CASE-SYN-LEAVER-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-08-31",
+          "entitlement": "standard staff account",
+          "entitlement_reviews": [],
+          "environment": "shared",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires access removal on the last working day",
+              "system": null
+            },
+            {
+              "intent": null,
+              "kind": "ticket_request",
+              "locator": "synthetic-ticket-4411",
+              "matches_intent": null,
+              "observed_on": "2026-08-28",
+              "statement": "Offboarding ticket raised by the engaging manager",
+              "system": "central identity provider"
+            },
+            {
+              "intent": null,
+              "kind": "approval_record",
+              "locator": "synthetic-ticket-4411#approval",
+              "matches_intent": null,
+              "observed_on": "2026-08-29",
+              "statement": "Offboarding approved by the engaging manager",
+              "system": "central identity provider"
+            },
+            {
+              "intent": null,
+              "kind": "execution_record",
+              "locator": "synthetic-ticket-4411#closure",
+              "matches_intent": null,
+              "observed_on": "2026-08-31",
+              "statement": "Ticket closed, marked account disabled",
+              "system": "central identity provider"
+            },
+            {
+              "intent": null,
+              "kind": "system_state_observation",
+              "locator": "synthetic-directory-export-2026-09-04.csv",
+              "matches_intent": true,
+              "observed_on": "2026-09-04",
+              "statement": "Directory export shows the account in a disabled state",
+              "system": "central identity provider"
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "CONFIRMED_IN_SYSTEM",
+          "status_meaning": "The system's own state was observed after the change and matches the intent.",
+          "system": "central identity provider",
+          "what_would_settle_it": null
+        },
+        {
+          "case_id": "CASE-SYN-LEAVER-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-08-31",
+          "entitlement": "write access to two repositories",
+          "entitlement_reviews": [],
+          "environment": "development",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires access removal on the last working day",
+              "system": null
+            },
+            {
+              "intent": null,
+              "kind": "execution_record",
+              "locator": "synthetic-ticket-4411#closure",
+              "matches_intent": null,
+              "observed_on": "2026-08-31",
+              "statement": "Ticket closed, marked repository access removed",
+              "system": "source repository"
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "ACTION_RECORDED",
+          "status_meaning": "Somebody recorded performing the change. The system's own state has not been observed since, so whether it took effect is unverified.",
+          "system": "source repository",
+          "what_would_settle_it": "Request this system's own state as at a date after 2026-08-31: an export or account listing showing whether the revoke took effect."
+        },
+        {
+          "case_id": "CASE-SYN-LEAVER-01",
+          "conclusion_rests_on_policy_alone": true,
+          "effective_on": "2026-08-31",
+          "entitlement": "local pipeline account, created outside the identity provider",
+          "entitlement_reviews": [],
+          "environment": "deployment",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires access removal on the last working day",
+              "system": null
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "POLICY_ONLY",
+          "status_meaning": "Only a written policy applies. A policy states an intent; it is not evidence about this case, and no conclusion about this case rests on it.",
+          "system": "deployment pipeline",
+          "what_would_settle_it": "No case-specific evidence establishes anything about this system. A written policy is an intent, not a record of what happened here."
+        }
+      ],
+      "person_role": "Integration developer (fictional)",
+      "summary": "Contractor departure at end of engagement",
+      "systems_not_confirmed": [
+        "source repository",
+        "deployment pipeline"
+      ],
+      "systems_reviewed": [
+        "central identity provider",
+        "source repository",
+        "deployment pipeline"
+      ],
+      "worker_type": "contractor"
+    },
+    {
+      "case_id": "CASE-SYN-MOVER-01",
+      "case_status": "REQUESTED_ONLY",
+      "case_status_basis": "the weakest system is support console at REQUESTED_ONLY. The case status is the weakest system, not an average: an access change that reached three systems and missed a fourth has not been made.",
+      "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+      "event_on": "2026-07-01",
+      "interview_prompts": [
+        "When somebody changes team, what triggers the removal of the entitlements they no longer need?",
+        "Is the removal tracked to completion, or closed when the new access is working?",
+        "Can you show the support console's role listing for this person as at any date after 1 July?"
+      ],
+      "lifecycle_event": "mover",
+      "notes": "The second case the order names. Movers are where entitlement accumulates: the grant is confirmed because somebody needed it to work, and the revoke has a request and nothing after it.",
+      "per_system": [
+        {
+          "case_id": "CASE-SYN-MOVER-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-07-01",
+          "entitlement": "release approver role",
+          "entitlement_reviews": [],
+          "environment": "deployment",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires entitlements to follow role changes",
+              "system": null
+            },
+            {
+              "intent": null,
+              "kind": "approval_record",
+              "locator": "synthetic-ticket-4102#approval",
+              "matches_intent": null,
+              "observed_on": "2026-06-30",
+              "statement": "Release approver role approved by the receiving manager",
+              "system": "deployment pipeline"
+            },
+            {
+              "intent": null,
+              "kind": "execution_record",
+              "locator": "synthetic-ticket-4102#closure",
+              "matches_intent": null,
+              "observed_on": "2026-07-01",
+              "statement": "Role assigned",
+              "system": "deployment pipeline"
+            },
+            {
+              "intent": null,
+              "kind": "system_state_observation",
+              "locator": "synthetic-pipeline-roles-2026-07-15.csv",
+              "matches_intent": true,
+              "observed_on": "2026-07-15",
+              "statement": "Pipeline role listing shows the release approver role present",
+              "system": "deployment pipeline"
+            }
+          ],
+          "intent": "grant",
+          "observation_result_not_recorded": [],
+          "status": "CONFIRMED_IN_SYSTEM",
+          "status_meaning": "The system's own state was observed after the change and matches the intent.",
+          "system": "deployment pipeline",
+          "what_would_settle_it": null
+        },
+        {
+          "case_id": "CASE-SYN-MOVER-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-07-01",
+          "entitlement": "tier 2 support role, no longer required",
+          "entitlement_reviews": [],
+          "environment": "production support",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires entitlements to follow role changes",
+              "system": null
+            },
+            {
+              "intent": null,
+              "kind": "ticket_request",
+              "locator": "synthetic-ticket-4103",
+              "matches_intent": null,
+              "observed_on": "2026-07-02",
+              "statement": "Request raised to remove the tier 2 support role",
+              "system": "support console"
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "REQUESTED_ONLY",
+          "status_meaning": "A request exists. Nobody has evidenced that it was approved, performed, or reached the system.",
+          "system": "support console",
+          "what_would_settle_it": "Request this system's own state as at a date after 2026-07-01: an export or account listing showing whether the revoke took effect."
+        }
+      ],
+      "person_role": "Moved from application support to release engineering (fictional)",
+      "summary": "Changed responsibilities: new access granted, previous access not evidenced as removed",
+      "systems_not_confirmed": [
+        "support console"
+      ],
+      "systems_reviewed": [
+        "deployment pipeline",
+        "support console"
+      ],
+      "worker_type": "staff"
+    },
+    {
+      "case_id": "CASE-SYN-JOINER-01",
+      "case_status": "CONFIRMED_IN_SYSTEM",
+      "case_status_basis": "the weakest system is central identity provider at CONFIRMED_IN_SYSTEM. The case status is the weakest system, not an average: an access change that reached three systems and missed a fourth has not been made.",
+      "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+      "event_on": "2026-06-01",
+      "interview_prompts": [
+        "How soon after a start date is access checked against what was approved?",
+        "Who owns the approval for repository access, and is it separate from the identity account?"
+      ],
+      "lifecycle_event": "joiner",
+      "notes": "The comparatively clean case. Both systems observed after the change; included so the matrix is not only failures.",
+      "per_system": [
+        {
+          "case_id": "CASE-SYN-JOINER-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-06-01",
+          "entitlement": "standard staff account",
+          "entitlement_reviews": [],
+          "environment": "shared",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "ticket_request",
+              "locator": "synthetic-ticket-3980",
+              "matches_intent": null,
+              "observed_on": "2026-05-26",
+              "statement": "Onboarding request raised",
+              "system": "central identity provider"
+            },
+            {
+              "intent": null,
+              "kind": "approval_record",
+              "locator": "synthetic-ticket-3980#approval",
+              "matches_intent": null,
+              "observed_on": "2026-05-27",
+              "statement": "Approved by the hiring manager",
+              "system": "central identity provider"
+            },
+            {
+              "intent": null,
+              "kind": "execution_record",
+              "locator": "synthetic-ticket-3980#closure",
+              "matches_intent": null,
+              "observed_on": "2026-06-01",
+              "statement": "Account created",
+              "system": "central identity provider"
+            },
+            {
+              "intent": null,
+              "kind": "system_state_observation",
+              "locator": "synthetic-directory-export-2026-06-05.csv",
+              "matches_intent": true,
+              "observed_on": "2026-06-05",
+              "statement": "Directory export shows an enabled account",
+              "system": "central identity provider"
+            }
+          ],
+          "intent": "grant",
+          "observation_result_not_recorded": [],
+          "status": "CONFIRMED_IN_SYSTEM",
+          "status_meaning": "The system's own state was observed after the change and matches the intent.",
+          "system": "central identity provider",
+          "what_would_settle_it": null
+        },
+        {
+          "case_id": "CASE-SYN-JOINER-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-06-01",
+          "entitlement": "write access to one repository",
+          "entitlement_reviews": [],
+          "environment": "development",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "approval_record",
+              "locator": "synthetic-ticket-3981#approval",
+              "matches_intent": null,
+              "observed_on": "2026-06-01",
+              "statement": "Repository access approved by the repository owner",
+              "system": "source repository"
+            },
+            {
+              "intent": null,
+              "kind": "system_state_observation",
+              "locator": "synthetic-repo-collaborators-2026-06-05.csv",
+              "matches_intent": true,
+              "observed_on": "2026-06-05",
+              "statement": "Repository collaborator export shows write access",
+              "system": "source repository"
+            }
+          ],
+          "intent": "grant",
+          "observation_result_not_recorded": [],
+          "status": "CONFIRMED_IN_SYSTEM",
+          "status_meaning": "The system's own state was observed after the change and matches the intent.",
+          "system": "source repository",
+          "what_would_settle_it": null
+        }
+      ],
+      "person_role": "Application developer (fictional)",
+      "summary": "New starter, development environments only",
+      "systems_not_confirmed": [],
+      "systems_reviewed": [
+        "central identity provider",
+        "source repository"
+      ],
+      "worker_type": "staff"
+    },
+    {
+      "case_id": "CASE-SYN-EMERGENCY-01",
+      "case_status": "ACTION_RECORDED",
+      "case_status_basis": "the weakest system is deployment pipeline at ACTION_RECORDED. The case status is the weakest system, not an average: an access change that reached three systems and missed a fourth has not been made.",
+      "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+      "event_on": "2026-08-12",
+      "interview_prompts": [
+        "What record is created when emergency elevation is used, and who reviews it?",
+        "Can you show the retrospective approval for the 12 August elevation?",
+        "How is the elevated role removed after the incident, and is its removal observed?"
+      ],
+      "lifecycle_event": "emergency_access",
+      "notes": "Emergency access is the path designed to bypass the approval gate. The elevation is confirmed in the system; the retrospective approval the standard requires has no record at all, and the removal has only an audit-log entry with no later observation. Both changes sit on ONE system, so each piece of evidence has to name which change it concerns -- evidence that does not is excluded as ambiguous rather than credited to whichever change is nearby.",
+      "per_system": [
+        {
+          "case_id": "CASE-SYN-EMERGENCY-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-08-12",
+          "entitlement": "emergency elevated role",
+          "entitlement_reviews": [],
+          "environment": "deployment",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires retrospective approval of emergency elevation within one working day",
+              "system": null
+            },
+            {
+              "intent": "grant",
+              "kind": "execution_record",
+              "locator": "synthetic-pipeline-audit-2026-08-12",
+              "matches_intent": null,
+              "observed_on": "2026-08-12",
+              "statement": "Elevation recorded in the pipeline audit log",
+              "system": "deployment pipeline"
+            },
+            {
+              "intent": "grant",
+              "kind": "system_state_observation",
+              "locator": "synthetic-pipeline-roles-2026-08-12.csv",
+              "matches_intent": true,
+              "observed_on": "2026-08-12",
+              "statement": "Role listing during the incident window shows the elevated role present",
+              "system": "deployment pipeline"
+            }
+          ],
+          "intent": "grant",
+          "observation_result_not_recorded": [],
+          "status": "CONFIRMED_IN_SYSTEM",
+          "status_meaning": "The system's own state was observed after the change and matches the intent.",
+          "system": "deployment pipeline",
+          "what_would_settle_it": null
+        },
+        {
+          "case_id": "CASE-SYN-EMERGENCY-01",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-08-13",
+          "entitlement": "emergency elevated role, after the incident",
+          "entitlement_reviews": [],
+          "environment": "deployment",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires retrospective approval of emergency elevation within one working day",
+              "system": null
+            },
+            {
+              "intent": "revoke",
+              "kind": "execution_record",
+              "locator": "synthetic-pipeline-audit-2026-08-13",
+              "matches_intent": null,
+              "observed_on": "2026-08-13",
+              "statement": "Pipeline audit log records the elevated role being removed after the incident",
+              "system": "deployment pipeline"
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "ACTION_RECORDED",
+          "status_meaning": "Somebody recorded performing the change. The system's own state has not been observed since, so whether it took effect is unverified.",
+          "system": "deployment pipeline",
+          "what_would_settle_it": "Request this system's own state as at a date after 2026-08-13: an export or account listing showing whether the revoke took effect."
+        }
+      ],
+      "person_role": "On-call engineer (fictional)",
+      "summary": "Emergency elevation used during an incident; retrospective approval not evidenced",
+      "systems_not_confirmed": [
+        "deployment pipeline"
+      ],
+      "systems_reviewed": [
+        "deployment pipeline",
+        "deployment pipeline"
+      ],
+      "worker_type": "staff"
+    },
+    {
+      "case_id": "CASE-SYN-LEAVER-02",
+      "case_status": "POLICY_ONLY",
+      "case_status_basis": "the weakest system is central identity provider at POLICY_ONLY. The case status is the weakest system, not an average: an access change that reached three systems and missed a fourth has not been made.",
+      "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+      "event_on": "2026-05-29",
+      "interview_prompts": [
+        "For a departure in May, what records would still exist today?",
+        "Where are offboarding tickets retained, and for how long?",
+        "If no ticket exists, is there any system-side record that would show when the account was disabled?"
+      ],
+      "lifecycle_event": "leaver",
+      "notes": "The refusal case. There is a policy and nothing else, so no conclusion about this departure can be drawn at all. The policy is not weak evidence here; it is evidence about a different subject.",
+      "per_system": [
+        {
+          "case_id": "CASE-SYN-LEAVER-02",
+          "conclusion_rests_on_policy_alone": true,
+          "effective_on": "2026-05-29",
+          "entitlement": "standard staff account",
+          "entitlement_reviews": [],
+          "environment": "shared",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires access removal on the last working day",
+              "system": null
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "POLICY_ONLY",
+          "status_meaning": "Only a written policy applies. A policy states an intent; it is not evidence about this case, and no conclusion about this case rests on it.",
+          "system": "central identity provider",
+          "what_would_settle_it": "No case-specific evidence establishes anything about this system. A written policy is an intent, not a record of what happened here."
+        },
+        {
+          "case_id": "CASE-SYN-LEAVER-02",
+          "conclusion_rests_on_policy_alone": true,
+          "effective_on": "2026-05-29",
+          "entitlement": "read access",
+          "entitlement_reviews": [],
+          "environment": "production support",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "written_policy",
+              "locator": "synthetic-access-standard-v2.pdf",
+              "matches_intent": null,
+              "observed_on": null,
+              "statement": "A published standard requires access removal on the last working day",
+              "system": null
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "POLICY_ONLY",
+          "status_meaning": "Only a written policy applies. A policy states an intent; it is not evidence about this case, and no conclusion about this case rests on it.",
+          "system": "reporting database",
+          "what_would_settle_it": "No case-specific evidence establishes anything about this system. A written policy is an intent, not a record of what happened here."
+        }
+      ],
+      "person_role": "Analyst (fictional)",
+      "summary": "Departure where the only applicable evidence is the written standard",
+      "systems_not_confirmed": [
+        "central identity provider",
+        "reporting database"
+      ],
+      "systems_reviewed": [
+        "central identity provider",
+        "reporting database"
+      ],
+      "worker_type": "staff"
+    },
+    {
+      "case_id": "CASE-SYN-LEAVER-03",
+      "case_status": "CONTRADICTED_IN_SYSTEM",
+      "case_status_basis": "the weakest system is reporting database at CONTRADICTED_IN_SYSTEM. The case status is the weakest system, not an average: an access change that reached three systems and missed a fourth has not been made.",
+      "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+      "event_on": "2026-09-05",
+      "interview_prompts": [
+        "The database still shows this role. Was the change reversed, never applied, or applied to a different account?",
+        "What date does the supplied directory export cover, and is there one from after the departure?",
+        "Does the quarterly entitlement review cover the reporting database's administrative roles?"
+      ],
+      "lifecycle_event": "leaver",
+      "notes": "Two mechanisms at once. The reporting database still shows the account after the departure, which outranks the closed ticket. And an export taken before the departure was offered as evidence for the identity provider; it is excluded and listed, because it cannot show a later change.",
+      "per_system": [
+        {
+          "case_id": "CASE-SYN-LEAVER-03",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-09-05",
+          "entitlement": "standard staff account",
+          "entitlement_reviews": [],
+          "environment": "shared",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [
+            {
+              "observed_on": "2026-09-01",
+              "reference_date": "2026-09-05",
+              "statement": "Directory export supplied as evidence of removal",
+              "why_excluded": "observed before the change took effect, so it cannot show the change reached the system"
+            }
+          ],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "ticket_request",
+              "locator": "synthetic-ticket-4720",
+              "matches_intent": null,
+              "observed_on": "2026-09-02",
+              "statement": "Offboarding ticket raised",
+              "system": "central identity provider"
+            },
+            {
+              "intent": null,
+              "kind": "approval_record",
+              "locator": "synthetic-ticket-4720#approval",
+              "matches_intent": null,
+              "observed_on": "2026-09-03",
+              "statement": "Approved by the line manager",
+              "system": "central identity provider"
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "APPROVED_ONLY",
+          "status_meaning": "An approval is recorded. Nobody has evidenced that the change was performed or reached the system.",
+          "system": "central identity provider",
+          "what_would_settle_it": "Request this system's own state as at a date after 2026-09-05: an export or account listing showing whether the revoke took effect."
+        },
+        {
+          "case_id": "CASE-SYN-LEAVER-03",
+          "conclusion_rests_on_policy_alone": false,
+          "effective_on": "2026-09-05",
+          "entitlement": "administrative role",
+          "entitlement_reviews": [
+            {
+              "intent": null,
+              "kind": "entitlement_review_record",
+              "locator": "synthetic-entitlement-review-q3.csv",
+              "matches_intent": null,
+              "observed_on": "2026-07-15",
+              "statement": "A quarterly entitlement review was recorded in July",
+              "system": "reporting database"
+            }
+          ],
+          "environment": "production support",
+          "evidence_excluded_as_ambiguous": [],
+          "evidence_excluded_as_stale": [],
+          "evidence_used": [
+            {
+              "intent": null,
+              "kind": "execution_record",
+              "locator": "synthetic-ticket-4721#closure",
+              "matches_intent": null,
+              "observed_on": "2026-09-05",
+              "statement": "Ticket closed, marked administrative role removed",
+              "system": "reporting database"
+            },
+            {
+              "intent": null,
+              "kind": "system_state_observation",
+              "locator": "synthetic-db-roles-2026-09-12.csv",
+              "matches_intent": false,
+              "observed_on": "2026-09-12",
+              "statement": "Role listing still shows the administrative role assigned",
+              "system": "reporting database"
+            },
+            {
+              "intent": null,
+              "kind": "entitlement_review_record",
+              "locator": "synthetic-entitlement-review-q3.csv",
+              "matches_intent": null,
+              "observed_on": "2026-07-15",
+              "statement": "A quarterly entitlement review was recorded in July",
+              "system": "reporting database"
+            }
+          ],
+          "intent": "revoke",
+          "observation_result_not_recorded": [],
+          "status": "CONTRADICTED_IN_SYSTEM",
+          "status_meaning": "The system's own state was observed after the change and does NOT match the intent. This outranks every paper record.",
+          "system": "reporting database",
+          "what_would_settle_it": "The system's state does not match the intent. Establish whether the change was reversed, never applied, or applied to a different account."
+        }
+      ],
+      "person_role": "Database administrator (fictional)",
+      "summary": "Departure where the system state contradicts the closed ticket, and a stale export was offered as proof",
+      "systems_not_confirmed": [
+        "central identity provider",
+        "reporting database"
+      ],
+      "systems_reviewed": [
+        "central identity provider",
+        "reporting database"
+      ],
+      "worker_type": "staff"
+    }
+  ],
+  "content_class": "SYNTHETIC_NOT_A_UNIVERSITY_FINDING",
+  "counts": {
+    "case_status": {
+      "ACTION_RECORDED": 1,
+      "CONFIRMED_IN_SYSTEM": 1,
+      "CONTRADICTED_IN_SYSTEM": 1,
+      "POLICY_ONLY": 2,
+      "REQUESTED_ONLY": 1
+    },
+    "cases": 6,
+    "cases_resting_on_policy_alone": 2,
+    "system_status": {
+      "ACTION_RECORDED": 2,
+      "APPROVED_ONLY": 1,
+      "CONFIRMED_IN_SYSTEM": 5,
+      "CONTRADICTED_IN_SYSTEM": 1,
+      "POLICY_ONLY": 3,
+      "REQUESTED_ONLY": 1
+    },
+    "systems_reviewed": 13
+  },
+  "coverage": {
+    "changed_responsibilities_present": true,
+    "contractor_departure_present": true,
+    "lifecycle_events": [
+      "joiner",
+      "mover",
+      "leaver",
+      "emergency_access"
+    ],
+    "lifecycle_events_covered": [
+      "emergency_access",
+      "joiner",
+      "leaver",
+      "mover"
+    ],
+    "lifecycle_events_missing": []
+  },
+  "evidence_stage_order": [
+    "written_policy",
+    "ticket_request",
+    "approval_record",
+    "execution_record",
+    "system_state_observation"
+  ],
+  "limits": [
+    "Every case, system, role and record here is fictional. Nothing describes the University of Iowa, and no output is a finding.",
+    "A CONFIRMED_IN_SYSTEM status means one observation of one system matched the intent on one date. It is not a statement that access management works.",
+    "A written policy establishes nothing about any individual case, and no status in this output is derived from one.",
+    "No person is assessed. The subject of every conclusion is a system's recorded state, never an individual's performance."
+  ]
+}

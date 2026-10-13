@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/ci/federated/schema/receipt.v1.json",
+  "title": "Commons federated CI receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "job_id",
+    "shard_id",
+    "attempt",
+    "parent_receipt_id",
+    "source_sha",
+    "test_identity",
+    "command",
+    "exit_code",
+    "duration_ms",
+    "artifacts",
+    "provider",
+    "run_url",
+    "terminal_state",
+    "measured",
+    "claim_boundary",
+    "scan"
+  ],
+  "properties": {
+    "schema_version": { "const": "commons-federated-receipt/v1" },
+    "kind": { "const": "FEDERATED_CI_RECEIPT" },
+    "receipt_id": { "type": "string", "pattern": "^fcr-[0-9a-f]{16}$" },
+    "job_id": { "type": "string", "minLength": 1 },
+    "shard_id": { "type": "integer", "minimum": 0 },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "parent_receipt_id": { "type": ["string", "null"] },
+    "source_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "test_identity": { "type": "string", "minLength": 1 },
+    "command": { "type": "object" },
+    "exit_code": { "type": "integer" },
+    "duration_ms": { "type": "integer", "minimum": 0 },
+    "artifacts": { "type": "array" },
+    "provider": { "type": "string", "minLength": 1 },
+    "run_url": { "type": ["string", "null"] },
+    "terminal_state": {
+      "enum": ["PASSED", "FAILED", "CANCELLED", "SKIPPED", "TIMED_OUT", "FIXTURE"]
+    },
+    "measured": { "type": "boolean" },
+    "claim_boundary": { "type": "object" },
+    "scan": { "type": "object" }
+  }
+}

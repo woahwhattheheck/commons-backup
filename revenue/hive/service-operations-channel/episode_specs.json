@@ -1,0 +1,54 @@
+{
+  "source": {
+    "workflow_git_blob": "da339d714fd610689dafaca5a2e47c57d772edce",
+    "index_git_blob": "62f98f0bfd798d8b5abe74094337fea3af7c991a",
+    "pr": 10513
+  },
+  "video": {
+    "width": 1280,
+    "height": 720,
+    "fps": 5,
+    "scene_seconds": 4
+  },
+  "episodes": [
+    {
+      "id": "01-intake-to-job",
+      "title": "Intake to a trackable job",
+      "description": "Create one synthetic cleaning request and watch the landed intake workflow produce one customer, one job, three tasks, and one queued delivery without a duplicate record.",
+      "captions": [
+        "Start in a clean local workspace backed by the landed Hive intake application.",
+        "Enter a synthetic request with a stable source ID and the service details the operator actually received.",
+        "Submit once: the application records one customer and one job, with three open tasks and one pending delivery.",
+        "The job card keeps source identity, task state, requested date, and delivery state together for operator follow-through."
+      ]
+    },
+    {
+      "id": "02-tasks-to-completion",
+      "title": "Move a job through task completion",
+      "description": "Use the landed job checklist to move a synthetic job from new to in-progress to complete, showing that task state persists in the same local workspace.",
+      "captions": [
+        "A new synthetic job begins with all three service-operation tasks open.",
+        "Completing the first task moves the job into in-progress while the remaining work stays visible.",
+        "Complete the second task and the same job remains in-progress with one action left.",
+        "Completing the final task changes the job to complete; the customer and source record stay linked."
+      ]
+    },
+    {
+      "id": "03-selected-delivery-retry",
+      "title": "Retry only the selected delivery",
+      "description": "Create two synthetic jobs and use the PR #10513 selected-event retry path: retrying one job delivers only that event, leaving the unrelated queued job untouched until the operator processes it.",
+      "captions": [
+        "Two synthetic jobs are queued independently, each with its own durable delivery event.",
+        "Choose Retry delivery on the newest job: the UI sends that event ID to the selected-process path.",
+        "Only the chosen job is delivered and appears in the local notification feed; the other event remains pending.",
+        "The normal Deliver next notification action can then process the remaining due event without duplicating the first."
+      ]
+    }
+  ],
+  "encode": {
+    "width": 854,
+    "height": 480,
+    "fps": 1,
+    "crf": 51
+  }
+}

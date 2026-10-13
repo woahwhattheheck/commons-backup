@@ -1,0 +1,42 @@
+{
+  "receipt_id": "referral-intake-completeness-20260831-01",
+  "slug": "referral-intake-completeness",
+  "status": "WORKING_SYNTHETIC_DEMO",
+  "fixture": {
+    "referralId": "REF-SYN-4401",
+    "referralClass": "imaging-slot",
+    "referringClinicId": "CLINIC-NORTHBRIDGE-DEMO",
+    "destinationClinicId": "CLINIC-CEDAR-HOLLOW-DEMO"
+  },
+  "run": {
+    "status": "QUEUED_COMPLETE",
+    "lane": "IMAGING_SCHEDULING",
+    "queueEntryId": "REF-SYN-4401:queue",
+    "intakeReceiptId": "REF-SYN-4401:intake-receipt",
+    "processedAt": "2026-08-31T02:00:00Z"
+  },
+  "test_command": "node test_referral_intake_completeness.js",
+  "expected": "referral-intake-completeness: 9 scenarios PASS",
+  "binary_scenarios": [
+    "complete imaging route",
+    "incomplete hold to INCOMPLETE_INTAKE",
+    "four-class queue matrix",
+    "identical replay",
+    "crash after checklist and resume",
+    "crash after queue and resume",
+    "rollback and rerun",
+    "same-id different-bytes conflict",
+    "PHI refusal with no queue ticket"
+  ],
+  "clinical_decision": "NONE_INTAKE_ONLY",
+  "diagnoses": 0,
+  "care_approvals": 0,
+  "care_denials": 0,
+  "treatment_advice": 0,
+  "phi_emitted": 0,
+  "external_messages_sent": 0,
+  "buyer_delivery": false,
+  "payment_verified": false,
+  "cash_usd": 0,
+  "outreach": false
+}

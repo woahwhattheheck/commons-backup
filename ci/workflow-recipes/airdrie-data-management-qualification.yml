@@ -1,0 +1,41 @@
+name: Airdrie data-management qualification
+
+on:
+  pull_request:
+    paths:
+      - "revenue/airdrie_data_management/**"
+      - ".github/workflows/airdrie-data-management-qualification.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/airdrie_data_management/**"
+      - ".github/workflows/airdrie-data-management-qualification.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revenue/airdrie_data_management
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: python -m py_compile qualification.py test_qualification.py
+      - name: Hostile tests
+        run: python -m unittest -v test_qualification.py
+      - name: Optimized hostile tests
+        run: python -O -m unittest -v test_qualification.py
+      - name: Discovery carrier must remain on HOLD
+        run: |
+          python qualification.py public_notice.json > /tmp/airdrie-receipt.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/airdrie-receipt.json', encoding='utf-8'))
+          assert r['status'] == 'HOLD_CONTROLLING_PACK_REQUIRED', r
+          PY

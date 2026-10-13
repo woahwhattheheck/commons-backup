@@ -1,0 +1,36 @@
+{
+  "kind": "titan-v4-repair-evidence",
+  "mechanism": "b7-shed-overflow",
+  "status": "evidence-only-current-root-regate-required",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "legacy_source": {
+    "pr": 12562,
+    "branch": "astra/v31-8e3-b7-shed-overflow-gate-20260911",
+    "observed_head": "8764cacfbf39510db0be5696a628380098de3272",
+    "historical_recomposed_head": "b81e014a8f9cdd88bc9b54012e1eaab90f9e1ef7",
+    "donor_blob": "a27da659884c0f9a9594cbd9332b5edb4d7f3307",
+    "baseline_blob": "fea3773514b4276aa57677b74814fe87b391ccf0",
+    "candidate_blob": "f5b9ea0ac58f35a3b5cb844c5fc9e2eb03eae83f",
+    "gate_blob": "37d5bb6c18990c427372bd0cd8ad08340c023c81"
+  },
+  "historical_gate": {
+    "run": 34592366181,
+    "disposition": "stale-before-spend",
+    "reason": "workflow pinned V3.1 root 8e3d92a286806f9f9525973ee7d359b629a11487 after live gameplay advanced; this is freshness/custody failure, not an economics rejection"
+  },
+  "required_postconditions_before_any_activation": [
+    "recompose B7 semantics onto literal current canonical main bytes rather than replacing current gameplay with a stale whole-file image",
+    "prove current source/default/package ancestry and helper compatibility before evaluator spend",
+    "run the strict paired-control exact-cell gate on the current canonical stack",
+    "zero changed traces means KILL_INACTIVE",
+    "any negative paired delta-margin cell means HOLD_NEGATIVE_CELL",
+    "only active zero-negative positive-mean evidence may advance to widened opponent-diverse validation"
+  ],
+  "forbidden_actions": [
+    "do not run the legacy stale-root workflow as current authority",
+    "do not change production defaults or feature wiring from this evidence pack",
+    "do not advance old V3/V3.1/V4 integration refs",
+    "do not treat preservation as an economics PASS"
+  ]
+}

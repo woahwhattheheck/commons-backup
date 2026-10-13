@@ -1,0 +1,16 @@
+# Sample workflow only. Not installed under .github/workflows/.
+# Command the $99 pack reproduces: python3 -m unittest test_health.py -v
+name: ci-fix-99-sample
+on:
+  pull_request:
+    paths:
+      - "health.py"
+      - "test_health.py"
+      - "workflow.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: health unittest
+        run: python3 -m unittest test_health.py -v

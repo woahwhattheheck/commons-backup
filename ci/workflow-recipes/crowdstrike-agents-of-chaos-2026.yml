@@ -1,0 +1,26 @@
+name: crowdstrike-agents-of-chaos-2026
+on:
+  push:
+    paths:
+      - "competitions/crowdstrike-agents-of-chaos-2026/**"
+      - ".github/workflows/crowdstrike-agents-of-chaos-2026.yml"
+  pull_request:
+    paths:
+      - "competitions/crowdstrike-agents-of-chaos-2026/**"
+      - ".github/workflows/crowdstrike-agents-of-chaos-2026.yml"
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: focused suite
+        run: python3 -m unittest discover -s competitions/crowdstrike-agents-of-chaos-2026/tests -q
+      - name: optimized suite
+        run: python3 -O -m unittest discover -s competitions/crowdstrike-agents-of-chaos-2026/tests -q
+      - name: compile
+        run: python3 -m py_compile competitions/crowdstrike-agents-of-chaos-2026/workbench.py
+      - name: cli fixture
+        run: python3 competitions/crowdstrike-agents-of-chaos-2026/workbench.py competitions/crowdstrike-agents-of-chaos-2026/fixtures/sample_ledger.json

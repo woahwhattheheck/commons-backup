@@ -1,0 +1,22 @@
+{
+  "schema": "commons.erdos89.reader_plan/v1",
+  "minima": "For each cardinality 0..16: exact minimum-distance condition, one complete page (saved counts all <=256), first/middle/last distinct ranks and inverse-mask comparison, plus rank=count rejection.",
+  "conditions": "Fifteen additional conditions: full, require/forbid vertex0, require/forbid shortest host class, require longest/both extreme classes, all eight-vertex subsets, distance budget9, require original vertices0/32, absent required source class, incompatible vertices/distances, reversed cardinality and negative budget.",
+  "budgets": [
+    -1,
+    0,
+    1,
+    5,
+    8,
+    9,
+    12,
+    13,
+    51,
+    52,
+    100
+  ],
+  "marginals": "Full family, shortest-host-class condition, and minimum-distance eight-vertex family. Counts are subsets containing each vertex/class once.",
+  "pagination": "Saved fixed cardinality total 12,870 is the known combinatorial binomial(16,8), not a distance result. Query at-end and beyond-end pages; a zero mask is outside cardinality8.",
+  "custody": "Every request/response/latest caches/work retained before next call. Complete compact result checkpointed before publication; no old metric or support construction replay.",
+  "output": "If complete reader exceeds a checkpoint artifact limit, split its exact serialized text before any provider call and retain ordered chunk manifest; never rerun the reader."
+}

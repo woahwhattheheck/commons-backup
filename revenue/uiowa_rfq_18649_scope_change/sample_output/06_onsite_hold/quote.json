@@ -1,0 +1,83 @@
+{
+  "authority": {
+    "buyer_contact": false,
+    "invoice": false,
+    "payment": false,
+    "revenue": false,
+    "scheduling": false,
+    "submission": false,
+    "travel": false
+  },
+  "baseline": {
+    "currency": "USD",
+    "dimensions": [
+      "software",
+      "security",
+      "deployment",
+      "ai_readiness"
+    ],
+    "groups": [
+      "ESS",
+      "RIS",
+      "IAM"
+    ],
+    "horizon_weeks": [
+      6,
+      8
+    ],
+    "milestone_amounts_usd": [
+      9600,
+      9600,
+      4800
+    ],
+    "milestone_split": [
+      40,
+      40,
+      20
+    ],
+    "rfq_id": "18649",
+    "roles": {
+      "principal": "prime",
+      "specialist": "subcontract"
+    },
+    "specialist_hours_in_base": 160,
+    "travel_treatment": "excluded_from_base",
+    "workshare_base_usd": 24000,
+    "workshare_option_usd": 4000
+  },
+  "issues": [
+    {
+      "code": "ONSITE_TRAVEL_HOLD",
+      "detail": "line L1 requests onsite days; travel remains unauthorized",
+      "ref": "L1",
+      "severity": "WARN"
+    }
+  ],
+  "lines": [
+    {
+      "class": "added_scope",
+      "hours": 8,
+      "id": "L1",
+      "note": "Onsite/travel is excluded from the $24,000 base. This assembler does not invent travel spend or authorization.",
+      "quantity": 1,
+      "status": "HOLD_TRAVEL_UNAUTHORIZED",
+      "type": "added_onsite_day",
+      "usd": null
+    }
+  ],
+  "notes": [
+    "$24000 is TJLabs subcontract workshare, not the prime all-inclusive bid fee.",
+    "Added scope is priced separately from in-scope defect correction.",
+    "Travel/onsite is excluded from base and is never auto-authorized.",
+    "This quote is not an invoice, payment, submission, or schedule."
+  ],
+  "schema": "uiowa-133-scope-change/1",
+  "totals": {
+    "baseline_usd": 24000,
+    "incremental_hours": 8,
+    "incremental_usd": null,
+    "optional_readout_usd": 4000,
+    "quoted_total_usd": null,
+    "status": "HOLD_MISSING_INPUTS"
+  }
+}

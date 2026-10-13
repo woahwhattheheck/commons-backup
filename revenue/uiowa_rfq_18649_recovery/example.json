@@ -1,0 +1,184 @@
+{
+  "schema": "uiowa-recovery/v1",
+  "synthetic": true,
+  "as_of": "2026-09-19T12:00:00Z",
+  "max_exercise_age_days": 90,
+  "evidence": [
+    {
+      "id": "CFG-01-PROC",
+      "scenario_id": "CFG-01",
+      "kind": "procedure",
+      "available": true,
+      "recorded_at": "2026-09-17T09:00:00Z",
+      "summary": "Invented procedure v3; restore steps, stop conditions, and role handoff recorded."
+    },
+    {
+      "id": "CFG-01-DEC",
+      "scenario_id": "CFG-01",
+      "kind": "decision",
+      "available": true,
+      "recorded_at": "2026-09-18T10:04:00Z",
+      "summary": "Invented decision log explains the selected recovery strategy and accountable role."
+    },
+    {
+      "id": "CFG-01-RUN",
+      "scenario_id": "CFG-01",
+      "kind": "execution",
+      "available": true,
+      "recorded_at": "2026-09-18T10:12:00Z",
+      "summary": "Invented isolated rehearsal log records failure, detection, decision, execution, and completion."
+    },
+    {
+      "id": "CFG-01-SERVICE",
+      "scenario_id": "CFG-01",
+      "kind": "verification",
+      "available": true,
+      "recorded_at": "2026-09-18T10:15:00Z",
+      "summary": "Invented post-recovery checks cover the critical request flow and integration response."
+    },
+    {
+      "id": "MIG-01-PROC",
+      "scenario_id": "MIG-01",
+      "kind": "procedure",
+      "available": true,
+      "recorded_at": "2026-09-17T09:00:00Z",
+      "summary": "Invented procedure v3; restore steps, stop conditions, and role handoff recorded."
+    },
+    {
+      "id": "MIG-01-DEC",
+      "scenario_id": "MIG-01",
+      "kind": "decision",
+      "available": true,
+      "recorded_at": "2026-09-18T11:10:00Z",
+      "summary": "Invented decision log explains the selected recovery strategy and accountable role."
+    },
+    {
+      "id": "MIG-01-RUN",
+      "scenario_id": "MIG-01",
+      "kind": "execution",
+      "available": true,
+      "recorded_at": "2026-09-18T11:30:00Z",
+      "summary": "Invented isolated rehearsal log records failure, detection, decision, execution, and completion."
+    },
+    {
+      "id": "MIG-01-SERVICE",
+      "scenario_id": "MIG-01",
+      "kind": "verification",
+      "available": true,
+      "recorded_at": "2026-09-18T11:36:00Z",
+      "summary": "Invented post-recovery checks cover the critical request flow and integration response."
+    },
+    {
+      "id": "MIG-01-DATA",
+      "scenario_id": "MIG-01",
+      "kind": "verification",
+      "available": false,
+      "recorded_at": "2026-09-18T11:37:00Z",
+      "summary": "Requested, not supplied: invented reconciliation of project counts, durable IDs, relationships, and aggregate totals."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "CFG-01",
+      "group": "ESS",
+      "title": "Fictional registration routing configuration",
+      "change_kind": "configuration",
+      "procedure_refs": [
+        "CFG-01-PROC"
+      ],
+      "decision": {
+        "strategy": "rollback",
+        "rollback_compatible": true,
+        "owner_role": "Fictional release lead",
+        "rationale": "Prior configuration is versioned and compatible with unchanged data.",
+        "evidence_refs": [
+          "CFG-01-DEC"
+        ]
+      },
+      "target_minutes": 20,
+      "attempts": [
+        {
+          "id": "CFG-01-R1",
+          "mode": "executed_rehearsal",
+          "strategy": "rollback",
+          "environment": "Isolated fictional exercise; no University systems",
+          "times": {
+            "failure": "2026-09-18T10:00:00Z",
+            "detected": "2026-09-18T10:02:00Z",
+            "decision": "2026-09-18T10:04:00Z",
+            "start": "2026-09-18T10:05:00Z",
+            "complete": "2026-09-18T10:12:00Z"
+          },
+          "evidence_refs": [
+            "CFG-01-RUN"
+          ],
+          "verification": [
+            {
+              "aspect": "service",
+              "result": "pass",
+              "at": "2026-09-18T10:15:00Z",
+              "evidence_refs": [
+                "CFG-01-SERVICE"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "MIG-01",
+      "group": "RIS",
+      "title": "Fictional research project-summary migration",
+      "change_kind": "data_migration",
+      "procedure_refs": [
+        "MIG-01-PROC"
+      ],
+      "decision": {
+        "strategy": "forward_repair",
+        "rollback_compatible": false,
+        "owner_role": "Fictional release lead",
+        "rationale": "The old application cannot read converted summaries; forward repair preserves durable identifiers. Data reconciliation is still requested.",
+        "evidence_refs": [
+          "MIG-01-DEC"
+        ]
+      },
+      "target_minutes": 45,
+      "attempts": [
+        {
+          "id": "MIG-01-R1",
+          "mode": "executed_rehearsal",
+          "strategy": "forward_repair",
+          "environment": "Isolated fictional exercise; no University systems",
+          "times": {
+            "failure": "2026-09-18T11:00:00Z",
+            "detected": "2026-09-18T11:03:00Z",
+            "decision": "2026-09-18T11:10:00Z",
+            "start": "2026-09-18T11:12:00Z",
+            "complete": "2026-09-18T11:30:00Z"
+          },
+          "evidence_refs": [
+            "MIG-01-RUN"
+          ],
+          "verification": [
+            {
+              "aspect": "service",
+              "result": "pass",
+              "at": "2026-09-18T11:36:00Z",
+              "evidence_refs": [
+                "MIG-01-SERVICE"
+              ]
+            },
+            {
+              "aspect": "data",
+              "result": "unknown",
+              "at": "2026-09-18T11:37:00Z",
+              "evidence_refs": [
+                "MIG-01-DATA"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

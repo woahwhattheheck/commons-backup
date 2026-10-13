@@ -1,0 +1,150 @@
+{
+  "assignments": [
+    {
+      "arm_id": "diagnostic-email",
+      "assigned_at": "2026-09-13T18:05:00Z",
+      "evidence": {
+        "commit": "ffffffffffffffffffffffffffffffffffffffff",
+        "path": "revenue/commercial_experiment_lab/evidence/assign-a1.json",
+        "repository": "woahwhattheheck/commons",
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "id": "assign-a1",
+      "opportunity_id": "synthetic-a1"
+    },
+    {
+      "arm_id": "proof-form",
+      "assigned_at": "2026-09-13T18:06:00Z",
+      "evidence": {
+        "commit": "ffffffffffffffffffffffffffffffffffffffff",
+        "path": "revenue/commercial_experiment_lab/evidence/assign-b1.json",
+        "repository": "woahwhattheheck/commons",
+        "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "id": "assign-b1",
+      "opportunity_id": "synthetic-b1"
+    }
+  ],
+  "funnel": {
+    "opportunities": [
+      {
+        "events": [
+          {
+            "evidence": {
+              "commit": "ffffffffffffffffffffffffffffffffffffffff",
+              "path": "revenue/commercial_experiment_lab/evidence/a1-traffic.json",
+              "repository": "woahwhattheheck/commons",
+              "sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+            },
+            "id": "a1-traffic",
+            "observed_at": "2026-09-13T19:00:00Z",
+            "stage": "TRAFFIC"
+          },
+          {
+            "evidence": {
+              "commit": "ffffffffffffffffffffffffffffffffffffffff",
+              "path": "revenue/commercial_experiment_lab/evidence/a1-reply.json",
+              "repository": "woahwhattheheck/commons",
+              "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+            },
+            "id": "a1-reply",
+            "observed_at": "2026-09-13T19:20:00Z",
+            "stage": "REPLY"
+          },
+          {
+            "evidence": {
+              "commit": "ffffffffffffffffffffffffffffffffffffffff",
+              "path": "revenue/commercial_experiment_lab/evidence/a1-acceptance.json",
+              "repository": "woahwhattheheck/commons",
+              "sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+            },
+            "id": "a1-acceptance",
+            "observed_at": "2026-09-13T19:40:00Z",
+            "stage": "ACCEPTANCE"
+          }
+        ],
+        "family": "SERVICE",
+        "id": "synthetic-a1",
+        "offer": {
+          "id": "failure-diagnostic",
+          "source": {
+            "commit": "ffffffffffffffffffffffffffffffffffffffff",
+            "path": "revenue/commercial_experiment_lab/evidence/failure-diagnostic-v1.json",
+            "repository": "woahwhattheheck/commons",
+            "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+          },
+          "version": "v1"
+        }
+      },
+      {
+        "events": [
+          {
+            "evidence": {
+              "commit": "ffffffffffffffffffffffffffffffffffffffff",
+              "path": "revenue/commercial_experiment_lab/evidence/b1-traffic.json",
+              "repository": "woahwhattheheck/commons",
+              "sha256": "9999999999999999999999999999999999999999999999999999999999999999"
+            },
+            "id": "b1-traffic",
+            "observed_at": "2026-09-13T19:02:00Z",
+            "stage": "TRAFFIC"
+          }
+        ],
+        "family": "SERVICE",
+        "id": "synthetic-b1",
+        "offer": {
+          "id": "binary-proof",
+          "source": {
+            "commit": "ffffffffffffffffffffffffffffffffffffffff",
+            "path": "revenue/commercial_experiment_lab/evidence/binary-proof-v1.json",
+            "repository": "woahwhattheheck/commons",
+            "sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+          },
+          "version": "v1"
+        }
+      }
+    ],
+    "schema": "commons-commercial-funnel-input/v1"
+  },
+  "plan": {
+    "arms": [
+      {
+        "id": "diagnostic-email",
+        "offer_id": "failure-diagnostic",
+        "offer_version": "v1",
+        "proof_package": "failure-map",
+        "route_class": "EMAIL",
+        "segment": "ops-smb"
+      },
+      {
+        "id": "proof-form",
+        "offer_id": "binary-proof",
+        "offer_version": "v1",
+        "proof_package": "binary-acceptance",
+        "route_class": "FORM",
+        "segment": "ops-midmarket"
+      }
+    ],
+    "declared_at": "2026-09-13T18:00:00Z",
+    "family": "SERVICE",
+    "id": "synthetic-gtm-1",
+    "minimum_sample_per_arm": 1,
+    "opportunity_ids": [
+      "synthetic-a1",
+      "synthetic-b1"
+    ],
+    "revision": "r1",
+    "source": {
+      "commit": "ffffffffffffffffffffffffffffffffffffffff",
+      "path": "revenue/commercial_experiment_lab/evidence/plan.json",
+      "repository": "woahwhattheheck/commons",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "thresholds": {
+      "expand_acceptance_bps": 5000,
+      "expand_reply_bps": 7500,
+      "pause_reply_bps": 2500
+    }
+  },
+  "schema": "commons-commercial-experiment-input/v1"
+}

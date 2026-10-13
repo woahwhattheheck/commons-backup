@@ -1,0 +1,55 @@
+name: outcome-commerce
+
+on:
+  push:
+    branches:
+      - main
+    paths: &commerce_paths
+      - '.github/workflows/outcome-commerce.yml'
+      - 'test_outcome_commerce.py'
+      - 'host/outcome_commerce.py'
+      - 'commerce.html'
+      - 'commerce.js'
+      - 'commons_mcp.py'
+      - 'crawler-access.json'
+      - 'sitemap.xml'
+      - 'ground/COMMERCE.md'
+      - 'revenue/outcome_commerce/**'
+      - 'bazaar.json'
+      - 'host/bazaar.py'
+      - 'commercial.json'
+      - 'revenue/dio/**'
+      - 'revenue/expert_networks/**'
+      - 'revenue/human_outcomes/**'
+      - 'revenue/payment_ready/**'
+      - 'revenue/portfolio_overdrive/**'
+      - 'revenue/production_survival/**'
+      - 'revenue/subzero_buyers/**'
+      - 'revenue/subzero_gtm/**'
+  pull_request:
+    paths: *commerce_paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: dependency-free commerce contracts
+        run: python -W error -m unittest -q test_outcome_commerce.py
+      - name: syntax and JSON checks
+        run: |
+          python -m py_compile host/outcome_commerce.py test_outcome_commerce.py
+          python -c "import json,pathlib; [json.loads(path.read_text(encoding='utf-8')) for path in pathlib.Path('revenue/outcome_commerce').rglob('*.json')]"
+      - name: open-door anti-regression
+        run: git show --format= --no-ext-diff HEAD | python open_door_guard.py --diff-file -
+      - name: whitespace guard
+        run: git diff --check HEAD^

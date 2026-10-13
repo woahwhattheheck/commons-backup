@@ -1,0 +1,49 @@
+name: Water4All 2026 readiness
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/water4all_2026_swm/**'
+      - '.github/workflows/water4all-2026-swm.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'revenue/water4all_2026_swm/**'
+      - '.github/workflows/water4all-2026-swm.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile source
+        run: python -m compileall -q revenue/water4all_2026_swm
+      - name: Run authority hostiles
+        run: python -m unittest -v revenue.water4all_2026_swm.test_engine
+      - name: Run authority hostiles without assertions
+        run: python -O -m unittest -v revenue.water4all_2026_swm.test_engine
+      - name: Historical CLI round trip
+        shell: bash
+        run: |
+          rm -f /tmp/water4all.bundle.json /tmp/water4all.owner.md
+          python -m revenue.water4all_2026_swm.cli \
+            compile-historical \
+            revenue/water4all_2026_swm/example_input.json \
+            2026-09-14T04:00:00Z \
+            /tmp/water4all.bundle.json \
+            --markdown-output /tmp/water4all.owner.md
+          python -m revenue.water4all_2026_swm.cli \
+            verify \
+            revenue/water4all_2026_swm/example_input.json \
+            /tmp/water4all.bundle.json

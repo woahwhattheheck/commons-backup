@@ -1,0 +1,43 @@
+{
+  "schema_version": "owner-commercial-decision-request/v1",
+  "request_id": "example-owner-decision-001",
+  "mailbox": "tokenjunkielabs@gmail.com",
+  "thread_id": "provider-thread-id",
+  "inbound_event": {
+    "event_id": "provider-inbound-id",
+    "event_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observed_at": "2026-09-14T03:18:00Z"
+  },
+  "decision_type": "PAID_SCOPE",
+  "buyer_scope": "example-buyer.test",
+  "opportunity_id": "example-opportunity",
+  "prior_offers": [
+    {
+      "offer_id": "fixed-scope-offer",
+      "amount_minor": 2400000,
+      "currency": "USD",
+      "status": "PROPOSED_NOT_ACCEPTED",
+      "evidence_event_id": "provider-outbound-id"
+    }
+  ],
+  "prior_promises": [
+    {
+      "summary": "Send one bounded technical workshare exhibit for review.",
+      "evidence_event_id": "provider-outbound-id"
+    }
+  ],
+  "evidenced_amounts": [
+    {
+      "label": "proposed fixed scope",
+      "amount_minor": 2400000,
+      "currency": "USD",
+      "evidence_event_id": "provider-outbound-id"
+    }
+  ],
+  "deadlines": [],
+  "recommendation": {
+    "action": "Keep the thread quiet until the owner rules on the exact commercial boundary.",
+    "rationale": "The buyer is reviewing the existing scope and there is no newer provider event."
+  },
+  "ruling_needed": "May the next human reply discuss the existing fixed scope without changing price or terms?"
+}

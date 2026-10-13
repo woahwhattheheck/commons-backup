@@ -1,0 +1,56 @@
+{
+  "schema": "tjl.offboardmesh-demo-input/v1",
+  "organizationRef": "SYNTHETIC-MSP-001",
+  "engagementId": "ENG-SYNTH-001",
+  "planVersion": "PLAN-V3",
+  "requestedAt": "2026-09-10T12:00:00.000Z",
+  "requestedCloseoutAt": "2026-09-20T12:00:00.000Z",
+  "modelProposal": {
+    "sourceModelRef": "MODEL-ADAPTER-DEMO-001",
+    "generatedAt": "2026-09-10T12:03:00.000Z",
+    "suggestions": [
+      {
+        "taskId": "TASK-DOCS",
+        "actionClass": "DOCUMENT_HANDOFF",
+        "summary": "Compile the final owner-review handoff inventory from supplied evidence.",
+        "ownerRef": "OWNER-OPS",
+        "evidenceRefs": ["EV-PLAN", "EV-COMPLETE"],
+        "proposedState": "PROPOSAL_ONLY"
+      },
+      {
+        "taskId": "TASK-ACCESS",
+        "actionClass": "ACCESS_REVOKE",
+        "summary": "Owner reviews the supplied access list and performs any approved revocation externally.",
+        "ownerRef": "OWNER-SECURITY",
+        "evidenceRefs": ["EV-PLAN"],
+        "proposedState": "PROPOSAL_ONLY"
+      },
+      {
+        "taskId": "TASK-BILLING",
+        "actionClass": "BILLING_CLOSE",
+        "summary": "Owner reviews the closeout record before any billing-system change.",
+        "ownerRef": "OWNER-FINANCE",
+        "evidenceRefs": ["EV-PLAN"],
+        "proposedState": "PROPOSAL_ONLY"
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "evidenceId": "EV-PLAN",
+      "kind": "OWNER_AUTHORED_PLAN",
+      "observedAt": "2026-09-10T11:55:00.000Z",
+      "sha256": "a4b4f65ce4890a02e7727bf8651891b764b40487f509d2e65bed7a14e6a9a56b",
+      "sourceRef": "OWNER-VAULT-PLAN-003",
+      "ownerSupplied": true
+    },
+    {
+      "evidenceId": "EV-COMPLETE",
+      "kind": "COMPLETION_EVIDENCE",
+      "observedAt": "2026-09-10T11:57:00.000Z",
+      "sha256": "f6a79f751f441c62c595e8af6b5b6aa8ea803dfce2d98fdc8a7c206a45131931",
+      "sourceRef": "OWNER-VAULT-EVIDENCE-021",
+      "ownerSupplied": true
+    }
+  ]
+}

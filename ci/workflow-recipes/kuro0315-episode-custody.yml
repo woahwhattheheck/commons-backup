@@ -1,0 +1,35 @@
+name: Kuro0315 episode custody
+
+on:
+  push:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/kuro0315-episode-107983535/**'
+      - '.github/workflows/kuro0315-episode-custody.yml'
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/kuro0315-episode-107983535/**'
+      - '.github/workflows/kuro0315-episode-custody.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/kuro0315-episode-107983535/verify_episode.py revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/kuro0315-episode-107983535/tests/test_verify_episode.py
+      - name: Unit tests
+        run: python -m unittest discover -s revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/kuro0315-episode-107983535/tests -v
+      - name: Optimized-mode tests
+        run: python -O -m unittest discover -s revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/kuro0315-episode-107983535/tests -v

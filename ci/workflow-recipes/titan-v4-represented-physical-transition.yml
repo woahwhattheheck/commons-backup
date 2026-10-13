@@ -1,0 +1,71 @@
+name: titan-v4-represented-physical-transition
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/represented-market-executability/**'
+      - '.github/workflows/titan-v4-represented-physical-transition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-repository-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Focused contracts — normal interpreter
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/represented-market-executability
+        run: |
+          python -B - <<'PY'
+          import unittest
+          names = [
+              'test_represented_physical_transition',
+              'test_receipt_config_guard',
+              'test_repository_materialization',
+              'test_integral_money_custody',
+          ]
+          suite = unittest.defaultTestLoader.loadTestsFromNames(names)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if result.testsRun != 30:
+              raise SystemExit(f'expected 30 tests, ran {result.testsRun}')
+          if result.skipped:
+              raise SystemExit(f'skips are not authority: {result.skipped!r}')
+          if not result.wasSuccessful():
+              raise SystemExit(1)
+          PY
+      - name: Focused contracts — optimized interpreter
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/represented-market-executability
+        run: |
+          python -O -B - <<'PY'
+          import unittest
+          names = [
+              'test_represented_physical_transition',
+              'test_receipt_config_guard',
+              'test_repository_materialization',
+              'test_integral_money_custody',
+          ]
+          suite = unittest.defaultTestLoader.loadTestsFromNames(names)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if result.testsRun != 30:
+              raise SystemExit(f'expected 30 tests, ran {result.testsRun}')
+          if result.skipped:
+              raise SystemExit(f'skips are not authority: {result.skipped!r}')
+          if not result.wasSuccessful():
+              raise SystemExit(1)
+          PY
+      - name: Compile carrier and tests
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/represented-market-executability
+        run: |
+          python -B -m py_compile \
+            materialize_represented_physical_transition.py \
+            materialize_integral_money_custody.py \
+            test_represented_physical_transition.py \
+            test_receipt_config_guard.py \
+            test_repository_materialization.py \
+            test_integral_money_custody.py

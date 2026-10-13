@@ -1,0 +1,24 @@
+{
+  "lane": "V224 raw-slot-preserving SELL ordering",
+  "status": "donor_only_default_off_package_gate_pending",
+  "source_pr": 12615,
+  "source_head": "652c00dd5ea6232e64ad22a8d07127fd4cfccd19",
+  "source_blob": "43afebae35560e54dde645cff656c8be8031851f",
+  "test_blob": "4e3ece39b80bbfea4d4232745f9ef01c1c53c205",
+  "external_overflow_regression_donor": "29da24599149bf5a16e75bf701b8953b408d7399",
+  "validation": "Current helper authority preserves raw executable slots/barriers and fails closed on overflow. Source comments report 100,932 enumerated pure-helper structural cases plus 9/9 normal and 9/9 -O overflow evidence on the external donor. Full current-head package/hosted/economics acceptance is not claimed.",
+  "included_repairs": [
+    "preserve falsey, malformed, zero-quantity and engine-no-op raw timing barriers",
+    "retain V224 SELL bubbling only across contiguous positive-effect rows",
+    "preserve same-item BUY_PRODUCT/BUY_ANIMAL dependency barriers",
+    "fail closed on nonstandard maxMarketOrdersPerTurn configuration",
+    "preserve executable-prefix truncation semantics when frozen V224 would publish a changed prefix",
+    "preserve V224 reorder telemetry on actual rewrites"
+  ],
+  "excluded": [
+    "legacy apply_v4.py wiring",
+    "feature activation or default-on promotion",
+    "stale helper blob 7401ab7616cff5be313c3746d75db536c8dac23d",
+    "claim of terminal hosted package/economics gate"
+  ]
+}

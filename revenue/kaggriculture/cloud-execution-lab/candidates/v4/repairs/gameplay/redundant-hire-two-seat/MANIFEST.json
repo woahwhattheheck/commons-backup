@@ -1,0 +1,48 @@
+{
+  "schema": "titan-v4-repair-receipt/v1",
+  "lane": "V4-REDUNDANT-HIRE-TWO-SEAT-FAILCLOSE-20260911-01",
+  "status": "repair_ready_not_production_activated",
+  "canonical_branch": "main",
+  "production_feature_state": "redundant_hire=true",
+  "artifact_provenance": {
+    "artifact_id": 10123395668,
+    "artifact_zip_sha256": "d11b9ca245dc8205dabd26523c2e431055feaa22afa3bc10866e4e3bae3db4ed",
+    "titan_runtime_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+    "official_engine_blob": "3c202c7ee921da239356789e266b694635103fc4"
+  },
+  "source": {
+    "path": "revenue/kaggriculture/cloud-execution-lab/reference/titan-current/redundant_hire.py",
+    "input_blob": "9ded2a9b636793df0511103da802bd3f26dbbb94",
+    "repaired_postimage_blob": "a58ba3403d89f0d9a17e56225f891f1aa81a4c8f",
+    "repaired_postimage_sha256": "d84c56940ab3d2a7959f6695d376e6e2337c9deff70858de15419cf8174e4d5c"
+  },
+  "repair_artifacts": {
+    "transformer_blob": "dfea05c50b89f410fa089efe3599dea58e14aad7",
+    "test_blob": "7b4e60167a168493643ccc931d7c8235f1f34a9f"
+  },
+  "reproduction": {
+    "malformed_public_shape": "three farms, player=2, step=22, one executable HIRE, one remaining PASS",
+    "predecessor_result": "mutates authored HIRE to [SELL,WHEAT,0], changed=true, immediate_wage_saving=1",
+    "repair_result": "exact parent identity, route unchanged, changed=false, route_changed=false, reason=unsupported_public_seat_schema"
+  },
+  "contract": [
+    "require farms to be a list of exactly two public farm seats",
+    "require player to be strict int 0 or 1; bool is rejected",
+    "fail closed before player indexing, unit simulation, hire simulation, or shared-route edits",
+    "preserve ordinary two-seat redundant-HIRE behavior on both player 0 and player 1"
+  ],
+  "validation": {
+    "server_byte_transformer": "dfea05c50b89f410fa089efe3599dea58e14aad7",
+    "server_byte_test": "7b4e60167a168493643ccc931d7c8235f1f34a9f",
+    "py_compile": "PASS",
+    "normal": "8/8 PASS",
+    "python_O": "8/8 PASS",
+    "postimage_hash_gate": "PASS"
+  },
+  "activation": {
+    "production_source_modified": false,
+    "feature_default_modified": false,
+    "archive_or_kaggle_modified": false,
+    "next": "apply exact transformer to input blob in the sole current-runtime integration line, rerun package tests, then update production source only through normal main serialization"
+  }
+}

@@ -1,0 +1,27 @@
+[Unit]
+Description=Commons grok.com Slack connector
+Documentation=https://github.com/woahwhattheheck/commons/blob/main/integrations/grok_slack/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=commons
+Group=commons
+WorkingDirectory=/opt/commons
+Environment=COMMONS_GROK_SLACK_STATE_DB=/var/lib/commons/grok_slack.sqlite3
+Environment=COMMONS_GROK_SLACK_HEALTH_BIND=127.0.0.1:8788
+EnvironmentFile=-/etc/commons/grok-slack.env
+ExecStartPre=/usr/bin/python3 /opt/commons/integrations/grok_slack/bridge.py doctor --json
+ExecStart=/usr/bin/python3 /opt/commons/integrations/grok_slack/bridge.py serve --state-db /var/lib/commons/grok_slack.sqlite3
+Restart=always
+RestartSec=5
+RestartPreventExitStatus=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/commons
+
+[Install]
+WantedBy=multi-user.target

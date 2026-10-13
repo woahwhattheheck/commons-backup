@@ -1,0 +1,107 @@
+name: TITAN T07 lineage checks
+on:
+  push:
+    branches: [work/astra-elm-t07-20260907, astra/orbit-t07-public-bank-20260907]
+    paths:
+      - .github/workflows/titan-t07-intake.yml
+      - revenue/kaggriculture/cloud-opponent-frontier/lineage/*.py
+      - revenue/kaggriculture/cloud-opponent-frontier/runtime/public_bank/**
+  pull_request:
+    paths:
+      - .github/workflows/titan-t07-intake.yml
+      - revenue/kaggriculture/cloud-opponent-frontier/lineage/**
+      - revenue/kaggriculture/cloud-opponent-frontier/runtime/public_bank/**
+permissions:
+  contents: read
+jobs:
+  lineage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: revenue/kaggriculture/cloud-opponent-frontier/lineage
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test actual lineage implementation without importing opponent policies
+        run: python -m unittest discover -s revenue/kaggriculture/cloud-opponent-frontier/lineage -p 'test_*.py' -v
+      - name: Retrieve missing historical reference bytes once on the implementation push
+        if: github.event_name == 'push' && github.ref == 'refs/heads/work/astra-elm-t07-20260907'
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, urllib.request
+          root = pathlib.Path('t07-lineage-ref')
+          root.mkdir()
+          base = 'https://raw.githubusercontent.com/woahwhattheheck/commons/'
+          frontier = base + '8329e78768906dc6e75ca3712e1690adc1ab2148/revenue/kaggriculture/'
+          breaking = base + '9f79dff0d37acaf9943476d96b710058ba502830/revenue/kaggriculture/cloud-frontier-decision/public-opponent/'
+          sources = {
+              'kaito/kaito_v43.py': (frontier + 'cloud-frontier-policy/vendor/kaito_v43.py', '69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3'),
+              'kaito/UPSTREAM.json': (frontier + 'cloud-opponent-bench/UPSTREAM.json', None),
+              'kaito/NOTICE.md': (frontier + 'cloud-frontier-policy/NOTICE.md', None),
+              'kaito/LICENSE': (frontier + 'cloud-frontier-policy/LICENSE', None),
+              'breaking/submission.py': (breaking + 'submission.py', 'df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5'),
+              'breaking/UPSTREAM.json': (breaking + 'UPSTREAM.json', None),
+              'breaking/NOTICE.txt': (breaking + 'NOTICE.txt', None),
+              'breaking/LICENSE-APACHE-2.0.txt': (breaking + 'LICENSE-APACHE-2.0.txt', None),
+          }
+          rows = []
+          for name, (url, expected) in sources.items():
+              req = urllib.request.Request(url, headers={'User-Agent': 'commons-titan-lineage/1.0'})
+              with urllib.request.urlopen(req, timeout=35) as response:
+                  data = response.read(4 * 1024 * 1024 + 1)
+                  if len(data) > 4 * 1024 * 1024:
+                      raise ValueError('reference exceeds bounded intake size')
+                  actual = hashlib.sha256(data).hexdigest()
+                  if expected and actual != expected:
+                      raise ValueError('reference differs from existing published source pin: ' + name)
+                  row = {'path': name, 'source_url': url, 'status': response.status, 'bytes': len(data), 'sha256': actual}
+              target = root / name
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(data)
+              rows.append(row)
+              print(json.dumps(row, sort_keys=True))
+          manifest = {'run_id': os.environ['GITHUB_RUN_ID'], 'source_commit': os.environ['GITHUB_SHA'], 'executes_downloaded_code': False, 'requests': rows}
+          (root / 'REFERENCES.json').write_text(json.dumps(manifest, indent=2) + '\n')
+      - name: Preserve implementation and exact supplemental inputs
+        if: github.event_name == 'push' && github.ref == 'refs/heads/work/astra-elm-t07-20260907'
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-t07-lineage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            t07-lineage-ref/
+            revenue/kaggriculture/cloud-opponent-frontier/lineage/*.py
+          if-no-files-found: error
+          retention-days: 30
+  public-bank:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            revenue/kaggriculture/cloud-opponent-frontier/runtime/public_bank
+            revenue/kaggriculture/cloud-pack
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check bank implementation
+        run: |
+          python -m compileall -q revenue/kaggriculture/cloud-opponent-frontier/runtime/public_bank
+          python -m unittest discover -s revenue/kaggriculture/cloud-opponent-frontier/runtime/public_bank -p 'test_*.py' -v
+      - name: Intake exact public sources once when explicitly marked
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[t07-bank-intake]')
+        run: |
+          python revenue/kaggriculture/cloud-opponent-frontier/runtime/public_bank/intake.py fetch public-bank-intake
+          python revenue/kaggriculture/cloud-opponent-frontier/runtime/public_bank/intake.py verify public-bank-intake
+      - name: Export public source bank without executing policy code
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[t07-bank-intake]')
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-t07-public-bank-${{ github.run_id }}-${{ github.run_attempt }}
+          path: public-bank-intake/
+          if-no-files-found: error
+          retention-days: 30

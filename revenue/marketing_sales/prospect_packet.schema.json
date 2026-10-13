@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/marketing_sales/prospect_packet.schema.json",
+  "title": "Commons decision-maker prospect packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "packet_id", "organization", "decision_maker", "need", "offer", "dedupe", "suppression"],
+  "properties": {
+    "schema_version": {"const": "commons-marketing-sales-prospect-packet/v1"},
+    "packet_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,127}$"},
+    "organization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "domain", "evidence_url"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "domain": {"type": "string", "minLength": 3},
+        "evidence_url": {"type": "string", "pattern": "^https?://"}
+      }
+    },
+    "decision_maker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role", "authority_evidence_url", "public_professional_route"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "role": {"type": "string", "minLength": 1},
+        "authority_evidence_url": {"type": "string", "pattern": "^https?://"},
+        "public_professional_route": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "evidence_url"],
+          "properties": {
+            "type": {"enum": ["email", "phone", "linkedin", "contact_form", "procurement_portal"]},
+            "value": {"type": "string", "minLength": 3},
+            "evidence_url": {"type": "string", "pattern": "^https?://"}
+          }
+        }
+      }
+    },
+    "need": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failure_sentence", "evidence_url", "observed_at"],
+      "properties": {
+        "failure_sentence": {"type": "string", "minLength": 12},
+        "evidence_url": {"type": "string", "pattern": "^https?://"},
+        "observed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["narrow_sku", "diagnostic_price_usd", "one_day_deliverable", "binary_acceptance", "optional_proof_price_usd"],
+      "properties": {
+        "narrow_sku": {"type": "string", "minLength": 3},
+        "diagnostic_price_usd": {"const": 199},
+        "one_day_deliverable": {"type": "string", "minLength": 12},
+        "binary_acceptance": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 3}},
+        "optional_proof_price_usd": {"const": 2500}
+      }
+    },
+    "dedupe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checked_at", "checks"],
+      "properties": {
+        "checked_at": {"type": "string", "format": "date-time"},
+        "checks": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["surface", "query", "result"],
+            "properties": {
+              "surface": {"enum": ["commons", "gmail_sent", "crm"]},
+              "query": {"type": "string", "minLength": 1},
+              "result": {"enum": ["CLEAR", "FOUND"]}
+            }
+          }
+        }
+      }
+    },
+    "suppression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hard_do_not_resend", "prior_transport_found"],
+      "properties": {
+        "hard_do_not_resend": {"const": false},
+        "prior_transport_found": {"const": false}
+      }
+    }
+  }
+}

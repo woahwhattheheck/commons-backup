@@ -1,0 +1,62 @@
+name: TITAN V3 one-tree transport custody (SOL-PRO)
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-one-tree-transport-custody-sol-pro/**"
+      - ".github/workflows/titan-v3-one-tree-transport-custody-sol-pro.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-one-tree-transport-custody-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-head-custody-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact event head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact head and additive scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected='${{ github.event.pull_request.head.sha || github.sha }}'
+          test "$(git rev-parse HEAD)" = "$expected"
+          if [[ '${{ github.event_name }}' == 'pull_request' ]]; then
+            base='${{ github.event.pull_request.base.sha }}'
+            git diff --name-only "$base" HEAD > /tmp/changed.txt
+            awk '
+              /^revenue\/kaggriculture\/cloud-execution-lab\/analysis\/titan-v3-one-tree-transport-custody-sol-pro\// {next}
+              /^\.github\/workflows\/titan-v3-one-tree-transport-custody-sol-pro\.yml$/ {next}
+              {print "unexpected path: " $0; bad=1}
+              END {exit bad}
+            ' /tmp/changed.txt
+          fi
+          test -z "$(git status --porcelain)"
+
+      - name: Run fail-closed contracts and verify retained finding
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-one-tree-transport-custody-sol-pro
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./run_tests.sh | tee "$RUNNER_TEMP/CONTRACTS.log"
+          test -z "$(git status --porcelain)"
+
+      - name: Retain exact finding and contract log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-one-tree-transport-custody-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          path: |
+            revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-one-tree-transport-custody-sol-pro/FINDING.json
+            ${{ runner.temp }}/CONTRACTS.log

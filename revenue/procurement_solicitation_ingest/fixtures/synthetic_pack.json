@@ -1,0 +1,126 @@
+{
+  "evaluated_at": "2026-09-16T16:00:00-07:00",
+  "pack_id": "synthetic-public-sector-rfp",
+  "schema": "procurement-solicitation-ingest/pack/v1",
+  "source_max_age_seconds": 86400,
+  "sources": [
+    {
+      "attachments": [
+        {
+          "attachment_id": "att-rfp-body",
+          "ref": "fixture://buyer/rfp-100.pdf",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "captured_at": "2026-09-16T08:00:00-07:00",
+      "deadline": {
+        "supersedes_deadline": false,
+        "value": "2026-10-01T17:00:00-07:00"
+      },
+      "identity": "buyer-official:example-city:rfp-100",
+      "kind": "SOLICITATION",
+      "ref": "fixture://buyer/rfp-100.pdf",
+      "requirements": [
+        {
+          "family": "corporate_capability",
+          "kind": "MANDATORY",
+          "lineage_id": "req-corporate-capability",
+          "section_id": "section-01-corporate_capability",
+          "tags": ["public_sector"],
+          "text": "Offeror shall describe corporate capability for public-sector delivery."
+        },
+        {
+          "family": "cybersecurity",
+          "kind": "MANDATORY",
+          "lineage_id": "req-cybersecurity",
+          "section_id": "section-03-cybersecurity",
+          "tags": ["public_sector"],
+          "text": "Offeror shall describe cybersecurity controls."
+        },
+        {
+          "family": "accessibility",
+          "kind": "SCORED",
+          "lineage_id": "req-accessibility",
+          "section_id": "section-04-accessibility",
+          "tags": ["public_sector"],
+          "text": "Offeror should describe accessibility conformance evidence."
+        },
+        {
+          "family": "sla_support",
+          "kind": "INFORMATIONAL",
+          "lineage_id": "req-sla-support",
+          "section_id": "section-06-sla_support",
+          "tags": ["public_sector"],
+          "text": "Buyer published an informational SLA questionnaire."
+        }
+      ],
+      "sequence": 1,
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "source_class": "BUYER_OFFICIAL",
+      "source_id": "sol-001",
+      "supersedes_lineages": [],
+      "supersedes_sources": []
+    },
+    {
+      "attachments": [
+        {
+          "attachment_id": "att-amend-1",
+          "ref": "fixture://buyer/rfp-100-amendment-1.pdf",
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
+      "captured_at": "2026-09-16T12:00:00-07:00",
+      "deadline": {
+        "supersedes_deadline": true,
+        "value": "2026-10-08T17:00:00-07:00"
+      },
+      "identity": "buyer-official:example-city:rfp-100-amendment-1",
+      "kind": "AMENDMENT",
+      "ref": "fixture://buyer/rfp-100-amendment-1.pdf",
+      "requirements": [
+        {
+          "family": "cybersecurity",
+          "kind": "MANDATORY",
+          "lineage_id": "req-cybersecurity",
+          "section_id": "section-03-cybersecurity",
+          "tags": ["public_sector", "fedramp"],
+          "text": "Amendment 1 requires FedRAMP-aligned cybersecurity narrative."
+        }
+      ],
+      "sequence": 2,
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "source_class": "BUYER_OFFICIAL",
+      "source_id": "amd-001",
+      "supersedes_lineages": ["req-cybersecurity"],
+      "supersedes_sources": []
+    },
+    {
+      "attachments": [],
+      "captured_at": "2026-09-16T13:00:00-07:00",
+      "deadline": {
+        "supersedes_deadline": true,
+        "value": "2026-11-01T17:00:00-07:00"
+      },
+      "identity": "blog:example-city-rfp-summary",
+      "kind": "AMENDMENT",
+      "ref": "fixture://secondary/blog-summary.html",
+      "requirements": [
+        {
+          "family": "pricing_assumptions",
+          "kind": "MANDATORY",
+          "lineage_id": "req-pricing",
+          "section_id": "section-09-pricing_assumptions",
+          "tags": ["public_sector"],
+          "text": "Secondary blog claims a pricing form is mandatory."
+        }
+      ],
+      "sequence": 9,
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "source_class": "SECONDARY",
+      "source_id": "blog-001",
+      "supersedes_lineages": ["req-corporate-capability"],
+      "supersedes_sources": ["sol-001"]
+    }
+  ],
+  "truth_boundary": "INTERNAL_OWNER_REVIEW_ONLY"
+}

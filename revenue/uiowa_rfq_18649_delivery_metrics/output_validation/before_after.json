@@ -1,0 +1,24 @@
+{
+  "baseline_calculator_blob": "6e73cb8067bbdd38cc0dd94995805c5006b1c401",
+  "candidate_calculator_blob": "ffc7d190a93cd7179c1909f2160e7f124d3232d1",
+  "cases": [
+    {
+      "case": "same_path",
+      "synthetic": true,
+      "before": {"exit_code": 0, "input_preserved": false, "diagnostic": ""},
+      "after": {"exit_code": 2, "input_preserved": true, "diagnostic": "ERROR: output must not overwrite the input CSV or its hardlink"}
+    },
+    {
+      "case": "hardlink",
+      "synthetic": true,
+      "before": {"exit_code": 0, "input_preserved": false, "diagnostic": ""},
+      "after": {"exit_code": 2, "input_preserved": true, "diagnostic": "ERROR: output must not overwrite the input CSV or its hardlink"}
+    },
+    {
+      "case": "symlink",
+      "synthetic": true,
+      "before": {"exit_code": 0, "input_preserved": false, "diagnostic": ""},
+      "after": {"exit_code": 2, "input_preserved": true, "diagnostic": "ERROR: output must not be a symbolic link"}
+    }
+  ]
+}

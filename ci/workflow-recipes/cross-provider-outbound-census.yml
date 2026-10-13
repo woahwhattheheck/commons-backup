@@ -1,0 +1,44 @@
+name: cross-provider-outbound-census-authority
+
+on:
+  pull_request:
+    paths:
+      - "revenue/cross_provider_outbound_census/**"
+      - ".github/workflows/cross-provider-outbound-census.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/cross_provider_outbound_census/**"
+      - ".github/workflows/cross-provider-outbound-census.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hostile-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [normal, optimized]
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: >-
+          python -m py_compile
+          revenue/cross_provider_outbound_census/census.py
+          revenue/cross_provider_outbound_census/test_census.py
+      - name: Run hostile suite
+        shell: bash
+        run: |
+          if [[ "${{ matrix.mode }}" == "optimized" ]]; then
+            python -O -m unittest -v revenue.cross_provider_outbound_census.test_census
+          else
+            python -m unittest -v revenue.cross_provider_outbound_census.test_census
+          fi

@@ -1,0 +1,42 @@
+{
+  "schema_version": "commons-checkout-request/v1",
+  "kind": "ACCEPTANCE_LOCKED_CHECKOUT_REQUEST",
+  "request_id": "checkout-example-survival-20260826-01",
+  "crm": {
+    "base_id": "appo8mlEVFcph1SP0",
+    "table_id": "tblYNSKoenAE3Tcl1",
+    "record_id": "recEXAMPLE0000000"
+  },
+  "sku_id": "same-day-agent-survival-proof",
+  "state": "ACCEPTANCE_LOCKED",
+  "acceptance": {
+    "intake_sentence": "A synthetic survey agent must stop before committing an inconsistent question number and resume without duplicating the effect.",
+    "given": "A public synthetic survey containing one inconsistent question number",
+    "when": "The workflow is interrupted after detecting the inconsistency and before its completion checkpoint",
+    "then": "The workflow stops visibly, resumes idempotently, commits one effect, and emits one timestamped receipt",
+    "input": "revenue/production_survival/example_intake.json",
+    "expected_output": "One clean-run receipt showing a deliberate stop, one dedupe hit, and exactly one external effect",
+    "environment": "Commons public repository at the source commit named by the delivery receipt",
+    "window_start": "2026-08-27T09:00:00-04:00",
+    "window_end": "2026-08-27T17:00:00-04:00",
+    "timezone": "America/New_York",
+    "refund_choice": "REFUND_IF_MISS",
+    "exclusions": [
+      "credentials",
+      "private-data",
+      "pii-phi",
+      "authentication",
+      "billing",
+      "production-migration",
+      "ongoing-hosting-or-sla",
+      "white-box-or-model-files"
+    ]
+  },
+  "acceptance_digest": "d20c6e40d5cc56fa7628b823793b0b5908d1805c04fb0da25c74cee51abe6893",
+  "quote": {"currency": "USD", "amount": "2500.00"},
+  "provider": {"name": "stripe", "livemode": false},
+  "routes": {
+    "success_url": "https://woahwhattheheck.github.io/commons/commerce.html?checkout=success",
+    "cancel_url": "https://woahwhattheheck.github.io/commons/commerce.html?checkout=cancelled"
+  }
+}

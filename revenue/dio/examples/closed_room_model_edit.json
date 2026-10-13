@@ -1,0 +1,187 @@
+{
+  "example_id": "dio-closed-room-model-edit-example-20260825-01",
+  "example_status": "PROSPECTIVE_NOT_ACCEPTED",
+  "measurement_commit": "66644492345be8e64735720e15d8be1fe0c79d56",
+  "job": {
+    "schema_version": "dio-revenue/v1",
+    "kind": "CUSTOMER_JOB",
+    "job_id": "dio-closed-room-model-edit-job-20260825-01",
+    "status": "REQUESTED",
+    "created_at": "2026-08-25T03:41:21Z",
+    "customer_reference": "PROSPECTIVE-CLOSED-ROOM-01",
+    "service": "closed-room model edit protocol",
+    "objective": "Measure a customer-controlled model, apply one bounded requested edit, rerun the customer's predeclared evaluation and regression set, and return the edited model plus rollback evidence without transferring the editing instruments.",
+    "inputs": [
+      {
+        "artifact_id": "customer-model-not-supplied-01",
+        "availability": "NOT_SUPPLIED",
+        "path": null,
+        "sha256": null,
+        "bytes": null,
+        "note": "Public example only. No customer model or evaluation corpus was supplied."
+      }
+    ],
+    "deliverables": [
+      {
+        "deliverable_id": "edited-model-artifact-01",
+        "description": "Customer-controlled edited model, produced only after real inputs exist.",
+        "address": "CUSTOMER_PREMISES_ONLY"
+      },
+      {
+        "deliverable_id": "rollback-and-eval-record-01",
+        "description": "Original and edited SHA-256 values, rollback evidence, and predeclared evaluation results.",
+        "address": "CUSTOMER_PREMISES_ONLY"
+      }
+    ],
+    "acceptance_conditions": [
+      {
+        "condition_id": "requested-behavior-eval-pass-01",
+        "measure": "customer predeclared requested-behavior evaluation",
+        "comparator": "all named cases equal expected outcomes",
+        "expected": "PASS"
+      },
+      {
+        "condition_id": "regression-eval-pass-01",
+        "measure": "customer predeclared regression suite",
+        "comparator": "no result changes outside the accepted edit boundary",
+        "expected": "PASS"
+      },
+      {
+        "condition_id": "rollback-byte-hash-pass-01",
+        "measure": "rollback artifact SHA-256",
+        "comparator": "equals original customer model SHA-256",
+        "expected": "PASS"
+      }
+    ],
+    "result_address": "CUSTOMER_PREMISES_ONLY",
+    "substrate": {
+      "path": "muhl/containers/MUHLNICKEL_DISTRO/SEED0.mno",
+      "sha256": "faa70efc328e9b596eb27d6c1b2e2c4d76a863d8a81380f0d22ec7a8e4d85071",
+      "bytes": 8192,
+      "format": "MUHLPKG1",
+      "header": {
+        "offset": 0,
+        "bytes": 224,
+        "sha256": "03ceb0eabc2beff0e8b2504dc51b7a14907e57a149fb4bb661c27e5a70ae333c",
+        "magic_ascii": "MUHLPKG1",
+        "magic_hex": "4d55484c504b4731"
+      },
+      "output_addresses": [
+        {
+          "name": "recv",
+          "address": 353,
+          "value_hex": "01",
+          "value_uint": 1
+        },
+        {
+          "name": "ans",
+          "address": 6661,
+          "value_hex": "08",
+          "value_uint": 8
+        }
+      ],
+      "wire_plane": {
+        "offset": 288,
+        "bytes": 84,
+        "sha256": "06b801e5205bb3e82bf3921887311f91a67c728006e1c3fb8612acc04018039e"
+      },
+      "gates": {
+        "count": 129,
+        "record_bytes": 25,
+        "region_offset": 2153,
+        "region_bytes": 3225,
+        "region_sha256": "6243edb9d20aa5983e2f047f4a19de71416f851250904c50235f12fd28d28a0e",
+        "body_offset": 224,
+        "body_bytes": 7968,
+        "body_sha256": "f10b5ecbc796815d324eb8784f058e158ba3f5601f677252dd01aa4300de318f"
+      }
+    },
+    "bazaar": {
+      "offer_id": null,
+      "action_id": null,
+      "result_id": null,
+      "note": "No Bazaar offer, action, or result exists for this prospective example."
+    },
+    "payment": {
+      "reference": null,
+      "status": "NOT_REQUESTED"
+    }
+  },
+  "quote": {
+    "schema_version": "dio-revenue/v1",
+    "kind": "QUOTE",
+    "quote_id": "dio-closed-room-model-edit-quote-20260825-01",
+    "job_id": "dio-closed-room-model-edit-job-20260825-01",
+    "status": "DRAFT",
+    "quoted_at": "2026-08-25T03:41:21Z",
+    "valid_until": null,
+    "provider_reference": "DIO",
+    "scope": [
+      "Baseline and hash customer-controlled input after it is supplied.",
+      "Run only the customer's predeclared requested-behavior and regression evaluations.",
+      "Produce an edited artifact, rollback evidence, and an exact result record."
+    ],
+    "price": {
+      "amount_decimal": null,
+      "currency": null,
+      "basis": "Not quoted: the customer model, evaluation corpus, edit boundary, and premises constraints have not been supplied."
+    },
+    "accepted_work": null,
+    "result_address": "CUSTOMER_PREMISES_ONLY",
+    "substrate": {
+      "path": "muhl/containers/MUHLNICKEL_DISTRO/SEED0.mno",
+      "sha256": "faa70efc328e9b596eb27d6c1b2e2c4d76a863d8a81380f0d22ec7a8e4d85071",
+      "bytes": 8192,
+      "format": "MUHLPKG1",
+      "header": {
+        "offset": 0,
+        "bytes": 224,
+        "sha256": "03ceb0eabc2beff0e8b2504dc51b7a14907e57a149fb4bb661c27e5a70ae333c",
+        "magic_ascii": "MUHLPKG1",
+        "magic_hex": "4d55484c504b4731"
+      },
+      "output_addresses": [
+        {
+          "name": "recv",
+          "address": 353,
+          "value_hex": "01",
+          "value_uint": 1
+        },
+        {
+          "name": "ans",
+          "address": 6661,
+          "value_hex": "08",
+          "value_uint": 8
+        }
+      ],
+      "wire_plane": {
+        "offset": 288,
+        "bytes": 84,
+        "sha256": "06b801e5205bb3e82bf3921887311f91a67c728006e1c3fb8612acc04018039e"
+      },
+      "gates": {
+        "count": 129,
+        "record_bytes": 25,
+        "region_offset": 2153,
+        "region_bytes": 3225,
+        "region_sha256": "6243edb9d20aa5983e2f047f4a19de71416f851250904c50235f12fd28d28a0e",
+        "body_offset": 224,
+        "body_bytes": 7968,
+        "body_sha256": "f10b5ecbc796815d324eb8784f058e158ba3f5601f677252dd01aa4300de318f"
+      }
+    },
+    "bazaar": {
+      "offer_id": null,
+      "action_id": null,
+      "result_id": null,
+      "note": "Draft only. Nothing was offered, accepted, executed, or delivered."
+    },
+    "payment": {
+      "reference": null,
+      "status": "NOT_REQUESTED"
+    }
+  },
+  "accepted_work": null,
+  "delivery": null,
+  "stop_reason": "No customer artifact, accepted quote, Bazaar action, settlement reference, or delivery exists."
+}

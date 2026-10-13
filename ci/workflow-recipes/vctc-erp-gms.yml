@@ -1,0 +1,21 @@
+name: vctc-erp-gms
+on:
+  pull_request:
+    paths:
+      - 'opportunities/vctc_erp_gms_2026/**'
+      - '.github/workflows/vctc-erp-gms.yml'
+  push:
+    paths:
+      - 'opportunities/vctc_erp_gms_2026/**'
+      - '.github/workflows/vctc-erp-gms.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile opportunities/vctc_erp_gms_2026/*.py
+      - run: python -m unittest -v opportunities.vctc_erp_gms_2026.test_engine
+      - run: python -O -m unittest -v opportunities.vctc_erp_gms_2026.test_engine

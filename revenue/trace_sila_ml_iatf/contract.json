@@ -1,0 +1,49 @@
+{
+  "id": "trace-sila-ml-iatf-lims-01",
+  "version": 1,
+  "build": "TRACE-SILA-ML-IATF-v0",
+  "buyer": "Sila Moses Lake / Rosendo Alvarado",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788149166.463349"
+  },
+  "workflow": [
+    "read-only MES/QMS/analytics export adapters",
+    "raw-material-to-batch genealogy",
+    "exception ownership",
+    "IATF-ready evidence manifests",
+    "incumbents remain authoritative",
+    "named human disposition"
+  ],
+  "fixture": {
+    "id": "SILA-ML-01",
+    "batches": ["B001", "B002", "B003", "B004"],
+    "unique_analytics": 12,
+    "duplicate": "B001-A01",
+    "threshold_source": "FIXTURE_ONLY"
+  },
+  "acceptance": [
+    "four batches and 12 unique analytics plus one duplicate",
+    "exactly 12 canonical results",
+    "exactly one duplicate log",
+    "exactly four dossiers",
+    "B001=REVIEW_READY",
+    "B002=HOLD_UNIT_MISMATCH",
+    "B003=HOLD_SPEC_OOS",
+    "B004=HOLD_GENEALOGY_GAP",
+    "byte-identical replay",
+    "adapter writes denied",
+    "human disposition mandatory; autonomous disposition denied"
+  ],
+  "exclusions": [
+    "no production writes, recipes, or real thresholds before buyer/vendor validation",
+    "no autonomous certification or disposition",
+    "no interface marked live before golden-round-trip validation"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "read-only genealogy, coded holds, dossiers, and human disposition receipts only; never live MES/QMS writes, recipes, or quality disposition",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

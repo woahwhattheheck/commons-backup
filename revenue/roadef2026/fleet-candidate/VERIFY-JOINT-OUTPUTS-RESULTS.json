@@ -1,0 +1,117 @@
+{
+  "environment": {
+    "compiler": "g++ 14.2.0",
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5"
+  },
+  "native": {
+    "algorithm_source_commit": "2885d176373c33410148829fef93c310c3752c0b",
+    "checker_build": "g++ -O0 -std=c++20 -DNDEBUG -DLANG_EN",
+    "context": "ROADEF-QUARTZ-verified-context-2885d176.zip",
+    "context_sha256": "62bb113f6fecf074fad8a5a76623c548d099466e230f509c8e353fb2b2e181e6",
+    "result": "pass",
+    "solver_build": "g++ -O3 -std=c++20 -DNDEBUG",
+    "summary": {
+      "cases": [
+        {
+          "after_mlu": 9.0,
+          "after_sha256": "54bb374c34f5e3316d85073cafeb926e7a6442a993675942e4d9c0f298d49187",
+          "before_mlu": 10.0,
+          "before_sha256": "606a5ba1723e8ce3b803c8ebc565eee0d8ae7e1a9aeda274af3cac8b4465ee7b",
+          "case": "joint",
+          "checker_valid": true,
+          "cost_after": 0,
+          "cost_before": 0,
+          "first_improved_rank": 1,
+          "fixed_round_repeatability": "pass",
+          "joint_accepted": 1,
+          "negative_control": "pass",
+          "same_path_resume": "pass"
+        },
+        {
+          "after_mlu": 10.0,
+          "after_sha256": "b0396abcb6de2b3f9e9570a565223df3167c983f14225c2bc3d807a0e95db9bc",
+          "before_mlu": 10.0,
+          "before_sha256": "b162bb6539e9dc99eccff1f6dbca933273339f9f762c71535f2462a534ba2131",
+          "case": "joint-budget",
+          "checker_valid": true,
+          "cost_after": 3,
+          "cost_before": 3,
+          "first_improved_rank": 3,
+          "fixed_round_repeatability": "pass",
+          "joint_accepted": 1,
+          "negative_control": "pass",
+          "same_path_resume": "pass"
+        }
+      ],
+      "checker_sha256": "51828e2e77ce86c3df4af149fc913faea50a2c2c1838bb9cf49b97d56e8fe22b",
+      "fixture_sha256": {
+        "joint-budget-incumbent.json": "b162bb6539e9dc99eccff1f6dbca933273339f9f762c71535f2462a534ba2131",
+        "joint-budget-scenario.json": "ad046b3b6240fd8d9765151740a69fe84ad7459200715f0ecb070af355c0658d",
+        "joint-budget-tm.json": "46c8281c34cca2147a70c79b168583cde2f6ef72de94a89066fe609e492c317d",
+        "joint-net.json": "5e4b170baf48a0ba41975f7d026ed78e4d87de567f64940b5dada726589c998f",
+        "joint-scenario.json": "0d3afa4828af57156657f711788d68876d1ba93fcd5f25aa9a2fb442a2edb21d",
+        "joint-tm.json": "0741d857dc321b14e9164c3e98687431d9be78548ea51e8a75463540a745cdd9"
+      },
+      "solver_sha256": "1b6828b4a45cd8e68a497c735ee52ea59006ebfa0656037bf1c56bd2717f58bf",
+      "source_sha256": "322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1"
+    }
+  },
+  "operation": "astra-verify-roadef-joint-output-ownership-20260908-01",
+  "regression": {
+    "after": {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "log_sha256": "7088df805b30c37a033f24e3d34193c5dd73d918f8e0f6883728e41a1d291a47"
+    },
+    "before": {
+      "errors": 0,
+      "exit": 1,
+      "failures": 5,
+      "log_sha256": "3396ae07cf6b2da47dd4e8e071dbcc857331eff8a5ef91b02c13851c3471141b"
+    },
+    "coverage": [
+      "stale solver output cannot satisfy a new zero-exit invocation",
+      "stale solver statistics cannot satisfy a new zero-exit invocation",
+      "same-path resume uses a detached incumbent snapshot and still requires fresh output",
+      "deterministic output, statistics, log, checker, and summary cells are current-run owned",
+      "directory collisions fail before solver execution"
+    ],
+    "methods": 5,
+    "test_bytes": 6056,
+    "test_path": "revenue/roadef2026/fleet-candidate/test_verify_joint_outputs.py",
+    "test_sha256": "a4f5256e81889494263f4e3df6ef4825466ee3a5cdf93f49277a81557acd36e2"
+  },
+  "schema": "roadef.verify-joint-output-ownership.v1",
+  "scope": {
+    "changed_behavior": "current invocation must create its own result and statistics files; in-place resume reads a detached snapshot",
+    "not_claimed": [
+      "public benchmark gain",
+      "container validation",
+      "qualification submission",
+      "organizer contact"
+    ],
+    "unchanged": [
+      "solver algorithm",
+      "checker semantics",
+      "joint fixtures",
+      "ranking assertions",
+      "fixed-round settings",
+      "S139 package and draft"
+    ]
+  },
+  "source": {
+    "after": {
+      "bytes": 6917,
+      "sha256": "16ed696a69d9677206d8d6b67008fa7a781d1080c32d57d0f1f296b5c216e131"
+    },
+    "base_main": "b89bb0d661c50c49fcf84336ccfd12ff69b4a7c4",
+    "before": {
+      "bytes": 5452,
+      "sha256": "3687f7b8bee359c0a6439be4dbbd51c2e14308928597da82502b061738b8c22c"
+    },
+    "path": "revenue/roadef2026/fleet-candidate/verify_joint.py",
+    "repository": "woahwhattheheck/commons"
+  }
+}

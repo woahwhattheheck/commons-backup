@@ -1,0 +1,58 @@
+{
+  "id": "plant-downtime-handoff",
+  "version": 2,
+  "buyer": "plant maintenance leader",
+  "workflow": [
+    "synthetic fault report or sensor ping",
+    "fault-identity idempotency key",
+    "exactly one technician/parts handoff",
+    "timestamped progress and status receipts",
+    "worker snapshot/restart without a second dispatch"
+  ],
+  "fault_classes": {
+    "overtemp": {
+      "tech": "TECH_KILN_THERMAL",
+      "parts": "PARTS_THERMAL_KIT",
+      "required": ["plantId", "assetId", "faultCode", "severity", "observedAt", "windowId"]
+    },
+    "vibration": {
+      "tech": "TECH_ROTATING",
+      "parts": "PARTS_BEARING_KIT",
+      "required": ["plantId", "assetId", "faultCode", "severity", "observedAt", "windowId"]
+    },
+    "pressure-drop": {
+      "tech": "TECH_PROCESS",
+      "parts": "PARTS_SEAL_KIT",
+      "required": ["plantId", "assetId", "faultCode", "severity", "observedAt", "windowId"]
+    },
+    "estop": {
+      "tech": "TECH_SAFETY",
+      "parts": "PARTS_NONE",
+      "required": ["plantId", "assetId", "faultCode", "severity", "observedAt", "windowId"]
+    }
+  },
+  "acceptance": [
+    "fault identity is the idempotency key",
+    "duplicate sensor ping and duplicate report share one store row",
+    "complete faults dispatch once to the class tech lane",
+    "incomplete or hold faults route once to HELD_INCOMPLETE with zero dispatches",
+    "worker restart after a mid-handoff crash resumes to one dispatch",
+    "rollback of a crashed run returns a clean un-dispatched state",
+    "a finished dispatch is not rollbackable and stays single-dispatched",
+    "same id with different bytes returns FAULT_CONFLICT and keeps the original dispatch",
+    "PII-shaped keys and live phone/email values are refused",
+    "live plant control, CMMS writes, purchasing, and safety decisions remain zero"
+  ],
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_pilot_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "browser-local synthetic fixtures only; no live plant; no PII; no server submission",
+  "decision_boundary": "handoff routing only; never live dispatch, CMMS write, purchasing, or a safety decision"
+}

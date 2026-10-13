@@ -1,0 +1,131 @@
+name: TITAN V3 final-pressure three-arm attribution
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-final-pressure-three-arm-solstice.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/v3-final-pressure-three-arm-20260909-solstice/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-final-pressure-solstice-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  three-arm-panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify triggering head
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install exact engine dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Unit, adversarial, and syntax contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=revenue/kaggriculture/cloud-execution-lab/analysis/v3-final-pressure-three-arm-20260909-solstice
+          cd "$ROOT"
+          python -B -m unittest discover -v
+          PYTHONPYCACHEPREFIX=/tmp/solstice-pyc python -B -m py_compile \
+            evidence.py variants.py panel_analysis.py game_runner.py \
+            run_final_pressure_panel.py test_evidence_variants.py test_analysis_game.py
+          cd - >/dev/null
+          git diff --check
+          test -z "$(git status --porcelain)"
+
+      - name: Materialize exact canonical dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          DISPATCH=ee2700033d8a204d6b39843e75937155adf58c51
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          git worktree add --detach /tmp/solstice-dispatch "$DISPATCH"
+          cd "/tmp/solstice-dispatch/$ROOT"
+          python -B build_integrated.py --check
+          test "$(stat -c %s exports/titan-current.tar.gz)" = '427870'
+          test "$(sha256sum exports/titan-current.tar.gz | awk '{print $1}')" = '17f536087b3a6baf4ae1222a051285766a3ea8c2ca5af6edc190d4f527e12b86'
+          test "$(sha256sum runtime/integrated-selected/CURRENT-SOURCE.json | awk '{print $1}')" = '1feec5a68ffde28ab7b5c7d2c92a34aa66ff5705b7d88182ef6af98df8bb5083'
+
+      - name: Run exact-current three-arm development panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/solstice-results
+          ROOT=revenue/kaggriculture/cloud-execution-lab
+          LANE="$ROOT/analysis/v3-final-pressure-three-arm-20260909-solstice"
+          python -B "$LANE/run_final_pressure_panel.py" \
+            --archive "/tmp/solstice-dispatch/$ROOT/exports/titan-current.tar.gz" \
+            --expected-archive-sha256 17f536087b3a6baf4ae1222a051285766a3ea8c2ca5af6edc190d4f527e12b86 \
+            --expected-archive-bytes 427870 \
+            --expected-member-count 109 \
+            --expected-source-sha256 1feec5a68ffde28ab7b5c7d2c92a34aa66ff5705b7d88182ef6af98df8bb5083 \
+            --dispatch-commit ee2700033d8a204d6b39843e75937155adf58c51 \
+            --runner-head "$(git rev-parse HEAD)" \
+            --seeds 2609099821,2609099822,2609099823,2609099824 \
+            --opponent starter=official_starter \
+            --opponent exact_public_arlene=runtime:reference/next-panel/vendor/arlene.py::agent \
+            --action-timeout 1.0 \
+            --startup-timeout 10.0 \
+            --game-timeout 120.0 \
+            --output /tmp/solstice-results/FINAL-PRESSURE-THREE-ARM.json \
+            --markdown /tmp/solstice-results/FINAL-PRESSURE-THREE-ARM.md
+
+      - name: Validate complete receipt
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPORT=/tmp/solstice-results/FINAL-PRESSURE-THREE-ARM.json
+          test -s "$REPORT"
+          python - "$REPORT" <<'PY'
+          import json, sys
+          with open(sys.argv[1], encoding="utf-8") as handle:
+              data = json.load(handle)
+          if data.get("schema_version") != 1:
+              raise SystemExit("schema_version must be 1")
+          if data.get("operation") != "op:titan-v3-final-pressure-three-arm-20260909-solstice":
+              raise SystemExit("operation mismatch")
+          if data.get("status") != "complete" or data.get("all_complete") is not True:
+              raise SystemExit(f"panel incomplete: {data.get('status')!r}")
+          if data.get("scheduled_games") != 48 or len(data.get("games", [])) != 48:
+              raise SystemExit("exact 48-game panel required")
+          if set((data.get("summary") or {}).get("by_variant", {})) != {
+              "pressure_off", "legacy_in_pipeline", "final_boundary"
+          }:
+              raise SystemExit("three exact arms required")
+          print("complete", data["summary"]["development_signal"])
+          PY
+
+      - name: Upload exact evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-final-pressure-three-arm-${{ github.run_id }}
+          path: |
+            /tmp/solstice-results/FINAL-PRESSURE-THREE-ARM.json
+            /tmp/solstice-results/FINAL-PRESSURE-THREE-ARM.md
+            /tmp/solstice-dispatch/revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz
+            /tmp/solstice-dispatch/revenue/kaggriculture/cloud-execution-lab/runtime/integrated-selected/CURRENT-ARCHIVE.json
+            /tmp/solstice-dispatch/revenue/kaggriculture/cloud-execution-lab/runtime/integrated-selected/CURRENT-SOURCE.json
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,88 @@
+name: TITAN V3 route-reference echo SOL-ACCRUAL
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-route-reference-echo-sol-accrual.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/v3-route-reference-echo-sol-accrual/**"
+      - "p/sol-accrual-titan-v3-route-reference-echo-20260909-01.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-route-reference-echo-sol-accrual-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  exact-source-and-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      LAB: revenue/kaggriculture/cloud-execution-lab
+      LANE: revenue/kaggriculture/cloud-execution-lab/analysis/v3-route-reference-echo-sol-accrual
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+
+    steps:
+      - name: Checkout exact triggering head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD }}
+          fetch-depth: 1
+
+      - name: Bind checkout identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          printf 'HEAD=%s\n' "$EXPECTED_HEAD"
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile additive carrier and evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m py_compile "$LANE"/*.py
+
+      - name: Run predecessor-discriminating contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s "$LANE" -p 'test_*.py' -v
+
+      - name: Audit exact source seam and route applicability surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B "$LANE/audit.py" \
+            --lab "$LAB" \
+            --output "$RUNNER_TEMP/titan-v3-route-reference-echo-audit.json" \
+            --require-opportunity
+
+      - name: Verify canonical release remains byte-current
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B "$LAB/build_integrated.py" --check
+
+      - name: Require clean exact head after verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test -z "$(git status --porcelain)"
+
+      - name: Publish bounded audit receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-route-reference-echo-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/titan-v3-route-reference-echo-audit.json
+          if-no-files-found: warn
+          retention-days: 14

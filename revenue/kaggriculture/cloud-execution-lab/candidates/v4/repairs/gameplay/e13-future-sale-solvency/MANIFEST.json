@@ -1,0 +1,42 @@
+{
+  "schema": "titan.v4.repair-manifest/v1",
+  "name": "e13-future-sale-solvency",
+  "status": "current_abi_source_real_action_unmeasured",
+  "source_pr": 12037,
+  "source_operation": "TITAN-V3-E13-FUTURE-SALE-SOLVENCY-CLOSURE-20260910-01",
+  "owner_operation": "ASTRA-E13-V4",
+  "surface": "frozen_selected.py::funded_minimum_now",
+  "current_source_git_blob": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+  "engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "default": false,
+  "mechanism_contract": "Protect baseline-completed fixed acquisitions on turns strictly later than the first actually executed positive-cash future sale; credit represented future receipts exactly rather than treating any positive receipt as a complete working-capital reset.",
+  "collision_boundary": {
+    "same_turn_future_sale_acquisitions": "unchanged; owned by SOL-ESCROW/order-aware logic",
+    "cash_reserve_suffix_logic": "unchanged",
+    "market_compaction": "unchanged",
+    "route_selection": "unchanged"
+  },
+  "killer": {
+    "current_sale": "SELL MILK 10 searched down",
+    "future_sale": "next-turn SELL WOOL 1 at $1 floor",
+    "later_acquisition": "following-turn BUY_ANIMAL COW 1 at $400",
+    "predecessor_minimum_now": 0,
+    "expected_port_minimum_now": 3,
+    "two_milk_plus_future_cash": 319,
+    "three_milk_plus_future_cash": 475
+  },
+  "control": {
+    "future_sale": "SELL WOOL 2 at base inventory",
+    "future_cash": 400,
+    "expected_port_minimum_now": 0
+  },
+  "integration_contract": "Method-scoped authenticated transform only. Materialization is external-scratch only: candidate, receipt, and temporary sidecar destinations are rejected if lexically or resolved inside the repository or if any existing path component is a symlink. Production promotion requires composition registration plus a fresh one-tree returned-action activation receipt and economic gate.",
+  "claims": {
+    "source_real": true,
+    "current_abi_authenticated": true,
+    "returned_action_activation": false,
+    "gameplay_strength": false,
+    "score_causality": false,
+    "production_promotion": false
+  }
+}

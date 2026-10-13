@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/payment_ready/gguf_rollback_fixture.schema.json",
+  "title": "Synthetic GGUF v3 rollback fixture receipt",
+  "description": "Strict public receipt for one synthetic GGUF v3 tensor-table parse, payload zero, and exact restore. This is not the production-survival proof and not a customer delivery contract. Validation does not imply a buyer, demand, acceptance, delivery, program submission, award, or cash.",
+  "no_auth": true,
+  "no_gate": true,
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "label",
+    "name",
+    "gguf_version",
+    "architecture",
+    "tensor_name",
+    "tensor_type",
+    "tensor_dimensions",
+    "tensor_payload_bytes",
+    "fixture_original",
+    "fixture_zeroed",
+    "fixture_restored",
+    "fixture",
+    "binaries_published",
+    "network_used",
+    "titan",
+    "buyer",
+    "demand",
+    "acceptance",
+    "delivery",
+    "cash_claimed",
+    "cash_usd",
+    "program_submission",
+    "eligibility",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "gguf-rollback-fixture/v1"
+    },
+    "kind": {
+      "const": "SYNTHETIC_GGUF_ROLLBACK_FIXTURE"
+    },
+    "label": {
+      "const": "SYNTHETIC_FIXTURE_PASS"
+    },
+    "name": {
+      "const": "commons-gguf-rollback-fixture"
+    },
+    "gguf_version": {
+      "const": 3
+    },
+    "architecture": {
+      "const": "synthrollback"
+    },
+    "tensor_name": {
+      "const": "synth.ffn_down.weight"
+    },
+    "tensor_type": {
+      "const": "F32"
+    },
+    "tensor_dimensions": {
+      "type": "array",
+      "const": [8]
+    },
+    "tensor_payload_bytes": {
+      "const": 32
+    },
+    "fixture_original": {
+      "$ref": "#/$defs/originalState"
+    },
+    "fixture_zeroed": {
+      "$ref": "#/$defs/zeroedState"
+    },
+    "fixture_restored": {
+      "$ref": "#/$defs/restoredState"
+    },
+    "fixture": {
+      "const": "SYNTHETIC"
+    },
+    "binaries_published": {
+      "const": false
+    },
+    "network_used": {
+      "const": false
+    },
+    "titan": {
+      "const": "NOT_WRITTEN"
+    },
+    "buyer": {
+      "const": false
+    },
+    "demand": {
+      "const": "UNKNOWN"
+    },
+    "acceptance": {
+      "const": false
+    },
+    "delivery": {
+      "const": false
+    },
+    "cash_claimed": {
+      "const": false
+    },
+    "cash_usd": {
+      "const": 0
+    },
+    "program_submission": {
+      "const": false
+    },
+    "eligibility": {
+      "const": "NOT_CLAIMED"
+    },
+    "nonclaims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "customer_gguf",
+        "customer_delivery",
+        "titan_write",
+        "buyer_signal",
+        "program_submission",
+        "award",
+        "cash"
+      ],
+      "properties": {
+        "statement": {
+          "const": "This synthetic GGUF v3 rollback fixture is not a customer GGUF, not a customer delivery, not a Titan write, not a buyer signal, not a program submission, not an award, and not cash."
+        },
+        "customer_gguf": {
+          "const": false
+        },
+        "customer_delivery": {
+          "const": false
+        },
+        "titan_write": {
+          "const": false
+        },
+        "buyer_signal": {
+          "const": false
+        },
+        "program_submission": {
+          "const": false
+        },
+        "award": {
+          "const": false
+        },
+        "cash": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "originalState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256"
+      ],
+      "properties": {
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "zeroedState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "differs_from_original"
+      ],
+      "properties": {
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "differs_from_original": {
+          "const": true
+        }
+      }
+    },
+    "restoredState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "equals_original"
+      ],
+      "properties": {
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "equals_original": {
+          "const": true
+        }
+      }
+    }
+  }
+}

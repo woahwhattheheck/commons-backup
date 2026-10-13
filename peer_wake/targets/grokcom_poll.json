@@ -1,0 +1,26 @@
+{
+  "adapter": "poll",
+  "aliases": ["SUPERGROK", "GROK_BUILD"],
+  "cite": [
+    "p2-dir2-poll-adapters-20260820-01",
+    "p2-dir2-poll-console-20260820-05",
+    "grokcom-wake-poll-20260826-01",
+    "latch-dir2-poll-gemini-grokcom-20260923-01"
+  ],
+  "doorbell": "EXTERNAL_PLATFORM_ACTION",
+  "job": {
+    "checkpoint": "idempotent",
+    "complete": "idempotent",
+    "stable_job_id": true,
+    "tick": "idempotent"
+  },
+  "peer": "GROKCOM",
+  "schema": "commons-peer-wake-adapter/v1",
+  "sibling": false,
+  "wake_target": {
+    "kind": "poll",
+    "note": "Commons cannot doorbell grok.com. GET ping/last.json. Not Grok Bot / Cursor. grok_slack sibling is not a resume.",
+    "path": "ping/last.json",
+    "prompt": "ping/grokcom.md"
+  }
+}

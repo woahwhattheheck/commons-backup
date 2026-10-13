@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">
+<title>AT-GROK adapter evidence — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#f4f1ea;--ink:#1c1914;--mute:#5a5348;--line:#c9bfae;--card:#fffdf7;--ok:#1f6b45;--hold:#8a4b16}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 Georgia,serif}
+main{max-width:980px;margin:auto;padding:28px 16px 72px}a{color:#2a4060}
+.kicker{letter-spacing:.14em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--hold)}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:.95;margin:.2em 0 .35em}
+.lede{color:var(--mute);max-width:760px}
+.bound{border-left:5px solid var(--hold);padding:8px 0 8px 14px;margin:16px 0}
+.card{background:var(--card);border:1px solid var(--line);padding:16px;margin:16px 0}
+table{width:100%;border-collapse:collapse;font:13px/1.4 system-ui,sans-serif}th,td{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.stamp{display:inline-block;border:1px solid var(--hold);color:var(--hold);padding:2px 8px;font:11px/1.4 system-ui,sans-serif}
+code,pre{font:12px/1.4 ui-monospace,monospace}pre{white-space:pre-wrap;background:#1c1914;color:#f3ead8;padding:12px}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a> ·  · <a href="./at_grok_adapter_evidence/uncertainty_ledger.json">ledger JSON</a></nav>
+<p class="kicker">Commons · AT-GROK-ADAPTER-EVIDENCE-01 · window onto the ledger, not the product</p>
+<h1>Four buyer instruments. OEM manuals only. Schema stays UNKNOWN until a public record exists.</h1>
+
+
+
+
+
+<p class="lede">Exact buyer labels: Metrohm Eco IC, Seivers M5310C, Seal Analytical AQ300, Perkin Elmer PinAAcle 900Z. Seivers is the buyer spelling. This page is a window onto the uncertainty ledger. The working product is the CLI.</p>
+
+<section class="card">
+<h2>Ledger window <span class="stamp">HOLD</span></h2>
+<table>
+<thead><tr><th>Buyer label</th><th>Public schema</th><th>Framing</th><th>Fixture</th><th>OEM cites</th></tr></thead>
+<tbody>
+<tr><td>Metrohm Eco IC</td><td>UNKNOWN / BUYER OR VENDOR SAMPLE REQUIRED</td><td>DOCUMENTED_PARTIAL — MagIC Net file types, CSV separators, XML section tree. Exact XML tags unpublished.</td><td>none</td><td>metrohm.com manuals 8.925.8001EN, 8.102.8088EN</td></tr>
+<tr><td>Seivers M5310C</td><td>UNKNOWN / BUYER OR VENDOR SAMPLE REQUIRED</td><td>TRANSPORT_NAMED — USB, Modbus TCP/IP, 4–20 mA. No register map or file schema. OEM trademark spelling Sievers is cited, not substituted.</td><td>none</td><td>watertechnologies.com M5310 C pages; DLM 77120 password-gated</td></tr>
+<tr><td>Seal Analytical AQ300</td><td>UNKNOWN / BUYER OR VENDOR SAMPLE REQUIRED</td><td>TRANSPORT_NAMED — official brochure says export in .csv; product page says files are fully customizable.</td><td>none</td><td>seal-analytical.com AQ300 brochure + product page</td></tr>
+<tr><td>Perkin Elmer PinAAcle 900Z</td><td>UNKNOWN / BUYER OR VENDOR SAMPLE REQUIRED</td><td>UNKNOWN — Syngistix for AA named on OEM pages; no public export schema on searched PerkinElmer hosts.</td><td>none</td><td>perkinelmer.com AAS software; shop N1010302</td></tr>
+</tbody>
+</table>
+<p class="small">Counts: schema 4 UNKNOWN / 0 documented. Framing 1 DOCUMENTED_PARTIAL / 2 TRANSPORT_NAMED / 1 UNKNOWN. Export fixtures 0. Binary: <code>python3 test_at_grok_adapter_evidence.py</code></p>
+</section>
+<section class="card">
+<h2>Live JSON read (same folder)</h2>
+<pre id="out">Open at_grok_adapter_evidence/uncertainty_ledger.json or run the official command. This door does not invent fields.</pre>
+</section>
+<p class="small">Off: AT-GROK-CMDP-EVIDENCE-01, AT-GROK-OPS-ACCEPTANCE-01, corrigan, torrent, bsk, chemtechford, aquatrace C/B/F, sanair, wadsworth, highpower, westpak, ddl, sharp, canyon, pcl, organabio, billings. Open door. No login.</p>
+</main>
+<script>
+(function () {
+  var out = document.getElementById("out");
+  fetch("./at_grok_adapter_evidence/uncertainty_ledger.json", {cache: "no-store"}).then(function (res) {
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return res.json();
+  }).then(function (ledger) {
+    out.textContent = JSON.stringify({
+      id: ledger.id,
+      state: ledger.state,
+      cash_usd: ledger.cash_usd,
+      counts: ledger.counts,
+      buyer_labels: ledger.buyer_labels,
+      schema_rows: ledger.instruments.map(function (row) {
+        return {buyer_label: row.buyer_label, schema_status: row.schema_status, framing_status: row.framing_status, fixture: row.fixture};
+      })
+    }, null, 2);
+  }).catch(function (err) {
+    out.textContent = "Ledger fetch missed (" + err + "). Use python3 at_grok_adapter_evidence.py or the committed JSON path. HEAD is truth, not this bake.";
+  });
+})();
+</script>
+</body></html>

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laundry Desk · Local Operations</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172e35;background:#f2f5f4;font-size:15px;line-height:1.5;--line:#d1ddd9;--accent:#126355}
+*{box-sizing:border-box}body{margin:0}header{background:#173c38;color:white;padding:24px max(24px,calc((100vw - 1440px)/2));display:flex;gap:24px;align-items:center;justify-content:space-between}h1{font-size:27px;margin:0;letter-spacing:-.7px}h2{font-size:20px;margin:0 0 12px}h3{font-size:17px;margin:0 0 8px}p{margin:8px 0}small,.muted{font-size:13px;color:#526a70}header small{color:#cee1db}.eyebrow{font-size:11px;letter-spacing:2px;font-weight:700}main{max-width:1440px;margin:auto;padding:24px}.grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:22px;align-items:start}.panel{background:white;border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:18px}.operation-panel{position:sticky;top:16px}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.grow{flex:1}.row>label{flex:1;min-width:150px}.hint{font-size:13px;color:#526a70;margin:6px 0 16px}.notice{padding:12px 16px;border:1px solid var(--line);border-radius:8px;background:#eaf2ef;margin-bottom:18px;overflow-wrap:anywhere}.notice.error{background:#fff0e8;color:#842c1d;border-color:#e7bfae}.notice.success{background:#e3f4e9;color:#15502b;border-color:#b7d7c1}.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;padding:4px 8px;border-radius:5px;background:#e9eeee;white-space:nowrap}.badge.warn{background:#ffead7;color:#6b3b13}.badge.done{background:#e3f0e8;color:#18552f}label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}input,select,textarea{display:block;width:100%;border:1px solid #a9bcb7;border-radius:6px;background:white;color:#172e35;padding:10px;font:inherit}textarea{min-height:86px;font-family:ui-monospace,monospace;font-size:13px;resize:vertical}input:focus,textarea:focus,select:focus,button:focus-visible,a:focus-visible{outline:3px solid #71bfae;outline-offset:2px}button,.download{display:inline-block;border:1px solid #a9bcb7;border-radius:6px;padding:9px 12px;background:white;font:inherit;font-weight:600;color:#154e44;cursor:pointer;text-decoration:none}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:disabled{opacity:.5;cursor:default}fieldset{border:0;margin:0;padding:0;min-width:0}pre{background:#f3f6f5;padding:12px;border-radius:6px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;max-height:320px;overflow:auto}code{font:12px ui-monospace,monospace;overflow-wrap:anywhere}details{margin-top:14px}summary{cursor:pointer;font-weight:600;font-size:13px}.scroll{overflow:auto;margin-top:12px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 8px;border-bottom:1px solid #e0e8e5;text-align:left;vertical-align:top}th{color:#526a70;font-size:11px;text-transform:uppercase;letter-spacing:.4px}td button{padding:3px 5px;font-size:12px;text-align:left;overflow-wrap:anywhere}article.stop{border:1px solid var(--line);border-radius:8px;padding:16px;margin:14px 0}.id{display:block;margin-top:5px}.quantities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}.quantity{background:#f3f6f5;border-radius:6px;padding:10px}.quantity strong{font-size:12px;display:block}.quantity span{font-size:13px;display:block;overflow-wrap:anywhere}.exception{border-left:3px solid #d09956;padding:10px 12px;background:#fff8f0;margin-top:10px}.exception.resolved{border-color:#90aaa2;background:#f0f5f3}#pending{border:2px solid #d09956}#result:empty{display:none}.empty{padding:20px 0;color:#526a70}footer{font-size:12px;color:#526a70;margin-top:20px;padding:16px 0;border-top:1px solid var(--line)}[hidden]{display:none!important}.full{width:100%;margin-top:16px}.links{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.amount{font-size:23px;font-weight:700}.subtle{font-weight:400;color:#526a70}.form-help{font-size:12px;color:#526a70;display:block;margin:4px 0}.catalog-controls select{width:auto;min-width:170px}
+@media(max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}.operation-panel{position:static}header{padding:20px;align-items:flex-start}main{padding:16px}.panel{padding:17px}}@media print{header{background:white;color:black}.operation-panel,#pending,#status,.catalog-controls,button,.download{display:none!important}.grid{display:block}.panel,article.stop{break-inside:avoid}body{background:white}main{padding:0}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">LOCAL OPERATIONS</div><h1>Laundry Desk</h1><small>Route planning · Linen custody · Invoice drafts</small></div><div><div id="database">Locked workspace</div><small>No customer sends or payment actions</small><button id="lock" type="button" hidden>Lock console</button></div></header>
+<section id="unlock-panel" class="panel" style="max-width:640px;margin:24px auto">
+<h2>Open your local session</h2><p>Open the private address printed by either console launcher, or paste its session key below. The key changes when the server restarts.</p>
+<form id="unlock-form"><label for="session-key">Session key</label><input id="session-key" type="password" autocomplete="off" required><button class="primary full" type="submit">Unlock workspace</button></form>
+<p id="unlock-status" role="status" aria-live="polite"></p></section>
+<main id="workspace" hidden>
+<div id="status" class="notice" role="status" aria-live="polite">Opening the selected local database…</div>
+<section id="pending" class="panel" hidden aria-labelledby="pending-title"><h2 id="pending-title">Unconfirmed operation</h2><p id="pending-note">This exact request is retained in this browser. Retrying uses the same operation key; it does not create a new copy.</p><pre id="pending-json"></pre><div class="row"><button id="retry" class="primary">Retry exact request</button><button id="save-pending">Save pending request</button><button id="dismiss-pending">Dismiss after reconciliation</button></div></section>
+<div class="grid">
+<div>
+<section class="panel"><div class="row between"><h2>Daily routes</h2><button id="refresh">Refresh views</button></div><div class="row"><label>Service date<input id="route-date" type="date"></label><button id="all-dates">All dates</button><button id="manifest-shortcut">Create manifest</button></div><p class="hint">A completed route is not an invoice approval. Open custody or quantity exceptions remain visible below.</p><div id="routes"></div><div class="row between"><small id="route-count"></small><button id="more-routes" hidden>Next 100 routes</button></div></section>
+<section class="panel" id="route-panel"><h2>Route workspace</h2><p class="empty">Choose a route to record pickup, processing, delivery, exception resolution, and invoice drafts.</p></section>
+<section class="panel"><h2>Customers &amp; service setup</h2><p class="hint">Create a customer, its site, a per-item agreement in integer cents, and a recurring service plan before making the day's manifest.</p><div class="row catalog-controls"><label>Catalog<select id="catalog-kind"><option value="customers">Customers</option><option value="sites">Sites</option><option value="agreements">Price agreements</option><option value="plans">Service plans</option></select></label><button id="catalog-first">First page</button><button id="catalog-next" hidden>Next 100</button></div><small id="catalog-count"></small><div id="catalog" class="scroll"></div><div id="customer-view"></div></section>
+</div>
+<aside class="panel operation-panel"><div class="eyebrow">RECORD AN OPERATION</div><h2 id="form-title">Operator entry</h2><p class="hint">These forms record your observations in the existing desk. Prefilled counts are prior records, not a new measurement; verify them before recording.</p>
+<form id="operation-form"><fieldset id="operation-fields"><label>Operation<select id="command"></select></label><div id="fields"></div><label>Operation key<input id="operation-key" required autocomplete="off" maxlength="255"></label><small>A unique key is supplied. Keep it unchanged when retrying the same request.</small><details><summary>Exact request preview</summary><pre id="preview"></pre></details><button id="apply" class="primary full" type="submit">Record operation</button></fieldset></form>
+<details id="result-details"><summary>Last operation result</summary><pre id="result"></pre></details>
+</aside>
+</div>
+<footer>Local operator records only. Invoice totals are draft amounts, not booked revenue or payment. This console does not certify sanitation or linen quality. Unconfirmed requests remain in this browser's local storage until confirmed or explicitly dismissed; save them before clearing browser data. Shut down the server before replacing its database file.</footer>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const storageKey = "laundry-console-pending-v1";
+const sessionStorageKey = "laundry-console-session-key";
+let sessionKey = "", epoch = 0;
+const titles = {customer:"Create customer",site:"Create site",agreement:"Record price agreement",plan:"Create recurring service plan",manifest:"Create daily manifest",pickup:"Record pickup",process:"Record plant processing",deliver:"Record delivery",resolve:"Resolve an exception","invoice-draft":"Create invoice DRAFT"};
+const labels = {customer_id:"Customer ID",site_id:"Site ID",name:"Name",agreement_id:"Agreement ID",item_code:"Linen item code",unit_price_cents:"Unit price (integer cents)",active_from:"Effective from",active_to:"Effective through (optional)",plan_id:"Plan ID",route_code:"Route code",weekday:"Weekday",stop_sequence:"Stop sequence",service_date:"Service date",stop_id:"Stop ID",linen_counts:"Picked-up quantities",processed_counts:"Good processed quantities",damaged_counts:"Damaged quantities (optional)",delivered_counts:"Delivered quantities",container_ids:"Container IDs",exception_id:"Exception ID",resolution_code:"Resolution code",note:"Resolution note"};
+let info, pending = null, unreadablePending = null, busy = false, routeId = null, customerId = null;
+let routeCursor = "", catalogCursor = "", routeGeneration = 0, listGeneration = 0, catalogGeneration = 0;
+function node(tag, text, attrs = {}) { const item = document.createElement(tag); if (text !== undefined && text !== null) item.textContent = String(text); for (const [key,value] of Object.entries(attrs)) item.setAttribute(key, String(value)); return item; }
+function button(text, action, primary = false) { const item = node("button", text, {type:"button"}); if (primary) item.className = "primary"; item.addEventListener("click", () => Promise.resolve().then(action).catch(error => notice(error.message, "error"))); return item; }
+function notice(text, kind = "") { $("status").textContent = text; $("status").className = "notice " + kind; }
+function localDay() { const date = new Date(); return [date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")].join("-"); }
+function newKey() { return "web:" + crypto.randomUUID(); }
+function money(cents) { if (!Number.isSafeInteger(cents) || cents < 0) return "Invalid amount"; return "$" + Math.floor(cents/100).toLocaleString("en-US") + "." + String(cents%100).padStart(2,"0"); }
+function human(value) { return String(value).replaceAll("_"," "); }
+function savedSession(value) { try { if(value === undefined)return sessionStorage.getItem(sessionStorageKey); if(value === null)sessionStorage.removeItem(sessionStorageKey); else sessionStorage.setItem(sessionStorageKey,value); } catch {} return null; }
+async function get(path, download=false) {
+ const generation=epoch;
+ const response=await fetch(path,{cache:"no-store",credentials:"omit",headers:{Authorization:"Bearer "+sessionKey}});
+ const value=response.ok && download ? await response.blob() : await response.json();
+ if(generation!==epoch)throw new Error("The console session changed; reopen the workspace.");
+ if(response.status===401){lockConsole();throw new Error("Unlock with the current session key; pending operations remain saved.");}
+ if(!response.ok)throw new Error(value.message || "Local read failed");return value;
+}
+function query(path,args) { return path + "?" + new URLSearchParams(args); }
+function badge(text,kind="") { return node("span",human(text),{class:"badge " + kind}); }
+function downloadBlob(blob, filename) { const url=URL.createObjectURL(blob), anchor=node("a",null,{href:url,download:filename}); document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000); }
+function downloads(kind,id) { const links=node("div",null,{class:"links"});for(const format of ["json","csv","markdown"])links.append(button(format.toUpperCase(),async()=>{const blob=await get(query("/api/export",{kind,id,format}),true);downloadBlob(blob,"laundry-"+kind+"."+(format==="markdown"?"md":format));}));return links; }
+function saveJSON(value,filename) { const url = URL.createObjectURL(new Blob([typeof value === "string" ? value : JSON.stringify(value,null,2)],{type:"application/json"})); const anchor = node("a",null,{href:url,download:filename}); document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url),1000); }
+function exactInteger(text) { if (!/^[0-9]+$/.test(text)) throw new Error("Quantities, prices and sequence numbers must be non-negative whole numbers."); const value = Number(text); if (!Number.isSafeInteger(value)) throw new Error("Integer exceeds exact browser representation."); return value; }
+function counts(text) { const result = Object.create(null); for (const line of text.split(/\r?\n/).filter(line=>line.trim())) { const match = line.match(/^\s*([^=\s]+)\s*=\s*([0-9]+)\s*$/); if (!match) throw new Error("Enter quantities as ITEM=COUNT, one per line."); if (Object.hasOwn(result,match[1])) throw new Error("Duplicate linen item: " + match[1]); result[match[1]] = exactInteger(match[2]); } if (!Object.keys(result).length) throw new Error("At least one linen item is required."); return result; }
+function countsText(value) { return Object.entries(value || {}).map(([item,quantity])=>item+"="+quantity).join("\n"); }
+function buildForm(values = {}) {
+ const command = $("command").value, schema = info.commands[command];
+ $("form-title").textContent = titles[command]; $("fields").replaceChildren();
+ for (const [key,type] of Object.entries({...schema.required,...schema.optional})) {
+  const optional = Object.hasOwn(schema.optional,key), label = node("label",labels[key] || key,{for:"field-"+key}); let input;
+  if (key === "weekday") { input=node("select"); for (const [index,day] of ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].entries()) input.append(node("option",day,{value:index})); }
+  else if (type === "dict" || type === "list") input=node("textarea");
+  else input=node("input",null,{type:key.includes("date") || key.startsWith("active_") ? "date" : type === "int" ? "number" : "text"});
+  input.id="field-"+key; input.name=key; input.required=!optional; input.autocomplete="off";
+  if (type === "int" && key !== "weekday") { input.min="0"; input.step="1"; }
+  let value=values[key];
+  if (value === undefined && (key === "active_from" || key === "service_date")) value=$("route-date").value || localDay();
+  if (value !== undefined && value !== null) input.value=type === "dict" ? countsText(value) : type === "list" ? value.join("\n") : String(value);
+  $("fields").append(label,input);
+  if (type === "dict") $("fields").append(node("small",key === "damaged_counts" ? "ITEM=COUNT, one per line. Blank uses the engine's zero-damage default; enter measured damage explicitly." : "ITEM=COUNT, one per line. Surrounding spaces and blank lines are ignored; item IDs remain case-sensitive.",{class:"form-help"}));
+  if (type === "list") $("fields").append(node("small","One exact container ID per line. Blank lines and surrounding spaces are ignored.",{class:"form-help"}));
+ }
+ $("operation-key").value=values.operation_key || newKey(); updatePreview(); renderPending();
+}
+function formPayload() { const command=$("command").value, schema=info.commands[command], payload={operation_key:$("operation-key").value}; for (const [key,type] of Object.entries({...schema.required,...schema.optional})) { const value=$("field-"+key).value; if (value === "" && Object.hasOwn(schema.optional,key)) continue; payload[key]=type === "int" ? exactInteger(value) : type === "dict" ? counts(value) : type === "list" ? value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean) : value; } return payload; }
+function updatePreview() { if (!info) return; try { $("preview").textContent=JSON.stringify(formPayload(),null,2); } catch (error) { $("preview").textContent=error.message; } }
+function choose(command,values={}) { if (pending || unreadablePending) throw new Error("Reconcile the retained operation before starting another one."); $("command").value=command; buildForm(values); $("command").scrollIntoView({behavior:"smooth",block:"center"}); }
+function renderPending() {
+ $("pending").hidden=!(pending || unreadablePending);
+ $("operation-fields").disabled=busy || Boolean(pending || unreadablePending) || !info;
+ $("pending-json").textContent=unreadablePending || (pending ? JSON.stringify(pending,null,2) : "");
+ const same=info && pending && pending.database_key === info.database_key;
+ $("retry").disabled=busy || !same;
+ $("dismiss-pending").disabled=busy; $("lock").disabled=busy;
+ $("pending-note").textContent=unreadablePending ? "The retained request cannot be decoded. Save it and reconcile before clearing it; nothing was sent." : same ? "This exact request is retained in this browser. Retrying uses its original key and payload; it never runs automatically." : "This request belongs to a different database. Reopen that database to retry, or save and reconcile it before dismissal.";
+}
+function clearPending() { pending=null; unreadablePending=null; try { localStorage.removeItem(storageKey); } catch { notice("Operation outcome is known, but the browser could not remove its saved recovery copy. Save the result before clearing browser data.","error"); } renderPending(); }
+async function postPending() {
+ if (!pending || busy || pending.database_key !== info.database_key) return;
+ const request=pending, retried=request.attempts !== 0;
+ try { request.attempts=(Number.isSafeInteger(request.attempts)?request.attempts:1)+1; localStorage.setItem(storageKey,JSON.stringify(request)); } catch(error) { notice("Nothing sent: unable to save the attempt for recovery. "+error.message,"error"); return; }
+ busy=true; renderPending(); notice("Recording " + request.command + " with its retained operation key…");
+ let response, value;
+ try { response=await fetch("/api/operate/"+encodeURIComponent(request.command),{method:"POST",headers:{"Content-Type":"application/json","X-Laundry-Database":request.database_key,Authorization:"Bearer "+sessionKey},body:JSON.stringify(request.payload),signal:AbortSignal.timeout(30000)}); value=await response.json(); }
+ catch (error) { notice("Outcome unconfirmed: " + error.message + ". Keep the saved request; use Retry exact request, not a new operation.","error"); busy=false; renderPending(); return; }
+ busy=false;
+ if(response.status===401){lockConsole();$("unlock-status").textContent="Session expired. Unlock again; the exact pending request remains saved.";return;}
+ if (response.ok && ["APPLIED","REPLAYED"].includes(value.status)) {
+  clearPending(); $("result").textContent=JSON.stringify(value,null,2); $("result-details").open=true;
+  $("operation-key").value=newKey(); updatePreview(); notice(value.status + " — " + titles[request.command] + ". " + (value.status === "REPLAYED" ? "The prior result was returned; no second operation was appended." : "The engine recorded the operation."),"success");
+  if (request.command === "manifest") { routeId=value.result.route_id; $("route-date").value=value.result.service_date; routeCursor=""; }
+  try { await refreshViews(); } catch(error) { notice(value.status + "; the write is confirmed, but view refresh failed: " + error.message,"error"); }
+ } else if (response.status === 400 && value.status === "REJECTED" && !retried) {
+  clearPending(); $("command").value=request.command; buildForm(request.payload);
+  $("result").textContent=JSON.stringify(value,null,2); $("result-details").open=true;
+  notice("REJECTED — " + value.message + ". Correct the entry before recording again.","error");
+ } else { notice((value.message || "Local operation unavailable") + " The outcome remains unconfirmed; the exact request is retained.","error"); }
+ renderPending();
+}
+function table(rows, onFirstCell) {
+ if (!rows.length) return node("p","No records on this page.",{class:"empty"});
+ const result=node("table"), head=node("thead"), header=node("tr"), body=node("tbody"), columns=Object.keys(rows[0]);
+ for (const key of columns) header.append(node("th",human(key))); head.append(header); result.append(head,body);
+ for (const row of rows) { const tr=node("tr"); for (const [index,key] of columns.entries()) { const cell=node("td"); if (index===0 && onFirstCell) cell.append(button(row[key],()=>onFirstCell(row))); else cell.textContent=row[key] === null ? "—" : String(row[key]); tr.append(cell); } body.append(tr); }
+ return result;
+}
+async function loadRoutes() { const generation=++listGeneration, args={after:routeCursor}; if ($("route-date").value) args.date=$("route-date").value; const page=await get(query("/api/catalog/routes",args)); if(generation!==listGeneration)return; $("routes").replaceChildren(node("div",null,{class:"scroll"})); $("routes").firstChild.append(table(page.rows,row=>loadRoute(row.route_id))); $("route-count").textContent=page.rows.length+" shown on this page / "+page.total+" matching routes. Read "+page.observed_at; $("more-routes").hidden=!page.next; $("more-routes").onclick=()=>{routeCursor=page.next;loadRoutes().catch(e=>notice(e.message,"error"));}; }
+async function loadCatalog() { const generation=++catalogGeneration, kind=$("catalog-kind").value, page=await get(query("/api/catalog/"+kind,{after:catalogCursor})); if(generation!==catalogGeneration)return; const action=kind==="customers" ? row=>loadCustomer(row.customer_id) : kind==="sites" ? row=>choose("agreement",{site_id:row.site_id}) : kind==="plans" ? row=>choose("manifest",{route_code:row.route_code}) : null; $("catalog").replaceChildren(table(page.rows,action)); $("catalog-count").textContent=page.rows.length+" shown on this page / "+page.total+" records. Identifiers open the relevant workspace."; $("catalog-next").hidden=!page.next; $("catalog-next").onclick=()=>{catalogCursor=page.next;loadCatalog().catch(e=>notice(e.message,"error"));}; }
+async function loadCustomer(id) { customerId=id; const snap=await get(query("/api/customer",{id})); if(customerId!==id)return; const view=$("customer-view"); view.replaceChildren(node("h3",snap.name),node("code",snap.customer_id),downloads("customer",id)); for(const site of snap.sites){view.append(node("h3",site.name),node("code",site.site_id),table(site.agreements));} }
+function quantity(title,values) { const item=node("div",null,{class:"quantity"}); item.append(node("strong",title)); if(!Object.keys(values).length)item.append(node("span","Not recorded")); else for(const [name,count] of Object.entries(values))item.append(node("span",name+": "+count)); return item; }
+async function loadRoute(id) {
+ routeId=id; const generation=++routeGeneration, snap=await get(query("/api/route",{id})); if(generation!==routeGeneration)return;
+ const panel=$("route-panel"), heading=node("div",null,{class:"row between"}); heading.append(node("h2",snap.route_code+" · "+snap.service_date),badge(snap.state,snap.state==="COMPLETE"?"done":""));
+ const open=snap.stops.reduce((sum,stop)=>sum+stop.exceptions.filter(e=>e.status==="OPEN").length,0);
+ panel.replaceChildren(heading,node("code",snap.route_id,{class:"id"}),node("p",snap.stops.length+" stops · "+open+" open exceptions. Drafts are local records, not invoices sent to customers.",{class:"hint"}),downloads("route",id));
+ for(const stop of snap.stops){
+  const card=node("article",null,{class:"stop"}), top=node("div",null,{class:"row between"}); top.append(node("h3",stop.sequence+". "+stop.customer_name+" / "+stop.site_name),badge(stop.state));card.append(top,node("code",stop.stop_id,{class:"id"}));
+  const quantities=node("div",null,{class:"quantities"}); for(const [title,key] of [["Picked up","pickup_counts"],["Good processed","processed_counts"],["Damaged","damaged_counts"],["Delivered","delivered_counts"]])quantities.append(quantity(title,stop[key]));card.append(quantities);
+  card.append(node("p","Pickup containers: "+(stop.pickup_containers.join(", ")||"not recorded"),{class:"hint"}),node("p","Delivery containers: "+(stop.delivery_containers.join(", ")||"not recorded"),{class:"hint"}));
+  const actions=node("div",null,{class:"row"});
+  if(stop.state==="MANIFESTED")actions.append(button("Record pickup",()=>choose("pickup",{stop_id:stop.stop_id}),true));
+  if(stop.state==="PICKED_UP")actions.append(button("Record processing",()=>choose("process",{stop_id:stop.stop_id,processed_counts:stop.pickup_counts}),true));
+  if(stop.state==="PROCESSED")actions.append(button("Record delivery",()=>choose("deliver",{stop_id:stop.stop_id,delivered_counts:stop.processed_counts,container_ids:stop.pickup_containers}),true));
+  if(stop.state==="DELIVERED")actions.append(button("Create invoice draft",()=>choose("invoice-draft",{stop_id:stop.stop_id}),true));
+  card.append(actions);
+  for(const exception of stop.exceptions){const item=node("div",null,{class:"exception "+(exception.status==="RESOLVED"?"resolved":"")});item.append(badge(exception.status,exception.status==="OPEN"?"warn":"done"),node("p",human(exception.kind)+" · "+exception.item_code+" · expected "+exception.expected_qty+", recorded "+exception.actual_qty),node("code",exception.exception_id));if(exception.status==="OPEN")item.append(button("Resolve this exception",()=>choose("resolve",{exception_id:exception.exception_id})));else item.append(node("p",exception.resolution_code+": "+exception.resolution_note));card.append(item);}
+  if(stop.invoice){const lines=node("div",null,{class:"scroll"});lines.append(table(stop.invoice.lines));card.append(node("p","INVOICE DRAFT",{class:"eyebrow"}),node("div",money(stop.invoice.total_cents),{class:"amount"}),lines,node("code",stop.invoice.invoice_id));}
+  panel.append(card);
+ }
+}
+async function refreshViews() { await Promise.all([loadRoutes(),loadCatalog(),routeId?loadRoute(routeId):Promise.resolve(),customerId?loadCustomer(customerId):Promise.resolve()]); }
+$("operation-form").addEventListener("submit",event=>{event.preventDefault();try{if(pending||unreadablePending||busy)return;const request={version:1,attempts:0,database_key:info.database_key,command:$("command").value,payload:formPayload()};localStorage.setItem(storageKey,JSON.stringify(request));pending=request;postPending();}catch(error){notice("Nothing sent: "+error.message,"error");}});
+$("operation-form").addEventListener("input",updatePreview);
+$("command").addEventListener("change",()=>buildForm());
+$("retry").onclick=()=>postPending();
+$("save-pending").onclick=()=>saveJSON(unreadablePending||pending,"laundry-pending-operation.json");
+$("dismiss-pending").onclick=()=>{if(confirm("A request with a lost response may already be recorded. Save it and reconcile its original operation key first. Dismiss the browser recovery copy without sending anything?")){clearPending();notice("Recovery copy dismissed. No operation was sent or undone.");}};
+$("refresh").onclick=()=>refreshViews().catch(error=>notice(error.message,"error"));
+$("route-date").onchange=()=>{routeCursor="";loadRoutes().catch(error=>notice(error.message,"error"));};
+$("all-dates").onclick=()=>{$("route-date").value="";routeCursor="";loadRoutes().catch(error=>notice(error.message,"error"));};
+$("manifest-shortcut").onclick=()=>{try{choose("manifest");}catch(error){notice(error.message,"error");}};
+$("catalog-kind").onchange=()=>{catalogCursor="";loadCatalog().catch(error=>notice(error.message,"error"));};
+$("catalog-first").onclick=()=>{catalogCursor="";loadCatalog().catch(error=>notice(error.message,"error"));};
+async function start(){
+ $("route-date").value=localDay();$("operation-fields").disabled=true;
+ info=await get("/api/info");$("database").textContent=info.database; $("command").replaceChildren();
+ for(const command of Object.keys(info.commands))$("command").append(node("option",titles[command]||command,{value:command}));
+ let raw=null;try{raw=localStorage.getItem(storageKey);if(raw){const candidate=JSON.parse(raw);if(candidate.version!==1||typeof candidate.database_key!=="string"||typeof candidate.command!=="string"||!candidate.payload||typeof candidate.payload!=="object")throw new Error("invalid pending request");pending=candidate;}}catch(error){if(raw)unreadablePending=raw;else notice("Browser recovery storage is unavailable. An operation will not be sent unless its recovery copy can be saved.","error");}
+ if(pending&&Object.hasOwn(info.commands,pending.command)){$("command").value=pending.command;buildForm(pending.payload);}else buildForm();
+ await refreshViews();if(!pending&&!unreadablePending)notice("Connected to "+info.database+". Reads do not initialize or modify the database. Choose an operation to record new work.");
+ renderPending();
+}
+function lockConsole() {
+ if(busy)return;
+ epoch++;routeGeneration++;listGeneration++;catalogGeneration++;sessionKey="";savedSession(null);info=null;routeId=null;customerId=null;pending=null;unreadablePending=null;routeCursor="";catalogCursor="";
+ $("workspace").hidden=true;$("lock").hidden=true;$("unlock-panel").hidden=false;$("database").textContent="Locked workspace";
+ for(const id of ["routes","catalog","customer-view","fields","result","pending-json","preview","route-panel","route-count","catalog-count"])$(id).replaceChildren();
+ $("session-key").value="";$("operation-key").value="";$("status").textContent="";$("operation-fields").disabled=true;
+ $("session-key").focus();
+}
+async function unlock(value) {
+ if(busy)return;
+ sessionKey=value;const generation=++epoch;$("unlock-status").textContent="Opening the local workspace…";
+ try{await start();if(generation!==epoch)return;savedSession(sessionKey);$("workspace").hidden=false;$("lock").hidden=false;$("unlock-panel").hidden=true;$("session-key").value="";}
+ catch(error){if(generation===epoch){lockConsole();$("unlock-status").textContent=error.message;}else if(!sessionKey)$("unlock-status").textContent=error.message;}
+}
+$("unlock-form").addEventListener("submit",event=>{event.preventDefault();unlock($("session-key").value.trim());});
+$("lock").onclick=lockConsole;
+const incoming=new URLSearchParams(location.hash.slice(1)).get("key");
+if(location.hash)history.replaceState(null,"",location.pathname);
+const initial=incoming || savedSession();if(initial)unlock(initial);
+</script>
+</body>
+</html>

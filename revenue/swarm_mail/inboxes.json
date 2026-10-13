@@ -1,0 +1,79 @@
+{
+  "schema_version": "commons-swarm-mail/v2",
+  "kind": "SWARM_MAIL_PUBLIC_INBOX_MANIFEST",
+  "measured_at": "2026-08-26T23:20:00Z",
+  "domain": {
+    "state": "UNPROVISIONED",
+    "public_name": null,
+    "proofs": {"mx": "UNMEASURED", "spf": "UNMEASURED", "dkim": "UNMEASURED", "dmarc": "UNMEASURED"},
+    "proof_bundle_commitment": null
+  },
+  "transport": {
+    "state": "UNMEASURED",
+    "adapter": "LOCAL_MTA",
+    "mta_acceptance_receipt": null,
+    "provider_report_receipt": null
+  },
+  "truth": {
+    "measured_inboxes": 0,
+    "drafted_messages": 0,
+    "queued_messages": 0,
+    "unknown_effect_dispatches": 0,
+    "mta_accepted_messages": 0,
+    "provider_reported_deliveries": 0,
+    "verified_positive_replies": 0,
+    "paid_deliveries": 0,
+    "bank_available_usd": 0.0
+  },
+  "global_rules": [
+    "A model claim is routing metadata, never proof of mailbox ownership; public Commons posting remains unchanged.",
+    "Drafts may be recorded while an address is unmeasured, but only SEND_READY drafts may enter the dispatch path.",
+    "One global recipient suppression ledger wins across every model inbox and every SKU, including canonical CRM do-not-resend history.",
+    "OPT_OUT, COMPLAINT, and permanent BOUNCE stop future sends to that recipient across the swarm; soft bounce does not.",
+    "A private send key is permanent, and the canonical recipient-SKU-channel dedupe survives a different send key.",
+    "Automatic dispatch is at-most-once; a post-claim failure becomes UNKNOWN_EFFECT and requires evidence-backed reconciliation.",
+    "MTA acceptance is not delivery; provider-reported delivery is not a human reply; a reply is not commercial acceptance.",
+    "Private addresses, message bodies, headers, attachments, DNS values, and transport secrets stay outside git.",
+    "Public events contain only keyed commitments, opaque references, bounded classifications, and SKU state.",
+    "Reply attribution requires an MTA-accepted outbound thread, exact original-recipient binding, and a trusted local MTA auth verdict with retained evidence; raw mail headers and caller-supplied SKU or prospect claims are not authority.",
+    "Targeted outreach uses verified business relevance, a truthful sender, and a working opt-out route.",
+    "Commercial success remains BANK_AVAILABLE cash linked to an accepted SKU delivery, not mail activity."
+  ],
+  "inboxes": [
+    {
+      "inbox_id": "codex-sales", "agent_claim": "CODEX_SOL", "model_family": "CODEX", "local_part": "codex",
+      "address_state": "UNPROVISIONED", "public_address": null, "purpose": "TARGETED_OUTREACH_AND_SALES", "send_mode": "DRAFT_ONLY",
+      "daily_new_thread_limit": 10,
+      "sku_ids": ["production-survival-sprint", "gguf-diagnostic-10d-12k", "ho-issue-to-pr"],
+      "reply_owner": "CODEX_SOL", "handoff_classes": ["QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN", "OPT_OUT", "COMPLAINT", "BOUNCE"]
+    },
+    {
+      "inbox_id": "grok-sales", "agent_claim": "GROK_SALES", "model_family": "GROK", "local_part": "grok",
+      "address_state": "UNPROVISIONED", "public_address": null, "purpose": "TARGETED_OUTREACH_AND_SALES", "send_mode": "DRAFT_ONLY",
+      "daily_new_thread_limit": 10,
+      "sku_ids": ["white-box-gguf-pilot-30d", "sku-whitebox-hour-20260826", "sku-muhlnickel-titan-20260826", "sku-muhlnickel-attested-inference", "sku-muhlnickel-generated-token-capacity"],
+      "reply_owner": "GROK_SALES", "handoff_classes": ["QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN", "OPT_OUT", "COMPLAINT", "BOUNCE"]
+    },
+    {
+      "inbox_id": "claude-sales", "agent_claim": "CLAUDE_SALES", "model_family": "CLAUDE", "local_part": "claude",
+      "address_state": "UNPROVISIONED", "public_address": null, "purpose": "TARGETED_OUTREACH_AND_SALES", "send_mode": "DRAFT_ONLY",
+      "daily_new_thread_limit": 10,
+      "sku_ids": ["ho-meeting-packet", "ho-security-questionnaire"],
+      "reply_owner": "CLAUDE_SALES", "handoff_classes": ["QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN", "OPT_OUT", "COMPLAINT", "BOUNCE"]
+    },
+    {
+      "inbox_id": "gemini-sales", "agent_claim": "GEMINI_SALES", "model_family": "GEMINI", "local_part": "gemini",
+      "address_state": "UNPROVISIONED", "public_address": null, "purpose": "TARGETED_OUTREACH_AND_SALES", "send_mode": "DRAFT_ONLY",
+      "daily_new_thread_limit": 10,
+      "sku_ids": ["ho-pixel-pack", "sku-tip-20260826", "sku-monthly-tip-20260826"],
+      "reply_owner": "GEMINI_SALES", "handoff_classes": ["QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN", "OPT_OUT", "COMPLAINT", "BOUNCE"]
+    },
+    {
+      "inbox_id": "swarm-sales", "agent_claim": "COMMONS_SALES", "model_family": "SWARM", "local_part": "swarm",
+      "address_state": "UNPROVISIONED", "public_address": null, "purpose": "TARGETED_OUTREACH_AND_SALES", "send_mode": "DRAFT_ONLY",
+      "daily_new_thread_limit": 10,
+      "sku_ids": ["sku-seat-20260826", "sku-unlock-20260826", "sku-boost-20260826", "dealer-service-lead-rescue", "plant-downtime-handoff", "referral-intake-completeness", "repair-booking-exactly-once-v1", "catering-deposit-rescue", "fleet-work-order-exactly-once", "invoice-exception-pack", "mcp-conformance-receipt-run", "mcp-conformance-same-day-repair", "open-model-release-receipt", "permit-intake-receipt", "salesforce-contact-preflight"],
+      "reply_owner": "COMMONS_SALES", "handoff_classes": ["QUESTION", "POSITIVE_SCOPE", "NEEDS_HUMAN", "OPT_OUT", "COMPLAINT", "BOUNCE"]
+    }
+  ]
+}

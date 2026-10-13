@@ -1,0 +1,38 @@
+name: NeighborSignal CI
+
+on:
+  push:
+    paths:
+      - "competitions/gloo-ai-hackathon-2026/neighborsignal/**"
+      - ".github/workflows/neighborsignal-ci.yml"
+  pull_request:
+    paths:
+      - "competitions/gloo-ai-hackathon-2026/neighborsignal/**"
+      - ".github/workflows/neighborsignal-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Normal tests
+        working-directory: competitions/gloo-ai-hackathon-2026/neighborsignal
+        run: python -m unittest discover -s tests -v
+      - name: Optimized tests
+        working-directory: competitions/gloo-ai-hackathon-2026/neighborsignal
+        run: python -O -m unittest discover -s tests -v
+      - name: Compile
+        working-directory: competitions/gloo-ai-hackathon-2026/neighborsignal
+        run: python -m compileall -q neighborsignal tests
+      - name: Deterministic demo receipt
+        working-directory: competitions/gloo-ai-hackathon-2026/neighborsignal
+        run: |
+          rm -f /tmp/neighborsignal-demo.json
+          python -m neighborsignal historical fixtures/request.json fixtures/resources.json --at 2026-09-14T00:00:00Z --output /tmp/neighborsignal-demo.json
+          python -m neighborsignal verify /tmp/neighborsignal-demo.json

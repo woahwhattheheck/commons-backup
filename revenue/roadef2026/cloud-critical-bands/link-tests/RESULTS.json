@@ -1,0 +1,94 @@
+{
+  "schema": "roadef.trace-critical-bands.link-native-contracts.v1",
+  "scope": "Independent tests only; no runtime change or public benchmark.",
+  "runtime_owner": "TRACE-9022",
+  "test_author": "ASTRA-LINK",
+  "source_commit": "a1886ecb26d4cb043419e7825cd6be801a05c6cb",
+  "baseline_commit": "2885d176373c33410148829fef93c310c3752c0b",
+  "execution": {
+    "methods": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "success": true
+  },
+  "solver_invocations": 23,
+  "official_checker_invocations": 45,
+  "six_decimal_checks": 23,
+  "twelve_decimal_checks": 22,
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "compiler_flags": [
+    "-O3",
+    "-std=c++20",
+    "-DNDEBUG"
+  ],
+  "python": "3.13.5",
+  "cpu_quota": "400000 100000",
+  "memory_limit_bytes": 4294967296,
+  "sources": {
+    "trace-source/build_candidate.py": {
+      "bytes": 4046,
+      "sha256": "f01f2cf86d102090943dfb12a0814cdce0ec02b13dd0c832c22312d1a1972a9c",
+      "git_blob": "a1bb8be8b1de863ec477a515b4130e140e884428"
+    },
+    "trace-source/critical_bands.hpp": {
+      "bytes": 3460,
+      "sha256": "0ce495820cb8506bb83d74ff12152edf562f6e605cf5cd817f40386cc5fc816b",
+      "git_blob": "5826c0a11480cf471316a002c45e3a4f3f9e259b"
+    },
+    "trace-generated/main.cpp": {
+      "bytes": 35362,
+      "sha256": "917874d5c9bb8e5ff1f8ebc0e0e0f459ea7d1cbab44473423809cd48cfdc5a0c",
+      "git_blob": "5751b2868ee1619625236a36bc3d67282cafa2ab"
+    },
+    "inputs/pinned-fleet/main.cpp": {
+      "bytes": 34254,
+      "sha256": "322ec2e6bec9ab17c4cdf74c52d8e40414ce90cf60f9e53aaee2531cce652ab1",
+      "git_blob": "9354ec61fc32bb7ebbdaaa4a9bff7c7780a7e1df"
+    },
+    "contribution/test_native.py": {
+      "bytes": 9965,
+      "sha256": "67d00b9b3f770778d5311e2263755f8327e1aae38851503d19a8d76fd142210f",
+      "git_blob": "3ea5953c4e758791ad1a00fc4d54ad52826e0baa"
+    },
+    "contribution/witness.py": {
+      "bytes": 2613,
+      "sha256": "02a6f4090ee40c5dbe45b950b137e7572a34c15cbd91984462bec91c01afcba2",
+      "git_blob": "60d85a957282f2097d01100e9a3e7444c70ce3ea"
+    }
+  },
+  "binaries": {
+    "bin/baseline": {
+      "bytes": 151552,
+      "sha256": "1b6828b4a45cd8e68a497c735ee52ea59006ebfa0656037bf1c56bd2717f58bf",
+      "git_blob": "34d1e196ee4d99b737a95a54bcce9fea73854b07"
+    },
+    "bin/trace-candidate": {
+      "bytes": 155968,
+      "sha256": "445bbfd195eead08952cafac7effbcc5e43bf6995778b845b453fa31676b18d1",
+      "git_blob": "82713efcd86e281d4680d0c9fe33c7bcce1368b7"
+    },
+    "bin/checker": {
+      "bytes": 1271728,
+      "sha256": "e2a2297b5a43aaf4d95d6cbc65b16e62d4fc5fb1381e59a2323a8bad3015a472",
+      "git_blob": "2ab91c2e8b2cad2c7e67982562f99bc40c331564"
+    }
+  },
+  "context": {
+    "sha256": "62bb113f6fecf074fad8a5a76623c548d099466e230f509c8e353fb2b2e181e6",
+    "transfer_hashes_matched": 336,
+    "staged_hashes_matched": 311
+  },
+  "barrier_result": {
+    "first_improved_rank": 34,
+    "before": "5.0",
+    "after": "0.5",
+    "unchanged_peak": "10.0"
+  },
+  "limitations": [
+    "Constructed network cases, not public or hidden contest scores.",
+    "No sanitizer claim for this exact canonical binary suite.",
+    "Historical LINK runtime and B12 runs are separate and are not canonical TRACE results.",
+    "One six-decimal signal check; all other solver outputs checked at six and twelve decimals."
+  ]
+}

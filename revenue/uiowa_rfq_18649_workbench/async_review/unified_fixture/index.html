@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Assessment workspace · TJLabs</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<nav class="skip-nav" aria-label="Workbench shortcuts"><a href="#summary-heading">Skip to assessment matrix</a><a href="#detail-heading">Skip to analyst notes</a><a href="#exportBtn">Skip to review export</a></nav>
+<header class="topbar"><div class="brand"><span class="brand-mark">TJ</span><span>TJLabs <span class="brand-context">/ Assessment workspace</span></span></div><span class="project-code">RFQ 18649</span></header>
+<main>
+<div class="page-heading"><div><p class="eyebrow">University of Iowa</p><h1>Assessment workspace</h1><p class="intro">Three teams. Four practice areas. Every observation connected to its evidence.</p></div><span id="sampleBadge" class="sample-badge" hidden>Synthetic sample</span></div>
+<details id="importPanel" class="import-panel" open><summary>Evidence package <span class="summary-hint">Import files or explore the sample</span></summary><div class="import-content">
+<div class="inputs"><label>Candidate JSON<input id="candidateFile" type="file" accept="application/json,.json"></label><label>Evidence authority JSON<input id="authorityFile" type="file" accept="application/json,.json"></label></div>
+<div class="actions"><button id="inspectBtn" type="button">Inspect evidence</button><button id="demoBtn" type="button" class="secondary">Load synthetic UI demo</button><button id="resetBtn" type="button" class="text-button">Clear workbench</button></div><p class="field-note">Files are processed locally. Export notes before replacing a package.</p></div></details>
+<p id="error" class="error" role="alert" aria-live="assertive"></p>
+<section class="overview" aria-label="Evidence overview"><dl id="summary" class="summary"></dl></section>
+<div class="workspace">
+<section class="panel matrix-panel" aria-labelledby="summary-heading"><div class="section-heading"><div><p class="eyebrow">01 / Overview</p><h2 id="summary-heading" tabindex="-1">Evidence matrix</h2></div><span id="matrixCount" class="subtle">Select an area</span></div>
+<div class="filters"><label><span class="sr-only">Search cells</span><input id="search" type="search" placeholder="Search team, area, or source…" disabled></label><label><span class="sr-only">Status</span><select id="statusFilter" disabled><option value="">All evidence states</option></select></label></div>
+<p id="matrix-help" class="sr-only">Tab between cells; Enter or Space opens the evidence and notes. Use Back to selected cell after editing.</p><p id="matrixStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p><div id="matrix" class="matrix" role="group" aria-labelledby="summary-heading" aria-describedby="matrix-help matrixStatus"></div><p class="matrix-footnote">Evidence state describes the supplied records. Maturity is a separate assessment.</p></section>
+<section id="detailPanel" class="panel detail-panel" aria-labelledby="detail-heading"><div class="section-heading"><div><p class="eyebrow">02 / Explore</p><h2 id="detail-heading" tabindex="-1">Selected evidence</h2></div></div>
+<div id="cellSummary" class="cell-summary"><p class="empty-state">Choose an area to explore its sources and next step.</p></div><div id="sourceList" class="source-list"></div>
+<details class="technical-details"><summary>Technical record</summary><pre id="detail" tabindex="0" role="region" aria-labelledby="selectedCellHeading">Select a cell.</pre></details>
+<div class="analyst-fields"><label>Review disposition<select id="disposition" aria-describedby="selectedCellHeading" disabled><option value="UNREVIEWED">Unreviewed</option><option value="NEEDS_EVIDENCE">Needs evidence</option><option value="DISCUSS_WITH_PRIME">Discuss with prospective prime</option><option value="TECHNICAL_DRAFT_NOTE">Technical draft note</option></select></label><label>Working note<textarea id="note" aria-describedby="selectedCellHeading" rows="4" maxlength="4000" disabled placeholder="Capture an observation, question, or next step…"></textarea></label><button id="backToCellBtn" type="button" class="text-button" disabled>Back to selected cell</button></div>
+<div class="inputs"><label>Saved draft handoff JSON<input id="handoffFile" type="file" accept="application/json,.json"></label></div><div class="actions"><button id="importDraftBtn" type="button" class="secondary" disabled>Restore matching draft</button></div><p class="field-note">Restore notes only after inspecting the same evidence files. The saved receipt and all 12 cells must match.</p>
+<div class="export-row"><button id="exportBtn" type="button" disabled>Export review handoff</button><button id="markdownBtn" type="button" class="secondary" disabled>Export readable draft</button><span class="field-note">JSON or Markdown · notes linked to this report</span></div><p id="exportStatus" class="field-note" aria-live="polite"></p></section>
+</div>
+<details class="report-details"><summary>Report details and provenance</summary><pre id="reportMeta" tabindex="0">Load a package to view its report metadata.</pre><p>Original report fields and provenance remain intact. Working notes stay in this tab until exported and reset when another package is imported.</p></details>
+<footer><span>TJLabs / Assessment tools</span><span>Evidence · Interpretation · Improvement</span></footer>
+</main><script src="/handoff.js" defer></script><script src="/handoff_import.js" defer></script><script src="/app.js" defer></script>
+</body></html>

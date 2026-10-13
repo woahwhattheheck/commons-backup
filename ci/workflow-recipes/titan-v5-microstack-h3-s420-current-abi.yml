@@ -1,0 +1,43 @@
+name: TITAN V5 MICROSTACK H3 S420 current ABI
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/microstack-h3-s420-current-abi/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/frozen_selected.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/selected_sell_core.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/scheduler.py'
+      - '.github/workflows/titan-v5-microstack-h3-s420-current-abi.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact event head
+        shell: bash
+        run: |
+          expected="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse HEAD)" = "$expected"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/microstack-h3-s420-current-abi
+        run: python -m py_compile current_sale_timing.py test_current_sale_timing.py test_source_pins.py
+      - name: Contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/microstack-h3-s420-current-abi
+        run: python -B -m unittest -v test_current_sale_timing.py test_source_pins.py
+      - name: Contracts optimized
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/microstack-h3-s420-current-abi
+        run: python -O -B -m unittest -v test_current_sale_timing.py test_source_pins.py

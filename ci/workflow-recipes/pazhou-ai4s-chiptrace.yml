@@ -1,0 +1,45 @@
+name: pazhou-ai4s-chiptrace
+
+on:
+  push:
+    paths:
+      - 'competitions/pazhou_ai4s_chiptrace_2026/**'
+      - '.github/workflows/pazhou-ai4s-chiptrace.yml'
+  pull_request:
+    paths:
+      - 'competitions/pazhou_ai4s_chiptrace_2026/**'
+      - '.github/workflows/pazhou-ai4s-chiptrace.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  chiptrace:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: |
+          python -m py_compile \
+            competitions/pazhou_ai4s_chiptrace_2026/chiptrace.py \
+            competitions/pazhou_ai4s_chiptrace_2026/tests/test_chiptrace.py
+      - name: Hostile tests
+        run: python -m unittest competitions.pazhou_ai4s_chiptrace_2026.tests.test_chiptrace -v
+      - name: Rebuild deterministic judge demo
+        run: |
+          rm -rf /tmp/chiptrace-demo-a /tmp/chiptrace-demo-b
+          python competitions/pazhou_ai4s_chiptrace_2026/chiptrace.py demo --directory /tmp/chiptrace-demo-a
+          python competitions/pazhou_ai4s_chiptrace_2026/chiptrace.py demo --directory /tmp/chiptrace-demo-b
+          python competitions/pazhou_ai4s_chiptrace_2026/chiptrace.py verify /tmp/chiptrace-demo-a/report.json
+          python competitions/pazhou_ai4s_chiptrace_2026/chiptrace.py verify /tmp/chiptrace-demo-b/report.json
+          cmp /tmp/chiptrace-demo-a/baseline.csv /tmp/chiptrace-demo-b/baseline.csv
+          cmp /tmp/chiptrace-demo-a/candidate.csv /tmp/chiptrace-demo-b/candidate.csv
+          cmp /tmp/chiptrace-demo-a/report.json /tmp/chiptrace-demo-b/report.json
+          cmp /tmp/chiptrace-demo-a/report.html /tmp/chiptrace-demo-b/report.html

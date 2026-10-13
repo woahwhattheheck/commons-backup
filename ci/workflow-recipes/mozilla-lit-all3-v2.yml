@@ -1,0 +1,29 @@
+name: Mozilla LIT all-three V2
+on:
+  pull_request:
+    paths:
+      - 'research/mozilla-lost-in-transcription-all3-v2/**'
+      - '.github/workflows/mozilla-lit-all3-v2.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/mozilla-lost-in-transcription-all3-v2/**'
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile research/mozilla-lost-in-transcription-all3-v2/*.py research/mozilla-lost-in-transcription-all3-v2/tests/*.py
+      - name: Normal
+        working-directory: research/mozilla-lost-in-transcription-all3-v2
+        run: python -m unittest discover -s tests -v
+      - name: Optimized
+        working-directory: research/mozilla-lost-in-transcription-all3-v2
+        run: python -O -m unittest discover -s tests -v

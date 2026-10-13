@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>HIGHPOWER SSF-to-receiving gate — Commons</title>
+<style>
+:root{color-scheme:light;--paper:#f4efe6;--ink:#231c16;--mute:#6a5c4f;--line:#d2c4b0;--card:#fffaf2;--clay:#8a4b24;--ok:#1f7a4d}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#e4d3b8 0%,var(--paper) 32%);color:var(--ink);font:16px/1.5 Georgia,serif}
+main{max-width:860px;margin:auto;padding:28px 16px 72px}a{color:var(--clay)}
+.kicker{letter-spacing:.14em;text-transform:uppercase;font:12px/1.2 system-ui,sans-serif;color:var(--clay)}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:.95;margin:.2em 0 .35em}
+.lede{color:var(--mute);max-width:720px}
+.bound{border-left:5px solid var(--ok);padding:8px 0 8px 14px}
+.card{background:var(--card);border:1px solid var(--line);padding:16px;margin:16px 0}
+code,pre{font:13px/1.4 ui-monospace,monospace}pre{background:#231c16;color:#f4efe6;padding:12px;overflow:auto}
+.small{color:var(--mute);font:13px/1.4 system-ui,sans-serif}
+.cta{display:inline-block;margin:.45rem .4rem .45rem 0;padding:.7rem 1.05rem;border:1px solid #62b879;border-radius:8px;background:#f0f0f2;color:#09090b!important;font-weight:800;text-decoration:none}
+.cta:hover{filter:brightness(1.06)}
+</style></head><body><main>
+<nav><a href="./index.html">← Commons</a></nav>
+<p class="kicker">Commons · highpower-ssf-receiving-gate-lims-01 · HOLD / BUILD-AND-VERIFY</p>
+<h1>The runner is the product. This page is a window.</h1>
+
+
+
+
+
+<p class="lede">HIGHPOWER Validation Testing &amp; Lab Services / Gary Socola leftover. Digital SSF-to-Receiving-Inspection accession + hold/release. Synthetic pairs only. No login. No live sample or test action. No outreach.</p>
+<p class="bound"><strong>Official command:</strong> <code>python3 highpower_ssf_receiving_gate.py</code><br>
+<strong>Official binary:</strong> <code>python3 test_highpower_ssf_receiving_gate.py</code></p>
+<section class="card">
+<h2>What the runner does</h2>
+<p>Loads 200 paired synthetic HP-QC-067 Sample Submission Forms and receiving-inspection records. Accessions 160 reconciled pairs once. Parks 40 predefined omissions/discrepancies under the exact HOLD code. Writes journal state and receipts. Replay adds zero accessions and changes no state. Named human <code>SYN-HPV-RELEASE-OFFICER</code> is mandatory. Held pairs never start a study, test, report, bill, or disposition.</p>
+<pre>python3 highpower_ssf_receiving_gate.py
+python3 highpower_ssf_receiving_gate.py --replay
+python3 test_highpower_ssf_receiving_gate.py</pre>
+<p class="small">Written artifacts: <a href="./revenue/highpower_ssf_receiving_gate/fixture.json">fixture.json</a> · <a href="./revenue/highpower_ssf_receiving_gate/state/journal.json">state/journal.json</a> · <a href="./revenue/highpower_ssf_receiving_gate/receipts/run.json">receipts/run.json</a> · <a href="./revenue/highpower_ssf_receiving_gate/receipts/accessions.json">accessions.json</a> · <a href="./revenue/highpower_ssf_receiving_gate/receipts/holds.json">holds.json</a> · <a href="./revenue/highpower_ssf_receiving_gate/receipts/report.json">report.json</a></p>
+</section>
+<section class="card">
+<h2>Contract</h2>
+<ul>
+<li>200 paired records / 160 valid / 40 HOLD</li>
+<li>Paired-form reconciliation across lot/serial, BOM, quantity, storage, intended use, safety, handling, and sterilization</li>
+<li>Exact HOLD codes, five each of eight codes</li>
+<li>Zero downstream activity while held</li>
+<li>Source and version provenance on every field</li>
+<li>Idempotent replay; deterministic audit and report hashes</li>
+<li>Named human release; autonomous release denied</li>
+</ul>
+<p class="small">PRE-SALE TRANSPORT: NONE. cash_usd = 0. Cite, do not remint: westpak-scope-capacity-routing-lims-01, wadsworth-five-site-consolidation-lims-01, canyon-multisite-regulated-intake-lims-01, pcl-scope-sla-routing-lims-01, organabio-multisite-donor-coa-lims-01. Leave sharp-rtu-vial-isolator-lineage-lims-01 and ddl-crosssite-method-proficiency-lims-01 open.</p>
+</section>
+</main></body></html>

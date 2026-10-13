@@ -1,0 +1,258 @@
+{
+  "source": {
+    "bytes": 15054,
+    "git_blob": "2be707cac86940728e75100447a354a10e2422a2",
+    "sha256": "b349e8f6a83e3d2ee87a117568b03c482c15cb80c6919d56806673a654f56406"
+  },
+  "predecessor": {
+    "bytes": 14551,
+    "git_blob": "f56a453234edaf3e214d61247f761a7cd2e92bb9",
+    "sha256": "f107f33131a36170be30f290723ca5e26bf0a372a7d5e953f634187bc9d88a99"
+  },
+  "regression": {
+    "bytes": 14503,
+    "git_blob": "3db76e9b254c08dd117ecee68d351291bd4e9826",
+    "sha256": "c34f9e16ba19f14355ed0af7add838cc414fdfe787b167b1a2780328542632f4"
+  },
+  "changed_functions": [
+    "_market_preserves_capacity",
+    "apply_dead_water_harvest"
+  ],
+  "unchanged_functions": 16,
+  "runs": [
+    {
+      "suite": "test_v4_w1_capacity_subset",
+      "optimized": false,
+      "tests": 25,
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "suite": "test_v4_w1_raw_prefix",
+      "optimized": false,
+      "tests": 15,
+      "exit": 0,
+      "stdout": "W1_RAW_PREFIX_COUNTS {'interpreter_calls': 1350, 'paired_worlds': 448, 'suffix_equivalence_worlds': 448, 'prefix_contract_cases': 112}"
+    },
+    {
+      "suite": "test_v4_w1_capacity_subset",
+      "optimized": true,
+      "tests": 25,
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "suite": "test_v4_w1_raw_prefix",
+      "optimized": true,
+      "tests": 15,
+      "exit": 0,
+      "stdout": "W1_RAW_PREFIX_COUNTS {'interpreter_calls': 1350, 'paired_worlds': 448, 'suffix_equivalence_worlds': 448, 'prefix_contract_cases': 112}"
+    }
+  ],
+  "negative_controls": [
+    {
+      "name": "exact_predecessor",
+      "optimized": false,
+      "exit": 1,
+      "result": "failures=565"
+    },
+    {
+      "name": "exact_predecessor",
+      "optimized": true,
+      "exit": 1,
+      "result": "failures=565"
+    },
+    {
+      "name": "uncapped_scan",
+      "optimized": false,
+      "exit": 1,
+      "result": "failures=563"
+    },
+    {
+      "name": "uncapped_scan",
+      "optimized": true,
+      "exit": 1,
+      "result": "failures=563"
+    },
+    {
+      "name": "off_by_one_cap",
+      "optimized": false,
+      "exit": 1,
+      "result": "failures=563"
+    },
+    {
+      "name": "off_by_one_cap",
+      "optimized": true,
+      "exit": 1,
+      "result": "failures=563"
+    },
+    {
+      "name": "lost_configuration",
+      "optimized": false,
+      "exit": 1,
+      "result": "failures=325"
+    },
+    {
+      "name": "lost_configuration",
+      "optimized": true,
+      "exit": 1,
+      "result": "failures=325"
+    },
+    {
+      "name": "filter_before_cap",
+      "optimized": false,
+      "exit": 1,
+      "result": "failures=2"
+    },
+    {
+      "name": "filter_before_cap",
+      "optimized": true,
+      "exit": 1,
+      "result": "failures=2"
+    },
+    {
+      "name": "no_minimum_slot",
+      "optimized": false,
+      "exit": 1,
+      "result": "failures=1"
+    },
+    {
+      "name": "no_minimum_slot",
+      "optimized": true,
+      "exit": 1,
+      "result": "failures=1"
+    },
+    {
+      "name": "accept_coerced_caps",
+      "optimized": false,
+      "exit": 1,
+      "result": "failures=1"
+    },
+    {
+      "name": "accept_coerced_caps",
+      "optimized": true,
+      "exit": 1,
+      "result": "failures=1"
+    }
+  ],
+  "lane": "ASTRA-W1-RAW-PREFIX",
+  "environment": "CPython 3.13.5; local cloud session",
+  "engine": {
+    "file": "engine.py",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "bytes": 40356,
+    "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e"
+  },
+  "engine_specification": {
+    "file": "kaggriculture.json",
+    "git_blob": "b354d06b742fe48402513792253f1a5c29366b20",
+    "bytes": 6002,
+    "sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+  },
+  "source_transport": "Existing GitHub artifact 10285621024; seed-retry-runtime/checks/reference/engine/kaggriculture.py and adjacent JSON",
+  "engine_scope": "Full official interpreter on constructed initialized states. Seed-resolver import adapter raises if called. No initializer, router, hosted package, game rollout, or economics gate executed.",
+  "source_and_test_server_blobs_match_executed_bytes": true,
+  "per_mode_counts": {
+    "normal_passed": 40,
+    "optimized_passed": 40,
+    "existing_subset_tests": 25,
+    "new_prefix_tests": 15,
+    "existing_subset_oracle_cases": 17745,
+    "existing_action_capacity_cases": 832,
+    "prefix_contract_cases": 112,
+    "constructed_paired_worlds": 448,
+    "suffix_equivalence_worlds": 448,
+    "official_interpreter_calls": 1350
+  },
+  "legacy_27_test_donor_suite": "NOT_RERUN in this continuation; its previous 52-test receipt remains historical and source-bound",
+  "py_compile": "PASS",
+  "witness": {
+    "step": 695,
+    "shed": {
+      "WHEAT": 98
+    },
+    "eligible_yields": [
+      2,
+      2
+    ],
+    "cap": 1,
+    "market": [
+      [
+        "BUY_SEED",
+        "WHEAT",
+        1
+      ],
+      [
+        "BUY_PRODUCT",
+        "WHEAT",
+        100
+      ]
+    ],
+    "predecessor_delivered_tomato": 0,
+    "candidate_delivered_tomato": 2,
+    "cash_delta": 0,
+    "rival_state_delta": 0,
+    "note": "Constructed one-callback delivery witness, not win-rate or economic evidence"
+  },
+  "active_inflow_control": "With cap2 and second-row BUY_PRODUCT WHEAT1 the helper returns parent; forcing HARVEST loses one of two TOMATO units at EOD.",
+  "scope": {
+    "new_feature_keys": [],
+    "production_changed": false,
+    "defaults_changed": false,
+    "donor_changed": false,
+    "materializer_executed": false,
+    "archive_changed": false,
+    "kaggle_submitted": false,
+    "full_games_run": 0
+  },
+  "input_gate_checks": [
+    {
+      "case": "missing_env",
+      "optimized": false,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    },
+    {
+      "case": "drifted_engine",
+      "optimized": false,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    },
+    {
+      "case": "missing_spec",
+      "optimized": false,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    },
+    {
+      "case": "drifted_spec",
+      "optimized": false,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    },
+    {
+      "case": "missing_env",
+      "optimized": true,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    },
+    {
+      "case": "drifted_engine",
+      "optimized": true,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    },
+    {
+      "case": "missing_spec",
+      "optimized": true,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    },
+    {
+      "case": "drifted_spec",
+      "optimized": true,
+      "exit": 1,
+      "result": "required-input gate correctly failed"
+    }
+  ]
+}

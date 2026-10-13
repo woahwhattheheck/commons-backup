@@ -1,0 +1,38 @@
+name: UArk RFP09112026 CMMC Qualification
+
+on:
+  pull_request:
+    paths:
+      - "revenue/uark_rfp09112026_cmmc/**"
+      - "tests/test_uark_rfp09112026_cmmc.py"
+      - ".github/workflows/uark-rfp09112026-cmmc.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/uark_rfp09112026_cmmc/**"
+      - "tests/test_uark_rfp09112026_cmmc.py"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax
+        run: python -m py_compile revenue/uark_rfp09112026_cmmc/qualifier.py tests/test_uark_rfp09112026_cmmc.py
+      - name: Focused hostile suite
+        run: python -m unittest tests/test_uark_rfp09112026_cmmc.py -v
+      - name: Focused hostile suite optimized
+        run: python -O -m unittest tests/test_uark_rfp09112026_cmmc.py -v
+      - name: Synthetic compile and semantic verify
+        run: |
+          td=$(mktemp -d)
+          python revenue/uark_rfp09112026_cmmc/qualifier.py compile revenue/uark_rfp09112026_cmmc/synthetic_candidate.json --json-out "$td/packet.json" --markdown-out "$td/packet.md"
+          python revenue/uark_rfp09112026_cmmc/qualifier.py verify "$td/packet.json"
+          python -m json.tool "$td/packet.json" >/dev/null

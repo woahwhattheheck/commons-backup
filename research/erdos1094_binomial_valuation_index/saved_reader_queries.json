@@ -1,0 +1,5463 @@
+{
+  "schema": "binomial-prime-valuation-reader/v1",
+  "source": {
+    "bytes": 11451,
+    "git_blob_sha": "659fef01d6cebd4cc1c9cce79338aa7076ff6b08"
+  },
+  "snapshot": {
+    "bytes": 2672079,
+    "git_blob_sha": "620aa1a9ab5fe8df21647b6895b4f285c8d5782d"
+  },
+  "queries": [
+    {
+      "request": {
+        "id": 1,
+        "label": "summary",
+        "method": "summary",
+        "args": []
+      },
+      "result": {
+        "max_n": 256,
+        "domain": "2<=n<=max_n, 1<=k<=floor(n/2)",
+        "order": "increasing n, then increasing k; zero-based ranks",
+        "primes": [
+          2,
+          3,
+          5,
+          7,
+          11,
+          13,
+          17,
+          19,
+          23,
+          29,
+          31,
+          37,
+          41,
+          43,
+          47,
+          53,
+          59,
+          61,
+          67,
+          71,
+          73,
+          79,
+          83,
+          89,
+          97,
+          101,
+          103,
+          107,
+          109,
+          113,
+          127,
+          131,
+          137,
+          139,
+          149,
+          151,
+          157,
+          163,
+          167,
+          173,
+          179,
+          181,
+          191,
+          193,
+          197,
+          199,
+          211,
+          223,
+          227,
+          229,
+          233,
+          239,
+          241,
+          251
+        ],
+        "next_prime": 257,
+        "rows": 16384,
+        "exceptions": 13,
+        "exception_row_ids": [
+          11,
+          39,
+          45,
+          125,
+          469,
+          515,
+          538,
+          539,
+          935,
+          1341,
+          2171,
+          2218,
+          14415
+        ],
+        "least_prime_counts": [
+          13359,
+          2387,
+          380,
+          129,
+          43,
+          15,
+          4,
+          5,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          4,
+          2,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "construction_work": {
+          "factorial_cells": 13878,
+          "legendre_floor_divisions": 24376,
+          "legendre_additions": 10552,
+          "rows": 16384,
+          "valuation_cells": 884736,
+          "valuation_subtractions": 1769472,
+          "nonzero_factors": 335595,
+          "threshold_floor_divisions": 16384,
+          "least_prime_histogram_additions": 16384,
+          "exception_index_entries": 13,
+          "primality_tests": 0,
+          "sieve_steps": 0,
+          "binomial_integer_products": 0
+        }
+      },
+      "work_after": {
+        "queries": 1,
+        "conditions_compiled": 0,
+        "condition_cache_hits": 0,
+        "saved_row_scans": 0,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 0,
+        "rank_binary_probes": 0,
+        "row_lookups": 0,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 0,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 2,
+        "label": "complete triangle",
+        "method": "family",
+        "args": [
+          {}
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "16384"
+      },
+      "work_after": {
+        "queries": 2,
+        "conditions_compiled": 1,
+        "condition_cache_hits": 0,
+        "saved_row_scans": 16384,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16384,
+        "rank_binary_probes": 0,
+        "row_lookups": 0,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 0,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 3,
+        "label": "all exceptions",
+        "method": "family",
+        "args": [
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13"
+      },
+      "work_after": {
+        "queries": 3,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 0,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 0,
+        "row_lookups": 0,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 0,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 4,
+        "label": "complete exception export",
+        "method": "page",
+        "args": [
+          "0",
+          200,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "start": "0",
+        "rows": [
+          {
+            "rank": "0",
+            "row": {
+              "id": 11,
+              "n": 7,
+              "k": 3,
+              "least_prime_index": 2,
+              "least_prime": 5,
+              "threshold": 3,
+              "exceptional": true,
+              "distinct_prime_factors": 2,
+              "total_prime_exponent": 2,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 2,
+                  "prime": 5,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 3,
+                  "prime": 7,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "1",
+            "row": {
+              "id": 39,
+              "n": 13,
+              "k": 4,
+              "least_prime_index": 2,
+              "least_prime": 5,
+              "threshold": 4,
+              "exceptional": true,
+              "distinct_prime_factors": 3,
+              "total_prime_exponent": 3,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 2,
+                  "prime": 5,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "2",
+            "row": {
+              "id": 45,
+              "n": 14,
+              "k": 4,
+              "least_prime_index": 3,
+              "least_prime": 7,
+              "threshold": 4,
+              "exceptional": true,
+              "distinct_prime_factors": 3,
+              "total_prime_exponent": 3,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 3,
+                  "prime": 7,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "3",
+            "row": {
+              "id": 125,
+              "n": 23,
+              "k": 5,
+              "least_prime_index": 3,
+              "least_prime": 7,
+              "threshold": 5,
+              "exceptional": true,
+              "distinct_prime_factors": 4,
+              "total_prime_exponent": 4,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 3,
+                  "prime": 7,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "4",
+            "row": {
+              "id": 469,
+              "n": 44,
+              "k": 8,
+              "least_prime_index": 4,
+              "least_prime": 11,
+              "threshold": 8,
+              "exceptional": true,
+              "distinct_prime_factors": 6,
+              "total_prime_exponent": 6,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 11,
+                  "prime": 37,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 12,
+                  "prime": 41,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 13,
+                  "prime": 43,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "5",
+            "row": {
+              "id": 515,
+              "n": 46,
+              "k": 10,
+              "least_prime_index": 4,
+              "least_prime": 11,
+              "threshold": 10,
+              "exceptional": true,
+              "distinct_prime_factors": 7,
+              "total_prime_exponent": 7,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 11,
+                  "prime": 37,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 12,
+                  "prime": 41,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 13,
+                  "prime": 43,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "6",
+            "row": {
+              "id": 538,
+              "n": 47,
+              "k": 10,
+              "least_prime_index": 4,
+              "least_prime": 11,
+              "threshold": 10,
+              "exceptional": true,
+              "distinct_prime_factors": 7,
+              "total_prime_exponent": 7,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 12,
+                  "prime": 41,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 13,
+                  "prime": 43,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 14,
+                  "prime": 47,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "7",
+            "row": {
+              "id": 539,
+              "n": 47,
+              "k": 11,
+              "least_prime_index": 5,
+              "least_prime": 13,
+              "threshold": 11,
+              "exceptional": true,
+              "distinct_prime_factors": 7,
+              "total_prime_exponent": 7,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 11,
+                  "prime": 37,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 12,
+                  "prime": 41,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 13,
+                  "prime": 43,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 14,
+                  "prime": 47,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "8",
+            "row": {
+              "id": 935,
+              "n": 62,
+              "k": 6,
+              "least_prime_index": 7,
+              "least_prime": 19,
+              "threshold": 10,
+              "exceptional": true,
+              "distinct_prime_factors": 5,
+              "total_prime_exponent": 5,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 9,
+                  "prime": 29,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 10,
+                  "prime": 31,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 16,
+                  "prime": 59,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 17,
+                  "prime": 61,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "9",
+            "row": {
+              "id": 1341,
+              "n": 74,
+              "k": 10,
+              "least_prime_index": 4,
+              "least_prime": 11,
+              "threshold": 10,
+              "exceptional": true,
+              "distinct_prime_factors": 8,
+              "total_prime_exponent": 8,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 6,
+                  "prime": 17,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 11,
+                  "prime": 37,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 18,
+                  "prime": 67,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 19,
+                  "prime": 71,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 20,
+                  "prime": 73,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "10",
+            "row": {
+              "id": 2171,
+              "n": 94,
+              "k": 10,
+              "least_prime_index": 4,
+              "least_prime": 11,
+              "threshold": 10,
+              "exceptional": true,
+              "distinct_prime_factors": 9,
+              "total_prime_exponent": 9,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 6,
+                  "prime": 17,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 9,
+                  "prime": 29,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 10,
+                  "prime": 31,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 13,
+                  "prime": 43,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 14,
+                  "prime": 47,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 23,
+                  "prime": 89,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "11",
+            "row": {
+              "id": 2218,
+              "n": 95,
+              "k": 10,
+              "least_prime_index": 4,
+              "least_prime": 11,
+              "threshold": 10,
+              "exceptional": true,
+              "distinct_prime_factors": 9,
+              "total_prime_exponent": 9,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 4,
+                  "prime": 11,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 5,
+                  "prime": 13,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 9,
+                  "prime": 29,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 10,
+                  "prime": 31,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 13,
+                  "prime": 43,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 14,
+                  "prime": 47,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 23,
+                  "prime": 89,
+                  "exponent": 1
+                }
+              ]
+            }
+          },
+          {
+            "rank": "12",
+            "row": {
+              "id": 14415,
+              "n": 241,
+              "k": 16,
+              "least_prime_index": 6,
+              "least_prime": 17,
+              "threshold": 16,
+              "exceptional": true,
+              "distinct_prime_factors": 13,
+              "total_prime_exponent": 13,
+              "squarefree": true,
+              "factors": [
+                {
+                  "prime_index": 6,
+                  "prime": 17,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 7,
+                  "prime": 19,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 8,
+                  "prime": 23,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 9,
+                  "prime": 29,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 14,
+                  "prime": 47,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 16,
+                  "prime": 59,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 21,
+                  "prime": 79,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 29,
+                  "prime": 113,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 48,
+                  "prime": 227,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 49,
+                  "prime": 229,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 50,
+                  "prime": 233,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 51,
+                  "prime": 239,
+                  "exponent": 1
+                },
+                {
+                  "prime_index": 52,
+                  "prime": 241,
+                  "exponent": 1
+                }
+              ]
+            }
+          }
+        ],
+        "next_rank": "13",
+        "complete": true
+      },
+      "work_after": {
+        "queries": 4,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 1,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 0,
+        "row_lookups": 13,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 5,
+        "label": "exception inverse 0",
+        "method": "rank",
+        "args": [
+          7,
+          3,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "0",
+        "row": {
+          "id": 11,
+          "n": 7,
+          "k": 3,
+          "least_prime_index": 2,
+          "least_prime": 5,
+          "threshold": 3,
+          "exceptional": true,
+          "distinct_prime_factors": 2,
+          "total_prime_exponent": 2,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 5,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 2,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 4,
+        "row_lookups": 14,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 6,
+        "label": "exception inverse 1",
+        "method": "rank",
+        "args": [
+          13,
+          4,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "1",
+        "row": {
+          "id": 39,
+          "n": 13,
+          "k": 4,
+          "least_prime_index": 2,
+          "least_prime": 5,
+          "threshold": 4,
+          "exceptional": true,
+          "distinct_prime_factors": 3,
+          "total_prime_exponent": 3,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 6,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 3,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 8,
+        "row_lookups": 15,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 7,
+        "label": "exception inverse 2",
+        "method": "rank",
+        "args": [
+          14,
+          4,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "2",
+        "row": {
+          "id": 45,
+          "n": 14,
+          "k": 4,
+          "least_prime_index": 3,
+          "least_prime": 7,
+          "threshold": 4,
+          "exceptional": true,
+          "distinct_prime_factors": 3,
+          "total_prime_exponent": 3,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 7,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 4,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 12,
+        "row_lookups": 16,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 8,
+        "label": "exception inverse 3",
+        "method": "rank",
+        "args": [
+          23,
+          5,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "3",
+        "row": {
+          "id": 125,
+          "n": 23,
+          "k": 5,
+          "least_prime_index": 3,
+          "least_prime": 7,
+          "threshold": 5,
+          "exceptional": true,
+          "distinct_prime_factors": 4,
+          "total_prime_exponent": 4,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 8,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 5,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 16,
+        "row_lookups": 17,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 9,
+        "label": "exception inverse 4",
+        "method": "rank",
+        "args": [
+          44,
+          8,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "4",
+        "row": {
+          "id": 469,
+          "n": 44,
+          "k": 8,
+          "least_prime_index": 4,
+          "least_prime": 11,
+          "threshold": 8,
+          "exceptional": true,
+          "distinct_prime_factors": 6,
+          "total_prime_exponent": 6,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 9,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 6,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 20,
+        "row_lookups": 18,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 10,
+        "label": "exception inverse 5",
+        "method": "rank",
+        "args": [
+          46,
+          10,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "5",
+        "row": {
+          "id": 515,
+          "n": 46,
+          "k": 10,
+          "least_prime_index": 4,
+          "least_prime": 11,
+          "threshold": 10,
+          "exceptional": true,
+          "distinct_prime_factors": 7,
+          "total_prime_exponent": 7,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 10,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 7,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 24,
+        "row_lookups": 19,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 11,
+        "label": "exception inverse 6",
+        "method": "rank",
+        "args": [
+          47,
+          10,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "6",
+        "row": {
+          "id": 538,
+          "n": 47,
+          "k": 10,
+          "least_prime_index": 4,
+          "least_prime": 11,
+          "threshold": 10,
+          "exceptional": true,
+          "distinct_prime_factors": 7,
+          "total_prime_exponent": 7,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 11,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 8,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 27,
+        "row_lookups": 20,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 12,
+        "label": "exception inverse 7",
+        "method": "rank",
+        "args": [
+          47,
+          11,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "7",
+        "row": {
+          "id": 539,
+          "n": 47,
+          "k": 11,
+          "least_prime_index": 5,
+          "least_prime": 13,
+          "threshold": 11,
+          "exceptional": true,
+          "distinct_prime_factors": 7,
+          "total_prime_exponent": 7,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 12,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 9,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 31,
+        "row_lookups": 21,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 13,
+        "label": "exception inverse 8",
+        "method": "rank",
+        "args": [
+          62,
+          6,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "8",
+        "row": {
+          "id": 935,
+          "n": 62,
+          "k": 6,
+          "least_prime_index": 7,
+          "least_prime": 19,
+          "threshold": 10,
+          "exceptional": true,
+          "distinct_prime_factors": 5,
+          "total_prime_exponent": 5,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 13,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 10,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 35,
+        "row_lookups": 22,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 14,
+        "label": "exception inverse 9",
+        "method": "rank",
+        "args": [
+          74,
+          10,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "9",
+        "row": {
+          "id": 1341,
+          "n": 74,
+          "k": 10,
+          "least_prime_index": 4,
+          "least_prime": 11,
+          "threshold": 10,
+          "exceptional": true,
+          "distinct_prime_factors": 8,
+          "total_prime_exponent": 8,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 14,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 11,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 39,
+        "row_lookups": 23,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 15,
+        "label": "exception inverse 10",
+        "method": "rank",
+        "args": [
+          94,
+          10,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "10",
+        "row": {
+          "id": 2171,
+          "n": 94,
+          "k": 10,
+          "least_prime_index": 4,
+          "least_prime": 11,
+          "threshold": 10,
+          "exceptional": true,
+          "distinct_prime_factors": 9,
+          "total_prime_exponent": 9,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 15,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 12,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 43,
+        "row_lookups": 24,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 16,
+        "label": "exception inverse 11",
+        "method": "rank",
+        "args": [
+          95,
+          10,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "11",
+        "row": {
+          "id": 2218,
+          "n": 95,
+          "k": 10,
+          "least_prime_index": 4,
+          "least_prime": 11,
+          "threshold": 10,
+          "exceptional": true,
+          "distinct_prime_factors": 9,
+          "total_prime_exponent": 9,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 16,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 13,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 47,
+        "row_lookups": 25,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 17,
+        "label": "exception inverse 12",
+        "method": "rank",
+        "args": [
+          241,
+          16,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": true,
+        "rank": "12",
+        "row": {
+          "id": 14415,
+          "n": 241,
+          "k": 16,
+          "least_prime_index": 6,
+          "least_prime": 17,
+          "threshold": 16,
+          "exceptional": true,
+          "distinct_prime_factors": 13,
+          "total_prime_exponent": 13,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 17,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 14,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 51,
+        "row_lookups": 26,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 83,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 18,
+        "label": "full select 0",
+        "method": "select",
+        "args": [
+          "0",
+          {}
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "16384",
+        "rank": "0",
+        "row": {
+          "id": 0,
+          "n": 2,
+          "k": 1,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 2,
+          "exceptional": false,
+          "distinct_prime_factors": 1,
+          "total_prime_exponent": 1,
+          "squarefree": true,
+          "factors": [
+            {
+              "prime_index": 0,
+              "prime": 2,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 18,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 15,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 51,
+        "row_lookups": 27,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 84,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 19,
+        "label": "full inverse 0",
+        "method": "rank",
+        "args": [
+          2,
+          1,
+          {}
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "16384",
+        "member": true,
+        "rank": "0",
+        "row": {
+          "id": 0,
+          "n": 2,
+          "k": 1,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 2,
+          "exceptional": false,
+          "distinct_prime_factors": 1,
+          "total_prime_exponent": 1,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 19,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 16,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 66,
+        "row_lookups": 28,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 84,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 20,
+        "label": "full select 8192",
+        "method": "select",
+        "args": [
+          "8192",
+          {}
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "16384",
+        "rank": "8192",
+        "row": {
+          "id": 8192,
+          "n": 182,
+          "k": 3,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 60,
+          "exceptional": false,
+          "distinct_prime_factors": 6,
+          "total_prime_exponent": 7,
+          "squarefree": false,
+          "factors": [
+            {
+              "prime_index": 0,
+              "prime": 2,
+              "exponent": 2
+            },
+            {
+              "prime_index": 1,
+              "prime": 3,
+              "exponent": 1
+            },
+            {
+              "prime_index": 2,
+              "prime": 5,
+              "exponent": 1
+            },
+            {
+              "prime_index": 3,
+              "prime": 7,
+              "exponent": 1
+            },
+            {
+              "prime_index": 5,
+              "prime": 13,
+              "exponent": 1
+            },
+            {
+              "prime_index": 41,
+              "prime": 181,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 20,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 17,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 66,
+        "row_lookups": 29,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 90,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 21,
+        "label": "full inverse 8192",
+        "method": "rank",
+        "args": [
+          182,
+          3,
+          {}
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "16384",
+        "member": true,
+        "rank": "8192",
+        "row": {
+          "id": 8192,
+          "n": 182,
+          "k": 3,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 60,
+          "exceptional": false,
+          "distinct_prime_factors": 6,
+          "total_prime_exponent": 7,
+          "squarefree": false
+        }
+      },
+      "work_after": {
+        "queries": 21,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 18,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 80,
+        "row_lookups": 30,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 90,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 22,
+        "label": "full select 16383",
+        "method": "select",
+        "args": [
+          "16383",
+          {}
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "16384",
+        "rank": "16383",
+        "row": {
+          "id": 16383,
+          "n": 256,
+          "k": 128,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 128,
+          "exceptional": false,
+          "distinct_prime_factors": 39,
+          "total_prime_exponent": 43,
+          "squarefree": false,
+          "factors": [
+            {
+              "prime_index": 0,
+              "prime": 2,
+              "exponent": 1
+            },
+            {
+              "prime_index": 1,
+              "prime": 3,
+              "exponent": 4
+            },
+            {
+              "prime_index": 2,
+              "prime": 5,
+              "exponent": 1
+            },
+            {
+              "prime_index": 3,
+              "prime": 7,
+              "exponent": 1
+            },
+            {
+              "prime_index": 4,
+              "prime": 11,
+              "exponent": 1
+            },
+            {
+              "prime_index": 5,
+              "prime": 13,
+              "exponent": 2
+            },
+            {
+              "prime_index": 6,
+              "prime": 17,
+              "exponent": 1
+            },
+            {
+              "prime_index": 7,
+              "prime": 19,
+              "exponent": 1
+            },
+            {
+              "prime_index": 8,
+              "prime": 23,
+              "exponent": 1
+            },
+            {
+              "prime_index": 13,
+              "prime": 43,
+              "exponent": 1
+            },
+            {
+              "prime_index": 14,
+              "prime": 47,
+              "exponent": 1
+            },
+            {
+              "prime_index": 18,
+              "prime": 67,
+              "exponent": 1
+            },
+            {
+              "prime_index": 19,
+              "prime": 71,
+              "exponent": 1
+            },
+            {
+              "prime_index": 20,
+              "prime": 73,
+              "exponent": 1
+            },
+            {
+              "prime_index": 21,
+              "prime": 79,
+              "exponent": 1
+            },
+            {
+              "prime_index": 22,
+              "prime": 83,
+              "exponent": 1
+            },
+            {
+              "prime_index": 31,
+              "prime": 131,
+              "exponent": 1
+            },
+            {
+              "prime_index": 32,
+              "prime": 137,
+              "exponent": 1
+            },
+            {
+              "prime_index": 33,
+              "prime": 139,
+              "exponent": 1
+            },
+            {
+              "prime_index": 34,
+              "prime": 149,
+              "exponent": 1
+            },
+            {
+              "prime_index": 35,
+              "prime": 151,
+              "exponent": 1
+            },
+            {
+              "prime_index": 36,
+              "prime": 157,
+              "exponent": 1
+            },
+            {
+              "prime_index": 37,
+              "prime": 163,
+              "exponent": 1
+            },
+            {
+              "prime_index": 38,
+              "prime": 167,
+              "exponent": 1
+            },
+            {
+              "prime_index": 39,
+              "prime": 173,
+              "exponent": 1
+            },
+            {
+              "prime_index": 40,
+              "prime": 179,
+              "exponent": 1
+            },
+            {
+              "prime_index": 41,
+              "prime": 181,
+              "exponent": 1
+            },
+            {
+              "prime_index": 42,
+              "prime": 191,
+              "exponent": 1
+            },
+            {
+              "prime_index": 43,
+              "prime": 193,
+              "exponent": 1
+            },
+            {
+              "prime_index": 44,
+              "prime": 197,
+              "exponent": 1
+            },
+            {
+              "prime_index": 45,
+              "prime": 199,
+              "exponent": 1
+            },
+            {
+              "prime_index": 46,
+              "prime": 211,
+              "exponent": 1
+            },
+            {
+              "prime_index": 47,
+              "prime": 223,
+              "exponent": 1
+            },
+            {
+              "prime_index": 48,
+              "prime": 227,
+              "exponent": 1
+            },
+            {
+              "prime_index": 49,
+              "prime": 229,
+              "exponent": 1
+            },
+            {
+              "prime_index": 50,
+              "prime": 233,
+              "exponent": 1
+            },
+            {
+              "prime_index": 51,
+              "prime": 239,
+              "exponent": 1
+            },
+            {
+              "prime_index": 52,
+              "prime": 241,
+              "exponent": 1
+            },
+            {
+              "prime_index": 53,
+              "prime": 251,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 22,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 19,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 80,
+        "row_lookups": 31,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 129,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 23,
+        "label": "full inverse 16383",
+        "method": "rank",
+        "args": [
+          256,
+          128,
+          {}
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "16384",
+        "member": true,
+        "rank": "16383",
+        "row": {
+          "id": 16383,
+          "n": 256,
+          "k": 128,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 128,
+          "exceptional": false,
+          "distinct_prime_factors": 39,
+          "total_prime_exponent": 43,
+          "squarefree": false
+        }
+      },
+      "work_after": {
+        "queries": 23,
+        "conditions_compiled": 2,
+        "condition_cache_hits": 20,
+        "saved_row_scans": 32768,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 16397,
+        "rank_binary_probes": 94,
+        "row_lookups": 32,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 129,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 24,
+        "label": "all squarefree binomials",
+        "method": "family",
+        "args": [
+          {
+            "squarefree": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": true,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "1264"
+      },
+      "work_after": {
+        "queries": 24,
+        "conditions_compiled": 3,
+        "condition_cache_hits": 20,
+        "saved_row_scans": 49152,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 17661,
+        "rank_binary_probes": 94,
+        "row_lookups": 32,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 129,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 25,
+        "label": "all squarefree binomials middle",
+        "method": "select",
+        "args": [
+          "632",
+          {
+            "squarefree": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": true,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "1264",
+        "rank": "632",
+        "row": {
+          "id": 6182,
+          "n": 158,
+          "k": 21,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 21,
+          "exceptional": false,
+          "distinct_prime_factors": 17,
+          "total_prime_exponent": 17,
+          "squarefree": true,
+          "factors": [
+            {
+              "prime_index": 0,
+              "prime": 2,
+              "exponent": 1
+            },
+            {
+              "prime_index": 2,
+              "prime": 5,
+              "exponent": 1
+            },
+            {
+              "prime_index": 3,
+              "prime": 7,
+              "exponent": 1
+            },
+            {
+              "prime_index": 4,
+              "prime": 11,
+              "exponent": 1
+            },
+            {
+              "prime_index": 5,
+              "prime": 13,
+              "exponent": 1
+            },
+            {
+              "prime_index": 8,
+              "prime": 23,
+              "exponent": 1
+            },
+            {
+              "prime_index": 9,
+              "prime": 29,
+              "exponent": 1
+            },
+            {
+              "prime_index": 10,
+              "prime": 31,
+              "exponent": 1
+            },
+            {
+              "prime_index": 11,
+              "prime": 37,
+              "exponent": 1
+            },
+            {
+              "prime_index": 14,
+              "prime": 47,
+              "exponent": 1
+            },
+            {
+              "prime_index": 19,
+              "prime": 71,
+              "exponent": 1
+            },
+            {
+              "prime_index": 20,
+              "prime": 73,
+              "exponent": 1
+            },
+            {
+              "prime_index": 21,
+              "prime": 79,
+              "exponent": 1
+            },
+            {
+              "prime_index": 33,
+              "prime": 139,
+              "exponent": 1
+            },
+            {
+              "prime_index": 34,
+              "prime": 149,
+              "exponent": 1
+            },
+            {
+              "prime_index": 35,
+              "prime": 151,
+              "exponent": 1
+            },
+            {
+              "prime_index": 36,
+              "prime": 157,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 25,
+        "conditions_compiled": 3,
+        "condition_cache_hits": 21,
+        "saved_row_scans": 49152,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 17661,
+        "rank_binary_probes": 94,
+        "row_lookups": 33,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 146,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 26,
+        "label": "all squarefree binomials inverse",
+        "method": "rank",
+        "args": [
+          158,
+          21,
+          {
+            "squarefree": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": true,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "1264",
+        "member": true,
+        "rank": "632",
+        "row": {
+          "id": 6182,
+          "n": 158,
+          "k": 21,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 21,
+          "exceptional": false,
+          "distinct_prime_factors": 17,
+          "total_prime_exponent": 17,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 26,
+        "conditions_compiled": 3,
+        "condition_cache_hits": 22,
+        "saved_row_scans": 49152,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 17661,
+        "rank_binary_probes": 104,
+        "row_lookups": 34,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 146,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 27,
+        "label": "all nonsquarefree binomials",
+        "method": "family",
+        "args": [
+          {
+            "squarefree": false
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": false,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "15120"
+      },
+      "work_after": {
+        "queries": 27,
+        "conditions_compiled": 4,
+        "condition_cache_hits": 22,
+        "saved_row_scans": 65536,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 32781,
+        "rank_binary_probes": 104,
+        "row_lookups": 34,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 146,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 28,
+        "label": "all nonsquarefree binomials middle",
+        "method": "select",
+        "args": [
+          "7560",
+          {
+            "squarefree": false
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": false,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "15120",
+        "rank": "7560",
+        "row": {
+          "id": 8284,
+          "n": 183,
+          "k": 4,
+          "least_prime_index": 1,
+          "least_prime": 3,
+          "threshold": 45,
+          "exceptional": false,
+          "distinct_prime_factors": 6,
+          "total_prime_exponent": 7,
+          "squarefree": false,
+          "factors": [
+            {
+              "prime_index": 1,
+              "prime": 3,
+              "exponent": 2
+            },
+            {
+              "prime_index": 2,
+              "prime": 5,
+              "exponent": 1
+            },
+            {
+              "prime_index": 3,
+              "prime": 7,
+              "exponent": 1
+            },
+            {
+              "prime_index": 5,
+              "prime": 13,
+              "exponent": 1
+            },
+            {
+              "prime_index": 17,
+              "prime": 61,
+              "exponent": 1
+            },
+            {
+              "prime_index": 41,
+              "prime": 181,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 28,
+        "conditions_compiled": 4,
+        "condition_cache_hits": 23,
+        "saved_row_scans": 65536,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 32781,
+        "rank_binary_probes": 104,
+        "row_lookups": 35,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 152,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 29,
+        "label": "all nonsquarefree binomials inverse",
+        "method": "rank",
+        "args": [
+          183,
+          4,
+          {
+            "squarefree": false
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": false,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "15120",
+        "member": true,
+        "rank": "7560",
+        "row": {
+          "id": 8284,
+          "n": 183,
+          "k": 4,
+          "least_prime_index": 1,
+          "least_prime": 3,
+          "threshold": 45,
+          "exceptional": false,
+          "distinct_prime_factors": 6,
+          "total_prime_exponent": 7,
+          "squarefree": false
+        }
+      },
+      "work_after": {
+        "queries": 29,
+        "conditions_compiled": 4,
+        "condition_cache_hits": 24,
+        "saved_row_scans": 65536,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 32781,
+        "rank_binary_probes": 117,
+        "row_lookups": 36,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 152,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 30,
+        "label": "least prime at least five",
+        "method": "family",
+        "args": [
+          {
+            "least_prime_min": 5
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 5,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "638"
+      },
+      "work_after": {
+        "queries": 30,
+        "conditions_compiled": 5,
+        "condition_cache_hits": 24,
+        "saved_row_scans": 81920,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 33419,
+        "rank_binary_probes": 117,
+        "row_lookups": 36,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 152,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 31,
+        "label": "least prime at least five middle",
+        "method": "select",
+        "args": [
+          "319",
+          {
+            "least_prime_min": 5
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 5,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "638",
+        "rank": "319",
+        "row": {
+          "id": 7141,
+          "n": 170,
+          "k": 2,
+          "least_prime_index": 2,
+          "least_prime": 5,
+          "threshold": 85,
+          "exceptional": false,
+          "distinct_prime_factors": 3,
+          "total_prime_exponent": 4,
+          "squarefree": false,
+          "factors": [
+            {
+              "prime_index": 2,
+              "prime": 5,
+              "exponent": 1
+            },
+            {
+              "prime_index": 5,
+              "prime": 13,
+              "exponent": 2
+            },
+            {
+              "prime_index": 6,
+              "prime": 17,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 31,
+        "conditions_compiled": 5,
+        "condition_cache_hits": 25,
+        "saved_row_scans": 81920,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 33419,
+        "rank_binary_probes": 117,
+        "row_lookups": 37,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 155,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 32,
+        "label": "least prime at least five inverse",
+        "method": "rank",
+        "args": [
+          170,
+          2,
+          {
+            "least_prime_min": 5
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 5,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "638",
+        "member": true,
+        "rank": "319",
+        "row": {
+          "id": 7141,
+          "n": 170,
+          "k": 2,
+          "least_prime_index": 2,
+          "least_prime": 5,
+          "threshold": 85,
+          "exceptional": false,
+          "distinct_prime_factors": 3,
+          "total_prime_exponent": 4,
+          "squarefree": false
+        }
+      },
+      "work_after": {
+        "queries": 32,
+        "conditions_compiled": 5,
+        "condition_cache_hits": 26,
+        "saved_row_scans": 81920,
+        "valuation_filter_checks": 0,
+        "factor_binary_probes": 0,
+        "conditional_entries": 33419,
+        "rank_binary_probes": 126,
+        "row_lookups": 38,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 155,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 33,
+        "label": "not divisible by two or three",
+        "method": "family",
+        "args": [
+          {
+            "valuations": [
+              {
+                "prime_index": 0,
+                "min": 0,
+                "max": 0
+              },
+              {
+                "prime_index": 1,
+                "min": 0,
+                "max": 0
+              }
+            ]
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": [
+            {
+              "prime_index": 0,
+              "min": 0,
+              "max": 0
+            },
+            {
+              "prime_index": 1,
+              "min": 0,
+              "max": 0
+            }
+          ]
+        },
+        "count": "638"
+      },
+      "work_after": {
+        "queries": 33,
+        "conditions_compiled": 6,
+        "condition_cache_hits": 26,
+        "saved_row_scans": 98304,
+        "valuation_filter_checks": 19409,
+        "factor_binary_probes": 90024,
+        "conditional_entries": 34057,
+        "rank_binary_probes": 126,
+        "row_lookups": 38,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 155,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 34,
+        "label": "not divisible by two or three middle",
+        "method": "select",
+        "args": [
+          "319",
+          {
+            "valuations": [
+              {
+                "prime_index": 0,
+                "min": 0,
+                "max": 0
+              },
+              {
+                "prime_index": 1,
+                "min": 0,
+                "max": 0
+              }
+            ]
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": [
+            {
+              "prime_index": 0,
+              "min": 0,
+              "max": 0
+            },
+            {
+              "prime_index": 1,
+              "min": 0,
+              "max": 0
+            }
+          ]
+        },
+        "count": "638",
+        "rank": "319",
+        "row": {
+          "id": 7141,
+          "n": 170,
+          "k": 2,
+          "least_prime_index": 2,
+          "least_prime": 5,
+          "threshold": 85,
+          "exceptional": false,
+          "distinct_prime_factors": 3,
+          "total_prime_exponent": 4,
+          "squarefree": false,
+          "factors": [
+            {
+              "prime_index": 2,
+              "prime": 5,
+              "exponent": 1
+            },
+            {
+              "prime_index": 5,
+              "prime": 13,
+              "exponent": 2
+            },
+            {
+              "prime_index": 6,
+              "prime": 17,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 34,
+        "conditions_compiled": 6,
+        "condition_cache_hits": 27,
+        "saved_row_scans": 98304,
+        "valuation_filter_checks": 19409,
+        "factor_binary_probes": 90024,
+        "conditional_entries": 34057,
+        "rank_binary_probes": 126,
+        "row_lookups": 39,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 158,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 35,
+        "label": "not divisible by two or three inverse",
+        "method": "rank",
+        "args": [
+          170,
+          2,
+          {
+            "valuations": [
+              {
+                "prime_index": 0,
+                "min": 0,
+                "max": 0
+              },
+              {
+                "prime_index": 1,
+                "min": 0,
+                "max": 0
+              }
+            ]
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": [
+            {
+              "prime_index": 0,
+              "min": 0,
+              "max": 0
+            },
+            {
+              "prime_index": 1,
+              "min": 0,
+              "max": 0
+            }
+          ]
+        },
+        "count": "638",
+        "member": true,
+        "rank": "319",
+        "row": {
+          "id": 7141,
+          "n": 170,
+          "k": 2,
+          "least_prime_index": 2,
+          "least_prime": 5,
+          "threshold": 85,
+          "exceptional": false,
+          "distinct_prime_factors": 3,
+          "total_prime_exponent": 4,
+          "squarefree": false
+        }
+      },
+      "work_after": {
+        "queries": 35,
+        "conditions_compiled": 6,
+        "condition_cache_hits": 28,
+        "saved_row_scans": 98304,
+        "valuation_filter_checks": 19409,
+        "factor_binary_probes": 90024,
+        "conditional_entries": 34057,
+        "rank_binary_probes": 135,
+        "row_lookups": 40,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 158,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 36,
+        "label": "large-row squarefree interior",
+        "method": "family",
+        "args": [
+          {
+            "min_n": 200,
+            "min_k": 2,
+            "squarefree": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 200,
+          "max_n": 256,
+          "min_k": 2,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": true,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "422"
+      },
+      "work_after": {
+        "queries": 36,
+        "conditions_compiled": 7,
+        "condition_cache_hits": 28,
+        "saved_row_scans": 114688,
+        "valuation_filter_checks": 19409,
+        "factor_binary_probes": 90024,
+        "conditional_entries": 34479,
+        "rank_binary_probes": 135,
+        "row_lookups": 40,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 158,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 37,
+        "label": "large-row squarefree interior middle",
+        "method": "select",
+        "args": [
+          "211",
+          {
+            "min_n": 200,
+            "min_k": 2,
+            "squarefree": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 200,
+          "max_n": 256,
+          "min_k": 2,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": true,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "422",
+        "rank": "211",
+        "row": {
+          "id": 12371,
+          "n": 223,
+          "k": 51,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 51,
+          "exceptional": false,
+          "distinct_prime_factors": 28,
+          "total_prime_exponent": 28,
+          "squarefree": true,
+          "factors": [
+            {
+              "prime_index": 0,
+              "prime": 2,
+              "exponent": 1
+            },
+            {
+              "prime_index": 1,
+              "prime": 3,
+              "exponent": 1
+            },
+            {
+              "prime_index": 4,
+              "prime": 11,
+              "exponent": 1
+            },
+            {
+              "prime_index": 5,
+              "prime": 13,
+              "exponent": 1
+            },
+            {
+              "prime_index": 9,
+              "prime": 29,
+              "exponent": 1
+            },
+            {
+              "prime_index": 10,
+              "prime": 31,
+              "exponent": 1
+            },
+            {
+              "prime_index": 11,
+              "prime": 37,
+              "exponent": 1
+            },
+            {
+              "prime_index": 15,
+              "prime": 53,
+              "exponent": 1
+            },
+            {
+              "prime_index": 16,
+              "prime": 59,
+              "exponent": 1
+            },
+            {
+              "prime_index": 17,
+              "prime": 61,
+              "exponent": 1
+            },
+            {
+              "prime_index": 18,
+              "prime": 67,
+              "exponent": 1
+            },
+            {
+              "prime_index": 19,
+              "prime": 71,
+              "exponent": 1
+            },
+            {
+              "prime_index": 20,
+              "prime": 73,
+              "exponent": 1
+            },
+            {
+              "prime_index": 23,
+              "prime": 89,
+              "exponent": 1
+            },
+            {
+              "prime_index": 24,
+              "prime": 97,
+              "exponent": 1
+            },
+            {
+              "prime_index": 25,
+              "prime": 101,
+              "exponent": 1
+            },
+            {
+              "prime_index": 26,
+              "prime": 103,
+              "exponent": 1
+            },
+            {
+              "prime_index": 27,
+              "prime": 107,
+              "exponent": 1
+            },
+            {
+              "prime_index": 28,
+              "prime": 109,
+              "exponent": 1
+            },
+            {
+              "prime_index": 39,
+              "prime": 173,
+              "exponent": 1
+            },
+            {
+              "prime_index": 40,
+              "prime": 179,
+              "exponent": 1
+            },
+            {
+              "prime_index": 41,
+              "prime": 181,
+              "exponent": 1
+            },
+            {
+              "prime_index": 42,
+              "prime": 191,
+              "exponent": 1
+            },
+            {
+              "prime_index": 43,
+              "prime": 193,
+              "exponent": 1
+            },
+            {
+              "prime_index": 44,
+              "prime": 197,
+              "exponent": 1
+            },
+            {
+              "prime_index": 45,
+              "prime": 199,
+              "exponent": 1
+            },
+            {
+              "prime_index": 46,
+              "prime": 211,
+              "exponent": 1
+            },
+            {
+              "prime_index": 47,
+              "prime": 223,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 37,
+        "conditions_compiled": 7,
+        "condition_cache_hits": 29,
+        "saved_row_scans": 114688,
+        "valuation_filter_checks": 19409,
+        "factor_binary_probes": 90024,
+        "conditional_entries": 34479,
+        "rank_binary_probes": 135,
+        "row_lookups": 41,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 186,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 38,
+        "label": "large-row squarefree interior inverse",
+        "method": "rank",
+        "args": [
+          223,
+          51,
+          {
+            "min_n": 200,
+            "min_k": 2,
+            "squarefree": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 200,
+          "max_n": 256,
+          "min_k": 2,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": true,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "422",
+        "member": true,
+        "rank": "211",
+        "row": {
+          "id": 12371,
+          "n": 223,
+          "k": 51,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 51,
+          "exceptional": false,
+          "distinct_prime_factors": 28,
+          "total_prime_exponent": 28,
+          "squarefree": true
+        }
+      },
+      "work_after": {
+        "queries": 38,
+        "conditions_compiled": 7,
+        "condition_cache_hits": 30,
+        "saved_row_scans": 114688,
+        "valuation_filter_checks": 19409,
+        "factor_binary_probes": 90024,
+        "conditional_entries": 34479,
+        "rank_binary_probes": 143,
+        "row_lookups": 42,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 186,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 39,
+        "label": "row256 with at least seven factors of two",
+        "method": "family",
+        "args": [
+          {
+            "min_n": 256,
+            "max_n": 256,
+            "valuations": [
+              {
+                "prime_index": 0,
+                "min": 7
+              }
+            ]
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 256,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": [
+            {
+              "prime_index": 0,
+              "min": 7,
+              "max": 256
+            }
+          ]
+        },
+        "count": "96"
+      },
+      "work_after": {
+        "queries": 39,
+        "conditions_compiled": 8,
+        "condition_cache_hits": 30,
+        "saved_row_scans": 131072,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 143,
+        "row_lookups": 42,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 186,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 40,
+        "label": "row256 with at least seven factors of two middle",
+        "method": "select",
+        "args": [
+          "48",
+          {
+            "min_n": 256,
+            "max_n": 256,
+            "valuations": [
+              {
+                "prime_index": 0,
+                "min": 7
+              }
+            ]
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 256,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": [
+            {
+              "prime_index": 0,
+              "min": 7,
+              "max": 256
+            }
+          ]
+        },
+        "count": "96",
+        "rank": "48",
+        "row": {
+          "id": 16320,
+          "n": 256,
+          "k": 65,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 65,
+          "exceptional": false,
+          "distinct_prime_factors": 31,
+          "total_prime_exponent": 42,
+          "squarefree": false,
+          "factors": [
+            {
+              "prime_index": 0,
+              "prime": 2,
+              "exponent": 8
+            },
+            {
+              "prime_index": 1,
+              "prime": 3,
+              "exponent": 3
+            },
+            {
+              "prime_index": 2,
+              "prime": 5,
+              "exponent": 2
+            },
+            {
+              "prime_index": 3,
+              "prime": 7,
+              "exponent": 1
+            },
+            {
+              "prime_index": 4,
+              "prime": 11,
+              "exponent": 2
+            },
+            {
+              "prime_index": 6,
+              "prime": 17,
+              "exponent": 1
+            },
+            {
+              "prime_index": 8,
+              "prime": 23,
+              "exponent": 1
+            },
+            {
+              "prime_index": 12,
+              "prime": 41,
+              "exponent": 1
+            },
+            {
+              "prime_index": 18,
+              "prime": 67,
+              "exponent": 1
+            },
+            {
+              "prime_index": 19,
+              "prime": 71,
+              "exponent": 1
+            },
+            {
+              "prime_index": 20,
+              "prime": 73,
+              "exponent": 1
+            },
+            {
+              "prime_index": 21,
+              "prime": 79,
+              "exponent": 1
+            },
+            {
+              "prime_index": 22,
+              "prime": 83,
+              "exponent": 1
+            },
+            {
+              "prime_index": 24,
+              "prime": 97,
+              "exponent": 1
+            },
+            {
+              "prime_index": 25,
+              "prime": 101,
+              "exponent": 1
+            },
+            {
+              "prime_index": 26,
+              "prime": 103,
+              "exponent": 1
+            },
+            {
+              "prime_index": 27,
+              "prime": 107,
+              "exponent": 1
+            },
+            {
+              "prime_index": 28,
+              "prime": 109,
+              "exponent": 1
+            },
+            {
+              "prime_index": 29,
+              "prime": 113,
+              "exponent": 1
+            },
+            {
+              "prime_index": 30,
+              "prime": 127,
+              "exponent": 1
+            },
+            {
+              "prime_index": 43,
+              "prime": 193,
+              "exponent": 1
+            },
+            {
+              "prime_index": 44,
+              "prime": 197,
+              "exponent": 1
+            },
+            {
+              "prime_index": 45,
+              "prime": 199,
+              "exponent": 1
+            },
+            {
+              "prime_index": 46,
+              "prime": 211,
+              "exponent": 1
+            },
+            {
+              "prime_index": 47,
+              "prime": 223,
+              "exponent": 1
+            },
+            {
+              "prime_index": 48,
+              "prime": 227,
+              "exponent": 1
+            },
+            {
+              "prime_index": 49,
+              "prime": 229,
+              "exponent": 1
+            },
+            {
+              "prime_index": 50,
+              "prime": 233,
+              "exponent": 1
+            },
+            {
+              "prime_index": 51,
+              "prime": 239,
+              "exponent": 1
+            },
+            {
+              "prime_index": 52,
+              "prime": 241,
+              "exponent": 1
+            },
+            {
+              "prime_index": 53,
+              "prime": 251,
+              "exponent": 1
+            }
+          ]
+        }
+      },
+      "work_after": {
+        "queries": 40,
+        "conditions_compiled": 8,
+        "condition_cache_hits": 31,
+        "saved_row_scans": 131072,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 143,
+        "row_lookups": 43,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 41,
+        "label": "row256 with at least seven factors of two inverse",
+        "method": "rank",
+        "args": [
+          256,
+          65,
+          {
+            "min_n": 256,
+            "max_n": 256,
+            "valuations": [
+              {
+                "prime_index": 0,
+                "min": 7
+              }
+            ]
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 256,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": null,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": [
+            {
+              "prime_index": 0,
+              "min": 7,
+              "max": 256
+            }
+          ]
+        },
+        "count": "96",
+        "member": true,
+        "rank": "48",
+        "row": {
+          "id": 16320,
+          "n": 256,
+          "k": 65,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 65,
+          "exceptional": false,
+          "distinct_prime_factors": 31,
+          "total_prime_exponent": 42,
+          "squarefree": false
+        }
+      },
+      "work_after": {
+        "queries": 41,
+        "conditions_compiled": 8,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 131072,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 42,
+        "label": "exception and nonsquarefree",
+        "method": "family",
+        "args": [
+          {
+            "exceptional": true,
+            "squarefree": false
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": false,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "0"
+      },
+      "work_after": {
+        "queries": 42,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 43,
+        "label": "row metadata 0",
+        "method": "byN",
+        "args": [
+          0
+        ]
+      },
+      "result": {
+        "n": 0,
+        "start": 0,
+        "end": 0,
+        "count": 0,
+        "exceptional": 0
+      },
+      "work_after": {
+        "queries": 43,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 44,
+        "label": "row metadata 2",
+        "method": "byN",
+        "args": [
+          2
+        ]
+      },
+      "result": {
+        "n": 2,
+        "start": 0,
+        "end": 1,
+        "count": 1,
+        "exceptional": 0
+      },
+      "work_after": {
+        "queries": 44,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 45,
+        "label": "row metadata 128",
+        "method": "byN",
+        "args": [
+          128
+        ]
+      },
+      "result": {
+        "n": 128,
+        "start": 4032,
+        "end": 4096,
+        "count": 64,
+        "exceptional": 0
+      },
+      "work_after": {
+        "queries": 45,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 46,
+        "label": "row metadata 256",
+        "method": "byN",
+        "args": [
+          256
+        ]
+      },
+      "result": {
+        "n": 256,
+        "start": 16256,
+        "end": 16384,
+        "count": 128,
+        "exceptional": 0
+      },
+      "work_after": {
+        "queries": 46,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 0,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 47,
+        "label": "factorial valuation 0/0",
+        "method": "factorial",
+        "args": [
+          0,
+          0
+        ]
+      },
+      "result": {
+        "n": 0,
+        "prime_index": 0,
+        "prime": 2,
+        "exponent": 0
+      },
+      "work_after": {
+        "queries": 47,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 1,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 48,
+        "label": "factorial valuation 256/0",
+        "method": "factorial",
+        "args": [
+          256,
+          0
+        ]
+      },
+      "result": {
+        "n": 256,
+        "prime_index": 0,
+        "prime": 2,
+        "exponent": 255
+      },
+      "work_after": {
+        "queries": 48,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 2,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 49,
+        "label": "factorial valuation 256/53",
+        "method": "factorial",
+        "args": [
+          256,
+          53
+        ]
+      },
+      "result": {
+        "n": 256,
+        "prime_index": 53,
+        "prime": 251,
+        "exponent": 1
+      },
+      "work_after": {
+        "queries": 49,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90700,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 44,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 50,
+        "label": "binomial valuation 256/128/0",
+        "method": "valuation",
+        "args": [
+          256,
+          128,
+          0
+        ]
+      },
+      "result": {
+        "n": 256,
+        "k": 128,
+        "prime_index": 0,
+        "prime": 2,
+        "exponent": 1
+      },
+      "work_after": {
+        "queries": 50,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90706,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 45,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 51,
+        "label": "binomial valuation 256/128/53",
+        "method": "valuation",
+        "args": [
+          256,
+          128,
+          53
+        ]
+      },
+      "result": {
+        "n": 256,
+        "k": 128,
+        "prime_index": 53,
+        "prime": 251,
+        "exponent": 1
+      },
+      "work_after": {
+        "queries": 51,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90711,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 46,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 52,
+        "label": "binomial valuation 241/16/6",
+        "method": "valuation",
+        "args": [
+          241,
+          16,
+          6
+        ]
+      },
+      "result": {
+        "n": 241,
+        "k": 16,
+        "prime_index": 6,
+        "prime": 17,
+        "exponent": 1
+      },
+      "work_after": {
+        "queries": 52,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90715,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 47,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 53,
+        "label": "binomial valuation 241/16/0",
+        "method": "valuation",
+        "args": [
+          241,
+          16,
+          0
+        ]
+      },
+      "result": {
+        "n": 241,
+        "k": 16,
+        "prime_index": 0,
+        "prime": 2,
+        "exponent": 0
+      },
+      "work_after": {
+        "queries": 53,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 48,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 0,
+        "exact_power_multiplies": 0,
+        "exact_factor_products": 0,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 54,
+        "label": "exact binomial 256/128",
+        "method": "integer",
+        "args": [
+          256,
+          128
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 16383,
+          "n": 256,
+          "k": 128,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 128,
+          "exceptional": false,
+          "distinct_prime_factors": 39,
+          "total_prime_exponent": 43,
+          "squarefree": false
+        },
+        "value": "5768658823449206338089748357862286887740211701975162032608436567264518750790"
+      },
+      "work_after": {
+        "queries": 54,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 50,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 3,
+        "exact_power_multiplies": 39,
+        "exact_factor_products": 39,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 55,
+        "label": "exact binomial 241/16",
+        "method": "integer",
+        "args": [
+          241,
+          16
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 14415,
+          "n": 241,
+          "k": 16,
+          "least_prime_index": 6,
+          "least_prime": 17,
+          "threshold": 16,
+          "exceptional": true,
+          "distinct_prime_factors": 13,
+          "total_prime_exponent": 13,
+          "squarefree": true
+        },
+        "value": "3720625555021727122496771"
+      },
+      "work_after": {
+        "queries": 55,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 52,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 3,
+        "exact_power_multiplies": 52,
+        "exact_factor_products": 52,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 56,
+        "label": "exact binomial 256/1",
+        "method": "integer",
+        "args": [
+          256,
+          1
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 16256,
+          "n": 256,
+          "k": 1,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 256,
+          "exceptional": false,
+          "distinct_prime_factors": 1,
+          "total_prime_exponent": 8,
+          "squarefree": false
+        },
+        "value": "256"
+      },
+      "work_after": {
+        "queries": 56,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 54,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 6,
+        "exact_power_multiplies": 53,
+        "exact_factor_products": 53,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 57,
+        "label": "exact binomial 127/63",
+        "method": "integer",
+        "args": [
+          127,
+          63
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 4031,
+          "n": 127,
+          "k": 63,
+          "least_prime_index": 1,
+          "least_prime": 3,
+          "threshold": 63,
+          "exceptional": false,
+          "distinct_prime_factors": 21,
+          "total_prime_exponent": 24,
+          "squarefree": false
+        },
+        "value": "11975573020964041433067793888190275875"
+      },
+      "work_after": {
+        "queries": 57,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 56,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 8,
+        "exact_power_multiplies": 75,
+        "exact_factor_products": 74,
+        "modular_power_squarings": 0,
+        "modular_power_multiplies": 0,
+        "modular_factor_products": 0,
+        "modular_reductions": 0,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 58,
+        "label": "modular binomial 256/128 mod 1000000007",
+        "method": "modulo",
+        "args": [
+          256,
+          128,
+          "1000000007"
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 16383,
+          "n": 256,
+          "k": 128,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 128,
+          "exceptional": false,
+          "distinct_prime_factors": 39,
+          "total_prime_exponent": 43,
+          "squarefree": false
+        },
+        "modulus": "1000000007",
+        "residue": "240734056"
+      },
+      "work_after": {
+        "queries": 58,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 58,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 8,
+        "exact_power_multiplies": 75,
+        "exact_factor_products": 74,
+        "modular_power_squarings": 3,
+        "modular_power_multiplies": 39,
+        "modular_factor_products": 39,
+        "modular_reductions": 160,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 59,
+        "label": "modular binomial 241/16 mod 100000000000000000000000000000000000000000000000003",
+        "method": "modulo",
+        "args": [
+          241,
+          16,
+          "100000000000000000000000000000000000000000000000003"
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 14415,
+          "n": 241,
+          "k": 16,
+          "least_prime_index": 6,
+          "least_prime": 17,
+          "threshold": 16,
+          "exceptional": true,
+          "distinct_prime_factors": 13,
+          "total_prime_exponent": 13,
+          "squarefree": true
+        },
+        "modulus": "100000000000000000000000000000000000000000000000003",
+        "residue": "3720625555021727122496771"
+      },
+      "work_after": {
+        "queries": 59,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 60,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 8,
+        "exact_power_multiplies": 75,
+        "exact_factor_products": 74,
+        "modular_power_squarings": 3,
+        "modular_power_multiplies": 52,
+        "modular_factor_products": 52,
+        "modular_reductions": 213,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 60,
+        "label": "modular binomial 127/63 mod 65536",
+        "method": "modulo",
+        "args": [
+          127,
+          63,
+          "65536"
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 4031,
+          "n": 127,
+          "k": 63,
+          "least_prime_index": 1,
+          "least_prime": 3,
+          "threshold": 63,
+          "exceptional": false,
+          "distinct_prime_factors": 21,
+          "total_prime_exponent": 24,
+          "squarefree": false
+        },
+        "modulus": "65536",
+        "residue": "8483"
+      },
+      "work_after": {
+        "queries": 60,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 62,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 8,
+        "exact_power_multiplies": 75,
+        "exact_factor_products": 74,
+        "modular_power_squarings": 5,
+        "modular_power_multiplies": 74,
+        "modular_factor_products": 73,
+        "modular_reductions": 301,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 61,
+        "label": "modular binomial 256/128 mod 1",
+        "method": "modulo",
+        "args": [
+          256,
+          128,
+          "1"
+        ]
+      },
+      "result": {
+        "row": {
+          "id": 16383,
+          "n": 256,
+          "k": 128,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 128,
+          "exceptional": false,
+          "distinct_prime_factors": 39,
+          "total_prime_exponent": 43,
+          "squarefree": false
+        },
+        "modulus": "1",
+        "residue": "0"
+      },
+      "work_after": {
+        "queries": 61,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 32,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 149,
+        "row_lookups": 64,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 8,
+        "exact_power_multiplies": 75,
+        "exact_factor_products": 74,
+        "modular_power_squarings": 8,
+        "modular_power_multiplies": 113,
+        "modular_factor_products": 112,
+        "modular_reductions": 461,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    },
+    {
+      "request": {
+        "id": 62,
+        "label": "nonexception excluded from exception family",
+        "method": "rank",
+        "args": [
+          256,
+          128,
+          {
+            "exceptional": true
+          }
+        ]
+      },
+      "result": {
+        "condition": {
+          "min_n": 2,
+          "max_n": 256,
+          "min_k": 1,
+          "max_k": 128,
+          "least_prime_min": 2,
+          "least_prime_max": 256,
+          "exceptional": true,
+          "squarefree": null,
+          "min_distinct_factors": 1,
+          "max_distinct_factors": 54,
+          "valuations": []
+        },
+        "count": "13",
+        "member": false,
+        "rank": null,
+        "row": {
+          "id": 16383,
+          "n": 256,
+          "k": 128,
+          "least_prime_index": 0,
+          "least_prime": 2,
+          "threshold": 128,
+          "exceptional": false,
+          "distinct_prime_factors": 39,
+          "total_prime_exponent": 43,
+          "squarefree": false
+        }
+      },
+      "work_after": {
+        "queries": 62,
+        "conditions_compiled": 9,
+        "condition_cache_hits": 33,
+        "saved_row_scans": 147456,
+        "valuation_filter_checks": 19537,
+        "factor_binary_probes": 90719,
+        "conditional_entries": 34575,
+        "rank_binary_probes": 152,
+        "row_lookups": 65,
+        "factorial_lookups": 3,
+        "factor_output_pairs": 217,
+        "exact_power_squarings": 8,
+        "exact_power_multiplies": 75,
+        "exact_factor_products": 74,
+        "modular_power_squarings": 8,
+        "modular_power_multiplies": 113,
+        "modular_factor_products": 112,
+        "modular_reductions": 461,
+        "constructor_calls": 0,
+        "new_factorial_cells": 0,
+        "new_binomial_valuation_cells": 0,
+        "primality_tests": 0,
+        "sieve_steps": 0
+      }
+    }
+  ],
+  "inverse_comparisons": [
+    {
+      "label": "exception inverse 0",
+      "n": 7,
+      "k": 3,
+      "selected_rank": "0",
+      "returned_rank": "0",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 1",
+      "n": 13,
+      "k": 4,
+      "selected_rank": "1",
+      "returned_rank": "1",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 2",
+      "n": 14,
+      "k": 4,
+      "selected_rank": "2",
+      "returned_rank": "2",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 3",
+      "n": 23,
+      "k": 5,
+      "selected_rank": "3",
+      "returned_rank": "3",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 4",
+      "n": 44,
+      "k": 8,
+      "selected_rank": "4",
+      "returned_rank": "4",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 5",
+      "n": 46,
+      "k": 10,
+      "selected_rank": "5",
+      "returned_rank": "5",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 6",
+      "n": 47,
+      "k": 10,
+      "selected_rank": "6",
+      "returned_rank": "6",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 7",
+      "n": 47,
+      "k": 11,
+      "selected_rank": "7",
+      "returned_rank": "7",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 8",
+      "n": 62,
+      "k": 6,
+      "selected_rank": "8",
+      "returned_rank": "8",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 9",
+      "n": 74,
+      "k": 10,
+      "selected_rank": "9",
+      "returned_rank": "9",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 10",
+      "n": 94,
+      "k": 10,
+      "selected_rank": "10",
+      "returned_rank": "10",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 11",
+      "n": 95,
+      "k": 10,
+      "selected_rank": "11",
+      "returned_rank": "11",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "exception inverse 12",
+      "n": 241,
+      "k": 16,
+      "selected_rank": "12",
+      "returned_rank": "12",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "full inverse 0",
+      "n": 2,
+      "k": 1,
+      "selected_rank": "0",
+      "returned_rank": "0",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "full inverse 8192",
+      "n": 182,
+      "k": 3,
+      "selected_rank": "8192",
+      "returned_rank": "8192",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "full inverse 16383",
+      "n": 256,
+      "k": 128,
+      "selected_rank": "16383",
+      "returned_rank": "16383",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "all squarefree binomials inverse",
+      "n": 158,
+      "k": 21,
+      "selected_rank": "632",
+      "returned_rank": "632",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "all nonsquarefree binomials inverse",
+      "n": 183,
+      "k": 4,
+      "selected_rank": "7560",
+      "returned_rank": "7560",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "least prime at least five inverse",
+      "n": 170,
+      "k": 2,
+      "selected_rank": "319",
+      "returned_rank": "319",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "not divisible by two or three inverse",
+      "n": 170,
+      "k": 2,
+      "selected_rank": "319",
+      "returned_rank": "319",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "large-row squarefree interior inverse",
+      "n": 223,
+      "k": 51,
+      "selected_rank": "211",
+      "returned_rank": "211",
+      "member": true,
+      "matches": true
+    },
+    {
+      "label": "row256 with at least seven factors of two inverse",
+      "n": 256,
+      "k": 65,
+      "selected_rank": "48",
+      "returned_rank": "48",
+      "member": true,
+      "matches": true
+    }
+  ],
+  "request_arithmetic": {
+    "midpoint_divisions": 7,
+    "last_rank_subtractions": 1
+  },
+  "final_work": {
+    "queries": 62,
+    "conditions_compiled": 9,
+    "condition_cache_hits": 33,
+    "saved_row_scans": 147456,
+    "valuation_filter_checks": 19537,
+    "factor_binary_probes": 90719,
+    "conditional_entries": 34575,
+    "rank_binary_probes": 152,
+    "row_lookups": 65,
+    "factorial_lookups": 3,
+    "factor_output_pairs": 217,
+    "exact_power_squarings": 8,
+    "exact_power_multiplies": 75,
+    "exact_factor_products": 74,
+    "modular_power_squarings": 8,
+    "modular_power_multiplies": 113,
+    "modular_factor_products": 112,
+    "modular_reductions": 461,
+    "constructor_calls": 0,
+    "new_factorial_cells": 0,
+    "new_binomial_valuation_cells": 0,
+    "primality_tests": 0,
+    "sieve_steps": 0
+  },
+  "condition_cache_count": 9,
+  "caches": "complete records published in saved_condition_caches.json",
+  "scope": "Fresh saved-factor navigation and explicitly counted integer/modular products; no factorial or binomial valuation construction."
+}

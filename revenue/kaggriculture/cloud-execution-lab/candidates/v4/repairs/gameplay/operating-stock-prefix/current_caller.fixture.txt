@@ -1,0 +1,22 @@
+    def _operating_stock_selected(self, obs, cfg, selected):
+        """Protect a current producer input at the final market boundary."""
+        if (not self.features.operating_stock or self.features.consumer != 'frozen'
+                or self.features.terminal_route):
+            return selected
+        if not any(o and len(o) > 2 and o[:2] == ['SELL', 'FERTILIZER']
+                   for o in selected.get('market', [])):
+            return selected
+        snapshot = getattr(self.consumer, 'selected_post_units', None)
+        if (snapshot is None or self.selected is None
+                or selected.get('farmer') != self.selected.get('farmer')
+                or selected.get('hands') != self.selected.get('hands')):
+            self.diagnostics['operating_stock'] = {'changed': False, 'reason': 'no_completed_unit_snapshot'}
+            return selected
+        from operating_stock import protect_operating_stock
+        from scheduler import m, parent
+        farm, private = snapshot
+        result, report = protect_operating_stock(
+            m, obs, cfg, selected, farm, private, self.controller.R[self.controller.cur],
+            [item[0] for item in parent.DECISIONS])
+        self.diagnostics['operating_stock'] = report
+        return result

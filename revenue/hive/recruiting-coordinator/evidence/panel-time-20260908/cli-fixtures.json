@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "source": "ASTRA-PANEL-TIME original cloud run, retained archive hive-recruiting-time-windows.zip",
+  "runtime_sha256": "744afe6ce1f00e808f4a3066e2e77b9cac33aff0adfbd06c167e5f2133d7fe79",
+  "original_test_log_sha256": "01ef9620234719d0b1ed1b89a93243d499c02eb831ee37a73dac4e13abd7daf1",
+  "fixtures": [
+    {
+      "name": "initial",
+      "request": {
+        "participants": [
+          "synthetic-candidate-a",
+          "synthetic-panel-one",
+          "synthetic-panel-two"
+        ],
+        "timezones": {
+          "synthetic-candidate-a": "America/Chicago",
+          "synthetic-panel-one": "America/New_York",
+          "synthetic-panel-two": "Europe/London"
+        },
+        "availability": {
+          "synthetic-candidate-a": [
+            {
+              "start": "2030-01-15T09:00",
+              "end": "2030-01-15T11:00"
+            }
+          ],
+          "synthetic-panel-one": [
+            {
+              "start": "2030-01-15T10:30",
+              "end": "2030-01-15T12:00"
+            }
+          ],
+          "synthetic-panel-two": [
+            {
+              "start": "2030-01-15T15:00",
+              "end": "2030-01-15T17:00"
+            }
+          ]
+        },
+        "search": {
+          "start": "2030-01-15T15:00Z",
+          "end": "2030-01-15T18:00Z"
+        },
+        "duration_minutes": 30,
+        "grid_minutes": 15,
+        "limit": 100,
+        "busy": []
+      },
+      "expected": {
+        "slots": [
+          {
+            "start": "2030-01-15T15:30Z",
+            "end": "2030-01-15T16:00Z"
+          },
+          {
+            "start": "2030-01-15T15:45Z",
+            "end": "2030-01-15T16:15Z"
+          },
+          {
+            "start": "2030-01-15T16:00Z",
+            "end": "2030-01-15T16:30Z"
+          },
+          {
+            "start": "2030-01-15T16:15Z",
+            "end": "2030-01-15T16:45Z"
+          },
+          {
+            "start": "2030-01-15T16:30Z",
+            "end": "2030-01-15T17:00Z"
+          }
+        ],
+        "slot_count": 5,
+        "booking_created": false,
+        "messages_sent": false
+      },
+      "original_request_sha256": "f8114f6ec8e48c06d8c0c5d34bcf39288c408fb7d6eea7727612445138c7088a",
+      "original_result_sha256": "0796928f0f86a7f6dd3c8341cd290208a9394116b677d28cd0ae7aa9c9234540"
+    },
+    {
+      "name": "busy",
+      "request": {
+        "participants": [
+          "synthetic-candidate-a",
+          "synthetic-panel-one",
+          "synthetic-panel-two"
+        ],
+        "timezones": {
+          "synthetic-candidate-a": "America/Chicago",
+          "synthetic-panel-one": "America/New_York",
+          "synthetic-panel-two": "Europe/London"
+        },
+        "availability": {
+          "synthetic-candidate-a": [
+            {
+              "start": "2030-01-15T09:00",
+              "end": "2030-01-15T11:00"
+            }
+          ],
+          "synthetic-panel-one": [
+            {
+              "start": "2030-01-15T10:30",
+              "end": "2030-01-15T12:00"
+            }
+          ],
+          "synthetic-panel-two": [
+            {
+              "start": "2030-01-15T15:00",
+              "end": "2030-01-15T17:00"
+            }
+          ]
+        },
+        "search": {
+          "start": "2030-01-15T15:00Z",
+          "end": "2030-01-15T18:00Z"
+        },
+        "duration_minutes": 30,
+        "grid_minutes": 15,
+        "limit": 100,
+        "busy": [
+          {
+            "id": "synthetic-booking-b",
+            "participants": [
+              "synthetic-candidate-b",
+              "synthetic-panel-one"
+            ],
+            "start": "2030-01-15T15:30Z",
+            "end": "2030-01-15T16:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "slots": [
+          {
+            "start": "2030-01-15T16:00Z",
+            "end": "2030-01-15T16:30Z"
+          },
+          {
+            "start": "2030-01-15T16:15Z",
+            "end": "2030-01-15T16:45Z"
+          },
+          {
+            "start": "2030-01-15T16:30Z",
+            "end": "2030-01-15T17:00Z"
+          }
+        ],
+        "slot_count": 3,
+        "booking_created": false,
+        "messages_sent": false
+      },
+      "original_request_sha256": "d9b7615c05131223375ca0d72812440f59156f9833e9d567eb4132079e65cf13",
+      "original_result_sha256": "d9b5aadd4ccac1054389a208f50f19f2582825558b03b410d1630371168c38d3"
+    },
+    {
+      "name": "reschedule",
+      "request": {
+        "participants": [
+          "synthetic-candidate-a",
+          "synthetic-panel-one",
+          "synthetic-panel-two"
+        ],
+        "timezones": {
+          "synthetic-candidate-a": "America/Chicago",
+          "synthetic-panel-one": "America/New_York",
+          "synthetic-panel-two": "Europe/London"
+        },
+        "availability": {
+          "synthetic-candidate-a": [
+            {
+              "start": "2030-01-15T09:00",
+              "end": "2030-01-15T11:00"
+            }
+          ],
+          "synthetic-panel-one": [
+            {
+              "start": "2030-01-15T10:30",
+              "end": "2030-01-15T12:00"
+            }
+          ],
+          "synthetic-panel-two": [
+            {
+              "start": "2030-01-15T15:00",
+              "end": "2030-01-15T17:00"
+            }
+          ]
+        },
+        "search": {
+          "start": "2030-01-15T15:00Z",
+          "end": "2030-01-15T18:00Z"
+        },
+        "duration_minutes": 30,
+        "grid_minutes": 15,
+        "limit": 100,
+        "busy": [
+          {
+            "id": "synthetic-booking-b",
+            "participants": [
+              "synthetic-candidate-b",
+              "synthetic-panel-one"
+            ],
+            "start": "2030-01-15T15:30Z",
+            "end": "2030-01-15T16:00Z"
+          }
+        ],
+        "exclude_booking_id": "synthetic-booking-b"
+      },
+      "expected": {
+        "slots": [
+          {
+            "start": "2030-01-15T15:30Z",
+            "end": "2030-01-15T16:00Z"
+          },
+          {
+            "start": "2030-01-15T15:45Z",
+            "end": "2030-01-15T16:15Z"
+          },
+          {
+            "start": "2030-01-15T16:00Z",
+            "end": "2030-01-15T16:30Z"
+          },
+          {
+            "start": "2030-01-15T16:15Z",
+            "end": "2030-01-15T16:45Z"
+          },
+          {
+            "start": "2030-01-15T16:30Z",
+            "end": "2030-01-15T17:00Z"
+          }
+        ],
+        "slot_count": 5,
+        "booking_created": false,
+        "messages_sent": false
+      },
+      "original_request_sha256": "7d2d44be2805f4dd9b8a2193bcd51d562994d0e0c394f89c4428e7c2453ea024",
+      "original_result_sha256": "0796928f0f86a7f6dd3c8341cd290208a9394116b677d28cd0ae7aa9c9234540"
+    }
+  ]
+}

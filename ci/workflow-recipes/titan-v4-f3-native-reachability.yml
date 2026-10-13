@@ -1,0 +1,42 @@
+name: TITAN V4 F3 current-native reachability
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/check_current_native_reachability.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/test_check_current_native_reachability.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail/CURRENT-NATIVE-REACHABILITY.json'
+      - '.github/workflows/titan-v4-f3-native-reachability.yml'
+  workflow_dispatch:
+
+jobs:
+  reachability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Focused gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          P='revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/f3-v217-eod-tail'
+          R='revenue/kaggriculture/cloud-execution-lab'
+          python "$P/test_check_current_native_reachability.py" -v
+          python -O "$P/test_check_current_native_reachability.py" -v
+          python -m py_compile "$P/check_current_native_reachability.py" "$P/test_check_current_native_reachability.py"
+          python "$P/check_current_native_reachability.py" "$R" \
+            --require-disposition BLOCKED_AT_NATIVE_ASSEMBLY \
+            --output /tmp/current-native-reachability.json
+          python - "$P/CURRENT-NATIVE-REACHABILITY.json" /tmp/current-native-reachability.json <<'PY'
+          import json, sys
+          expected=json.load(open(sys.argv[1]))
+          actual=json.load(open(sys.argv[2]))
+          assert actual['disposition']==expected['disposition']=='BLOCKED_AT_NATIVE_ASSEMBLY'
+          assert actual['reachable']==expected['reachable']=={
+              'f3_v217':False,'night_feed':False,'opening_book':False}
+          pins=expected['live_source_pins']
+          for name in ('main.py','titan_runtime.py','frozen_selected.py','scheduler.py'):
+              assert actual['source_identities'][name]['git_blob']==pins[name], (name, actual['source_identities'][name]['git_blob'], pins[name])
+          assert actual['config']['git_blob']==pins['TITAN-CONFIG.json']
+          assert actual['native_chain_recognized'] is True
+          print('F3 current-native reachability: BLOCKED_AT_NATIVE_ASSEMBLY (source pins exact)')
+          PY

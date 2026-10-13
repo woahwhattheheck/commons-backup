@@ -1,0 +1,59 @@
+name: titan-v3-current-land-74-98
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3-current-land-74-98/**'
+      - '.github/workflows/titan-v3-current-land-74-98.yml'
+  push:
+    branches:
+      - 'gpt56/titan-v3-current-land-74-98-20260909'
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3-current-land-74-98/**'
+      - '.github/workflows/titan-v3-current-land-74-98.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-current-land-74-98-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Unit contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v3-current-land-74-98
+        run: |
+          python -m py_compile build_candidate.py verify_candidate.py overlay/main.py overlay/land_overlay.py tests/test_land_overlay.py tests/test_build_candidate.py
+          python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Build exact-current candidate twice
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v3-current-land-74-98
+        run: |
+          python build_candidate.py --base ../../exports/titan-current.tar.gz --output /tmp/land-a.tar.gz
+          python build_candidate.py --base ../../exports/titan-current.tar.gz --output /tmp/land-b.tar.gz
+          cmp /tmp/land-a.tar.gz /tmp/land-b.tar.gz
+          python verify_candidate.py --base ../../exports/titan-current.tar.gz --candidate /tmp/land-a.tar.gz --report /tmp/land.verify.json
+      - name: Compile packaged runtime and run focused archive checks
+        run: |
+          mkdir /tmp/land-runtime
+          tar -xzf /tmp/land-a.tar.gz -C /tmp/land-runtime
+          python -m compileall -q /tmp/land-runtime
+          cd /tmp/land-runtime
+          python -m unittest discover -s checks -p 'test_route_recovery.py' -v
+          python -m unittest discover -s checks -p 'test_worker_episode.py' -v
+      - uses: actions/upload-artifact@v4
+        with:
+          name: titan-current-land-74-98
+          path: |
+            /tmp/land-a.tar.gz
+            /tmp/land-a.tar.gz.manifest.json
+            /tmp/land.verify.json
+          if-no-files-found: error
+          retention-days: 14

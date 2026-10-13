@@ -1,0 +1,95 @@
+{
+  "schema": "opencv-packet-source-review/v1",
+  "recorded_at_utc": "2026-09-19T15:49:40.131082+00:00",
+  "reviewer": "ZZ–Keystone-43CF / workbench_review",
+  "model": "Codex / GPT family (exact model identifier unavailable)",
+  "verdict": "PASS",
+  "base_commit": "12b3ee49049fd04749803270024f7c01241afbbf",
+  "review_scope": "Independent source review of root-authored packet_cli.py, packet_rehearsal.py and tests/test_packet_cli.py; frozen core/adapter identities included with prior separate decoder_review source review. No source edits during this review.",
+  "reviewed_files": {
+    "competitions/opencv-ai-2026/visual-evidence-gate/packet_cli.py": {
+      "git_blob": "1e2f51e33bc4136b4789b5ce1d9659097a24d065",
+      "sha256": "36827e7afb3c78aec6f4bff7107f06ee4530950bdbc57d58e37b5f2c3cde5cb6",
+      "bytes": 3741
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/packet_rehearsal.py": {
+      "git_blob": "48202bc8ea1344a56164e959f81d83fef4ee2d22",
+      "sha256": "c1561fe0281f82fbd8520e89ae9f0564016b621d0bc2a3539027176c3a377da2",
+      "bytes": 10470
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/packet_quality.py": {
+      "git_blob": "69d4c021fcb50eb95232822d1171d91f7c7a21f9",
+      "sha256": "4939e9b077dd13ef0edc6e7ea402a66c537e64c5ccee5a63440c795d57827752",
+      "bytes": 18330
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/packet_s3.py": {
+      "git_blob": "4abfa503efc35e9860d8053803c05d61c07feef7",
+      "sha256": "5d13f4792bf316b5ac94f1875961551e980b4abf799536ac4c9f7537adc0e276",
+      "bytes": 9595
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/tests/test_packet_cli.py": {
+      "git_blob": "27bb78feebc881695bbe4dfed024d96886a5b544",
+      "sha256": "6d3cc5b90d2380aff3243f4b8394d6d7490a9f6dc35b1fbcde83f59e26880089",
+      "bytes": 6327
+    }
+  },
+  "preserved_canonical_originals": {
+    "competitions/opencv-ai-2026/visual-evidence-gate/visual_gate.py": {
+      "git_blob": "f2317b792aeae7e2ea1cadd95bd194faef481122",
+      "sha256": "7129d3a2674dd09ffc12a2b4d9e8563780aa7881635659a51dd1b55806418147",
+      "bytes": 11599
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/aws_lambda.py": {
+      "git_blob": "9d11f7c6e26d8eaa8ede64a2fa2bfce6a57d7f3e",
+      "sha256": "b1f19b2b39cd22e203b484a3e263b95d4a10ed78761e9688414072afd236ac87",
+      "bytes": 1572
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/evaluate.py": {
+      "git_blob": "74f15c92a6facf24aed08f97226f88715abfa03d",
+      "sha256": "988d568b88925c5b3d35351f0cd2b2c64eb686a679eb934164784d6c9bc9c9f2",
+      "bytes": 1485
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/requirements-test.txt": {
+      "git_blob": "346296abf5a0b8c6898410db53c6b6890acb6d11",
+      "sha256": "2f23046aca5c7918d4d247de97dcff6352836005af879fa0f94fd94f38ce372d",
+      "bytes": 47
+    },
+    "competitions/opencv-ai-2026/visual-evidence-gate/tests/test_visual_gate.py": {
+      "git_blob": "bb4c935fe90f148685fd70e271f3fb37e766b8dd",
+      "sha256": "dd65684f57b5a2c76549076d6ad585d09170acf0788942bfb4cc24d0f10f1bb9",
+      "bytes": 6505
+    }
+  },
+  "findings": [],
+  "observations": [
+    "CLI takes explicit local packet/image-map files, validates via the core, binds loaded bytes to packet image digests, and requires exact map membership before issuing output.",
+    "A command snapshots each image once; exact recompile verification uses those captured bytes. Receipt checks do not assert ongoing file validity after the command.",
+    "JSON output is exclusively created, preserving existing files. Input and verification failures produce no successful JSON output.",
+    "Rehearsal computes and checks nine synthetic cases plus an in-memory S3-shaped fixture before creating the output directory; all generated artifacts are covered by a deterministic inventory except the inventory itself.",
+    "Rehearsal validates all expected action outcomes and exact receipts, explicitly distinguishes the intentionally rejected input, and retains false business/AWS authority.",
+    "CLI tests execute real subprocesses, propagate actual Python -O when requested, check deterministic output and inventory digests, and preserve existing operator files.",
+    "Frozen core retains donor schemas/actions, rejects malformed or empty requirements, bounds structured input, and reads provider streams through EOF without writing to AWS."
+  ],
+  "validation_scope": {
+    "source_review": true,
+    "new_test_runs_during_this_review": false,
+    "earlier_normal_donor_tests_observed": 21,
+    "earlier_maximum_view_and_identifier_roundtrip_observed": true,
+    "expanded_packet_tests_reported_by_independent_test_agent": {
+      "normal": 44,
+      "optimized": 44,
+      "source_sha256": "e9f1003a5a0926ed083a68211b1f19c0f901e1fe3faa5d69c8e92705c3dc5eab"
+    },
+    "full_combined_suite_result": "recorded separately by test owner",
+    "hosted_ci_success_verified": false,
+    "main_integration_verified": false,
+    "aws_execution_verified": false,
+    "opencv5_execution_verified": false
+  },
+  "limitations": [
+    "Dimension checks follow OpenCV decoding; encoded-byte and postdecode dimensions are data limits, not a native-process peak-memory sandbox.",
+    "Fixtures establish deterministic measured behavior, not natural-image accuracy, correct viewpoint, authentic capture or calibrated production thresholds.",
+    "Provider completeness is tested with fake read-only bodies; no AWS provider runtime or OpenCV5 execution was performed.",
+    "Write errors can leave a newly created partial output; exclusive creation preserves prior operator files but is not an atomic multi-file transaction."
+  ]
+}

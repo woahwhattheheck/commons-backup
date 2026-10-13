@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/production_survival/reply.schema.json",
+  "title": "Production survival inbound-reply intake",
+  "description": "Secret-free operator envelope and public-safe durable intake receipt. Envelope fields are opaque refs and one manual classification only.",
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "event_ref": {
+      "type": "string",
+      "pattern": "^opaque:[A-Za-z0-9._:-]{8,200}$",
+      "minLength": 16,
+      "maxLength": 208
+    },
+    "prospect_key": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,80}$",
+      "minLength": 3,
+      "maxLength": 81
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 40
+    },
+    "classification": {
+      "enum": [
+        "OPT_OUT",
+        "AUTO_RESPONSE",
+        "NEGATIVE",
+        "QUESTION",
+        "POSITIVE_SCOPE",
+        "NEEDS_HUMAN"
+      ]
+    },
+    "next_action": {
+      "enum": [
+        "DNC/CLOSE",
+        "WAIT_FOR_HUMAN_REPLY",
+        "CLOSE",
+        "DRAFT_REPLY",
+        "NEEDS_ACCEPTANCE",
+        "ESCALATE_ONLY_IF_BUYER_REQUESTS_BRYCE"
+      ]
+    },
+    "private_field_presence": {
+      "anyOf": [
+        {"required": ["body"]},
+        {"required": ["raw"]},
+        {"required": ["raw_body"]},
+        {"required": ["headers"]},
+        {"required": ["header"]},
+        {"required": ["address"]},
+        {"required": ["addresses"]},
+        {"required": ["email"]},
+        {"required": ["from"]},
+        {"required": ["to"]},
+        {"required": ["cc"]},
+        {"required": ["bcc"]},
+        {"required": ["subject"]},
+        {"required": ["credentials"]},
+        {"required": ["credential"]},
+        {"required": ["password"]},
+        {"required": ["token"]},
+        {"required": ["secret"]},
+        {"required": ["content"]},
+        {"required": ["message"]},
+        {"required": ["text"]},
+        {"required": ["html"]},
+        {"required": ["payload"]},
+        {"required": ["private"]},
+        {"required": ["mailbox"]},
+        {"required": ["sender"]},
+        {"required": ["recipient"]},
+        {"required": ["authorization"]},
+        {"required": ["invoice"]},
+        {"required": ["phone"]},
+        {"required": ["name"]}
+      ]
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "unevaluatedProperties": false,
+      "propertyNames": {
+        "enum": [
+          "event_ref",
+          "received_at",
+          "prospect_key",
+          "payload_sha256",
+          "classification"
+        ]
+      },
+      "required": [
+        "event_ref",
+        "received_at",
+        "prospect_key",
+        "payload_sha256",
+        "classification"
+      ],
+      "properties": {
+        "event_ref": {"$ref": "#/$defs/event_ref"},
+        "received_at": {"$ref": "#/$defs/received_at"},
+        "prospect_key": {"$ref": "#/$defs/prospect_key"},
+        "payload_sha256": {"$ref": "#/$defs/sha256"},
+        "classification": {"$ref": "#/$defs/classification"}
+      },
+      "not": {"$ref": "#/$defs/private_field_presence"}
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "unevaluatedProperties": false,
+      "propertyNames": {
+        "enum": [
+          "schema_version",
+          "kind",
+          "receipt_id",
+          "status",
+          "event_ref",
+          "received_at",
+          "prospect_key",
+          "payload_sha256",
+          "classification",
+          "next_action",
+          "limits"
+        ]
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "receipt_id",
+        "status",
+        "event_ref",
+        "received_at",
+        "prospect_key",
+        "payload_sha256",
+        "classification",
+        "next_action",
+        "limits"
+      ],
+      "properties": {
+        "schema_version": {"const": "production-survival-reply-intake/v1"},
+        "kind": {"const": "PRODUCTION_SURVIVAL_REPLY_INTAKE_RECEIPT"},
+        "receipt_id": {
+          "type": "string",
+          "pattern": "^reply-[0-9a-f]{24}$"
+        },
+        "status": {"const": "RECORDED"},
+        "event_ref": {"$ref": "#/$defs/event_ref"},
+        "received_at": {"$ref": "#/$defs/received_at"},
+        "prospect_key": {"$ref": "#/$defs/prospect_key"},
+        "payload_sha256": {"$ref": "#/$defs/sha256"},
+        "classification": {"$ref": "#/$defs/classification"},
+        "next_action": {"$ref": "#/$defs/next_action"},
+        "limits": {
+          "const": [
+            "mailbox-operator classification of an opaque payload hash only",
+            "no mailbox send",
+            "no commercial state change"
+          ]
+        }
+      },
+      "not": {"$ref": "#/$defs/private_field_presence"},
+      "allOf": [
+        {
+          "if": {
+            "properties": {"classification": {"const": "OPT_OUT"}},
+            "required": ["classification"]
+          },
+          "then": {
+            "properties": {"next_action": {"const": "DNC/CLOSE"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"classification": {"const": "AUTO_RESPONSE"}},
+            "required": ["classification"]
+          },
+          "then": {
+            "properties": {"next_action": {"const": "WAIT_FOR_HUMAN_REPLY"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"classification": {"const": "NEGATIVE"}},
+            "required": ["classification"]
+          },
+          "then": {
+            "properties": {"next_action": {"const": "CLOSE"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"classification": {"const": "QUESTION"}},
+            "required": ["classification"]
+          },
+          "then": {
+            "properties": {"next_action": {"const": "DRAFT_REPLY"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"classification": {"const": "POSITIVE_SCOPE"}},
+            "required": ["classification"]
+          },
+          "then": {
+            "properties": {"next_action": {"const": "NEEDS_ACCEPTANCE"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"classification": {"const": "NEEDS_HUMAN"}},
+            "required": ["classification"]
+          },
+          "then": {
+            "properties": {
+              "next_action": {
+                "const": "ESCALATE_ONLY_IF_BUYER_REQUESTS_BRYCE"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/receipt"
+    }
+  ]
+}

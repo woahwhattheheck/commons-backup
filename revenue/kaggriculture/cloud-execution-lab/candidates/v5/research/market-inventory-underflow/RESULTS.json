@@ -1,0 +1,114 @@
+{
+  "buy_beyond_zero": {
+    "final_inventory": -1,
+    "final_price": 125,
+    "initial_inventory": 1,
+    "money_spent": 250.0,
+    "units_bought": 2
+  },
+  "checks": {
+    "all_refreshed_prices_are_finite_positive_ints": true,
+    "buy_can_cross_zero_without_crash": true,
+    "negative_inventory_is_reached_without_wrap": true,
+    "town_consumption_matches_exact_decrements": true,
+    "town_consumption_uses_signed_python_ints": true
+  },
+  "engine": {
+    "configuration_sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e"
+  },
+  "expected_consumption": {
+    "CARROT": 4,
+    "EGG": 3,
+    "FERTILIZER": 0,
+    "MELON": 1,
+    "MILK": 4,
+    "STRAWBERRY": 5,
+    "TOMATO": 3,
+    "WHEAT": 6,
+    "WOOL": 3
+  },
+  "hypothesis": "zero inventory underflows or crashes town pricing",
+  "policy_change": false,
+  "runtime_change": false,
+  "schema": "titan-v5/market-inventory-underflow/v1",
+  "town_runs": [
+    {
+      "final_inventory": {
+        "CARROT": -3,
+        "EGG": -2,
+        "FERTILIZER": 1,
+        "MELON": 0,
+        "MILK": -3,
+        "STRAWBERRY": -4,
+        "TOMATO": -2,
+        "WHEAT": -5,
+        "WOOL": -2
+      },
+      "initial_inventory": 1,
+      "prices": {
+        "CARROT": 126999,
+        "EGG": 136389,
+        "FERTILIZER": 2100,
+        "MELON": 331,
+        "MILK": 1029,
+        "STRAWBERRY": 960,
+        "TOMATO": 462440,
+        "WHEAT": 125,
+        "WOOL": 279
+      }
+    },
+    {
+      "final_inventory": {
+        "CARROT": -4,
+        "EGG": -3,
+        "FERTILIZER": 0,
+        "MELON": -1,
+        "MILK": -4,
+        "STRAWBERRY": -5,
+        "TOMATO": -3,
+        "WHEAT": -6,
+        "WOOL": -3
+      },
+      "initial_inventory": 0,
+      "prices": {
+        "CARROT": 127026,
+        "EGG": 136417,
+        "FERTILIZER": 2100,
+        "MELON": 331,
+        "MILK": 1029,
+        "STRAWBERRY": 960,
+        "TOMATO": 462535,
+        "WHEAT": 125,
+        "WOOL": 279
+      }
+    },
+    {
+      "final_inventory": {
+        "CARROT": -5,
+        "EGG": -4,
+        "FERTILIZER": -1,
+        "MELON": -2,
+        "MILK": -5,
+        "STRAWBERRY": -6,
+        "TOMATO": -4,
+        "WHEAT": -7,
+        "WOOL": -4
+      },
+      "initial_inventory": -1,
+      "prices": {
+        "CARROT": 127052,
+        "EGG": 136445,
+        "FERTILIZER": 2100,
+        "MELON": 331,
+        "MILK": 1029,
+        "STRAWBERRY": 960,
+        "TOMATO": 462629,
+        "WHEAT": 125,
+        "WOOL": 279
+      }
+    }
+  ],
+  "verdict": "FALSIFIED"
+}

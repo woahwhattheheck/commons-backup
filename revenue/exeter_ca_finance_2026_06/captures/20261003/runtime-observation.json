@@ -1,0 +1,64 @@
+{
+  "schema": "exeter.actual-source-product-use/v1",
+  "runtime_source": {
+    "revenue/rfp_addenda_delta/schema.py": "0e051434486e0d67f58d981c41a4cdf1b21844bd",
+    "revenue/rfp_addenda_delta/cli.py": "e79599d6c322a82da4f42fc24f76a970e30c2f5f",
+    "revenue/rfp_addenda_delta/engine.py": "0c329aa6863cc4dc1f73e5b045ba7195ee38a668",
+    "revenue/rfp_addenda_delta/__init__.py": "31f1ec4cfd7615e5fdf19f43dca82dc0b01b82ad"
+  },
+  "invocations": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "revenue.rfp_addenda_delta.cli",
+        "compile",
+        "--old",
+        "revenue/exeter_ca_finance_2026_06/captures/20261003/old-generation.json",
+        "--new",
+        "revenue/exeter_ca_finance_2026_06/captures/20261003/new-generation.json",
+        "--out-json",
+        "revenue/exeter_ca_finance_2026_06/captures/20261003/delta-report.json",
+        "--out-md",
+        "revenue/exeter_ca_finance_2026_06/captures/20261003/delta-report.md"
+      ],
+      "started_at": "2026-10-03T21:16:27+00:00",
+      "exit_code": 3,
+      "stdout": "SOURCE_REFRESH_REQUIRED c4d438cef8efa709ff05b63ac39bb034ff4340596a65080ff76aeea41cda38fc\n",
+      "stderr": "",
+      "elapsed_seconds": 0.041306
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "revenue.rfp_addenda_delta.cli",
+        "verify",
+        "--old",
+        "revenue/exeter_ca_finance_2026_06/captures/20261003/old-generation.json",
+        "--new",
+        "revenue/exeter_ca_finance_2026_06/captures/20261003/new-generation.json",
+        "--report",
+        "revenue/exeter_ca_finance_2026_06/captures/20261003/delta-report.json"
+      ],
+      "started_at": "2026-10-03T21:16:27+00:00",
+      "exit_code": 0,
+      "stdout": "VALID\n",
+      "stderr": "",
+      "elapsed_seconds": 0.045714
+    }
+  ],
+  "state": "SOURCE_REFRESH_REQUIRED",
+  "report_semantic_sha256": "c4d438cef8efa709ff05b63ac39bb034ff4340596a65080ff76aeea41cda38fc",
+  "newly_normalized_qa_rows": 20,
+  "deadline_rows_retained": 1,
+  "historical_review_decisions_supplied": 0,
+  "capture_bytes_checked": 8178030,
+  "official_links_checked": 4,
+  "max_child_rss_kib": 13256,
+  "finance_engine_executed": false,
+  "finance_inputs_invented": false,
+  "source_pin_only": true
+}

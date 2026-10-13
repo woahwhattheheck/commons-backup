@@ -1,0 +1,55 @@
+name: dat-parkinsons-local-model-v2
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/dat-parkinsons-local-model-v2/**'
+      - '.github/workflows/dat-parkinsons-local-model-v2.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/dat-parkinsons-local-model-v2/**'
+      - '.github/workflows/dat-parkinsons-local-model-v2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify finalized public source blob identities
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path('research/dat-parkinsons-local-model-v2')
+          manifest = json.loads((root / 'provenance.json').read_text(encoding='utf-8'))
+          expected = manifest['git_blob_sha1']
+          for relative, wanted in sorted(expected.items()):
+              data = (root / relative).read_bytes()
+              header = f'blob {len(data)}\0'.encode('ascii')
+              actual = hashlib.sha1(header + data).hexdigest()
+              if actual != wanted:
+                  raise SystemExit(f'blob mismatch: {relative}: {actual} != {wanted}')
+          print(f'verified {len(expected)} pinned source blobs')
+          PY
+      - name: Install public baseline dependencies
+        run: python -m pip install --disable-pip-version-check numpy scikit-learn
+      - name: Compile public carrier
+        working-directory: research/dat-parkinsons-local-model-v2
+        run: python -m py_compile dat_v2/*.py submission_template/*.py tests/test_dat_v2.py
+      - name: Synthetic hostile suite
+        working-directory: research/dat-parkinsons-local-model-v2
+        run: PYTHONPATH=. python tests/test_dat_v2.py
+      - name: Synthetic hostile suite under optimized Python
+        working-directory: research/dat-parkinsons-local-model-v2
+        run: PYTHONPATH=. python -O tests/test_dat_v2.py

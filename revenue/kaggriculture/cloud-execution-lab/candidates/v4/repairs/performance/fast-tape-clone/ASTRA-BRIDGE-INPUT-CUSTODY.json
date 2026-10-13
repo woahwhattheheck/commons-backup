@@ -1,0 +1,149 @@
+{
+  "schema": "titan-v4-fast-clone-input-custody/v1",
+  "owner": "ASTRA-BRIDGE",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/performance/fast-tape-clone",
+  "python": "3.13.5",
+  "scope": "Verifier input-custody only; clone helper and original graph suite unchanged.",
+  "source_commit": "ac94a8855e3018bc267dc6c5e5b54f6cb6df9c10",
+  "test_commit": "a8d7d8cda170506eab116811c834d29f52651430",
+  "predecessor_runner_blob": "adf5ea5b769c9aa06a283e2f5d738ac9db47e86a",
+  "files": {
+    "verify_fast_clone.py": {
+      "git_blob": "1a5e349ca657351024bdfaad2e08f7313f811855",
+      "bytes": 6876,
+      "sha256": "8b12f91af6152b3191bfbf4d8d4a35fee44741de7d7fbece79c539a54763b31c"
+    },
+    "test_verify_fast_clone_inputs.py": {
+      "git_blob": "d05a71a46ae5f6c2a89df0554b12dd879b5f2ea1",
+      "bytes": 6433,
+      "sha256": "aaf4a83549e69f634a1c50ef4357d84360ae207d9b485527704082e45b9f287c"
+    },
+    "r04_fast_tape_clone.py": {
+      "git_blob": "b7c1fd2f7f786c5dc5f8a3b9a7116815ea40607a",
+      "bytes": 2194,
+      "sha256": "80f6c82b735199227c7caabea10107867a3cb3ca7f0af7a6af7073dfa79b22c0"
+    },
+    "test_fast_clone_graph_contract.py": {
+      "git_blob": "da78c6664ff9b0537a910cf4672355fcaafb0a9e",
+      "bytes": 6335,
+      "sha256": "45c91cd4be233836af2e2d4e86630405dc904be97efa77d86db19c3c11666052"
+    }
+  },
+  "repair": "Authenticate GRAPH_TEST with the same read_pinned boundary used for every other executable fixture; exact graph blob is da78c6664ff9b0537a910cf4672355fcaafb0a9e.",
+  "new_cli_tests": {
+    "normal": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "optimized": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "cli_invocations_per_mode": 16,
+    "input_file_bytes_unchanged": true
+  },
+  "predecessor_differential": {
+    "normal": {
+      "tests": 10,
+      "failed_subcases": 6
+    },
+    "optimized": {
+      "tests": 10,
+      "failed_subcases": 6
+    },
+    "coverage_reduction_graph_blob": "599f99dfe2708eb08070843b0985802b0d99d519",
+    "witness": "Removing only the central graph-equality assertion retains eight tests; exact predecessor reports PASS in both child modes. Repaired runner returns2 with empty stdout before import. Appended comment drift also previously returned PASS."
+  },
+  "graph_runner_stdout": {
+    "generated_only": true,
+    "input_blobs": {
+      "r04_fast_tape_clone.py": "b7c1fd2f7f786c5dc5f8a3b9a7116815ea40607a",
+      "test_fast_clone_graph_contract.py": "da78c6664ff9b0537a910cf4672355fcaafb0a9e"
+    },
+    "legacy_port": false,
+    "production_changed": false,
+    "runs": [
+      {
+        "ok": true,
+        "optimized": false,
+        "skipped": 0,
+        "tests": 8
+      },
+      {
+        "ok": true,
+        "optimized": true,
+        "skipped": 0,
+        "tests": 8
+      }
+    ],
+    "scope": "historical-clone-source-only",
+    "status": "PASS"
+  },
+  "commands_from_package": [
+    "python verify_fast_clone.py --generated-only",
+    "python test_verify_fast_clone_inputs.py",
+    "python -O test_verify_fast_clone_inputs.py",
+    "TITAN_CLONE_RUNNER_UNDER_TEST=/path/to/exact-adf5-runner.py python test_verify_fast_clone_inputs.py",
+    "TITAN_CLONE_RUNNER_UNDER_TEST=/path/to/exact-adf5-runner.py python -O test_verify_fast_clone_inputs.py"
+  ],
+  "four_path_handoff_reconciliation": {
+    "slack_parent_ts": "1789179119.983509",
+    "scope": "Peer intake wins; this session did not republish the four old proposed blobs.",
+    "readme_preserved": "5534598a557d8d5f875530dd5eeeeea3058ae4be",
+    "receipt_preserved": "3e1a17e135d020215054009660dda8696a3f3d4e",
+    "retired_doc_blobs_not_overwritten": [
+      "a35bf67f65991f4f331082c8f47fce00f49b1734",
+      "7ea3e9a664469a9f4991861700afc318507aac1c"
+    ],
+    "exact_archival_fold_present": "a83de6bfcc60c51c8bdc9106f8565c52eb5fe764",
+    "exact_archival_scaffold_present": "12a3eb23dd1052a769baa16ce861890f21911e14",
+    "create_only_old_receipt_attempt": "Rejected because newer peer receipt already existed; left untouched."
+  },
+  "not_run": [
+    "default28 corpus combination",
+    "historical39 combination",
+    "actual9347-action corpus",
+    "performance benchmark",
+    "current-runtime package or economic gate",
+    "hosted Python3.11",
+    "legacy fold or checker scaffold"
+  ],
+  "production_changed": false,
+  "defaults_changed": false,
+  "legacy_materializer_executed": false,
+  "new_branch_or_pr": false,
+  "kaggle_changed": false,
+  "composition_followup": {
+    "peer_runner_blob": "324b1b6b4d9752c88ad86ae15f1f81b08ab9f883",
+    "peer_change": "Adds bounded, pinned Slack-package transport to the same verifier; retains the GRAPH_TEST pin and read_pinned call.",
+    "test_blob": "5a2723aef026228fce9198683f9abe39078e3a2d",
+    "test_commit": "53633cbcb2bca22ca8bc76f5e946018b30ed6c8d",
+    "normal": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "optimized": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "cli_invocations_per_mode": 20,
+    "added_cases": [
+      "graph drift with --slack-package",
+      "graph drift with combined Slack and legacy inputs",
+      "generated-only rejects Slack package",
+      "explicit tapes and Slack package are mutually exclusive"
+    ],
+    "positive_graph_suite": "8/8 normal +8/8 optimized through the exact composed runner",
+    "corpus_transport_status": "Two authorized Slack reads of F0C18AXAL04 returned429. Positive Slack archive, default28 and historical39 runs remain NOT EXECUTED here.",
+    "reproduction_note": "The six-failure historical differential above pairs exact adf5 runner with exact d05a test from a8d7d8cd. The latest 5a2723 test additionally covers peer Slack flags absent from that historical runner; do not expect the same historical failure count when substituting latest tests."
+  }
+}

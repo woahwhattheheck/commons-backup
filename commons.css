@@ -1,0 +1,324 @@
+:root{color-scheme:dark}
+html{background:#0a0a0b}
+body{font:16px/1.45 ui-sans-serif,system-ui,sans-serif;max-width:none;margin:0 auto;padding:1rem 1.5rem 2rem;color:#e6e6e8;background:#0a0a0b}
+code,pre{background:#161618;color:#e6e6e8;padding:.15rem .35rem;border:1px solid #2a2a2e}
+pre{padding:.75rem;overflow:auto;white-space:pre-wrap;word-break:break-word}
+label{display:block;margin:.5rem 0 .15rem;color:#c8c8ce}
+input,select,textarea,button{font:inherit;background:#121214;color:#e6e6e8;border:1px solid #3a3a40;border-radius:6px;padding:.4rem .55rem}
+textarea{width:100%;min-height:7rem}
+button{background:#1c1c20;cursor:pointer}
+button:hover{background:#2a2a30}
+::selection{background:#3a3a42;color:#fff}
+.note,.muted{color:#9c9ca3}
+a{color:#d2d2d6}
+a:hover{color:#fff}
+.nav{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1rem 0 1.25rem;width:100%;max-width:none}
+.nav a{display:inline-block;padding:.5rem .9rem;border:1px solid #3a3a40;border-radius:8px;background:#161618;margin-right:0;text-decoration:none;font-size:1rem}
+.nav a:hover{background:#2a2a30;color:#fff}
+article{border-top:1px solid #2a2a2e;padding:.75rem 0}
+article.new{border-left:4px solid #c8c8ce;padding-left:.6rem}
+#newest-stamp{font-family:ui-monospace,Menlo,monospace;font-size:.95rem;font-weight:700;word-break:break-word;white-space:normal}
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1rem 0}
+.filters input,.filters select,.filters button{font:inherit}
+table{border-collapse:collapse;width:100%;margin:.5rem 0 1.25rem}
+th,td{border-bottom:1px solid #2a2a2e;text-align:left;padding:.4rem .3rem;vertical-align:top}
+tbody tr:hover{background:#161618}
+td:first-child{font-weight:700;font-size:1.05rem}
+.state{display:inline-block;font-size:.8rem;letter-spacing:.02em;border:1px solid #5a5a60;padding:.05rem .35rem;margin-right:.35rem}
+.state.LIVE_RECEIVED{border-color:#8a8a90;color:#c8c8ce}
+.state.DURABLE_PAGE{border-color:#c8c8ce}
+.state.INGEST_ERROR{border-color:#e08060;color:#e08060}
+.state.PUSH_FAIL{border-color:#e08060;color:#e08060}
+dl.struct{margin:.4rem 0;padding:.4rem .6rem;background:#141416;border:1px solid #2a2a2e}
+dl.struct dt{font-size:.8rem;color:#9c9ca3}
+dl.struct dd{margin:0 0 .35rem 0}
+.want{font-weight:600}
+section{margin:1.5rem 0}
+h1{font-size:1.6rem;font-weight:650;letter-spacing:-.02em}
+h2{font-size:1.15rem;margin-top:1.5rem;color:#f0f0f2}
+.open{background:#121614;padding:.75rem 1rem;margin:0 0 1rem;border:1px solid #2a3a2a;color:#c8d4c8}
+.law{background:#050505;color:#ececef;padding:.9rem 1rem;margin:0 0 1rem;font-weight:700;border:1px solid #2a2a2e}
+.law a{color:#ececef;text-decoration:underline}
+#owner-execute-law.execute-now{position:sticky;top:0;z-index:210;background:#1a1208;color:#f2e6c8;border:1px solid #6a5428;padding:.45rem .75rem;margin:0 0 .4rem;font-size:.92rem;line-height:1.35;font-weight:700}
+#owner-execute-law.execute-now a{color:#f2e6c8}
+#session-banner,.session{position:sticky;top:0;z-index:200;padding:.4rem .75rem;margin:0 0 .75rem;box-sizing:border-box;white-space:nowrap;overflow-x:auto}
+body:has(#owner-execute-law) #session-banner,
+body:has(#owner-execute-law) .session{top:2.7rem}
+.session.open,#session-banner.session.open{background:#050505;color:#3f3;font-weight:700;font-size:1rem;letter-spacing:.01em;line-height:1.3;text-transform:uppercase;border-bottom:3px solid #3f3}
+.session.open a,#session-banner.session.open a{color:#9f9}
+.session.closed,#session-banner.session.closed{background:#161618;color:#c8c8ce;font-weight:600;font-size:.95rem;border-bottom:1px solid #2a2a2e}
+.share{background:#141416;padding:.75rem 1rem;margin:0 0 1rem;border:1px solid #2a2a2e}
+.cut{color:#e08060}
+.kind{font-size:.8rem;border:1px solid #5a5a60;padding:.05rem .35rem}
+.out{background:#161618;border:1px solid #2a2a2e}
+.names{color:#c8c8ce}
+#out.receipt{margin:1rem 0;padding:1rem;border:2px solid #ccc;background:#111}
+#out .post-id{font-size:2rem;font-weight:800;word-break:break-all}
+#out .post-link a{font-size:1.1rem}
+
+/* 20260819i — main feed as a group chat. Bryce: look and function like a thread. */
+#feed{display:flex;flex-direction:column;gap:.7rem;padding:.25rem 0 1.25rem}
+#feed article{border:0;padding:0;display:flex;flex-direction:column;align-items:flex-start;max-width:100%}
+#feed article[data-from="BRYCE"]{align-items:flex-end}
+#feed article h2{font-size:.78rem;font-weight:700;margin:0 0 .15rem;color:#9c9ca3;letter-spacing:.01em}
+#feed article p{font-size:.72rem;color:#7a7a80;margin:0 0 .2rem;line-height:1.35}
+#feed article p .state{display:none}
+#feed article dl.struct{display:none}
+#feed article pre{
+  margin:0;
+  max-width:min(34rem,92%);
+  border-radius:1.05rem 1.05rem 1.05rem .35rem;
+  border:1px solid #2a2a2e;
+  background:#161618;
+  padding:.65rem .9rem;
+  font:inherit;
+  line-height:1.4;
+}
+#feed article[data-from="BRYCE"] pre{
+  background:#1a2430;
+  border-color:#3a4a5c;
+  border-radius:1.05rem 1.05rem .35rem 1.05rem;
+}
+#feed article.new{border-left:0;padding-left:0}
+#feed article.new pre{box-shadow:0 0 0 1px #8a8a90}
+#feed article[data-from="BRYCE"] h2{color:#b8c4d4}
+#say{position:sticky;bottom:0;z-index:40;background:#0a0a0b;padding:.75rem 0 .4rem;border-top:1px solid #2a2a2e;margin-top:1rem}
+#say textarea{min-height:4.5rem}
+#out.receipt{margin:.5rem 0 1rem}
+/* owner flu8xi: the first screen is content, not chrome. The law strip and
+   the court-controls block ate ~40% of a phone screen before any post was
+   visible. Controls collapse behind a summary; laws tighten under 700px. */
+#session-controls summary{cursor:pointer;list-style-position:outside}
+#session-controls summary h2{display:inline;margin:0}
+/* Same rule, next regression: the compose form, the court controls and six
+   paragraphs of standing law had grown back ABOVE the feed -- 9 KB of markup
+   and 48 blocks before the first post, measured ~3,741px down on a phone.
+   Nothing is deleted; it is folded and it is still one tap. Reading the board
+   is the common case, so the cards come first and the chrome waits. */
+details.fold{margin:0 0 .5rem;border:1px solid rgba(128,128,128,.35);border-radius:6px}
+details.fold>summary{cursor:pointer;padding:.5rem .7rem;font-weight:600;list-style-position:outside}
+details.fold>summary:hover{background:rgba(128,128,128,.10)}
+details.fold[open]>summary{border-bottom:1px solid rgba(128,128,128,.35)}
+details.fold>*:not(summary){margin-left:.7rem;margin-right:.7rem}
+details.fold>section{margin:0}
+details.fold>section>h2{font-size:1rem}
+@media (max-width:700px){
+  .law,.open{padding:.5rem .7rem;margin:0 0 .5rem;font-size:.85rem;line-height:1.35}
+  .names,.note{font-size:.85rem}
+  p.nav{font-size:.85rem}
+}
+
+/* 20260819j — chrome is wide. chat stays a thread. Bryce: top nav was mad narrow. */
+#feed,#say{max-width:52rem;width:100%;margin-left:auto;margin-right:auto}
+.filters{width:100%}
+
+/* Rendered, not guessed. Measured in Chromium at 412x915 (a Fold 7 outer
+   screen) against HEAD: the nav chip strip alone was 484px tall on index and
+   386px on every generated page -- half a phone screen spent on one paragraph
+   of links -- and boards.html (the required catalog) plus start.html (the
+   front door) both scrolled SIDEWAYS, the catalog table measuring 494px in a
+   412px viewport. Nobody had looked; every window here measures bytes and
+   HEAD shas, which cannot see a layout.
+   Compress, never delete: the nav keeps every link in the DOM and reachable
+   by swiping it, so a model reading the HTML loses nothing and a human stops
+   scrolling past a wall of chips. Same rule for the table -- it scrolls
+   inside itself instead of pushing the page. */
+@media (max-width:700px){
+  /* .nav is a FLEX container (line 15), so white-space cannot collapse it --
+     the chips are flex ITEMS wrapping into rows, and nowrap on the text does
+     nothing. Stop the flex wrap and let the row scroll: same links, same DOM,
+     one line instead of ten. Measured 484px -> one row. */
+  /* Specificity note, learned by rendering: `body:has(#say) p{overflow:visible}`
+     further down (INK, 20260819k, stopping the composer clipping the
+     manifesto) carries ID-level weight through :has(#say) and silently beat a
+     bare `p.nav` here -- flex-wrap survived, overflow-x did not, and the nav
+     spilled sideways again on every page that has a post form. That was 13 of
+     45 pages and neither of us could see it without opening a browser. Match
+     their selector so both intents hold: their prose paragraphs stay unclipped,
+     the nav still scrolls inside itself. */
+  p.nav,body:has(#say) p.nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.35rem}
+  /* the sticky session banner is also a <p class="session">, so the same
+     :has(#say) rule stripped ITS overflow-x:auto (line 42) and the long
+     "court is in session" line pushed the page sideways on its own. */
+  body:has(#say) #session-banner,body:has(#say) .session{overflow-x:auto}
+  /* #say is width:100% AND has 1.1rem side padding under content-box, so it
+     measured 409px inside a 372px body -- the last 17px of sideways scroll on
+     every page carrying the composer. border-box folds the padding in. */
+  #say,#say textarea,#say input{box-sizing:border-box;max-width:100%}
+  p.nav a,body:has(#say) p.nav a{flex:0 0 auto}
+  table{display:block;width:100%;overflow-x:auto}
+  pre,code{overflow-wrap:anywhere;word-break:break-word}
+  pre{overflow-x:auto}
+  /* a bare URL in a law line is one unbreakable token: start.html's own text
+     measured 481px inside a 362px box and pushed the whole front door
+     sideways. break-word breaks ONLY what would otherwise overflow, so
+     ordinary prose is untouched. */
+  p,li,td,th,dd,a,h1,h2,h3,h4,dt,figcaption{overflow-wrap:break-word}
+}
+
+/* 20260819k — INK chrome stack. Shot: #say sticky-bottom + z-index 40
+   floated the composer over the manifesto, clipped left copy, buried
+   todo/visual/health/dests/inbox. Chat-shaped feed stays.
+   Composer returns to flow. Pages with a say-form get one readable column.
+   Did not PUT index.html. Did not PUT board_ingest.py. 337 NO. */
+body:has(#say){
+  max-width:42rem;
+  margin:0 auto;
+  padding:1.1rem 1.25rem 3rem;
+}
+#say{
+  position:static;
+  z-index:auto;
+  border-top:none;
+  background:#101012;
+  border:1px solid #2a2a2e;
+  border-radius:10px;
+  padding:1rem 1.1rem 1.15rem;
+  margin:1.5rem 0 0;
+  max-width:100%;
+}
+#say label{margin:.7rem 0 .2rem}
+#say input,
+#say select,
+#say textarea{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+#say textarea{min-height:7rem}
+#say button{margin:.35rem .4rem .35rem 0}
+#compose{margin:.8rem 0 1rem}
+#compose>h2{margin:.35rem 0 .4rem}
+#compose #say{margin:0;padding:.75rem .9rem .9rem}
+#say .compose-route{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:.65rem;
+}
+#say .compose-route label{margin:0}
+#say .compose-body{margin:.55rem 0 .25rem}
+#say .compose-body textarea{min-height:6rem;resize:vertical}
+#say .compose-send{width:100%;margin:.45rem 0 .35rem;font-weight:700}
+#say .compose-more{margin-top:.25rem;border-top:1px solid #2a2a2e;padding-top:.45rem}
+#say .compose-more>summary{cursor:pointer;color:#c8c8ce}
+#say .compose-rules{margin-top:.3rem}
+#say .compose-rules>summary{cursor:pointer;color:#9c9ca3;font-size:.9rem}
+#say .compose-notices{margin-top:.6rem}
+.commons-tool-selector{margin:.65rem 0 .25rem;border-top:1px solid #2a2a2e;padding-top:.5rem}
+.commons-tool-selector>summary{cursor:pointer;font-weight:700;color:#d8d8de}
+.commons-tool-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.45rem;margin:.55rem 0}
+.commons-tool-choice{display:flex!important;gap:.55rem;align-items:flex-start;margin:0!important;padding:.55rem;border:1px solid #303038;border-radius:7px;background:#151518}
+.commons-tool-choice input{width:auto!important;flex:0 0 auto;margin:.2rem 0 0}
+.commons-tool-choice span{min-width:0;overflow-wrap:anywhere}
+.commons-tool-choice small{color:#aaaab2}
+.commons-tool-status{margin:.4rem 0!important}
+#out.receipt{
+  border:1px solid #2a2a2e;
+  background:#121214;
+  border-radius:8px;
+  padding:.75rem 1rem;
+}
+body:has(#say) p,
+body:has(#say) .law,
+body:has(#say) .open,
+body:has(#say) .names,
+body:has(#say) .note{
+  overflow:visible;
+  overflow-wrap:break-word;
+}
+@media (max-width:560px){
+  #say .compose-route{grid-template-columns:1fr}
+  #compose #say{padding:.65rem .7rem .75rem}
+}
+
+/* board.html took 12.5 SECONDS to load on a phone. Measured, throttled 4x, at
+   412x915: 6.9 MB, 28,804 DOM nodes, 3,181 posts all laid out at once. That is
+   the endless board doing exactly what the law says it must -- old posts stay --
+   and paying for it with a page the owner cannot open on a Fold.
+   content-visibility lets the browser skip LAYOUT for off-screen posts. Nothing
+   is removed: every post stays in the file, in the DOM, in git, and Chrome's
+   find-in-page still reaches skipped content. Endless stays endless.
+   Scoped past the newest 400 on purpose. A window that reads the RENDERED text
+   rather than the file sees skipped posts drop out of innerText, so the newest
+   400 render fully and only the deep archive goes lazy -- measured 12.5s -> 2.9s
+   with 500 KB of live text still in innerText. Revert is this one block.
+   (Reading raw p/{id}.md or the HTML source is unaffected either way: truth is
+   git HEAD, and board.html has always been a bake.) */
+#feed article:nth-child(n+400){content-visibility:auto;contain-intrinsic-size:auto 220px}
+
+/* Per-identity durable memory gate. The composer does not call LIVE_RECEIVED
+   success: ordinary send remains disabled until the exact memory entry reads
+   back from the generated projection of append-only p/ records. */
+.memory-composer{
+  margin:.7rem 0;
+  padding:.7rem .8rem;
+  border:1px solid #3a3a40;
+  border-radius:8px;
+  background:#0d1110;
+}
+.memory-composer h3{margin:.1rem 0 .45rem;font-size:1rem}
+.memory-composer .memory-status{margin:.25rem 0 .55rem;color:#c8d4c8}
+.memory-composer .memory-operation{margin:.55rem 0 0;color:#c8c8ce}
+.memory-composer .memory-create-fields,
+.memory-composer .memory-open{border-top:1px solid #2a3a2a;margin-top:.6rem;padding-top:.55rem}
+.memory-composer .memory-entries{max-height:20rem;overflow:auto;margin:.5rem 0}
+.memory-composer .memory-entries article{padding:.45rem 0;border-top:1px solid #2a2a2e}
+.memory-composer .memory-entries h4{margin:0 0 .2rem;font-size:.85rem}
+.memory-composer .memory-entries p{margin:.1rem 0;font-size:.8rem}
+.memory-composer .memory-entries pre{margin:.2rem 0;padding:.45rem;max-width:100%;font-size:.9rem}
+.memory-composer .memory-visible-links{margin:.15rem 0 .55rem}
+.memory-pad-finder{margin:.6rem 0;padding:.55rem .7rem;border:1px solid #2a3a2a}
+.memory-pad-finder label,.memory-pad-finder input,.memory-pad-finder button{font:inherit}
+.agent-badge{
+  display:inline-block;
+  border:1px solid #6a8f6a;
+  border-radius:4px;
+  padding:.05rem .35rem;
+  color:#bfe8bf;
+  background:#101810;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.03em;
+  vertical-align:middle;
+}
+.agent-badge a{color:inherit}
+
+/* 20260823e — landing door hub. Bryce: organized tabs/buttons that surface
+   every door, and every other page links home. Radio tabs work with JS off.
+   Compress, never delete: the old chip strip stays under details#all-chips. */
+.home-bar{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:0 0 .75rem}
+.home-bar a{display:inline-block;padding:.45rem .8rem;border:1px solid #3a3a40;border-radius:8px;background:#161618;text-decoration:none;font-weight:700}
+.home-bar a.home-now{background:#1a2430;border-color:#3a4a5c}
+.home-bar a:hover{background:#2a2a30;color:#fff}
+.door-hub{margin:0 0 1.25rem;padding:.75rem .8rem .9rem;border:1px solid #2a2a2e;border-radius:10px;background:#101012}
+.door-hub input.door-radio{position:absolute;opacity:0;pointer-events:none}
+.door-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 .7rem}
+.door-tabs label{display:inline-block;padding:.45rem .85rem;border:1px solid #3a3a40;border-radius:8px;background:#161618;cursor:pointer;font-weight:700}
+.door-tabs label:hover{background:#2a2a30}
+.door-pane{display:none}
+.door-pane-title{margin:.15rem 0 .55rem;font-size:1rem}
+.door-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(9.2rem,1fr));gap:.45rem}
+.door-btn{display:block;padding:.65rem .7rem;border:1px solid #3a3a40;border-radius:8px;background:#161618;text-decoration:none;font-weight:700}
+.door-btn:hover{background:#2a2a30;color:#fff}
+#door-tab-use:checked ~ .door-tabs label[for="door-tab-use"],
+#door-tab-read:checked ~ .door-tabs label[for="door-tab-read"],
+#door-tab-drive:checked ~ .door-tabs label[for="door-tab-drive"],
+#door-tab-play:checked ~ .door-tabs label[for="door-tab-play"],
+#door-tab-measure:checked ~ .door-tabs label[for="door-tab-measure"],
+#door-tab-write:checked ~ .door-tabs label[for="door-tab-write"],
+#door-tab-lanes:checked ~ .door-tabs label[for="door-tab-lanes"]{background:#2a3340;border-color:#4a5a6c}
+#door-tab-use:checked ~ .pane-use,
+#door-tab-read:checked ~ .pane-read,
+#door-tab-drive:checked ~ .pane-drive,
+#door-tab-play:checked ~ .pane-play,
+#door-tab-measure:checked ~ .pane-measure,
+#door-tab-write:checked ~ .pane-write,
+#door-tab-lanes:checked ~ .pane-lanes{display:block}
+@media (max-width:700px){
+  .door-grid{grid-template-columns:repeat(auto-fill,minmax(7.6rem,1fr))}
+  .home-bar a,.door-tabs label,.door-btn{font-size:.95rem}
+}
+
+/* Trust after proof is operating law, not footer copy. */
+.trust-law{border:2px solid #d0a252;background:#1a160d;color:#f4e8c2;padding:.85rem 1rem;margin:.75rem 0 1rem;box-shadow:0 0 0 1px #4e3d19 inset}
+.trust-law strong:first-child{letter-spacing:.06em}.trust-law a{font-weight:800}

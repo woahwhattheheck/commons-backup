@@ -1,0 +1,73 @@
+name: Manufacture cloud Muhlnickel miner
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'codex/cloud-miner-fabrication-*'
+      - 'cloud-miner-stratum-*'
+      - main
+    paths:
+      - 'muhl/cloud_miner/**'
+      - '.github/workflows/cloud-miner-manufacture.yml'
+  pull_request:
+    paths:
+      - 'muhl/cloud_miner/**'
+      - '.github/workflows/cloud-miner-manufacture.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloud-miner-manufacture-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  manufacture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            muhl/cloud_miner
+          sparse-checkout-cone-mode: true
+      - name: Compile the new source
+        run: python3 -m compileall -q muhl/cloud_miner
+      - name: Fabricate the new container
+        run: |
+          python3 muhl/cloud_miner/fabricate.py --output "$RUNNER_TEMP/cloud-miner"
+      - name: Bind the manufactured address map to the live-job adapter
+        run: |
+          python3 - "$RUNNER_TEMP/cloud-miner/layout.json" <<'PY'
+          import json, pathlib, sys
+          from muhl.cloud_miner.runner import Layout
+          manifest = json.loads(pathlib.Path(sys.argv[1]).read_text())
+          layout = Layout.from_manifest(manifest)
+          for name in ("nonce", "winner_nonce", "win", "exhausted"):
+              layout.state_writes(name, bytes(layout.ram[name]["width"]))
+          print(json.dumps({"schema": layout.schema,
+                            "adapter_layout": "bound",
+                            "live_mining_started": False}))
+          PY
+      - name: Record artifact geometry
+        run: |
+          python3 - "$RUNNER_TEMP/cloud-miner" <<'PY'
+          import hashlib, json, pathlib, sys
+          root = pathlib.Path(sys.argv[1])
+          rows = []
+          for name in ("miner.mno", "layout.json"):
+              path = root / name
+              with path.open("rb") as stream:
+                  digest = hashlib.file_digest(stream, "sha256").hexdigest()
+              rows.append({"name": name, "bytes": path.stat().st_size, "sha256": digest})
+          print(json.dumps({"operation": "offline-manufacturing", "artifacts": rows,
+                            "live_mining_started": False}, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cloud-muhlnickel-miner-${{ github.sha }}
+          path: ${{ runner.temp }}/cloud-miner/
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,2932 @@
+{
+  "schema": "aquatrace-acceptance-corpus/v1",
+  "id": "billings-bid-1421-acceptance-corpus-20260831-01",
+  "state": "SYNTHETIC_TEST_SPEC_ONLY",
+  "source": {
+    "title": "City of Billings Bid 1421 - Laboratory Information Management System",
+    "official_bid_page": "https://www.billingsmt.gov/bids.aspx?bidID=1421",
+    "official_rfp": "https://www.billingsmt.gov/DocumentCenter/View/56340/2026-LIMS-RFP",
+    "local_source_sha256": "667d3d260f28877ad41ca6313d03eaddf3e45ae278a995ebf72d78d144339882",
+    "retrieved_at": "2026-08-30T23:19:00-04:00"
+  },
+  "rfp_basis": {
+    "S3_FIELD": "Section 3: web UI plus integrated field application; sample collection, field entry, electronic chain of custody, and offline operation.",
+    "S3_LIFECYCLE": "Section 3: complete sample lifecycle traceability, custody events, and disposition activities.",
+    "S3_ANALYST": "Section 3: track analyst demonstration of capability, training, and certification status for each method.",
+    "S3_STORAGE": "Section 3: centralized secure storage with redundancy and disaster recovery.",
+    "S3_RBAC": "Section 3: role-based access control for data integrity and accountability.",
+    "S3_AUDIT": "Section 3: real-time audit trails and logs for data changes and activity history.",
+    "S3_INSTRUMENT": "Section 3: automated laboratory-instrument acquisition and processing; Attachment F names instruments.",
+    "S3_QC": "Section 3: tools for documenting and charting QC and QA processes.",
+    "S3_COA": "Section 3: upload and store certificates of analysis for chemical inventory.",
+    "S3_REPORTS": "Section 3: customizable regulatory, client, and internal report templates.",
+    "S3_SUPPORT": "Section 3: training materials, help resources, dedicated technical support, updates, and issue resolution.",
+    "S7_SECURITY": "Section 7: security aligned to NIST CSF, current NIST SP 800-53, FIPS 199 categorization, independent evidence, and annual NIST or FedRAMP assessment reports.",
+    "AF_METHODS": "Attachment F: 37 listed analyte/method rows, including EPA, Standard Methods, HACH, calculated, and two blank-method entries.",
+    "AF_INSTRUMENTS": "Attachment F: five pH meters, three balances, PerkinElmer Furnace AA, Metrohm Ion Chromatograph, Sievers TOC Analyzer, and Seal Discrete Analyzer.",
+    "AF_REPORTS": "Attachment F: CMDP drinking-water reporting, netDMR reporting, and operations dashboards or external BI links.",
+    "WORK_ORDER_BOUNDARY": "Internal Billings work order: synthetic data only and the system must not release regulatory results."
+  },
+  "truth_boundary": {
+    "delivered": false,
+    "implemented": false,
+    "city_submission": false,
+    "instrument_compatibility_claimed": false,
+    "security_certification_claimed": false,
+    "production_deployment_claimed": false,
+    "regulatory_release_or_transmission": false,
+    "notes": [
+      "All people, roles, samples, devices, results, limits, times, and payloads are synthetic fixtures.",
+      "The City must supply the authoritative role matrix, QC limits, method versions, report layouts, retention rules, instrument protocols, and security categorization.",
+      "Instrument names in cases are mock source labels derived from Attachment F; they are not compatibility claims.",
+      "A complete draft remains a draft until authorized City laboratory personnel approve and perform any regulatory release outside this test system."
+    ]
+  },
+  "global_acceptance": {
+    "case_count": 100,
+    "required_pass_count": 100,
+    "allowed_result": "PASS only when every case-specific and common assertion is satisfied.",
+    "automatic_failures": [
+      "Any regulatory result release or transmission by the system.",
+      "Any external contact, City endpoint call, live instrument control, or production-data use.",
+      "Any duplicate business effect, silent drop, orphan event, or unreceipted state change.",
+      "Any invented method, compatibility, role, QC limit, certification, security report, or customer evidence.",
+      "Any non-deterministic normalized business outcome across the required clean replay."
+    ],
+    "required_receipt_fields": [
+      "case_id",
+      "event_id",
+      "sample_id",
+      "actor_fixture",
+      "role_fixture",
+      "method_version",
+      "rule_version",
+      "input_hash",
+      "observed_effect_hash",
+      "disposition",
+      "reason_code",
+      "event_time"
+    ]
+  },
+  "category_distribution": {
+    "field_collection": 10,
+    "offline_sync": 10,
+    "chain_of_custody": 10,
+    "sample_receipt_and_disposition": 10,
+    "qc_retest_authorized_release": 10,
+    "instrument_ingest": 10,
+    "audit_export": 10,
+    "report_reconciliation": 10,
+    "role_denial_and_accountability": 10,
+    "retry_replay_and_recovery": 10
+  },
+  "cases": [
+    {
+      "id": "AT-001",
+      "category": "field_collection",
+      "title": "Complete online collection",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-001 complete collection for SAMPLE-001 under method EPA 300.0",
+      "fault_injection": "none",
+      "expected_disposition": "ACCEPTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One collection event creates one traceable sample start."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The sample start is absent, duplicated, or lacks actor/method evidence."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-002",
+      "category": "field_collection",
+      "title": "Missing required collection time",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-002 omits collection_time",
+      "fault_injection": "required field missing",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No lifecycle transition occurs and reason_code is REQUIRED_FIELD_MISSING."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A sample proceeds without collection time."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-003",
+      "category": "field_collection",
+      "title": "Unknown synthetic method code",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-003 uses METHOD-UNKNOWN",
+      "fault_injection": "unmapped method",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The event is retained with METHOD_MAPPING_REQUIRED and zero result eligibility."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The unknown method is silently mapped or accepted."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-004",
+      "category": "field_collection",
+      "title": "Exact duplicate field event",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-004 is submitted twice byte-for-byte",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "DUPLICATE_SUPPRESSED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One business collection exists and the second delivery adds zero effects."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Two sample starts or custody events exist."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-005",
+      "category": "field_collection",
+      "title": "Same event ID, different payload",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-005 reuses event_id with a changed sample point",
+      "fault_injection": "identity conflict",
+      "expected_disposition": "CONFLICT_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Both hashes are retained and neither payload advances."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Either payload overwrites the other or advances."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-006",
+      "category": "field_collection",
+      "title": "Unauthorized field role",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-006 is submitted by role_fixture VIEWER",
+      "fault_injection": "role denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No collection state is created and the denial is audited."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The viewer creates or changes a sample."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-007",
+      "category": "field_collection",
+      "title": "Electronic custody initialized",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-007 includes collector, sample_id, container_id, method, and collection_time",
+      "fault_injection": "none",
+      "expected_disposition": "ACCEPTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The initial custody node links to the collection receipt."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Custody begins without a linked collection receipt."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-008",
+      "category": "field_collection",
+      "title": "Missing collector identity",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-008 omits actor_fixture",
+      "fault_injection": "accountability evidence missing",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No custody node is created and reason_code is ACTOR_REQUIRED."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "An anonymous collection enters the lifecycle."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-009",
+      "category": "field_collection",
+      "title": "Future-dated field timestamp",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-009 is 25 hours beyond the fixture clock",
+      "fault_injection": "synthetic clock anomaly",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The anomaly is explicit and requires human resolution."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The event silently changes the authoritative sample time."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-010",
+      "category": "field_collection",
+      "title": "Certificate attachment pointer",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_LIFECYCLE",
+        "S3_RBAC"
+      ],
+      "synthetic_input": "FC-010 includes a synthetic COA hash and filename only",
+      "fault_injection": "none",
+      "expected_disposition": "ACCEPTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The COA pointer is linked without treating its contents as a test result."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The attachment is orphaned or used to release a result."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-011",
+      "category": "offline_sync",
+      "title": "Ordered offline batch",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-001 sequence 1..5 for SAMPLE-011",
+      "fault_injection": "offline then reconnect",
+      "expected_disposition": "ACCEPTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "All five events apply once in sequence and cite one batch receipt."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Any event is lost, duplicated, or applied out of sequence."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-012",
+      "category": "offline_sync",
+      "title": "Offline duplicate replay",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-002 replays a previously committed 4-event batch",
+      "fault_injection": "full-batch duplicate",
+      "expected_disposition": "DUPLICATE_SUPPRESSED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Replay adds zero lifecycle effects and produces a replay receipt."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Any second custody or result effect appears."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-013",
+      "category": "offline_sync",
+      "title": "Out-of-order offline delivery",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-003 arrives sequence 3,1,2",
+      "fault_injection": "reordered delivery",
+      "expected_disposition": "ACCEPTED_AFTER_REORDER",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Events apply as 1,2,3 using sequence evidence."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Arrival order becomes authoritative lifecycle order."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-014",
+      "category": "offline_sync",
+      "title": "Missing offline predecessor",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-004 contains sequence 1 and 3 but not 2",
+      "fault_injection": "sequence gap",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Sequence 3 does not apply and the missing predecessor is named."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Sequence 3 advances before sequence 2."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-015",
+      "category": "offline_sync",
+      "title": "Timeout before commit",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-005 loses acknowledgment before any commit marker",
+      "fault_injection": "timeout-before-commit",
+      "expected_disposition": "RETRY_SAFE",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One bounded retry commits one effect."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "No retry occurs or more than one effect is committed."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-016",
+      "category": "offline_sync",
+      "title": "Timeout after commit",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-006 loses acknowledgment after commit marker",
+      "fault_injection": "timeout-after-commit",
+      "expected_disposition": "RECONCILED_COMMITTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Readback resolves the effect without a second write."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A blind retry creates a duplicate effect."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-017",
+      "category": "offline_sync",
+      "title": "Conflicting offline replay",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-007 reuses an event ID with changed result bytes",
+      "fault_injection": "payload conflict",
+      "expected_disposition": "CONFLICT_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Both hashes and the device sequence are retained; zero result effect applies."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "One payload silently wins."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-018",
+      "category": "offline_sync",
+      "title": "Interrupted resume cursor",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-008 stops after 6 of 10 events then restarts",
+      "fault_injection": "client crash",
+      "expected_disposition": "ACCEPTED_AFTER_RESUME",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Resume begins at event 7 and final count is exactly 10."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Events 1..6 replay as new effects or 7..10 are lost."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-019",
+      "category": "offline_sync",
+      "title": "Synthetic device clock skew",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-009 device time is 3 hours behind server fixture",
+      "fault_injection": "clock skew",
+      "expected_disposition": "ACCEPTED_WITH_CLOCK_EVIDENCE",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Device and receipt times are both preserved; sequence remains authoritative."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Device time overwrites receipt time or reorders custody."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-020",
+      "category": "offline_sync",
+      "title": "Offline clean-room replay",
+      "rfp_basis": [
+        "S3_FIELD",
+        "S3_STORAGE",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "OS-010 runs the same 12-event batch in two fresh stores",
+      "fault_injection": "determinism check",
+      "expected_disposition": "ACCEPTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Normalized final state and receipt hashes are byte-identical."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The two clean runs differ in business state or normalized hashes."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-021",
+      "category": "chain_of_custody",
+      "title": "Valid collect-transfer-receive chain",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-001 has three signed synthetic custody nodes",
+      "fault_injection": "none",
+      "expected_disposition": "ACCEPTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The chain has one root, two valid predecessor links, and one current custodian."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Any node is unlinked or two current custodians exist."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-022",
+      "category": "chain_of_custody",
+      "title": "Missing transfer actor",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-002 transfer omits actor_fixture",
+      "fault_injection": "accountability gap",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The transfer does not change custody and ACTOR_REQUIRED is recorded."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Custody changes anonymously."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-023",
+      "category": "chain_of_custody",
+      "title": "Unauthorized recipient role",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-003 transfers to role_fixture VIEWER",
+      "fault_injection": "role denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The prior custodian remains authoritative and denial is logged."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The unauthorized recipient becomes custodian."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-024",
+      "category": "chain_of_custody",
+      "title": "Broken predecessor hash",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-004 references an unknown prior custody hash",
+      "fault_injection": "lineage break",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No custody transition applies and the missing hash is named."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The chain is accepted with a broken link."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-025",
+      "category": "chain_of_custody",
+      "title": "Duplicate custody handoff",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-005 submits the same transfer twice",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "DUPLICATE_SUPPRESSED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Exactly one transfer exists and replay is receipted."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Two transfers or two current custodians appear."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-026",
+      "category": "chain_of_custody",
+      "title": "Out-of-order custody node",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-006 receive arrives before transfer",
+      "fault_injection": "reordered delivery",
+      "expected_disposition": "HOLD_PENDING_PREDECESSOR",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Receive remains unapplied until the transfer arrives."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Receive applies before the transfer."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-027",
+      "category": "chain_of_custody",
+      "title": "Append-only custody correction",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-007 corrects a container label with reason and approver fixtures",
+      "fault_injection": "correction",
+      "expected_disposition": "ACCEPTED_AS_CORRECTION",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Original and correction remain visible with linked hashes."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Original evidence is overwritten or deleted."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-028",
+      "category": "chain_of_custody",
+      "title": "Disposition before receipt",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-008 requests DISPOSED while sample is still IN_TRANSIT",
+      "fault_injection": "invalid lifecycle transition",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "State remains IN_TRANSIT and transition rule is named."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Disposition bypasses laboratory receipt."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-029",
+      "category": "chain_of_custody",
+      "title": "Custody export completeness",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-009 exports a 7-node synthetic chain",
+      "fault_injection": "none",
+      "expected_disposition": "ACCEPTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Export contains all seven ordered nodes and matches the ledger root hash."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A node is missing, duplicated, or reordered."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-030",
+      "category": "chain_of_custody",
+      "title": "Authorized void with reason",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_RBAC",
+        "S3_AUDIT"
+      ],
+      "synthetic_input": "CC-010 requests VOID by role_fixture QA_MANAGER with reason",
+      "fault_injection": "none",
+      "expected_disposition": "VOIDED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Void is terminal, reasoned, role-checked, and append-only."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Void erases prior custody or lacks reason/authority."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-031",
+      "category": "sample_receipt_and_disposition",
+      "title": "Valid laboratory receipt",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-001 receives SAMPLE-031 with container and method fixtures",
+      "fault_injection": "none",
+      "expected_disposition": "RECEIVED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One accession receipt links to the final field custody node."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Receipt is missing or creates a second sample identity."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-032",
+      "category": "sample_receipt_and_disposition",
+      "title": "Duplicate laboratory receipt",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-002 submits the same accession twice",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "DUPLICATE_SUPPRESSED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One RECEIVED state exists and the replay adds zero effects."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Two accession records exist."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-033",
+      "category": "sample_receipt_and_disposition",
+      "title": "Sample ID metadata conflict",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-003 reuses sample_id with a different container_id",
+      "fault_injection": "identity conflict",
+      "expected_disposition": "CONFLICT_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Both hashes are preserved and neither becomes authoritative."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Existing metadata is silently replaced."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-034",
+      "category": "sample_receipt_and_disposition",
+      "title": "Missing requested analysis",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-004 has no method/analyte request",
+      "fault_injection": "required mapping missing",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Sample is traceable but ineligible for analysis until mapped."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Analysis begins without a requested method."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-035",
+      "category": "sample_receipt_and_disposition",
+      "title": "Damaged container",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-005 has synthetic condition DAMAGED",
+      "fault_injection": "receipt exception",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Condition, reason, actor, and owner are recorded."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Damaged sample silently enters analysis."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-036",
+      "category": "sample_receipt_and_disposition",
+      "title": "Unscheduled sample",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-006 has no schedule fixture",
+      "fault_injection": "schedule exception",
+      "expected_disposition": "MANUAL_REVIEW",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The sample is retained without invented schedule approval."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The system invents a schedule or rejects without trace."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-037",
+      "category": "sample_receipt_and_disposition",
+      "title": "COA upload linkage",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-007 includes a synthetic chemical-inventory COA hash",
+      "fault_injection": "none",
+      "expected_disposition": "RECEIVED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "COA is stored as evidence and linked to its inventory fixture."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "COA is orphaned or treated as regulatory result evidence."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-038",
+      "category": "sample_receipt_and_disposition",
+      "title": "Corrupt COA bytes",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-008 attachment hash does not match bytes",
+      "fault_injection": "integrity failure",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Attachment is quarantined and the sample state is unchanged."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Corrupt bytes are stored as valid evidence."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-039",
+      "category": "sample_receipt_and_disposition",
+      "title": "Authorized rejection",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-009 role_fixture RECEIVING_LEAD rejects with reason BROKEN_SEAL",
+      "fault_injection": "none",
+      "expected_disposition": "REJECTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One terminal rejection cites actor, role, reason, and source receipt."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Rejection lacks authority/reason or deletes prior custody."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-040",
+      "category": "sample_receipt_and_disposition",
+      "title": "Orphan result before sample",
+      "rfp_basis": [
+        "S3_LIFECYCLE",
+        "S3_QC",
+        "S3_COA"
+      ],
+      "synthetic_input": "SR-010 result references unknown SAMPLE-040",
+      "fault_injection": "orphan event",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No sample is invented; event waits with SAMPLE_NOT_FOUND."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A phantom sample/result enters reports."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-041",
+      "category": "qc_retest_authorized_release",
+      "title": "QC pass awaiting human release",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-001 result and synthetic QC controls meet fixture limits",
+      "fault_injection": "none",
+      "expected_disposition": "ELIGIBLE_FOR_HUMAN_RELEASE",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Eligibility is recorded but result remains unreleased."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The system changes regulatory release state."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-042",
+      "category": "qc_retest_authorized_release",
+      "title": "QC control out of range",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-002 positive control exceeds synthetic upper limit",
+      "fault_injection": "bad QC",
+      "expected_disposition": "QC_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Release eligibility is false and the exact failed control is named."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The result becomes eligible or released."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-043",
+      "category": "qc_retest_authorized_release",
+      "title": "Blank contamination",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-003 blank fixture exceeds its limit",
+      "fault_injection": "bad QC",
+      "expected_disposition": "QC_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Affected batch and results are held with one reasoned linkage."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Only the blank is held while affected results pass."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-044",
+      "category": "qc_retest_authorized_release",
+      "title": "Expired analyst capability",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-004 analyst fixture capability expired before run",
+      "fault_injection": "capability lapse",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Result entry/review is blocked and capability evidence is cited."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Expired capability is ignored."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-045",
+      "category": "qc_retest_authorized_release",
+      "title": "Missing analyst method capability",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-005 analyst fixture lacks the requested method",
+      "fault_injection": "capability missing",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No result effect applies and method capability is named."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A generic role substitutes for method capability."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-046",
+      "category": "qc_retest_authorized_release",
+      "title": "Retest linked to original",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-006 retest references failed QC-002",
+      "fault_injection": "none",
+      "expected_disposition": "RETEST_RECORDED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Original remains held; retest has its own receipt and predecessor link."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Retest overwrites or hides the original."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-047",
+      "category": "qc_retest_authorized_release",
+      "title": "Duplicate retest event",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-007 replays the same retest",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "DUPLICATE_SUPPRESSED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Exactly one retest exists."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A second retest/result is created."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-048",
+      "category": "qc_retest_authorized_release",
+      "title": "QC rule version drift",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-008 result evaluated under v1 then fixture changes to v2",
+      "fault_injection": "rule drift",
+      "expected_disposition": "REVIEW_REQUIRED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Cached v1 eligibility is invalidated and both versions remain visible."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Stale v1 eligibility remains authoritative."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-049",
+      "category": "qc_retest_authorized_release",
+      "title": "Unauthorized release request",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-009 role_fixture ANALYST requests regulatory release",
+      "fault_injection": "role denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Release count remains zero and denial is audited."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The analyst releases or transmits the result."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-050",
+      "category": "qc_retest_authorized_release",
+      "title": "Authorized human approval boundary",
+      "rfp_basis": [
+        "S3_ANALYST",
+        "S3_QC",
+        "S3_RBAC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "QC-010 role_fixture QA_MANAGER records approval intent",
+      "fault_injection": "none",
+      "expected_disposition": "HUMAN_RELEASE_APPROVAL_RECORDED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Approval intent is receipted while system release/transmission counts stay zero."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The system equates approval intent with regulatory release."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-051",
+      "category": "instrument_ingest",
+      "title": "pH meter normal mock import",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-001 mock source PH-METER-01 reports synthetic pH under SM 4500-H+ B",
+      "fault_injection": "none",
+      "expected_disposition": "INGESTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One normalized result links source bytes, mapping version, sample, and method."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Import loses source evidence or creates multiple results."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-052",
+      "category": "instrument_ingest",
+      "title": "Balance duplicate delivery",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-002 BALANCE-01 sends the same synthetic weight twice",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "DUPLICATE_SUPPRESSED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One result exists and the replay adds zero effects."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Two weight results exist."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-053",
+      "category": "instrument_ingest",
+      "title": "Furnace AA out-of-order batch",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-003 AA-FURNACE mock results arrive 3,1,2",
+      "fault_injection": "reordered delivery",
+      "expected_disposition": "INGESTED_AFTER_REORDER",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Results apply in source sequence with all raw hashes retained."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Arrival order silently changes sample/result ordering."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-054",
+      "category": "instrument_ingest",
+      "title": "Ion chromatograph bad QC",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-004 METROHM-IC mock batch includes failed QC",
+      "fault_injection": "bad QC",
+      "expected_disposition": "QC_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "All affected synthetic analyte results are held."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Failed-QC results become report eligible."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-055",
+      "category": "instrument_ingest",
+      "title": "TOC timeout after commit",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-005 SIEVERS-TOC mock loses acknowledgment after commit",
+      "fault_injection": "timeout-after-commit",
+      "expected_disposition": "RECONCILED_COMMITTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Commit readback prevents a second result write."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Retry creates a duplicate result."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-056",
+      "category": "instrument_ingest",
+      "title": "Discrete analyzer malformed payload",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-006 SEAL-DISCRETE mock omits sample_id",
+      "fault_injection": "schema failure",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Raw bytes are quarantined with MISSING_SAMPLE_ID."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Malformed payload enters the result ledger."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-057",
+      "category": "instrument_ingest",
+      "title": "Unknown instrument source",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-007 source INSTRUMENT-UNKNOWN sends a result",
+      "fault_injection": "unmapped source",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No compatibility is inferred and INSTRUMENT_MAPPING_REQUIRED is recorded."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "The system guesses a parser or method."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-058",
+      "category": "instrument_ingest",
+      "title": "Instrument mapping drift",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-008 parser mapping changes from fixture v1 to v2 mid-batch",
+      "fault_injection": "mapping drift",
+      "expected_disposition": "REVIEW_REQUIRED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Mixed-version results are named and held pending review."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Mixed versions appear as one homogeneous batch."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-059",
+      "category": "instrument_ingest",
+      "title": "Blank method in Attachment F fixture",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-009 synthetic Paint Filter Test has no official method string",
+      "fault_injection": "official mapping absent",
+      "expected_disposition": "HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "The missing buyer-approved method is explicit; no method is invented."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A method is guessed or compatibility claimed."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-060",
+      "category": "instrument_ingest",
+      "title": "Multi-instrument reconciliation",
+      "rfp_basis": [
+        "S3_INSTRUMENT",
+        "S3_QC",
+        "AF_INSTRUMENTS",
+        "AF_METHODS"
+      ],
+      "synthetic_input": "II-010 imports 12 synthetic events across all named mock instrument families",
+      "fault_injection": "none",
+      "expected_disposition": "INGESTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Input count equals ingested plus held plus duplicate-suppressed; no orphan event remains."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Counts do not reconcile or any event disappears."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-061",
+      "category": "audit_export",
+      "title": "Complete lifecycle audit export",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-001 exports SAMPLE-061 from collection through QC hold",
+      "fault_injection": "none",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Every transition includes actor, role, time, rule version, and predecessor hash."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Any lifecycle change lacks attribution or ordering."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-062",
+      "category": "audit_export",
+      "title": "Append-only correction audit",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-002 exports an original value plus reasoned correction",
+      "fault_injection": "none",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Both values and the correction link are present."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Original evidence is overwritten."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-063",
+      "category": "audit_export",
+      "title": "Unauthorized attempt audit",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-003 includes a denied release attempt",
+      "fault_injection": "role denial",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Denial, actor fixture, role fixture, reason, and zero effect are present."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Denied attempt is missing or appears successful."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-064",
+      "category": "audit_export",
+      "title": "Duplicate delivery audit",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-004 includes one accepted event and two replays",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One business effect and two replay receipts are distinguishable."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Replays are invisible or become effects."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-065",
+      "category": "audit_export",
+      "title": "Tampered receipt hash",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-005 alters one stored receipt byte before export",
+      "fault_injection": "integrity failure",
+      "expected_disposition": "EXPORT_BLOCKED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Hash mismatch names the exact receipt and no clean export is claimed."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Tampered export is reported valid."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-066",
+      "category": "audit_export",
+      "title": "Configuration change audit",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-006 changes synthetic QC rule v1 to v2",
+      "fault_injection": "none",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Old/new hashes, actor, approval fixture, and effective time are present."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Configuration change is unattributed."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-067",
+      "category": "audit_export",
+      "title": "Role change audit",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-007 changes ANALYST to QA_REVIEWER",
+      "fault_injection": "none",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Role grant/revoke evidence and effective boundary are present."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Prior actions are relabeled under the new role."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-068",
+      "category": "audit_export",
+      "title": "Instrument mapping change audit",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-008 changes mock IC parser mapping",
+      "fault_injection": "none",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Both mapping versions and affected result IDs are listed."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Mapping drift is hidden."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-069",
+      "category": "audit_export",
+      "title": "Redundancy restore audit",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-009 restores the synthetic store from backup fixture",
+      "fault_injection": "restore drill",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Restore point, source hash, resulting root hash, and gaps are explicit."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Restore is called successful without reconciliation."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-070",
+      "category": "audit_export",
+      "title": "Deterministic export replay",
+      "rfp_basis": [
+        "S3_AUDIT",
+        "S3_RBAC",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "AE-010 exports the same frozen ledger twice",
+      "fault_injection": "determinism check",
+      "expected_disposition": "EXPORTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Normalized exports are byte-identical."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Equivalent ledgers produce differing normalized exports."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-071",
+      "category": "report_reconciliation",
+      "title": "CMDP draft count reconciliation",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-001 builds a synthetic CMDP draft from 10 eligible results",
+      "fault_injection": "none",
+      "expected_disposition": "DRAFT_READY_FOR_HUMAN_REVIEW",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Draft count and values match the eligible-result manifest; release count is zero."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Draft omits/adds results or is transmitted."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-072",
+      "category": "report_reconciliation",
+      "title": "netDMR draft count reconciliation",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-002 builds a synthetic netDMR draft from 8 eligible results",
+      "fault_injection": "none",
+      "expected_disposition": "DRAFT_READY_FOR_HUMAN_REVIEW",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Draft exactly matches the manifest and remains untransmitted."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Totals differ or transmission occurs."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-073",
+      "category": "report_reconciliation",
+      "title": "Operations dashboard reconciliation",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-003 renders synthetic dashboard aggregates",
+      "fault_injection": "none",
+      "expected_disposition": "DASHBOARD_RECONCILED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Dashboard totals equal ledger totals by state."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Dashboard totals differ or hide held/unknown states."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-074",
+      "category": "report_reconciliation",
+      "title": "Orphan sample blocks report",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-004 includes a result for unknown sample_id",
+      "fault_injection": "orphan event",
+      "expected_disposition": "REPORT_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Orphan is named and draft sign-off is blocked."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Orphan appears in a report or disappears."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-075",
+      "category": "report_reconciliation",
+      "title": "Duplicate result suppression in report",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-005 includes an exact duplicate instrument result",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "DRAFT_READY_FOR_HUMAN_REVIEW",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Duplicate contributes zero second count/value."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Duplicate inflates the report."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-076",
+      "category": "report_reconciliation",
+      "title": "QC-held result accounting",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-006 includes three eligible and two QC-held results",
+      "fault_injection": "none",
+      "expected_disposition": "DRAFT_READY_FOR_HUMAN_REVIEW",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Eligible=3, held=2, total=5 with held results excluded from report values."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Held results are released, omitted from accounting, or included in values."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-077",
+      "category": "report_reconciliation",
+      "title": "Rule-version-specific report",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-007 spans synthetic method/rule v1 and v2",
+      "fault_injection": "version boundary",
+      "expected_disposition": "DRAFT_READY_FOR_HUMAN_REVIEW",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Every value cites the applied version; no silent cross-version merge occurs."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Version provenance is missing."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-078",
+      "category": "report_reconciliation",
+      "title": "Corrupt report export",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-008 alters one output byte after rendering",
+      "fault_injection": "integrity failure",
+      "expected_disposition": "REPORT_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Output hash mismatch blocks sign-off."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Corrupt export is treated as final."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-079",
+      "category": "report_reconciliation",
+      "title": "Sample-result-report tri-ledger",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-009 reconciles 20 samples, 24 results, and 2 draft reports",
+      "fault_injection": "none",
+      "expected_disposition": "RECONCILED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Every sample/result is accounted for once and report membership is explicit."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Any orphan, duplicate membership, or unexplained count exists."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-080",
+      "category": "report_reconciliation",
+      "title": "No autonomous regulatory release",
+      "rfp_basis": [
+        "S3_REPORTS",
+        "AF_REPORTS",
+        "S3_QC",
+        "WORK_ORDER_BOUNDARY"
+      ],
+      "synthetic_input": "RR-010 requests SEND on a complete synthetic CMDP draft",
+      "fault_injection": "prohibited action test",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Transmission and release counts remain zero; human-owned next step is explicit."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Any external send, release, or claim of submission occurs."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-081",
+      "category": "role_denial_and_accountability",
+      "title": "Field collector cannot release",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-001 role_fixture FIELD_COLLECTOR requests release",
+      "fault_injection": "role denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Collection permission remains separate from release permission."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Collector changes release state."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-082",
+      "category": "role_denial_and_accountability",
+      "title": "Analyst cannot administer roles",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-002 role_fixture ANALYST changes another role",
+      "fault_injection": "role denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Role registry is unchanged and denial is audited."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Analyst grants or revokes access."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-083",
+      "category": "role_denial_and_accountability",
+      "title": "QA reviewer can place hold",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-003 role_fixture QA_REVIEWER holds failed QC",
+      "fault_injection": "none",
+      "expected_disposition": "QC_HOLD",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Hold succeeds with actor, reason, and rule evidence."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Authorized hold fails silently or releases result."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-084",
+      "category": "role_denial_and_accountability",
+      "title": "Viewer cannot edit result",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-004 role_fixture VIEWER edits result bytes",
+      "fault_injection": "role denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Result hash is unchanged."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Viewer changes the result."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-085",
+      "category": "role_denial_and_accountability",
+      "title": "Inactive user denied",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-005 actor_fixture status is INACTIVE",
+      "fault_injection": "account disabled",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "All mutating actions are denied and logged."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Inactive user changes state."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-086",
+      "category": "role_denial_and_accountability",
+      "title": "Role change effective boundary",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-006 grant becomes effective after event 3",
+      "fault_injection": "role transition",
+      "expected_disposition": "DENIED_THEN_ALLOWED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Events 1..3 use old role; event 4 uses new role with grant receipt."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Role is applied retroactively or before effective time."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-087",
+      "category": "role_denial_and_accountability",
+      "title": "Method-specific capability denial",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-007 analyst role exists but method capability does not",
+      "fault_injection": "capability missing",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Method-level capability gate blocks the action."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Generic analyst role bypasses method capability."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-088",
+      "category": "role_denial_and_accountability",
+      "title": "Session actor mismatch",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-008 token fixture actor differs from payload actor",
+      "fault_injection": "identity mismatch",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No effect applies and both fixture identities are logged."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Payload actor overrides session actor."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-089",
+      "category": "role_denial_and_accountability",
+      "title": "Restricted audit export",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-009 role_fixture FIELD_COLLECTOR requests full audit export",
+      "fault_injection": "role denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No export bytes are produced and denial is receipted."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Restricted data is exported."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-090",
+      "category": "role_denial_and_accountability",
+      "title": "Denial replay",
+      "rfp_basis": [
+        "S3_RBAC",
+        "S3_AUDIT",
+        "S3_ANALYST"
+      ],
+      "synthetic_input": "RD-010 replays the same unauthorized action",
+      "fault_injection": "duplicate denial",
+      "expected_disposition": "DENIED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "No business effect occurs; attempts remain countable without duplicate state."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Replay changes state or erases first denial."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-091",
+      "category": "retry_replay_and_recovery",
+      "title": "Exact input retry",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-001 retries an accepted collection event",
+      "fault_injection": "duplicate delivery",
+      "expected_disposition": "DUPLICATE_SUPPRESSED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Retry adds zero business effects."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "A second sample/custody effect exists."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-092",
+      "category": "retry_replay_and_recovery",
+      "title": "Timeout before write",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-002 times out before commit marker",
+      "fault_injection": "timeout-before-commit",
+      "expected_disposition": "RETRY_SAFE",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "One bounded retry produces one effect."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Effect is lost or duplicated."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-093",
+      "category": "retry_replay_and_recovery",
+      "title": "Timeout after write",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-003 times out after commit marker",
+      "fault_injection": "timeout-after-commit",
+      "expected_disposition": "RECONCILED_COMMITTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Readback confirms commit and no second write occurs."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Blind retry duplicates the effect."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-094",
+      "category": "retry_replay_and_recovery",
+      "title": "Crash after custody append",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-004 process crashes after append but before acknowledgment",
+      "fault_injection": "process crash",
+      "expected_disposition": "RECONCILED_COMMITTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Restart finds the receipt and advances once."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Restart appends a second custody node."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-095",
+      "category": "retry_replay_and_recovery",
+      "title": "Report renderer retry",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-005 renderer crashes after draft bytes are stored",
+      "fault_injection": "process crash",
+      "expected_disposition": "RECONCILED_COMMITTED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Stored hash is reused or verified; one canonical draft remains."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Two divergent canonical drafts appear."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-096",
+      "category": "retry_replay_and_recovery",
+      "title": "Offline partition recovery",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-006 two devices reconnect with overlapping event sets",
+      "fault_injection": "network partition",
+      "expected_disposition": "RECONCILED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Union is exact; duplicates add zero effects; conflicts hold."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Events disappear or conflicts silently resolve."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-097",
+      "category": "retry_replay_and_recovery",
+      "title": "Instrument adapter restart",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-007 mock adapter restarts at event 6 of 10",
+      "fault_injection": "adapter crash",
+      "expected_disposition": "INGESTED_AFTER_RESUME",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Resume cursor begins at 6/7 boundary and final count is 10."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Events are skipped or duplicated."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-098",
+      "category": "retry_replay_and_recovery",
+      "title": "Stale recovery cursor",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-008 resume cursor points behind committed root",
+      "fault_injection": "stale cursor",
+      "expected_disposition": "RECONCILED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Committed IDs are checked before replay and add zero effects."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Stale cursor duplicates prior work."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-099",
+      "category": "retry_replay_and_recovery",
+      "title": "Full-corpus clean replay",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-009 runs all 100 cases twice against fresh stores",
+      "fault_injection": "determinism check",
+      "expected_disposition": "RECONCILED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Normalized dispositions and root hashes are identical."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Any business outcome or normalized root differs."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    },
+    {
+      "id": "AT-100",
+      "category": "retry_replay_and_recovery",
+      "title": "Configuration rollback",
+      "rfp_basis": [
+        "S3_STORAGE",
+        "S3_AUDIT",
+        "S3_INSTRUMENT",
+        "S7_SECURITY"
+      ],
+      "synthetic_input": "RRR-010 rolls synthetic rule v2 back to v1",
+      "fault_injection": "rollback",
+      "expected_disposition": "REVIEW_REQUIRED",
+      "pass_if": [
+        "The observed disposition equals the case's expected_disposition.",
+        "Exactly one immutable receipt is emitted with case_id, event_id, sample_id, actor_fixture, role_fixture, method_version, rule_version, input_hash, observed_effect_hash, disposition, reason_code, and event_time.",
+        "No external system, instrument, City endpoint, regulatory endpoint, or prospect is contacted.",
+        "regulatory_release_count equals 0 and regulatory_transmission_count equals 0.",
+        "Both versions remain auditable; caches invalidate; affected samples are re-evaluated without automatic release."
+      ],
+      "fail_if": [
+        "Any silent drop, unreceipted state change, duplicate business effect, or orphan event occurs.",
+        "Any held, denied, conflicting, or ambiguous item is reported as accepted or released.",
+        "Any regulatory result is released or transmitted by the system.",
+        "Rollback erases v2 evidence or auto-releases results."
+      ],
+      "system_may_release_regulatory_result": false,
+      "system_may_contact_external_endpoint": false
+    }
+  ],
+  "blockers": [
+    "The RFP names instruments but does not provide wire protocols, export formats, firmware/software versions, or vendor interface specifications; mock adapters cannot prove compatibility.",
+    "The RFP does not define the City-approved role matrix, QC thresholds, method-version authority, report schemas, retention schedule, RTO/RPO, or support SLAs; fixtures must be replaced with buyer-owned values.",
+    "Section 7 requires independent security evidence and annual NIST or FedRAMP assessment reports; this corpus supplies no audit, certification, scan, or assurance statement.",
+    "Attachment F contains blank method cells for Paint Filter Test and Volatile Acids; the corpus must hold those mappings rather than invent methods.",
+    "This artifact validates a future nonproduction test harness only; it is not proposal eligibility, product delivery, regulatory compliance, or a City submission."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "uiowa-098-interface-map-v1",
+  "canonical_groups": ["ESS", "RIS", "IAM", "CROSS"],
+  "components": [
+    {
+      "component": "delivery_metrics",
+      "source": "revenue/uiowa_rfq_18649_delivery_metrics/fixtures/synthetic_deployments.csv",
+      "native_id": "deployment_id",
+      "native_group": "service",
+      "mapping": {"synthetic-registration": "ESS"},
+      "preserve": ["commit_at", "deployed_at", "intervention_required", "recovered_at", "unplanned_rework"]
+    },
+    {
+      "component": "observability",
+      "source": "revenue/uiowa_rfq_18649_observability/examples.json",
+      "native_id": "objective_id",
+      "native_group": "service_id",
+      "mapping": {"SYN-REG": "ESS", "SYN-RES": "RIS", "SYN-SIGNIN": "IAM"},
+      "preserve": ["indicator.kind", "indicator.user_visible", "measurement_evidence.source_ref", "measurement_evidence.period_start", "measurement_evidence.period_end"]
+    },
+    {
+      "component": "test_data_readiness",
+      "source": "revenue/uiowa_rfq_18649_test_data_readiness/fixtures/catalog.synthetic.json",
+      "native_id": "dataset_id",
+      "native_group": "service",
+      "mapping": {"ESS": "ESS", "RIS": "RIS", "IAM": "IAM"},
+      "preserve": ["fixture_interface_version", "current_interface_version", "as_of"]
+    },
+    {
+      "component": "prioritization",
+      "source": "revenue/uiowa_rfq_18649_prioritization/recommendations.synthetic.csv",
+      "native_id": "id",
+      "native_group": null,
+      "mapping": {"*": "CROSS"},
+      "preserve": ["quality", "security", "delivery", "complexity", "confidence", "owner_role", "dependencies"]
+    }
+  ],
+  "boundaries": {
+    "native_ids_retained": true,
+    "missing_values_preserved": true,
+    "cross_group_assignment_inferred": false,
+    "numeric_scores_synthesized": false
+  }
+}

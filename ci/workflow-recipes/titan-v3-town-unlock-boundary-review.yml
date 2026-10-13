@@ -1,0 +1,74 @@
+name: TITAN V3 town-unlock boundary review
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/reviews/titan-v3-town-unlock-boundary-20260910-01/**"
+      - ".github/workflows/titan-v3-town-unlock-boundary-review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-town-unlock-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Bind pull-request head
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Rebuild and verify strict receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="revenue/kaggriculture/cloud-execution-lab/reviews/titan-v3-town-unlock-boundary-20260910-01"
+          export PYTHONDONTWRITEBYTECODE=1
+          export PYTHONPYCACHEPREFIX="${RUNNER_TEMP}/titan-v3-town-unlock-pycache"
+
+          echo "616561f72a38474307d12008d560520458502959da09741acdd4793ce413f3e1  ${ROOT}/town_unlock_witness.py" | sha256sum -c -
+          echo "2162c637a50dee9b420d96ac2d93c099e06d07d5e73eefe29f5ef2b18e15a418  ${ROOT}/WITNESS.json" | sha256sum -c -
+
+          python -B "${ROOT}/town_unlock_witness.py" --out "${RUNNER_TEMP}/WITNESS.json" > "${RUNNER_TEMP}/stdout.json"
+          cmp "${RUNNER_TEMP}/stdout.json" "${RUNNER_TEMP}/WITNESS.json"
+          cmp "${RUNNER_TEMP}/WITNESS.json" "${ROOT}/WITNESS.json"
+          python -m py_compile "${ROOT}/town_unlock_witness.py"
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("${{ runner.temp }}") / "WITNESS.json"
+          receipt = json.loads(path.read_text(encoding="utf-8"))
+          assert receipt["disposition"] == "STATIC_TOWN_SNAPSHOT_UNSAFE_ACROSS_UNLOCK_BOUNDARY"
+          assert receipt["official_transition"]["drawn_shop"] == "BAKERY"
+          assert receipt["static_current_town_projection"]["buy_price"] == 26
+          assert receipt["official_dynamic_town_projection"]["buy_price"] == 27
+          assert receipt["static_current_town_projection"]["minimum_now"] == 0
+          assert receipt["official_dynamic_town_projection"]["minimum_now"] == 1
+          assert receipt["receipt_sha256"] == "eb2de6a727920116a955f97a4497a98007fe936a2f4e33b0d00122f5c6370691"
+          PY
+
+          test -z "$(git status --porcelain)"
+
+      - name: Retain witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-town-unlock-boundary-${{ github.sha }}
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/WITNESS.json
+            ${{ runner.temp }}/stdout.json

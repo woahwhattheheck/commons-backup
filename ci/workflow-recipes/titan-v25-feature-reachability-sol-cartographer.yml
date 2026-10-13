@@ -1,0 +1,155 @@
+name: TITAN V2.5 exact feature reachability SOL Cartographer
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v25-feature-reachability-sol-cartographer.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/v25-feature-reachability-sol-cartographer/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v25-feature-reachability-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-feature-reachability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Bind exact runner head
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          printf '%s\n' "$EXPECTED_HEAD" | tee "$RUNNER_TEMP/exact-head.sha"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pinned official-interpreter dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Run unit and syntax contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/v25-feature-reachability-sol-cartographer
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python -m unittest -v test_feature_reachability.py
+          python -m py_compile feature_reachability.py run_feature_reachability.py test_feature_reachability.py
+
+      - name: Run exact all-enabled plus leave-one-out panel
+        id: panel
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          CASE="$LAB/analysis/v25-feature-reachability-sol-cartographer"
+          OUT="$RUNNER_TEMP/titan-v25-feature-reachability"
+          mkdir -p "$OUT"
+          python "$CASE/run_feature_reachability.py" \
+            --archive "$LAB/exports/titan-current.tar.gz" \
+            --archive-receipt "$LAB/runtime/integrated-selected/CURRENT-ARCHIVE.json" \
+            --expected-archive-sha256 17f536087b3a6baf4ae1222a051285766a3ea8c2ca5af6edc190d4f527e12b86 \
+            --expected-archive-bytes 427870 \
+            --expected-runtime-files 109 \
+            --expected-source-sha256 1feec5a68ffde28ab7b5c7d2c92a34aa66ff5705b7d88182ef6af98df8bb5083 \
+            --runner-head "$(git rev-parse HEAD)" \
+            --seeds 2609099501 \
+            --opponent exact_public_arlene=runtime:reference/next-panel/vendor/arlene.py::agent \
+            --agent-rng-seed 20260910 \
+            --action-timeout 1.0 \
+            --startup-timeout 15.0 \
+            --game-timeout 180.0 \
+            --max-agent-calls 45000 \
+            --recheck-control \
+            --output "$OUT/FEATURE-REACHABILITY.json" \
+            --markdown "$OUT/FEATURE-REACHABILITY.md"
+
+      - name: Validate fail-closed evidence receipt
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPORT="$RUNNER_TEMP/titan-v25-feature-reachability/FEATURE-REACHABILITY.json"
+          test -f "$REPORT"
+          python - "$REPORT" <<'PY'
+          import json
+          import sys
+
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          expected = [
+              "seed", "funding", "redundant_hire", "market_pressure",
+              "operating_stock", "crop_release", "idle_fertilizer", "early_capital",
+          ]
+          assert report.get("schema_version") == 1
+          assert report.get("operation") == "op:titan-v3-v25-feature-reachability-bisect-20260910-01"
+          assert report.get("status") == "complete", report.get("failure")
+          assert report.get("all_complete") is True
+          assert report.get("tested_factors") == expected
+          assert report.get("static_unreferenced_factors") == []
+          assert report.get("scheduled_games") == 18
+          assert len(report.get("completed_keys", [])) == 18
+          assert report.get("reproducibility", {}).get("same_trace_and_scores") is True
+          limits = report["limits"]
+          assert limits["scheduled_hard_agent_call_bound"] <= limits["max_agent_calls"] == 45000
+          assert report["observed_agent_calls"] <= 45000
+          summary = report["summary"]
+          buckets = (
+              summary["candidate_disable"] + summary["candidate_keep"] +
+              summary["panel_inert"] + summary["needs_more_evidence"]
+          )
+          assert sorted(buckets) == sorted(expected)
+          assert len(buckets) == len(set(buckets)) == 8
+          print(json.dumps({
+              "candidate_disable": summary["candidate_disable"],
+              "candidate_keep": summary["candidate_keep"],
+              "panel_inert": summary["panel_inert"],
+              "needs_more_evidence": summary["needs_more_evidence"],
+              "agent_calls": report["observed_agent_calls"],
+          }, sort_keys=True))
+          PY
+
+      - name: Publish readable result
+        if: always()
+        shell: bash
+        run: |
+          REPORT="$RUNNER_TEMP/titan-v25-feature-reachability/FEATURE-REACHABILITY.md"
+          if [[ -f "$REPORT" ]]; then
+            cat "$REPORT" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '# Feature reachability panel did not reach markdown classification' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Retain exact evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v25-feature-reachability-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/exact-head.sha
+            ${{ runner.temp }}/titan-v25-feature-reachability/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Assert checkout stayed clean
+        if: always()
+        run: git diff --exit-code -- .
+
+      - name: Require panel command success
+        if: always()
+        shell: bash
+        run: test "${{ steps.panel.outcome }}" = 'success'

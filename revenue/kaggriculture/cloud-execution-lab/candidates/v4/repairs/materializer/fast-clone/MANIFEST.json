@@ -1,0 +1,45 @@
+{
+  "name": "r04-fast-clone-recovery",
+  "status": "preserved_repair_donor_not_integrated",
+  "source_pr": 12431,
+  "source_head": "e60e98425f04599ee1ac6269488350887f5a0a79",
+  "historical_production_patch_blob": "84346b65edacbfb2e46580adace4ec407707ed5e",
+  "historical_frozen_router_blob": "21c4f1db0298f8955b1f5ad366bd780a89cad206",
+  "historical_frozen_tapes_blob": "a43289b9cc5e34a2481fddf652762a7d92f427ef",
+  "historical_hosted_gate": {"run":34583510868,"job":103212293936,"result":"success","action_steps":9347,"route_cases":23,"reported_clone_speedup":4.3834836644993835},
+  "v4_fold_recipe_blob": "a83de6bfcc60c51c8bdc9106f8565c52eb5fe764",
+  "copy_contract_hardener_blob": "22acbcc6f1beb0460ba3f796af0e1febf7d94ca1",
+  "copy_contract_test_blob": "d50c75fcbaf420e9cdb62fd009dabc6ff8b7ec42",
+  "hardened_contract_receipt": {
+    "normal_python":"27 pass / 1 skip",
+    "optimized_python":"27 pass / 1 skip",
+    "generated_shallow_actions":600,
+    "full_frozen_corpus":"must be rerun in a package-capable environment because r01_tapes was not mounted for the hardening receipt"
+  },
+  "integration_contract": [
+    "main/candidates/v4 is the sole integration line; do not create a successor V4 branch",
+    "preserve this donor before semantic porting",
+    "do not add a feature/config/default key; this is a copy-equivalent hot-path optimization",
+    "re-CAS the source-bound fold against the then-current donor apply_v4.py instead of executing the legacy recipe blindly",
+    "before semantic integration rerun the full 9347-action corpus equivalence/alias graph check, actual-corpus speed gate, and materialized V4 checker suite",
+    "do not execute the legacy r04 materializer against current production runtime"
+  ],
+  "independent_frozen_corpus": {
+    "status":"PASS_NORMAL_AND_OPTIMIZED_HELPER_ONLY",
+    "supersedes_missing_corpus_blocker":true,
+    "receipt":"FROZEN-CORPUS-RECEIPT.json",
+    "receipt_commit":"52fdf2cc4668b70f52655c21d2b1079d31fa1d1e",
+    "verifier":"verify_frozen_clone_corpus.py",
+    "verifier_git_blob":"d170b5e1ac72d29395cec2e7913e578f5636f1d3",
+    "actions_per_helper_per_mode":9347,
+    "future_schema_cases_per_helper_per_mode":25,
+    "corpus_fallbacks":0,
+    "negative_controls_rejected_per_mode":2,
+    "hardened_helper_clone_speedup_normal":2.094405943823728,
+    "hardened_helper_clone_speedup_optimized":2.091488540401218,
+    "peer_helper_git_blob":"b7c1fd2f7f786c5dc5f8a3b9a7116815ea40607a",
+    "peer_helper_clone_speedup_normal":2.8733938972648048,
+    "peer_helper_clone_speedup_optimized":2.781605185600312,
+    "scope":"Historical receipts above remain unchanged. This closes only the exact helper corpus/alias/mutation/clone-speed gap. Materialized V4 checker, current-production ABI, whole-agent and game gates remain required. No live clone mechanism or new key was installed."
+  }
+}

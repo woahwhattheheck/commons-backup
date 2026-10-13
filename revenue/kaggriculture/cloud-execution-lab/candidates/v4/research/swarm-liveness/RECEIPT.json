@@ -1,0 +1,94 @@
+{
+  "canonical_root": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "evidence": {
+    "kind": "exact-connector-bytes reconstructed in isolated scratch; git hash-object verified before execution",
+    "validated_source_head_sha": "a5816f2f3f5fecce4f3a12d8cf90ce95ae24b6ea"
+  },
+  "files_bytes": {
+    "README.md": 6352,
+    "adversarial-events.jsonl": 1096,
+    "claim_liveness.py": 27667,
+    "test_claim_arbitration.py": 2474,
+    "test_claim_liveness.py": 19035,
+    "test_scope_keys.py": 3704
+  },
+  "files_sha256": {
+    "README.md": "535c383e50408e5ec1c57c621860867fa453258c9a5d0af0af6e1e794b650a14",
+    "adversarial-events.jsonl": "88f23c681bc1f343423a8d15d3cd96fbc806814444cbe7818b28ffc47ee8960f",
+    "claim_liveness.py": "958ac3b8d3ccd984b3dabbb06ae8e108c63bc148cd3357cea27d0855c391192e",
+    "test_claim_arbitration.py": "4a6431414d33e6eb8052c445cb79b379e257dca25a04ad0d7f68f2c893815a9d",
+    "test_claim_liveness.py": "6d26754d6cf0c46c110f85723d163eb407df50f4aac5c96ca8aff54421ecdfce",
+    "test_scope_keys.py": "5106c9304c4c44d78018f831949dcce83f36b2e68d23956e815781f64f802d8e"
+  },
+  "git_blobs": {
+    "README.md": "21c2db991b5bbdb7ac3a865d63c49144dd5c6794",
+    "adversarial-events.jsonl": "9a099369a82923932e0ad0b55be911ee8d0402c6",
+    "claim_liveness.py": "cb3937b51c5e044c7b55ee9bf77a9a46762b1d3d",
+    "test_claim_arbitration.py": "9caa69c7bfe5e7935496b0e804799c41036d59e5",
+    "test_claim_liveness.py": "3b3f03c2efa4ee9737fc93e55e062526da85a9af",
+    "test_scope_keys.py": "c1dcebac3c5c5cb1f2392b76b2b79f11f1539ddc"
+  },
+  "safety": {
+    "arbitration_is_overwrite_authority": false,
+    "duplicate_event_id_replays_authoritative": false,
+    "earliest_fresh_claim_precedence_is_advisory": true,
+    "equal_earliest_claim_tie_fails_closed": true,
+    "fresh_owner_blocks_recovery": true,
+    "future_events_authoritative": false,
+    "noncanonical_root_events_authoritative": false,
+    "noncanonical_root_is_anomaly": true,
+    "quarantined_events_reserve_provider_ids": false,
+    "read_only_missing_root_authoritative": true,
+    "repeat_active_claims_authoritative": false,
+    "repo_write_without_canonical_root_authoritative": false,
+    "repo_writes_require_exact_canonical_root": true,
+    "scope_keys_are_explicit_only": true,
+    "scope_keys_infer_semantic_equivalence": false,
+    "stale_is_overwrite_authority": false,
+    "writer_epoch_followups_require_claim_root": true
+  },
+  "schema": "titan-v4-swarm-liveness-receipt/v1",
+  "scope": "research/control-plane only; no gameplay/default/archive/Kaggle mutation",
+  "tests": {
+    "compile": {
+      "command": "python -B -m py_compile claim_liveness.py test_claim_liveness.py test_claim_arbitration.py test_scope_keys.py",
+      "status": "PASS"
+    },
+    "fixture": {
+      "arbitration": {
+        "lane": "live-collision",
+        "preferred_claim_ts": 1950.0,
+        "preferred_owner": "MUSE",
+        "yield_candidates": [
+          "CLAUDE"
+        ]
+      },
+      "command": "python -B claim_liveness.py adversarial-events.jsonl --as-of 2000 --ttl-seconds 100",
+      "report_bytes": 3376,
+      "report_sha256": "cb3541aea2a2d83a325426db0b5a7f65469f5b6a8801e8111948984ef8487b7c",
+      "scope_groups": [],
+      "summary": {
+        "active": 0,
+        "active_with_stale_owner": 0,
+        "anomalies": 1,
+        "closed": 1,
+        "collisions": 1,
+        "cross_lane_scoped_collisions": 0,
+        "lanes": 3,
+        "scoped_active_groups": 0,
+        "scoped_collisions": 0,
+        "stale_claims": 1
+      }
+    },
+    "normal": {
+      "command": "python -B -m unittest -v test_claim_liveness.py test_claim_arbitration.py test_scope_keys.py",
+      "failed": 0,
+      "passed": 55
+    },
+    "optimized": {
+      "command": "python -O -B -m unittest -v test_claim_liveness.py test_claim_arbitration.py test_scope_keys.py",
+      "failed": 0,
+      "passed": 55
+    }
+  }
+}

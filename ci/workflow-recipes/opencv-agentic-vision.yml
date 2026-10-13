@@ -1,0 +1,42 @@
+name: OpenCV agentic vision contract
+
+on:
+  pull_request:
+    paths:
+      - "competitions/opencv-agentic-vision-2026/**"
+      - ".github/workflows/opencv-agentic-vision.yml"
+  push:
+    branches: [main]
+    paths:
+      - "competitions/opencv-agentic-vision-2026/**"
+      - ".github/workflows/opencv-agentic-vision.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r competitions/opencv-agentic-vision-2026/requirements.txt
+      - name: Compile source
+        run: >-
+          python -m py_compile
+          competitions/opencv-agentic-vision-2026/prooflens.py
+          competitions/opencv-agentic-vision-2026/opencv_perception.py
+          competitions/opencv-agentic-vision-2026/aws_agent.py
+          competitions/opencv-agentic-vision-2026/validate_readiness.py
+      - name: Contract and hostile tests
+        working-directory: competitions/opencv-agentic-vision-2026
+        run: python -B -m unittest discover -s tests -v
+      - name: Optimized-mode hostile tests
+        working-directory: competitions/opencv-agentic-vision-2026
+        run: python -O -B -m unittest discover -s tests -v
+      - name: Checked-in release state must remain blocked
+        working-directory: competitions/opencv-agentic-vision-2026
+        run: python validate_readiness.py submission_readiness.json --expect-blocked

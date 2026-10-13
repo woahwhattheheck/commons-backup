@@ -1,0 +1,38 @@
+name: Sixty Vines Tap Integrity
+
+on:
+  push:
+    paths:
+      - 'revenue/sixty_vines_tap_integrity/**'
+      - '.github/workflows/sixty-vines-tap-integrity.yml'
+  pull_request:
+    paths:
+      - 'revenue/sixty_vines_tap_integrity/**'
+      - '.github/workflows/sixty-vines-tap-integrity.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Normal-mode tests
+        run: python -m unittest discover -s revenue/sixty_vines_tap_integrity -p 'test_*.py' -v
+      - name: Optimized-mode tests
+        run: python -O -m unittest discover -s revenue/sixty_vines_tap_integrity -p 'test_*.py' -v
+      - name: Compile gate
+        run: python -m py_compile revenue/sixty_vines_tap_integrity/rail.py revenue/sixty_vines_tap_integrity/test_rail.py revenue/sixty_vines_tap_integrity/test_rail_hardening.py
+      - name: Full synthetic acceptance
+        run: |
+          python revenue/sixty_vines_tap_integrity/rail.py acceptance \
+            --events 20000 \
+            --taps 60 \
+            --receipt /tmp/sixty-vines-acceptance.json \
+            --require-pass
+          python revenue/sixty_vines_tap_integrity/rail.py verify-receipt /tmp/sixty-vines-acceptance.json

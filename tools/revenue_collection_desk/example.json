@@ -1,0 +1,82 @@
+{
+  "schema": "commons.revenue_collection_ledger/v1",
+  "as_of": "2026-09-18T07:30:00Z",
+  "claims": [
+    {
+      "claim_id": "example-usd-accepted",
+      "counterparty_id": "counterparty-a",
+      "work_ref": "work-a",
+      "instrument": "USD",
+      "amount": "90.00",
+      "events": [
+        {
+          "event_id": "a1",
+          "at": "2026-09-10T10:00:00Z",
+          "kind": "WORK_SUBMITTED",
+          "source_ref": "issue-1",
+          "source_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "event_id": "a2",
+          "at": "2026-09-12T10:00:00Z",
+          "kind": "ACCEPTED",
+          "source_ref": "merge-1",
+          "source_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        {
+          "event_id": "a3",
+          "at": "2026-09-12T11:00:00Z",
+          "kind": "ENTITLEMENT_CONFIRMED",
+          "entitlement_instrument": "USD",
+          "entitlement_amount": "90.00",
+          "source_ref": "bounty-or-agreement-1",
+          "source_digest": "2222222222222222222222222222222222222222222222222222222222222222"
+        }
+      ]
+    },
+    {
+      "claim_id": "example-token-available",
+      "counterparty_id": "counterparty-b",
+      "work_ref": "work-b",
+      "instrument": "RTC",
+      "amount": "25",
+      "reference_valuation": {
+        "currency": "USD",
+        "amount": "4.25",
+        "source_ref": "reference-only",
+        "source_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "events": [
+        {
+          "event_id": "b1",
+          "at": "2026-09-09T09:00:00Z",
+          "kind": "WORK_SUBMITTED",
+          "source_ref": "claim-2",
+          "source_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        {
+          "event_id": "b2",
+          "at": "2026-09-11T09:00:00Z",
+          "kind": "ACCEPTED",
+          "source_ref": "accept-2",
+          "source_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        },
+        {
+          "event_id": "b3",
+          "at": "2026-09-12T09:00:00Z",
+          "kind": "PAYMENT_ASSERTED",
+          "hold_until": "2026-09-13T09:00:00Z",
+          "source_ref": "paid-email-2",
+          "source_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        {
+          "event_id": "b4",
+          "at": "2026-09-14T09:00:00Z",
+          "kind": "PAYMENT_AVAILABLE",
+          "source_ref": "wallet-2",
+          "source_digest": "1111111111111111111111111111111111111111111111111111111111111111"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "titan-v4-e7-lifecycle-repair/v1",
+  "status": "component_tested_unwired_default_off",
+  "owner": "ASTRA-E7-LIFECYCLE",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e7-post-tick",
+  "source": {
+    "file": "e7_post_tick_evening_flush.py",
+    "previous_git_blob": "e5ed61613cfa8a6d23809166d9310a8f569a65d4",
+    "git_blob": "bb8e0ff12734dc882b700e5d3d07c82a014e0cde",
+    "bytes": 15038,
+    "sha256": "59049f5421105a28193b27f82610d7ccb73268e4d6587f5397684875a12a5317"
+  },
+  "test": {
+    "file": "test_e7_lifecycle.py",
+    "git_blob": "d6926a6b0cc80f2d1271ec042bf3549b18275f4b",
+    "bytes": 19523,
+    "sha256": "4a5f1fed689747ce1fa3e9e4fe43b1c275df8095a84a8439843aca97d29454f8"
+  },
+  "selected_collaborator_fixture": {
+    "file": "e7_router_test_slice.py",
+    "git_blob": "43b8c185ecc2b4f2be2dd962cae6e3dcfc95ecf1",
+    "bytes": 4378,
+    "sha256": "393482a472946abb387562288ff29248efd4faef4986eccfd09a0f6d0707a6a7",
+    "source_router_blob": "a3e2fe87c717d128e43c9b65bae2265f40d1d76d",
+    "scope": "Verbatim FarmView, projected_shed and evening_flush bodies plus referenced constants from GitHub source excerpts; not the full router",
+    "complete_router_ast_comparison": "NOT_RUN; optional --router gate is implemented"
+  },
+  "official_engine": {
+    "artifact_id": 10285621024,
+    "member": "seed-retry-runtime/kaggriculture.py",
+    "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "bytes": 40356,
+    "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "adjacent_spec_blob": "b354d06b742fe48402513792253f1a5c29366b20",
+    "adjacent_spec_sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+    "execution": "Complete interpreter on constructed states; initialization not called; seed-resolution shim raises if called"
+  },
+  "changes": [
+    "Require plain-integer episodeSteps and source_step+2 <= episodeSteps-2 before withholding; equality permits the final callback",
+    "Revalidate supported configuration and executable horizon at release; reject to exact parent action and clear pending",
+    "Record wanted-minus-issued for partial release shortfalls; parent-covered units are not incrementally issued by E7, not necessarily lost units or cash"
+  ],
+  "execution": {
+    "python": "3.13.5",
+    "normal": {"tests": 21, "failures": 0, "errors": 0, "skipped": 0},
+    "optimized": {"tests": 21, "failures": 0, "errors": 0, "skipped": 0},
+    "per_mode_counts": {
+      "short_horizon_cells": 112,
+      "exact_boundary_cells": 56,
+      "default_callback_comparisons": 540,
+      "release_accounting_cells": 1248,
+      "engine_short_horizon_pairs": 12,
+      "engine_boundary_pairs": 12,
+      "interpreter_calls": 108
+    },
+    "exact_predecessor": {"normal_failed_subcases": 524, "optimized_failed_subcases": 524, "errors_each_mode": 0},
+    "mutation_controls": [
+      {"name": "allow_missing_final_callback", "failed_subcases_each_mode": 64},
+      {"name": "reject_exact_final_callback", "failed_subcases_each_mode": 3},
+      {"name": "drop_partial_shortfall", "failed_subcases_each_mode": 386},
+      {"name": "skip_release_configuration_gate", "failed_subcases_each_mode": 1}
+    ],
+    "mutation_result": "4/4 killed normal and 4/4 killed optimized",
+    "py_compile": "PASS"
+  },
+  "actual_engine_witness": {
+    "seats": [0, 1],
+    "initial_money": 3000,
+    "milk_units": 5,
+    "source_step": 47,
+    "horizons_49_and_50": {"old_terminal_reward": 3000, "old_milk_left": 5, "repaired_terminal_reward": 3780, "repaired_milk_left": 0},
+    "horizon_51": {"callbacks": [47, 48, 49], "old_terminal_reward": 3797, "repaired_terminal_reward": 3797},
+    "qualification": "Constructed shortened-episode suffixes, not an observed game, occurrence estimate or expected-value claim. Default720 already has R04 LAST_STEP718 protection."
+  },
+  "preserved": {
+    "original_test_blob": "999a4c2e2fc3f26fe8ea32e81f8b6b04e28f8bfc",
+    "original_evaluator_blob": "83072e8ee2bbe50c4ecee5787180df8163287f21",
+    "original_source_available_in_git_history": true,
+    "same_helper_and_feature": true,
+    "raw_market_indexes_and_parent_action_identity_on_reject": true
+  },
+  "not_run": [
+    "Original 15-test file against complete imported router",
+    "Complete router AST comparison; excerpt-selected collaborator fixture only",
+    "Current production ABI port or installed package gate",
+    "Hosted Python3.11 or new Actions runs",
+    "Full-game field economics or leaderboard evaluation"
+  ],
+  "unchanged": ["production runtime", "donor router", "feature defaults", "shared materializer", "workflow", "archive", "Kaggle submission"]
+}

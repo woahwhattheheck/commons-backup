@@ -1,0 +1,50 @@
+{
+  "acceptance": {
+    "exactly_once_effect": true,
+    "forced_failure_visible": true,
+    "recovery_reached_done": true,
+    "replay_deduped": true
+  },
+  "artifacts": {
+    "code": "revenue/production_survival/survival_canary.py",
+    "code_sha256": "c9243bb2f630feba08b22915bca264e4fac30da6592bb02ccff9f6a064f24404",
+    "intake": "revenue/production_survival/example_intake.json",
+    "receipt": "revenue/production_survival/example_receipt.json",
+    "schema": "revenue/production_survival/receipt.schema.json"
+  },
+  "canary": {
+    "attempts": 2,
+    "dedupe_hits": 1,
+    "external_effect_count": 1,
+    "failure_injected": true,
+    "failure_point": "after_effect_before_done_checkpoint",
+    "final_phase": "DONE",
+    "operation_key": "survival-proof:87b602a9f0694aef",
+    "recovery_result": "DEDUPED"
+  },
+  "contract": {
+    "environment": {
+      "runtime": "Python 3 standard library",
+      "system": "provider-controlled public-safe filesystem"
+    },
+    "expected_output": "forced failure is visible; recovery reaches DONE with exactly one effect",
+    "input": "one non-confidential outcome/failure sentence",
+    "window": {
+      "kind": "PUBLIC_EXAMPLE_NOT_CUSTOMER_SLA",
+      "timezone": "America/New_York",
+      "window_end": null,
+      "window_start": null
+    }
+  },
+  "intake": {
+    "sentence": "My agent should record one customer action, but in production it retries after a timeout and records the action twice.",
+    "sha256": "87b602a9f0694aef659888d3469756441f57ae46d4b7bdf024f03ce6a5b7cd9b"
+  },
+  "limits": [
+    "uses synthetic public-safe state",
+    "does not access or fix a buyer production system",
+    "demonstrates the receipt and exactly-once recovery pattern only"
+  ],
+  "offer_id": "same-day-agent-survival-proof",
+  "status": "LANDED"
+}

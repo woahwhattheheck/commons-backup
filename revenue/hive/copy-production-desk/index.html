@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Hive Copy Desk</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#192b35;background:#eff3f3}*{box-sizing:border-box}body{margin:0}header{background:#142f35;color:white;padding:24px max(24px,calc((100vw - 1260px)/2))}header p{color:#c8dfdc;max-width:850px}h1{margin:0;font-size:30px}h2{font-size:20px;margin:0 0 15px}h3{font-size:16px}.card{background:white;border:1px solid #d6e1e1;border-radius:12px;padding:20px;margin-bottom:18px}main{max-width:1308px;margin:auto;padding:24px;display:grid;grid-template-columns:340px 1fr;gap:20px}label{display:block;font-size:13px;font-weight:650;margin:12px 0 6px}input,select,textarea{width:100%;font:inherit;border:1px solid #a9bbbb;border-radius:6px;padding:9px;background:white;color:inherit}textarea{min-height:90px;resize:vertical}button,.button{font:inherit;cursor:pointer;border:0;border-radius:6px;background:#17655e;color:white;padding:10px 14px;margin:10px 6px 0 0;text-decoration:none;display:inline-block}button.secondary{background:#e2eeee;color:#174b48}button:disabled{opacity:.4;cursor:default}.muted{color:#55696d;font-size:13px;line-height:1.55}.status{font-size:12px;font-weight:750;background:#e2eeee;padding:4px 8px;border-radius:4px}.request{width:100%;text-align:left;background:#f3f7f7;color:#192b35;border:1px solid #d6e1e1;display:block}.request.selected{border:2px solid #17655e}.request small{display:block;margin-top:6px}.row{display:flex;gap:12px;align-items:center}.row>*{flex:1}#notice{max-width:1260px;margin:12px auto;padding:12px 20px;white-space:pre-wrap;min-height:40px}#editor{font-family:ui-monospace,monospace;min-height:440px;line-height:1.6}details{margin:14px 0}summary{cursor:pointer;font-weight:650}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.hidden{display:none}a{color:#175e67}#history{max-height:230px;overflow:auto}footer{max-width:1260px;margin:auto;padding:0 24px 30px}.pending{background:#ffeac1} @media(max-width:850px){main{grid-template-columns:1fr;padding:14px}header{padding:20px}.row{flex-wrap:wrap}#editor{min-height:360px}}
+header .status{color:#192b35}header a{color:#c8dfdc}
+</style>
+<header><h1>Hive Copy Desk</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>From a source-backed brief to editable copy. Keep one request in production per customer, preserve every revision, and hand off the finished files.</p><span class="status">Shared operator workspace · no emails or publishing</span></header>
+<div id="notice" role="status" aria-live="polite">Loading workspace…</div>
+<main><aside>
+<section class="card"><h2>Customers & brand voice</h2><label for="customer">Customer</label><select id="customer"></select>
+<details id="brandDetails"><summary>Edit brand and claim sources</summary><label for="brandName">Customer name</label><input id="brandName" maxlength="200"><label for="voice">Brand voice</label><textarea id="voice"></textarea><label for="claims">Claim library — JSON</label><textarea id="claims" rows="8" spellcheck="false"></textarea><p class="muted">Each claim needs an id, text and source. Source links are context, not automatic fact-checking. Edits apply to new drafts; previous snapshots remain intact.</p><button id="saveBrand">Save brand</button></details>
+<button id="newCustomer" class="secondary">New customer</button></section>
+<section class="card"><h2>Request queue</h2><div id="queue"></div><details id="intake"><summary>Add copy request</summary><label for="title">Request title</label><input id="title"><label for="kind">Deliverable</label><select id="kind"><option>Landing page + email sequence</option><option>Landing page</option><option>Email sequence</option><option>Product copy</option></select><label for="brief">Brief and offer details</label><textarea id="brief"></textarea><label for="priority">Priority (0–100)</label><input id="priority" type="number" value="0" min="0" max="100"><button id="createRequest">Add to queue</button></details></section>
+<section class="card"><h2>Retry an interrupted edit</h2><p class="muted">An unacknowledged write retains its exact payload here. Retry it before making another change. The database prevents duplicate edits.</p><button id="retry" class="secondary" disabled>Retry pending edit</button><button id="refresh" class="secondary">Refresh workspace</button></section>
+</aside><article>
+<section class="card" id="empty"><h2>Your editable production desk</h2><p>Create a customer and a source-linked brand library, then add the first request. Run with <code>--demo</code> to load finished sample copy for the Commons purchasing operator.</p></section>
+<section class="card hidden" id="work"><div class="row"><h2 id="requestTitle"></h2><span id="requestStatus" class="status"></span></div><p id="requestBrief"></p><p class="muted" id="feedbackDisplay"></p>
+<div id="queueControls"><label for="queuePriority">Queue priority</label><input id="queuePriority" type="number" min="0" max="100"><button id="changePriority" class="secondary">Update priority</button><button id="start">Start production</button></div>
+<details><summary>Source library for this draft</summary><pre id="sourceView"></pre></details>
+<div class="row"><div><label for="document">Editable document</label><select id="document"></select></div><div><label for="newFilename">New document filename</label><input id="newFilename" placeholder="landing-page.md"><button id="addDocument" class="secondary">Add document</button></div></div>
+<label for="editor">Copy source</label><textarea id="editor" spellcheck="true"></textarea><button id="removeDocument" class="secondary">Remove selected document</button>
+<label for="sourceIds">Source IDs used (comma-separated)</label><input id="sourceIds"><label for="note">Revision note</label><input id="note" placeholder="Describe this revision"><button id="saveDraft">Save draft for review</button>
+<label for="feedback">Revision request</label><textarea id="feedback" placeholder="What needs to change?"></textarea><button id="revise" class="secondary">Request revision</button><button id="deliver">Mark delivered & start next</button><a id="download" class="button" href="#">Export editable ZIP</a><button id="cancel" class="secondary">Cancel request</button>
+<p class="muted">Delivery changes local workflow status and starts the next queued request for this customer. Exported files are not sent or published. Review copy against source material before using it.</p>
+<details><summary>Revision history & saved source snapshots</summary><div id="history"></div></details></section>
+</article></main><footer class="muted">No sign-in, subscriptions, model calls or automatic copy generation. This is an editable production and delivery workspace. All connected users share the same operator view.</footer>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let state={clients:[],requests:[]}, clientId='', requestId='', files={}, activeFile='', creating=false, busy=false, renderedVersion=null;
+const pendingKey='hive-copy-desk-pending-v1';
+function notice(message){$('notice').textContent=message}
+function pending(){try{return JSON.parse(sessionStorage.getItem(pendingKey)||'null')}catch{return null}}
+function keepEditor(){if(activeFile)files[activeFile]=$('editor').value}
+function selected(){return state.requests.find(r=>r.id===requestId)}
+function client(){return state.clients.find(c=>c.id===clientId)}
+function fillFiles(){const names=Object.keys(files);if(!names.includes(activeFile))activeFile=names[0]||'';$('document').replaceChildren(...names.map(n=>new Option(n,n)));$('document').value=activeFile;$('editor').value=files[activeFile]||'';$('editor').disabled=!activeFile}
+async function refresh(){const res=await fetch('/api/state');if(!res.ok)throw Error('Cannot read workspace');state=await res.json();render()}
+function render(){
+ if(!state.clients.some(c=>c.id===clientId))clientId=state.clients[0]?.id||'';
+ $('customer').replaceChildren(...state.clients.map(c=>new Option(c.name,c.id)));$('customer').value=clientId;
+ const c=client();if(c&&!creating){$('brandName').value=c.name;$('voice').value=c.brand.voice;$('claims').value=JSON.stringify(c.brand.claims,null,2)}
+ const requests=state.requests.filter(r=>r.client_id===clientId);if(!requests.some(r=>r.id===requestId))requestId=requests.find(r=>['active','review','revision'].includes(r.status))?.id||requests[0]?.id||'';
+ $('queue').replaceChildren();for(const r of requests){const b=document.createElement('button');b.className='request'+(r.id===requestId?' selected':'');const name=document.createElement('span');name.textContent=r.title;const meta=document.createElement('small');meta.textContent=`${r.status} · priority ${r.priority} · ${r.drafts.length} revision(s)`;b.append(name,meta);b.onclick=()=>{requestId=r.id;renderedVersion=null;render()};$('queue').append(b)}
+ const r=selected();$('empty').classList.toggle('hidden',!!r);$('work').classList.toggle('hidden',!r);
+ $('retry').disabled=!pending()||busy;$('createRequest').disabled=!c||busy;
+ if(!r)return;
+ $('requestTitle').textContent=r.title;$('requestStatus').textContent=r.status+' · version '+r.version;$('requestBrief').textContent=r.brief;$('feedbackDisplay').textContent=r.feedback?'Revision feedback: '+r.feedback:'';
+ $('sourceView').textContent=JSON.stringify(c.brand,null,2);$('queueControls').classList.toggle('hidden',r.status!=='queued');$('queuePriority').value=r.priority;
+ if(renderedVersion!==r.id+':'+r.version){const d=r.drafts.at(-1);files=d?{...d.files}:{'draft.md':''};activeFile=Object.keys(files)[0];$('sourceIds').value=d?d.sources.join(', '):c.brand.claims.map(x=>x.id).join(', ');$('note').value='';fillFiles();renderedVersion=r.id+':'+r.version}
+ const editable=['active','review','revision'].includes(r.status);for(const id of ['saveDraft','addDocument','removeDocument'])$(id).disabled=!editable||busy;
+ $('revise').disabled=r.status!=='review'||busy;$('deliver').disabled=r.status!=='review'||busy;$('cancel').disabled=['delivered','cancelled'].includes(r.status)||busy;$('download').classList.toggle('hidden',!r.drafts.length);$('download').href='/api/export/'+r.id;
+ $('history').replaceChildren();for(const d of [...r.drafts].reverse()){const p=document.createElement('pre');p.textContent=`Revision ${d.number} · ${d.created}\n${d.note}\nBrand version ${d.brand_version}\nSources: ${d.sources.join(', ')}\n`+JSON.stringify(d.brand_snapshot,null,2);$('history').append(p)}
+}
+async function transmit(job){
+ if(busy)return;busy=true;notice('Saving…');
+ try{const res=await fetch('/api/'+job.operation,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(job.data)});const result=await res.json();if(!res.ok){if(res.status<500)sessionStorage.removeItem(pendingKey);throw Error(result.error||'Write failed')}
+ sessionStorage.removeItem(pendingKey);creating=false;if(job.operation==='client/create'){clientId=result.id;requestId='';renderedVersion=null}if(job.operation==='request/create'){clientId=job.data.client_id;requestId=result.id;renderedVersion=null}notice('Saved. Nothing was emailed or published.');await refresh();
+ }catch(error){notice(error.message+(pending()?' — exact edit retained; use Retry pending edit.':''))}finally{busy=false;render()}
+}
+async function write(operation,data){if(pending()){notice('Resolve the pending edit with Retry before making another change.');return}const job={operation,data:{...data,operation_id:crypto.randomUUID()}};sessionStorage.setItem(pendingKey,JSON.stringify(job));await transmit(job)}
+function run(fn){return async()=>{try{await fn()}catch(error){notice(error.message)}}}
+function action(action,extra={}){const r=selected();return write('request/action',{id:r.id,version:r.version,action,...extra})}
+$('customer').onchange=()=>{clientId=$('customer').value;requestId='';creating=false;renderedVersion=null;render()};
+$('newCustomer').onclick=()=>{creating=true;$('brandDetails').open=true;$('brandName').value='';$('voice').value='';$('claims').value=JSON.stringify([{id:'offer',text:'Describe the actual offer',source:'Link or file reference'}],null,2);$('brandName').focus()};
+$('saveBrand').onclick=run(async()=>{const c=client();await write(creating||!c?'client/create':'client/update',{...(creating||!c?{}:{id:c.id,version:c.version}),name:$('brandName').value,voice:$('voice').value,claims:JSON.parse($('claims').value)})});
+$('createRequest').onclick=run(()=>write('request/create',{client_id:clientId,title:$('title').value,kind:$('kind').value,brief:$('brief').value,priority:Number($('priority').value)}));
+$('start').onclick=run(()=>action('start'));$('changePriority').onclick=run(()=>action('priority',{priority:Number($('queuePriority').value)}));$('revise').onclick=run(()=>action('revise',{feedback:$('feedback').value}));$('deliver').onclick=run(()=>action('deliver'));$('cancel').onclick=run(()=>action('cancel'));
+$('document').onchange=()=>{keepEditor();activeFile=$('document').value;fillFiles()};
+$('addDocument').onclick=()=>{keepEditor();const name=$('newFilename').value;if(!/^[A-Za-z0-9][A-Za-z0-9_-]{0,79}\.(md|txt)$/.test(name)){notice('Use a filename such as landing-page.md');return}if(Object.hasOwn(files,name)){notice('That document already exists');return}files[name]='';activeFile=name;fillFiles()};
+$('removeDocument').onclick=()=>{delete files[activeFile];activeFile='';fillFiles()};
+$('saveDraft').onclick=run(()=>{keepEditor();const r=selected();return write('draft/save',{id:r.id,version:r.version,files,source_ids:$('sourceIds').value.split(',').map(s=>s.trim()).filter(Boolean),note:$('note').value})});
+$('retry').onclick=run(()=>{const job=pending();if(job)return transmit(job)});$('refresh').onclick=run(refresh);
+refresh().then(()=>notice(pending()?'A prior edit awaits acknowledgement. Use Retry pending edit.':'Workspace ready.')).catch(e=>notice(e.message));
+</script></html>

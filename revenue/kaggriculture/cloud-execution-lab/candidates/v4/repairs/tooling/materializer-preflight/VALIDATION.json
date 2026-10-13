@@ -1,0 +1,38 @@
+{
+  "lane": "V4-MATERIALIZER-OPTIMIZATION-PREFLIGHT-20260911-01",
+  "publication": "LOCAL_VALIDATION_RECEIPT_PUBLISHED_FOR_CUSTODY",
+  "canonical_integration_branch": "main",
+  "preimage_git_blob": "f67f8ce7d5f5779c1fad9b1e51e3b736b02b513d",
+  "postimage_git_blob": "a180e59c22fa90d675aff031678ff1f7a59ce3c3",
+  "postimage_sha256": "84edb80f98f2f51b9cd6a443339537c3877507dea5da8b6eacc2437955669408",
+  "test_scope": "24 hermetic unittest methods per run; helpers compiled in optimization modes 0, 1 and 2; synthetic seam fixtures only",
+  "unchanged_scope": "13 literal gameplay edits, 12 feature keys, positive output bytes against original normal-mode materializer",
+  "not_claimed": [
+    "No complete-game or leaderboard measurement",
+    "No current-production ABI compatibility or official #12620 checker acceptance",
+    "No crash-atomic or concurrent multi-file publication",
+    "No gameplay activation or default flip"
+  ],
+  "runs": [
+    {"label":"normal","exit_code":0,"test_methods":24,"matches_expectation":true,"seconds":3.823,"log_sha256":"c07c2dea9736c119e58a49b282e2de739955d87938c2536743e1c16dc0fae893"},
+    {"label":"optimized","exit_code":0,"test_methods":24,"matches_expectation":true,"seconds":5.859,"log_sha256":"8c0baca836084ba7806fbc01573a4a67bd3a735f2d7306d160e2d2d2b8b69350"},
+    {"label":"double-optimized","exit_code":0,"test_methods":24,"matches_expectation":true,"seconds":5.989,"log_sha256":"79b3679c8dba544ad51ed2f338296d1c9c246a7ffedd64b6f903a2deecf84789"},
+    {"label":"predecessor-negative-control","exit_code":1,"test_methods":3,"matches_expectation":true,"seconds":1.033,"failure_events_including_subtests":8,"log_sha256":"953d717ea002015b31a0d5272ce40fa0b34f0112e63bed3f60fe540f7218d672"}
+  ],
+  "pass": true,
+  "fresh_github_readback": {
+    "historical_main_commit": "df757abbc5f6a73367c20e7848ed13c73fd29b7f",
+    "source_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/apply_v4.py",
+    "source_git_blob": "f67f8ce7d5f5779c1fad9b1e51e3b736b02b513d",
+    "source_matches_tested_preimage": true
+  },
+  "patch_check": {
+    "git_apply_check": 0,
+    "git_apply": 0,
+    "postimage_exact": true,
+    "double_apply_check": 1,
+    "changed_paths": ["revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/apply_v4.py"],
+    "patch_sha256": "95537a3f0f5a755f5b26124654a342bb9d9e140b738bb0fdd95f016dcdef44f9"
+  },
+  "witness_count": 9
+}

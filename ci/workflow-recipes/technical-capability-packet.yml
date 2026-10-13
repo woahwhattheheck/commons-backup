@@ -1,0 +1,37 @@
+name: Technical Capability Packet
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/technical_capability_packet/**'
+      - '.github/workflows/technical-capability-packet.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/technical_capability_packet/**'
+      - '.github/workflows/technical-capability-packet.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/technical_capability_packet/*.py
+      - name: Contract tests
+        run: python -m unittest revenue.technical_capability_packet.test_engine revenue.technical_capability_packet.test_cli -v
+      - name: Optimized contract tests
+        run: python -O -m unittest revenue.technical_capability_packet.test_engine revenue.technical_capability_packet.test_cli -v
+      - name: Fixture compile and current verify
+        run: |
+          python -m revenue.technical_capability_packet.cli compile revenue/technical_capability_packet/fixtures/synthetic_request.json --format json > /tmp/capability-report.json
+          python -m revenue.technical_capability_packet.cli verify revenue/technical_capability_packet/fixtures/synthetic_request.json /tmp/capability-report.json

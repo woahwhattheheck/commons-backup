@@ -1,0 +1,13 @@
+{
+  "operation_id": "astra-lantern-community-events-20260908-01",
+  "source_demand": "bm-hive-20260908-038",
+  "scope": "Scheduled trivia slice; not the complete community-platform or chess product",
+  "requirements": [
+    {"requirement": "Scheduled trivia and rooms", "implementation": "app.py Store.create/phase/listing; index.html host form", "evidence": "test_schedule_hides_questions_and_prevents_early_answers; test_listing_has_schedule_and_room_but_no_question_keys"},
+    {"requirement": "Members join and finish a round", "implementation": "Store.join/answer/finish; HTTP and browser interfaces", "evidence": "test_full_http_create_join_answer_reconnect_finish_flow; browser acceptance unverified"},
+    {"requirement": "Consistent scores after reconnecting", "implementation": "SQLite answers, first-answer-wins transaction, reconnect references", "evidence": "test_reconnect_and_restart_preserve_all_scores; test_parallel_retries_commit_exactly_one_answer"},
+    {"requirement": "Leaderboards and moderator controls", "implementation": "Shared host finish control; tied final ranks", "evidence": "test_tied_scores_share_rank_with_competition_gap; test_finish_is_idempotent_and_does_not_change_scoring"},
+    {"requirement": "Free-entry play and non-cash points", "implementation": "No payments or prizes; integer points", "evidence": "Source inspection and scoring tests"},
+    {"requirement": "Chess-style challenges and community installation", "implementation": null, "evidence": "Separate remaining work; no completion claim"}
+  ]
+}

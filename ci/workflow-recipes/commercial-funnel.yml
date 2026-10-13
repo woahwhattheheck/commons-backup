@@ -1,0 +1,47 @@
+name: commercial-funnel
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/commercial_funnel/**'
+      - '.github/workflows/commercial-funnel.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/commercial_funnel/**'
+      - '.github/workflows/commercial-funnel.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse and compile package
+        run: |
+          python -m py_compile revenue/commercial_funnel/*.py
+      - name: Focused hostile and acceptance suites
+        run: |
+          python -m unittest -v revenue.commercial_funnel.test_ledger revenue.commercial_funnel.test_cli revenue.commercial_funnel.test_review_regressions
+          python -O -m unittest -v revenue.commercial_funnel.test_ledger revenue.commercial_funnel.test_cli revenue.commercial_funnel.test_review_regressions
+      - name: Example compile and independent artifact verification
+        run: |
+          out="$RUNNER_TEMP/commercial-funnel-example"
+          python -m revenue.commercial_funnel.cli compile \
+            revenue/commercial_funnel/example_input.json \
+            --as-of 2026-09-13T10:10:00Z \
+            --out-dir "$out"
+          python -m revenue.commercial_funnel.cli verify \
+            revenue/commercial_funnel/example_input.json \
+            --as-of 2026-09-13T10:10:00Z \
+            --packet "$out/packet.json" \
+            --receipt "$out/receipt.json" \
+            --report-json "$out/report.json" \
+            --report-csv "$out/report.csv" \
+            --report-md "$out/report.md"

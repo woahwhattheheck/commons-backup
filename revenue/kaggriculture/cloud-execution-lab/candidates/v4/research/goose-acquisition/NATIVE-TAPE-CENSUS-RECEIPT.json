@@ -1,0 +1,69 @@
+{
+  "goose_buy_witnesses": [
+    {"animal":"GOOSE","plan":0,"qty":2,"slot":2,"step":241},
+    {"animal":"GOOSE","plan":0,"qty":1,"slot":7,"step":265},
+    {"animal":"GOOSE","plan":2,"qty":2,"slot":2,"step":241},
+    {"animal":"GOOSE","plan":2,"qty":1,"slot":7,"step":265}
+  ],
+  "goose_plan_coop_witnesses": [
+    {"actor":6,"command":["BUILD_COOP"],"plan":0,"step":254},
+    {"actor":2,"command":["BUILD_COOP"],"plan":0,"step":255},
+    {"actor":3,"command":["BUILD_COOP"],"plan":0,"step":258},
+    {"actor":11,"command":["BUILD_COOP"],"plan":0,"step":259},
+    {"actor":6,"command":["BUILD_COOP"],"plan":0,"step":676},
+    {"actor":6,"command":["BUILD_COOP"],"plan":2,"step":254},
+    {"actor":2,"command":["BUILD_COOP"],"plan":2,"step":255},
+    {"actor":3,"command":["BUILD_COOP"],"plan":2,"step":258},
+    {"actor":11,"command":["BUILD_COOP"],"plan":2,"step":259},
+    {"actor":6,"command":["BUILD_COOP"],"plan":2,"step":676}
+  ],
+  "goose_worker_witnesses": [
+    {"actor":3,"command":["PICKUP","GOOSE"],"op":"PICKUP","plan":0,"step":253},
+    {"actor":11,"command":["PICKUP","GOOSE"],"op":"PICKUP","plan":0,"step":254},
+    {"actor":3,"command":["PLACE","GOOSE"],"op":"PLACE","plan":0,"step":259},
+    {"actor":11,"command":["PLACE","GOOSE"],"op":"PLACE","plan":0,"step":260},
+    {"actor":6,"command":["PICKUP","GOOSE"],"op":"PICKUP","plan":0,"step":268},
+    {"actor":6,"command":["PLACE","GOOSE"],"op":"PLACE","plan":0,"step":275},
+    {"actor":3,"command":["PICKUP","GOOSE"],"op":"PICKUP","plan":2,"step":253},
+    {"actor":11,"command":["PICKUP","GOOSE"],"op":"PICKUP","plan":2,"step":254},
+    {"actor":3,"command":["PLACE","GOOSE"],"op":"PLACE","plan":2,"step":259},
+    {"actor":11,"command":["PLACE","GOOSE"],"op":"PLACE","plan":2,"step":260},
+    {"actor":6,"command":["PICKUP","GOOSE"],"op":"PICKUP","plan":2,"step":268},
+    {"actor":6,"command":["PLACE","GOOSE"],"op":"PLACE","plan":2,"step":275}
+  ],
+  "interpretation": [
+    "Exact frozen native R01 plans already author GOOSE acquisition and placement; adding generic GOOSE acquisition is not justified as a missing-native-capability repair.",
+    "Next gate is R04 retention/erosion: determine whether the current whole-route transforms preserve or suppress these exact plan-0/2 BUY/PICKUP/PLACE/BUILD_COOP actions.",
+    "Static requested-action evidence only; not an engine execution or economic receipt."
+  ],
+  "limits": [
+    "Static frozen-tape census only; no runtime opportunity/economic inference.",
+    "Counts requested actions in exact R01 tapes, not engine execution receipts."
+  ],
+  "schema": "titan.v4.goose-native-tape-census-receipt.v1",
+  "source": {
+    "actions_scanned": 9347,
+    "archive_bytes": 652318,
+    "archive_file_id": "F0C18AXAL04",
+    "archive_member": "titan-v3.1-package/tree/v3/overlay/r01_tapes.py",
+    "archive_sha256": "8fb4776b416f32dcd978f57a6f8caf42c84d2245d5f9a08962adbe814dadab8e",
+    "plans": 13,
+    "r01_tapes_bytes": 32955,
+    "r01_tapes_git_blob": "a43289b9cc5e34a2481fddf652762a7d92f427ef",
+    "r01_tapes_sha256": "4a60e775e52905048257aff4871a11c5ba49de6ba464177ed6ae4d9bd3120e18",
+    "steps_per_plan": 719
+  },
+  "source_result_bytes": 23523,
+  "source_result_git_blob": "4f669a3c3f50bb535a63580e77e69338fc25a9b3",
+  "source_result_sha256": "6b9f1ad4675de21e584695e299695b0a2b3149d886eec141cc0f05aebd3951dd",
+  "status": "STATIC_NATIVE_CAPABILITY_PRESENT",
+  "summary": {
+    "build_coop_commands_by_plan": {"0":5,"1":2,"10":2,"11":2,"12":2,"2":5,"3":1,"4":2,"5":2,"6":2,"7":2,"8":2,"9":2},
+    "buy_animal_orders": {"COW":56,"GOOSE":4,"SHEEP":99},
+    "buy_animal_units": {"COW":80,"GOOSE":6,"SHEEP":133},
+    "goose_worker_ops": {"PICKUP":6,"PLACE":6},
+    "native_goose_buy_present": true,
+    "native_goose_pickup_present": true,
+    "native_goose_place_present": true
+  }
+}

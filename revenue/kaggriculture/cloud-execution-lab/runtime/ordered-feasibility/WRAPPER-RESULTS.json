@@ -1,0 +1,198 @@
+{
+  "scope": "Five new selected-action wrapper interface cases; accepted component suites and game panels were not rerun.",
+  "test_command": "python3 -m unittest -v test_ordered_selected_sell.py",
+  "execution": {
+    "executor": "parent /root in existing cloud container",
+    "tests_run": 5,
+    "failures": 0,
+    "errors": 0,
+    "suite_seconds": 0.062,
+    "command_seconds": 0.162,
+    "timing_provenance": "Parent supplied completed run output; no per-call timing was recorded.",
+    "additional_runs_by_report_writer": 0
+  },
+  "source_sha256": {
+    "ordered_selected_sell.py": "b38caacb2d2156e83aab9d1471e1312a241250dae8b655c1b133fce097bca426",
+    "selected_action_sell.py": "a3ca92cb7fabfb65bb660931fb6fa2623067809ac01ef44b55edd6ca3f5b422a",
+    "selected_sell_core.py": "5a0ad436a31c344ee684773d20ef23bda0ef6a7bb8952b7af5e46489f67f45e7",
+    "mechanics.py": "579965e589237d1e5bbcc8b8448188f91b173d4480430d34b3a7f0e07e0c48d3",
+    "test_ordered_selected_sell.py": "f8eca725d1e78430d3264b1143aaef104b99e206a09f72ad6cb4f937f3cda8e6",
+    "reference/ordered-feasibility/atlas/projection.py": "0ab335604b46a415bfb61cc5494c2d6f83591b13f2aa61323af6cf4a6e90e002",
+    "reference/selected-action/t08/arrival_contract.py": "2ebe366f326ce1ff8a9a014f1a8142883a9393f69ae0aef00e203643e068ebd8",
+    "reference/decision/decision.py": "9d78406668c927785b29f5bf2b5a67f0263bfcd63f626c881a60bad5f8293c52"
+  },
+  "witnesses": [
+    {
+      "test": "test_current_pickup_before_drop_prepares_once_and_binds_selected_action",
+      "step": 100,
+      "initial_shed": {
+        "WHEAT": 10,
+        "MILK": 90
+      },
+      "selected_workers": [
+        [
+          "PICKUP",
+          "WHEAT",
+          10
+        ],
+        [
+          "DROP"
+        ]
+      ],
+      "hand_carried": {
+        "MILK": 10
+      },
+      "assertions": {
+        "post_unit_shed": {
+          "WHEAT": 0,
+          "MILK": 100
+        },
+        "post_unit_inventories": [
+          {
+            "WHEAT": 10
+          },
+          {}
+        ],
+        "current_stock_events": [],
+        "milk_sold": 100,
+        "prepared_transform_did_not_call_prepare": true,
+        "changed_action_uses_fallback": true,
+        "changed_same_step_stock_uses_fallback": true,
+        "inputs_unchanged": true
+      }
+    },
+    {
+      "test": "test_future_drop_pickup_order_changes_capacity_decision",
+      "steps": [
+        100,
+        101
+      ],
+      "initial_shed": {
+        "WHEAT": 90,
+        "CARROT": 10
+      },
+      "observed_carried_milk": 10,
+      "assertions": {
+        "drop_before_pickup_event_deltas": [
+          10,
+          -10
+        ],
+        "pickup_before_drop_event_deltas": [
+          -10,
+          10
+        ],
+        "drop_before_pickup_current_carrot_sale": 10,
+        "pickup_before_drop_current_carrot_sale": "strictly less than 10",
+        "official_engine_milk_admitted_in_both": 10
+      }
+    },
+    {
+      "test": "test_terminal_place_then_reserved_stock_uses_valid_fallback",
+      "step": 718,
+      "initial_shed": {
+        "CARROT": 1
+      },
+      "initial_farmer_carried": {
+        "WHEAT": 1
+      },
+      "selected_farmer": [
+        "PLACE",
+        "WHEAT",
+        1
+      ],
+      "stock_minimum": {
+        "WHEAT": 1
+      },
+      "assertions": {
+        "post_unit_wheat": 1,
+        "fallback_market": [
+          [],
+          [
+            "SELL",
+            "CARROT",
+            1
+          ]
+        ],
+        "official_engine_final_wheat": 1,
+        "official_engine_final_carrot": 0
+      }
+    },
+    {
+      "test": "test_t08_pending_whole_lot_and_observed_carry_have_separate_accounting",
+      "steps": [
+        21,
+        22,
+        23
+      ],
+      "contract_source": "reference/selected-action/t08/arrival_contract.py",
+      "committed_whole_lot": 6,
+      "observed_carried_eggs": 2,
+      "pending_harvest_eggs": 4,
+      "contingent_harvest_exclusion": [
+        [
+          22,
+          0
+        ]
+      ],
+      "assertions": {
+        "egg_stock_events": [
+          {
+            "step": 23,
+            "phase": "after_market",
+            "quantity_delta": 2
+          }
+        ],
+        "pending_capacity_units": 4,
+        "contract_sale_lots": [],
+        "current_egg_sale": 0,
+        "fallback_unused": true,
+        "observed_inventory_unchanged": {
+          "EGG": 2
+        }
+      }
+    },
+    {
+      "test": "test_market_sale_before_animal_purchase_preserves_order_and_admission",
+      "step": 17,
+      "shed_capacity": 2,
+      "initial_shed": {
+        "CARROT": 2
+      },
+      "stock_minimum": {
+        "CARROT": 1
+      },
+      "assertions": {
+        "sale_then_buy_status": "unchanged",
+        "buy_then_sale_status": "fallback",
+        "valid_returned_market": [
+          [
+            "SELL",
+            "CARROT",
+            1
+          ],
+          [
+            "BUY_ANIMAL",
+            "GOOSE",
+            1
+          ]
+        ],
+        "official_engine_final_shed_both": {
+          "CARROT": 1,
+          "GOOSE": 1
+        },
+        "retained_non_sell_order": [
+          "BUY_ANIMAL",
+          "GOOSE",
+          1
+        ]
+      }
+    }
+  ],
+  "limits": {
+    "full_games": 0,
+    "new_seeds": [],
+    "per_action_performance_claim": null,
+    "leaderboard_claim": null
+  },
+  "attribution": "Transfer-order witness follows retained ATLAS tests; terminal reservation follows retained WREN tests. Their exact source packages remain under reference/ordered-feasibility/."
+}

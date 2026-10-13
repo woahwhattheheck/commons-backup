@@ -1,0 +1,43 @@
+{
+  "schema": "uiowa.alert-quality/v1",
+  "evidence_class": "SYNTHETIC",
+  "window": {"start": "2026-09-14T00:00:00Z", "end": "2026-09-16T00:00:00Z"},
+  "coverage": [
+    {"id":"ESS","notifications":"complete","responses":"complete","rationale_ref":"C-ESS"},
+    {"id":"IAM","notifications":"complete","responses":"complete","rationale_ref":"C-IAM"},
+    {"id":"RIS","notifications":"partial","responses":"partial","rationale_ref":"C-RIS"}
+  ],
+  "evidence": [
+    {"id":"E-ESS-1","locator":"fictional/registration/incident-101.md#timeline","excerpt":"SYNTHETIC: registration queue delay affected submissions. First page 09:00, acknowledged 09:01, query diagnosis at 09:12. Repeat pages at 09:02 and 09:04 carried no new context. 09:06 escalation successfully reached the database support role. Tested runbook isolated a queue lock."},
+    {"id":"E-ESS-2","locator":"fictional/registration/incident-102.md#timeline","excerpt":"SYNTHETIC: next-day queue delay is a separate incident, despite the same rule. First page 09:00, acknowledgement 09:02, diagnostic query 09:04. Service operations owned response and followed the tested runbook."},
+    {"id":"E-IAM-1","locator":"fictional/sign-in/cache-warning.md#review","excerpt":"SYNTHETIC: cache warning had no observed user impact. The reviewed route had no accountable role and no escalation destination. First warning and its two repeats supplied no actionable decision. Acknowledged 10:01, but complete retained response log has no useful action before window end. Runbook named an obsolete endpoint."},
+    {"id":"E-RIS-1","locator":"fictional/research/transfer-201.md#retained-notes","excerpt":"SYNTHETIC: delayed research transfers affected submission. Retained pages start 11:00; earlier notifications may be missing. Escalation at 11:15 added a dependency diagnosis. An acknowledgement at 11:10 is retained, but response export is incomplete. Ownership and runbook usefulness have not been established."},
+    {"id":"E-IAM-2","locator":"fictional/sign-in/incident-302.md#timeline","excerpt":"SYNTHETIC: sign-in errors triggered a page at 12:00. Identity operations diagnosed a dependency fault at 12:03, before pressing acknowledgement at 12:05. The runbook and escalation route were exercised successfully."},
+    {"id":"E-RIS-2","locator":"fictional/research/unlinked-warning.md#fragment","excerpt":"SYNTHETIC: 13:00 fragment lacks an incident ticket and impact review. Research platform role is the documented owner. Runbook exists but has not been exercised, escalation is documented but untested, and response records are incomplete."},
+    {"id":"C-ESS","locator":"fictional/export/manifest.md#ess","excerpt":"SYNTHETIC: complete notifications and response records for registration for the declared window; sample selection is not an institutional incident census."},
+    {"id":"C-IAM","locator":"fictional/export/manifest.md#iam","excerpt":"SYNTHETIC: complete notification and response export for the declared sign-in window."},
+    {"id":"C-RIS","locator":"fictional/export/manifest.md#ris","excerpt":"SYNTHETIC: research notification export begins mid-episode and response records are partial; absence cannot be concluded."}
+  ],
+  "episodes": [
+    {"id":"ESS-101","service":"ESS","incident_id":"incident-101","linkage_ref":"E-ESS-1","impact":"yes","impact_ref":"E-ESS-1","owner_status":"assigned","owner":"service operations","owner_ref":"E-ESS-1","runbook_status":"useful","runbook_ref":"E-ESS-1","escalation_status":"tested","escalation_ref":"E-ESS-1","ack_at":"2026-09-14T09:01:00Z","ack_ref":"E-ESS-1","action_at":"2026-09-14T09:12:00Z","action_ref":"E-ESS-1"},
+    {"id":"ESS-102","service":"ESS","incident_id":"incident-102","linkage_ref":"E-ESS-2","impact":"yes","impact_ref":"E-ESS-2","owner_status":"assigned","owner":"service operations","owner_ref":"E-ESS-2","runbook_status":"useful","runbook_ref":"E-ESS-2","escalation_status":"tested","escalation_ref":"E-ESS-2","ack_at":"2026-09-15T09:02:00Z","ack_ref":"E-ESS-2","action_at":"2026-09-15T09:04:00Z","action_ref":"E-ESS-2"},
+    {"id":"IAM-301","service":"IAM","incident_id":"cache-301","linkage_ref":"E-IAM-1","impact":"no","impact_ref":"E-IAM-1","owner_status":"unowned","owner":null,"owner_ref":"E-IAM-1","runbook_status":"unhelpful","runbook_ref":"E-IAM-1","escalation_status":"missing","escalation_ref":"E-IAM-1","ack_at":"2026-09-14T10:01:00Z","ack_ref":"E-IAM-1","action_at":null,"action_ref":null},
+    {"id":"RIS-201","service":"RIS","incident_id":"transfer-201","linkage_ref":"E-RIS-1","impact":"yes","impact_ref":"E-RIS-1","owner_status":"unknown","owner":null,"owner_ref":null,"runbook_status":"unknown","runbook_ref":null,"escalation_status":"documented","escalation_ref":"E-RIS-1","ack_at":"2026-09-14T11:10:00Z","ack_ref":"E-RIS-1","action_at":null,"action_ref":null},
+    {"id":"IAM-302","service":"IAM","incident_id":"incident-302","linkage_ref":"E-IAM-2","impact":"yes","impact_ref":"E-IAM-2","owner_status":"assigned","owner":"identity operations","owner_ref":"E-IAM-2","runbook_status":"useful","runbook_ref":"E-IAM-2","escalation_status":"tested","escalation_ref":"E-IAM-2","ack_at":"2026-09-14T12:05:00Z","ack_ref":"E-IAM-2","action_at":"2026-09-14T12:03:00Z","action_ref":"E-IAM-2"},
+    {"id":"RIS-fragment","service":"RIS","incident_id":null,"linkage_ref":null,"impact":"unknown","impact_ref":null,"owner_status":"assigned","owner":"research platform","owner_ref":"E-RIS-2","runbook_status":"untested","runbook_ref":"E-RIS-2","escalation_status":"documented","escalation_ref":"E-RIS-2","ack_at":null,"ack_ref":null,"action_at":null,"action_ref":null}
+  ],
+  "notifications": [
+    {"id":"N01","episode_id":"ESS-101","rule":"queue-delay","route":"primary","at":"2026-09-14T09:00:00Z","kind":"initial","duplicate_of":null,"value":"useful","review_ref":"E-ESS-1","source_ref":"E-ESS-1"},
+    {"id":"N02","episode_id":"ESS-101","rule":"queue-delay","route":"primary","at":"2026-09-14T09:02:00Z","kind":"repeat","duplicate_of":"N01","value":"redundant","review_ref":"E-ESS-1","source_ref":"E-ESS-1"},
+    {"id":"N03","episode_id":"ESS-101","rule":"queue-delay","route":"primary","at":"2026-09-14T09:04:00Z","kind":"repeat","duplicate_of":"N01","value":"redundant","review_ref":"E-ESS-1","source_ref":"E-ESS-1"},
+    {"id":"N04","episode_id":"ESS-101","rule":"queue-delay","route":"database support","at":"2026-09-14T09:06:00Z","kind":"escalation","duplicate_of":null,"value":"useful","review_ref":"E-ESS-1","source_ref":"E-ESS-1"},
+    {"id":"N05","episode_id":"ESS-102","rule":"queue-delay","route":"primary","at":"2026-09-15T09:00:00Z","kind":"initial","duplicate_of":null,"value":"useful","review_ref":"E-ESS-2","source_ref":"E-ESS-2"},
+    {"id":"N06","episode_id":"IAM-301","rule":"cache-capacity","route":"primary","at":"2026-09-14T10:00:00Z","kind":"initial","duplicate_of":null,"value":"redundant","review_ref":"E-IAM-1","source_ref":"E-IAM-1"},
+    {"id":"N07","episode_id":"IAM-301","rule":"cache-capacity","route":"primary","at":"2026-09-14T10:03:00Z","kind":"repeat","duplicate_of":"N06","value":"redundant","review_ref":"E-IAM-1","source_ref":"E-IAM-1"},
+    {"id":"N08","episode_id":"IAM-301","rule":"cache-capacity","route":"primary","at":"2026-09-14T10:06:00Z","kind":"repeat","duplicate_of":"N06","value":"redundant","review_ref":"E-IAM-1","source_ref":"E-IAM-1"},
+    {"id":"N09","episode_id":"RIS-201","rule":"transfer-delay","route":"primary","at":"2026-09-14T11:00:00Z","kind":"initial","duplicate_of":null,"value":"unknown","review_ref":null,"source_ref":"E-RIS-1"},
+    {"id":"N10","episode_id":"RIS-201","rule":"transfer-delay","route":"dependency support","at":"2026-09-14T11:15:00Z","kind":"escalation","duplicate_of":null,"value":"useful","review_ref":"E-RIS-1","source_ref":"E-RIS-1"},
+    {"id":"N11","episode_id":"IAM-302","rule":"sign-in-errors","route":"primary","at":"2026-09-14T12:00:00Z","kind":"initial","duplicate_of":null,"value":"useful","review_ref":"E-IAM-2","source_ref":"E-IAM-2"},
+    {"id":"N12","episode_id":"RIS-fragment","rule":"queue-delay","route":"primary","at":"2026-09-14T13:00:00Z","kind":"initial","duplicate_of":null,"value":"unknown","review_ref":null,"source_ref":"E-RIS-2"}
+  ]
+}

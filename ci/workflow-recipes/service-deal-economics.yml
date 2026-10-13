@@ -1,0 +1,31 @@
+name: service-deal-economics
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/service_deal_economics/**'
+      - '.github/workflows/service-deal-economics.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/service_deal_economics/**'
+      - '.github/workflows/service-deal-economics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/service_deal_economics/*.py
+      - run: python -m unittest -v revenue.service_deal_economics.test_engine revenue.service_deal_economics.test_authority revenue.service_deal_economics.test_authority_surface revenue.service_deal_economics.test_quote_expiry revenue.service_deal_economics.test_strict_io revenue.service_deal_economics.test_current_runtime
+      - run: python -O -m unittest -v revenue.service_deal_economics.test_engine revenue.service_deal_economics.test_authority revenue.service_deal_economics.test_authority_surface revenue.service_deal_economics.test_quote_expiry revenue.service_deal_economics.test_strict_io revenue.service_deal_economics.test_current_runtime

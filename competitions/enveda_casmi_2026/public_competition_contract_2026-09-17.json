@@ -1,0 +1,81 @@
+{
+  "schema": "commons.enveda-casmi-2026.public-contract/v1",
+  "competition_id": "ENVEDA-CASMI-2026",
+  "captured_date": "2026-09-17",
+  "source_urls": {
+    "overview": "https://www.kaggle.com/competitions/enveda-CASMI26-molecule-id-mass-spectra",
+    "data": "https://www.kaggle.com/competitions/enveda-CASMI26-molecule-id-mass-spectra/data"
+  },
+  "evaluation": {
+    "metric": "MRR@25",
+    "scoring_unit": "MOLECULE",
+    "max_ranked_candidates": 25,
+    "correct_match": "RDKit tautomer canonicalization then first InChIKey block (InChIKey14)"
+  },
+  "data_shape": {
+    "train_spectra_approx": 2500000,
+    "train_unique_structures_approx": 275000,
+    "hidden_test_spectra_approx": 1500,
+    "hidden_test_molecules_approx": 400,
+    "spectra_per_test_molecule_min": 1,
+    "spectra_per_test_molecule_max": 16,
+    "spectra_per_test_molecule_median": 3,
+    "test_adducts": [
+      "[M+H]+",
+      "[M+NH4]+",
+      "[M-H2O+H]+",
+      "[M-2H2O+H]+",
+      "[M+Na]+",
+      "[M+K]+",
+      "[M-H]-",
+      "[M-H2O-H]-",
+      "[M+CH2O2-H]-",
+      "[M+Cl]-"
+    ],
+    "public_data_license": "CC BY-NC 4.0"
+  },
+  "submission": {
+    "required_columns": [
+      "molecule_id",
+      "smiles"
+    ],
+    "candidate_separator": ";",
+    "max_candidates_per_molecule": 25,
+    "filename": "submission.csv",
+    "notebook_only": true,
+    "cpu_runtime_hours_max": 9,
+    "gpu_runtime_hours_max": 9,
+    "internet_enabled": false,
+    "freely_public_external_data_allowed": true
+  },
+  "timeline": {
+    "entry_deadline_utc": "2026-12-07T23:59:00Z",
+    "team_merger_deadline_utc": "2026-12-07T23:59:00Z",
+    "final_submission_deadline_utc": "2026-12-14T23:59:00Z"
+  },
+  "prizes_usd": {
+    "total": 50000,
+    "1": 16000,
+    "2": 12000,
+    "3": 9000,
+    "4": 7000,
+    "5": 6000
+  },
+  "held_owner_or_rules_facts": [
+    "eligibility",
+    "team_size_and_collaboration_rules",
+    "account_specific_rule_acceptance",
+    "submission_quota_if_any"
+  ],
+  "authority": {
+    "kaggle_sign_in": false,
+    "competition_join": false,
+    "rules_acceptance": false,
+    "team_mutation": false,
+    "gated_data_download": false,
+    "competition_submission": false,
+    "eligibility_assertion": false,
+    "prize_assertion": false,
+    "revenue_recognition": false
+  }
+}

@@ -1,0 +1,63 @@
+name: MCP Transcript Audit
+
+on:
+  pull_request:
+    paths:
+      - 'tools/mcp_transcript_audit/**'
+      - 'test_mcp_transcript_audit.py'
+      - 'test_mcp_transcript_audit_runtime_binding.py'
+      - '_mcp_transcript_audit_regression_suite.py'
+      - 'test_mcp_transcript_audit_cli_bounds.py'
+      - 'test_mcp_transcript_audit_numeric_parser.py'
+      - '.github/workflows/mcp-transcript-audit.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mcp_transcript_audit/**'
+      - 'test_mcp_transcript_audit.py'
+      - 'test_mcp_transcript_audit_runtime_binding.py'
+      - '_mcp_transcript_audit_regression_suite.py'
+      - 'test_mcp_transcript_audit_cli_bounds.py'
+      - 'test_mcp_transcript_audit_numeric_parser.py'
+      - '.github/workflows/mcp-transcript-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compile
+        run: >-
+          python -m py_compile
+          tools/mcp_transcript_audit/*.py
+          test_mcp_transcript_audit.py
+          test_mcp_transcript_audit_runtime_binding.py
+          _mcp_transcript_audit_regression_suite.py
+          test_mcp_transcript_audit_cli_bounds.py
+          test_mcp_transcript_audit_numeric_parser.py
+      - name: Unit and hostile tests
+        run: >-
+          python -m unittest -v
+          test_mcp_transcript_audit.py
+          test_mcp_transcript_audit_runtime_binding.py
+          test_mcp_transcript_audit_cli_bounds.py
+          test_mcp_transcript_audit_numeric_parser.py
+      - name: Optimized-mode hostile tests
+        run: >-
+          python -O -m unittest -v
+          test_mcp_transcript_audit.py
+          test_mcp_transcript_audit_runtime_binding.py
+          test_mcp_transcript_audit_cli_bounds.py
+          test_mcp_transcript_audit_numeric_parser.py
+      - name: Example audit and independent verification
+        run: |
+          tmpdir="$(mktemp -d)"
+          python -m tools.mcp_transcript_audit.cli audit tools/mcp_transcript_audit/example_session.jsonl -o "$tmpdir/receipt.json"
+          python -m tools.mcp_transcript_audit.cli verify tools/mcp_transcript_audit/example_session.jsonl "$tmpdir/receipt.json"

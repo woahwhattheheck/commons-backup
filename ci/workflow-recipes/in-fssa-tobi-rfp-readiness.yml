@@ -1,0 +1,39 @@
+name: IN FSSA Tobi RFP readiness
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/in_fssa_tobi_rfp/**'
+      - '.github/workflows/in-fssa-tobi-rfp-readiness.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/in_fssa_tobi_rfp/**'
+      - '.github/workflows/in-fssa-tobi-rfp-readiness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: python -m py_compile revenue/in_fssa_tobi_rfp/*.py revenue/in_fssa_tobi_rfp/tests/*.py
+      - name: Tests
+        env:
+          PYTHONPATH: .
+        run: python -m unittest discover -s revenue/in_fssa_tobi_rfp/tests -v
+      - name: Optimized-mode tests
+        env:
+          PYTHONPATH: .
+        run: python -O -m unittest discover -s revenue/in_fssa_tobi_rfp/tests -q

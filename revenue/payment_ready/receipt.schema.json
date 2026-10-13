@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/payment_ready/receipt.schema.json",
+  "title": "GGUF diagnostic revenue-recovery receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "offer_id",
+    "stage",
+    "state",
+    "source",
+    "evidence",
+    "facts",
+    "next_stage",
+    "cash_claimed"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "revenue-recovery/v1"
+    },
+    "kind": {
+      "const": "REVENUE_RECOVERY_RECEIPT"
+    },
+    "receipt_id": {
+      "$ref": "#/$defs/id"
+    },
+    "offer_id": {
+      "const": "gguf-diagnostic-10d-12k"
+    },
+    "stage": {
+      "enum": [
+        "PUBLIC_OFFER",
+        "PURCHASE_INTENT",
+        "QUOTE",
+        "ACCEPTANCE",
+        "DELIVERY",
+        "PROCESSOR_REFERENCE"
+      ]
+    },
+    "state": {
+      "enum": [
+        "READY",
+        "NEEDS_BUYER",
+        "INCOMPLETE",
+        "RECORDED",
+        "OFFERED",
+        "ACCEPTED",
+        "DELIVERED",
+        "REFERENCE_RECORDED",
+        "OWNER_REPORTED"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "terms_sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "terms_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "reference",
+          "sha256",
+          "status"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/sha256"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner_reported_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purchase_intent",
+        "gguf_control",
+        "harness_ready",
+        "public_contact_url_present",
+        "legal_acceptance",
+        "delivery",
+        "processor_reference",
+        "processor_payment",
+        "payout",
+        "bank_available",
+        "cash_evidence",
+        "collected_cash_usd"
+      ],
+      "properties": {
+        "purchase_intent": {
+          "enum": [
+            "YES",
+            "NO",
+            "UNKNOWN"
+          ]
+        },
+        "gguf_control": {
+          "enum": [
+            "YES",
+            "NO",
+            "UNKNOWN"
+          ]
+        },
+        "harness_ready": {
+          "enum": [
+            "YES",
+            "NO",
+            "UNKNOWN"
+          ]
+        },
+        "public_contact_url_present": {
+          "type": "boolean"
+        },
+        "legal_acceptance": {
+          "enum": [
+            "NOT_LANDED",
+            "OWNER_REPORTED"
+          ]
+        },
+        "delivery": {
+          "enum": [
+            "NOT_LANDED",
+            "OWNER_REPORTED"
+          ]
+        },
+        "processor_reference": {
+          "enum": [
+            "NOT_LANDED",
+            "REFERENCE_RECORDED"
+          ]
+        },
+        "processor_payment": {
+          "const": "NOT_LANDED"
+        },
+        "payout": {
+          "const": "NOT_LANDED"
+        },
+        "bank_available": {
+          "const": "NOT_LANDED"
+        },
+        "cash_evidence": {
+          "const": "NOT_LANDED"
+        },
+        "collected_cash_usd": {
+          "const": 0
+        }
+      }
+    },
+    "next_stage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cash_claimed": {
+      "const": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"stage": {"const": "QUOTE"}}},
+      "then": {
+        "properties": {
+          "state": {"const": "OFFERED"},
+          "next_stage": {"const": "ACCEPTANCE"},
+          "facts": {
+            "properties": {
+              "purchase_intent": {"const": "YES"},
+              "gguf_control": {"const": "YES"},
+              "harness_ready": {"const": "YES"},
+              "public_contact_url_present": {"const": true},
+              "legal_acceptance": {"const": "NOT_LANDED"},
+              "delivery": {"const": "NOT_LANDED"},
+              "processor_reference": {"const": "NOT_LANDED"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stage": {"const": "ACCEPTANCE"}}},
+      "then": {
+        "properties": {
+          "state": {"const": "ACCEPTED"},
+          "next_stage": {"const": "DELIVERY"},
+          "facts": {
+            "properties": {
+              "purchase_intent": {"const": "YES"},
+              "gguf_control": {"const": "YES"},
+              "harness_ready": {"const": "YES"},
+              "public_contact_url_present": {"const": true},
+              "legal_acceptance": {"const": "OWNER_REPORTED"},
+              "delivery": {"const": "NOT_LANDED"},
+              "processor_reference": {"const": "NOT_LANDED"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stage": {"const": "DELIVERY"}}},
+      "then": {
+        "properties": {
+          "state": {"const": "DELIVERED"},
+          "next_stage": {"const": "PROCESSOR_REFERENCE"},
+          "facts": {
+            "properties": {
+              "purchase_intent": {"const": "YES"},
+              "gguf_control": {"const": "YES"},
+              "harness_ready": {"const": "YES"},
+              "public_contact_url_present": {"const": true},
+              "legal_acceptance": {"const": "OWNER_REPORTED"},
+              "delivery": {"const": "OWNER_REPORTED"},
+              "processor_reference": {"const": "NOT_LANDED"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stage": {"const": "PROCESSOR_REFERENCE"}}},
+      "then": {
+        "properties": {
+          "state": {"const": "REFERENCE_RECORDED"},
+          "next_stage": {"const": "OWNER_PRIVATE_CASH_EVIDENCE"},
+          "facts": {
+            "properties": {
+              "purchase_intent": {"const": "YES"},
+              "gguf_control": {"const": "YES"},
+              "harness_ready": {"const": "YES"},
+              "public_contact_url_present": {"const": true},
+              "legal_acceptance": {"const": "OWNER_REPORTED"},
+              "delivery": {"const": "OWNER_REPORTED"},
+              "processor_reference": {"const": "REFERENCE_RECORDED"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

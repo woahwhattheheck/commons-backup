@@ -1,0 +1,129 @@
+{
+  "as_of": "2026-09-17",
+  "hard_gates": [
+    {
+      "gate_id": "active-sam",
+      "label": "Active SAM",
+      "phase": "PRE_OUTREACH",
+      "requirement": "Partner must evidence active SAM registration",
+      "required_evidence_kind": "PARTNER_EVIDENCE",
+      "source_refs": [
+        {"source_id": "rfp", "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+        {"source_id": "sam", "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+      ]
+    },
+    {
+      "gate_id": "three-refs",
+      "label": "Three references",
+      "phase": "PRE_SUBMISSION",
+      "requirement": "Three recent references required",
+      "required_evidence_kind": "PARTNER_EVIDENCE",
+      "source_refs": [
+        {"source_id": "rfp", "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+      ]
+    }
+  ],
+  "opportunity_id": "SYNTH-001",
+  "partners": [
+    {
+      "gate_dispositions": [
+        {
+          "evidence_refs": [{"source_id": "sam", "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}],
+          "gate_id": "active-sam",
+          "note": "retained SAM evidence",
+          "state": "SATISFIED"
+        },
+        {
+          "evidence_refs": [],
+          "gate_id": "three-refs",
+          "note": "screen before submission",
+          "state": "UNKNOWN"
+        }
+      ],
+      "name": "Example MSP",
+      "paid_workshare": {
+        "acceptance_criteria": ["matrix source-bound"],
+        "currency": "USD",
+        "exclusions": ["prime responsibility"],
+        "fixed_fee_minor": 500000,
+        "scope": "qualification evidence matrix",
+        "state": "DEFINED"
+      },
+      "registration": {
+        "deadline": null,
+        "evidence_refs": [{"source_id": "reg", "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}],
+        "requirement_refs": [{"source_id": "rfp", "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}],
+        "state": "COMPLETE"
+      }
+    }
+  ],
+  "runway_input": {
+    "as_of": "2026-09-17",
+    "opportunities": [
+      {
+        "buyer": "Synthetic Buyer",
+        "collision_state": "CLEAR",
+        "dates": {
+          "proposal_due": {
+            "date": "2026-10-23",
+            "evidence_urls": ["https://buyer.example/rfp.pdf"],
+            "label": "proposal due"
+          }
+        },
+        "id": "SYNTH-001",
+        "partners": [
+          {
+            "capability_evidence_urls": ["https://partner.example/services"],
+            "capacity": {
+              "evidence_urls": ["https://partner.example/capacity"],
+              "lead_time_days": 0,
+              "state": "EXPLICIT_LEAD_TIME_DAYS"
+            },
+            "conflicts_dnr": [],
+            "name": "Example MSP"
+          }
+        ],
+        "relationship_state": "CLEAR",
+        "source_urls": ["https://buyer.example/rfp.pdf"],
+        "workshare": {
+          "acceptance_criteria": ["evidence matrix accepted"],
+          "currency": "USD",
+          "exclusions": ["submission"],
+          "fixed_fee_minor": 500000,
+          "scope": "qualification evidence QA"
+        }
+      }
+    ],
+    "schema": "procurement-runway-gate-input/v1"
+  },
+  "schema": "partner-opportunity-qualification-input/v1",
+  "sources": [
+    {
+      "kind": "SOLICITATION_CONTROL",
+      "observed_on": "2026-09-17",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "source_id": "rfp",
+      "status": "CURRENT",
+      "subject_partner": null,
+      "url": "https://buyer.example/rfp.pdf"
+    },
+    {
+      "kind": "PARTNER_EVIDENCE",
+      "observed_on": "2026-09-17",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "source_id": "sam",
+      "status": "CURRENT",
+      "subject_partner": "Example MSP",
+      "url": "https://partner.example/sam"
+    },
+    {
+      "kind": "REGISTRATION_EVIDENCE",
+      "observed_on": "2026-09-17",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "source_id": "reg",
+      "status": "CURRENT",
+      "subject_partner": "Example MSP",
+      "url": "https://buyer.example/registration"
+    }
+  ]
+}

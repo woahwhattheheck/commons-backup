@@ -1,0 +1,27 @@
+{
+  "lane": "H3c raw executable market prefix",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "source_pr": 12648,
+  "source_commit": "c06fa2539b43067971f3c17176cdbb0377233d1f",
+  "predecessor_blob": "2044d6cf1e0c51f95027229863f910aa43ac7008",
+  "source_blob": "79c3fd029054a2db5931609db06f6b9aa4d4be3c",
+  "focused_test_blob": "c24bd784a43267f84071d2c293c10fe57f30a1da",
+  "differential_test_blob": "bed6e58e3604209a6243ade4b6b5a338c7f47957",
+  "differential_main_commit": "6fcf7f2eb3e8a253ba7124db7f68e516d06a5ab0",
+  "verification": {
+    "source_and_test_git_hashes": "matched",
+    "py_compile": "pass",
+    "normal_tests": 17,
+    "optimized_tests": 17,
+    "differential_cells_per_run": 4800,
+    "predecessor_tests": 15,
+    "predecessor_failing_subcases": 24
+  },
+  "run_from_repo_root": [
+    "V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4; PYTHONPATH=$V4/donor/overlay:$V4/donor/overlay/checks python -m unittest -v test_v4_h3c_market_prefix test_v4_h3c_prefix_differential",
+    "V4=revenue/kaggriculture/cloud-execution-lab/candidates/v4; PYTHONPATH=$V4/donor/overlay:$V4/donor/overlay/checks python -O -m unittest -v test_v4_h3c_market_prefix test_v4_h3c_prefix_differential"
+  ],
+  "integration_note": "Peer integrated the identical reviewed helper and focused test before this append. This contribution adds only independent differential coverage and this receipt in the existing lane. Detached four-path construction 65cd758e4cf4dbd7fe732c3f172a119ddd4225a2 is retired, unreferenced, and must not be promoted.",
+  "boundary": "Local exact-source mechanism evidence only. No full-package, field activation, economics, feature-default, production archive, or Kaggle/submission claim."
+}

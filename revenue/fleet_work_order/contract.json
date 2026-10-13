@@ -1,0 +1,45 @@
+{
+  "id": "fleet-work-order-exactly-once",
+  "version": 1,
+  "buyer": "fleet maintenance or operations owner",
+  "input": "one inspection or fault event with an id, vehicle, fault code, severity, timestamp, and optional note",
+  "workflow": [
+    "synthetic inspection or fault event",
+    "event-identity idempotency key",
+    "exactly one work order",
+    "exactly one escalation",
+    "one durable closeout receipt",
+    "crash after prepare or after effects, then resume or rollback"
+  ],
+  "acceptance": [
+    "a duplicate event plus crash/resume produces one work order, one escalation, and one receipt",
+    "crash after prepare leaves no external effect",
+    "crash after effects persists deterministic effect ids; resume detects them and commits without duplication",
+    "rollback of an incomplete run leaves no committed effect",
+    "a reused id with different bytes is rejected"
+  ],
+  "deliverables": [
+    "field contract",
+    "replay fixtures",
+    "exception taxonomy",
+    "run receipt",
+    "fit verdict for one approved workflow"
+  ],
+  "commercial": {
+    "diagnostic_usd": 199,
+    "diagnostic_window": "one business day",
+    "optional_proof_usd": 2500,
+    "proof_only_after_fit": true,
+    "cash_usd": 0,
+    "refund": "If the accepted diagnostic is not delivered inside the one-business-day window, the paid diagnostic amount is refunded unless the buyer elects in writing to receive one free next-business-day repair instead."
+  },
+  "open_door": true,
+  "requires_login": false,
+  "data_boundary": "synthetic inputs only; no vehicle credentials; no production fleet connection",
+  "decision_boundary": "work-order routing only; never dispatches a technician",
+  "sources": [
+    "fleet-work-order.html",
+    "features/registry/fleet-work-order-exactly-once.json",
+    "revenue/fleet_work_order/receipt.json"
+  ]
+}

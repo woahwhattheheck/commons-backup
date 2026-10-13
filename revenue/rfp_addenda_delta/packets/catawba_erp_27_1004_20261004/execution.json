@@ -1,0 +1,152 @@
+{
+  "historical_implementation_proof_replayed": false,
+  "new_tests_or_fixtures": false,
+  "opportunity_id": "CATAWBA-ERP-27-1004",
+  "previous_stages": {
+    "acquisition": {
+      "admission_headroom_bytes": 794030080,
+      "attempted_requests": 4,
+      "automatic_retries": 0,
+      "elapsed_seconds": 28.222889,
+      "exit_code": 0,
+      "helper_git_blob": "b9c02f775d53c875a62d7d3b863df3e31e23cdbd",
+      "http_statuses": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "redirects_followed": 0,
+      "total_bytes": 1245149
+    },
+    "extraction": {
+      "admission_headroom_bytes": 731701248,
+      "commands": [
+        {
+          "argv": [
+            "-layout",
+            "-enc",
+            "UTF-8",
+            "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/capture/raw/rfp.pdf",
+            "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/text/base-rfp.txt"
+          ],
+          "executable": "pdftotext",
+          "exit_code": 0,
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "-layout",
+            "-enc",
+            "UTF-8",
+            "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/capture/raw/addendum-1.pdf",
+            "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/text/addendum-1.txt"
+          ],
+          "executable": "pdftotext",
+          "exit_code": 0,
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "-layout",
+            "-enc",
+            "UTF-8",
+            "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/capture/raw/addendum-2.pdf",
+            "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/text/addendum-2.txt"
+          ],
+          "executable": "pdftotext",
+          "exit_code": 0,
+          "stderr": ""
+        }
+      ],
+      "elapsed_seconds": 0.134494,
+      "exit_code": 0,
+      "peak_children_kib": 9992,
+      "total_text_bytes": 156924
+    },
+    "retained_rfp_read": {
+      "admission_headroom_bytes": 721555456,
+      "bytes": 69045,
+      "exit_code": 0,
+      "extraction_children": 0,
+      "network_requests": 0,
+      "pages": 28,
+      "sha256": "89106e34bdf3b04adfa562c2c5b56ba2cf6807d74aa48d2107ca7be8828eeddd"
+    }
+  },
+  "schema": "commons-procurement-native-use/v1",
+  "source_requests_replayed": 0,
+  "source_stage": {
+    "admission_headroom_bytes": 376967168,
+    "commands": [
+      {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "-B",
+          "-m",
+          "revenue.rfp_addenda_delta.cli",
+          "compile",
+          "--old",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/old-generation.json",
+          "--new",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/new-generation.json",
+          "--decisions",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/prior-decisions.json",
+          "--out-json",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/delta-receipt.json",
+          "--out-md",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/delta-report.md"
+        ],
+        "elapsed_seconds": 0.045094,
+        "exit_code": 3,
+        "stderr": "",
+        "stdout": "SOURCE_REFRESH_REQUIRED 76c5e85270e74d3822a47a4884e95b236934f85731ca532423a1fdaeb2b3b973\n"
+      },
+      {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "-B",
+          "-m",
+          "revenue.rfp_addenda_delta.cli",
+          "verify",
+          "--old",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/old-generation.json",
+          "--new",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/new-generation.json",
+          "--decisions",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/prior-decisions.json",
+          "--report",
+          "/workspace/scratch/7ca69aac7ec3/catawba_erp_a2_20261004_84a3/use/packet/delta-receipt.json"
+        ],
+        "elapsed_seconds": 0.041768,
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "VALID\n"
+      }
+    ],
+    "elapsed_seconds": 0.09083,
+    "finished_at": "2026-10-04T01:10:57.515340+00:00",
+    "minimum_admission_headroom_bytes": 33554432,
+    "peak_children_kib": 12960,
+    "retained_sources_stream_verified": 4,
+    "runtime_sources": [
+      {
+        "git_blob": "31f1ec4cfd7615e5fdf19f43dca82dc0b01b82ad",
+        "path": "revenue/rfp_addenda_delta/__init__.py"
+      },
+      {
+        "git_blob": "e79599d6c322a82da4f42fc24f76a970e30c2f5f",
+        "path": "revenue/rfp_addenda_delta/cli.py"
+      },
+      {
+        "git_blob": "0c329aa6863cc4dc1f73e5b045ba7195ee38a668",
+        "path": "revenue/rfp_addenda_delta/engine.py"
+      },
+      {
+        "git_blob": "0e051434486e0d67f58d981c41a4cdf1b21844bd",
+        "path": "revenue/rfp_addenda_delta/schema.py"
+      }
+    ],
+    "started_after_capture": true
+  }
+}

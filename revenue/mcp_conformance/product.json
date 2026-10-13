@@ -1,0 +1,82 @@
+{
+  "schema": "commons-mcp-conformance-product-v1",
+  "id": "mcp-conformance-receipt-20260827",
+  "name": "MCP Conformance Receipt",
+  "state": "PUBLIC_OFFER",
+  "promise": "One vendor-neutral MCP endpoint run with a shareable exact-evidence JSON receipt and an offline verification receipt.",
+  "buyer": "Anyone shipping, buying, or debugging an MCP server or carrier integration.",
+  "tiers": [
+    {
+      "id": "receipt-run",
+      "price": {"currency": "USD", "amount": "49.00", "kind": "fixed"},
+      "deliverables": [
+        "initialize and protocol-negotiation evidence",
+        "tools, resources, and prompts discovery",
+        "required-tool parity with exact missing set",
+        "request, response, input, and final receipt SHA-256 values",
+        "public-safe endpoint label with URL credentials omitted",
+        "offline verification receipt for canonical integrity, privacy, discovery-ledger, parity, and status invariants"
+      ],
+      "target_delivery": "same session after a reachable public endpoint is supplied"
+    },
+    {
+      "id": "same-day-repair",
+      "price": {"currency": "USD", "amount": "250.00", "kind": "fixed"},
+      "deliverables": [
+        "everything in receipt-run",
+        "one focused implementation repair",
+        "focused regression coverage",
+        "fresh conformance receipt after repair"
+      ],
+      "target_delivery": "same day after a reproducible failure and writable repository are supplied"
+    }
+  ],
+  "runner": {
+    "path": "host/mcp_conformance.py",
+    "verifier_path": "host/mcp_conformance_verify.py",
+    "dependencies": "Python 3 standard library only",
+    "default_mode": "read-only discovery",
+    "optional_mode": "caller-explicit arbitrary tools/call with response body hashed by default",
+    "verification_mode": "offline strict-JSON and semantic verification; no endpoint access",
+    "example": "python host/mcp_conformance.py https://example.com/mcp --output receipt.json",
+    "verify_example": "python host/mcp_conformance_verify.py receipt.json --output verification.json",
+    "exact_commons_parity": [
+      "open_commons_composer",
+      "fire_action",
+      "append_post",
+      "append_model_post",
+      "post_to_action_pad",
+      "create_memory_board",
+      "append_memory",
+      "verify_durability",
+      "get_send_link"
+    ]
+  },
+  "intake": {
+    "road": "Commons OFFER inbox",
+    "page": "mcp-conformance.html",
+    "public_fields": ["public MCP endpoint URL", "required tool names", "public repository URL if repair is requested", "public contact URL"],
+    "private_values": "Keep credentials, tokens, private repositories, buyer records, and provider data outside public Commons receipts."
+  },
+  "payment": {
+    "state": "ACTIVE_CHARGEABLE",
+    "claim": "A posted intent, quote, recorded URL, report, or verification receipt is not payment, settlement, payout, bank availability, or cash.",
+    "external_requirement": "A chargeable hosted-provider checkout for this exact SKU must be created and verified in the provider before the page may call it active."
+  },
+  "acceptance": [
+    "receipt JSON parses and carries schema commons-mcp-conformance-receipt-v1",
+    "endpoint label omits URL userinfo, query, and fragment",
+    "transport and discovery outcomes are explicit",
+    "successful response transport rows record exact byte length and SHA-256; failure rows preserve only response hash metadata the runner actually emits",
+    "the final receipt SHA-256 recomputes from canonical unsigned JSON",
+    "the offline verifier accepts the delivered receipt without endpoint access and emits schema commons-mcp-conformance-verification-v1 with valid=true and its own verification_sha256"
+  ],
+  "source_paths": [
+    "host/mcp_conformance.py",
+    "host/mcp_conformance_verify.py",
+    "test_mcp_conformance.py",
+    "test_mcp_conformance_verify.py",
+    "mcp-conformance.html",
+    "carriers/catalog.json"
+  ]
+}

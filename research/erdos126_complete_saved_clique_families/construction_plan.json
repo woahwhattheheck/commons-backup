@@ -1,0 +1,21 @@
+{
+  "operation": "ERDOS126-COMPLETE-SAVED-CLIQUE-FAMILIES-20261006-7CA6",
+  "input": "Exact copied adjacency arrays from completed #31433; no prior source invocation.",
+  "construction": "Build a memoized complete clique-family decision DAG for each saved graph, least candidate vertex first, absent and present branches, cardinality coefficients. Each candidate-mask state is constructed once per graph.",
+  "order": "Membership vector indexed by vertices 0..127, absent (0) before present (1). This is not numeric-mask or usual increasing-vertex-list lexicographic order.",
+  "new_objectives": [
+    "all clique counts by size",
+    "all maximum cliques at inherited sizes 5 and 7",
+    "required/forbidden vertex conditioning with size intervals",
+    "exact rank/select/pages and per-vertex marginals"
+  ],
+  "empty_clique": "Included once in each graph.",
+  "protected": [
+    "factorizations",
+    "pair table",
+    "adjacency construction",
+    "old branch/color search",
+    "old maximum proof and witness queries"
+  ],
+  "readers": "Bank a separate reader driver/plan before its first actual use; retain every request/response and complete caches/work."
+}

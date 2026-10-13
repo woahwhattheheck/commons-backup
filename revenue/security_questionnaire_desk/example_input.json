@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "questionnaire_id": "sq-example-001",
+  "questionnaire_source_ref": "buyer-file/sq-example-001",
+  "questionnaire_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "questions": [
+    {
+      "question_id": "q-access",
+      "section": "Access Control",
+      "prompt": "Is administrative access restricted by an explicit policy?",
+      "mode": "BOOLEAN",
+      "assurance_kind": "GENERAL",
+      "required": true,
+      "allowed_values": [],
+      "source_ref": "buyer-row/q-access",
+      "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "question_id": "q-cert",
+      "section": "Assurance",
+      "prompt": "Do you hold the requested third-party certification?",
+      "mode": "BOOLEAN",
+      "assurance_kind": "CERTIFICATION",
+      "required": true,
+      "allowed_values": [],
+      "source_ref": "buyer-row/q-cert",
+      "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    {
+      "question_id": "q-retention",
+      "section": "Data",
+      "prompt": "Describe the documented retention practice.",
+      "mode": "TEXT",
+      "assurance_kind": "GENERAL",
+      "required": true,
+      "allowed_values": [],
+      "source_ref": "buyer-row/q-retention",
+      "source_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev-access",
+      "supports_question_id": "q-access",
+      "supports_question_source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "claim_key": "access.policy",
+      "claim_value": "yes",
+      "statement": "The public policy documents restricted administrative access.",
+      "kind": "PUBLIC_POLICY",
+      "disclosure": "PUBLIC",
+      "source_ref": "commons/policy/access",
+      "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "captured_at": "2026-09-13T00:00:00Z",
+      "fresh_for_days": 365
+    },
+    {
+      "evidence_id": "ev-retention-private",
+      "supports_question_id": "q-retention",
+      "supports_question_source_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "claim_key": "data.retention",
+      "claim_value": "documented",
+      "statement": "Owner-attested retention practice is documented internally.",
+      "kind": "OWNER_ATTESTATION",
+      "disclosure": "NON_PUBLIC",
+      "source_ref": "owner-record/retention-v1",
+      "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "captured_at": "2026-09-13T00:00:00Z",
+      "fresh_for_days": 365
+    }
+  ],
+  "proposed_answers": [
+    {
+      "question_id": "q-access",
+      "answer": "YES",
+      "state": "SUPPORTED_PROPOSED_ANSWER",
+      "evidence_ids": [
+        "ev-access"
+      ]
+    },
+    {
+      "question_id": "q-cert",
+      "answer": "UNMEASURED",
+      "state": "UNMEASURED",
+      "evidence_ids": []
+    },
+    {
+      "question_id": "q-retention",
+      "answer": "A retention practice is documented for owner review.",
+      "state": "SUPPORTED_PROPOSED_ANSWER",
+      "evidence_ids": [
+        "ev-retention-private"
+      ]
+    }
+  ],
+  "owner_dispositions": []
+}

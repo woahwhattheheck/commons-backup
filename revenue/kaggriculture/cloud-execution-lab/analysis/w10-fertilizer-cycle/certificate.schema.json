@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/schemas/titan/w10/realized-fertilizer-certificate-v1.schema.json",
+  "title": "TITAN W10 realized fertilizer certificate v1",
+  "description": "Deterministic result emitted by realized_fertilizer.py for a paired trace.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "decision", "reasons", "gates", "identity", "trace_sha256", "deltas", "milestones", "certificate_sha256"],
+  "properties": {
+    "schema": {"const": "titan.w10.realized-fertilizer-certificate/v1"},
+    "decision": {"enum": ["CERTIFIED", "REJECTED"]},
+    "reasons": {"type": "array", "items": {"type": "string"}},
+    "gates": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "boolean"}},
+    "identity": {"oneOf": [{"$ref": "trace.schema.json#/$defs/identity"}, {"type": "null"}]},
+    "trace_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["control", "candidate"],
+      "properties": {
+        "control": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "candidate": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      }
+    },
+    "policy_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["control", "candidate"],
+      "properties": {"control": {"$ref": "#/$defs/sha256"}, "candidate": {"$ref": "#/$defs/sha256"}}
+    },
+    "deltas": {"oneOf": [{"$ref": "#/$defs/deltas"}, {"type": "null"}]},
+    "milestones": {"oneOf": [{"$ref": "#/$defs/milestones"}, {"type": "null"}]},
+    "terminal": {"$ref": "#/$defs/terminal"},
+    "certificate_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "deltas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fertilizer_actions", "produced_units", "harvested_units", "deposited_units", "sold_units", "discarded_units", "worker_ticks_used", "travel_steps", "watering_actions", "harvest_actions", "deposit_actions", "sale_actions", "protected_obligation_misses", "protected_stock_shortfall_units", "cash", "carry_units", "shed_units"],
+      "properties": {
+        "fertilizer_actions": {"type": "integer"},
+        "produced_units": {"type": "integer"},
+        "harvested_units": {"type": "integer"},
+        "deposited_units": {"type": "integer"},
+        "sold_units": {"type": "integer"},
+        "discarded_units": {"type": "integer"},
+        "worker_ticks_used": {"type": "integer"},
+        "travel_steps": {"type": "integer"},
+        "watering_actions": {"type": "integer"},
+        "harvest_actions": {"type": "integer"},
+        "deposit_actions": {"type": "integer"},
+        "sale_actions": {"type": "integer"},
+        "protected_obligation_misses": {"type": "integer"},
+        "protected_stock_shortfall_units": {"type": "integer"},
+        "cash": {"type": "integer"},
+        "carry_units": {"type": "integer"},
+        "shed_units": {"type": "integer"}
+      }
+    },
+    "milestones": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fertilizer_tick", "production_tick", "harvest_tick", "deposit_tick", "sale_tick"],
+      "properties": {
+        "fertilizer_tick": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+        "production_tick": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+        "harvest_tick": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+        "deposit_tick": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+        "sale_tick": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]}
+      }
+    },
+    "terminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["control", "candidate"],
+      "properties": {
+        "control": {"$ref": "trace.schema.json#/$defs/snapshot"},
+        "candidate": {"$ref": "trace.schema.json#/$defs/snapshot"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"decision": {"const": "CERTIFIED"}}, "required": ["decision"]},
+      "then": {
+        "required": ["policy_sha256", "terminal"],
+        "properties": {
+          "identity": {"$ref": "trace.schema.json#/$defs/identity"},
+          "deltas": {"$ref": "#/$defs/deltas"},
+          "milestones": {"$ref": "#/$defs/milestones"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"decision": {"const": "REJECTED"}}, "required": ["decision"]},
+      "then": {}
+    }
+  ],
+  "$comment": "A rejected document may be a valid comparison failure with policy_sha256 and terminal, or an invalid-input failure without them. Certificate hashing and semantic gate relationships are enforced by realized_fertilizer.py."
+}

@@ -1,0 +1,121 @@
+{
+  "after_repair": {
+    "commands": [
+      "python -m unittest -v test_ai_coding.py test_source_trace.py",
+      "python -O -m unittest -v test_ai_coding.py test_source_trace.py"
+    ],
+    "new_subprocess_tests_inherit_optimization": true,
+    "rehearsal_directories_byte_identical": true,
+    "result": "PASS",
+    "skips": 0,
+    "tests_per_mode": 58
+  },
+  "baseline": {
+    "normal": {
+      "command": "python -m unittest -v test_ai_coding.py",
+      "result": "PASS",
+      "tests": 36
+    },
+    "optimized": {
+      "command": "python -O -m unittest -v test_ai_coding.py",
+      "result": "PASS",
+      "tests": 36
+    },
+    "rehearsal": {
+      "command": "python rehearse.py --out <new-empty-directory>",
+      "result": "OK changes=6 pairs=3 comparable=2 sources=77"
+    }
+  },
+  "baseline_sources": {
+    "ai_coding.py": {
+      "bytes": 24239,
+      "git_blob": "a41bc8beb7172b0a982a851e064135735b79b479",
+      "sha256": "c4fe3e94904df29a84a11ee6a21b81634387fb325ed92721c6baba50716bfa26"
+    },
+    "rehearse.py": {
+      "bytes": 8660,
+      "git_blob": "a6f0fa64c9d5768d4be9a7decb2949086b6593a0",
+      "sha256": "1b1fe4e49261cedaafd1b5ff07a195216089c95879376a4125d711990ed2641d"
+    },
+    "test_ai_coding.py": {
+      "bytes": 12332,
+      "git_blob": "8644cdfb512a84ba2c860a2b213c038362f1d14d",
+      "sha256": "8e5eb8aaa2888f8f7b5f25ad3bb04859b858ee78e5703c8f4b99d86f2554aeff"
+    }
+  },
+  "independent_before_repair": {
+    "commands": [
+      "python -m unittest -v test_source_trace.py",
+      "python -O -m unittest -v test_source_trace.py"
+    ],
+    "errors_per_mode": 18,
+    "failures_per_mode": 43,
+    "note": "unittest subtests produce multiple failure/error entries in one test method; these are not 61 distinct defects",
+    "tests_per_mode": 22
+  },
+  "limits": [
+    "Source classification and relevance remain supplied/assessor-judged; no source authenticity claim.",
+    "CSV remains a documented summary, not a trace-preserving interchange.",
+    "No hosted CI, all-repository, browser navigation, live University finding, or integration authority is established by this local receipt.",
+    "The import-isolation repair belongs to the original builder; no generator or original-test bytes are modified here."
+  ],
+  "model": "GPT-6 Astra Pro",
+  "operation": "uiowa-076-independent-review-astra-forge-20260919",
+  "original_builder": "ZZ-COPPERFIN-73",
+  "preserved_examples": {
+    "ESS": {
+      "author_delta_minutes": "-67",
+      "faults_delta": 0,
+      "lifecycle_delta_minutes": "-70"
+    },
+    "IAM": "not comparable",
+    "RIS": {
+      "author_delta_minutes": "-45",
+      "faults_delta": 2,
+      "lifecycle_delta_minutes": "90"
+    }
+  },
+  "repaired_sources": {
+    "ai_coding.py": {
+      "bytes": 26993,
+      "git_blob": "e49316c2d1f3f9fc769de434894581ca2e640f50",
+      "sha256": "39929ebd266615b21772fd7cf6c66aea5390a47a8256dcff95aa87697df72df7"
+    },
+    "test_source_trace.py": {
+      "bytes": 12772,
+      "git_blob": "9796d54d7fa25f4ccfb84838a44a6d9ca3d05f32",
+      "sha256": "ce92a7e4baeb7ed50ebb27c0b77aec49a1cea0dbdbc36f9a102d707e5d971bff"
+    }
+  },
+  "reproduced_projection_losses": [
+    "acceptance evidence reference",
+    "follow-up evidence reference",
+    "coverage explanation",
+    "effort allocation identifier",
+    "start/acceptance/follow-up timestamp shift"
+  ],
+  "reviewer": "ZZ-ASTRA-FORGE",
+  "runtime": {
+    "python": "3.13.5",
+    "scope": "isolated ephemeral Linux cloud; not GitHub Actions, native Windows, or browser execution"
+  },
+  "schema": "uiowa076-source-trace-review/v1",
+  "source_head": "914ad778708a4d87045b16e35683f6d7a730029d",
+  "source_pr": 16252,
+  "unknown_context": {
+    "after_repair": "comparable=false with explicit arm/field reasons; all pair deltas null; per-change known amounts retained",
+    "both_arms_unknown_before_repair": "comparable=true; lifecycle_delta_minutes=-70",
+    "fields": [
+      "task_fingerprint",
+      "stack",
+      "complexity",
+      "criticality"
+    ],
+    "missing_representations": [
+      null,
+      "UNKNOWN",
+      "unknown",
+      " UnKnOwN "
+    ]
+  }
+}

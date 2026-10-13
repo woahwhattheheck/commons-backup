@@ -1,0 +1,42 @@
+name: RCAP CRM Assessment Qualification
+
+on:
+  pull_request:
+    paths:
+      - "opportunities/rcap-crm-assessment-2026/**"
+      - ".github/workflows/rcap-crm-assessment.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "opportunities/rcap-crm-assessment-2026/**"
+      - ".github/workflows/rcap-crm-assessment.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rcap-crm-assessment-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: "3.13"
+      - name: Compile qualification gate
+        run: python -m py_compile opportunities/rcap-crm-assessment-2026/validate_qualification.py opportunities/rcap-crm-assessment-2026/test_validate_qualification.py
+      - name: Run qualification regressions
+        working-directory: opportunities/rcap-crm-assessment-2026
+        run: |
+          python -B -m unittest -v test_validate_qualification.py
+          python -O -B -m unittest -v test_validate_qualification.py
+      - name: Prove checked-in facts remain hold
+        working-directory: opportunities/rcap-crm-assessment-2026
+        run: python validate_qualification.py --expect-hold

@@ -1,0 +1,135 @@
+{
+  "schema": "opencv-packet-tests-execution/v1",
+  "status": "PASS",
+  "base_commit": "12b3ee49049fd04749803270024f7c01241afbbf",
+  "runtime": {
+    "python_executable": "/workspace/scratch/43cf957cdeec/opencv-venv/bin/python",
+    "python_version": "3.12.14",
+    "numpy": "2.3.5",
+    "opencv_python_headless": "4.13.0.92",
+    "cv2_runtime": "4.13.0"
+  },
+  "counts": {
+    "existing_single_frame_tests": 20,
+    "packet_tests": 44,
+    "cli_tests": 8,
+    "distinct_canonical_tests": 72,
+    "bridge_reported_tests": 73,
+    "optimized_subprocess_wrapper_tests": 1
+  },
+  "count_note": "The bridge reports 73: 72 canonical tests plus one wrapper which repeats those 72 tests in a real python -O subprocess. Repeated execution is not additional distinct coverage. CLI child processes inherit optimized mode explicitly.",
+  "packet_test_bare_assert_count": 0,
+  "source_manifest": {
+    "path": "/workspace/scratch/43cf957cdeec/opencv-validation/packet-source-manifest.json",
+    "bytes": 2852,
+    "sha256": "3c1d6926c96233e67e06abac1ee6ca9ea448f555369b4be8de9ca0feb15c2bf4"
+  },
+  "final_cli_git_blob": "1e2f51e33bc4136b4789b5ce1d9659097a24d065",
+  "source_unchanged_after_final_runs": true,
+  "original_single_frame_source_and_tests_unchanged_from_base": {
+    "competitions/opencv-ai-2026/visual-evidence-gate/visual_gate.py": true,
+    "competitions/opencv-ai-2026/visual-evidence-gate/tests/test_visual_gate.py": true
+  },
+  "executions": [
+    {
+      "command": [
+        "/workspace/scratch/43cf957cdeec/opencv-venv/bin/python",
+        "-m",
+        "unittest",
+        "-v",
+        "test_opencv_visual_evidence_gate.py"
+      ],
+      "cwd": "/workspace/scratch/43cf957cdeec/keystone-opencv",
+      "returncode": 0,
+      "reported_tests": 73,
+      "duration_seconds": 11.176,
+      "raw_log": {
+        "path": "/workspace/scratch/43cf957cdeec/opencv-validation/root-normal-final.log",
+        "bytes": 10282,
+        "sha256": "4adbf4c78186955129633ace9f8ed48b0b6d51a785f02a2151ec61132d8aa4d9"
+      }
+    },
+    {
+      "command": [
+        "/workspace/scratch/43cf957cdeec/opencv-venv/bin/python",
+        "-O",
+        "-m",
+        "unittest",
+        "-v",
+        "test_opencv_visual_evidence_gate.py"
+      ],
+      "cwd": "/workspace/scratch/43cf957cdeec/keystone-opencv",
+      "returncode": 0,
+      "reported_tests": 73,
+      "duration_seconds": 13.473,
+      "raw_log": {
+        "path": "/workspace/scratch/43cf957cdeec/opencv-validation/root-optimized-final.log",
+        "bytes": 10282,
+        "sha256": "306e9a2d9963836d6b2422162c8bf8dd4ad68f9c7758d19ef331213da65dd4a9"
+      }
+    },
+    {
+      "command": [
+        "/workspace/scratch/43cf957cdeec/opencv-venv/bin/python",
+        "-m",
+        "py_compile",
+        "competitions/opencv-ai-2026/visual-evidence-gate/aws_lambda.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/evaluate.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/packet_cli.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/packet_quality.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/packet_rehearsal.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/packet_s3.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/tests/test_packet_cli.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/tests/test_packet_quality.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/tests/test_visual_gate.py",
+        "competitions/opencv-ai-2026/visual-evidence-gate/visual_gate.py",
+        "test_opencv_visual_evidence_gate.py"
+      ],
+      "cwd": "/workspace/scratch/43cf957cdeec/keystone-opencv",
+      "returncode": 0,
+      "compiled_python_files": 11,
+      "raw_log": {
+        "path": "/workspace/scratch/43cf957cdeec/opencv-validation/packet-py-compile-final.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "earlier_stage_logs": [
+    {
+      "path": "/workspace/scratch/43cf957cdeec/opencv-validation/packet-normal.log",
+      "bytes": 6102,
+      "sha256": "e9f6d567bdca9e32f47205695efff48dd18a389bbb5c6d86b59de6ded48ffa61"
+    },
+    {
+      "path": "/workspace/scratch/43cf957cdeec/opencv-validation/packet-optimized.log",
+      "bytes": 6102,
+      "sha256": "445a787d6a4e7a9f137c91df180601c0a579056581822b7a9558acb6fe8d4070"
+    },
+    {
+      "path": "/workspace/scratch/43cf957cdeec/opencv-validation/root-normal.log",
+      "bytes": 10282,
+      "sha256": "f23451b6d912c19a322f460178083a7fdb43d253f07ca5aff9d9bc147a66aca4"
+    },
+    {
+      "path": "/workspace/scratch/43cf957cdeec/opencv-validation/root-optimized.log",
+      "bytes": 10282,
+      "sha256": "084e622bf418496c38f06d0a2a822b0371e3347ccd12f391cd3c599dd35bf299"
+    },
+    {
+      "path": "/workspace/scratch/43cf957cdeec/opencv-validation/packet-py-compile.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "earlier_stage_note": "The initial root runs and compile preceded removal of one unused import from packet_cli.py. Final root logs above bind the current twelve-path source manifest. Direct packet runs exercised the unchanged packet implementation and tests. The prior source manifest is retained as packet-source-manifest-before-cli-import-cleanup.json.",
+  "scope": {
+    "actual_opencv_4_13_image_encoding_and_measurement": true,
+    "actual_optimized_python_execution": true,
+    "s3_loader_and_streaming_body_tests_use_fakes": true,
+    "live_aws_executed": false,
+    "opencv_5_execution_proven": false,
+    "competition_submission_or_prize_proven": false,
+    "remote_publication_proven_by_this_receipt": false
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/right_now/control.schema.json",
+  "title": "Commons right-now revenue control",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "as_of",
+    "truth",
+    "payment",
+    "settled_awards",
+    "offers",
+    "execution_queue",
+    "blockers",
+    "preserved_portfolio",
+    "source_receipts"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-right-now-control/v2"},
+    "kind": {"const": "RIGHT_NOW_REVENUE_CONTROL"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collected_cash_usd",
+        "verified_positive_replies",
+        "accepted_scopes",
+        "active_chargeable_checkout",
+        "prospects_evaluated",
+        "ready_to_draft",
+        "transport_actions",
+        "paid_awards",
+        "settled_amounts_by_currency",
+        "usd_conversion_asserted",
+        "award_bank_availability_asserted",
+        "award_withdrawability_asserted"
+      ],
+      "properties": {
+        "collected_cash_usd": {"type": "integer", "minimum": 0},
+        "verified_positive_replies": {"type": "integer", "minimum": 0},
+        "accepted_scopes": {"type": "integer", "minimum": 0},
+        "active_chargeable_checkout": {"type": "boolean"},
+        "prospects_evaluated": {"type": "integer", "minimum": 0},
+        "ready_to_draft": {"type": "integer", "minimum": 0},
+        "transport_actions": {"type": "integer", "minimum": 0},
+        "paid_awards": {"type": "integer", "minimum": 0},
+        "settled_amounts_by_currency": {"$ref": "#/$defs/currencyTotals"},
+        "usd_conversion_asserted": {"const": false},
+        "award_bank_availability_asserted": {"const": false},
+        "award_withdrawability_asserted": {"const": false}
+      }
+    },
+    "payment": {"type": "object"},
+    "settled_awards": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "paid_awards",
+        "totals_by_currency",
+        "usd_equivalent",
+        "usd_conversion_asserted",
+        "bank_availability_asserted",
+        "withdrawability_asserted",
+        "awards"
+      ],
+      "properties": {
+        "schema_version": {"const": "commons-settled-awards-summary/v1"},
+        "as_of": {"type": "string", "format": "date-time"},
+        "paid_awards": {"type": "integer", "minimum": 0},
+        "totals_by_currency": {"$ref": "#/$defs/currencyTotals"},
+        "usd_equivalent": {"type": "null"},
+        "usd_conversion_asserted": {"const": false},
+        "bank_availability_asserted": {"const": false},
+        "withdrawability_asserted": {"const": false},
+        "awards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "award_id",
+              "program",
+              "task_url",
+              "result_url",
+              "claimant",
+              "amount",
+              "currency",
+              "payment_state",
+              "paid_at",
+              "destination_kind",
+              "destination_reference",
+              "hold",
+              "public_receipt_id",
+              "collection_action"
+            ],
+            "properties": {
+              "award_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{0,127}$"},
+              "program": {"type": "string", "minLength": 1},
+              "task_url": {"type": "string", "format": "uri"},
+              "result_url": {"type": "string", "format": "uri"},
+              "claimant": {"type": "string", "minLength": 1},
+              "amount": {"type": "string", "pattern": "^(?:[1-9][0-9]*(?:\\.[0-9]*[1-9])?|0\\.[0-9]*[1-9])$"},
+              "currency": {"type": "string", "pattern": "^[A-Z][A-Z0-9]{1,11}$"},
+              "payment_state": {"const": "PAID"},
+              "paid_at": {"type": "string", "format": "date"},
+              "destination_kind": {"const": "HOSTED_HANDLE"},
+              "destination_reference": {"type": "string", "minLength": 1},
+              "hold": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["kind", "hours", "availability_state"],
+                "properties": {
+                  "kind": {"const": "SPONSOR_STATED_DURATION"},
+                  "hours": {"type": "integer", "minimum": 1, "maximum": 8760},
+                  "availability_state": {"const": "NOT_ASSERTED"}
+                }
+              },
+              "public_receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{0,127}$"},
+              "collection_action": {"const": "NONE_DO_NOT_RESEND"}
+            }
+          }
+        }
+      }
+    },
+    "offers": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "execution_queue": {"type": "array", "items": {"type": "object"}},
+    "blockers": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "preserved_portfolio": {"type": "object"},
+    "source_receipts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "currencyTotals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["currency", "amount"],
+        "properties": {
+          "currency": {"type": "string", "pattern": "^[A-Z][A-Z0-9]{1,11}$"},
+          "amount": {"type": "string", "pattern": "^(?:[1-9][0-9]*(?:\\.[0-9]*[1-9])?|0\\.[0-9]*[1-9])$"}
+        }
+      }
+    }
+  }
+}

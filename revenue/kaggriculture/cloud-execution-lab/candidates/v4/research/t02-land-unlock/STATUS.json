@@ -1,0 +1,28 @@
+{
+  "lane": "T02 land_unlock_timing",
+  "disposition": "PARKED_CENSUS_NO_RUNTIME_PROMOTION",
+  "manifest_origin": "V3-MANIFEST pending lane",
+  "live_integration_pr": 11418,
+  "live_integration_merge": "f19438dd14e399f138c4167c23339566f2a66f52",
+  "live_evidence": {
+    "focused_tests": "44/44 plus 4/4 isolated-source-path contracts",
+    "official_panel": "64/64 complete on two repaired heads; dev 32/32 plus holdout 32/32",
+    "changed_action_rows": 0,
+    "strength_claim": false
+  },
+  "jit_census_pr": 11995,
+  "jit_census_head": "01b610ae31ca21544de5dec0d8abe2dc4e03363d",
+  "census_result": {
+    "route_bank_rows": 720,
+    "ne_candidate": "four shared-prefix records step 150 slot 4 -> step 154 append slot 1",
+    "sw_candidate": "none safe",
+    "se_purchase": "none authored"
+  },
+  "do_not_promote_blockers": [
+    "census omits same-turn BUY_LAND suffix orders whose newly completed purchases can drain target cash or alter shed state",
+    "apply_relocation is endpoint-bound rather than bound to exact route digest plus recomputed certificate/interval",
+    "per-route mutation can break shared-prefix route-switch equivalence; no atomic whole-bank transaction theorem",
+    "central locked-tile/unit-before-market/BUY_LAND/HIRE semantics were modeled rather than proven by the pinned official interpreter"
+  ],
+  "integration_rule": "Do not port or enable T02 from these historical heads. A revival requires a current-main atomic whole-bank certificate, official-engine differential proof including same-turn suffix economics, nonzero returned-action activation, and a loss-safe matched economic panel."
+}

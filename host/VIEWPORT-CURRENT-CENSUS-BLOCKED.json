@@ -1,0 +1,25 @@
+{
+  "derived_pages_modified": 0,
+  "inspected_source": {
+    "head": "b19e7d4ee51046c2dd2f254629d2f49a7fa341e6",
+    "tree": "cd93059c2a127c5512e9ef30dc22bba0b0fbf921"
+  },
+  "issue": {
+    "id": "aster-grok-viewport-current-main-backfill-20260825-01",
+    "number": 2407,
+    "prototype_backfill_blob": "8fbeda0bfce1fe1894992ed4672aab53638e4c78",
+    "prototype_checker_blob": "8e284bd87b7680ea4a765478ad80b9019b0873d1",
+    "state_at_intake": "open"
+  },
+  "reason": "The available GitHub connector exposed individual files and object identities but no complete exact-current worktree/archive to the execution container. Shell network access was unavailable. The only complete backup located was older than the inspected source and was therefore not substituted.",
+  "repository_wide_counts": null,
+  "required_input": "A full Git checkout or archive whose HEAD/tree exactly match one frozen current-main revision.",
+  "resume_commands": [
+    "HEAD_SHA=$(git rev-parse HEAD)",
+    "python3 -B host/viewport_inventory.py --root . --source-ref \"$HEAD_SHA\" --include-records --output /tmp/viewport-census.json",
+    "python3 -B host/viewport_backfill.py --root . --source-ref \"$HEAD_SHA\" --limit 25 --output /tmp/viewport-plan-0001.json"
+  ],
+  "schema": "commons.viewport-current-census-blocked.v1",
+  "status": "blocked_exact_worktree_unavailable",
+  "stopping_condition": "Do not apply a derived-page batch until the complete census is source-bound, tool/tests are landed, the plan is reviewed, and every plan preimage still matches."
+}

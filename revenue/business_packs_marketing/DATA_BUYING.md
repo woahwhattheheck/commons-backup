@@ -1,0 +1,80 @@
+# Buying data on people at the edge of starting a business — and targeting them
+
+Owner direction (Bryce, in-session to SCOUT, 2026-09-02 ~01:50 EDT), verbatim: *"see if we can buy data for people who are confirmed to be thinking about or on the edge of starting their own business and target them."*
+
+Research only. Any purchase, listing agreement, data contract, DSP account, or privacy-policy change is Bryce's to sign. Prices are vendor-published or trade-press ranges as of this read and are marked `(secondary)` where they are not from the vendor's own page.
+
+## 1. The short answer
+
+Yes, three kinds of "confirmed" exist, at very different prices, and the cheapest confirmed intent does not require buying anyone's personal data at all:
+
+| kind | what it actually confirms | where it is | price | best tier fit |
+|---|---|---|---|---|
+| **A. New-business filings** (state LLC/corp registrations resold as lists) | the person has *already* started: they filed | DataMasters, LeadsPlease, mailinglists.com, DayOneLead, Apify registry scrapers | $0.02–$0.25 per record; from ~$99 per list; flat monthly plans | the hive's SMB-site lane (they need a website now) and, for packs, the $200 DESK buyer's *customers*; weak for pack sales themselves (they already chose their business) |
+| **B. Franchise-seeker leads** (people who filled a "request info" form on a franchise/bizopp portal) | the person is actively shopping to buy a business this year | Franchise Gator, Franchise Direct, FranchiseOpportunities.com, Entrepreneur.com, Franchise Business Review | $28–$100 per lead, $30–$60 typical, ~$85+ at the quality end; leads are resold 5–15 times; 50–200+ leads per franchise sale | **$1,000 and $10,000** exactly; the buyer is Renee/Kevin and Owen |
+| **C. Intent segments** (modeled or observed "aspiring entrepreneur / small-business intender" audiences) | the person searched, browsed, or profiled like someone about to start | Google custom segments (Google's own signals, no data purchase); X keyword targeting; LiveRamp Data Marketplace segments from Experian/Acxiom/Eyeota and ~160 sellers via a DSP | Google/X: no data fee, only media; marketplace segments: CPM uplift set per segment, "you pay the highest CPM among selected segments" (catalog price not public) | $100–$1,000 on Google/X now; marketplace segments only after the pixel exists to measure uplift |
+
+And one marketplace route that is confirmed intent without any data purchase: **list the $1,000 packs where confirmed buyers already browse** (Flippa starter-site category, BizBuySell, Acquire.com). The buyer came to buy a business; the listing meets him there.
+
+## 2. Source A — new-business filings (already started)
+
+- DataMasters weekly new-business data ~$0.09/lead; a Texas sales-tax-permit feed ~$0.02/lead; commercial retail lists ~$0.25/record ($124.95 per 500); LeadsPlease from $99.75 and counts ~169,535 new businesses per month nationally; DayOneLead sells flat-monthly browse/export with owner phone/email where published; Apify scrapers pull CO/CT/NY daily and FL/NY/WA/CO/TX/CA registries with NAICS and email where the state publishes them ([datamasters](https://www.datamasters.org/mailing-lists/new-business-database-mailing-lists/), [leadsplease](https://www.leadsplease.com/mailing-lists/business/new-business-list), [dayonelead](https://dayonelead.com/new-llc-filing-business-leads), [apify TX](https://apify.com/deadwood_data_solutions/texas-new-business-leads), [apify filings](https://apify.com/splendorous_astrolabe_xs9/new-business-filings)) `(vendor pages)`.
+- **What it is good for:** business-to-business offers to people who just became owners — a website, a booking door, a workflow app. That is the hive's existing SMB-site lane ($1,500–$6,000) and TALLY's showcase, not the consumer packs. For packs, a filed LLC owner has already picked his business; he is a $10,000 "add a unit" buyer only later.
+- **Do not** hand these lists to $200 DESK pack buyers as "your first customers": that makes the pack an FTC business opportunity (16 CFR 437 prong ii). Sell the *method* of finding such lists; do not include the list.
+- **Law for use:** email to business addresses is CAN-SPAM-permitted without opt-in but must carry identification, a working opt-out and a postal address; texts and calls to purchased numbers need prior express written consent naming tjlabs under TCPA ($500–$1,500 per message, private right of action); Gmail/Yahoo bulk-sender rules (one-click unsubscribe, spam-rate ceilings) decide deliverability in practice ([TCPA/CAN-SPAM guide](https://blog.clickpointsoftware.com/2025-guide-to-tcpa-one-to-one-consent-can-spam-state-regulations), [leadsplease compliance](https://test.leadsplease.com/buying-guides/data-compliance-guide)) `(secondary)`.
+
+## 3. Source B — franchise-seeker leads (actively shopping)
+
+- Portals sell request-for-information leads to listed brands at ~$28–$100 each; $30–$60 is typical; Franchise Business Review positions at ~$85+/lead on quality; the same lead is commonly resold to 5–15 brands; conversion needs 50–200+ leads per sale; portal usage among franchisors rose from 68.6% to 74.4% into 2026 ([leadppc cost](https://leadppc.com/franchise/how-much-does-franchise-lead-generation-cost/), [leadppc portals](https://leadppc.com/franchise/franchise-lead-portals/), [franchiseinsights 2026 summary](https://www.franchiseinsights.com/franchise-development/2026-franchise-development-lead-generation-strategic-summary/), [franchiseperformancegroup](https://franchiseperformancegroup.com/much-budget-franchise-lead-generation/)) `(secondary)`.
+- **Why it fits:** this is the exact $1,000/$10,000 buyer at the exact moment (BUYER_TIERS §3: corporate refugee, 91% intend to buy within two years). The pack's pitch to him is the one franchises cannot make: no royalties, you own the brand.
+- **How it works:** tjlabs would list as a *business opportunity* (portals carry non-franchise "bizopp" categories) and pay per lead or a listing fee. **OWNER/counsel before listing:** portal bizopp listings sit inside the state business-opportunity laws (LAW_AND_POLICY_FLAGS §8b; California SAMP $500–$50,000 band) and the FTC Business Opportunity Rule if any customer/location/buy-back promise is made; portals may require disclosure documents for some categories.
+- **Operating rule if used:** because the lead is resold 5–15 times, the five-minute human reply (MESSAGING_ANGLE §5) is the whole game. A lead form that waits a day is a lead bought for a competitor.
+
+## 4. Source C — intent segments (thinking about it)
+
+- **Google custom segments (no data purchase).** Define an audience by the searches, URLs and apps Google observes: searches like "how to start a business", "LLC vs sole proprietorship", "how much does it cost to start a lawn business"; URLs like legalzoom.com, zenbusiness.com, bizee.com, sba.gov/business-guide, franchisegator.com; then run YouTube/Display/Demand Gen or layer onto Search ([stackmatix custom audiences](https://www.stackmatix.com/blog/google-ads-custom-audiences), [benly audience types](https://benly.ai/learn/google-ads/google-ads-audience-targeting), [twosquares guide](https://twosquares.co.uk/blog/google-ads-audiences)) `(secondary)`. This is the closest thing to "confirmed thinking about it" that costs nothing but media and breaks no platform rule.
+- **X keyword and look-alike targeting** does the same job on X and is already specified per tier in X_ADS_BRIEF §3.
+- **Data-marketplace segments.** LiveRamp's Data Marketplace exposes third-party segments from 160+ sellers (Experian, Acxiom, Eyeota and others), bought inside a DSP or pushed to destinations; pricing is a per-segment CPM and, when several are stacked, only the highest CPM is charged ([liveramp data marketplace](https://liveramp.com/our-platform/data-marketplace), [liveramp buying segments](https://docs.liveramp.com/connect/en/buying-segment-data-from-the-data-marketplace.html), [eyeota](https://www.eyeota.com/)). Segment names and CPMs for "aspiring entrepreneur / small-business intender" are catalog-gated; **to confirm inside a DSP account** (owner account). Planning ranges: third-party audience segments generally add **$0.50–$3.00 CPM on top of media**; B2B and high-intent in-market segments run **$2–$5 CPM**; generic demographic segments cost cents ([stackmatix programmatic costs](https://www.stackmatix.com/blog/programmatic-advertising-costs), [sproutbox programmatic pricing](https://sproutbox.co/programmatic-advertising-pricing-cost-guide)) `(secondary)`. On The Trade Desk and Google's retail network, LiveRamp's hybrid pricing bills segments under a $5 CPM as a percentage of media with a CPM cap, which is meant to hold data cost to roughly 10–20% of media instead of the 40% flat CPMs could reach ([liveramp pricing options](https://docs.liveramp.com/connect/en/data-marketplace-pricing-options.html), [liveramp getting started](https://docs.liveramp.com/connect/en/getting-started-with-data-buying.html)). Worth doing only after the pixel exists, because the only way to judge that uplift is a measured conversion lift.
+
+## 5. Activation rules — where bought data may and may not go
+
+- **Meta:** Customer List Custom Audiences must be your own first-party data collected with notice and consent; "data from brokers, data marketplaces, or third-party data suppliers is explicitly not permitted"; advertisers must declare the data source ([Meta custom audience terms](https://www.facebook.com/legal/terms/customaudience), [growwithsakib guide](https://growwithsakib.com/meta-custom-audiences/), [jonloomer restrictions](https://www.jonloomer.com/restrictions-on-customer-list-custom-audiences/)). Meta ended third-party Partner Categories in 2018. Bought lists do not go into Meta.
+- **X:** looser than Meta on paper. X's List Custom Audiences help page says the uploaded file may contain "1P or 3P customer data" to match against @handles, with the constraint that "you cannot re-upload third-party lists that you do not own", and X's audience policy requires legally sufficient notice and consent for the data used ([X List Custom Audiences](https://business.x.com/en/help/campaign-setup/campaign-targeting/custom-audiences/lists), [X policies for conversion tracking and custom audiences](https://business.x.com/en/help/ads-policies/campaign-considerations/policies-for-conversion-tracking-and-custom-audiences)). Practical reading: a list tjlabs has *licensed with the right to use for advertising* and whose subjects were given lawful notice can be uploaded to X; a rented one-time-use list or a scraped registry cannot. The licence terms of the data vendor decide, and counsel reads them. Rented lists still work for mail.
+- **TikTok:** Customer File audiences are treated as first-party targeting and TikTok's guidance says only opted-in people may be reached; purchased lists are the classic violation ([TikTok customer file](https://ads.tiktok.com/help/article/customer-file), [TikTok customer file guidelines](https://ads.tiktok.com/help/article/customer-file-faq?lang=en)). Third-party data enters TikTok only through its own partner-audience integrations where they exist; verify inside Ads Manager.
+- **Google:** Customer Match is first-party only; bought lists are rejected. Intent is bought from Google itself via custom segments (§4).
+- **Direct mail / email / DSP display:** where bought data can be used, subject to CAN-SPAM, TCPA, and state law.
+- **Lookalikes from bought seeds** are the same violation as uploading the seed. Seeds must be first-party: our own buyers, lead-form submitters, and pixel visitors.
+
+## 6. Privacy and data-broker law that lands on tjlabs the moment this starts
+
+- **Buying data does not make tjlabs a data broker** under California, Texas, Oregon or Vermont law unless it *sells or licenses* personal data it did not collect directly; reselling lists (including inside a pack) would. Registration regimes: CA (CPPA), TX (Secretary of State), OR (DCBS), VT (Secretary of State) ([captaincompliance comparison](https://captaincompliance.com/education/state-data-broker-laws-compared-ct-ca-tx-vt-mt/), [privacylawmap 2026](https://privacylawmap.com/blog/data-broker-registration-requirements-2026)). California's Delete Act DROP went live 2026-01-01 and from 2026-08-01 brokers must process deletions every 45 days at $200 per request per day of failure ([datagrail DROP](https://www.datagrail.io/blog/regulations/the-delete-act-and-drop-what-you-need-to-know/), [privacy.ca.gov](https://privacy.ca.gov/data-brokers/)). Consequence: bought lists decay by law; buy fresh, do not warehouse.
+- **Pixels are "sharing."** Installing the X, TikTok or Meta pixel on the pack door is a CCPA/CPRA "share" for cross-context behavioral advertising, which requires a privacy notice at collection and a "Do Not Sell or Share My Personal Information" opt-out on the door ([clym CCPA sale/share 2026](https://www.clym.io/blog/ccpa-selling-and-sharing-what-counts-as-a-sale-or-share), [adfirm CPPA 2026](https://www.adfirm.net/blog/cppa-marketer-compliance-2026/)) `(secondary)`. This attaches to the thanks-door build (`scout-demand-pack-door-thanks-pixel-20260902-01`) and to every pack door: **OWNER**, privacy policy and opt-out link before the first pixel fires.
+- **FTC posture.** The population the owner wants to target is the population the Business Opportunity Rule and the 2025 NPRM protect; the enforcement pattern (Arise, MESSAGING_ANGLE §5) is aspiration copy plus an earnings figure aimed at exactly these people. The copy rule (prices yes, earnings never) is the compliance strategy for this audience, not a style preference.
+
+## 7. Research recommendation by tier (owner decides)
+
+| tier | first move (no data purchase) | second move (paid data) | not this |
+|---|---|---|---|
+| $100 SHOP | X keywords/look-alikes; Google custom segment on "start a lawn care / pressure washing business" searches and URLs | none needed | franchise portals (wrong buyer) |
+| $200 DESK | Google custom segment on "start an agency / freelance web" intent; X look-alikes | none; new-business lists are the *buyer's customers*, sold as a method, never included | bundling lists into the pack (437) |
+| $1,000 PLANT | list the instance on Flippa's starter-site category / BizBuySell / Acquire.com where confirmed buyers browse; Google Search + custom segments on "buy a business", "franchise under 10k" | franchise/bizopp portal listing at $28–$100 per lead **after counsel clears the bizopp posture**; marketplace segments via DSP after the pixel exists | uploading any bought list to Meta/X/TikTok |
+| $10,000 HEAVY | founder-led X posts to operator look-alikes; Google Search "add a service line", "franchise fee" | franchise portal leads with a five-minute human reply; new-business filings for the *SMB-site* offer, not the pack | leads inside the pack; equity language |
+
+## 8. Owner actions this research creates (financial or legal, so his)
+
+1. Decide whether tjlabs lists as a business opportunity on franchise portals; counsel on state bizopp posture first.
+2. Open a DSP or LiveRamp buyer account only if the pixel and thanks door exist; otherwise the uplift cannot be measured.
+3. Privacy policy plus "Do Not Sell or Share" opt-out on every pack door before any pixel fires (attaches to the thanks-door build).
+4. Buy new-business lists, if at all, for the SMB-site lane; route through the sales law (verified route, YES first); no texts or calls to purchased numbers.
+
+## Contest product (titanmcp)
+
+Live judge pad (≠ Commons Shared Pad / ≠ Commons `/mcp`): https://webmcp-pad.vercel.app/ — **titanmcp 1.4.5**, 24 tools, Agent Resources, `syncConsents`. Board: [titanmcp.html](../../titanmcp.html). Cite Latch Pad KEEP.
+## Live cash
+
+Verified product pages only — no invented Stripe links.
+- [$199 dealer diagnostic](../../dealer-service-lead-rescue.html)
+- [$199 referral diagnostic](../../referral-intake-completeness.html)
+- [$199 repair diagnostic](../../repair-booking-preflight.html)
+- [$199 plant diagnostic](../../plant-downtime-handoff.html)
+

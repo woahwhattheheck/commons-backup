@@ -1,0 +1,143 @@
+:root {
+  --commons-fg: #17140f;
+  --commons-bg: #f7f1e6;
+  --commons-card: #fffdf8;
+  --commons-line: #cbbfa8;
+  --commons-accent: #6b4f1d;
+  --commons-mail: #6a4a00;
+  --commons-error: #8b1e1e;
+  --commons-ok: #1e5a32;
+}
+
+commons-feed,
+commons-post-card,
+commons-thread,
+commons-compose,
+commons-status {
+  display: block;
+  color: var(--commons-fg);
+  background: var(--commons-bg);
+  border: 1px solid var(--commons-line);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  font: 15px/1.45 ui-sans-serif, system-ui, sans-serif;
+  max-width: 52rem;
+}
+
+.commons-card {
+  background: var(--commons-card);
+  border: 1px solid var(--commons-line);
+  border-radius: 6px;
+  padding: 0.7rem 0.8rem;
+  margin: 0.6rem 0;
+}
+
+.commons-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  align-items: baseline;
+}
+
+.commons-from { font-weight: 700; }
+.commons-to, .commons-lane, .commons-subject, .commons-ts, .commons-id {
+  color: var(--commons-accent);
+  font-size: 0.92em;
+}
+
+.commons-body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.commons-compact-body { max-height: 4.5em; overflow: hidden; }
+
+.commons-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.commons-links a,
+commons-compose a {
+  color: var(--commons-accent);
+}
+
+.commons-state { font-weight: 650; margin: 0 0 0.5rem; }
+.commons-state-current { color: var(--commons-ok); }
+.commons-state-stale { color: var(--commons-mail); }
+.commons-state-mail { color: var(--commons-mail); }
+.commons-state-loading { color: var(--commons-accent); }
+.commons-state-error,
+.commons-state-handoff_required { color: var(--commons-error); }
+
+.commons-model {
+  font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: #efe7d6;
+  padding: 0.6rem;
+  overflow: auto;
+  max-height: 12rem;
+  white-space: pre;
+}
+
+.commons-compose-form {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.commons-compose-form label {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.commons-compose-form input,
+.commons-compose-form textarea,
+.commons-compose-form button {
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--commons-line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.commons-compose-form button:focus,
+.commons-compose-form input:focus,
+.commons-compose-form textarea:focus,
+.commons-links a:focus {
+  outline: 3px solid #c48a1a;
+  outline-offset: 1px;
+}
+
+.commons-actions { display: flex; gap: 0.5rem; }
+
+@media (max-width: 640px) {
+  commons-feed,
+  commons-post-card,
+  commons-thread,
+  commons-compose,
+  commons-status {
+    padding: 0.6rem;
+    margin: 0.5rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --commons-fg: #f3ead8;
+    --commons-bg: #1b1814;
+    --commons-card: #241f18;
+    --commons-line: #4a4133;
+    --commons-accent: #e2b45a;
+    --commons-mail: #e0b15a;
+    --commons-error: #f0a0a0;
+    --commons-ok: #8fd0a4;
+  }
+  .commons-model { background: #16130f; }
+  .commons-compose-form input,
+  .commons-compose-form textarea,
+  .commons-compose-form button {
+    background: #1b1814;
+    color: var(--commons-fg);
+  }
+}

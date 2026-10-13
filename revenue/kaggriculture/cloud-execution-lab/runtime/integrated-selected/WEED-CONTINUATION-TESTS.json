@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "operation": "titan-v2-weed-continuation-20260909",
+  "status": "source_and_native_validated",
+  "submission_status": "not_submitted",
+  "archive": {
+    "path": "exports/titan-current.tar.gz",
+    "entrypoint": "main.py::agent",
+    "config": "TITAN-CONFIG.json",
+    "sha256": "db34f9d2ce0ecf4c88e0a0ed5a9966a7ef18484a5efb53f20ba24162c543599d",
+    "bytes": 350846,
+    "runtime_files": 96,
+    "source_manifest": "runtime/integrated-selected/CURRENT-SOURCE.json",
+    "source_manifest_sha256": "689e1b927ac8cd39e564c00d6780035bf14112e8e8610d6ca5acc825bbbd3564"
+  },
+  "predecessor_archive_sha256": "6c50cf6024440cecbf3c7326e7a3a57249815d01a0b784c7e3a8ed1b83239bcc",
+  "candidate_origin": "New implementation in existing SpatialTempo/TitanAgent; original A amended source was not recovered.",
+  "test_evidence": [
+    {
+      "command": "PYTHONPATH='../cloud-runtime-pulse:../cloud-quickstep' python -m unittest test_engine_semantics test_funded_payback_runtime test_route_recovery test_seed_derived test_worker_deadline test_committed_seed_retry_runtime test_integrated_selected test_market_pressure_runtime test_weed_continuation test_module_recovery test_entrypoint_clock test_terminal_history_join test_release_consistency test_build_publication -q",
+      "tests": 126,
+      "passed": 126,
+      "scope": "current continuation source; before the final frozen-terminal packaging mapping correction"
+    },
+    {
+      "command": "python -m unittest test_build_publication test_release_consistency -q",
+      "tests": 22,
+      "passed": 22,
+      "scope": "final builder mapping and archive publication"
+    },
+    {
+      "command": "python test_titan_archive.py",
+      "cases": 12,
+      "passed": 12,
+      "scope": "exact current standalone archive; includes disabled optional terminal owner import",
+      "max_seconds": 0.058221591001711204,
+      "details": "WEED-ARCHIVE-TESTS.json"
+    },
+    {
+      "command": "python build_integrated.py --check",
+      "passed": true,
+      "scope": "exact archive bytes and source manifest closure"
+    }
+  ],
+  "native_fixture_evidence": {
+    "DELTA": {
+      "recorded_control_transitions": 19,
+      "current_agent_transitions": 19,
+      "steps_inclusive": [
+        28,
+        46
+      ],
+      "rejoin_step": 47,
+      "result": "same emitted market rows and unrelated actors; exact state rejoin except restored PASTURE"
+    },
+    "SPRUCE": {
+      "result": "Exact recorded prefix: DIG29, BUILD30, original SOUTH31; only missing pasture restored"
+    },
+    "ASH": {
+      "result": "Exact source-native observations at decision304 and190 rejected across root routes: observed seed3 is below109 later committed wheat requests; last-hour plant cannot survive same-day reset"
+    },
+    "synthetic_source_boundaries": 14
+  },
+  "mechanism_review": [
+    "Single original producer invocation and actor-wise commit only after emitted final action.",
+    "Restore pristine route past for branch compatibility; reject reset, backwards calls, branch changes, and hiring boundary.",
+    "Only observed-weed displacement of authored PLANT/BUILD admitted, with one later PASS absorbed before same-day reset.",
+    "No credited future purchases. PLANT stock must exceed all remaining prefix-compatible route demand and pending extra plants; recheck actual next observed actor/site/stock.",
+    "Preserve market rows and unrelated actor streams. Reject shared-service collisions and resource-consuming delay.",
+    "Optional spatial flags remain false.",
+    "Repaired pre-existing6c50 disabled-terminal packaging closure: vendor exact frozen SELL scheduler SHA25632c8610c9827d1686a6f831e2c4b6af4c00d32d2aa04dcf25699d976d6d97dd9 in the existing lab vendor layout; retain its hash check and sparse-checkout compatibility."
+  ],
+  "game_evidence": {
+    "new_full_games": 0,
+    "new_simulation_panels": 0,
+    "strength_measured": false,
+    "reason": "Owner paused new simulations for this source/economics and recorded-game study pass."
+  },
+  "historical_reports_not_attributed": [
+    "A predecessor170tests,24calibration and192preliminary games",
+    "A later9test amendment/5664native audit without recovered source bytes",
+    "Original A8tests36transitions",
+    "Original A-D1536 historical4999-v7b58 outcomes",
+    "Prior hosted56092261 results and score"
+  ],
+  "limits": [
+    "The conservative PLANT gate may reject recoverable crops; it does not assume later buys will fill.",
+    "Only bounded native rejoin is established. Whole-game outcome and reactive branch effects remain unmeasured.",
+    "Recorded-replay study is separate evidence and does not simulate this candidate."
+  ],
+  "packaging_ci_discriminator": {
+    "initial_candidate": "c5b2ae983cb288accb428b85dc1abac9bfc73258fcf37ea2663f0794b895d0f5",
+    "initial_commit": "13464e97a58dd90dc98ef3fd4c1ad8333673ccab",
+    "job_id": 102304904906,
+    "observed_failure": "The canonical CI sparse checkout omitted the newly mapped cloud-titan-composition sibling, so builder --check and copied-tree consistency failed.",
+    "repair": "Place exact pinned bytes in the existing reference/titan-current/vendor/sell layout; no runtime policy or pin changes."
+  }
+}

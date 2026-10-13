@@ -1,0 +1,32 @@
+{
+  "package": "commercial_acceptance_bridge",
+  "schema_version": 1,
+  "status": "NORMALIZED_HUMAN_REVIEWED_EVIDENCE_ONLY",
+  "acceptance_contract": {
+    "offer_series": 60,
+    "offer_versions": 65,
+    "input_records": 125,
+    "unique_events": 120,
+    "exact_retry_replays": 5,
+    "forced_quarantines": 10,
+    "receipt_sha256": "dede4ae4fb681198b46e5d4433f182f05afe4583539d2f62487672bda27767fb"
+  },
+  "receipt_self_digest_is_authenticity": false,
+  "offline_verification_requires_out_of_band_receipt_sha256": true,
+  "offline_verification_requires_trusted_source_batch": true,
+  "production_verification_uses_current_utc": true,
+  "max_snapshot_age_seconds": 300,
+  "commands": [
+    "python -m unittest revenue.commercial_acceptance_bridge.test_gate -v",
+    "python -O -m unittest revenue.commercial_acceptance_bridge.test_gate -v",
+    "python -m revenue.commercial_acceptance_bridge.acceptance --write-receipt /tmp/commercial-acceptance-receipt.json --write-source-batch /tmp/commercial-acceptance-source.json",
+    "python -m revenue.commercial_acceptance_bridge.acceptance --verify-receipt /path/to/current-receipt.json --source-batch /path/to/trusted-source-batch.json --expected-receipt-sha256 <out-of-band-sha256>"
+  ],
+  "raw_message_parsing": false,
+  "signer_or_legal_authority": false,
+  "contract_creation_or_execution": false,
+  "invoice_or_checkout_creation": false,
+  "payment_or_charge": false,
+  "fulfillment_start": false,
+  "recognized_revenue": false
+}

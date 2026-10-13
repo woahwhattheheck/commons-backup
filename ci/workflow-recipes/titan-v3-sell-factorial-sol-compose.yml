@@ -1,0 +1,38 @@
+name: titan-v3-sell-factorial-sol-compose
+
+on:
+  push:
+    branches:
+      - sol-compose/titan-v3-sell-factorial-gate-20260910-01
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/**
+      - .github/workflows/titan-v3-sell-factorial-sol-compose.yml
+  pull_request:
+    paths:
+      - revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose/**
+      - .github/workflows/titan-v3-sell-factorial-sol-compose.yml
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compile and run fail-closed contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/titan-v3-sell-factorial-sol-compose
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+        run: |
+          python -B -m py_compile interaction_gate.py test_interaction_gate.py
+          python -B -m unittest -v test_interaction_gate.py

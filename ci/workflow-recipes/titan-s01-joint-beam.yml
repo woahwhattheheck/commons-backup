@@ -1,0 +1,98 @@
+name: titan-s01-joint-beam
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-s01-joint-beam.yml'
+      - 'revenue/kaggriculture/cloud-anytime-joint-beam/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/mechanics.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      S01_MECHANICS: ${{ github.workspace }}/revenue/kaggriculture/cloud-execution-lab/mechanics.py
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/titan-s01-joint-beam.yml
+            /revenue/kaggriculture/cloud-anytime-joint-beam/
+            /revenue/kaggriculture/cloud-execution-lab/mechanics.py
+      - name: Record exact committed source
+        shell: python
+        run: |
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          out = Path(os.environ['RUNNER_TEMP']) / 's01-joint-beam'
+          out.mkdir()
+          files = [
+              Path('.github/workflows/titan-s01-joint-beam.yml'),
+              *sorted(Path('revenue/kaggriculture/cloud-anytime-joint-beam').glob('*.py')),
+              Path('revenue/kaggriculture/cloud-execution-lab/mechanics.py'),
+          ]
+          records = {}
+          for path in files:
+              data = path.read_bytes()
+              records[str(path)] = {
+                  'bytes': len(data),
+                  'sha256': hashlib.sha256(data).hexdigest(),
+                  'git_blob': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest(),
+              }
+          mechanics = records['revenue/kaggriculture/cloud-execution-lab/mechanics.py']['git_blob']
+          if mechanics != '044a4f9c0a4a44dde10ada57563238bcaf82075d':
+              raise SystemExit('official mechanics blob drift: ' + mechanics)
+          checkout = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          if checkout != os.environ['GITHUB_SHA']:
+              raise SystemExit('checkout differs from event SHA')
+          report = {
+              'schema': 'titan.s01.source.v1',
+              'checkout': checkout,
+              'event': os.environ['GITHUB_EVENT_NAME'],
+              'files': records,
+              'scope': 'isolated proposer/scorer experiment; no canonical archive change',
+          }
+          (out / 'SOURCE-SNAPSHOT.json').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
+      - name: Pure bounded beam contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-anytime-joint-beam
+          python3 -B -m unittest -v test_joint_action_beam.py \
+            2>&1 | tee "$RUNNER_TEMP/s01-joint-beam/pure-contracts.log"
+      - name: Preserved official-mechanics adapter contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-anytime-joint-beam
+          python3 -B -m unittest -v test_mechanics_adapter.py \
+            2>&1 | tee "$RUNNER_TEMP/s01-joint-beam/mechanics-contracts.log"
+      - name: Width-24 depth-4 35ms runtime contract sample
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd revenue/kaggriculture/cloud-anytime-joint-beam
+          python3 -B run_contracts.py \
+            --runs 64 \
+            --output "$RUNNER_TEMP/s01-joint-beam/RUNTIME-CONTRACT.json" \
+            2>&1 | tee "$RUNNER_TEMP/s01-joint-beam/runtime-contract.log"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: titan-s01-joint-beam-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/s01-joint-beam/
+          if-no-files-found: error
+          retention-days: 7

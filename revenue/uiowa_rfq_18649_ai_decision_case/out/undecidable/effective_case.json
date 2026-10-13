@@ -1,0 +1,138 @@
+{
+  "case_id": "CASE-SYN-IAM-RUNBOOK",
+  "workflow": "Producing an access-review runbook section (SYNTHETIC)",
+  "synthetic": true,
+  "documents": [
+    {
+      "id": "DOC-D-B1",
+      "variant": "BASELINE",
+      "events": [
+        {
+          "id": "EVT-D-B1-1",
+          "kind": "AUTHOR",
+          "day": 1,
+          "minutes": 120.0
+        },
+        {
+          "id": "EVT-D-B1-2",
+          "kind": "CHECK",
+          "day": 2,
+          "minutes": 25.0
+        },
+        {
+          "id": "EVT-D-B1-3",
+          "kind": "ACCEPT",
+          "day": 3,
+          "minutes": 0.0
+        }
+      ]
+    },
+    {
+      "id": "DOC-D-B2",
+      "variant": "BASELINE",
+      "events": [
+        {
+          "id": "EVT-D-B2-1",
+          "kind": "AUTHOR",
+          "day": 1,
+          "minutes": 115.0
+        },
+        {
+          "id": "EVT-D-B2-2",
+          "kind": "CHECK",
+          "day": 2,
+          "minutes": 28.0
+        },
+        {
+          "id": "EVT-D-B2-3",
+          "kind": "ACCEPT",
+          "day": 3,
+          "minutes": 0.0
+        }
+      ]
+    },
+    {
+      "id": "DOC-D-A1",
+      "variant": "ASSISTED",
+      "events": [
+        {
+          "id": "EVT-D-A1-1",
+          "kind": "GENERATE",
+          "day": 1,
+          "minutes": 8.0
+        },
+        {
+          "id": "EVT-D-A1-2",
+          "kind": "CHECK",
+          "day": 1,
+          "minutes": null
+        },
+        {
+          "id": "EVT-D-A1-3",
+          "kind": "ACCEPT",
+          "day": 2,
+          "minutes": 0.0
+        }
+      ]
+    },
+    {
+      "id": "DOC-D-A2",
+      "variant": "ASSISTED",
+      "events": [
+        {
+          "id": "EVT-D-A2-1",
+          "kind": "GENERATE",
+          "day": 1,
+          "minutes": 9.0
+        },
+        {
+          "id": "EVT-D-A2-2",
+          "kind": "CHECK",
+          "day": 1,
+          "minutes": 33.0
+        }
+      ]
+    }
+  ],
+  "quality_measurements": [
+    {
+      "id": "QM-D-A1",
+      "document_id": "DOC-D-A1",
+      "required_elements": 10,
+      "correct_elements": 7,
+      "fabricated_references": 1
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "ASM-D-001",
+      "name": "analyst_hourly_cost",
+      "value": 85.0,
+      "unit": "currency_per_hour",
+      "low": 70.0,
+      "high": 110.0,
+      "basis": "ASSUMED",
+      "source": "synthetic planning assumption"
+    },
+    {
+      "id": "ASM-D-002",
+      "name": "documents_per_month",
+      "value": 10.0,
+      "unit": "documents_per_month",
+      "low": 6.0,
+      "high": 14.0,
+      "basis": "ASSUMED",
+      "source": "synthetic volume assumption"
+    },
+    {
+      "id": "ASM-D-003",
+      "name": "evaluation_horizon_months",
+      "value": 12.0,
+      "unit": "months",
+      "low": 12.0,
+      "high": 12.0,
+      "basis": "ASSUMED",
+      "source": "synthetic one-year evaluation window"
+    }
+  ]
+}

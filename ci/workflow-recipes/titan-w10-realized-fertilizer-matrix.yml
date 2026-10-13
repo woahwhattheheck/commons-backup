@@ -1,0 +1,43 @@
+name: titan-w10-realized-fertilizer-matrix
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/analysis/w10-fertilizer-cycle/**"
+      - ".github/workflows/titan-w10-realized-fertilizer-matrix.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-w10-realized-fertilizer-matrix-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  matrix:
+    name: all-required counterfactual pairs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@v4
+      - name: Select Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile W10 suite
+        run: |
+          python -m py_compile \
+            revenue/kaggriculture/cloud-execution-lab/analysis/w10-fertilizer-cycle/realized_fertilizer.py \
+            revenue/kaggriculture/cloud-execution-lab/analysis/w10-fertilizer-cycle/matrix_runner.py \
+            revenue/kaggriculture/cloud-execution-lab/analysis/w10-fertilizer-cycle/test_realized_fertilizer.py \
+            revenue/kaggriculture/cloud-execution-lab/analysis/w10-fertilizer-cycle/test_matrix_runner.py
+      - name: Run complete fail-closed suite
+        run: |
+          python -m unittest discover \
+            -s revenue/kaggriculture/cloud-execution-lab/analysis/w10-fertilizer-cycle \
+            -p "test_*.py" \
+            -v

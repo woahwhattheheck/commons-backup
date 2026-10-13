@@ -1,0 +1,35 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><title>Federated CI receipts</title><link rel="stylesheet" href="./commons.css?v=20260823f"><body>
+
+<p class="nav"><a href="./index.html">Commons</a> ·  · <a href="./resources.html">resources</a> · <a href="./ci/README.md">ci/</a> · <b>FEDERATED CI</b></p>
+<p id="live-cash" class="note"><strong>Live cash</strong> — <a href="./dealer-service-lead-rescue.html">$199 dealer</a> · <a href="./referral-intake-completeness.html">$199 referral</a> · <a href="./repair-booking-preflight.html">$199 repair</a> · <a href="./plant-downtime-handoff.html">$199 plant</a>.</p>
+<p class="note"><strong>Larger fixed engagements</strong> (separate product pages; checkout/intent stays there): <a href="./diagnostic.html">GGUF diagnostic · $12,000 / 10 days</a> · <a href="./commercial.html">White Box pilot · $30,000 / 30 days</a>. Not remints of tip SKUs.</p>
+<h1>Federated CI receipt engine</h1>
+
+
+<p class="law">The muhlnickel is the computer. This page is a static report over checked-in receipts. It does not start a runner. Provider names are observations, not gates. Unknown providers remain usable manifest targets. A workflow file is not a measured run.</p>
+<p>Engine <a href="./host_offload/federated_ci.py"><code>host_offload/federated_ci.py</code></a> · tests <a href="./test_federated_ci.py"><code>test_federated_ci.py</code></a> · tree <a href="./ci/federated/README.md"><code>ci/federated/</code></a>. Cite PLUMB/Opus 5 #commons 2026-08-23. Do not remint.</p>
+<h2>Pinned source</h2>
+<p>Planning commit <code>38dad71081c1dc2e458004324046cebf4008c03c</code> (then-current main when this corpus was authored). GitHub Actions config blob <code>7bfce9a1de21f42068d091968cb4e362c483def8</code> · 1597 bytes · sha256 <code>2f7931ab80cbc676cb0f07b2aa4cd581eb6b25e726bc2b617fa0e2a906eef0af</code> · path <code>.github/workflows/header-census.yml</code>.</p>
+<h2>Who was measured</h2>
+<table>
+<thead><tr><th>provider</th><th>state in this corpus</th><th>evidence</th></tr></thead>
+<tbody>
+<tr><td><code>local-fixture</code></td><td><b>MEASURED</b></td><td>two echo shards executed by the local fixture runner; stdout sha256 pinned in <a href="./ci/federated/receipts/local-fixture-shard-0.json">shard-0</a> and <a href="./ci/federated/receipts/local-fixture-shard-1.json">shard-1</a></td></tr>
+<tr><td><code>github-actions</code></td><td>FIXTURE / READBACK</td><td>config pin only. <a href="./ci/federated/github_actions_readback.json">github_actions_readback.json</a>. No Actions run URL. Shape receipt <a href="./ci/federated/receipts/github-actions-shape-shard-0.json">github-actions-shape-shard-0.json</a> uses <code>terminal_state=FIXTURE</code></td></tr>
+<tr><td><code>cirrus</code></td><td>UNMEASURED · supported by contract</td><td>named on the manifest; no receipt</td></tr>
+<tr><td><code>gitlab</code></td><td>UNMEASURED · supported by contract</td><td>named on the manifest; no receipt</td></tr>
+<tr><td><code>woodpecker</code></td><td>UNMEASURED · supported by contract</td><td>named on the manifest; no receipt</td></tr>
+<tr><td><code>unknown-lab</code></td><td>UNMEASURED · supported by contract</td><td>unknown names stay legal targets</td></tr>
+</tbody>
+</table>
+<h2>Example reconciliation</h2>
+<p>Job <code>federated-echo-20260828-01</code>. Status <b>RECONCILED</b>. Planned shards 2. Measured providers: <code>local-fixture</code> only. The engine did not activate another provider. File: <a href="./ci/federated/reconciliation/example.json">example.json</a>.</p>
+<ul>
+<li>shard 0 test identity <code>federated.echo.shard-a</code> receipt <code>fcr-88fc009df7cfa3b0</code> exit 0 stdout sha256 <code>33e381437866eeb9b5a2e4e75051053ea5470a008cda7af6776769d8dcb8e20e</code> (4 bytes, <code>ok-0</code>)</li>
+<li>shard 1 test identity <code>federated.echo.shard-b</code> receipt <code>fcr-224daaf0c607f730</code> exit 0 stdout sha256 <code>e43010e4c07c7cee53685f8c37ea8ef0ef01d9f8035dd79cd88955ddf814981a</code> (4 bytes, <code>ok-1</code>)</li>
+</ul>
+<h2>Receipt contract</h2>
+<p>Normalized receipt fields: source SHA, test identity, runner-neutral command envelope (<code>argv</code>/<code>cwd</code>/<code>env</code>/<code>timeout_s</code>/<code>shell=false</code>), exit code, duration_ms, artifact paths+sha256+bytes, provider, run URL (null unless measured or <code>fixture://</code>), terminal state. Reconciler findings cover equivalent results, missing shards, stale-source runs, artifact drift, contradictory exits, retries, duplicate receipts, hash mismatch, cancellation, and malformed schemas.</p>
+<p>Secret/PII scan must stay zero hits. License of Commons remains whatever the root tree already is; this engine does not mint a license or a release.</p>
+<p>Related existing cards: <a href="./ci/provider_quotas.json">ci/provider_quotas.json</a> · <a href="./ci/provider_readbacks/jsdelivr-0cc5ccba5815.json">jsdelivr readback</a> · <a href="./ci/README.md">ci/README.md</a>. Those files were not edited for this landing.</p>
+</body>

@@ -1,0 +1,40 @@
+name: titan-v3-event-horizon-proven-hire
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/frozen_selected.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/analysis/v3_event_horizon_proven_hire/**'
+      - '.github/workflows/titan-v3-event-horizon-proven-hire.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONPYCACHEPREFIX: /tmp/titan-v3-event-horizon-proven-hire-pycache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source-bound contracts
+        run: >-
+          python -m unittest -v
+          revenue/kaggriculture/cloud-execution-lab/analysis/v3_event_horizon_proven_hire/test_event_horizon_executable_hire.py
+      - name: Materialize candidate and receipt
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/titan-event-proven-hire
+          python revenue/kaggriculture/cloud-execution-lab/analysis/v3_event_horizon_proven_hire/materialize_event_horizon_executable_hire.py \
+            --source revenue/kaggriculture/cloud-execution-lab/frozen_selected.py \
+            --output /tmp/titan-event-proven-hire/frozen_selected.py \
+            --receipt /tmp/titan-event-proven-hire/receipt.json
+          python -m py_compile /tmp/titan-event-proven-hire/frozen_selected.py
+          cat /tmp/titan-event-proven-hire/receipt.json
+      - name: Assert checkout is sterile
+        run: test -z "$(git status --porcelain=v1 --untracked-files=all)"

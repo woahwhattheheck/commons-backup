@@ -1,0 +1,67 @@
+name: titan-selected-protocol
+
+# A real standalone replay check. No game, Kaggle write, install or policy build.
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-selected-protocol/**'
+      - '.github/workflows/titan-selected-protocol.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: verifier
+          persist-credentials: false
+          sparse-checkout: |
+            revenue/kaggriculture/cloud-selected-protocol
+      - uses: actions/checkout@v4
+        with:
+          ref: c533e7ce210dbe77e078e566a71b15b175db0da9
+          path: published
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /revenue/kaggriculture/cloud-titan-composition/artifacts/titan-selected.tar.gz
+            /revenue/kaggriculture/cloud-execution-lab/exports/
+      - name: Exercise protocol regressions
+        working-directory: verifier/revenue/kaggriculture/cloud-selected-protocol
+        run: python3 -B -m unittest -v test_verify
+      - name: Stage exact published package and development observations
+        run: >-
+          python3 -B verifier/revenue/kaggriculture/cloud-selected-protocol/verify.py prepare
+          --checkout published --output "${{ runner.temp }}/selected-protocol/inputs"
+      - name: Replay both standalone actors against historical actions
+        run: >-
+          python3 -B verifier/revenue/kaggriculture/cloud-selected-protocol/verify.py run
+          --inputs "${{ runner.temp }}/selected-protocol/inputs"
+          --output "${{ runner.temp }}/selected-protocol/REPORT.json"
+      - name: Bind result to actual workflow and verifier checkout
+        if: always()
+        shell: python
+        env:
+          OUTPUT: ${{ runner.temp }}/selected-protocol
+        run: |
+          import json, os, pathlib, subprocess
+          out = pathlib.Path(os.environ['OUTPUT'])
+          out.mkdir(parents=True, exist_ok=True)
+          commit = subprocess.check_output(['git','-C','verifier','rev-parse','HEAD'], text=True).strip()
+          receipt = {'run_id': os.environ['GITHUB_RUN_ID'],
+                     'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                     'workflow_sha': os.environ['GITHUB_SHA'], 'verifier_checkout': commit,
+                     'policy_source_commit': 'c533e7ce210dbe77e078e566a71b15b175db0da9'}
+          (out/'RUN.json').write_text(json.dumps(receipt, indent=2)+'\n')
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titan-selected-protocol-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/selected-protocol/
+          if-no-files-found: error
+          retention-days: 7

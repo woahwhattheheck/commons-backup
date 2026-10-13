@@ -1,0 +1,38 @@
+name: Lawrence Youth AI training core
+
+on:
+  pull_request:
+    paths:
+      - "revenue/lawrence_youth_ai_training_core/**"
+      - ".github/workflows/lawrence-youth-ai-training-core.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/lawrence_youth_ai_training_core/**"
+      - ".github/workflows/lawrence-youth-ai-training-core.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hostile-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        working-directory: revenue/lawrence_youth_ai_training_core
+        run: python -m py_compile training_evidence.py test_training_evidence.py
+      - name: Hostile suite
+        working-directory: revenue/lawrence_youth_ai_training_core
+        run: python -m unittest -v test_training_evidence.py
+      - name: Hostile suite optimized
+        working-directory: revenue/lawrence_youth_ai_training_core
+        run: python -O -m unittest -v test_training_evidence.py

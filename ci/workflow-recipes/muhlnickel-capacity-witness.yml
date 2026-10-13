@@ -1,0 +1,29 @@
+name: Muhlnickel capacity witness
+
+on:
+  pull_request:
+    paths:
+      - "host/muhlnickel_capacity_witness.py"
+      - "test_muhlnickel_capacity_witness.py"
+      - "docs/MUHLNICKEL_CAPACITY_WITNESS.md"
+      - "artifacts/products/volvo_ota_muhlnickel/**"
+      - ".github/workflows/muhlnickel-capacity-witness.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  witness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile bounded witness
+        run: python -m py_compile host/muhlnickel_capacity_witness.py
+      - name: Run deterministic acceptance
+        run: python -m unittest -v test_muhlnickel_capacity_witness.py
+      - name: Validate product manifest
+        run: python -m json.tool artifacts/products/volvo_ota_muhlnickel/manifest.json > /dev/null

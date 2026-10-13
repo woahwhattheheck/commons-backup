@@ -1,0 +1,60 @@
+{
+  "id": "aquatrace-work-order-c-reporting-offline-20260831-01",
+  "version": 1,
+  "product": "AquaTrace reporting and offline recovery runner",
+  "lane": "C — Reporting & offline",
+  "swarm": "AquaTrace production swarm",
+  "owner": "Adam-crew",
+  "workflow": [
+    "offline recover versus conflict HOLD",
+    "CMDP synthetic export contract",
+    "netDMR synthetic export contract",
+    "Power BI synthetic export contract",
+    "named-human release boundary",
+    "idempotent replay",
+    "deterministic audit hash"
+  ],
+  "acceptance": [
+    "80 frozen synthetic offline events: 60 recover, 20 conflict HOLD",
+    "20 recover each into CMDP, netDMR, and Power BI",
+    "all 20 block with the exact HOLD code",
+    "three export contracts match locked golden hashes",
+    "conflict source hashes never enter an export",
+    "replay adds 0 recover and 0 holds and keeps the audit hash",
+    "named human-only export release; zero autonomous releases"
+  ],
+  "hold_codes": [
+    "HOLD_VERSION_CONFLICT",
+    "HOLD_CHECKSUM_DIVERGENCE",
+    "HOLD_CLOCK_SKEW",
+    "HOLD_SPLIT_BRAIN"
+  ],
+  "audit_sha256": "5be4b7ebe6432e675fdb1360ad1125262a014de25eb740dae8ea7aa88c63e51b",
+  "fixture_sha256": "c35a330b712327e6224168614d4097d57adfebd0a64937ced4899b40ef2ec34f",
+  "export_sha256": {
+    "CMDP": "ec2af2de146bfe52b9896cad857ef8fe2f6b26ea12d2900b81d4e4a63e3b11ec",
+    "NETDMR": "71babb70499dc8aa47102d5af05d8f5445d06fec5fe7866dfca9e140b64d48dc",
+    "POWER_BI": "7ef946b249b9d06c73c4c9a49d8dd6f2be9aee99171a268f04c0ad8c7b67b983"
+  },
+  "cite_only": {
+    "private_repo": "woahwhattheheck/aquatrace-lims",
+    "private_sha": "7a5ca7fe2856c49abf46bc248654a4d6f7af0335",
+    "private_path": "docs/validation/reporting-offline-test-contract.md",
+    "note": "unmerged private-repo docs — cite, do not inherit"
+  },
+  "exclusions": [
+    "no City contact",
+    "no live submission",
+    "no live LIMS",
+    "no customer data",
+    "no production or certification claim",
+    "no remint of A / B / field-mobility C / D / D-QA",
+    "no remint of sanair, wadsworth, highpower, westpak, ddl, sharp, canyon, pcl, organabio, billings"
+  ],
+  "truth_gate": "NOT_READY / HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic offline recover, conflict HOLD, export-hash, and named-human release receipts only; never production write, live submission, or autonomous export",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

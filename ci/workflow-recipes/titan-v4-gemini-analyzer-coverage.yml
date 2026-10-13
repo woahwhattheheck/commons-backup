@@ -1,0 +1,31 @@
+name: TITAN V4 agent-index analyzer hardening
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/titan-v4-gemini-analyzer-coverage.yml
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/agent-index-predictability/analyze_agent_index.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/agent-index-predictability/test_agent_index.py
+      - revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/agent-index-predictability/README.md
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-head:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Agent-index analyzer regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          DIR=revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/agent-index-predictability
+          pushd "$DIR"
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v test_agent_index.py
+          PYTHONDONTWRITEBYTECODE=1 python -OB -m unittest -v test_agent_index.py
+          python -B -m py_compile analyze_agent_index.py test_agent_index.py
+          popd

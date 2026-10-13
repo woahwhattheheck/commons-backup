@@ -1,0 +1,89 @@
+{
+  "schema": "titan.lazy-actor-child-retention-validation.v1",
+  "date": "2026-09-08",
+  "owner": "COVE-707949 / recovery4523",
+  "original_blob": "29d0f43ed54866b1b9ab7afdaf8d75e6a7730c1b",
+  "original_sha256": "caf8584ccbd4a29c976864edcb4c3cccdf72f585f08def9ee64b2eef3b87115e",
+  "source": {
+    "bench_lazy_actor.py": {
+      "sha256": "26d266c005adb041eab5e1122901465795803347f7228ebf7ca690f9f6a73448",
+      "git_blob": "1916f0150b7f0a5f26f59ad43edbe100e2479b7d"
+    },
+    "test_lazy_actor_failures.py": {
+      "sha256": "3327a5535d0a518d1b15960c5ea3f1df6812b33e29e445c98c37969107ea409f",
+      "git_blob": "4e661bf90db6b45de17db7050dcbda3a313e404c"
+    }
+  },
+  "new_suite": {
+    "benchmark_sha256": "26d266c005adb041eab5e1122901465795803347f7228ebf7ca690f9f6a73448",
+    "tests": 9,
+    "failures": [],
+    "errors": [],
+    "skipped": [],
+    "successful": true,
+    "policy_calls": 0,
+    "engine_calls": 0,
+    "scope": "coordinator fixtures; two real timeout children and one nonzero-exit child"
+  },
+  "original_control": {
+    "benchmark_sha256": "caf8584ccbd4a29c976864edcb4c3cccdf72f585f08def9ee64b2eef3b87115e",
+    "tests": 9,
+    "failures": [
+      "test_failed_atomic_receipt_write_keeps_original_exception_and_prior_receipt (__main__.FailureRetentionTests.test_failed_atomic_receipt_write_keeps_original_exception_and_prior_receipt)",
+      "test_launch_error_keeps_identity_and_disposition (__main__.FailureRetentionTests.test_launch_error_keeps_identity_and_disposition)",
+      "test_log_write_failure_still_retains_failure_record (__main__.FailureRetentionTests.test_log_write_failure_still_retains_failure_record)",
+      "test_missing_timeout_streams_create_empty_log (__main__.FailureRetentionTests.test_missing_timeout_streams_create_empty_log)",
+      "test_nonzero_real_child_preserves_partial_output_without_validating_it (__main__.FailureRetentionTests.test_nonzero_real_child_preserves_partial_output_without_validating_it)",
+      "test_nonzero_trace_disposition_retains_completed_pass_files (__main__.FailureRetentionTests.test_nonzero_trace_disposition_retains_completed_pass_files)",
+      "test_ordinary_timeout_saves_exact_binary_streams (__main__.FailureRetentionTests.test_ordinary_timeout_saves_exact_binary_streams)",
+      "test_trace_timeout_retains_earlier_measurements (__main__.FailureRetentionTests.test_trace_timeout_retains_earlier_measurements)"
+    ],
+    "errors": [],
+    "skipped": [],
+    "successful": false,
+    "policy_calls": 0,
+    "engine_calls": 0,
+    "scope": "coordinator fixtures; two real timeout children and one nonzero-exit child"
+  },
+  "retained_suite": {
+    "methods": 14,
+    "failures": 0,
+    "errors": 0,
+    "source_unchanged": true
+  },
+  "original_real_timeout": {
+    "exception": "TimeoutExpired",
+    "captured_stdout": "retained-stdout\n",
+    "captured_stderr": "retained-stderr\n",
+    "saved_child_log": false,
+    "saved_failure_record": false,
+    "final_summary": false
+  },
+  "unchanged_function_bodies": [
+    "canonical",
+    "sha",
+    "eager_source",
+    "read_module",
+    "plain",
+    "decision_snapshot",
+    "trace",
+    "compare_traces",
+    "summarize_passes"
+  ],
+  "retained_log_sha256": {
+    "repaired-tests.log": "60ad59a37a26746045e468640a2216ee183e24fe21b8005accef4c47bf65a6b3",
+    "original-tests.log": "aba5b8239aeac28465f80c39f0b2e506c79a2c4307f6a39a4170d45664272099",
+    "retained-tests.log": "0c70e6ee749d3b372f32d7a93f24f76868b5ce83d573bedd8583e54536722d06"
+  },
+  "scope": {
+    "child_programs": "explicit coordinator fixtures",
+    "real_timeout_children_per_new_suite": 2,
+    "real_nonzero_exit_children_per_new_suite": 1,
+    "configured_benchmark_timeout_seconds": 180,
+    "fixture_timeout_seconds": 1,
+    "policy_calls": 0,
+    "engine_calls": 0,
+    "new_game_evaluations": 0,
+    "new_speed_claim": false
+  }
+}

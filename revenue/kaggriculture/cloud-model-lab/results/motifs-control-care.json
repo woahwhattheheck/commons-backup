@@ -1,0 +1,41 @@
+{
+ "motifs": [
+  {
+   "id": "c000",
+   "op": [
+    "CARE"
+   ],
+   "when": {
+    "tile": "ANIMAL",
+    "cared_today": false,
+    "fed_today": true
+   },
+   "effect": "tile_state_change",
+   "role": "worker",
+   "observed_roles": [
+    "worker"
+   ],
+   "proposable": true,
+   "hold_reason": null,
+   "support": {
+    "model": 0,
+    "teacher": 0,
+    "hand": 1,
+    "total": 1
+   },
+   "provenance": [
+    "engine-derived-control"
+   ],
+   "authored": "hand",
+   "rule": "the daily refresh pays care only on an animal already fed today (kaggriculture.py 829-830); this is the fed half of that pair",
+   "sources": []
+  }
+ ],
+ "meta": {
+  "lane": "hand-authored CARE-only control",
+  "authored": "hand",
+  "provenance": "engine-derived-control",
+  "engine_pin": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "note": "CARE consumes nothing at all: it sets a daily flag on an animal already fed, which the refresh pays. The zero-cost limit of this lane."
+ }
+}

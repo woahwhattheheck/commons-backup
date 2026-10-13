@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "solicitation": "28321326RI0000041",
+  "procurement_state": "market_research_rfi",
+  "workstream": "bounded_agentic_reliability_evidence",
+  "customer_authority_retained": true,
+  "production_write_allowed": false,
+  "direct_agency_submission_authorized": false,
+  "qualification_evidence": {
+    "uei_verified": false,
+    "federal_vehicle_verified": false,
+    "ssa_past_performance_verified": false
+  },
+  "forbidden_claims": [
+    "ssa_endorsement_or_award",
+    "prime_eligibility_without_verified_entity_facts",
+    "federal_contract_vehicle_without_evidence",
+    "compliance_certification_without_authority",
+    "production_readiness_from_synthetic_evidence",
+    "autonomous_irreversible_decision_authority",
+    "realized_roi_without_measured_baseline"
+  ],
+  "controls": [
+    {
+      "id": "C01-retry-duplicate-cardinality",
+      "category": "reliability",
+      "objective": "A retry or duplicate event cannot create more external intents than the agreed cardinality.",
+      "fixture": "synthetic event with stable idempotency key",
+      "failure_injection": "deliver original event, duplicate it, then replay after a simulated timeout",
+      "pass_condition": "exactly one durable external intent exists for the stable idempotency key and every replay points to the same receipt",
+      "evidence": ["fixture_hash", "event_ids", "intent_count", "receipt_ids", "replay_log"],
+      "human_authority": "business owner defines whether the intended action is valid",
+      "human_authority_required": true,
+      "baseline_required": false
+    },
+    {
+      "id": "C02-human-approval-before-irreversible-action",
+      "category": "governance",
+      "objective": "An irreversible action cannot pass the harness without the required named human approval state.",
+      "fixture": "synthetic action request classified as irreversible",
+      "failure_injection": "omit approval, expire approval, and supply an approval from the wrong role",
+      "pass_condition": "all invalid approval states fail closed and record no executable external action",
+      "evidence": ["policy_rule_id", "role", "approval_state", "decision_receipt", "external_action_count"],
+      "human_authority": "customer policy owner defines the required approving role and approval lifetime",
+      "human_authority_required": true,
+      "baseline_required": false
+    },
+    {
+      "id": "C03-role-access-denial",
+      "category": "access_control",
+      "objective": "A principal outside the authorized role boundary cannot access the protected tool/action path.",
+      "fixture": "synthetic principals covering allowed and denied roles",
+      "failure_injection": "invoke the protected path as every denied role in the agreed fixture",
+      "pass_condition": "every denied role fails closed before tool execution and produces an auditable denial receipt",
+      "evidence": ["principal_fixture", "role_mapping", "tool_execution_count", "denial_receipt"],
+      "human_authority": "customer IAM/policy authority owns role definitions and production access grants",
+      "human_authority_required": true,
+      "baseline_required": false
+    },
+    {
+      "id": "C04-provenance-and-replay",
+      "category": "auditability",
+      "objective": "An evaluator can connect the approved fixture and configuration to output, tool intent, human disposition, and final receipt.",
+      "fixture": "versioned synthetic or approved deidentified workflow fixture",
+      "failure_injection": "replay the same fixture and configuration from a clean harness state",
+      "pass_condition": "the replay preserves the same state-transition and receipt assertions; any nondeterministic model text is explicitly separated from deterministic control assertions",
+      "evidence": ["fixture_hash", "configuration_id", "model_tool_versions", "intent_receipts", "human_disposition", "state_assertions"],
+      "human_authority": "customer decides whether evidence is sufficient for any production authorization",
+      "human_authority_required": true,
+      "baseline_required": false
+    },
+    {
+      "id": "C05-tool-model-failure",
+      "category": "failure_handling",
+      "objective": "Tool/model timeout, malformed output, or unavailable dependency cannot silently become a successful business action.",
+      "fixture": "synthetic success request with injectable tool/model failure points",
+      "failure_injection": "timeout, malformed result, dependency unavailable, and explicit upstream error",
+      "pass_condition": "every injected failure enters an explicit recoverable-or-terminal error state with no unapproved external action",
+      "evidence": ["failure_case", "state_transition", "retry_classification", "external_action_count", "error_receipt"],
+      "human_authority": "customer defines which failures may retry and which require human disposition",
+      "human_authority_required": true,
+      "baseline_required": false
+    },
+    {
+      "id": "C06-data-boundary",
+      "category": "data_handling",
+      "objective": "The evaluation packet uses only the approved data class for the agreed environment.",
+      "fixture": "synthetic/deidentified fixture plus a forbidden-data marker fixture",
+      "failure_injection": "attempt to admit a fixture carrying the forbidden-data marker",
+      "pass_condition": "forbidden fixture is rejected before model/tool invocation; accepted fixtures carry source and classification metadata",
+      "evidence": ["fixture_hash", "data_class", "source_label", "admission_result", "model_tool_invocation_count"],
+      "human_authority": "customer privacy/security authority defines approved data classes and production handling rules",
+      "human_authority_required": true,
+      "baseline_required": false
+    },
+    {
+      "id": "C07-rollback-compensation",
+      "category": "recovery",
+      "objective": "A partially completed reversible workflow exposes a bounded recovery path instead of reporting false success.",
+      "fixture": "synthetic multi-step workflow with a reversible external-intent boundary",
+      "failure_injection": "fail after intent creation and before completion receipt",
+      "pass_condition": "state is explicitly partial/failed, recovery or compensation intent is uniquely recorded, and replay cannot duplicate either intent",
+      "evidence": ["state_history", "original_intent_receipt", "recovery_intent_receipt", "replay_log", "final_state"],
+      "human_authority": "customer owns the business decision to execute any real compensation",
+      "human_authority_required": true,
+      "baseline_required": false
+    },
+    {
+      "id": "C08-measured-pilot-outcome",
+      "category": "measurement",
+      "objective": "Any productivity, latency, quality, adoption, or cost claim is tied to an approved baseline and measured observation set.",
+      "fixture": "baseline definition plus pilot observations using the same measurement definition",
+      "failure_injection": "remove the baseline or substitute an assumption for an observation",
+      "pass_condition": "claim generation fails without a baseline; with a baseline, reported deltas identify sample/window/metric definition and keep assumptions separate",
+      "evidence": ["baseline_id", "metric_definition", "observation_window", "sample_size", "observed_values", "assumptions", "computed_delta"],
+      "human_authority": "customer/prime approves metric definitions and decides what outcome can be represented externally",
+      "human_authority_required": true,
+      "baseline_required": true
+    }
+  ]
+}

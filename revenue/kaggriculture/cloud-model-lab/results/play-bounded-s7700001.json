@@ -1,0 +1,719 @@
+{
+ "seed": 7700001,
+ "seat": 0,
+ "from_step": 120,
+ "model_turns": 12,
+ "warmup": "starter",
+ "opponent": "starter",
+ "wall_total_s": 145.1,
+ "money": 3010.0,
+ "opponent_money": 3010.0,
+ "margin": 0.0,
+ "settings": {
+  "backend": "CPU",
+  "max_num_tokens": 4096,
+  "temperature": 0.0,
+  "top_k": 1,
+  "sampler_seed": 0,
+  "thinking": false,
+  "max_output_tokens": 192,
+  "model_sha256": "0b2a8980ce155fd97673d8e820b4d29d9c7d99b8fa6806f425d969b145bd52e0"
+ },
+ "provenance": {
+  "derivation_seeds": [
+   4242001
+  ],
+  "evaluation_seeds": [
+   7700001,
+   8800001,
+   9900017
+  ],
+  "derivation_cards": [
+   "s4242001-t130-p0",
+   "s4242001-t300-p0"
+  ],
+  "exemplars": {
+   "ADMIT": [
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST",
+     "output": {
+      "farmer": [
+       "EAST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "STOCK": [
+    {
+     "situation": "farmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "PLANT",
+       "WHEAT"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [empty]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     }
+    }
+   ],
+   "ONCE": [
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "EAST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "RIPE": [
+    {
+     "situation": "farmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "HARVEST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100",
+     "output": {
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "KEEP": [
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered",
+     "output": {
+      "farmer": [
+       "WATER"
+      ],
+      "hands": [],
+      "market": []
+     }
+    },
+    {
+     "situation": "farmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way",
+     "output": {
+      "farmer": [
+       "EAST"
+      ],
+      "hands": [],
+      "market": []
+     }
+    }
+   ],
+   "VENT": [
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     }
+    },
+    {
+     "situation": "farmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100",
+     "output": {
+      "farmer": [
+       "PASS"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "SELL",
+        "WHEAT",
+        5
+       ]
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "turns": [
+  {
+   "day": 5,
+   "hour": 0,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 0 money 3010\nfarmer at (4,4) on [PLANT CARROT age2d ripe_at2d yield1 not_watered_today] carrying -\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON266,MILK179,STRAWBERRY139,TOMATO61,WHEAT27,WOOL229\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 599 (last is step 718); 24 turn(s) left today\n  (4,4) CARROT age2d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step168 unwatered_streak0\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 0 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | EAST | HARVEST | NORTH | PASS | SOUTH | WATER | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\n",
+   "raw_output": "{\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "WATER"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.025,
+    "prompt_build": 0.0003,
+    "model_inference": 18.938,
+    "prefill_ttft": 12.97178033975,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.7090432939999998,
+    "time_to_first_token_in_second": 12.97178033975,
+    "last_prefill_token_count": 1190,
+    "last_prefill_tokens_per_second": 95.73414332218906,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 1.8466422895737111
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "EAST",
+    "HARVEST",
+    "NORTH",
+    "PASS",
+    "SOUTH",
+    "WATER",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 1,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 1 money 3010\nfarmer at (4,4) on [PLANT CARROT age2d ripe_at2d yield2 watered_today] carrying -\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 598 (last is step 718); 23 turn(s) left today\n  (4,4) CARROT age2d yield2/4 ripe at age2d watering raises yield at age2-3d decays from step168 unwatered_streak0\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 1 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | EAST | HARVEST | NORTH | PASS | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\n",
+   "raw_output": "{\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "HARVEST"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.025,
+    "prompt_build": 0.0003,
+    "model_inference": 8.946,
+    "prefill_ttft": 7.67676853675,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.702174483,
+    "time_to_first_token_in_second": 7.67676853675,
+    "last_prefill_token_count": 1185,
+    "last_prefill_tokens_per_second": 156.50498016716196,
+    "last_decode_token_count": 13,
+    "last_decode_tokens_per_second": 9.512530478092772
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "EAST",
+    "HARVEST",
+    "NORTH",
+    "PASS",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 2,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 2 money 3010\nfarmer at (4,4) on [empty] carrying CARROT2\nseeds CARROT1\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 597 (last is step 718); 22 turn(s) left today\nno plants owned\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds CARROT1. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 2 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: BUILD_COOP | BUILD_PASTURE | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | PLANT CARROT | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PLANT\",\"CARROT\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PLANT",
+     "CARROT"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0233,
+    "prompt_build": 0.0003,
+    "model_inference": 8.968,
+    "prefill_ttft": 7.549641566249999,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.612360278,
+    "time_to_first_token_in_second": 7.549641566249999,
+    "last_prefill_token_count": 1169,
+    "last_prefill_tokens_per_second": 156.7944221895917,
+    "last_decode_token_count": 16,
+    "last_decode_tokens_per_second": 10.636124673039793
+   },
+   "admissible_farmer_ops": [
+    "BUILD_COOP",
+    "BUILD_PASTURE",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "PLANT CARROT",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 3,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 3 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 not_watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 596 (last is step 718); 21 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1 DIES at this day's refresh unless watered today\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 3 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WATER | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "WATER"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0226,
+    "prompt_build": 0.0003,
+    "model_inference": 8.898,
+    "prefill_ttft": 7.75698801575,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.470271776,
+    "time_to_first_token_in_second": 7.75698801575,
+    "last_prefill_token_count": 1222,
+    "last_prefill_tokens_per_second": 159.65714625502918,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 9.70054779987732
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WATER",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 4,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 4 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 595 (last is step 718); 20 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 4 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0254,
+    "prompt_build": 0.0003,
+    "model_inference": 8.59,
+    "prefill_ttft": 7.49253067675,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.73196535,
+    "time_to_first_token_in_second": 7.49253067675,
+    "last_prefill_token_count": 1206,
+    "last_prefill_tokens_per_second": 163.1171374861689,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.093784506154337
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 5,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 5 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 594 (last is step 718); 19 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 5 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.024,
+    "prompt_build": 0.0003,
+    "model_inference": 9.004,
+    "prefill_ttft": 7.85591399325,
+    "decode_validation": 0.0002
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.5217502179999998,
+    "time_to_first_token_in_second": 7.85591399325,
+    "last_prefill_token_count": 1206,
+    "last_prefill_tokens_per_second": 155.56808674983623,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 9.644935933983248
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 6,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 6 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 593 (last is step 718); 18 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 6 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0252,
+    "prompt_build": 0.0003,
+    "model_inference": 8.73,
+    "prefill_ttft": 7.6244205615,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.751771487,
+    "time_to_first_token_in_second": 7.6244205615,
+    "last_prefill_token_count": 1206,
+    "last_prefill_tokens_per_second": 160.2741766696806,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.01855862846734
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 7,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 7 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 592 (last is step 718); 17 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 7 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0247,
+    "prompt_build": 0.0003,
+    "model_inference": 8.472,
+    "prefill_ttft": 7.41203015825,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.487452768,
+    "time_to_first_token_in_second": 7.41203015825,
+    "last_prefill_token_count": 1206,
+    "last_prefill_tokens_per_second": 164.83790321170358,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.443678543160177
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 8,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 8 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL230\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 591 (last is step 718); 16 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 8 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0242,
+    "prompt_build": 0.0003,
+    "model_inference": 8.35,
+    "prefill_ttft": 7.32377605475,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.540657296,
+    "time_to_first_token_in_second": 7.32377605475,
+    "last_prefill_token_count": 1206,
+    "last_prefill_tokens_per_second": 166.77949481574703,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.790828772113708
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 9,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 9 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL231\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 590 (last is step 718); 15 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 9 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0226,
+    "prompt_build": 0.0003,
+    "model_inference": 8.233,
+    "prefill_ttft": 7.154756241,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.4869871019999996,
+    "time_to_first_token_in_second": 7.154756241,
+    "last_prefill_token_count": 1206,
+    "last_prefill_tokens_per_second": 170.8850074015093,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.269177951688818
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 10,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 10 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL231\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 589 (last is step 718); 14 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 10 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0234,
+    "prompt_build": 0.0003,
+    "model_inference": 8.555,
+    "prefill_ttft": 7.48852958575,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.6147511649999995,
+    "time_to_first_token_in_second": 7.48852958575,
+    "last_prefill_token_count": 1208,
+    "last_prefill_tokens_per_second": 163.41489093221443,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.383957641773833
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  },
+  {
+   "day": 5,
+   "hour": 11,
+   "prompt": "Sigma:ADMIT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; accepted includes EAST -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 0/100; nothing to advance the goal here -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}\n->\nSigma:STOCK\nfarmer on [empty]; seeds CARROT1,WHEAT1; carrying -; shed 0/100 -> {\"farmer\":[\"PLANT\",\"WHEAT\"],\"hands\":[],\"market\":[]}\nfarmer on [empty]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_SEED\",\"WHEAT\",1]]}\n->\nSigma:ONCE\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:RIPE\nfarmer on [PLANT WHEAT age2d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"HARVEST\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age1d ripe_at2d yield2 not_watered_today]; seeds CARROT1; carrying -; shed 0/100 -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\n->\nSigma:KEEP\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak1, DIES at this refresh unless watered -> {\"farmer\":[\"WATER\"],\"hands\":[],\"market\":[]}\nfarmer on [PLANT WHEAT age0d ripe_at2d yield1 not_watered_today]; seeds CARROT1; carrying -; shed 0/100; unwatered_streak0, survives this refresh either way -> {\"farmer\":[\"EAST\"],\"hands\":[],\"market\":[]}\n->\nSigma:VENT\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 95/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",1]]}\nfarmer on [PLANT CARROT age2d ripe_at2d yield2 watered_today]; seeds CARROT1; carrying -; shed 100/100 -> {\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[[\"SELL\",\"WHEAT\",5]]}\n->\n\nSTATE\nday 5 hour 11 money 3010\nfarmer at (4,4) on [PLANT CARROT age0d ripe_at2d yield1 watered_today] carrying CARROT2\nseeds -\nshed - (0/100 used, 100 room)\nsell prices CARROT35,EGG50,FERTILIZER100,MELON267,MILK181,STRAWBERRY141,TOMATO61,WHEAT27,WOOL231\ntown shops YARN_STORE\n\nPLANTS AND HORIZON\ndecisions left this episode: 588 (last is step 718); 13 turn(s) left today\n  (4,4) CARROT age0d yield1/4 ripe at age2d watering raises yield at age2-3d decays from step216 unwatered_streak1\n\nRULES\nunits this turn: 1 (farmer only)\nPLANT budget is JOINT across farmer and hands: seeds none. If PLANT requests for one crop exceed its seed count, the engine turns ALL of them into PASS.\nORDER: every unit action resolves BEFORE any market order. So goods dropped into the shed this turn CAN be sold this turn; a seed bought this turn CANNOT be planted until the next turn.\nmarket orders run in sequence sharing one cash balance and 100 shed room, repricing after each unit; at most 10 orders.\nend of day is not this turn (hour 11 of 24).\n\nACCEPTED (the engine acts on exactly these)\nfarmer: DIG | DROP | EAST | NORTH | PASS | PLACE CARROT n<=2 | SOUTH | WEST\nmarket now: BUY_ANIMAL COW n<=7 | BUY_ANIMAL GOOSE n<=10 | BUY_ANIMAL SHEEP n<=6 | BUY_LAND | BUY_PRODUCT FERTILIZER n<=29 | BUY_PRODUCT WHEAT n<=94 | BUY_SEED CARROT n<=150 | BUY_SEED MELON n<=37 | BUY_SEED STRAWBERRY n<=30 | BUY_SEED TOMATO n<=60 | BUY_SEED WHEAT n<=301 | HIRE\nmarket also available if this turn deposits carried goods: SELL CARROT n<=2\n",
+   "raw_output": "{\"farmer\":[\"PASS\"],\"hands\":[],\"market\":[]}",
+   "error": null,
+   "rejected": null,
+   "action": {
+    "farmer": [
+     "PASS"
+    ],
+    "hands": [],
+    "market": []
+   },
+   "legal": true,
+   "violations": [],
+   "joint_blocks": [],
+   "timing_s": {
+    "constraint_calculation": 0.0236,
+    "prompt_build": 0.0003,
+    "model_inference": 8.397,
+    "prefill_ttft": 7.37805570875,
+    "decode_validation": 0.0001
+   },
+   "engine_counters": {
+    "init_time_in_second": 3.447464697,
+    "time_to_first_token_in_second": 7.37805570875,
+    "last_prefill_token_count": 1208,
+    "last_prefill_tokens_per_second": 165.79680558273552,
+    "last_decode_token_count": 12,
+    "last_decode_tokens_per_second": 10.866172973386368
+   },
+   "admissible_farmer_ops": [
+    "DIG",
+    "DROP",
+    "EAST",
+    "NORTH",
+    "PASS",
+    "PLACE CARROT 1",
+    "SOUTH",
+    "WEST"
+   ]
+  }
+ ],
+ "summary": {
+  "model_turns": 12,
+  "legal": 12,
+  "syntax_rejections": 0,
+  "non_pass_farmer": 4,
+  "market_orders_authored": 0,
+  "mean_inference_s": 9.51,
+  "total_inference_s": 114.1
+ }
+}

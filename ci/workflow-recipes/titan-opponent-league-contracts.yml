@@ -1,0 +1,40 @@
+name: titan-opponent-league-contracts
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-opponent-league-contracts.yml'
+      - 'revenue/kaggriculture/cloud-opponent-league/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-opponent-league-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Assert exact triggering head
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile and run opponent-league contracts
+        working-directory: revenue/kaggriculture/cloud-opponent-league
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m py_compile variants.py league.py test_league.py
+          python -B -m unittest -v test_league
+          python -O -B -m unittest -v test_league
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --porcelain)"

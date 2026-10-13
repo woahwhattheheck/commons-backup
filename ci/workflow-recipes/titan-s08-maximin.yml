@@ -1,0 +1,31 @@
+name: titan-s08-maximin
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-s08-maximin.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/s08_maximin.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_s08_maximin.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/evaluator/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/engine/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  exact-five-scenario-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Run S08 maximin and exact lockstep regressions
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: python3 -B test_s08_maximin.py -v

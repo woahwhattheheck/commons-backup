@@ -1,0 +1,51 @@
+name: Muhlnickel command snapshot
+
+on:
+  pull_request:
+    paths:
+      - ".gitattributes"
+      - "host/muhl_github_drive.py"
+      - "host/_muhl_github_drive_legacy_source.txt"
+      - "host/muhl_command_snapshot.py"
+      - "infra/host/muhl_github_drive.py"
+      - "infra/host/_muhl_github_drive_legacy_source.txt"
+      - "infra/host/muhl_command_snapshot.py"
+      - "tests/test_muhl_command_snapshot.py"
+      - "tests/test_muhl_github_drive_snapshot.py"
+      - ".github/workflows/muhl-command-snapshot.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".gitattributes"
+      - "host/muhl_github_drive.py"
+      - "host/_muhl_github_drive_legacy_source.txt"
+      - "host/muhl_command_snapshot.py"
+      - "infra/host/muhl_github_drive.py"
+      - "infra/host/_muhl_github_drive_legacy_source.txt"
+      - "infra/host/muhl_command_snapshot.py"
+      - "tests/test_muhl_command_snapshot.py"
+      - "tests/test_muhl_github_drive_snapshot.py"
+      - ".github/workflows/muhl-command-snapshot.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  command-snapshot:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Snapshot and ingress tests
+        run: python -B -m unittest -v tests.test_muhl_command_snapshot tests.test_muhl_github_drive_snapshot
+      - name: Optimized-mode snapshot and ingress tests
+        run: python -O -B -m unittest -v tests.test_muhl_command_snapshot tests.test_muhl_github_drive_snapshot
+      - name: Compile ingress modules
+        run: python -B -m py_compile host/muhl_command_snapshot.py host/muhl_github_drive.py infra/host/muhl_command_snapshot.py infra/host/muhl_github_drive.py

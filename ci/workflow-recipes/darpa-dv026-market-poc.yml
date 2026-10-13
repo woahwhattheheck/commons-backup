@@ -1,0 +1,45 @@
+name: DARPA DV026 market POC
+
+on:
+  pull_request:
+    paths:
+      - "research/darpa_dv026_market_poc/**"
+      - ".github/workflows/darpa-dv026-market-poc.yml"
+  push:
+    paths:
+      - "research/darpa_dv026_market_poc/**"
+      - ".github/workflows/darpa-dv026-market-poc.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile source
+        run: python -m compileall -q research/darpa_dv026_market_poc
+      - name: Hostile suite
+        run: python -m unittest discover -v -s research/darpa_dv026_market_poc -p "test_*.py"
+      - name: Hostile suite under optimization
+        run: python -O -m unittest discover -v -s research/darpa_dv026_market_poc -p "test_*.py"
+      - name: Compile and semantically verify positive fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$(mktemp -d)"
+          python research/darpa_dv026_market_poc/cli.py compile \
+            --scenario research/darpa_dv026_market_poc/scenario_good.json \
+            --json-out "$out/result.json" \
+            --markdown-out "$out/result.md"
+          python research/darpa_dv026_market_poc/cli.py verify \
+            --scenario research/darpa_dv026_market_poc/scenario_good.json \
+            --result "$out/result.json"

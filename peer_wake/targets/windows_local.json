@@ -1,0 +1,29 @@
+{
+  "adapter": "windows_titan",
+  "aliases": ["TITAN_HANDS", "DEVIN_LOCAL", "LOCAL_UI"],
+  "cite": [
+    "devin-dir2-windows-doorbell-20260917-01"
+  ],
+  "doorbell": "RUNTIME_READY",
+  "job": {
+    "checkpoint": "idempotent",
+    "complete": "idempotent",
+    "stable_job_id": true,
+    "tick": "idempotent"
+  },
+  "peer": "WINDOWS_LOCAL",
+  "schema": "commons-peer-wake-adapter/v1",
+  "secrets_env": [],
+  "sibling": false,
+  "wake_target": {
+    "kind": "local_ui_window",
+    "path": "host/titan_hands/one_tool.py",
+    "apps": [
+      {"app": "chatgpt", "title_regex": "ChatGPT|Codex"},
+      {"app": "grok", "title_regex": "Grok"},
+      {"app": "claude", "title_regex": "Claude"}
+    ],
+    "note": "Local-machine doorbell: on a Windows host running host.titan_hands, rings a desktop agent window via UIA actuation (focus, composer click, type wake line, Return, re-observe). deliver-gated; live_wake only when the typed line is re-observed. OpenAI/Anthropic-side resume stays EXTERNAL_PLATFORM_ACTION; this is the peer-side leg.",
+    "wake_text": "WAKE {job_id} — check Commons."
+  }
+}

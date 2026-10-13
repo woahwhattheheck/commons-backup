@@ -1,0 +1,581 @@
+{
+  "crossover": {
+    "chars_per_statement": 200,
+    "crossover_statements": 160,
+    "note": "Smallest MEASURED point at which the optimized check beat the baseline. Not interpolated. If no measured point won, this is UNKNOWN rather than a guessed threshold.",
+    "points": [
+      {
+        "baseline_seconds": {
+          "median": 9.001000080388621e-06,
+          "min": 8.752999974603881e-06,
+          "samples": 7
+        },
+        "optimized_faster": false,
+        "optimized_seconds": {
+          "median": 9.539100005895307e-05,
+          "min": 8.95719999789435e-05,
+          "samples": 7
+        },
+        "report_chars": 2112,
+        "statements": 10
+      },
+      {
+        "baseline_seconds": {
+          "median": 1.7975000218939385e-05,
+          "min": 1.7601999843464e-05,
+          "samples": 7
+        },
+        "optimized_faster": false,
+        "optimized_seconds": {
+          "median": 0.00017395999998370826,
+          "min": 0.00017062500000974978,
+          "samples": 7
+        },
+        "report_chars": 4212,
+        "statements": 20
+      },
+      {
+        "baseline_seconds": {
+          "median": 4.632200011656096e-05,
+          "min": 4.555300006359175e-05,
+          "samples": 7
+        },
+        "optimized_faster": false,
+        "optimized_seconds": {
+          "median": 0.0003326690000449162,
+          "min": 0.00031543299996883434,
+          "samples": 7
+        },
+        "report_chars": 8412,
+        "statements": 40
+      },
+      {
+        "baseline_seconds": {
+          "median": 0.00014532999989569362,
+          "min": 0.00014429999987441988,
+          "samples": 7
+        },
+        "optimized_faster": false,
+        "optimized_seconds": {
+          "median": 0.0006649269998888485,
+          "min": 0.0006412370000816736,
+          "samples": 7
+        },
+        "report_chars": 16812,
+        "statements": 80
+      },
+      {
+        "baseline_seconds": {
+          "median": 0.0018587429999570304,
+          "min": 0.0018530039999404835,
+          "samples": 7
+        },
+        "optimized_faster": true,
+        "optimized_seconds": {
+          "median": 0.001337937000016609,
+          "min": 0.0012911759999951755,
+          "samples": 7
+        },
+        "report_chars": 33612,
+        "statements": 160
+      },
+      {
+        "baseline_seconds": {
+          "median": 0.007274261000020488,
+          "min": 0.007258943000124418,
+          "samples": 7
+        },
+        "optimized_faster": true,
+        "optimized_seconds": {
+          "median": 0.002661305999936303,
+          "min": 0.0025871370000913885,
+          "samples": 7
+        },
+        "report_chars": 67212,
+        "statements": 320
+      },
+      {
+        "baseline_seconds": {
+          "median": 0.02966214600019157,
+          "min": 0.029522663999841825,
+          "samples": 7
+        },
+        "optimized_faster": true,
+        "optimized_seconds": {
+          "median": 0.005245650000006208,
+          "min": 0.0051788579999083595,
+          "samples": 7
+        },
+        "report_chars": 134412,
+        "statements": 640
+      },
+      {
+        "baseline_seconds": {
+          "median": 0.1154212839999218,
+          "min": 0.11471116300003814,
+          "samples": 7
+        },
+        "optimized_faster": true,
+        "optimized_seconds": {
+          "median": 0.010716049000166095,
+          "min": 0.010495524000134537,
+          "samples": 7
+        },
+        "report_chars": 268812,
+        "statements": 1280
+      }
+    ],
+    "repeats_per_point": 7
+  },
+  "environment": {
+    "container_note": "Shared CI-style container. Minimum-of-repeats is the cleanest signal; median is reported alongside so noise is visible.",
+    "cpu_affinity_count": 4,
+    "cpu_count_logical": 4,
+    "machine": "x86_64",
+    "measured_at_utc": "2026-09-19T14:05:15Z",
+    "memory_probe": "tracemalloc (Python-level allocations only; excludes interpreter overhead and OS RSS)",
+    "page_cache": "warm -- one uncounted warmup run precedes the counted repeats at every size",
+    "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+    "processor_model": "Intel(R) Xeon(R) Processor @ 2.80GHz",
+    "python_build": "main Mar  3 2026 09:26:23",
+    "python_implementation": "CPython",
+    "python_version": "3.11.15",
+    "timer": "time.perf_counter"
+  },
+  "schema": "uiowa-095-benchmark-v1",
+  "seed": 20260919,
+  "sizes": {
+    "large": {
+      "analyst_steps": {
+        "commands": [
+          "python3 generate_collection.py --profile <size> --out <dir>",
+          "python3 workflow.py <dir> --out <out>"
+        ],
+        "note": "Command count is fixed by the tool and does not grow with collection size. Items returned to a human DO grow with the collection; that count is 'analyst_followups' above. Minutes per item is UNKNOWN and is not modelled.",
+        "operator_commands_per_run": 2
+      },
+      "export_bytes": {
+        "coverage-matrix.csv": 636,
+        "workflow-report.md": 352,
+        "workflow-result.json": 3280
+      },
+      "generation_seconds": 1.605512853999926,
+      "memory_peak_bytes": {
+        "baseline": 18256365,
+        "optimized": 16454971
+      },
+      "outputs_identical_across_modes": true,
+      "repeats": 3,
+      "size": "large",
+      "timings_seconds": {
+        "baseline": {
+          "coverage_rollup": {
+            "max": 0.005281516999957603,
+            "median": 0.0050528099998246034,
+            "min": 0.004999644999998054,
+            "samples": 3
+          },
+          "document_labels": {
+            "max": 0.06405086800009485,
+            "median": 0.062029865000113205,
+            "min": 0.06002427599992188,
+            "samples": 3
+          },
+          "export": {
+            "max": 0.0007599640000535146,
+            "median": 0.0007525779999468796,
+            "min": 0.0005989039998439694,
+            "samples": 3
+          },
+          "import": {
+            "max": 0.06461453499991876,
+            "median": 0.06337501299981341,
+            "min": 0.06256453299988607,
+            "samples": 3
+          },
+          "link_check": {
+            "max": 0.018248784999968848,
+            "median": 0.01821942200012927,
+            "min": 0.01762380199988911,
+            "samples": 3
+          },
+          "statement_presence": {
+            "max": 0.6967523179998807,
+            "median": 0.6960826849999648,
+            "min": 0.6942890959999204,
+            "samples": 3
+          },
+          "total": {
+            "max": 0.8467969089995222,
+            "median": 0.8457778289998714,
+            "min": 0.8427458779997323,
+            "samples": 3
+          }
+        },
+        "optimized": {
+          "coverage_rollup": {
+            "max": 0.004971432000047571,
+            "median": 0.00496410100004141,
+            "min": 0.004892200999847773,
+            "samples": 3
+          },
+          "document_labels": {
+            "max": 0.014976939000007405,
+            "median": 0.01483971500010739,
+            "min": 0.014477727999974377,
+            "samples": 3
+          },
+          "export": {
+            "max": 0.0007307269997909316,
+            "median": 0.0006868220000342262,
+            "min": 0.0006396930000391876,
+            "samples": 3
+          },
+          "import": {
+            "max": 0.0613864710001053,
+            "median": 0.060858721000158766,
+            "min": 0.06032155100001546,
+            "samples": 3
+          },
+          "link_check": {
+            "max": 0.01702328800001851,
+            "median": 0.016898159999982454,
+            "min": 0.016643068000121275,
+            "samples": 3
+          },
+          "statement_presence": {
+            "max": 0.03119157199989786,
+            "median": 0.030927773000030356,
+            "min": 0.030793922999919232,
+            "samples": 3
+          },
+          "total": {
+            "max": 0.1293111250001857,
+            "median": 0.12922202599997945,
+            "min": 0.12869073399997433,
+            "samples": 3
+          }
+        }
+      },
+      "workflow_findings": {
+        "analyst_followups": 6,
+        "document_errors": 1,
+        "link_errors": 2,
+        "statement_errors": 2,
+        "unknown_coverage_cells": 1
+      },
+      "workload": {
+        "collection_bytes": 59068523,
+        "document_bytes": 55152446,
+        "documents_listed": 600,
+        "documents_on_disk": 599,
+        "evidence_rows": 10000,
+        "finding_rows": 3000,
+        "largest_document_bytes": 1430897,
+        "profile": "large",
+        "recommendation_rows": 1200,
+        "report_chars": 631500,
+        "seed": 20260919,
+        "trace_rows": 3000
+      }
+    },
+    "medium": {
+      "analyst_steps": {
+        "commands": [
+          "python3 generate_collection.py --profile <size> --out <dir>",
+          "python3 workflow.py <dir> --out <out>"
+        ],
+        "note": "Command count is fixed by the tool and does not grow with collection size. Items returned to a human DO grow with the collection; that count is 'analyst_followups' above. Minutes per item is UNKNOWN and is not modelled.",
+        "operator_commands_per_run": 2
+      },
+      "export_bytes": {
+        "coverage-matrix.csv": 603,
+        "workflow-report.md": 351,
+        "workflow-result.json": 3240
+      },
+      "generation_seconds": 0.34469913799989627,
+      "memory_peak_bytes": {
+        "baseline": 4550716,
+        "optimized": 3379396
+      },
+      "outputs_identical_across_modes": true,
+      "repeats": 5,
+      "size": "medium",
+      "timings_seconds": {
+        "baseline": {
+          "coverage_rollup": {
+            "max": 0.0010179260000313661,
+            "median": 0.0010023010001987132,
+            "min": 0.0009545800000978488,
+            "samples": 5
+          },
+          "document_labels": {
+            "max": 0.014578087000018058,
+            "median": 0.013517057999933968,
+            "min": 0.013431512999886763,
+            "samples": 5
+          },
+          "export": {
+            "max": 0.0008654179998757172,
+            "median": 0.0007008170000517566,
+            "min": 0.000669423000090319,
+            "samples": 5
+          },
+          "import": {
+            "max": 0.013427456000044913,
+            "median": 0.012720949999902587,
+            "min": 0.0122587470000326,
+            "samples": 5
+          },
+          "link_check": {
+            "max": 0.0032010360000640503,
+            "median": 0.003015093999920282,
+            "min": 0.0029046659999494295,
+            "samples": 5
+          },
+          "statement_presence": {
+            "max": 0.017764423000016905,
+            "median": 0.016136796000182585,
+            "min": 0.01586007400010203,
+            "samples": 5
+          },
+          "total": {
+            "max": 0.04948627299995678,
+            "median": 0.047192926000434454,
+            "min": 0.04612174800013236,
+            "samples": 5
+          }
+        },
+        "optimized": {
+          "coverage_rollup": {
+            "max": 0.0010123229999408068,
+            "median": 0.0009357620001537725,
+            "min": 0.0008936809999795514,
+            "samples": 5
+          },
+          "document_labels": {
+            "max": 0.005168125999944095,
+            "median": 0.004994140000007974,
+            "min": 0.004886570999815376,
+            "samples": 5
+          },
+          "export": {
+            "max": 0.0008632830001715774,
+            "median": 0.0006549509998876601,
+            "min": 0.0006224349999683909,
+            "samples": 5
+          },
+          "import": {
+            "max": 0.012543674999960785,
+            "median": 0.0123105550001128,
+            "min": 0.012125753999953304,
+            "samples": 5
+          },
+          "link_check": {
+            "max": 0.0031365340000775177,
+            "median": 0.0028708610000194312,
+            "min": 0.002836419000004753,
+            "samples": 5
+          },
+          "statement_presence": {
+            "max": 0.0060584599998492195,
+            "median": 0.0059889530000418745,
+            "min": 0.005960878999985653,
+            "samples": 5
+          },
+          "total": {
+            "max": 0.02852452000024641,
+            "median": 0.02767944399965927,
+            "min": 0.027463014999739244,
+            "samples": 5
+          }
+        }
+      },
+      "workflow_findings": {
+        "analyst_followups": 6,
+        "document_errors": 1,
+        "link_errors": 2,
+        "statement_errors": 2,
+        "unknown_coverage_cells": 1
+      },
+      "workload": {
+        "collection_bytes": 10671438,
+        "document_bytes": 9885094,
+        "documents_listed": 200,
+        "documents_on_disk": 199,
+        "evidence_rows": 2000,
+        "finding_rows": 600,
+        "largest_document_bytes": 715382,
+        "profile": "medium",
+        "recommendation_rows": 240,
+        "report_chars": 122220,
+        "seed": 20260919,
+        "trace_rows": 600
+      }
+    },
+    "small": {
+      "analyst_steps": {
+        "commands": [
+          "python3 generate_collection.py --profile <size> --out <dir>",
+          "python3 workflow.py <dir> --out <out>"
+        ],
+        "note": "Command count is fixed by the tool and does not grow with collection size. Items returned to a human DO grow with the collection; that count is 'analyst_followups' above. Minutes per item is UNKNOWN and is not modelled.",
+        "operator_commands_per_run": 2
+      },
+      "export_bytes": {
+        "coverage-matrix.csv": 559,
+        "workflow-report.md": 348,
+        "workflow-result.json": 3193
+      },
+      "generation_seconds": 0.047041276000072685,
+      "memory_peak_bytes": {
+        "baseline": 810092,
+        "optimized": 491194
+      },
+      "outputs_identical_across_modes": true,
+      "repeats": 5,
+      "size": "small",
+      "timings_seconds": {
+        "baseline": {
+          "coverage_rollup": {
+            "max": 0.00010599099982755433,
+            "median": 0.00010357399992244609,
+            "min": 0.00010316199995941133,
+            "samples": 5
+          },
+          "document_labels": {
+            "max": 0.0018632989999787242,
+            "median": 0.0015966160001426033,
+            "min": 0.0014997040000253037,
+            "samples": 5
+          },
+          "export": {
+            "max": 0.0015993740000794787,
+            "median": 0.0006047899998975481,
+            "min": 0.0005452469999909226,
+            "samples": 5
+          },
+          "import": {
+            "max": 0.0020079680000435474,
+            "median": 0.0015395540001463814,
+            "min": 0.0014375779999227234,
+            "samples": 5
+          },
+          "link_check": {
+            "max": 0.00033793200009313296,
+            "median": 0.0002734659999532596,
+            "min": 0.0002701800001432275,
+            "samples": 5
+          },
+          "statement_presence": {
+            "max": 0.0002464780000082101,
+            "median": 0.00019326599999658356,
+            "min": 0.00019098000007033988,
+            "samples": 5
+          },
+          "total": {
+            "max": 0.005245480999974461,
+            "median": 0.004492854000091029,
+            "min": 0.00428693599997132,
+            "samples": 5
+          }
+        },
+        "optimized": {
+          "coverage_rollup": {
+            "max": 0.00014905700004419487,
+            "median": 0.00010086299994327419,
+            "min": 0.00010011299991674605,
+            "samples": 5
+          },
+          "document_labels": {
+            "max": 0.0011409460000777472,
+            "median": 0.0009893220001231384,
+            "min": 0.0009758029998465645,
+            "samples": 5
+          },
+          "export": {
+            "max": 0.001604628999984925,
+            "median": 0.0005754180001531495,
+            "min": 0.0005072080000445567,
+            "samples": 5
+          },
+          "import": {
+            "max": 0.0026637580001533934,
+            "median": 0.001499609000120472,
+            "min": 0.001468896999995195,
+            "samples": 5
+          },
+          "link_check": {
+            "max": 0.00046679399997628934,
+            "median": 0.0002769469999748253,
+            "min": 0.00027491600008033856,
+            "samples": 5
+          },
+          "statement_presence": {
+            "max": 0.0009840469999744528,
+            "median": 0.0006828040000073088,
+            "min": 0.0006034789998921042,
+            "samples": 5
+          },
+          "total": {
+            "max": 0.006061917000124595,
+            "median": 0.004397510000217153,
+            "min": 0.004052249000096708,
+            "samples": 5
+          }
+        }
+      },
+      "workflow_findings": {
+        "analyst_followups": 6,
+        "document_errors": 1,
+        "link_errors": 2,
+        "statement_errors": 2,
+        "unknown_coverage_cells": 1
+      },
+      "workload": {
+        "collection_bytes": 831031,
+        "document_bytes": 748328,
+        "documents_listed": 40,
+        "documents_on_disk": 39,
+        "evidence_rows": 200,
+        "finding_rows": 60,
+        "largest_document_bytes": 238295,
+        "profile": "small",
+        "recommendation_rows": 24,
+        "report_chars": 12030,
+        "seed": 20260919,
+        "trace_rows": 60
+      }
+    }
+  },
+  "statement_variants": {
+    "note": "Time and peak memory measured in separate passes, as everywhere else. All three variants return the identical answer; that is asserted before timing.",
+    "repeats": 5,
+    "report_chars": 630012,
+    "statements": 3000,
+    "variants": [
+      {
+        "peak_bytes": 36152,
+        "samples": 5,
+        "seconds_median": 0.6309290020001299,
+        "seconds_min": 0.6296037060001254,
+        "variant": "baseline (delivered: scan per id)"
+      },
+      {
+        "peak_bytes": 5152986,
+        "samples": 5,
+        "seconds_median": 0.021452753999938068,
+        "seconds_min": 0.020971505000034085,
+        "variant": "findall + set (rejected: fast, fat)"
+      },
+      {
+        "peak_bytes": 332883,
+        "samples": 5,
+        "seconds_median": 0.025136404000022594,
+        "seconds_min": 0.024980092000078002,
+        "variant": "finditer + length filter (shipped)"
+      }
+    ]
+  },
+  "synthetic_workload": true
+}

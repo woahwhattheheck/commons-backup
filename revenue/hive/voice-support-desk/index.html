@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voice Support Desk</title>
+<style>
+:root{font:16px/1.5 system-ui,sans-serif;color:#182435;background:#eef2f5}*{box-sizing:border-box}body{margin:0}header{background:#102a43;color:white;padding:1.4rem max(1.2rem,calc((100vw - 1180px)/2))}header h1{margin:0;font-size:1.8rem}header p{margin:.4rem 0;color:#d6e5f3}header section{color:#182435}main{max-width:1180px;margin:1.4rem auto;padding:0 1rem}section{background:white;padding:1.3rem;border:1px solid #d4dee7;border-radius:12px;margin-bottom:1.2rem}h2{font-size:1.2rem;margin:0 0 .8rem}h3{font-size:1rem;margin:.6rem 0}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.2rem}.grid>*{min-width:0}.note{padding:.8rem 1rem;background:#fff7df;border-left:4px solid #a87800;border-radius:4px}.muted{color:#526477}label{display:block;margin:.6rem 0}input,textarea,select,button{font:inherit;padding:.55rem .7rem;border:1px solid #9bacba;border-radius:6px}input,textarea,select{width:100%;min-width:0}textarea{resize:vertical;min-height:5rem}button,.button{background:#155e75;color:white;border:0;cursor:pointer;font-weight:600;display:inline-block;text-decoration:none;padding:.6rem .9rem;border-radius:6px;margin:.3rem .3rem .3rem 0}button:disabled{opacity:.5;cursor:wait}button.secondary{background:#42586b}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f6f9;padding:1rem;border-radius:6px;max-height:22rem;overflow:auto}table{border-collapse:collapse;width:100%}th,td{padding:.6rem;text-align:left;border-bottom:1px solid #dbe3eb;vertical-align:top;overflow-wrap:anywhere}th{font-size:.8rem;text-transform:uppercase;color:#51677c}.table-wrap{overflow:auto}#notice{min-height:1.5rem;font-weight:600;overflow-wrap:anywhere}#notice.error{color:#a10d23}#transcript p{border-left:3px solid #99b5c8;padding-left:.8rem}small{display:block}.row{display:flex;gap:.7rem;align-items:end}.row>*{flex:1;min-width:0}#call-info{overflow-wrap:anywhere}.tag{font-size:.8rem;background:#ddeaf2;padding:.15rem .4rem;border-radius:4px}@media(max-width:760px){.grid{grid-template-columns:minmax(0,1fr)}.row{display:block}th,td{min-width:8rem}header{padding:1.1rem}}
+</style>
+</head>
+<body>
+<header><h1>Voice Support Desk</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p>Current order answers. Confirmed return requests. A visible queue for the team.</p></header>
+<main>
+<p class="note">This desk runs locally. The call walk-through below uses text and keypad inputs, not a telephone call. Connect the webhook to the shop's existing voice service separately. Returns are requests for review, never automatic refunds.</p>
+<p id="notice" role="status" aria-live="polite"></p>
+<p id="storage-status" class="note" role="status" hidden></p>
+<div class="grid">
+<section><h2>1. Shop policy and transfer destination</h2>
+<p id="policy-status" class="muted"></p>
+<form id="policy-form">
+<label>Shop name<input id="shop_name" required maxlength="100"></label>
+<label>Current shipping policy<textarea id="shipping_text" required maxlength="3000"></textarea></label>
+<div class="row"><label>Return window, days after delivery<input id="return_days" type="number" min="0" max="3650" required></label><label>Existing team phone, international format<input id="staff_phone" placeholder="Leave blank for queue-only handoff" maxlength="20"></label></div>
+<small>Save the shop's actual policy before automated return intake. A blank phone keeps handoffs in the queue and explicitly tells callers that no live transfer is configured.</small>
+<button type="submit">Save current policy</button>
+</form></section>
+<section><h2>2. Load the shop's order export</h2>
+<p class="muted">Import is an atomic upsert: absent orders are retained and return IDs do not change. Supply only these five fields; no addresses, payment details or customer names are needed.</p>
+<pre>order_ref,status,eta,delivered_on,returnable
+1001,delivered,Delivered,2026-09-01,true
+1002,shipped,Carrier expects Friday,,false</pre>
+<form id="import-form"><label>UTF-8 CSV<input id="orders-file" type="file" accept=".csv,text/csv" required></label><button type="submit">Import orders</button></form>
+<small>Statuses: processing, shipped, delivered, cancelled. Delivered dates use YYYY-MM-DD. Returnable is literally true or false. Invalid rows roll back the whole import.</small>
+<p><a class="button" href="/api/export">Export desk data</a><button id="refresh" class="secondary">Refresh queues</button></p>
+</section>
+</div>
+<section><h2>3. Local call walk-through <span class="tag">No telephone connection</span></h2>
+<p class="muted">Start a call, enter an order reference, then follow the actual server prompts. Use text commands or keypad digits. Reloading the page preserves the current walk-through ID and next turn.</p>
+<button id="start">Start new walk-through</button><span id="call-info" class="muted"></span>
+<form id="turn-form"><div class="row"><label>Spoken text / transcript<input id="speech" maxlength="1000" placeholder="status, return, agent, yes, or the requested answer"></label><label>Or keypad digits<input id="digits" maxlength="32" inputmode="numeric" placeholder="1, 2, 3, 0, or order number"></label></div><button type="submit" id="send-turn">Send turn</button><button type="button" id="repeat" class="secondary">Retry last identical request</button></form>
+<div id="transcript" aria-live="polite"></div>
+<details><summary>Exact returned phone markup</summary><pre id="xml"></pre></details>
+</section>
+<section><h2>Orders</h2><div class="table-wrap"><table><thead><tr><th>Reference</th><th>Status</th><th>Shipping update</th><th>Delivered</th><th>Returnable</th></tr></thead><tbody id="orders"></tbody></table></div></section>
+<div class="grid"><section><h2>Return requests</h2><p class="muted">Review and record your action here. Fulfillment, labels and refunds stay in the shop's existing system.</p><div id="returns"></div></section><section><h2>Team handoffs</h2><p class="muted">A provider's completed dial status does not prove a human answered. Resolve the queue item only after the team has handled it.</p><div id="handoffs"></div></section></div>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let call=null,last=null;
+try{call=JSON.parse(sessionStorage.getItem('voice-desk-call')||'null')}catch{storageStatus(true)}
+function notice(message,error=false){$('notice').textContent=message;$('notice').className=error?'error':''}
+async function api(path,body,raw=false){const opts=body===undefined?{}:{method:'POST',headers:{'Content-Type':raw?'text/csv; charset=utf-8':'application/json'},body:raw?body:JSON.stringify(body)};const r=await fetch(path,opts);const data=await r.json();if(!r.ok)throw new Error(data.error||`Request failed (${r.status})`);return data}
+function node(tag,content,parent){const e=document.createElement(tag);e.textContent=content;parent.append(e);return e}
+function storageStatus(unavailable){$('storage-status').hidden=!unavailable;$('storage-status').textContent=unavailable?'Walk-through reload recovery is unavailable. Keep this page open to continue; saved desk records remain on the server.':''}
+function remember(result){call={id:result.call_id,next:result.next_turn,ended:result.state==='ended'};try{sessionStorage.setItem('voice-desk-call',JSON.stringify(call));storageStatus(false)}catch{try{sessionStorage.removeItem('voice-desk-call')}catch{}storageStatus(true)}updateCall()}
+function updateCall(){$('call-info').textContent=call?`${call.id} · ${call.ended?'ended':`next turn ${call.next}`}`:'No active walk-through';$('send-turn').disabled=!call||call.ended;$('repeat').disabled=!last}
+function show(result,replay=false){node('p',(replay?'Identical retry: ':'Desk: ')+result.message,$('transcript'));$('xml').textContent=result.twiml;remember(result)}
+function renderRequests(items,kind){const target=$(kind);target.replaceChildren();if(!items.length){node('p','No requests yet.',target);return}for(const item of items){const card=document.createElement('article');target.append(card);node('h3',item.id,card);node('p',`${item.order_ref||'No matched order'} · ${item.reason}`,card);node('p',kind==='returns'?`Status: ${item.status} · policy revision ${item.policy_revision}`:`Dial: ${item.dial_status} · team: ${item.operator_status} · call ${item.call_id}`,card);const select=document.createElement('select');select.setAttribute('aria-label',`Status for ${item.id}`);for(const s of kind==='returns'?['requested','reviewed','closed']:['open','resolved']){const option=node('option',s,select);option.value=s}select.value=kind==='returns'?item.status:item.operator_status;card.append(select);const note=document.createElement('textarea');note.setAttribute('aria-label',`Team note for ${item.id}`);note.value=item.note;note.placeholder='Record the team action; this does not execute a refund.';note.maxLength=2000;card.append(note);const save=node('button','Save team review',card);save.addEventListener('click',async()=>{save.disabled=true;try{await api('/api/review',{kind,id:item.id,status:select.value,note:note.value});await refresh();notice('Team review saved.')}catch(e){notice(e.message,true);save.disabled=false}})}}
+async function refresh(policy=false){const data=await api('/api/state');if(policy){for(const k of ['shop_name','shipping_text','return_days','staff_phone'])$(k).value=data.policy[k]}$('policy-status').textContent=data.policy.revision===1?'Not configured: automated returns route to the team until you save the shop policy.':`Current policy revision ${data.policy.revision}. ${data.policy.staff_phone?'Staff dial destination configured.':'Queue-only handoff.'}`;$('orders').replaceChildren();for(const order of data.orders){const row=document.createElement('tr');$('orders').append(row);for(const key of ['order_ref','status','eta','delivered_on','returnable'])node('td',key==='returnable'?(order[key]?'yes':'no'):order[key],row)}renderRequests(data.returns,'returns');renderRequests(data.handoffs,'handoffs')}
+$('policy-form').addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/policy',{shop_name:$('shop_name').value,shipping_text:$('shipping_text').value,return_days:Number($('return_days').value),staff_phone:$('staff_phone').value});await refresh(true);notice('Shop policy saved.')}catch(e){notice(e.message,true)}});
+$('import-form').addEventListener('submit',async e=>{e.preventDefault();try{const file=$('orders-file').files[0];if(!file)throw new Error('Choose a CSV file.');const result=await api('/api/import',await file.text(),true);await refresh();notice(`${result.imported} orders imported.`)}catch(e){notice(e.message,true)}});
+$('start').addEventListener('click',async()=>{try{last={call_id:'desk-'+crypto.randomUUID(),turn:0};const result=await api('/api/turn',last);$('transcript').replaceChildren();show(result);notice('Local walk-through started; no call was placed.')}catch(e){notice(e.message,true)}});
+$('turn-form').addEventListener('submit',async e=>{e.preventDefault();if(!call||call.ended)return;$('send-turn').disabled=true;try{last={call_id:call.id,turn:call.next,speech:$('speech').value,digits:$('digits').value};const result=await api('/api/turn',last);show(result);$('speech').value='';$('digits').value='';await refresh();notice('Call turn saved.')}catch(e){notice(e.message,true)}finally{updateCall()}});
+$('repeat').addEventListener('click',async()=>{if(!last)return;try{show(await api('/api/turn',last),true);await refresh();notice('Identical request replayed; no duplicate action.')}catch(e){notice(e.message,true)}});
+$('refresh').addEventListener('click',()=>refresh(true).then(()=>notice('Desk refreshed.')).catch(e=>notice(e.message,true)));
+updateCall();refresh(true).catch(e=>notice(e.message,true));
+</script>
+</body></html>

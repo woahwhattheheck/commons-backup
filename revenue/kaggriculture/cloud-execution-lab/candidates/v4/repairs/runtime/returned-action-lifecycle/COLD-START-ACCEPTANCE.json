@@ -1,0 +1,192 @@
+{
+  "schema": "titan-v4-cold-start-acceptance/v1",
+  "owner": "ASTRA-RETURN-LIFECYCLE",
+  "contributor": "ASTRA-COLDSTART",
+  "owner_thread": "1789179515.698319",
+  "canonical_workspace": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "package": "repairs/runtime/returned-action-lifecycle",
+  "status": "independent_cold_gate_passed_on_owner_composed_runtime",
+  "baseline_runtime_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+  "deadline_blob": "664aa4f8a21368c388dfa6714406519b6535ef7f",
+  "test": {
+    "path": "check_cold_start_finalizer.py",
+    "bytes": 26171,
+    "git_blob": "4b07d5a30b5d1d085e6d40de69e7253d1263a9a5",
+    "sha256": "16b4f5a88bf8186df5a2f8f8b00f79b2e3ce4c69f8667312e319361a3c228500"
+  },
+  "fixture_patch": {
+    "path": "fixtures/cold_start_positive_control.patch",
+    "bytes": 1741,
+    "git_blob": "9e97612b96125d678079539d54cff5ad44ce9051",
+    "sha256": "7f459b8b53b58bfbc7ec463d8f9e5220566ac1d408bc48f8f630572295427176"
+  },
+  "positive_control_runtime_blob": "c27ee9c9ed1f17f9f9b0af9c3b90026df78d6102",
+  "positive_control_runtime_sha256": "17536b7bf5488c30e3d8e854ed039d48c0a1591de923f4a0b413258079e47b83",
+  "python": "3.13.5",
+  "normal": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "initialization_cut_cells": 244,
+    "exact_fallback_cells": 80,
+    "predecessor_crash_witnesses": 4,
+    "real_signal_cases": 1,
+    "real_worker_trace_cases": 1
+  },
+  "optimized": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "initialization_cut_cells": 244,
+    "exact_fallback_cells": 80,
+    "predecessor_crash_witnesses": 4,
+    "real_signal_cases": 1,
+    "real_worker_trace_cases": 1
+  },
+  "rejected_mutations": [
+    {
+      "name": "original_unrepaired",
+      "optimized": false,
+      "exit_code": 1,
+      "failures": 234,
+      "errors": 59
+    },
+    {
+      "name": "original_unrepaired",
+      "optimized": true,
+      "exit_code": 1,
+      "failures": 234,
+      "errors": 59
+    },
+    {
+      "name": "always_finalize",
+      "optimized": false,
+      "exit_code": 1,
+      "failures": 234,
+      "errors": 59
+    },
+    {
+      "name": "always_finalize",
+      "optimized": true,
+      "exit_code": 1,
+      "failures": 234,
+      "errors": 59
+    },
+    {
+      "name": "never_finalize",
+      "optimized": false,
+      "exit_code": 1,
+      "failures": 9,
+      "errors": 0
+    },
+    {
+      "name": "never_finalize",
+      "optimized": true,
+      "exit_code": 1,
+      "failures": 9,
+      "errors": 0
+    },
+    {
+      "name": "test_ready_after_except_cleared_it",
+      "optimized": false,
+      "exit_code": 1,
+      "failures": 9,
+      "errors": 0
+    },
+    {
+      "name": "test_ready_after_except_cleared_it",
+      "optimized": true,
+      "exit_code": 1,
+      "failures": 9,
+      "errors": 0
+    },
+    {
+      "name": "stage_label_instead_of_completion",
+      "optimized": false,
+      "exit_code": 1,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "name": "stage_label_instead_of_completion",
+      "optimized": true,
+      "exit_code": 1,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "name": "commit_completion_before_initialize",
+      "optimized": false,
+      "exit_code": 1,
+      "failures": 234,
+      "errors": 59
+    },
+    {
+      "name": "commit_completion_before_initialize",
+      "optimized": true,
+      "exit_code": 1,
+      "failures": 234,
+      "errors": 59
+    }
+  ],
+  "input_rejections": [
+    {
+      "case": "wrong_baseline",
+      "exit_code": 2,
+      "stdout_empty": true
+    },
+    {
+      "case": "wrong_candidate",
+      "exit_code": 2,
+      "stdout_empty": true
+    },
+    {
+      "case": "wrong_deadline",
+      "exit_code": 2,
+      "stdout_empty": true
+    },
+    {
+      "case": "missing_candidate",
+      "exit_code": 2,
+      "stdout_empty": true
+    },
+    {
+      "case": "wrong_candidate_hash",
+      "exit_code": 2,
+      "stdout_empty": true
+    }
+  ],
+  "compile": "PASS",
+  "limits": [
+    "complete runtime class and pinned deadline executed; planning/economic collaborators are doubles",
+    "synthetic observations; no hosted incident-frequency or game-strength claim",
+    "not a test of every internal collaborator recovery invariant",
+    "Python 3.11 not run",
+    "owner integrated_selected output was generated and compiled, not executed by this cold-specific suite; integrated/engine gates remain separate"
+  ],
+  "production_promoted": false,
+  "default_changed": false,
+  "archive_changed": false,
+  "kaggle_changed": false,
+  "next": "Preserve this single owner source and acceptance suite together; require separate integrated/engine/current-package gates before production promotion.",
+  "owner_composition": {
+    "transformer_blob": "e127232a9f6dad4a356158c1b82bd894f0fc9004",
+    "input_integrated_blob": "defa9b84c77fff28ae107bce291b6235bec5d26c",
+    "runtime_output_blob": "863a36442bd0f2b475db4c2647a27daf933bba83",
+    "runtime_output_sha256": "f354f679217794a0d264670f6e8f5640a8ce4389863efaa5f52a743f5d115d02",
+    "integrated_output_blob": "53a610f9abaab64690d7a555bf283b87aa282e51",
+    "execution": "actual two-source CLI and py_compile; actual runtime through cold-specific suite, integrated collaborator doubled",
+    "normal": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "initialization_cut_cells": 244
+    },
+    "optimized": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "initialization_cut_cells": 244
+    }
+  }
+}

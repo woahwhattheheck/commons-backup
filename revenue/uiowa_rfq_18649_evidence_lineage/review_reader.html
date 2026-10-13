@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Evidence lineage · Offline finding review</title>
+<style>
+:root{color-scheme:light;--ink:#19343c;--muted:#50646b;--line:#c6d5d3;--paper:#f2f5f3;--accent:#00665c}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,sans-serif}main{max-width:1260px;margin:auto;padding:32px}h1{font-size:clamp(26px,4vw,42px);line-height:1.18;letter-spacing:-.035em}h2{font-size:25px;margin-top:36px}h3{font-size:16px}h4{font-size:14px}p{margin:12px 0}h1,h2,h3,h4,p,summary{overflow-wrap:anywhere}a{color:var(--accent)}button,input,select{font:inherit;padding:9px 12px;border:1px solid #78928c;border-radius:6px;background:white;color:var(--ink);max-width:100%}button{cursor:pointer}button:hover{background:#e4eee9}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #bd6908;outline-offset:3px}.classification{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}.boundary{border-left:3px solid #af7220;padding:8px 14px;background:#fff1db;font-size:14px}.counts{color:var(--muted)}.jump{display:flex;gap:18px;flex-wrap:wrap;padding:15px 0;border-block:1px solid var(--line)}.filters{display:flex;gap:14px;align-items:end;flex-wrap:wrap}.filters label{display:flex;flex-direction:column;gap:5px;font-size:13px;flex:1 1 220px;min-width:0}.filters input,.filters select{width:100%;min-width:0}details{background:white;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:12px 0;min-width:0}summary{cursor:pointer}summary strong{font-size:17px}.impact>summary{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}.impact>summary::before{content:'▸';font-weight:700}.impact[open]>summary::before{content:'▾'}.status{font-size:12px;font-weight:700;background:#e2eeea;padding:3px 7px;border-radius:4px;overflow-wrap:anywhere}.citation{width:100%;font-size:14px;color:var(--muted)}.impact-body{padding-top:12px}.reference-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.ref-group{min-width:0}.refs{list-style:none;margin:0;padding:0}.refs li{border-top:1px solid var(--line);padding:8px 0;font-size:14px;overflow-wrap:anywhere}.refs code{display:block;font-size:11px;margin-top:6px}.collections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.collections>section{min-width:0}pre{font:12px/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;background:#f5f7f5;padding:12px;max-width:100%}code{font:12px/1.6 ui-monospace,Consolas,monospace;overflow-wrap:anywhere}.source:target,details:target{outline:3px solid #a7792c}footer{border-top:1px solid var(--line);margin-top:32px;padding-top:16px;color:var(--muted);font-size:13px}[hidden]{display:none!important}.skip{position:absolute;left:16px;top:-90px;background:white;padding:10px}.skip:focus{top:10px}
+@media(max-width:760px){main{padding:22px 16px}.reference-grid,.collections{grid-template-columns:1fr}.filters{display:block}.filters label{margin-bottom:10px}.filters button{width:100%}.jump{gap:10px 18px}}
+@media print{body{background:white}main{padding:0;max-width:none}.filters,.jump,button,.skip{display:none}.impact[hidden]{display:block!important}details{break-inside:avoid}h2{break-after:avoid}pre{font-size:10px}.reference-grid{grid-template-columns:1fr}.collections{grid-template-columns:1fr}footer{font-size:10px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#queue">Skip to finding queue</a>
+<main>
+__REVIEW_BODY__
+<noscript><p>All report content remains readable without JavaScript. Search, source auto-expansion and JSON download require JavaScript.</p></noscript>
+<footer>Offline presentation of the existing lineage engine's report. No network requests, account, server or browser storage. The underlying assessment remains the reviewer's decision.</footer>
+</main>
+<script id="original-bytes" type="application/octet-stream">__REPORT_BASE64__</script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const rows=[...document.querySelectorAll('.impact')];
+const searchText=rows.map(row=>row.textContent.toLocaleLowerCase());
+function filter(){
+ const query=$('search').value.trim().toLocaleLowerCase(),status=$('status').value;
+ let visible=0;
+ rows.forEach((row,index)=>{row.hidden=Boolean((status&&row.dataset.status!==status)||(query&&!searchText[index].includes(query)));if(!row.hidden)visible++;});
+ $('visible-count').textContent=visible+' of '+rows.length+' citation-impact rows shown';
+ $('empty').hidden=visible!==0;
+}
+$('search').addEventListener('input',filter);
+$('status').addEventListener('change',filter);
+$('clear').addEventListener('click',()=>{$('search').value='';$('status').value='';filter();$('search').focus();});
+function reveal(){
+ let target;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)));}catch{return;}
+ if(!target)return;
+ for(let node=target;node;node=node.parentElement)if(node.tagName==='DETAILS')node.open=true;
+ target.scrollIntoView({block:'start'});
+ target.setAttribute('tabindex','-1');target.focus({preventScroll:true});
+}
+window.addEventListener('hashchange',reveal);
+document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link&&link.hash===location.hash)reveal();});
+$('save-report').addEventListener('click',()=>{
+ const bytes=Uint8Array.from(atob($('original-bytes').textContent.trim()),c=>c.charCodeAt(0));
+ const url=URL.createObjectURL(new Blob([bytes],{type:'application/json'}));
+ const link=document.createElement('a');link.href=url;link.download='lineage-review.json';document.body.append(link);link.click();link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+filter();reveal();
+</script>
+</body>
+</html>

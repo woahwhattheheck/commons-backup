@@ -1,0 +1,125 @@
+{
+  "metadata": {
+    "packet_version": "1.0",
+    "change_id": "SYN-ESS-REL-001",
+    "change_type": "planned_release",
+    "service": "Synthetic Student Self-Service",
+    "group": "ESS",
+    "summary": "Show a clearer enrollment-hold explanation before registration submission.",
+    "requested_behavior": "A student with an active hold sees the hold category and support route before attempting registration.",
+    "implementation_owner_role": "Application engineering lead",
+    "support_owner_role": "Student systems support lead",
+    "release_trigger": "Scheduled release window after acceptance evidence and support materials are reviewed.",
+    "synthetic": true
+  },
+  "user_facing_behavior": {
+    "before": "The synthetic workflow displays a generic registration-blocked message.",
+    "after": "The synthetic workflow displays the hold category, non-sensitive next step, and support route.",
+    "affected_users": ["synthetic student persona", "synthetic service-desk persona"],
+    "communications": "Synthetic release note and support decision tree describe the wording change and escalation path."
+  },
+  "known_limitations": [
+    {
+      "id": "LIM-01",
+      "description": "The example does not expose detailed hold records; it displays only a category label.",
+      "affected_scope": "Synthetic registration pre-check",
+      "owner_role": "Product owner role",
+      "mitigation": "Direct users to the owning office for record-specific questions.",
+      "follow_up_trigger": "Revisit if support logs show category wording is insufficient."
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "statement": "Display an actionable hold explanation before registration submission.",
+      "acceptance_criteria": "Supported synthetic hold categories render the expected non-sensitive category and support route.",
+      "acceptance_evidence": ["EVID-01", "EVID-02"],
+      "support_readiness": ["SUP-01", "OPS-01"]
+    },
+    {
+      "id": "REQ-02",
+      "statement": "Preserve the existing registration-block behavior while changing explanatory text.",
+      "acceptance_criteria": "Blocked synthetic cases remain blocked and unblocked cases remain unaffected.",
+      "acceptance_evidence": ["EVID-03"],
+      "support_readiness": ["SUP-02", "OPS-02"]
+    }
+  ],
+  "acceptance_evidence": [
+    {
+      "id": "EVID-01",
+      "kind": "test",
+      "locator": "synthetic://tests/registration_hold_rendering",
+      "result": "pass",
+      "notes": "Fictional example covering configured synthetic hold categories."
+    },
+    {
+      "id": "EVID-02",
+      "kind": "user_acceptance",
+      "locator": "synthetic://uat/SYN-ESS-REL-001",
+      "result": "accepted_for_example",
+      "notes": "Fictional UAT record used only to demonstrate traceability."
+    },
+    {
+      "id": "EVID-03",
+      "kind": "regression_test",
+      "locator": "synthetic://tests/registration_block_regression",
+      "result": "pass",
+      "notes": "Fictional regression evidence; not a University test result."
+    }
+  ],
+  "support_readiness": [
+    {
+      "id": "SUP-01",
+      "item": "Support decision tree includes the new hold-category wording and escalation route.",
+      "owner_role": "Student systems support lead",
+      "status": "complete",
+      "locator": "synthetic://support/hold-decision-tree-v2"
+    },
+    {
+      "id": "SUP-02",
+      "item": "Known-error guidance states that explanatory wording changes do not alter the block decision.",
+      "owner_role": "Student systems support lead",
+      "status": "complete",
+      "locator": "synthetic://support/known-error-note"
+    }
+  ],
+  "documentation_updates": [
+    {
+      "document": "Synthetic registration support runbook",
+      "owner_role": "Student systems support lead",
+      "status": "updated",
+      "locator": "synthetic://docs/registration-support-runbook-v3"
+    },
+    {
+      "document": "Synthetic release notes",
+      "owner_role": "Application engineering lead",
+      "status": "updated",
+      "locator": "synthetic://docs/release-notes/SYN-ESS-REL-001"
+    }
+  ],
+  "operational_needs": [
+    {
+      "id": "OPS-01",
+      "kind": "monitoring",
+      "need": "Observe support-contact volume tagged to registration holds after the change.",
+      "owner_role": "Service operations analyst role",
+      "status": "complete",
+      "verification": "synthetic://ops/dashboard/registration-hold-support-volume"
+    },
+    {
+      "id": "OPS-02",
+      "kind": "runbook",
+      "need": "Keep the existing registration-block recovery procedure available to on-call support.",
+      "owner_role": "Application operations lead",
+      "status": "complete",
+      "verification": "synthetic://ops/runbook/registration-block-recovery"
+    }
+  ],
+  "rollback_and_recovery": {
+    "rollback_trigger": "Unexpected change to block decisions or materially misleading hold text in the synthetic scenario.",
+    "rollback_method": "Restore the prior presentation bundle while preserving the unchanged synthetic block decision service.",
+    "data_recovery_notes": "No synthetic data migration is part of this example.",
+    "owner_role": "Application operations lead"
+  },
+  "open_items": []
+}

@@ -1,0 +1,27 @@
+name: Commercial Portfolio Allocator
+on:
+  pull_request:
+    paths:
+      - 'revenue/commercial_portfolio_allocator/**'
+      - '.github/workflows/commercial-portfolio-allocator.yml'
+  push:
+    paths:
+      - 'revenue/commercial_portfolio_allocator/**'
+      - '.github/workflows/commercial-portfolio-allocator.yml'
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/commercial_portfolio_allocator/*.py
+      - run: python -m unittest revenue.commercial_portfolio_allocator.test_engine revenue.commercial_portfolio_allocator.test_cli
+      - run: python -O -m unittest revenue.commercial_portfolio_allocator.test_engine revenue.commercial_portfolio_allocator.test_cli
+      - run: python -m revenue.commercial_portfolio_allocator.acceptance

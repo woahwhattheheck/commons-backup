@@ -1,0 +1,16 @@
+{
+  "format": "declared-binary-circulant-family/v1",
+  "half_length": 8,
+  "coordinate_count": 16,
+  "seed_domain": {
+    "first": 0,
+    "last": 255,
+    "inclusive": true
+  },
+  "matrix_rule": "A[i,j] = bit(seed,(j-i) mod 8), 0<=i,j<8",
+  "generator_rule": "G=[I_8 | A] over F_2; coordinate i is bit i, and coordinate 8+j is bit 8+j",
+  "codeword_rule": "message m in 0..255 selects generator rows by its bits; XOR gives the 16-bit codeword",
+  "filter": "retain precisely the self-dual codes for which every generator row has weight divisible by four",
+  "erasure_domain": "every labelled subset of coordinates 0..15, numeric mask 0..65535",
+  "source_scope": "A finite family chosen for a new erasure/shortening API, not a search over length-72 candidates or all length-16 Type II codes"
+}

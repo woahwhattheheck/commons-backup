@@ -1,0 +1,55 @@
+{
+  "description": "Synthetic evidence only. Sources are deliberately unassigned and unselected. The camera frame says J-102 while its filename says J-101.",
+  "jobs": [
+    {
+      "job_id": "J-101",
+      "title": "Pump A service handover",
+      "description": "Arrange the evidence for Pump A. Preserve unresolved questions; do not infer a missing approval."
+    },
+    {
+      "job_id": "J-102",
+      "title": "Pump B inspection",
+      "description": "A second job with a similar filename prefix. Investigators choose the associations."
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "request-a",
+      "name": "J-101-request.txt",
+      "source_ref": "Synthetic work request / revision 1",
+      "text": "JOB: J-101\nASSET: Pump A\nRequested: inspect seal and report findings.\nReplacement work requires a separate approval.\n"
+    },
+    {
+      "source_id": "approval-a-v1",
+      "name": "J-101-approval-v1.txt",
+      "source_ref": "Synthetic approval record / revision 1",
+      "text": "JOB: J-101\nAPPROVED: inspection only\nPARTS: no replacement approval recorded\n"
+    },
+    {
+      "source_id": "approval-a-v2",
+      "name": "J-101-approval-v2.txt",
+      "source_ref": "Synthetic approval record / revision 2",
+      "revision_of": "approval-a-v1",
+      "text": "JOB: J-101\nAPPROVED: inspection and seal replacement\nPARTS: one seal kit\n"
+    },
+    {
+      "source_id": "invoice-a",
+      "name": "J-101-invoice.txt",
+      "source_ref": "Synthetic invoice export / row 1",
+      "text": "JOB: J-101\nASSET: Pump A\nITEMS: inspection; seal kit; installation\nPHOTO ATTACHMENT: J-101-photo.png\nThis is a billing record, not proof of work or approval.\n"
+    },
+    {
+      "source_id": "camera-b",
+      "name": "J-101-photo.png",
+      "source_ref": "Synthetic camera export / frame 7; visible job label differs from filename",
+      "media_type": "image/png",
+      "data_base64": "iVBORw0KGgoAAAANSUhEUgAAAoAAAAFUAQAAAACc8bAqAAAE6ElEQVR42u3dz48TZRjA8e87HdoSiVs9aE3AjgnxYEhsjIc9wO4bNCExHPAPMGk4cawXRcPSd5GDJ1xuHIz0P3BDiD8wmFkkEU/04E2DXemhJCTblUanzXReDp3+AEH3LT0Qfd7DZvadnU+eed9nZjbPO91Vlvk2DwEFFFBAAf+nINZ25octWDv3CH3IzO/B15C0EVBAAQUUUEABBRRQQAEFFFDAx4ODfbzR3/D1RbXh67NsstYafOSvmjWrNoNWj5JyBS/Vllk6BbWlU/ZbvtQksYpLIdRy61Cj5lIiAPovhZdGPck1E1byAFTyQNGbaQwTz0x3G98DMABNhXEGi++NewZYTWFY2CgMTyJ0nxRQ46OUoXKQCOAgwAKJM5gPXnug1w4H9yJAO0Q5g9kOVGDDrE76rb+p4UzvGBhWHUH1zX6AZTNKj3NUVVwKz3E6t94yvzqkTTopAZTH52v4IhpOfQTw/Qxp057qyaBCfJUfZ6nisDO4ByhOkpB9ljqwYoGSDtvOYDJ1iLfEsTSRm8Awf1zBZ46lSbwK6gjvhh5r1h/tNfsdZllZunvmdu9qlOURIKCAAgoooIACCiiggAIKKKCAAgoooIBPI1h/EtDq7WCgDLTgOhsMClDvKYLBSmALG3m2PdcIG+1RTCFad7sA6HRnH6xxBI9codYBsMa+3Ny+BZA0gQ7ktlBx6Aba4utwEqAf8ApeAavTkn0CefCajhEG+dEZ6kRXWzkAqgAYfLPj9YDxeor200FSDw2WftK0yRIT5SFJ4SieCYzN1DKM0eU5JLYHNx71E8Fw9GwwwylPjV6PGFgD4ghis+NVH39qe3V5st15VsH4jdsoZ307Q4TNh/q9ACh49J57MPydgrUTk+1WehVCAmRRSX2GCDWM1iVu0B+dcodchHNiA7B3srk23sqnw1x1Af8Ak2ggSJezppLEzpaH/oPdiab7iKma8Y7tmxtTl5ufnwn0wng6L6L0m2psZrr0colu9qBFtQV44dr21NKcfniadhLhKdVuQEgUAvzG7+nuN+/gFdzmxtp71sbYMBdTsuGCtbctywZ700bWNjPx6dJnP1rboWb/vd0cvXWfyVAuQoVyGSAMgQZAcbyipoxLhI9qF617u/lPnwuoyC9LAgoooIACCiiggAIKKKCAAgoo4LzANu20HpK2VncmcHRUfWpPowvW3NVP8RgOa0DhbOD5waGzPVM4wbVBcJ1POW8Ll7vLK0v1y3r7XnD2p+O9WuAEJh9W/ty62rrAL3b9A3uX5OOfj8JfxytHuVVb/yr5euu7dSdQheVhLSmADFnURgGGr/arsKh376dSdAILlD9pH8qC9l88TJZCPzsCG2cw0NZuIAOAbFq/rk93MlwjcF1Cygds66F1RrUmnbBp0LD99pobmOuw0AQ+hxq3Jp1QCu0iLNw+6ZiH4bC+HICdfIghHH7RQLPiBnZZCX7oAvGdxBrI9iHpAmgDEFxxvlKiqN7pEBNehTq2E1GBELY0EUT1Hc7KCNxVfWH34QOL8VG1/k7vXED2wF5e3fV+k+R5oy7A7rcWdxjiqAYbT9dSl619bG12phqsnvfdxgB05n37aj0ZmPnbrsV5RyjPZQEFFFBAAQUUUEABBRRQQAEFFFBAAQUUUEAB/3vg0/+X5JX8/xQBBRRQQAHn1O4DPbtRd70NiQUAAAAASUVORK5CYII="
+    },
+    {
+      "source_id": "missing-attachment",
+      "name": "J-101-attachment-register.txt",
+      "source_ref": "Synthetic handover register / row 8",
+      "text": "JOB: J-101\nExpected closeout photograph: referenced but not supplied in this dataset.\nAttachment availability is unresolved.\n"
+    }
+  ]
+}

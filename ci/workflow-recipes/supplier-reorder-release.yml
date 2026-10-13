@@ -1,0 +1,72 @@
+name: Supplier reorder standalone release
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/hive/supplier-reorder-assistant/**'
+      - '.github/workflows/supplier-reorder-release.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/hive/supplier-reorder-assistant/**'
+      - '.github/workflows/supplier-reorder-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supplier-reorder-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  standalone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+        working-directory: revenue/hive/supplier-reorder-assistant
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: /revenue/hive/supplier-reorder-assistant/
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.11'
+      - name: Test builder and real extracted CLI, HTTP, restart and backup
+        env:
+          PYTHONWARNINGS: error::ResourceWarning
+        run: |
+          python -B -m unittest -v test_release_package 2>&1 | tee "$RUNNER_TEMP/supplier-release-tests.log"
+      - name: Run the whole product suite on the same pinned checkout
+        env:
+          PYTHONWARNINGS: error::ResourceWarning
+        run: |
+          python -B -m unittest discover -s . -p 'test_*.py' -v 2>&1 | tee "$RUNNER_TEMP/supplier-product-tests.log"
+      - name: Build curated standalone distribution
+        run: |
+          mkdir -p "$RUNNER_TEMP/supplier-reorder-release"
+          python -B build_release.py --out "$RUNNER_TEMP/supplier-reorder-release/supplier-reorder-desk.zip" > "$RUNNER_TEMP/supplier-reorder-release/build.json"
+          git rev-parse HEAD > "$RUNNER_TEMP/supplier-reorder-release/source-commit.txt"
+          python --version > "$RUNNER_TEMP/supplier-reorder-release/python-version.txt"
+      - name: Upload runnable package only after passing extracted-product tests
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: supplier-reorder-desk-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/supplier-reorder-release/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain focused test output
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: supplier-reorder-release-tests-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/supplier-release-tests.log
+            ${{ runner.temp }}/supplier-product-tests.log
+          if-no-files-found: warn
+          retention-days: 7

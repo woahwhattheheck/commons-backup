@@ -1,0 +1,143 @@
+{
+  "schema": "titan-paired-panel-validation/v1",
+  "author": "ASTRA-PAIRGRID",
+  "scope": "local synthetic tooling checks; no actual games or economic promotion",
+  "python": "3.13.5",
+  "tested_files": {
+    "audit_paired_panel.py": {
+      "bytes": 13820,
+      "git_blob": "c9e8bbcf0dffe4d7770c79851590f29e80b1183b",
+      "sha256": "d5163c461e52cff846d86e6b67aa3696cd541350ac848c6b096e3dc8b98962d2"
+    },
+    "test_audit_paired_panel.py": {
+      "bytes": 14661,
+      "git_blob": "78ef3682b92dcd3b292f9734b0bbf8b60498dd84",
+      "sha256": "2e11d6486af9f96cd7fbb983a0a3da1ebf79fc7f4aa7fb25a5cf1c1a543cd420"
+    },
+    "run_mutation_checks.py": {
+      "bytes": 3034,
+      "git_blob": "bd17b7cc2edc868e117464192f7bd9548f9c5ead",
+      "sha256": "e1ceb0ebaa76aad1adf70f04b94e98731ac1725768178d9f8d09f839535858ff"
+    }
+  },
+  "tests": {
+    "normal": {
+      "run": 34,
+      "passed": 34,
+      "skipped": 0
+    },
+    "optimized": {
+      "run": 34,
+      "passed": 34,
+      "skipped": 0
+    },
+    "single_missing_row_cases_per_mode": 64,
+    "row_permutations_per_mode": 128
+  },
+  "mutation_checks": [
+    {
+      "mutant": "missing_cells",
+      "optimized": false,
+      "test": "test_missing_both_arms_is_not_invisible",
+      "rejected": true
+    },
+    {
+      "mutant": "missing_cells",
+      "optimized": true,
+      "test": "test_missing_both_arms_is_not_invisible",
+      "rejected": true
+    },
+    {
+      "mutant": "duplicates",
+      "optimized": false,
+      "test": "test_identical_duplicate_is_not_extra_evidence",
+      "rejected": true
+    },
+    {
+      "mutant": "duplicates",
+      "optimized": true,
+      "test": "test_identical_duplicate_is_not_extra_evidence",
+      "rejected": true
+    },
+    {
+      "mutant": "mixed_pins",
+      "optimized": false,
+      "test": "test_all_pin_mismatches_are_rejected",
+      "rejected": true
+    },
+    {
+      "mutant": "mixed_pins",
+      "optimized": true,
+      "test": "test_all_pin_mismatches_are_rejected",
+      "rejected": true
+    },
+    {
+      "mutant": "confirmation_overlap",
+      "optimized": false,
+      "test": "test_confirmation_reuses_world_under_other_opponent_rejects",
+      "rejected": true
+    },
+    {
+      "mutant": "confirmation_overlap",
+      "optimized": true,
+      "test": "test_confirmation_reuses_world_under_other_opponent_rejects",
+      "rejected": true
+    },
+    {
+      "mutant": "ancestor_history",
+      "optimized": false,
+      "test": "test_transitive_tuning_history_cannot_disappear",
+      "rejected": true
+    },
+    {
+      "mutant": "ancestor_history",
+      "optimized": true,
+      "test": "test_transitive_tuning_history_cannot_disappear",
+      "rejected": true
+    },
+    {
+      "mutant": "bool_integer",
+      "optimized": false,
+      "test": "test_unexpected_seed_opponent_and_seat_arm_domain",
+      "rejected": true
+    },
+    {
+      "mutant": "bool_integer",
+      "optimized": true,
+      "test": "test_unexpected_seed_opponent_and_seat_arm_domain",
+      "rejected": true
+    },
+    {
+      "mutant": "duplicate_json",
+      "optimized": false,
+      "test": "test_strict_json_duplicate_key_and_constants",
+      "rejected": true
+    },
+    {
+      "mutant": "duplicate_json",
+      "optimized": true,
+      "test": "test_strict_json_duplicate_key_and_constants",
+      "rejected": true
+    }
+  ],
+  "commands": [
+    "python -m py_compile audit_paired_panel.py test_audit_paired_panel.py",
+    "python -m unittest -v test_audit_paired_panel",
+    "python -O -m unittest -v test_audit_paired_panel",
+    "python run_mutation_checks.py"
+  ],
+  "not_run": [
+    "actual game panel",
+    "hosted CI",
+    "full sibling delta reporter execution",
+    "current production materialization"
+  ],
+  "unchanged": [
+    "delta-evidence reporter",
+    "gameplay keys and defaults",
+    "production runtime and archive",
+    "Kaggle submissions",
+    "old V4 refs"
+  ],
+  "claim": "https://github.com/woahwhattheheck/commons/pull/12646#issuecomment-5642716165"
+}

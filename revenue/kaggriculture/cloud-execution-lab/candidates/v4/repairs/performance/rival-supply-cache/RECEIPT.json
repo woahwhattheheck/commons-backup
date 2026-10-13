@@ -1,0 +1,91 @@
+{
+  "lane": "ASTRA-OBSERVE-PERF",
+  "status": "BUILT_TESTED_CANONICAL_CANDIDATE_NOT_ACTIVATED",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "package_path": "repairs/performance/rival-supply-cache",
+  "source_commits": ["ce7db73d83ee4f08ce75dae69cfcbd3ccfba7f66", "6667f1e3beae7dcb71228b113fccba9957cd980b", "8ddbbfaa3d00bdf6584580be89889353b6c41ac1"],
+  "source_blobs": {
+    "rival_supply_cache.py": "02b0ff2b2f46588d6d5b5f68e4a062c4ec031d99",
+    "validate_rival_supply_cache.py": "ce2917386bfc3c50560a6da9a71027c546a0da18",
+    "exercise_rival_supply_cache.py": "d583dbd9cf888b2204a706cc88976706a241d9a4"
+  },
+  "input": {
+    "artifact_id": 10175943272,
+    "artifact_run": 34537404363,
+    "artifact_head": "871710e524b0794a3d9ee2bce7ee9f3f56834d18",
+    "artifact_zip_sha256": "3a3b74936d238bf884f89a1b279f42676cda35c590f131a6a3548de52d61b4e8",
+    "archive_sha256": "b567942e4fb4e0571ebf9f8eaaf143d4a9156df3289f09a98db37823ef4d68d9",
+    "source_manifest_sha256": "e87d70dd3bcf5aea1e929f1a5dbdc86f3cc33d8a0b3492986f2970fc8e774be2",
+    "runtime_files_verified": 109,
+    "frozen_selected_git_blob": "fc7baf5c179818a55037f6a61d92984d81d1a21c",
+    "scheduler_git_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+    "main_git_blob": "4a8cf7bcda1f0fea231a144692cb84a779a9e73e",
+    "runtime_git_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+    "engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4"
+  },
+  "generated_postimage": {
+    "git_blob": "2cea26a3affe9814357920b42db58cea93d9ac3a",
+    "sha256": "12d317e401bc7bc74cf783c450fe72fa61317c4b993f2b30fc9e6688091d3d6d",
+    "bytes": 38608,
+    "stored_as_runtime": false
+  },
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "validation": [
+    {"optimized": false, "tests": 24, "passed": true, "failures": 0, "errors": 0, "native_cases": 116, "official_interpreter_pairs": 24},
+    {"optimized": true, "tests": 24, "passed": true, "failures": 0, "errors": 0, "native_cases": 116, "official_interpreter_pairs": 24}
+  ],
+  "scan_witnesses": [
+    {"case": "seed-funding25", "control": 29, "candidate": 3},
+    {"case": "land-funding25", "control": 41, "candidate": 3}
+  ],
+  "negative_controls": {
+    "normal_all_rejected": true,
+    "optimized_all_rejected": true,
+    "counts_identical_in_both_modes": true,
+    "variants": [
+      {"name": "no_cache", "git_blob": "e74b3c17dc139fd09853872a937f33819244964b", "behavioral_failures": 2, "errors": 3},
+      {"name": "shared_across_transforms", "git_blob": "e8f70845677f93369ba4275cb18dfb09533557c9", "behavioral_failures": 3, "errors": 0},
+      {"name": "cache_overrides", "git_blob": "68f735038f652c6d76357f9b2f7a6e55dc5c7d96", "behavioral_failures": 4, "errors": 0},
+      {"name": "eager_all_products", "git_blob": "45ed8527ec535e7fc54076279e7919ea6e8b13a0", "behavioral_failures": 6, "errors": 2},
+      {"name": "single_product_key", "git_blob": "ff51924d53b87861e82171517e57604a70242e49", "behavioral_failures": 52, "errors": 0}
+    ]
+  },
+  "benchmark": {
+    "method": "Alternating arm order; two warmups; GC and fixture copies outside timed transform; no profiler",
+    "repetitions_per_arm_per_case": 21,
+    "timing_gate_enforced": false,
+    "columns": ["case", "control_wall_median_ns", "candidate_wall_median_ns", "wall_speedup"],
+    "cases": [
+      ["seed-funding25", 4312361, 4146061, 1.0401103601707742],
+      ["animal-funding25", 4747643, 4480543, 1.059613310261725],
+      ["land-funding25", 4989065, 4795835, 1.0402912110195617],
+      ["funded-hire25", 3529599, 3544851, 0.9956974214148916],
+      ["variable-buy-barrier25", 2763711, 2804782, 0.985356794217875],
+      ["zero-public-supply", 3797990, 3792362, 1.0014840355430203]
+    ]
+  },
+  "default_entrypoint_smoke": {
+    "seed": 9922999,
+    "opponent": "official_starter",
+    "seats": [0, 1],
+    "callbacks_per_arm_per_seat": 719,
+    "total_callbacks": 2876,
+    "config_changed": false,
+    "fallbacks_all_four_episodes": 0,
+    "status_all_four_episodes": ["DONE", "DONE"],
+    "exact_own_and_rival_trace_in_each_pair": true,
+    "common_trace_sha256": "92be34952363255fc3a8f9d9a0f6a02dd046382d7f46bb63ecaf3510b618b65f",
+    "bank_seat_0_both_arms": [190363.0, 3550.0],
+    "bank_seat_1_both_arms": [3550.0, 190363.0]
+  },
+  "limits": [
+    "The 24 official-interpreter pairs are included in the 116 native cases per mode, not additional independent cases.",
+    "Valid 25-tile fixtures underlie the receipt. Earlier separate 100-tile stress witnesses had 81/85/86-to-3 scans and are not these timing cases.",
+    "One-seed, both-seat, official-starter episode smoke is not playing-strength evidence or all-opponent equivalence.",
+    "Non-funding fixtures include small timing regressions. No universal or whole-game speedup is claimed.",
+    "Subclasses and replaced native methods bypass caching; composed consumers must verify engagement.",
+    "The transformer refuses changed source rather than overwriting later peer work; composition needs fresh validation.",
+    "No production, feature config, release archive, workflow, or Kaggle change; no new branch."
+  ]
+}

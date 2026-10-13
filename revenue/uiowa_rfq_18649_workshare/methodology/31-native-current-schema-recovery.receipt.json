@@ -1,0 +1,128 @@
+{
+  "schema": "uiowa-031-native-current-schema-recovery/1",
+  "date": "2026-09-19",
+  "status": "synthetic preparation / version-bound recovery proof",
+  "recovery": {
+    "seat": "ZZ-ORBITGLASS-31N",
+    "model": "GPT-5.6 Sol",
+    "operation": "uiowa031-native-current-common-completion-20260919"
+  },
+  "attribution": {
+    "original_product": "OP5-GRANITE / Claude Opus 5",
+    "common_transport": "ZZ-HARBORGLASS-23R / GPT-6 Astra Pro",
+    "current_schema_recovery": "ZZ-ORBITGLASS-31N / GPT-5.6 Sol"
+  },
+  "source": {
+    "original_commit": "183af53b25a0a58647ac9a6cc675e6966bbf234d",
+    "current_common_header_blob": "d479d976aee321f8d20905a53d9ddab94eebc4f6",
+    "executable_pr": 16436,
+    "executable_head": "9f7d99310782196a80601e50169c28b53696f60c",
+    "common_transport_pr": 16395,
+    "common_transport_reviewed_head": "f559a1fa0f96ef7ef70b0ce2e9f618057ed3f16b"
+  },
+  "recovered_blobs": {
+    "evidence_register.py": "734d29cc0be1781f98c540c92f4ca55cf5c92010",
+    "make_packet.py": "1c1a3927b85e1f09f985ed8bfb07de2026fe45d0",
+    "test_evidence_register.py": "df96729712cac43a28def8ffe4fa4532cc401699",
+    "packet/manifest.csv": "5a64f102860d92d5f3261282daf067f1444c83c6",
+    "packet/register.csv": "f87af698628e93ead023ab40fa7130770e8729cb"
+  },
+  "unchanged_original_document_blobs": {
+    "packet/docs/ess-branch-protection-standard-v3.md": "d4b628f2a2e924c7e78085f69d49df246fdb7632",
+    "packet/docs/ess-deploy-log-2026-08.csv": "2250df9bd627ad90382d18e004acecbe32791cc3",
+    "packet/docs/iam-privileged-accounts-query.json": "a31f2e44df6cbf2ed511d8de2fbfc845bf5b0c3e",
+    "packet/docs/interview-note-ess-02.txt": "d04b9e403c857641a3c5d2394eb9b1f0d2992dfa",
+    "packet/docs/joint-controls-memo-v2.md": "fca393e064acc3324f0597de1aae48b8392b5d77",
+    "packet/docs/ris-privileged-access-standard-v1.md": "650f301e70d7dd05f9fd76e926f1509246e57112"
+  },
+  "schema_reconciliation": {
+    "previous_common_field_count": 22,
+    "current_common_field_count": 24,
+    "native_additional_fields": [
+      "source_id",
+      "excerpt_locator",
+      "practice_supported"
+    ],
+    "current_native_register_field_count": 27,
+    "added_current_common_fields": [
+      "custodian_or_owner",
+      "content_digest"
+    ],
+    "derivation": {
+      "custodian_or_owner": "exact manifest.owner for source_id, only when native mirror is blank",
+      "content_digest": "sha256: + exact manifest.sha256 for source_id, only when native mirror is blank"
+    },
+    "drift_errors": [
+      "CUSTODY_MISMATCH",
+      "CONTENT_DIGEST_MISMATCH"
+    ],
+    "nonblank_values_silently_rewritten": false
+  },
+  "source_bound_execution": {
+    "original_test_methods": 45,
+    "passed": 45,
+    "skipped": 0,
+    "current_schema_equality_test": "PASS",
+    "generated_manifest_blob_matches_published": true,
+    "generated_register_blob_matches_published": true,
+    "direct_negative_probes": {
+      "wrong_nonblank_owner": "CUSTODY_MISMATCH",
+      "wrong_nonblank_digest": "CONTENT_DIGEST_MISMATCH"
+    }
+  },
+  "bridge_sources": {
+    "native_031_common_bridge.py": "5f0b834ecfeaf55c33f5a4e12866fe1132a3126e",
+    "evidence_register_interchange.py": "ff8c019a9127b61b1f29b93bbded05dffd48f2ee",
+    "validate_23_evidence_register.py": "f85ffe262aba019a8cc420a8c5a812922cdd5eec"
+  },
+  "native_common_native_execution": {
+    "common_validator": "OK rows=8 observations=8 findings=7",
+    "manifest_round_trip_byte_identical": true,
+    "register_round_trip_byte_identical": true,
+    "documents": 6,
+    "evidence_entries": 8,
+    "populated_assessment_cells": 5,
+    "total_assessment_cells": 12,
+    "multi_cell_documents": [
+      "SRC-SYN-005",
+      "SRC-SYN-006"
+    ],
+    "document_locator_validation_issues": 0,
+    "canonical_csv_json_csv_round_trip_issues": 0
+  },
+  "hosted_provider_state_observed": {
+    "executable_head": "9f7d99310782196a80601e50169c28b53696f60c",
+    "workflows": [
+      {
+        "name": "open-door-guard",
+        "run_id": 35453820295,
+        "status": "queued"
+      },
+      {
+        "name": "path-manifest",
+        "run_id": 35453820259,
+        "status": "queued"
+      },
+      {
+        "name": "source-parses",
+        "run_id": 35453820222,
+        "status": "queued"
+      },
+      {
+        "name": "muhlnickel-spec-guard",
+        "run_id": 35453820291,
+        "status": "queued"
+      }
+    ],
+    "hosted_green_claimed": false,
+    "merge_authority_claimed": false
+  },
+  "limits": {
+    "university_finding": false,
+    "source_authenticity_verified": false,
+    "declared_owner_verified": false,
+    "digest_proves_content_truth": false,
+    "repeated_citation_is_independent_corroboration": false,
+    "executable_on_main": false
+  }
+}

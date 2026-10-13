@@ -1,0 +1,72 @@
+{
+  "schema": "titan-v4-terminal-labor-surge/v1",
+  "lane": "ASTRA-TERMINUS-CASH-BACKED-LABOR-SURGE-20260911",
+  "status": "source_ready_default_off_not_runtime_promoted",
+  "canonical_branch": "main",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "engine": {
+    "official_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+    "verified_contract": [
+      "hire_cost_is_fibonacci_of_hires_today",
+      "successful_hire_appends_hand_immediately",
+      "unit_actions_execute_before_market_processing",
+      "raw_market_prefix_is_bounded_by_maxMarketOrdersPerTurn",
+      "end_of_day_clears_hands_and_resets_hires_today",
+      "terminal_reward_is_farm_money_only"
+    ],
+    "corrected_mass_hire_arithmetic": {
+      "first_16_daily_costs": [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987],
+      "sixteen_total_hires_cost": 2583,
+      "remaining_cost_after_one_existing_hire": 2582
+    }
+  },
+  "dependencies": {
+    "terminal_composition_blob": "3c0bb0fe4dfe02f3ec9690b4f5d100fb8bd28f99",
+    "redundant_hire_blob": "9ded2a9b636793df0511103da802bd3f26dbbb94",
+    "terminal_route_blob": "5010fc03966f31a9b7139d25996d3f713080bf25",
+    "composition_contract": "preterminal step697 frontier feeds existing T05 at 698; in-owner mode consumes T05 committed route plus before-market snapshots; downstream SELL remains single owner",
+    "superseded_donor_pr": 12762,
+    "superseded_donor_source_blob": "1acbe90610da97bfdd506a49524b141e1341ea14"
+  },
+  "source": {
+    "file": "terminal_labor_surge.py",
+    "sha256": "e90763f448f9c3a3ea622ce2c849872dd0c5127a9da6998dda43544749c7919d"
+  },
+  "tests": {
+    "file": "test_terminal_labor_surge.py",
+    "sha256": "1c02234d5b7e04dd54bba4e69a2cb2da15c815185b8e6336d8b07dfea32be7c6",
+    "normal": "18/18 PASS",
+    "python_O": "18/18 PASS",
+    "py_compile": "PASS",
+    "coverage_contracts": [
+      "superseded_PR_12762_step697_frontier_consumed",
+      "first_ten_fresh_day_hires_cost_143",
+      "preterminal_nonhire_prefix_refusal",
+      "preterminal_disabled_identity",
+      "profitable multi-job terminal admission",
+      "exact marginal Fibonacci wage ordering",
+      "raw-prefix cap and parent-order preservation",
+      "outside-window and final-callback identity",
+      "shed-capacity rejection",
+      "parent target reservation",
+      "future-HIRE worker-index fail-close",
+      "existing-current-HIRE indexing",
+      "complete snapshot requirement",
+      "unprofitable marginal tail rejection",
+      "current cash-spending-prefix fail-close",
+      "parent terminal sale-volume quote charge"
+    ]
+  },
+  "activation": {
+    "production_source_modified": false,
+    "feature_default_modified": false,
+    "archive_or_kaggle_modified": false,
+    "required_next_gate": "compose behind existing terminal owner and run paired both-seat official-engine entrypoint games; require positive terminal cash delta and realized HIRE/HARVEST/DROP/SELL execution receipts before any enablement"
+  },
+  "limitations": [
+    "current quote is not a rival future-price oracle",
+    "future executable HIREs are rejected rather than reindexed",
+    "current cash-spending market prefixes are rejected rather than financially replayed",
+    "source component has no field-EV or production-promotion claim"
+  ]
+}

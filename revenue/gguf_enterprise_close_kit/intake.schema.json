@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/gguf_enterprise_close_kit/intake.schema.json",
+  "title": "GGUF Enterprise Close Kit secret-free intake",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "mode", "offer_id", "case_id", "customer_readiness", "privacy", "scope", "evidence_refs"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"const": "GGUF_ENTERPRISE_INTAKE"},
+    "mode": {"enum": ["SYNTHETIC_DEMO", "CUSTOMER_PRIVATE"]},
+    "offer_id": {"const": "gguf-diagnostic-10d-12k"},
+    "case_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$"},
+    "customer_readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["legal_control_confirmed", "harness_ready", "nda_signed", "sow_signed", "m1_received_owner_reported"],
+      "properties": {
+        "legal_control_confirmed": {"type": "boolean"}, "harness_ready": {"type": "boolean"},
+        "nda_signed": {"type": "boolean"}, "sow_signed": {"type": "boolean"}, "m1_received_owner_reported": {"type": "boolean"}
+      }
+    },
+    "privacy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["public_model_bytes_present", "public_secret_values_present", "public_private_contact_present"],
+      "properties": {
+        "public_model_bytes_present": {"const": false}, "public_secret_values_present": {"const": false}, "public_private_contact_present": {"const": false}
+      }
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["model_label", "objective", "harness_label", "start_window", "data_classification"],
+      "properties": {
+        "model_label": {"type": "string", "minLength": 1, "maxLength": 120},
+        "objective": {"type": "string", "minLength": 1, "maxLength": 500},
+        "harness_label": {"type": "string", "minLength": 1, "maxLength": 120},
+        "start_window": {"type": "string", "minLength": 1, "maxLength": 120},
+        "data_classification": {"enum": ["PUBLIC_SYNTHETIC", "PRIVATE_CUSTOMER_CONTROLLED"]}
+      }
+    },
+    "evidence_refs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["nda_sha256", "sow_sha256", "m1_sha256"],
+      "properties": {
+        "nda_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "sow_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "m1_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

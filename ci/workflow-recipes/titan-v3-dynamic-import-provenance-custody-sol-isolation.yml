@@ -1,0 +1,105 @@
+name: TITAN V3 dynamic import provenance custody
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-dynamic-import-provenance-custody-sol-isolation.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/dynamic-import-provenance-custody-sol-isolation/**"
+      - "revenue/kaggriculture/cloud-execution-lab/main.py"
+      - "revenue/kaggriculture/cloud-execution-lab/titan_runtime.py"
+      - "revenue/kaggriculture/cloud-execution-lab/exports/FILES.json"
+      - "revenue/kaggriculture/cloud-execution-lab/exports/titan-current.tar.gz"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provenance-custody:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unit and compile validation
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/dynamic-import-provenance-custody-sol-isolation
+        run: |
+          python -m unittest -v test_audit_import_provenance.py
+          python -m compileall -q audit_import_provenance.py _titan_custody_common.py _titan_custody_worker.py test_audit_import_provenance.py
+
+      - name: Prove canonical archive passes and stale foreign tree fails closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          lab="revenue/kaggriculture/cloud-execution-lab"
+          gate="$lab/candidates/dynamic-import-provenance-custody-sol-isolation/audit_import_provenance.py"
+          archive="$lab/exports/titan-current.tar.gz"
+          manifest="$lab/exports/FILES.json"
+          work="$(mktemp -d)"
+          mkdir -p "$work/unpacked"
+          tar -xzf "$archive" -C "$work/unpacked"
+
+          mapfile -t roots < <(
+            find "$work/unpacked" -type f -name main.py -printf '%h\n' \
+              | while IFS= read -r directory; do
+                  if [[ -f "$directory/titan_runtime.py" ]]; then
+                    printf '%s\n' "$directory"
+                  fi
+                done \
+              | sort -u
+          )
+          if [[ "${#roots[@]}" -ne 1 ]]; then
+            printf 'expected one candidate root, found %s\n' "${#roots[@]}" >&2
+            printf '%s\n' "${roots[@]:-}" >&2
+            exit 1
+          fi
+          root="${roots[0]}"
+
+          python "$gate" \
+            --candidate-root "$root" \
+            --manifest "$manifest" \
+            --entrypoint main.py \
+            --callable agent \
+            --activate titan-new-instance \
+            --receipt "$work/clean-receipt.json" \
+            >/dev/null
+
+          mkdir -p "$work/foreign"
+          cp -a "$root/." "$work/foreign/"
+          set +e
+          python "$gate" \
+            --candidate-root "$root" \
+            --manifest "$manifest" \
+            --entrypoint main.py \
+            --callable agent \
+            --activate titan-new-instance \
+            --preload-root "titan_runtime=$work/foreign" \
+            --receipt "$work/hostile-receipt.json" \
+            >/dev/null
+          hostile_status=$?
+          set -e
+          if [[ "$hostile_status" -ne 1 ]]; then
+            echo "hostile-cache predecessor did not fail closed" >&2
+            exit 1
+          fi
+
+          python - "$work/clean-receipt.json" "$work/hostile-receipt.json" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          clean = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+          hostile = json.loads(pathlib.Path(sys.argv[2]).read_text(encoding="utf-8"))
+          assert clean["verdict"] == "PASS", clean
+          assert hostile["verdict"] == "FAIL", hostile
+          assert any(
+              violation["code"] == "MODULE_OUTSIDE_ROOT"
+              and violation.get("module", "").split(".", 1)[0] == "titan_runtime"
+              for violation in hostile["violations"]
+          ), hostile
+          print("canonical clean PASS and identical foreign-tree predecessor rejected")
+          PY

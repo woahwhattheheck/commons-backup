@@ -1,0 +1,273 @@
+{
+  "algebra_trials_per_mode": {
+    "formula": "delta_margin = delta_own - delta_rival; both seats",
+    "paired_cells": 4000,
+    "random_panels": 1000
+  },
+  "commands": [
+    "python -m unittest -v test_gauntlet_audit",
+    "python -O -m unittest -v test_gauntlet_audit",
+    "python gauntlet_mutations.py --output GAUNTLET-NEGATIVE-CONTROLS.json",
+    "python gauntlet_audit.py GAUNTLET-REPORTED.json --output GAUNTLET-REPORTED-AUDIT.json"
+  ],
+  "limitations": [
+    "No raw gauntlet rows were retrieved; aggregate audit is descriptive, not game-level validation.",
+    "Hashes in paired manifests are asserted identities, not independent authentication.",
+    "Test cells are synthetic; no new engine, native callback, speed, leaderboard or EV measurement.",
+    "No inference that historical action replay represents a responsive opponent.",
+    "No promotion decision; production/default/archive/Kaggle/workflows unchanged."
+  ],
+  "negative_controls": [
+    {
+      "green_control_tests": 26,
+      "optimized": false,
+      "results": [
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "own_cash_only",
+          "skips": 0,
+          "test": "test_paired_margin_not_own_bank_gain",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "always_seat_zero",
+          "skips": 0,
+          "test": "test_paired_margin_not_own_bank_gain",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "duplicate_last_wins",
+          "skips": 0,
+          "test": "test_duplicate_result_is_error_not_last_wins",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "ignore_agent_identity",
+          "skips": 0,
+          "test": "test_source_and_coordinate_drift_rejected",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "missing_counts_as_covered",
+          "skips": 0,
+          "test": "test_missing_row_blocks_coverage",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "fallback_counts_as_clean",
+          "skips": 0,
+          "test": "test_fallbacks_retained_in_economics_but_not_runtime_green",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "pool_mirror",
+          "skips": 0,
+          "test": "test_summary_rank_not_three_losers",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "leak_holdout_seed",
+          "skips": 0,
+          "test": "test_cross_opponent_seed_leakage_rejected",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "trust_declared_totals",
+          "skips": 0,
+          "test": "test_summary_totals_must_reconcile",
+          "tests": 1
+        }
+      ]
+    },
+    {
+      "green_control_tests": 26,
+      "optimized": true,
+      "results": [
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "own_cash_only",
+          "skips": 0,
+          "test": "test_paired_margin_not_own_bank_gain",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "always_seat_zero",
+          "skips": 0,
+          "test": "test_paired_margin_not_own_bank_gain",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "duplicate_last_wins",
+          "skips": 0,
+          "test": "test_duplicate_result_is_error_not_last_wins",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "ignore_agent_identity",
+          "skips": 0,
+          "test": "test_source_and_coordinate_drift_rejected",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "missing_counts_as_covered",
+          "skips": 0,
+          "test": "test_missing_row_blocks_coverage",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "fallback_counts_as_clean",
+          "skips": 0,
+          "test": "test_fallbacks_retained_in_economics_but_not_runtime_green",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "pool_mirror",
+          "skips": 0,
+          "test": "test_summary_rank_not_three_losers",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "leak_holdout_seed",
+          "skips": 0,
+          "test": "test_cross_opponent_seed_leakage_rejected",
+          "tests": 1
+        },
+        {
+          "errors": 0,
+          "failures": 1,
+          "killed": true,
+          "name": "trust_declared_totals",
+          "skips": 0,
+          "test": "test_summary_totals_must_reconcile",
+          "tests": 1
+        }
+      ]
+    }
+  ],
+  "owner": "ASTRA-COHORT",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+  "positive_tests": {
+    "normal": {
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "tests": 26
+    },
+    "optimized": {
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "tests": 26
+    }
+  },
+  "publication_files": {
+    "GAUNTLET-AUDIT.md": {
+      "bytes": 8690,
+      "git_blob_sha1": "fb98f43c97ba5ad0fe743a1fcdae010ec36960fa",
+      "sha256": "d14daa65038c665e4e1fd9218e2a4283fa6ebe30518bfadcdbf36250cdd12390"
+    },
+    "GAUNTLET-REPORTED-AUDIT.json": {
+      "bytes": 6321,
+      "git_blob_sha1": "62ba258c0e6accfb46a1b2ec41c5e8bd7229429c",
+      "sha256": "e3764c39c30a89c154346c15070e9e76e622dd6d06b6db0d427641312adc6341"
+    },
+    "GAUNTLET-REPORTED.json": {
+      "bytes": 2911,
+      "git_blob_sha1": "12bb1ee560c60bf0916f36f4626b543ddcd1fef3",
+      "sha256": "1146c13d359b50ff9b6fe80c50fc6c1de7a890ad461a6f1f3ea78f5d7a5ac45c"
+    },
+    "gauntlet_audit.py": {
+      "bytes": 15983,
+      "git_blob_sha1": "73e3fc9d2da365159f7f1b2be6fa6240142cb493",
+      "sha256": "674de1b31ba3265cb39460bb7b34c216a798a468b45daedf2e5e529094e72251"
+    },
+    "gauntlet_mutations.py": {
+      "bytes": 5134,
+      "git_blob_sha1": "b468cd23a1462d22c2faf1461ea609acf63ffce8",
+      "sha256": "1efb3e03af090389dfcaf5adb7d207f2697ba5f8e322112e0521af3fe1240ff5"
+    },
+    "test_gauntlet_audit.py": {
+      "bytes": 13212,
+      "git_blob_sha1": "a892afcbc73094bdcd3fb508e93f5c3b7d99dbfe",
+      "sha256": "18def04e27b76719f825f1f6cb30e53c8b021c92719ac33a8b9a039c15e944c6"
+    }
+  },
+  "py_compile": "PASS: gauntlet_audit.py test_gauntlet_audit.py gauntlet_mutations.py",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "raw_local_evidence": {
+    "GAUNTLET-NEGATIVE-CONTROLS.json": {
+      "availability": "local execution log; regenerate with committed command (not separately published)",
+      "bytes": 32744,
+      "sha256": "8d3d9cce91ea1b96fb34f191b47d5032144739cb8dfb8e4f003ca7cedfc4176f"
+    },
+    "tests-normal.log": {
+      "availability": "local execution log; regenerate with committed command (not separately published)",
+      "bytes": 3309,
+      "sha256": "88908dcfe55aaef59f536c811cb993c5bc6c62e6d30c713c57d7a3ef545acbc2"
+    },
+    "tests-optimized.log": {
+      "availability": "local execution log; regenerate with committed command (not separately published)",
+      "bytes": 3309,
+      "sha256": "a51f860e3c9dcc72b4f90ccbf552af78ba6c0c3ae93054e288b59597926b0c71"
+    }
+  },
+  "reported_summary_exit": 3,
+  "reported_summary_totals": {
+    "draws": 4,
+    "games": 72,
+    "losses": 12,
+    "wins": 56
+  },
+  "schema": "titan.gauntlet.validation.v1",
+  "scope": "Executable analyzer contracts on synthetic fixtures + descriptive audit of attributed Slack aggregates. ZERO engine games run in this contribution.",
+  "workspace": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4/research/replay-loss-autopsy"
+}

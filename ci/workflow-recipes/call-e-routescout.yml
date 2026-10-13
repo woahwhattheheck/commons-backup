@@ -1,0 +1,41 @@
+name: CALL-E RouteScout
+
+on:
+  pull_request:
+    paths:
+      - 'competitions/call_e_routescout/**'
+      - '.github/workflows/call-e-routescout.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/call_e_routescout/**'
+      - '.github/workflows/call-e-routescout.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile competitions/call_e_routescout/routescout.py competitions/call_e_routescout/routescout_core/*.py competitions/call_e_routescout/test_support.py competitions/call_e_routescout/test_contracts.py competitions/call_e_routescout/test_results_provider.py
+      - name: Test normal
+        working-directory: competitions/call_e_routescout
+        run: python -m unittest -v test_contracts.py test_results_provider.py
+      - name: Test optimized
+        working-directory: competitions/call_e_routescout
+        run: python -O -m unittest -v test_contracts.py test_results_provider.py
+      - name: Deterministic preview and reconcile
+        working-directory: competitions/call_e_routescout
+        run: |
+          python routescout.py preview fixtures/sample_inquiry.json > /tmp/routescout-preview.json
+          python routescout.py reconcile fixtures/sample_inquiry.json fixtures/sample_terminal.json > /tmp/routescout-receipt.json
+          python -c 'import json; r=json.load(open("/tmp/routescout-receipt.json")); assert r["outcome"] == "ROUTE_FOUND"'

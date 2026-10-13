@@ -1,0 +1,49 @@
+{
+  "id": "luvak-ssa-lab-analytics-cutover-lims-01",
+  "version": 1,
+  "buyer": "Dean Gaskill / Luvak Laboratories",
+  "lead": {
+    "channel": "C0BTURDA3PW",
+    "ts": "1788152174.606709"
+  },
+  "demand": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788152175.153149"
+  },
+  "workflow": [
+    "accepted quote required before accession",
+    "submission form matched to physical package",
+    "optional chain-of-custody reconciliation",
+    "material and method revision freeze",
+    "interstitial-gas and metals result hashes",
+    "staged report across the SSA Lab Analytics cutover",
+    "named-human release only"
+  ],
+  "hold_codes": {
+    "MISSING_ACCEPTED_QUOTE": 8,
+    "DUPLICATE_SAMPLE_ID": 4,
+    "FORM_PACKAGE_MISMATCH": 4,
+    "METHOD_REVISION_MISMATCH": 4
+  },
+  "acceptance": [
+    "100 synthetic shipments",
+    "exactly 80 READY",
+    "exactly 20 HOLD with the four exact codes",
+    "holds create no test or report stage",
+    "each READY record preserves quote, form, optional CoC, method, result, and report hashes",
+    "replay creates zero duplicate READY or HOLD records",
+    "named human required; autonomous release denied"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no materials-qualification or CoA decision",
+    "no interface marked live",
+    "synthetic/read-only adapters only"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "accession, method-revision freeze, evidence hashes, and named-human release receipts only; never diagnosis, qualification, or live instrument/regulatory I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

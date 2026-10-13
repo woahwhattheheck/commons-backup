@@ -1,0 +1,12 @@
+name: Manual Burn Down
+on: [workflow_dispatch] # This adds a manual "Run" button
+
+jobs:
+  clear-storage:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '0 days' # 0 days means delete absolutely everything

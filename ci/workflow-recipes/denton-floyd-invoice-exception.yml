@@ -1,0 +1,45 @@
+name: Denton Floyd invoice exception control
+
+on:
+  push:
+    paths:
+      - 'revenue/denton_floyd_invoice_exception/**'
+      - '.github/workflows/denton-floyd-invoice-exception.yml'
+  pull_request:
+    paths:
+      - 'revenue/denton_floyd_invoice_exception/**'
+      - '.github/workflows/denton-floyd-invoice-exception.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile revenue/denton_floyd_invoice_exception/engine.py revenue/denton_floyd_invoice_exception/test_engine.py
+      - name: Unit tests
+        working-directory: revenue/denton_floyd_invoice_exception
+        run: python -m unittest -v test_engine.py
+      - name: Unit tests under optimization
+        working-directory: revenue/denton_floyd_invoice_exception
+        run: python -O -m unittest -v test_engine.py
+      - name: CLI round trip
+        run: |
+          python revenue/denton_floyd_invoice_exception/engine.py compile \
+            revenue/denton_floyd_invoice_exception/fixture.json \
+            --as-of 2026-09-13T10:45:00Z \
+            --out-dir /tmp/df-receipt
+          python revenue/denton_floyd_invoice_exception/engine.py verify \
+            revenue/denton_floyd_invoice_exception/fixture.json \
+            /tmp/df-receipt/result.json \
+            --as-of 2026-09-13T10:45:00Z

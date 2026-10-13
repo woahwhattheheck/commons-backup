@@ -1,0 +1,163 @@
+name: titan-v2-target-domain-ablation-sol-bulwark
+
+on:
+  # The target-domain hypothesis is closed/rejected. Preserve the exact
+  # historical carrier for explicit replay without emitting routine red CI.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  exact-target-domain-screen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      SEEDS: '539131249,1834999074,2609097301,2609097302,2609097303,2609097304,2611092201,2611092207'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Bind exact checkout
+        shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          printf '%s\n' "$EXPECTED_HEAD" | tee "$RUNNER_TEMP/exact-head.sha"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pinned official-interpreter dependency
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Run one-factor and comparison contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/analysis/v2-target-domain-ablation-sol-bulwark
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python -m unittest -v test_materialize.py test_compare.py
+          python -m py_compile materialize.py compare.py test_materialize.py test_compare.py
+
+      - name: Materialize exact V2 one-factor arm
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          CASE="$LAB/analysis/v2-target-domain-ablation-sol-bulwark"
+          OUT="$RUNNER_TEMP/v2-target-domain-ablation"
+          rm -rf "$OUT"
+          mkdir -p "$OUT"
+          python "$CASE/materialize.py" \
+            --source "$LAB/runtime/variants/v2" \
+            --output "$OUT/candidate" \
+            --receipt "$OUT/MATERIALIZATION.json"
+
+      - name: Verify canonical package stayed unchanged
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        shell: bash
+        run: |
+          set -euo pipefail
+          python build_integrated.py --check
+          git diff --exit-code -- .
+
+      - name: Run frozen V2 control panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          KAG=revenue/kaggriculture
+          OUT="$RUNNER_TEMP/v2-target-domain-ablation"
+          python "$KAG/cloud-eval/evaluate.py" \
+            --engine-dir "$LAB/reference/engine" \
+            --loader "$KAG/20260907-offline-agent/evaluate.py" \
+            --candidate "$LAB/runtime/variants/v2/candidate.py::agent" \
+            --opponent "arlene=$LAB/runtime/variants/v1/reference/next-panel/vendor/arlene.py::agent" \
+            --opponent "v1=$LAB/runtime/variants/v1/candidate.py::agent" \
+            --seeds "$SEEDS" \
+            --rng-seed 20260909 \
+            --action-timeout 1.0 \
+            --startup-timeout 15 \
+            --game-timeout 180 \
+            --output "$OUT/control.json"
+
+      - name: Run target-domain ablation panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAB=revenue/kaggriculture/cloud-execution-lab
+          KAG=revenue/kaggriculture
+          OUT="$RUNNER_TEMP/v2-target-domain-ablation"
+          python "$KAG/cloud-eval/evaluate.py" \
+            --engine-dir "$LAB/reference/engine" \
+            --loader "$KAG/20260907-offline-agent/evaluate.py" \
+            --candidate "$OUT/candidate/candidate.py::agent" \
+            --opponent "arlene=$LAB/runtime/variants/v1/reference/next-panel/vendor/arlene.py::agent" \
+            --opponent "v1=$LAB/runtime/variants/v1/candidate.py::agent" \
+            --seeds "$SEEDS" \
+            --rng-seed 20260909 \
+            --action-timeout 1.0 \
+            --startup-timeout 15 \
+            --game-timeout 180 \
+            --output "$OUT/candidate.json"
+
+      - name: Classify one-factor causal signal
+        id: classify
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          CASE=revenue/kaggriculture/cloud-execution-lab/analysis/v2-target-domain-ablation-sol-bulwark
+          OUT="$RUNNER_TEMP/v2-target-domain-ablation"
+          python "$CASE/compare.py" \
+            --control "$OUT/control.json" \
+            --candidate "$OUT/candidate.json" \
+            --receipt "$OUT/MATERIALIZATION.json" \
+            --head "$(git rev-parse HEAD)" \
+            --output "$OUT/ABLATION-REPORT.json" \
+            --markdown "$OUT/ABLATION-REPORT.md"
+          status=$?
+          printf 'exit_code=%s\n' "$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Publish readable result
+        if: always()
+        shell: bash
+        run: |
+          REPORT="$RUNNER_TEMP/v2-target-domain-ablation/ABLATION-REPORT.md"
+          if [[ -f "$REPORT" ]]; then
+            cat "$REPORT" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '# V2 target-domain ablation did not reach classification' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Retain exact evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v2-target-domain-ablation-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/exact-head.sha
+            ${{ runner.temp }}/v2-target-domain-ablation/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Assert checkout stayed clean
+        if: always()
+        run: git diff --exit-code -- .
+
+      - name: Require broad own-cash upside
+        if: always()
+        shell: bash
+        run: test "${{ steps.classify.outputs.exit_code }}" = '0'

@@ -1,0 +1,199 @@
+{
+  "schema": "titan-v4-scheduler-composition/v1",
+  "canonical_branch": "main",
+  "workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "package": "repairs/scheduler-action-prefix",
+  "owner": "ASTRA-PREFIX-COMPOSE",
+  "status": "full_scheduler_component_engine_validated_not_runtime_promoted",
+  "runner": {
+    "path": "check_scheduler_composition.py",
+    "git_blob": "fddaec9b0ecdc42ad8798ebe6c1cf8464c7fa34a",
+    "sha256": "92959062cb748ddfb20851468f801c234ed96fe504ac07e0f7b6ec7a2e039abd",
+    "bytes": 20574,
+    "main_commit": "54f89552e7b0b4117bf8da4087e1135fd9c6e057"
+  },
+  "consume_once": {
+    "input_git_blob": "a483b24dd72b580d7d8811636b54d2d44f391575",
+    "transformer_git_blob": "2958bff92c7d95d9e113b2406e7de1bb7a28de08",
+    "output_git_blob": "742a200e9a72e303ad18c51c104895013a7f3a4b",
+    "shared_helper": "_engine_market_prefix",
+    "callers": 6,
+    "preserve_all_raw_suffix_rows": true,
+    "current_post_units_and_optimize_lot_AST_unchanged": true
+  },
+  "legacy": {
+    "package": "repairs/scheduler/executable-prefix",
+    "candidate_git_blob": "4dcf25f0a1a68f6842b71c6cb58ee878c06f6a08",
+    "disposition": "preserved_donor_and_negative_control_not_current_scheduler_replacement",
+    "reason": "its raw-cap fixes overlap the modern transform; replacing modern source resurrects premarket overflow admission and leaves act() suffix stock/plans uncorrected"
+  },
+  "witnesses": [
+    {
+      "name": "unsold_suffix_cannot_retire_plans",
+      "cap": 1,
+      "queue": [
+        [],
+        [
+          "SELL",
+          "MILK",
+          4
+        ]
+      ],
+      "actual_engine_sold": 0,
+      "modern_predecessor_and_legacy_pending": 0,
+      "modern_repaired_pending": 4,
+      "modern_repaired_plan": [
+        [
+          24,
+          4
+        ]
+      ],
+      "seats": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "current_DROP_overflow_precedes_market",
+      "shed_WHEAT": 99,
+      "carried_MILK": 2,
+      "unit_action": [
+        "DROP",
+        "MILK",
+        2
+      ],
+      "market_action": [
+        "SELL",
+        "WHEAT",
+        10
+      ],
+      "actual_MILK_lost": 1,
+      "modern_predecessor_and_repaired_receipt": "reject",
+      "legacy_receipt": "accept",
+      "seats": [
+        0,
+        1
+      ]
+    }
+  ],
+  "execution": {
+    "python": "3.13.5",
+    "normal": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "counts": {
+        "actual_parent_paired_callbacks": 96,
+        "capped_sell_cells": 120,
+        "interpreter_calls": 513,
+        "interpreter_suffix_pairs": 80,
+        "physical_overflow_witnesses": 2,
+        "prefix_sale_cells": 20
+      }
+    },
+    "optimized": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "counts": {
+        "actual_parent_paired_callbacks": 96,
+        "capped_sell_cells": 120,
+        "interpreter_calls": 513,
+        "interpreter_suffix_pairs": 80,
+        "physical_overflow_witnesses": 2,
+        "prefix_sale_cells": 20
+      }
+    },
+    "negative_controls": {
+      "current_normal": {
+        "exit": 1,
+        "tests": 11,
+        "failures": 154,
+        "errors": 4,
+        "skips": 0
+      },
+      "current_optimized": {
+        "exit": 1,
+        "tests": 11,
+        "failures": 154,
+        "errors": 4,
+        "skips": 0
+      },
+      "legacy_normal": {
+        "exit": 1,
+        "tests": 11,
+        "failures": 144,
+        "errors": 4,
+        "skips": 0
+      },
+      "legacy_optimized": {
+        "exit": 1,
+        "tests": 11,
+        "failures": 144,
+        "errors": 4,
+        "skips": 0
+      }
+    },
+    "input_rejection_checks": {
+      "total": 5,
+      "passed": 5,
+      "exit": 2,
+      "stdout_empty": true,
+      "cases": [
+        "wrong source",
+        "wrong transformer",
+        "wrong legacy output",
+        "invalid package path",
+        "missing engine file before loader/no download"
+      ]
+    },
+    "py_compile": "pass"
+  },
+  "dependency_custody": {
+    "origin": "existing downloaded workflow artifact10285621024 seed-retry-runtime (historic package, not current runtime archive)",
+    "git_blobs": {
+      "checks/reference/engine/kaggriculture.json": "b354d06b742fe48402513792253f1a5c29366b20",
+      "checks/reference/engine/kaggriculture.py": "3c202c7ee921da239356789e266b694635103fc4",
+      "checks/reference/engine/utils.py": "91c8822ee6201ba4a5a8416c7dbe34f95dd61c87",
+      "checks/reference/evaluator/loader.py": "23948e10cfc3d32f46c9abb1321b0d8fc8db21d5",
+      "mechanics.py": "044a4f9c0a4a44dde10ada57563238bcaf82075d",
+      "observed_clone.py": "f810d53193d3035655a36c21021e18ba1d415916",
+      "reference/decision/decision.py": "2931aa55831204fbb473ab85a6f5b81ec947fcf7",
+      "reference/next-panel/vendor/arlene.py": "bdb9cf58148a3c7961c085f4902759537decabf6"
+    },
+    "engine_sha256": {
+      "kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867",
+      "kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b"
+    },
+    "all_inputs_hash_checked_before_import": true,
+    "legacy_control_hash_checked": true,
+    "whole_scheduler_modules_imported": true,
+    "fixture_doubles": [
+      "authored FixedRoute only; real mechanics, parent module, receipt math and optimizer"
+    ],
+    "actual_parent_opening_scope": "2 seeds x2 seats x24 callbacks =96 paired callbacks, not full games",
+    "upstream_seed_function": "actual resolve_episode_seed extracted by pinned loader; no substitute seed behavior"
+  },
+  "not_executed": [
+    "full competitive episodes",
+    "modern titan_runtime/selected-controller invocation",
+    "current packaged archive installation",
+    "Python3.11 hosted runner",
+    "paired field economics"
+  ],
+  "production_changed": false,
+  "defaults_changed": false,
+  "legacy_materializer_executed": false,
+  "kaggle_submitted": false,
+  "coordination": {
+    "owner_pr": 12643,
+    "claim_comment": 5642794473,
+    "findings_slack_ts": "1789179554.204209",
+    "build_demand_ts": "1789179750.124069",
+    "legacy_completion_pr": 12672
+  },
+  "next_gate": "Existing current-runtime integrator consumes this one modern transform, then proves its exact generated package call-path, default/OFF behavior and field economics. Do not apply the legacy scheduler candidate as a replacement."
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "titan-v4-s2-independent-suffix-gate/v1",
+  "canonical_branch": "main",
+  "gate_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/checks/check_v4_s2_suffix_invariance.py",
+  "gate_commit": "e3059b1317fbb80ffc1a15fdc3a2cdaeb0e2bd45",
+  "gate_blob": "0c53fe47f146d4fe4777415f9815a4160ecb27c8",
+  "gate_bytes": 6016,
+  "source_path": "revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r04_s2_sheep_swap.py",
+  "last_audited_main_source": "a519455d47c3ba84d8762a56bb8b96634b0c5402",
+  "canonical_source_verdict": "RED: day coverage is repaired, raw-prefix composition remains owned by ASTRA-S2-PREFIX",
+  "canonical_source_witnesses": {
+    "phantom_slot_11_buy": {"market": [[], [], [], [], [], [], [], [], [], []], "requested": 1, "pending_buy": {"before": 0, "quantity": 1}},
+    "lost_slot_11_wool_credit": {"market": [[], [], [], [], [], [], [], [], [], []], "wool_credit": 0, "extra_wool_sale_requests": 3}
+  },
+  "coverage": {
+    "methods": 3, "current_suffix_cells": 416, "future_suffix_cells": 624, "seats": [0, 1],
+    "comparisons": ["returned action", "entire transaction state", "parent and tape immutability"],
+    "nonvacuity_controls": ["live COW-to-SHEEP purchase", "live wool top-up", "executable future HIRE veto", "incomplete-day veto"]
+  },
+  "local_positive_control": {
+    "source_blob": "1196b46d127103ebb16c641f52f71934a4499521", "published": false,
+    "status": "not a canonical source or competing controller", "base": "84b025aa9ead6bf362445ad9c3e97598c175c5fd",
+    "delta": "four market-loop raw-prefix bounds plus complete-day coverage",
+    "normal": "3/3 PASS; 1040 comparison cells", "optimized": "3/3 PASS; 1040 comparison cells",
+    "existing_plus_focused_suite": "32/32 PASS normal and optimized, including exact original 19-test suite"
+  },
+  "mutation_testing": {
+    "source_scope": "local positive-control source, not peer-composed main",
+    "mutants": ["cap_11", "current_buy_full_queue", "future_full_queue", "wool_demand_full_queue", "wool_spend_full_queue", "missing_day_as_empty", "disable_all", "compact_before_cap"],
+    "normal_killed": 8, "optimized_killed": 8, "survivors": 0
+  },
+  "python": "3.13.5",
+  "commands": [
+    "python revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/checks/check_v4_s2_suffix_invariance.py",
+    "python -O revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/checks/check_v4_s2_suffix_invariance.py"
+  ],
+  "limits": [
+    "This is a standalone manual gate, not new default unittest discovery or CI wiring.",
+    "Current audited canonical source is RED; do not cite the local positive control as canonical-main GREEN.",
+    "Helper writes yielded to earlier PREFIX and DAY owners; donor helper and old preserved snapshot were not modified.",
+    "No engine episode, materialized package, field strength, runtime/default/feature key, export, or Kaggle activation is claimed."
+  ]
+}

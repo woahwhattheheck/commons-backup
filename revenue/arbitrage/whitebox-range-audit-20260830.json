@@ -1,0 +1,69 @@
+{
+  "opportunity_id": "whitebox-range-audit-20260830",
+  "category": "SERVICE_DELIVERY",
+  "state": "QUOTABLE",
+  "public_use_case": "A team holding a large model artifact (GGUF or Safetensors, hundreds of GB to TB-scale, hosted behind plain HTTP) needs questions answered about its weights - tensor health, embedding geometry, baked circuits, quantization stress, precision recipe - without downloading, storing, or GPU-evaluating the whole file. Commons WB-RANGE reads addressed byte ranges over HTTP Range requests and runs an 80+ metric pure-stdlib union on the decoded slices, so fulfillment cost is bandwidth-scale instead of storage- and compute-scale.",
+  "source_side": {
+    "description": "Commons WB-RANGE capability on woahwhattheheck/commons main: host/wb_range.py (Range reader, header-only GGUF/Safetensors index, row/span fetch, metric dispatch, control panel) plus host/wb_metrics.py (pure-stdlib metric union), landed via PRs #5317, #5318, #5320. Measured 2026-08-29 against moonshotai/Kimi-K3 (1.56 TB Safetensors, 96 shards): header-only index then addressed range reads ran a live 11-op metric battery (anisotropy, axis purity, analogy battery, category purity, bit-depth, mechanism, concept neighbors, circuitry, precision recipe, tensor stats) with KB-scale fetches per operation; one embedding-row-class read fetched ~14 KB against the 1.56 TB total. Marginal cash cost is bandwidth only; USD 1.00 is carried as a conservative per-engagement allowance.",
+    "price_status": "PUBLIC_OBSERVED"
+  },
+  "buyer_side": {
+    "description": "Commons' own published catalog SKU: White Box hour at USD 250 (land/sku-whitebox-hour-20260826.md, status ACTIVE_CHARGEABLE), priced at the cited Aristek 2026 senior-specialist/architect floor of USD 250-350/hour and inside the Strobes senior pentest band of USD 200-300/hour. Payable through the canonical Stripe link recorded active=true on account acct_1U6HI9ATH4EDE7XD with charges_enabled=true and payouts_enabled=true (land/stripe-payment-links-20260826.md, livemode re-read 2026-08-28T16:10:00Z).",
+    "price_status": "PUBLIC_OBSERVED"
+  },
+  "economics": {
+    "currency": "USD",
+    "quantity": 1,
+    "unit_buy_cost": 1.0,
+    "unit_sell_revenue": 250.0,
+    "unit_fees": 7.55,
+    "unit_delivery_cost": 0.0,
+    "unit_edge_before_tax": 241.45,
+    "total_edge_before_tax": 241.45
+  },
+  "evidence": [
+    {
+      "side": "SOURCE",
+      "public_url": "https://github.com/woahwhattheheck/commons/blob/main/host/wb_range.py",
+      "observed_at": "2026-08-30T05:12:00Z",
+      "establishes": "Range-reader capability exists on current main (landed PR #5317; metrics union #5318; format/layout fixes #5320)."
+    },
+    {
+      "side": "SOURCE",
+      "public_url": "https://github.com/woahwhattheheck/commons/blob/main/host/wb_metrics.py",
+      "observed_at": "2026-08-30T05:12:00Z",
+      "establishes": "The 80+ metric pure-stdlib union the hour delivers exists on current main."
+    },
+    {
+      "side": "BUYER",
+      "public_url": "https://github.com/woahwhattheheck/commons/blob/main/land/sku-whitebox-hour-20260826.md",
+      "observed_at": "2026-08-30T05:12:00Z",
+      "establishes": "Published buyer-side price USD 250/hour, status ACTIVE_CHARGEABLE, with cited market comps (Aristek senior specialist/architect USD 250-350; Strobes senior pentest USD 200-300)."
+    },
+    {
+      "side": "BUYER",
+      "public_url": "https://github.com/woahwhattheheck/commons/blob/main/land/stripe-payment-links-20260826.md",
+      "observed_at": "2026-08-30T05:12:00Z",
+      "establishes": "Canonical Stripe link active=true; account charges_enabled=true and payouts_enabled=true, livemode re-read 2026-08-28T16:10:00Z."
+    },
+    {
+      "side": "BUYER",
+      "public_url": "https://aristekconsulting.com/it-consulting-hourly-rates/",
+      "observed_at": "2026-08-30T05:12:00Z",
+      "establishes": "Published market floor for senior specialist/architect hourly work: USD 250-350, so the SKU price sits at a cited market floor rather than an invented number."
+    },
+    {
+      "side": "FEE",
+      "public_url": "https://stripe.com/pricing",
+      "observed_at": "2026-08-30T05:12:00Z",
+      "establishes": "Published online card fee 2.9% + USD 0.30 per charge; on USD 250 that is USD 7.55."
+    }
+  ],
+  "execution_boundary": {
+    "automatic_purchase": false,
+    "automatic_trade": false,
+    "rights_cleared": true,
+    "provider_authorization_required": true,
+    "cash_claimed": false
+  }
+}

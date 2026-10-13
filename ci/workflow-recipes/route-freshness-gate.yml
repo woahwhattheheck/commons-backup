@@ -1,0 +1,43 @@
+name: route freshness proof gate
+
+on:
+  pull_request:
+    paths:
+      - "revenue/route_freshness_gate/**"
+      - ".github/workflows/route-freshness-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/route_freshness_gate/**"
+      - ".github/workflows/route-freshness-gate.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: route-freshness-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: python -m py_compile revenue/route_freshness_gate/engine.py revenue/route_freshness_gate/test_engine.py
+      - name: Unit tests
+        run: python -m unittest -v revenue.route_freshness_gate.test_engine
+      - name: Unit tests optimized
+        run: python -O -m unittest -v revenue.route_freshness_gate.test_engine
+      - name: CLI compile and verify
+        run: |
+          python revenue/route_freshness_gate/engine.py compile \
+            --input revenue/route_freshness_gate/example_manifest.json \
+            --output /tmp/route-freshness.packet.json \
+            --markdown /tmp/route-freshness.packet.md
+          python revenue/route_freshness_gate/engine.py verify \
+            --input /tmp/route-freshness.packet.json

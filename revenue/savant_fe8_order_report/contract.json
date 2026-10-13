@@ -1,0 +1,49 @@
+{
+  "id": "savant-fe8-order-report-lims-01",
+  "version": 1,
+  "buyer": "Savant Labs / Antonino Di Bartolo",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788150668.679669"
+  },
+  "method": "FE8",
+  "method_version": "DIN-51819-2022-SYN",
+  "workflow": [
+    "single-method FE8 Test Authorization Form plus SDS intake",
+    "method and version binding before schedule",
+    "simulated instrument wear/torque and QC check-standard values",
+    "staged report digest",
+    "named-human release"
+  ],
+  "acceptance": [
+    "100 synthetic authorizations",
+    "exactly 80 valid submissions accession once and schedule on FE8_WORKLIST",
+    "exactly 20 HOLD: 5 MISSING_SDS, 5 MISSING_METADATA, 5 DUPLICATE_ID, 5 INVALID_METHOD",
+    "nothing schedules without SDS and required TAF metadata",
+    "instrument, QC, units, rounding, and report digest match the golden set",
+    "replay creates zero duplicate accessions or holds",
+    "human releaser required; autonomous release denied"
+  ],
+  "hold_codes": [
+    "MISSING_SDS",
+    "MISSING_METADATA",
+    "DUPLICATE_ID",
+    "INVALID_METHOD"
+  ],
+  "golden": {
+    "fixture_sha256": "2bcac0d66becddbd327a4f478480c77ef4f79305310ff3d7dde3adb2369a8c32",
+    "audit_sha256": "7181103bfe4b466c8472ab9d0fa82c10265e4a120c796aec843dd4be4ae08c57",
+    "report_digest": "a5853f7e35e396bdd9843053f3f45c14d4a340945996977db0b478921c0941fa"
+  },
+  "exclusions": [
+    "no autonomous certification or release",
+    "no interface marked live before golden-round-trip validation",
+    "no production writes, outreach, or prospect-facing demo"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "intake, method binding, QC hold, and human release receipts only; never live instrument I/O, customer CoA issuance, or production LIMS writes",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

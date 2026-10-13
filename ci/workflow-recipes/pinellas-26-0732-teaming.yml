@@ -1,0 +1,48 @@
+name: pinellas-26-0732-teaming
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/pinellas_26_0732_teaming/**'
+      - '.github/workflows/pinellas-26-0732-teaming.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/pinellas_26_0732_teaming/**'
+      - '.github/workflows/pinellas-26-0732-teaming.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: |
+          python -m py_compile \
+            revenue/pinellas_26_0732_teaming/validate_readiness.py \
+            revenue/pinellas_26_0732_teaming/tests/test_validate_readiness.py
+      - name: Hostile suite
+        run: |
+          python -m unittest -v revenue.pinellas_26_0732_teaming.tests.test_validate_readiness
+          python -O -m unittest -v revenue.pinellas_26_0732_teaming.tests.test_validate_readiness
+      - name: Default carrier must remain HOLD
+        shell: bash
+        run: |
+          set +e
+          python revenue/pinellas_26_0732_teaming/validate_readiness.py \
+            revenue/pinellas_26_0732_teaming/opportunity.json \
+            revenue/pinellas_26_0732_teaming/state.json \
+            revenue/pinellas_26_0732_teaming/workshare.json
+          rc=$?
+          set -e
+          test "$rc" -eq 3

@@ -1,0 +1,31 @@
+name: titan-e03-public-behavior-mixture
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/titan-e03-public-behavior-mixture.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/e03_public_behavior_mixture.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_e03_public_behavior_mixture.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  public-behavior-mixture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Run E03 public-only mixture contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab
+        run: |
+          python3 -m py_compile e03_public_behavior_mixture.py test_e03_public_behavior_mixture.py
+          python3 -B -m unittest -v test_e03_public_behavior_mixture.py

@@ -1,0 +1,29 @@
+{
+  "schema": "commons-ar-leakage-desk/v1",
+  "analysis_date": "2026-09-14",
+  "currency": "USD",
+  "grace_days": 0,
+  "invoices": [
+    {"invoice_id":"inv-open","account_id":"acct-a","issue_date":"2026-09-10","due_date":"2026-09-20","amount_minor":10000,"state":"OPEN","evidence_sha256":"1111111111111111111111111111111111111111111111111111111111111111"},
+    {"invoice_id":"inv-partial","account_id":"acct-b","issue_date":"2026-09-01","due_date":"2026-09-20","amount_minor":20000,"state":"OPEN","evidence_sha256":"2222222222222222222222222222222222222222222222222222222222222222"},
+    {"invoice_id":"inv-overdue","account_id":"acct-c","issue_date":"2026-08-01","due_date":"2026-08-31","amount_minor":30000,"state":"OPEN","evidence_sha256":"3333333333333333333333333333333333333333333333333333333333333333"},
+    {"invoice_id":"inv-partial-overdue","account_id":"acct-d","issue_date":"2026-08-01","due_date":"2026-08-31","amount_minor":40000,"state":"OPEN","evidence_sha256":"4444444444444444444444444444444444444444444444444444444444444444"},
+    {"invoice_id":"inv-disputed","account_id":"acct-e","issue_date":"2026-08-01","due_date":"2026-08-31","amount_minor":50000,"state":"OPEN","evidence_sha256":"5555555555555555555555555555555555555555555555555555555555555555"},
+    {"invoice_id":"inv-paid","account_id":"acct-f","issue_date":"2026-08-01","due_date":"2026-08-31","amount_minor":60000,"state":"OPEN","evidence_sha256":"6666666666666666666666666666666666666666666666666666666666666666"},
+    {"invoice_id":"inv-void","account_id":"acct-g","issue_date":"2026-08-01","due_date":"2026-08-31","amount_minor":70000,"state":"VOID","evidence_sha256":"7777777777777777777777777777777777777777777777777777777777777777"},
+    {"invoice_id":"inv-conflict","account_id":"acct-h","issue_date":"2026-08-01","due_date":"2026-08-31","amount_minor":8000,"state":"OPEN","evidence_sha256":"8888888888888888888888888888888888888888888888888888888888888888"}
+  ],
+  "payments": [
+    {"payment_id":"pay-partial","account_id":"acct-b","invoice_id":"inv-partial","amount_minor":5000,"currency":"USD","observed_at":"2026-09-12T12:00:00Z","evidence_sha256":"9999999999999999999999999999999999999999999999999999999999999999"},
+    {"payment_id":"pay-partial-overdue","account_id":"acct-d","invoice_id":"inv-partial-overdue","amount_minor":10000,"currency":"USD","observed_at":"2026-09-10T12:00:00Z","evidence_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    {"payment_id":"pay-paid","account_id":"acct-f","invoice_id":"inv-paid","amount_minor":60000,"currency":"USD","observed_at":"2026-09-05T12:00:00Z","evidence_sha256":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    {"payment_id":"pay-unapplied","account_id":"acct-z","invoice_id":null,"amount_minor":12500,"currency":"USD","observed_at":"2026-09-13T12:00:00Z","evidence_sha256":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"},
+    {"payment_id":"pay-conflict","account_id":"acct-h","invoice_id":"inv-conflict","amount_minor":9000,"currency":"USD","observed_at":"2026-09-10T12:00:00Z","evidence_sha256":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}
+  ],
+  "credits": [
+    {"credit_id":"credit-overdue","account_id":"acct-c","invoice_id":"inv-overdue","amount_minor":5000,"currency":"USD","observed_at":"2026-09-01T12:00:00Z","evidence_sha256":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}
+  ],
+  "disputes": [
+    {"event_id":"disp-open","dispute_id":"case-1","account_id":"acct-e","invoice_id":"inv-disputed","state":"OPEN","observed_at":"2026-09-02T12:00:00Z","evidence_sha256":"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}
+  ]
+}

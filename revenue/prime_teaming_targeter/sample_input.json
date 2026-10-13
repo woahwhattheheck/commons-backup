@@ -1,0 +1,68 @@
+{
+  "schema": "prime-teaming-targeter/input/v1",
+  "opportunity": {
+    "opportunity_id": "synthetic-modernization-001",
+    "title": "Synthetic public-sector modernization study",
+    "source_ref": "synthetic:public-notice-001",
+    "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observed_at": "2026-09-13T12:00:00Z",
+    "deadline_at": "2026-12-31T23:59:59Z",
+    "requirements": [
+      {"requirement_id": "domain", "label": "domain delivery history", "weight_bps": 4000, "mandatory": true},
+      {"requirement_id": "legacy", "label": "legacy modernization", "weight_bps": 3500, "mandatory": true},
+      {"requirement_id": "cloud", "label": "cloud roadmap", "weight_bps": 2500, "mandatory": false}
+    ]
+  },
+  "evidence_authority": [
+    {
+      "evidence_id": "prime-a-domain",
+      "opportunity_id": "synthetic-modernization-001",
+      "candidate_id": "prime-a",
+      "requirement_id": "domain",
+      "source_kind": "CANDIDATE_PUBLIC",
+      "source_ref": "synthetic:prime-a-domain",
+      "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "observed_at": "2026-09-12T12:00:00Z",
+      "status": "MEETS",
+      "note": "Synthetic public program-history record"
+    },
+    {
+      "evidence_id": "prime-a-legacy",
+      "opportunity_id": "synthetic-modernization-001",
+      "candidate_id": "prime-a",
+      "requirement_id": "legacy",
+      "source_kind": "CANDIDATE_PUBLIC",
+      "source_ref": "synthetic:prime-a-legacy",
+      "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "observed_at": "2026-09-12T12:00:00Z",
+      "status": "MEETS",
+      "note": "Synthetic legacy-modernization record"
+    },
+    {
+      "evidence_id": "prime-a-cloud",
+      "opportunity_id": "synthetic-modernization-001",
+      "candidate_id": "prime-a",
+      "requirement_id": "cloud",
+      "source_kind": "CANDIDATE_PUBLIC",
+      "source_ref": "synthetic:prime-a-cloud",
+      "source_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "observed_at": "2026-09-12T12:00:00Z",
+      "status": "PARTIAL",
+      "note": "Synthetic partial cloud-roadmap record"
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "prime-a",
+      "name": "Synthetic Prime A",
+      "evidence_ids": ["prime-a-domain", "prime-a-legacy", "prime-a-cloud"],
+      "paid_scope": {
+        "title": "Modernization evidence work package",
+        "amount_minor": 1850000,
+        "currency": "USD",
+        "deliverables": ["architecture contradiction ledger", "migration and reconciliation evidence matrix"],
+        "acceptance_criteria": ["every recommendation maps to retained evidence", "prime reviews and accepts final work package"]
+      }
+    }
+  ]
+}

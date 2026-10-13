@@ -1,0 +1,251 @@
+name: TITAN V3 market-prefix realized execution — SOL-REALIZER
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-market-prefix-realized-sol-realizer.yml"
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v3-market-prefix-realized-sol-realizer/**"
+      - "p/sol-realizer-titan-v3-market-prefix-realized-execution-20260910-01.md"
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: "Comma-separated development seeds; never use held selection seeds"
+        required: true
+        default: "2609099601,2609099602,2609099603,2609099604"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: titan-v3-market-prefix-realized-sol-realizer-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  realized-execution-panel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      CASE: revenue/kaggriculture/cloud-execution-lab/candidates/v3-market-prefix-realized-sol-realizer
+      LAB: revenue/kaggriculture/cloud-execution-lab
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+      EVENT_BASE: ${{ github.event.pull_request.base.sha || '' }}
+      SEEDS: ${{ github.event_name == 'workflow_dispatch' && inputs.seeds || '2609099601,2609099602,2609099603,2609099604' }}
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONHASHSEED: "0"
+
+    steps:
+      - name: Checkout exact source head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Bind actual PR ancestry and additive scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          if test -n "$EVENT_BASE"; then
+            TARGET="$EVENT_BASE"
+          else
+            git fetch --no-tags origin main
+            TARGET="origin/main"
+          fi
+          BASE="$(git merge-base "$TARGET" HEAD)"
+          test -n "$BASE"
+          count="$(git rev-list --count "$BASE"..HEAD)"
+          test "$count" -ge 1
+          test "$count" -le 2
+          test -z "$(git diff --diff-filter=D --name-only "$BASE"...HEAD)"
+          unexpected="$(
+            git diff --name-only "$BASE"...HEAD |
+            grep -Ev '^(\.github/workflows/titan-v3-market-prefix-realized-sol-realizer\.yml|revenue/kaggriculture/cloud-execution-lab/candidates/v3-market-prefix-realized-sol-realizer/.*|p/sol-realizer-titan-v3-market-prefix-realized-execution-20260910-01\.md)$' || true
+          )"
+          test -z "$unexpected" || {
+            printf 'Unexpected changed paths:\n%s\n' "$unexpected"
+            exit 1
+          }
+          test -f .github/workflows/titan-v3-market-prefix-realized-sol-realizer.yml
+          test -f "$CASE/market_prefix_rescue.py"
+          test -f "$CASE/realized_execution.py"
+          test -f "$CASE/run_panel.py"
+          test -f "$CASE/SOURCE.json"
+          test -f p/sol-realizer-titan-v3-market-prefix-realized-execution-20260910-01.md
+          git diff --check "$BASE"...HEAD
+          git status --short
+          test -z "$(git status --short)"
+          printf '%s\n' "$TARGET" > "$RUNNER_TEMP/ACTUAL-TARGET.txt"
+          printf '%s\n' "$BASE" > "$RUNNER_TEMP/ACTUAL-MERGE-BASE.txt"
+          printf '%s\n' "$EXPECTED_HEAD" > "$RUNNER_TEMP/EXACT-HEAD.txt"
+          git diff --name-status "$BASE"...HEAD > "$RUNNER_TEMP/EXACT-DIFF.txt"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned interpreter dependency
+        shell: bash
+        run: python -m pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+
+      - name: Compile and run predecessor-killing contracts
+        working-directory: ${{ env.CASE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile *.py
+          python -m unittest -v \
+            test_market_prefix_rescue.py \
+            test_realized_execution.py \
+            test_source_guard.py \
+            test_source_contract.py \
+            test_official_engine_contract.py
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          git diff --exit-code -- .
+          test -z "$(git status --short)"
+
+      - name: Verify exact source and frozen opponent closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/sol-realizer"
+          python "$CASE/source_contract.py" \
+            --output "$RUNNER_TEMP/sol-realizer/SOURCE-RECEIPT.json"
+          git diff --exit-code -- .
+          test -z "$(git status --short)"
+
+      - name: Prove canonical package remains unchanged
+        working-directory: ${{ env.LAB }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python build_integrated.py --check
+          git diff --exit-code -- .
+          test -z "$(git status --short)"
+
+      - name: Run complete paired realized-execution panel
+        id: panel
+        shell: bash
+        run: |
+          set +e
+          python "$CASE/run_panel.py" \
+            --runner-head "$EXPECTED_HEAD" \
+            --seeds "$SEEDS" \
+            --rng-seed 20260910 \
+            --action-timeout 1.0 \
+            --startup-timeout 15.0 \
+            --game-timeout 180.0 \
+            --output "$RUNNER_TEMP/sol-realizer/RESULTS.json" \
+            --markdown "$RUNNER_TEMP/sol-realizer/RESULTS.md"
+          status=$?
+          set -e
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Publish exact verdict
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## SOL-REALIZER — market-prefix realized execution"
+            echo
+            echo "- exact head: \`$EXPECTED_HEAD\`"
+            echo "- panel process status: \`${{ steps.panel.outputs.status || 'missing' }}\`"
+            echo
+            if test -f "$RUNNER_TEMP/sol-realizer/RESULTS.md"; then
+              cat "$RUNNER_TEMP/sol-realizer/RESULTS.md"
+            else
+              echo "No complete panel verdict was produced."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Mirror exact verdict to the PR conversation
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: actions/github-script@v7
+        env:
+          RESULTS_MD: ${{ runner.temp }}/sol-realizer/RESULTS.md
+          PANEL_STATUS: ${{ steps.panel.outputs.status || 'missing' }}
+          EXACT_HEAD_FOR_COMMENT: ${{ github.event.pull_request.head.sha || github.sha }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- titan-v3-market-prefix-realized-sol-realizer -->';
+            const path = process.env.RESULTS_MD;
+            let detail = fs.existsSync(path)
+              ? fs.readFileSync(path, 'utf8')
+              : 'No complete panel verdict was produced.';
+            if (detail.length > 58000) detail = detail.slice(0, 58000) + '\n\n[truncated]';
+            const body = [
+              marker,
+              detail,
+              '',
+              `- Exact head: \`${process.env.EXACT_HEAD_FOR_COMMENT}\``,
+              `- Panel process status: \`${process.env.PANEL_STATUS}\``,
+              '- Structural workflow success is not promotion authority.',
+            ].join('\n');
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              { owner, repo, issue_number, per_page: 100 }
+            );
+            const prior = comments.find(comment =>
+              comment.user?.type === 'Bot' && comment.body?.includes(marker)
+            );
+            if (prior) {
+              await github.rest.issues.updateComment({
+                owner, repo, comment_id: prior.id, body
+              });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
+
+      - name: Upload immutable evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-market-prefix-realized-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            ${{ runner.temp }}/ACTUAL-TARGET.txt
+            ${{ runner.temp }}/ACTUAL-MERGE-BASE.txt
+            ${{ runner.temp }}/EXACT-HEAD.txt
+            ${{ runner.temp }}/EXACT-DIFF.txt
+            ${{ runner.temp }}/sol-realizer/
+
+      - name: Enforce structural completeness without laundering gameplay verdict
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ steps.panel.outputs.status || 'missing' }}" = "0"
+          python - "$RUNNER_TEMP/sol-realizer/RESULTS.json" <<'PY'
+          import json, sys
+          path = sys.argv[1]
+          data = json.load(open(path, encoding="utf-8"))
+          assert data["status"] == "complete", data.get("status")
+          summary = data["summary"]
+          assert summary["paired_cells"] == 16, summary["paired_cells"]
+          assert summary["verdict"] in {
+              "NO_SYNTACTIC_SIGNAL",
+              "NO_REALIZED_SIGNAL",
+              "REALIZED_MIXED",
+              "REALIZED_REGRESSION",
+              "REALIZED_UPSIDE_SCREEN",
+          }, summary["verdict"]
+          assert len(data["games"]) == 32, len(data["games"])
+          assert all(game["status"] == "complete" for game in data["games"])
+          assert all(game["steps"] == 719 for game in data["games"])
+          print(json.dumps({
+              "verdict": summary["verdict"],
+              "paired_cells": summary["paired_cells"],
+              "syntactic_events": summary["syntactic_events"],
+              "realized_events": summary["realized_events"],
+              "mean_own_delta": summary["mean_own_delta"],
+              "mean_margin_delta": summary["mean_margin_delta"],
+          }, sort_keys=True))
+          PY

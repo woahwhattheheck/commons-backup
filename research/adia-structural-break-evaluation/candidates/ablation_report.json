@@ -1,0 +1,98 @@
+{
+  "base_source_sha256": "24b3afcb5e096de264dab9889512375fa935f13481fa3dd7922e95be5abef8f1",
+  "report_sha256": "b1de3c81cda7344f5a678f160998c64c93cde19b7c7299f7bdd8b281fb52b3e9",
+  "seeds": [
+    10000,
+    10015
+  ],
+  "use": "development-only one-factor ablations; no holdout tuning",
+  "variants": {
+    "iid_window_scaling": {
+      "literal_patch": {
+        "after": "variance = self.feature_var / w",
+        "before": "variance = np.mean((means - self.feature_mean) ** 2, axis=0)"
+      },
+      "metric": {
+        "comparable_pairs": 2158976,
+        "concordance": 1970850.0,
+        "no_comparable_pairs": false,
+        "scored_steps": 1000,
+        "series": 288,
+        "skipped_steps": 0,
+        "ts_auc": 0.9128633203889251
+      },
+      "null_false_alarms": {
+        "null_ar": 9,
+        "null_garch": 4,
+        "null_heavy": 0,
+        "null_iid": 0,
+        "null_outliers": 1,
+        "null_seasonal": 0
+      },
+      "runtime": {
+        "history_and_case_hashing_included": true,
+        "updates": 95760,
+        "wall_seconds": 3.4790122569997948
+      },
+      "source_sha256": "75aed729b5dad68304e43a510abf2432a5014efe8597e1cd49ce2391de7e9526"
+    },
+    "short_windows_only": {
+      "literal_patch": {
+        "after": "WINDOWS = (8, 16, 32, 64)",
+        "before": "WINDOWS = (8, 16, 32, 64, 128, 256)"
+      },
+      "metric": {
+        "comparable_pairs": 2158976,
+        "concordance": 1944072.5,
+        "no_comparable_pairs": false,
+        "scored_steps": 1000,
+        "series": 288,
+        "skipped_steps": 0,
+        "ts_auc": 0.9004604497687793
+      },
+      "null_false_alarms": {
+        "null_ar": 1,
+        "null_garch": 1,
+        "null_heavy": 0,
+        "null_iid": 0,
+        "null_outliers": 1,
+        "null_seasonal": 0
+      },
+      "runtime": {
+        "history_and_case_hashing_included": true,
+        "updates": 95760,
+        "wall_seconds": 2.990817078999953
+      },
+      "source_sha256": "1f31af3aa5b6548f8369a7eafeab32a89345a11c5c4055904bb05d079427c9bc"
+    },
+    "tied_score_floor": {
+      "literal_patch": {
+        "after": "",
+        "before": " + 0.2 * (min(raw, 8.0) - 1.0)"
+      },
+      "metric": {
+        "comparable_pairs": 2158976,
+        "concordance": 1871395.5,
+        "no_comparable_pairs": false,
+        "scored_steps": 1000,
+        "series": 288,
+        "skipped_steps": 0,
+        "ts_auc": 0.8667977318877097
+      },
+      "null_false_alarms": {
+        "null_ar": 1,
+        "null_garch": 1,
+        "null_heavy": 0,
+        "null_iid": 0,
+        "null_outliers": 0,
+        "null_seasonal": 0
+      },
+      "runtime": {
+        "history_and_case_hashing_included": true,
+        "updates": 95760,
+        "wall_seconds": 3.5414445679998607
+      },
+      "source_sha256": "cfdf1daede020543b9ba184e4f1e084a5f783da7e07d8765af3c7bff1e42456a"
+    }
+  }
+}

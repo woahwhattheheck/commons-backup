@@ -1,0 +1,27 @@
+name: Commercial Deal Room
+on:
+  pull_request:
+    paths:
+      - 'revenue/commercial_deal_room/**'
+      - 'ci/workflow-recipes/commercial-deal-room.yml'
+  push:
+    paths:
+      - 'revenue/commercial_deal_room/**'
+      - 'ci/workflow-recipes/commercial-deal-room.yml'
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m py_compile revenue/commercial_deal_room/*.py
+      - run: python -m unittest revenue.commercial_deal_room.test_engine revenue.commercial_deal_room.test_guarded revenue.commercial_deal_room.test_guarded_reload revenue.commercial_deal_room.test_guarded_graph revenue.commercial_deal_room.test_cli
+      - run: python -O -m unittest revenue.commercial_deal_room.test_engine revenue.commercial_deal_room.test_guarded revenue.commercial_deal_room.test_guarded_reload revenue.commercial_deal_room.test_guarded_graph revenue.commercial_deal_room.test_cli
+      - run: python -m revenue.commercial_deal_room.acceptance

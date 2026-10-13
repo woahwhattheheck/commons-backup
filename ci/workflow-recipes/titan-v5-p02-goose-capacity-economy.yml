@@ -1,0 +1,28 @@
+name: TITAN V5 P02 goose capacity economy
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/goose-capacity-economy/**"
+      - ".github/workflows/titan-v5-p02-goose-capacity-economy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Focused treatment contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/goose-capacity-economy
+        run: python -m unittest -v test_goose_capacity_economy.py
+      - name: Focused materializer contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/goose-capacity-economy
+        run: python -m unittest -v test_build_goose_capacity_economy.py
+      - name: Compile carrier
+        run: python -m py_compile revenue/kaggriculture/cloud-execution-lab/candidates/v5/goose-capacity-economy/{build.py,goose_capacity_economy.py,test_build_goose_capacity_economy.py,test_goose_capacity_economy.py}

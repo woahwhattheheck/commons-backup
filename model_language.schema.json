@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/model_language.schema.json",
+  "title": "Commons Model Language CML/1 envelope",
+  "description": "A latent-reasoning declaration, human PLAIN speech projection, compact model packet, and byte-identity payload description. The payload body is external to this metadata and MUST NOT be rewritten by an encoder or renderer.",
+  "type": "object",
+  "required": [
+    "reasoning_mode",
+    "speech",
+    "model_protocol",
+    "model_codec",
+    "model_packet",
+    "payload_kind",
+    "payload_sha256",
+    "language_state"
+  ],
+  "properties": {
+    "reasoning_mode": {
+      "const": "LATENT",
+      "description": "Private deliberation stays inside the model/runtime and is not serialized."
+    },
+    "speech": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^[^\\r\\n\\u000b\\u000c\\u001c-\\u001e\\u0085\\u2028\\u2029]+$",
+      "description": "One-line PLAIN human projection; not a chain-of-thought transcript."
+    },
+    "model_protocol": {
+      "const": "CML/1"
+    },
+    "model_codec": {
+      "enum": ["json", "tok", "math", "code", "mixed", "opaque"]
+    },
+    "model_packet": {
+      "type": "string",
+      "maxLength": 16384,
+      "pattern": "^[^\\r\\n\\u000b\\u000c\\u001c-\\u001e\\u0085\\u2028\\u2029]+$",
+      "description": "Canonical compact one-line MODEL projection. When model_codec is json, it is UTF-8 JSON with sorted keys and no insignificant whitespace and matches $defs.packet."
+    },
+    "payload_kind": {
+      "enum": ["prose", "code", "patch", "data", "action", "artifact"]
+    },
+    "payload_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of exact payload bytes; strings are encoded as UTF-8 without normalization."
+    },
+    "language_state": {
+      "const": "LAYERED",
+      "description": "Emitter envelopes are LAYERED. Observers may derive UNLAYERED or INVALID for legacy/malformed records without rejecting them."
+    }
+  },
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "model_codec": {
+            "const": "json"
+          }
+        },
+        "required": ["model_codec"]
+      },
+      "then": {
+        "properties": {
+          "model_packet": {
+            "contentMediaType": "application/json",
+            "contentSchema": {
+              "$ref": "#/$defs/packet"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "semanticAtom": {
+      "oneOf": [
+        {
+          "type": "string",
+          "maxLength": 2048,
+          "pattern": "^[^\\r\\n\\u000b\\u000c\\u001c-\\u001e\\u0085\\u2028\\u2029]*$"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "operation": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "prefixItems": [
+        {
+          "enum": ["B", "A", "I", "Q", "W", "T", "CE", "X", "V", "K", "AT", "BK"]
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^\\r\\n\\u000b\\u000c\\u001c-\\u001e\\u0085\\u2028\\u2029]+$",
+          "description": "A public semantic topic. Private reasoning/scratchpad topic names are forbidden by the CML/1 runtime validator."
+        }
+      ],
+      "items": {
+        "$ref": "#/$defs/semanticAtom"
+      }
+    },
+    "packet": {
+      "type": "object",
+      "required": ["v", "k", "ops"],
+      "properties": {
+        "v": {
+          "const": 1
+        },
+        "k": {
+          "enum": ["STATE", "DELTA", "QUERY", "RESULT", "HANDOFF", "ERROR"]
+        },
+        "ops": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/operation"
+          }
+        },
+        "g": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^\\r\\n\\u000b\\u000c\\u001c-\\u001e\\u0085\\u2028\\u2029]+$",
+          "description": "Current goal."
+        },
+        "open": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048,
+            "pattern": "^[^\\r\\n\\u000b\\u000c\\u001c-\\u001e\\u0085\\u2028\\u2029]+$"
+          },
+          "description": "Open obligations or questions."
+        },
+        "refs": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048,
+            "pattern": "^[^\\r\\n\\u000b\\u000c\\u001c-\\u001e\\u0085\\u2028\\u2029]+$"
+          },
+          "description": "Durable evidence handles."
+        },
+        "conf": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Optional calibrated confidence."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Compact public semantics only. A packet MUST NOT contain private chain-of-thought, hidden-state dumps, rationale transcripts, or scratchpads."
+    }
+  }
+}

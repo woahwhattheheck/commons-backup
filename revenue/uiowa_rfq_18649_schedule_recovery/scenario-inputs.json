@@ -1,0 +1,144 @@
+{
+  "assumption_note": "All delays, rework hours, and internal rates are illustrative scenario inputs, not University observations or commercial commitments. University effort is unpriced.",
+  "rates_usd_per_hour": {
+    "Clark": 100,
+    "TJLabs": 80,
+    "University": null
+  },
+  "scenarios": [
+    {
+      "comment_delay_days": 0,
+      "evidence_delay_days": 0,
+      "extra_hours": {},
+      "id": "baseline",
+      "interview_delay_days": 0,
+      "label": "Source staffing windows, no hypothetical delays"
+    },
+    {
+      "comment_delay_days": 0,
+      "evidence_delay_days": 0,
+      "extra_hours": {
+        "A04": {
+          "Clark": 2,
+          "TJLabs": 4,
+          "University": 1
+        }
+      },
+      "id": "late_interviews",
+      "interview_delay_days": 10,
+      "label": "Interview availability ten workdays later"
+    },
+    {
+      "comment_delay_days": 0,
+      "evidence_delay_days": 10,
+      "extra_hours": {
+        "A03": {
+          "Clark": 4,
+          "TJLabs": 6,
+          "University": 2
+        }
+      },
+      "id": "partial_evidence",
+      "interview_delay_days": 0,
+      "label": "Early tranche usable; complete tranche ten workdays late"
+    },
+    {
+      "comment_delay_days": 10,
+      "evidence_delay_days": 0,
+      "extra_hours": {
+        "A14": {
+          "Clark": 1,
+          "TJLabs": 2,
+          "University": 1
+        }
+      },
+      "id": "delayed_comments",
+      "interview_delay_days": 0,
+      "label": "Consolidated comments ten workdays after review ends"
+    },
+    {
+      "comment_delay_days": 0,
+      "compared_to": "late_interviews",
+      "evidence_delay_days": 0,
+      "extra_hours": {
+        "A04": {
+          "Clark": 2,
+          "TJLabs": 4,
+          "University": 1
+        },
+        "A09": {
+          "Clark": 2,
+          "TJLabs": 4,
+          "University": 0
+        }
+      },
+      "id": "recover_interviews",
+      "interview_delay_days": 10,
+      "label": "Provisional synthesis while the late matrix remains open",
+      "recovery": "rolling_synthesis",
+      "requires": [
+        "Prime confirms sufficient stable evidence for provisional synthesis",
+        "Draft closure still waits for the complete evidence matrix",
+        "Capacity and rework assumptions confirmed; no slots booked"
+      ]
+    },
+    {
+      "comment_delay_days": 0,
+      "compared_to": "partial_evidence",
+      "evidence_delay_days": 10,
+      "extra_hours": {
+        "A03": {
+          "Clark": 4,
+          "TJLabs": 6,
+          "University": 2
+        },
+        "A08": {
+          "Clark": 2,
+          "TJLabs": 4,
+          "University": 0
+        }
+      },
+      "id": "recover_evidence",
+      "interview_delay_days": 0,
+      "label": "Stage matrix from the early evidence tranche; retain completion dependency",
+      "recovery": "rolling_evidence",
+      "requires": [
+        "Early tranche supports useful matrix staging",
+        "All missing evidence stays explicitly open until full delivery",
+        "Prime confirms staged-work/reconciliation capacity",
+        "Two working days of final-tranche reconciliation are sufficient; confirm this estimate before use"
+      ],
+      "post_delivery_days": 2
+    },
+    {
+      "comment_delay_days": 10,
+      "compared_to": "delayed_comments",
+      "evidence_delay_days": 0,
+      "extra_hours": {
+        "A14": {
+          "Clark": 1,
+          "TJLabs": 2,
+          "University": 1
+        }
+      },
+      "id": "recover_comments",
+      "interview_delay_days": 0,
+      "label": "Three-day corrections and QA surge after consolidated comments",
+      "recovery": "review_surge",
+      "requires": [
+        "Three-day corrections and QA staffing expressly confirmed",
+        "All original labor retained; resolve displayed capacity overloads",
+        "No shortening of the consolidated-comment wait or written-acceptance trigger"
+      ],
+      "recovery_window_days": 3
+    },
+    {
+      "comment_delay_days": 0,
+      "evidence_delay_days": null,
+      "extra_hours": {},
+      "id": "unknown_evidence",
+      "interview_delay_days": 0,
+      "label": "Complete-tranche timing remains unknown"
+    }
+  ]
+}

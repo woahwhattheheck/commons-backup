@@ -1,0 +1,45 @@
+{
+  "schema_version": "tjlabs-partner-workshare-data-room/v1",
+  "evaluation_at_utc": "2026-09-17T18:00:00Z",
+  "opportunity": {
+    "id": "demo-rfp-001",
+    "title": "Synthetic ERP evidence workshare",
+    "buyer": "Example Buyer",
+    "source_generation": "buyer-addendum-2",
+    "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "deadline_utc": "2026-10-14T21:00:00Z"
+  },
+  "parties": [
+    {"id": "primeco", "display_name": "PrimeCo", "role": "PRIME", "evidence_refs": ["ev-prime"]},
+    {"id": "tjlabs", "display_name": "TokenJunkieLabs", "role": "SPECIALIST", "evidence_refs": ["ev-cap"]}
+  ],
+  "evidence": [
+    {"id": "ev-buyer", "kind": "BUYER_SCOPE", "subject": "demo-rfp-001", "source_uri": "https://example.gov/rfp", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "observed_at_utc": "2026-09-17T16:00:00Z", "expires_at_utc": null, "authority": "BUYER_OFFICIAL", "summary": "Synthetic buyer scope receipt."},
+    {"id": "ev-prime", "kind": "PARTNER_IDENTITY", "subject": "primeco", "source_uri": "https://prime.example/about", "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "observed_at_utc": "2026-09-17T16:00:00Z", "expires_at_utc": null, "authority": "PARTNER_OFFICIAL", "summary": "Synthetic prime identity evidence."},
+    {"id": "ev-cap", "kind": "CAPABILITY_PROOF", "subject": "tjlabs", "source_uri": "https://github.com/woahwhattheheck/commons", "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "observed_at_utc": "2026-09-17T16:00:00Z", "expires_at_utc": null, "authority": "OWNER_VERIFIED", "summary": "Synthetic retained technical capability proof."},
+    {"id": "ev-price", "kind": "OWNER_PRICING_AUTHORITY", "subject": "tjlabs", "source_uri": "https://github.com/woahwhattheheck/commons", "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "observed_at_utc": "2026-09-17T16:00:00Z", "expires_at_utc": "2026-09-30T00:00:00Z", "authority": "OWNER_VERIFIED", "summary": "Synthetic owner-approved proposed price basis."},
+    {"id": "ev-sec", "kind": "ACCESS_BOUNDARY", "subject": "tjlabs", "source_uri": "https://github.com/woahwhattheheck/commons", "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "observed_at_utc": "2026-09-17T16:00:00Z", "expires_at_utc": null, "authority": "OWNER_VERIFIED", "summary": "Synthetic read-only data-access boundary."}
+  ],
+  "claims": [
+    {"id": "claim-cap", "subject": "tjlabs", "kind": "CAPABILITY", "statement": "Can deliver deterministic reconciliation and acceptance evidence tooling.", "state": "SUPPORTED", "evidence_refs": ["ev-cap"]},
+    {"id": "claim-scope", "subject": "demo-rfp-001", "kind": "SCOPE", "statement": "Buyer scope includes migration and acceptance evidence.", "state": "SUPPORTED", "evidence_refs": ["ev-buyer"]}
+  ],
+  "capability_slices": [
+    {"id": "slice-reconcile", "title": "Migration reconciliation and acceptance evidence", "owner_party_id": "tjlabs", "claim_ids": ["claim-cap", "claim-scope"], "evidence_refs": ["ev-cap", "ev-buyer"], "deliverables": ["Deterministic reconciliation ledger", "Requirement-to-test acceptance matrix"], "acceptance_criteria": ["All source records bind exact digests", "Every unresolved mismatch is explicit"]}
+  ],
+  "workshare": [
+    {"id": "ws-reconcile", "capability_id": "slice-reconcile", "owner_party_id": "tjlabs", "status": "PROPOSED_NOT_ACCEPTED", "dependencies": ["Prime supplies approved source extracts", "Prime retains buyer communication authority"]}
+  ],
+  "exclusions": ["No authoritative ERP product representation", "No buyer submission authority", "No production mutation"],
+  "assumptions": [
+    {"id": "assumption-source", "text": "Prime supplies approved source extracts.", "required_for_ready": true, "evidence_refs": ["ev-prime"]}
+  ],
+  "security_access": [
+    {"id": "access-readonly", "requirement": "Read-only bounded source extracts; no production credentials.", "state": "PROVEN", "evidence_refs": ["ev-sec"]}
+  ],
+  "pricing_basis": {"status": "PROPOSED_NOT_ACCEPTED", "currency": "USD", "amount_minor": 2800000, "basis": "$28,000 fixed specialist workshare; acceptance remains separate.", "evidence_refs": ["ev-price"]},
+  "acceptance_questions": [
+    {"id": "q-inputs", "question": "Which source extracts are approved for specialist delivery?", "owner": "Prime"},
+    {"id": "q-signoff", "question": "Who signs off the specialist acceptance matrix?", "owner": "Prime"}
+  ]
+}

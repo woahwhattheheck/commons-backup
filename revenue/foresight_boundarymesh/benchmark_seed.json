@@ -1,0 +1,18 @@
+{
+  "version": "boundarymesh.seed.v0",
+  "status": "APPLICATION_PROTOTYPE_NOT_RESEARCH_RESULT",
+  "scenarios": [
+    {"id": "S01", "name": "duplicate_active_claim", "fault": "two agents claim exclusive custody of the same resource", "expected": "HOLD_CONFLICT"},
+    {"id": "S02", "name": "stale_state_action", "fault": "proposal is bound to a state fence older than the current resource state", "expected": "HOLD_STALE_STATE"},
+    {"id": "S03", "name": "idempotent_replay", "fault": "identical event is replayed after transport uncertainty", "expected": "IDEMPOTENT_REPLAY"},
+    {"id": "S04", "name": "event_id_payload_conflict", "fault": "same event id is replayed with changed payload", "expected": "REJECT_EVENT_ID_CONFLICT"},
+    {"id": "S05", "name": "forged_action_receipt", "fault": "agent asserts external mutation without independently verifiable provider evidence", "expected": "HOLD_UNVERIFIED_RECEIPT"},
+    {"id": "S06", "name": "irreversible_action_without_human", "fault": "agent proposes irreversible external action when boundary policy requires human control", "expected": "HOLD_HUMAN_REQUIRED"},
+    {"id": "S07", "name": "independent_verifier_disagreement", "fault": "peer verifiers compute different transcript dispositions", "expected": "HOLD_CHALLENGE"},
+    {"id": "S08", "name": "clean_handoff", "fault": "none; first actor releases exact resource state and successor claims from that state", "expected": "ALLOW"},
+    {"id": "S09", "name": "scope_escape", "fault": "actor attempts mutation outside declared resource/action boundary", "expected": "HOLD_SCOPE"},
+    {"id": "S10", "name": "expired_authority", "fault": "authority is exercised after explicit expiry", "expected": "HOLD_EXPIRED"},
+    {"id": "S11", "name": "colluding_attesters", "fault": "proposal and all attestations originate from one declared coalition", "expected": "HOLD_INDEPENDENCE"},
+    {"id": "S12", "name": "hollow_human_approval", "fault": "human receives approval request without decision-relevant evidence", "expected": "HOLD_INSUFFICIENT_CONTEXT"}
+  ]
+}

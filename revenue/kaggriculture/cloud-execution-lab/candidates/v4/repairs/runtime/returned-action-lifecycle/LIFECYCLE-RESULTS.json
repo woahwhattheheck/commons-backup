@@ -1,0 +1,154 @@
+{
+  "schema": "titan.return-lifecycle.acceptance/v1",
+  "owner": "ASTRA-RETURN-LIFECYCLE",
+  "canonical": "main:revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/runtime/returned-action-lifecycle",
+  "status": "SOURCE_AND_COMPONENT_ACCEPTED_NOT_PRODUCTION_PROMOTED",
+  "python": "3.13.5",
+  "input_pins": {
+    "titan_runtime.py": {
+      "git_blob": "b952c9c228ecbde592bf3d2df01638677abb0d24",
+      "sha256": "da391af2dbdec0f6e4a25749ed539cdd39578ace8861c0e225b5fbfef90d75a8",
+      "bytes": 33885
+    },
+    "integrated_selected.py": {
+      "git_blob": "defa9b84c77fff28ae107bce291b6235bec5d26c",
+      "sha256": "e16702fd388c2ae0ead9bb59a078e0099e0c149cc39002703b3b7988bb061bd8",
+      "bytes": 12860
+    },
+    "deadline_adapter.py": {
+      "git_blob": "664aa4f8a21368c388dfa6714406519b6535ef7f",
+      "sha256": "7f70a25dfb703f50aa83cd281a9722d575571da1073e605c5927fc35453ab486",
+      "bytes": 15458
+    },
+    "official_engine.py": {
+      "git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+      "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "bytes": 40356
+    }
+  },
+  "code_pins": {
+    "repair_return_lifecycle.py": {
+      "git_blob": "e127232a9f6dad4a356158c1b82bd894f0fc9004",
+      "sha256": "4550ec23fbd11c528c718f1dc908e944deaa04d50104c9582f06f4b255e5b7a0",
+      "bytes": 9041
+    },
+    "test_return_lifecycle.py": {
+      "git_blob": "50e4d55cbb7fc572154614b0b9a03f8d957e4134",
+      "sha256": "74d39a5289b61b16dcd6e52fb6e450a4ed599397ab222e6b7116b227c01454aa",
+      "bytes": 25543
+    },
+    "check_lifecycle_mutants.py": {
+      "git_blob": "3b033886bf9e8819aed779edd6f6a6cd76daa4da",
+      "sha256": "375e8f32fec96e3f19bca63d297729171953bb757b17910da674e6a985c30549",
+      "bytes": 4918
+    }
+  },
+  "output_pins": {
+    "titan_runtime.py": {
+      "git_blob": "863a36442bd0f2b475db4c2647a27daf933bba83",
+      "sha256": "f354f679217794a0d264670f6e8f5640a8ce4389863efaa5f52a743f5d115d02",
+      "bytes": 34848
+    },
+    "integrated_selected.py": {
+      "git_blob": "53a610f9abaab64690d7a555bf283b87aa282e51",
+      "sha256": "f0b4a9b2ae76f2bb5f6f343f4275c444b8f22aca71ad30ba2f5d6f823a07789d",
+      "bytes": 13986
+    }
+  },
+  "local_validation": {
+    "normal": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "official_interpreter_callbacks": 36,
+      "behavioral_mutants_rejected": 10
+    },
+    "optimized": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "official_interpreter_callbacks": 36,
+      "behavioral_mutants_rejected": 10
+    },
+    "mutant_names": [
+      "retain_prior_packet",
+      "remove_step_seat_check",
+      "remove_returned_units_check",
+      "alias_binding_to_caller",
+      "wrong_ready_gate",
+      "premature_initialization_latch",
+      "history_without_returned_binding",
+      "accept_seed_callback_unit_rewrite",
+      "omit_early_ordered_invalidation",
+      "discard_every_current_packet"
+    ],
+    "mutant_rule": "One named behavior test per mutant; exactly one assertion failure and zero errors. Hash/AST tests are not used to kill mutants."
+  },
+  "independent_validation": {
+    "contributor": "ASTRA-COLDSTART",
+    "receipt_path": "COLD-START-ACCEPTANCE.json",
+    "receipt_blob": "bf410cbea7ade23ad94811f28ef66730503f04de",
+    "test_blob": "4b07d5a30b5d1d085e6d40de69e7253d1263a9a5",
+    "scope": "Actual owner-composed runtime863a3644; economic/planner collaborators doubled in this cold-specific suite.",
+    "normal_tests": 19,
+    "optimized_tests": 19,
+    "initialization_line_cuts_per_mode": 244,
+    "real_signal_and_worker_cancellation": true
+  },
+  "critical_witness": {
+    "seats": [
+      0,
+      1
+    ],
+    "incoming_milk_shed": 2,
+    "incoming_milk_carried": 3,
+    "selected_unit": "DROP",
+    "actual_returned_unit": "PASS",
+    "predecessor_postimage_milk": 5,
+    "official_returned_action_milk": 2,
+    "repaired_postimage": null,
+    "description": "Real IntegratedSelectedAgent/SELL fallback under infeasible cash reservation; reject DROP snapshot for returned PASS. API/contract discriminator, not a hosted incident or economic improvement."
+  },
+  "reproduction": {
+    "dependency_artifact_id": 10285621024,
+    "dependency_subdirectory": "seed-retry-runtime",
+    "runtime_env": "TITAN_RUNTIME_SOURCE points to exact b952 file, not the older a10 file inside artifact.",
+    "package_env": "TITAN_PACKAGE_ROOT points to complete dependency package.",
+    "commands": [
+      "python test_return_lifecycle.py",
+      "python -O test_return_lifecycle.py",
+      "python check_lifecycle_mutants.py",
+      "python -O check_lifecycle_mutants.py"
+    ]
+  },
+  "log_hashes": {
+    "normal.log": {
+      "git_blob": "32f890e2bb3d01248332a4ad4692598a8c88c1cd",
+      "sha256": "dbaf818fb7247aac9f6af14943e5bc59a75d0236eb9a96c71726dcecca4d49de",
+      "bytes": 4388
+    },
+    "optimized.log": {
+      "git_blob": "104d6e6dfb020b860ab7799741f828bd3df69e32",
+      "sha256": "0623e07698982e6445b638154f3de7d77e45b476a7f2f7a2285960439160a2a9",
+      "bytes": 4388
+    },
+    "mutations-normal.log": {
+      "git_blob": "c931e327694e48f497ac2ec1f0a48cbf6ba45e78",
+      "sha256": "8dea97b31f13d3926e03eb251d0d0cf6f3169eefc9f7614a4078673822a18815",
+      "bytes": 1928
+    },
+    "mutations-optimized.log": {
+      "git_blob": "cefa24b062455dfd3d6a3a857b178428eeeb5426",
+      "sha256": "a0e82dda67d8fd2da6769d2743883c75264b1984eb08585a86ec0dca2062c974",
+      "bytes": 1927
+    }
+  },
+  "limits": [
+    "Complete current runtime class and current integrated consumer were executed, not a complete current production package or whole games.",
+    "Consumer tests use actual projection, seller and official interpreter with synthetic observations and injected route tape; runtime stage fault tests use controlled collaborators.",
+    "Dependency package contains older unrelated collaborators; this is not a claim that the entire artifact is current main.",
+    "No win-rate, final margin, leaderboard or economic benefit measured.",
+    "Python 3.11 and Kaggle runner were not tested.",
+    "No root production source, feature defaults, release archive or Kaggle submission changed."
+  ]
+}

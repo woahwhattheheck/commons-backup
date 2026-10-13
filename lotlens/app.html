@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow">
+<title>LotLens — impact report viewer</title>
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;background:#fafaf7;color:#111;line-height:1.45}
+header{padding:1rem 1.25rem;border-bottom:1px solid #ddd;background:#fff}
+h1{font-size:1.4rem;margin:0 0 .25rem}
+main{padding:1rem 1.25rem;max-width:80rem;margin:0 auto}
+.row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin:.5rem 0}
+.chip{display:inline-block;padding:.1rem .5rem;border-radius:.6rem;font-size:.8rem;border:1px solid #999}
+.KNOWN_AFFECTED{background:#ffe7e0;border-color:#c33}
+.POTENTIALLY_AFFECTED{background:#fff5d6;border-color:#b80}
+.gap{background:#eef;border-color:#55a}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border-bottom:1px solid #e3e3df;padding:.35rem .5rem;text-align:left;vertical-align:top}
+tr.item{cursor:pointer}
+tr.item:hover{background:#f2f2ee}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em}
+#detail{border:1px solid #ddd;background:#fff;padding:.75rem 1rem;margin-top:1rem;white-space:normal}
+textarea{width:100%;min-height:4rem}
+.muted{color:#555}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem}
+.grid>div{min-width:0}
+.table-scroll{max-width:100%;overflow:auto}
+#summary,#detail,#unresolved,#gaps,#contradictions,#cycles,#notes,#annotations{overflow-wrap:anywhere}
+textarea{box-sizing:border-box}
+@media(min-width:60rem){.grid{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}}
+button{padding:.3rem .7rem}
+button.inspect-item{padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;text-decoration:underline;text-underline-offset:.15em}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.table-scroll:focus-visible,#detail:focus-visible{outline:3px solid #075985;outline-offset:3px}
+.pathline{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;margin:.2rem 0}
+</style>
+</head>
+<body>
+<header>
+<h1>LotLens — impact report viewer</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+
+<p id="live-cash" class="note"><strong>Live cash</strong> — <a href="../dealer-service-lead-rescue.html">$199 dealer</a> · <a href="../referral-intake-completeness.html">$199 referral</a> · <a href="../repair-booking-preflight.html">$199 repair</a> · <a href="../plant-downtime-handoff.html">$199 plant</a>.</p>
+
+<p class="muted">Load a <code>report.json</code> written by <code>lotlens.py impact --out</code>. This page reads the file you give it and nothing else: no network, no third-party script, no storage beyond this tab.</p>
+<div class="row">
+<input id="file" type="file" accept="application/json">
+<label>filter status <select id="status"><option value="">all</option><option>KNOWN_AFFECTED</option><option>POTENTIALLY_AFFECTED</option></select></label>
+<label>filter kind <select id="kind"><option value="">all</option><option>lot</option><option>batch</option><option>package</option><option>shipment</option></select></label>
+<label>search <input id="search" placeholder="id or namespace"></label>
+<button id="download" disabled>download my notes as annotations.json</button>
+</div>
+</header>
+<main>
+<div id="summary" class="muted">no report loaded</div>
+<div class="grid">
+<div>
+<div class="table-scroll" role="region" aria-label="Affected items and evidence paths" tabindex="0"><table id="items"><thead><tr><th>status</th><th>item</th><th>kind</th><th>what</th><th>hops</th><th>via</th></tr></thead><tbody></tbody></table></div>
+<h3>Unresolved</h3><ul id="unresolved"></ul>
+<h3>Coverage gaps</h3><ul id="gaps"></ul>
+<h3>Contradictions</h3><ul id="contradictions"></ul>
+<h3>Cycles</h3><ul id="cycles"></ul>
+</div>
+<div>
+<div id="detail" role="region" aria-label="Selected item evidence path" tabindex="-1"><em>activate an item for its evidence path</em></div>
+<h3>My notes (this tab only until downloaded)</h3>
+<p class="muted">Notes are yours, kept apart from the observations. Download them and apply with <code>lotlens.py annotate</code>; the engine records revisions.</p>
+<textarea id="note" placeholder="note about the selected item"></textarea>
+<div class="row"><button id="addnote" disabled>add note for selected item</button></div>
+<ul id="notes"></ul>
+<h3>Existing annotations in the report</h3>
+<ul id="annotations"></ul>
+</div>
+</div>
+</main>
+<script>
+(function(){
+  var report=null, selected=null, notes=[];
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function srcs(list){return (list||[]).map(function(s){return esc(s.file)+":"+esc(s.line)+"@"+esc(String(s.version).slice(0,8));}).join("; ");}
+  function nodeDetail(kind, attrs){
+    attrs=attrs||{};
+    if(kind==="lot"){
+      return [attrs.material, attrs.supplier].filter(function(v){return v;}).join(" ");
+    }
+    if(kind==="batch"||kind==="package"){return String(attrs.product||"");}
+    if(kind==="shipment"){return String(attrs.customer||"");}
+    return "";
+  }
+  function pathSummaryLines(path){
+    return (path||[]).map(function(e){
+      if(typeof e==="string") return e; /* a report printed with --paths summary already carries the line */
+      var rows=(e.sources||[]).map(function(s){return s.file+":"+s.line+"@"+String(s.version).slice(0,8);}).join(", ");
+      var flag=e.status==="potential"?"*":"";
+      return e.from+" -"+e.relation+flag+"-> "+e.to+" ("+(rows||"no row")+")";
+    });
+  }
+  function factLine(f){return "<li><code>"+esc(f.code)+"</code> on "+(f.nodes||[]).map(function(n){return "<code>"+esc(n)+"</code>";}).join(", ")+" — "+esc(JSON.stringify(f.detail||{}))+" <span class=muted>"+srcs(f.sources)+"</span></li>";}
+  function render(){
+    if(!report){return;}
+    var imp=report.impact, q=imp.query;
+    $("summary").innerHTML="<b>"+esc(q.start)+"</b> "+esc(q.direction)+" · assumptions: "+(q.assumptions&&q.assumptions.length?esc(q.assumptions.join(", ")):"none")+" · imports: "+(report.imports||[]).map(function(i){return "<code>"+esc(i.version)+"</code>"+(i.label?" ("+esc(i.label)+")":"");}).join(", ")+" · generated "+esc(report.generated_at)+" · sha256 <code>"+esc(String(report.content_sha256).slice(0,16))+"…</code>"+(imp.counts?"<br>"+imp.counts.KNOWN_AFFECTED+" known · "+imp.counts.POTENTIALLY_AFFECTED+" potential · "+imp.counts.unresolved+" unresolved · "+imp.counts.coverage_gaps+" gaps · "+imp.counts.contradictions+" contradictions":"")+"<br><span class=muted>"+esc(imp.note||"")+"</span>";
+    var st=$("status").value, kd=$("kind").value, se=$("search").value.toLowerCase();
+    var body=$("items").querySelector("tbody"); body.innerHTML="";
+    (imp.affected||[]).forEach(function(a,i){
+      if(st&&a.status!==st)return; if(kd&&a.kind!==kd)return; if(se&&a.key.toLowerCase().indexOf(se)<0)return;
+      var what=nodeDetail(a.kind, a.attrs);
+      var via=pathSummaryLines(a.path).map(esc).join("<br>") || (a.path||[]).map(function(e){return esc(e.relation)+(e.status==="potential"?"*":"");}).join(" → ");
+      var tr=document.createElement("tr"); tr.className="item"; tr.dataset.index=i;
+      tr.innerHTML="<td><span class='chip "+esc(a.status)+"'>"+esc(a.status)+"</span></td><td><button class='inspect-item' type='button' aria-controls='detail'><code>"+esc(a.key)+"</code></button></td><td>"+esc(a.kind)+"</td><td>"+esc(what)+"</td><td>"+a.hops+"</td><td>"+via+"</td>";
+      tr.addEventListener("click",function(event){select(a);if(event.detail===0)$("detail").focus();});
+      body.appendChild(tr);
+    });
+    $("unresolved").innerHTML=(imp.unresolved||[]).map(factLine).join("")||"<li class=muted>none recorded</li>";
+    $("gaps").innerHTML=(imp.coverage_gaps||[]).map(factLine).join("")||"<li class=muted>none recorded</li>";
+    $("contradictions").innerHTML=(imp.contradictions||[]).map(factLine).join("")||"<li class=muted>none recorded</li>";
+    $("cycles").innerHTML=(imp.cycles||[]).map(factLine).join("")||"<li class=muted>none recorded</li>";
+    $("annotations").innerHTML=(report.annotations||[]).map(function(a){return "<li><code>"+esc(a.target)+"</code> r"+a.revision+" "+(a.current?"":"<span class=muted>(superseded)</span> ")+esc(a.text)+" <span class=muted>"+esc(a.investigator||"unsigned")+" "+esc(a.at)+"</span></li>";}).join("")||"<li class=muted>none</li>";
+  }
+  function select(a){
+    selected=a; $("addnote").disabled=false;
+    var what=nodeDetail(a.kind, a.attrs);
+    var html="<b><code>"+esc(a.key)+"</code></b> <span class='chip "+esc(a.status)+"'>"+esc(a.status)+"</span>";
+    if(what){html+=" <span class=muted>"+esc(what)+"</span>";}
+    html+="<br><span class=muted>"+esc(JSON.stringify(a.attrs||{}))+"</span><div class=pathlines>";
+    pathSummaryLines(a.path).forEach(function(line){html+="<p class=pathline>"+esc(line)+"</p>";});
+    html+="</div>"; if(a.assumptions_on_path&&a.assumptions_on_path.length){html+="<p>Only under: "+esc(a.assumptions_on_path.join(", "))+"</p>";}
+    $("detail").innerHTML=html;
+  }
+  function renderNotes(){$("notes").innerHTML=notes.map(function(n){return "<li><code>"+esc(n.target)+"</code>: "+esc(n.text)+"</li>";}).join("")||"<li class=muted>none yet</li>"; $("download").disabled=!notes.length;}
+  $("file").addEventListener("change",function(ev){var f=ev.target.files[0]; if(!f)return; var r=new FileReader(); r.onload=function(){try{report=JSON.parse(r.result);}catch(e){$("summary").textContent="not a JSON report: "+e.message;return;} if(!report.impact){$("summary").textContent="this JSON has no impact block";return;} selected=null; $("detail").innerHTML="<em>activate an item for its evidence path</em>"; render();}; r.readAsText(f);});
+  ["status","kind"].forEach(function(id){$(id).addEventListener("change",render);}); $("search").addEventListener("input",render);
+  $("addnote").addEventListener("click",function(){var t=$("note").value.trim(); if(!t||!selected)return; notes.push({target:selected.key,text:t}); $("note").value=""; renderNotes();});
+  $("download").addEventListener("click",function(){var blob=new Blob([JSON.stringify({schema:"commons-lotlens/v1/notes",notes:notes},null,2)],{type:"application/json"}); var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="annotations.json"; a.click();});
+  renderNotes();
+})();
+</script>
+</body>
+</html>

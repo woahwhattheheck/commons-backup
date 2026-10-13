@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conversation Desk · Your words, considered</title>
+<style>
+:root{color-scheme:light;--ink:#203b39;--muted:#576660;--paper:#f6f3eb;--card:#fffdf8;--line:#d7ddd3;--accent:#285c50;--warm:#b34d2d}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,sans-serif}button,input,select,textarea{font:inherit}button,a{touch-action:manipulation}button{border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);padding:.65rem .9rem;cursor:pointer}button:hover{border-color:var(--accent)}button:disabled{opacity:.55;cursor:wait}button.primary{background:var(--accent);border-color:var(--accent);color:white}button.danger{color:#942d29}a{color:var(--accent)}:focus-visible{outline:3px solid #d69d48;outline-offset:3px}header{max-width:1450px;margin:auto;padding:2rem 2rem 1.2rem;display:flex;justify-content:space-between;gap:2rem;align-items:center}h1{font:600 clamp(1.7rem,3vw,2.7rem)/1.2 Georgia,serif;margin:.3rem 0}.eyebrow{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-weight:750;color:var(--accent)}.tag{font-size:.82rem;border:1px solid var(--line);padding:.4rem .7rem;border-radius:20px;white-space:nowrap}.layout{max-width:1450px;margin:auto;padding:0 2rem 2rem;display:grid;grid-template-columns:250px minmax(0,1fr);gap:1.4rem}.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.3rem;min-width:0}.sidebar{align-self:start}.sidebar h2{font-size:1rem;margin-top:0}.sidebar ul{padding:0;list-style:none;margin:1rem 0}.sidebar li{margin:.45rem 0}.conversation{width:100%;text-align:left;overflow-wrap:anywhere}.conversation.selected{border-color:var(--accent);background:#e5eee5}.conversation small{display:block;color:var(--muted)}.stack{display:grid;gap:.8rem}.row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}.between{justify-content:space-between}.muted,small{color:var(--muted)}small{font-size:.83rem}.note{border-left:3px solid #c99b52;padding:.55rem .8rem;background:#fcf5e6;font-size:.9rem}.status{max-width:1386px;margin:.1rem auto 1.1rem;padding:.7rem 1rem;min-height:3rem;border-radius:8px;background:#e5eee5;overflow-wrap:anywhere}.status.error{background:#fae8df;color:#792a1c}.workspace{display:grid;gap:1.2rem}h2{font-size:1.2rem;margin:.1rem 0 .8rem}h3{font-size:1rem;margin:.2rem 0 .6rem}p{margin:.5rem 0 1rem}label{display:block;font-size:.9rem;font-weight:650;margin-bottom:.65rem}input,textarea,select{display:block;width:100%;background:white;border:1px solid #b9c7bd;border-radius:7px;padding:.65rem;color:var(--ink);margin-top:.35rem}textarea{resize:vertical;min-height:6rem}textarea.tall{min-height:11rem}.columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.2rem}.step{font-weight:700;color:var(--warm);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em}.image-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem}.image-card{padding:.7rem;border:1px solid var(--line);border-radius:9px;min-width:0}.image-card img{display:block;width:100%;height:150px;object-fit:contain;background:#eee;cursor:zoom-in}.image-card .name{font-size:.8rem;overflow-wrap:anywhere;margin:.5rem 0}.image-card button{font-size:.8rem;padding:.4rem .55rem}.candidates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}.candidate{border:1px solid var(--line);border-radius:9px;padding:1rem;display:flex;flex-direction:column;gap:.6rem;min-width:0}.candidate p{white-space:pre-wrap;overflow-wrap:anywhere;flex:1}.candidate button{margin-top:auto}.footer{font-size:.8rem;margin:1rem 0;color:var(--muted)}[hidden]{display:none!important}.empty{padding:3rem 2rem;text-align:center}.export{display:inline-block;margin:.6rem 0}.preview{white-space:pre-wrap;overflow-wrap:anywhere}#revision{font-size:.8rem;color:var(--muted)}#draft{min-height:8rem}#dirty{color:var(--warm);font-size:.83rem}@media(max-width:1050px){.candidates{grid-template-columns:1fr}.columns{grid-template-columns:1fr}.layout{grid-template-columns:220px minmax(0,1fr)}}@media(max-width:700px){header{padding:1.2rem 1rem;align-items:flex-start;gap:.7rem;flex-direction:column}.layout{padding:0 1rem 1.5rem;grid-template-columns:1fr}.panel{padding:1rem}.sidebar ul{max-height:180px;overflow:auto}.status{margin:.2rem 1rem 1rem}.row button{flex-grow:1}.empty{padding:2rem 1rem}}
+</style>
+<script src="desk.js" defer></script>
+</head>
+<body>
+<header><div><span class="eyebrow">A little space before you reply</span><h1>Conversation Desk</h1>
+<section id="titanmcp-pad-pointer" class="law" aria-label="titanmcp contest pad">
+  <strong>titanmcp pad (contest):</strong> <a href="https://webmcp-pad.vercel.app/">webmcp-pad.vercel.app</a> — <code>titanmcp 1.4.5</code> · 24 tools · Agent Resources · <a href="../../../titanmcp.html">titanmcp.html</a>. Commons Shared Pad / <code>/mcp</code> KEEP separate.
+</section>
+<p class="muted">Your words, considered. Choose a tone—not a different personality.</p></div><span class="tag">Local workspace · Nothing sends automatically</span></header>
+<div id="status" class="status" role="status" aria-live="polite">Opening your workspace…</div>
+<div class="layout">
+<aside class="panel sidebar">
+<h2>Your conversations</h2>
+<div class="stack"><button id="new" class="primary">New conversation</button><button id="sample">Try a fictional example</button></div>
+<ul id="conversations" aria-label="Saved conversations"></ul>
+<a class="export" href="api/export" download="conversation-desk-export.json">Export saved workspace</a>
+<p><small>The export includes private text and original screenshots. Unsaved edits are not included.</small></p>
+<button id="erase" class="danger">Erase all saved data</button>
+<div class="footer">No account, telemetry or external model calls. Anyone who can reach this running server shares the workspace. Keep it on your own trusted device.</div>
+</aside>
+<main>
+<div id="empty" class="panel empty"><span class="eyebrow">Start with what was actually said</span><h2>A reply is still yours to choose.</h2><p>Paste a conversation or add a screenshot, correct the transcript, then write the point you want to make.</p><p class="muted">This version uses local templates, not a language model or inferred personal facts.</p></div>
+<form id="editor" class="workspace" hidden>
+<section class="panel">
+<div class="row between"><span class="step">01 · Keep the context</span><div><span id="revision"></span> <span id="dirty"></span></div></div>
+<label>Conversation title<input id="title" maxlength="120" required autocomplete="off"></label>
+<div class="columns"><div><label>Transcript · paste text or correct your transcription<textarea id="transcript" class="tall" maxlength="30000" placeholder="Them: …&#10;Me: …"></textarea></label><small>Names, claims and OCR mistakes stay editable. No text is assumed to be correct.</small></div><div><label>Your private context notes<textarea id="context" class="tall" maxlength="10000" placeholder="What matters here? What should this reply avoid?"></textarea></label><small>Notes stay beside the draft for your review. They are not automatically turned into claims.</small></div></div>
+<details><summary>Screenshot intake and local transcription</summary>
+<p id="ocr-capability" class="muted"></p>
+<label>Add PNG, JPEG or WebP · up to 6 MiB<input id="image-file" type="file" accept="image/png,image/jpeg,image/webp"></label>
+<button id="upload" type="button">Save screenshot</button>
+<div id="images" class="image-list"></div>
+<div id="ocr-editor" hidden><label>Review and correct extracted text<textarea id="ocr-text" maxlength="30000"></textarea></label><button id="apply-ocr" type="button">Append corrected text to transcript</button><p><small>Transcription never replaces your transcript automatically. Save after applying corrections. Removing an image does not erase text already copied from it.</small></p></div>
+</details>
+</section>
+<section class="panel">
+<span class="step">02 · Say what you mean</span><h2>Your point first, tone second</h2>
+<div class="columns"><label>What are you trying to do?<select id="intent"><option value="respond">Respond to their message</option><option value="follow_up">Ask a follow-up</option><option value="invite">Suggest meeting up</option><option value="boundary">Set a boundary</option><option value="close">Close the conversation kindly</option></select></label><label>A question to ask · optional except for follow-ups<input id="question" maxlength="1000" placeholder="Which trail would you recommend?"></label></div>
+<label>The point or proposal you want to communicate<textarea id="reply" maxlength="4000" placeholder="I prefer an easy walk, and Saturday afternoon works for me."></textarea></label>
+<p class="note">The three options use your supplied words with different framing. They do not infer interests, feelings, availability or consent from the transcript. Read each one before using it.</p>
+<button id="generate" type="button" class="primary">Save and draft three options</button>
+<div id="candidates" class="candidates"></div>
+</section>
+<section class="panel">
+<span class="step">03 · Make it yours</span><h2>Edit your chosen reply</h2>
+<label>Your draft<textarea id="draft" maxlength="6000" placeholder="Choose an option above, or write your own."></textarea></label>
+<div class="row"><button class="primary" type="submit" id="save">Save conversation</button><button type="button" id="copy">Copy draft</button><button type="button" id="reload">Reload saved version</button><button type="button" id="delete" class="danger">Delete this conversation</button></div>
+<small>Copying does not send anything. Saved drafts survive a server restart; messages are sent only by you in your own app.</small>
+</section>
+</form>
+</main>
+</div>
+</body></html>

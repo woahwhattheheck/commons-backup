@@ -1,0 +1,40 @@
+name: titan-v5-v4-added-features-factorial
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial/**"
+      - ".github/workflows/titan-v5-v4-added-features-factorial.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-contract:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - name: Checkout exact carrier head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact carrier head
+        env:
+          EXPECTED_HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial
+        run: python -B -m py_compile paired.py test_paired.py feedstock_fourflag_cross.py test_feedstock_fourflag_cross.py
+      - name: Unit contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial
+        run: python -B -m unittest -v test_paired.py test_feedstock_fourflag_cross.py
+      - name: Unit contracts under optimized Python
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/v4-added-features-factorial
+        run: python -O -B -m unittest -v test_paired.py test_feedstock_fourflag_cross.py

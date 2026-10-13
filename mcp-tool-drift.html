@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Compare two MCP tools/list snapshots and catch silent name, description, or schema drift before it breaks production agents.">
+<title>MCP Tool Drift Watch</title>
+<style>
+:root{color-scheme:dark;--bg:#090b10;--panel:#111722;--ink:#edf2f7;--muted:#9aa9bc;--line:#2a3546;--hot:#ff6b6b;--ok:#55d98d;--accent:#86a7ff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#080a0f,#101827);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
+main{width:min(1080px,calc(100% - 32px));margin:48px auto 72px}h1{font-size:clamp(2rem,6vw,4.6rem);line-height:.98;max-width:900px;margin:.25em 0}
+.eyebrow{color:var(--accent);font:700 .78rem/1.2 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase}
+.lede{max-width:760px;color:var(--muted);font-size:1.12rem}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
+section,.result{background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:16px;padding:18px}
+label{display:block;font-weight:700;margin-bottom:8px}textarea{width:100%;min-height:300px;resize:vertical;border:1px solid var(--line);border-radius:10px;background:#080c13;color:#dfe8f5;padding:14px;font:13px/1.45 ui-monospace,monospace}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}button,.cta{border:0;border-radius:999px;padding:11px 16px;font:700 .9rem/1 system-ui,sans-serif;cursor:pointer;text-decoration:none}
+button.primary{background:var(--accent);color:#08101f}button.secondary,.cta{background:#1c2635;color:var(--ink);border:1px solid var(--line)}
+.result{min-height:150px}.status{display:inline-block;border-radius:999px;padding:5px 10px;font:800 .75rem/1 ui-monospace,monospace;letter-spacing:.08em}
+.changed{background:#461f25;color:#ffb4b4}.clean{background:#153c2a;color:#9af1be}.error{background:#4b3215;color:#ffd190}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#cbd7e6;font:13px/1.5 ui-monospace,monospace;margin-bottom:0}
+.privacy{color:var(--muted);font-size:.88rem}.offer{margin-top:28px;border-left:3px solid var(--accent);padding-left:18px}.offer p{color:var(--muted);max-width:760px}
+.law{margin:16px 0 18px;background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:16px;padding:18px}
+.nav{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:0 0 16px}
+.note{color:var(--muted);font-size:.88rem;max-width:760px}
+#buy-now-live-checkout .cta{display:inline-block;background:#edf2f7;color:#08101f!important;border-radius:8px;padding:.75rem 1rem;font-weight:800;margin:.4rem .5rem .4rem 0}
+code{font-family:ui-monospace,monospace;color:#c7d5ff}@media(max-width:760px){.grid{grid-template-columns:1fr}main{margin-top:28px}}
+</style>
+</head>
+<body>
+<main>
+  <p class="nav"><a class="cta" href="./index.html">← Commons</a></p>
+
+  <p class="eyebrow">Production ops · free local proof</p>
+  <h1>Catch silent tool changes before your agents break.</h1>
+
+
+  <p class="lede">Paste an approved and an observed MCP <code>tools/list</code> response. This page flags added, removed, renamed, re-described, and re-shaped tools entirely in your browser.</p>
+  <div class="grid">
+    <section><label for="before">Approved snapshot</label><textarea id="before" spellcheck="false" aria-label="Approved tools list JSON"></textarea></section>
+    <section><label for="after">Observed snapshot</label><textarea id="after" spellcheck="false" aria-label="Observed tools list JSON"></textarea></section>
+  </div>
+  <div class="actions">
+    <button class="primary" id="compare">Compare tool surfaces</button>
+    <button class="secondary" id="sample">Load hostile example</button>
+    <button class="secondary" id="copy">Copy report</button>
+  </div>
+  <div class="result" aria-live="polite">
+    <span class="status clean" id="status">READY</span>
+    <pre id="report">Paste two snapshots or load the hostile example.</pre>
+  </div>
+  <p class="privacy">No upload, account, key, or backend. The comparison runs locally. A clean result proves equality only for the two snapshots supplied.</p>
+  <div class="offer">
+    <h2>Found drift—or an agent that still fails in production?</h2>
+    
+    <a class="cta" href="./revenue/production_survival/README.md">Survival terms</a>
+  </div>
+</main>
+<script>
+(function(root){
+  "use strict";
+  function stable(value){
+    if(Array.isArray(value)) return value.map(stable);
+    if(value&&typeof value==="object"){
+      var out={};
+      Object.keys(value).sort().forEach(function(key){out[key]=stable(value[key]);});
+      return out;
+    }
+    return value;
+  }
+  function toolsOf(payload){
+    var list=Array.isArray(payload)?payload:
+      payload&&Array.isArray(payload.tools)?payload.tools:
+      payload&&payload.result&&Array.isArray(payload.result.tools)?payload.result.tools:null;
+    if(!list) throw new Error("Expected a tool array, {tools:[...]}, or {result:{tools:[...]}}.");
+    var seen=new Set();
+    return list.map(function(tool,index){
+      if(!tool||typeof tool!=="object"||Array.isArray(tool)) throw new Error("Tool "+index+" must be an object.");
+      if(typeof tool.name!=="string"||!tool.name.trim()) throw new Error("Tool "+index+" needs a non-empty string name.");
+      if(seen.has(tool.name)) throw new Error("Duplicate tool name: "+tool.name);
+      seen.add(tool.name);
+      return {name:tool.name,description:tool.description===undefined?null:tool.description,inputSchema:tool.inputSchema===undefined?null:stable(tool.inputSchema)};
+    });
+  }
+  function same(a,b){return JSON.stringify(stable(a))===JSON.stringify(stable(b));}
+  function diffSnapshots(before,after){
+    var oldTools=toolsOf(before),newTools=toolsOf(after);
+    var oldMap=new Map(oldTools.map(function(t){return [t.name,t];}));
+    var newMap=new Map(newTools.map(function(t){return [t.name,t];}));
+    var added=[],removed=[],changed=[];
+    Array.from(newMap.keys()).sort().forEach(function(name){if(!oldMap.has(name)) added.push(name);});
+    Array.from(oldMap.keys()).sort().forEach(function(name){if(!newMap.has(name)) removed.push(name);});
+    Array.from(oldMap.keys()).sort().forEach(function(name){
+      if(!newMap.has(name)) return;
+      var fields=[],oldTool=oldMap.get(name),newTool=newMap.get(name);
+      ["description","inputSchema"].forEach(function(field){if(!same(oldTool[field],newTool[field])) fields.push(field);});
+      if(fields.length) changed.push({name:name,fields:fields});
+    });
+    return {approved_count:oldTools.length,observed_count:newTools.length,added:added,removed:removed,changed:changed,clean:!added.length&&!removed.length&&!changed.length};
+  }
+  function format(result){
+    var lines=["MCP TOOL SURFACE: "+(result.clean?"UNCHANGED":"DRIFT DETECTED"),
+      "approved="+result.approved_count+" observed="+result.observed_count];
+    if(result.added.length) lines.push("ADDED: "+result.added.join(", "));
+    if(result.removed.length) lines.push("REMOVED: "+result.removed.join(", "));
+    result.changed.forEach(function(item){lines.push("CHANGED "+item.name+": "+item.fields.join(", "));});
+    if(result.clean) lines.push("No name, description, or inputSchema differences found.");
+    return lines.join("\n");
+  }
+  root.McpToolDrift={toolsOf:toolsOf,diffSnapshots:diffSnapshots,format:format};
+  if(typeof document==="undefined") return;
+  var before=document.getElementById("before"),after=document.getElementById("after");
+  var status=document.getElementById("status"),report=document.getElementById("report");
+  function compare(){
+    try{
+      var result=diffSnapshots(JSON.parse(before.value),JSON.parse(after.value));
+      status.textContent=result.clean?"CLEAN":"DRIFT";
+      status.className="status "+(result.clean?"clean":"changed");
+      report.textContent=format(result);
+    }catch(error){
+      status.textContent="INVALID INPUT";status.className="status error";report.textContent=error.message;
+    }
+  }
+  document.getElementById("compare").addEventListener("click",compare);
+  document.getElementById("sample").addEventListener("click",function(){
+    before.value=JSON.stringify({tools:[
+      {name:"lookup_order",description:"Read an order by ID",inputSchema:{type:"object",properties:{id:{type:"string"}},required:["id"]}},
+      {name:"refund_order",description:"Refund an order",inputSchema:{type:"object",properties:{id:{type:"string"}},required:["id"]}}
+    ]},null,2);
+    after.value=JSON.stringify({result:{tools:[
+      {name:"lookup_order",description:"Read or modify an order by ID",inputSchema:{properties:{id:{type:"string"}},type:"object",required:["id"]}},
+      {name:"refund_order",description:"Refund an order",inputSchema:{type:"object",properties:{id:{type:"string"},reason:{type:"string"}},required:["id"]}},
+      {name:"export_customers",description:"Export all customer records",inputSchema:{type:"object",properties:{}}}
+    ]}},null,2);
+    compare();
+  });
+  document.getElementById("copy").addEventListener("click",function(){
+    navigator.clipboard.writeText(report.textContent).then(function(){status.textContent="COPIED";}).catch(function(){status.textContent="COPY FAILED";});
+  });
+})(typeof globalThis!=="undefined"?globalThis:this);
+</script>
+
+
+
+</body>
+</html>

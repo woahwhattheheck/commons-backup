@@ -1,0 +1,30 @@
+{
+  "schema": "titan-v4-exact-helper-evidence/v1",
+  "status": "PASS_HELPER_API_ONLY",
+  "canonical_branch": "main",
+  "python": "3.13.5",
+  "candidate_git_blob": "d4d068d62ffc8fcd25842193bc7031f764630262",
+  "predecessor_git_blob": "429e32b3eb0ac9fa7bb440dce8fdf3c882210a6a",
+  "verifier_git_blob": "5d2e43aff1fdae3cbbbd7d29ba978dbc47fb9581",
+  "verifier_sha256": "6920256a63b4db8aba221568a392e0c98ec3e7d50bee49cbabe6d95322529508",
+  "valid_state_sequences": 288,
+  "callbacks_per_arm": 1152,
+  "positive_buy_callbacks": 56,
+  "both_seats": true,
+  "action_identity_state_report_parity": true,
+  "input_nonmutation": true,
+  "full_api_huge_integer_cases": 2,
+  "invalid_seat_cases": 11,
+  "disabled_identity_state_cases": 3,
+  "normal_and_optimized_receipts_byte_identical": true,
+  "trace_sha256": "08dcc90eb0c31aac80e4f9907a529744fae295e67d099640fa0ec91ab22641c2",
+  "receipt_sha256": "e8bf2adf4c2315b960b7359f299840f63afcd5ece75ea56efbfa346189f6a4fc",
+  "run_from_this_directory": [
+    "python -B verify_m1_recovery.py --predecessor historical/m1_hugeint_only.py --candidate r04_m1_wheat_trade.py --out /tmp/m1-recovery.json",
+    "python -B -O verify_m1_recovery.py --predecessor historical/m1_hugeint_only.py --candidate r04_m1_wheat_trade.py --out /tmp/m1-recovery-optimized.json"
+  ],
+  "historical_comparator_is_not_a_runtime_candidate": true,
+  "scope_exclusions": ["materialized_router", "B10_bridge", "hosted_python_3_11", "full_games", "economic_promotion", "production_activation"],
+  "provenance": {"owner_pr": 12605, "discussion_comment": 5642627207},
+  "notes": "Source-identical support for the repaired helper already preserved in this canonical pack. Both source identities are checked before import. No checker, materializer, runtime, config or feature-default change."
+}

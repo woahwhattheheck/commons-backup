@@ -1,0 +1,51 @@
+name: TITAN V4 E13 future-sale solvency
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/frozen_selected.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_funded_prefix.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e13-future-sale-solvency/**'
+      - '.github/workflows/titan-v4-e13-future-sale-solvency.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/frozen_selected.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/engine/kaggriculture.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/test_funded_prefix.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e13-future-sale-solvency/**'
+      - '.github/workflows/titan-v4-e13-future-sale-solvency.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Materialize current-ABI candidate
+        run: >-
+          python -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e13-future-sale-solvency/port_current_runtime.py
+          --output "$RUNNER_TEMP/frozen_selected_e13.py"
+          --receipt "$RUNNER_TEMP/e13-receipt.json"
+      - name: Run current-ABI E13 contracts
+        run: >-
+          python -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e13-future-sale-solvency/test_future_sale_solvency.py
+      - name: Run current-ABI E13 contracts under optimized Python
+        run: >-
+          python -O -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e13-future-sale-solvency/test_future_sale_solvency.py
+      - name: Run output-custody killers
+        run: >-
+          python -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e13-future-sale-solvency/test_output_custody.py
+      - name: Run output-custody killers under optimized Python
+        run: >-
+          python -O -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/e13-future-sale-solvency/test_output_custody.py
+      - name: Preserve inherited funded-prefix contracts
+        run: >-
+          python -B revenue/kaggriculture/cloud-execution-lab/test_funded_prefix.py

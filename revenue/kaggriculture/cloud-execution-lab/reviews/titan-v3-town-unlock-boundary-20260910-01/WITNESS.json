@@ -1,0 +1,80 @@
+{
+  "claim": "TITAN-V3-FUNDING-TOWN-UNLOCK-BOUNDARY-REVIEW-20260910-01",
+  "controls": {
+    "already_at_max_shop_instances": {
+      "shop_count": 8,
+      "static_equals_official_for_unlock_effect": true,
+      "unlock_occurs": false
+    },
+    "horizon_ending_at_step_71": {
+      "new_shop_consumptions": 0,
+      "static_equals_official": true
+    },
+    "non_unlock_day": {
+      "next_day": 4,
+      "unlock_interval_days": 3,
+      "unlock_occurs": false
+    }
+  },
+  "disposition": "STATIC_TOWN_SNAPSHOT_UNSAFE_ACROSS_UNLOCK_BOUNDARY",
+  "fixture": {
+    "board": "one fully occupied tile per player; zero weed RNG draws",
+    "current_sale": [
+      "SELL",
+      "MILK",
+      1
+    ],
+    "current_unlocked_shops": [],
+    "episode_seed": 0,
+    "future_buy": {
+      "order": [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+      ],
+      "step": 73
+    },
+    "initial_wheat_inventory": 9999,
+    "start_step": 60,
+    "starting_cash": 26,
+    "stress_units": 0,
+    "town_center_sell_interval_steps": 1000,
+    "town_shop_sell_interval_steps": 4,
+    "town_shop_unlock_interval_days": 3,
+    "turns_per_day": 24
+  },
+  "nonclaims": [
+    "no canonical TITAN source/config/archive/pointer mutation",
+    "no game, provider, Kaggle, submission, merge, or promotion action",
+    "no verdict on PR implementation bytes until exact-head patch readback"
+  ],
+  "official_dynamic_town_projection": {
+    "buy_fills_with_one_current_sale_at_price_floor": true,
+    "buy_fills_without_current_sale": false,
+    "buy_price": 27,
+    "minimum_now": 1,
+    "wheat_before_buy": 9998,
+    "wheat_post_buy_quote_inventory": 9997
+  },
+  "official_engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "official_transition": {
+    "drawn_shop": "BAKERY",
+    "first_consumption_step": 72,
+    "new_day": 3,
+    "unlock_after_step": 71,
+    "wheat_units_consumed_by_new_shop": 1
+  },
+  "receipt_sha256": "eb2de6a727920116a955f97a4497a98007fe936a2f4e33b0d00122f5c6370691",
+  "required_closure": [
+    "prove every protected funding horizon ends before the next unresolved shop unlock",
+    "or model the exact end-of-day RNG/shop-state evolution and all later town ticks",
+    "or conservatively stress every product a possible newly unlocked shop can consume"
+  ],
+  "static_current_town_projection": {
+    "buy_fills_without_current_sale": true,
+    "buy_price": 26,
+    "minimum_now": 0,
+    "wheat_before_buy": 9999,
+    "wheat_post_buy_quote_inventory": 9998
+  }
+}

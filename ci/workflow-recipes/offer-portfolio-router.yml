@@ -1,0 +1,29 @@
+name: offer-portfolio-router
+
+on:
+  push:
+    paths:
+      - 'revenue/offer_portfolio_router/**'
+      - '.github/workflows/offer-portfolio-router.yml'
+  pull_request:
+    paths:
+      - 'revenue/offer_portfolio_router/**'
+      - '.github/workflows/offer-portfolio-router.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hostile-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python3 -m py_compile revenue/offer_portfolio_router/router.py revenue/offer_portfolio_router/test_router.py
+      - name: Tests
+        run: python3 -m unittest revenue/offer_portfolio_router/test_router.py -v
+      - name: Optimized tests
+        run: python3 -O -m unittest revenue/offer_portfolio_router/test_router.py -v

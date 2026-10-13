@@ -1,0 +1,42 @@
+name: hive-field-service-workspace
+
+on:
+  pull_request:
+    paths:
+      - "revenue/hive/field-service-workspace/**"
+      - ".github/workflows/hive-field-service-workspace.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/hive/field-service-workspace/**"
+      - ".github/workflows/hive-field-service-workspace.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: revenue/hive/field-service-workspace
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Compile
+        run: python -m py_compile workspace.py portal.py demo.py test_workspace.py test_portal.py
+      - name: Hostile acceptance
+        run: python -W error::ResourceWarning -m unittest -v test_workspace.py test_portal.py
+      - name: Optimized hostile acceptance
+        run: python -O -W error::ResourceWarning -m unittest -v test_workspace.py test_portal.py
+      - name: Deterministic synthetic workflow
+        run: |
+          rm -f /tmp/hive-field-service-demo.db*
+          python demo.py --db /tmp/hive-field-service-demo.db > /tmp/demo-1.json
+          python demo.py --db /tmp/hive-field-service-demo.db > /tmp/demo-2.json
+          cmp /tmp/demo-1.json /tmp/demo-2.json
+          python -O demo.py --db /tmp/hive-field-service-demo.db > /tmp/demo-opt.json
+          cmp /tmp/demo-1.json /tmp/demo-opt.json

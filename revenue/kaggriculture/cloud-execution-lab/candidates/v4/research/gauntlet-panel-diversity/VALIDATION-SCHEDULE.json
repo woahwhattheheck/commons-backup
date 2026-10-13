@@ -1,0 +1,77 @@
+{
+  "commands": [
+    "python -B -m unittest -v test_family_schedule.py",
+    "python -O -B -m unittest -v test_family_schedule.py",
+    "python -B -m unittest -v test_panel_diversity.py test_family_schedule.py",
+    "python -O -B -m unittest -v test_panel_diversity.py test_family_schedule.py",
+    "python -m py_compile family_schedule.py panel_diversity.py",
+    "python -B family_schedule.py PUBLISHED-TOP30-FAMILIES.json --seed 0 --cycles 1  # expected rc=3 while rank17 unresolved",
+    "python -B family_schedule.py PUBLISHED-TOP30-FAMILIES.json --seed 0 --cycles 1 --preview-incomplete --output PUBLISHED-TOP30-SCHEDULE-PREVIEW.json"
+  ],
+  "files": {
+    "SCHEDULING.md": {
+      "bytes": 2620,
+      "sha256": "e73971bcf43ce2fd713e44d00b96022126425f26f1c8bf01340df16c2f583560"
+    },
+    "family_schedule.py": {
+      "bytes": 8852,
+      "sha256": "f13ef5cdeeead5bcc3433bc767300fa95fea31c5bf0a4b7d87efdb3a340c1c9c"
+    },
+    "test_family_schedule.py": {
+      "bytes": 7137,
+      "sha256": "0b364948029cd207dc6b775c097debc1b11629da8401f4b770f87bcd84b320b1"
+    }
+  },
+  "limitations": [
+    "The published preview is explicitly non-authoritative because rank 17 is unresolved in the source table.",
+    "Family/source declarations come from the panel identity authority; this planner never infers equivalence from scores or behavior.",
+    "A one-cycle plan favors diversity/compute efficiency and does not cover every alias when family multiplicity exceeds one; coverage is explicit and rotation can continue in later runs.",
+    "No engine games, gameplay mutation, default/archive change, evaluator replacement, Kaggle upload, or promotion threshold is claimed."
+  ],
+  "owner": "ASTRA-SPECTRUM-2",
+  "published_preview": {
+    "all_resolved_labels_seen": false,
+    "authoritative": false,
+    "cells": 24,
+    "cells_per_family": 2,
+    "cycles": 1,
+    "cycles_for_full_label_coverage": 5,
+    "default_authoritative_exit_code": 3,
+    "families": 12,
+    "generated_file_bytes": 12800,
+    "generated_file_sha256": "7e552a7b2c9d1a5ae02439bdc89475ad70255620a9468c1a25eed731e24b735b",
+    "max_family_multiplicity": 5,
+    "next_rotation_offset": 1,
+    "panel_identity_sha256": "d13a17648aac82d5ee85df5d85a1037b98119c8658afb57d76cbd44548f6d263",
+    "resolved_labels_scheduled": 12,
+    "resolved_labels_total": 30,
+    "schedule_sha256": "bfc279bc789464976c3ab518d101bf5c503893e04a733b084a97646d68c6d9ab",
+    "seed": 0
+  },
+  "python": "3.13.5",
+  "schema": "titan.gauntlet.family-schedule.validation.v1",
+  "scope": "Deterministic family-stratified coordinate planning for the existing gauntlet; no game execution, scoring, promotion threshold, or policy identity inference",
+  "tests": {
+    "combined_spectrum_normal": {
+      "errors": 0,
+      "failures": 0,
+      "tests": 34
+    },
+    "combined_spectrum_optimized": {
+      "errors": 0,
+      "failures": 0,
+      "tests": 34
+    },
+    "family_schedule_normal": {
+      "errors": 0,
+      "failures": 0,
+      "tests": 17
+    },
+    "family_schedule_optimized": {
+      "errors": 0,
+      "failures": 0,
+      "tests": 17
+    },
+    "py_compile": "PASS"
+  }
+}

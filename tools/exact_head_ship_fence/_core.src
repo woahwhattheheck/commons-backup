@@ -1,0 +1,352 @@
+"""Strict, deterministic evidence-only fence for exact-head GitHub snapshots."""
+from __future__ import annotations
+
+from datetime import datetime, timezone
+import hashlib, json, re
+from typing import Any, Callable, Mapping
+
+SCHEMA_VERSION = 1
+TOOL_ID = "exact-head-ship-fence/v1"
+MAX_SAFE_INT = 9_007_199_254_740_991
+MAX_JSON_BYTES = 1_048_576
+MAX_DIRECT_NODES = 65_536
+MAX_CLOCK_SKEW_SECONDS = 120
+VERDICTS = {
+    "READY_TO_MERGE_EVIDENCE", "HOLD_HEAD_MOVED", "HOLD_BASE_MOVED",
+    "HOLD_CI_UNKNOWN", "HOLD_CI_RED", "HOLD_REVIEW_STALE",
+    "HOLD_TOPOLOGY_UNKNOWN", "HOLD_INCOMPLETE_EVIDENCE",
+}
+NEXT_ACTIONS = {
+    "MERGE_AFTER_LIVE_RECENSUS", "REJOIN_CURRENT_MAIN", "WAIT_FOR_CI",
+    "REPAIR_CI", "REREVIEW_EXACT_HEAD", "REFRESH_TOPOLOGY", "REFRESH_EVIDENCE",
+}
+AUTHORITY = {k: False for k in (
+    "merge_authorized", "ref_mutation_authorized", "review_mutation_authorized",
+    "provider_mutation_authorized", "outbound_authorized", "spend_authorized",
+    "payment_authorized", "revenue_recognition_authorized",
+)}
+SHA = re.compile(r"^[0-9a-f]{40}$")
+REPO = re.compile(r"^[A-Za-z0-9_.-]{1,100}/[A-Za-z0-9_.-]{1,100}$")
+BRANCH = re.compile(r"^[A-Za-z0-9._/-]{1,255}$")
+NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:/ ()@+\[\]-]{0,127}$")
+TS = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+CHECK_STATUS = {"QUEUED", "IN_PROGRESS", "COMPLETED", "MISSING"}
+CHECK_CONCLUSION = {"SUCCESS", "FAILURE", "TIMED_OUT", "ACTION_REQUIRED", "CANCELLED", "SKIPPED", "NEUTRAL", "NONE"}
+
+ROOT = {"schema_version", "repository", "base_branch", "expected_pr_head", "current_pr_head",
+        "construction_parent", "current_base_head", "observed_at", "max_age_seconds",
+        "snapshot_complete", "refs", "topology", "check_policy", "checks", "review_policy", "reviews"}
+REFS = {"pr_ref_exists", "base_ref_exists"}
+TOPO = {"candidate_paths_known", "candidate_paths", "base_delta_paths_known", "base_delta_paths",
+        "evaluated_base_sha", "rejoin_proven", "rejoin_head_sha"}
+PATHROW = {"path", "blob_sha"}
+CPOL = {"name", "required", "allow_skipped"}
+CHECK = {"name", "run_id", "head_sha", "status", "conclusion", "observed_at"}
+RPOL = {"required", "min_passes"}
+REVIEW = {"review_id", "reviewer", "head_sha", "verdict", "observed_at"}
+REPORT = {"schema_version", "tool", "evaluated_at", "snapshot_sha256", "verdict", "next_action",
+          "reason_codes", "summary", "authority", "receipt_sha256"}
+SUMMARY = {"repository", "base_branch", "current_pr_head", "current_base_head", "base_moved",
+           "candidate_path_count", "base_delta_path_count", "required_check_count",
+           "current_review_pass_count", "current_review_stop_count"}
+
+
+class EvidenceError(ValueError):
+    pass
+
+
+def _clock_factory() -> Callable[[], datetime]:
+    now, utc = datetime.now, timezone.utc
+    return lambda: now(utc)
+
+_CURRENT_CLOCK = _clock_factory()
+
+def _err(msg: str) -> None: raise EvidenceError(msg)
+
+def _plain(v: Any, label="value", depth=0, budget=None) -> None:
+    if budget is None:
+        budget = [MAX_DIRECT_NODES, MAX_JSON_BYTES]
+    if depth > 64: _err(f"{label}: nesting too deep")
+    if budget[0] <= 0: _err(f"{label}: direct-object node budget exceeded")
+    budget[0] -= 1
+    t = type(v)
+    if v is None or t is bool: return
+    if t is int:
+        if abs(v) > MAX_SAFE_INT: _err(f"{label}: unsafe integer")
+        return
+    if t is float: _err(f"{label}: float forbidden")
+    if t is str:
+        if len(v) > budget[1] or len(v) > MAX_JSON_BYTES:
+            _err(f"{label}: direct-object byte budget exceeded")
+        try: encoded = v.encode("utf-8", "strict")
+        except UnicodeError as e: raise EvidenceError(f"{label}: invalid unicode") from e
+        if len(encoded) > budget[1]: _err(f"{label}: direct-object byte budget exceeded")
+        budget[1] -= len(encoded)
+        return
+    if t is list:
+        if len(v) > budget[0]: _err(f"{label}: direct-object node budget exceeded")
+        for i, x in enumerate(v): _plain(x, f"{label}[{i}]", depth + 1, budget)
+        return
+    if t is dict:
+        if len(v) * 2 > budget[0]: _err(f"{label}: direct-object node budget exceeded")
+        for k, x in v.items():
+            if type(k) is not str: _err(f"{label}: non-string key")
+            _plain(k, f"{label}.<key>", depth + 1, budget); _plain(x, f"{label}.{k}", depth + 1, budget)
+        return
+    _err(f"{label}: non-JSON runtime type")
+
+def _obj(v: Any, label: str, keys: set[str]) -> dict:
+    if type(v) is not dict: _err(f"{label}: expected plain object")
+    if set(v) != keys: _err(f"{label}: schema mismatch missing={sorted(keys-set(v))} extra={sorted(set(v)-keys)}")
+    return v
+
+def _arr(v: Any, label: str, cap=512) -> list:
+    if type(v) is not list: _err(f"{label}: expected plain array")
+    if len(v) > cap: _err(f"{label}: too many items")
+    return v
+
+def _text(v: Any, label: str, cap=4096) -> str:
+    if type(v) is not str or not v or len(v) > cap: _err(f"{label}: invalid string")
+    try: v.encode("utf-8", "strict")
+    except UnicodeError as e: raise EvidenceError(f"{label}: invalid unicode") from e
+    if any(ord(c) < 32 or ord(c) == 127 for c in v): _err(f"{label}: controls forbidden")
+    return v
+
+def _bool(v: Any, label: str) -> bool:
+    if type(v) is not bool: _err(f"{label}: expected boolean")
+    return v
+
+def _int(v: Any, label: str, lo: int, hi: int) -> int:
+    if type(v) is not int or not lo <= v <= hi: _err(f"{label}: invalid integer")
+    return v
+
+def _sha(v: Any, label: str, nullable=False):
+    if v is None and nullable: return None
+    s = _text(v, label, 40)
+    if not SHA.fullmatch(s): _err(f"{label}: malformed SHA-1")
+    return s
+
+def _name(v: Any, label: str) -> str:
+    s = _text(v, label, 128)
+    if not NAME.fullmatch(s): _err(f"{label}: malformed identifier")
+    return s
+
+def _time(v: Any, label: str) -> datetime:
+    s = _text(v, label, 20)
+    if not TS.fullmatch(s): _err(f"{label}: noncanonical timestamp")
+    try: return datetime.strptime(s, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    except ValueError as e: raise EvidenceError(f"{label}: invalid timestamp") from e
+
+def _fmt(d: datetime) -> str: return d.astimezone(timezone.utc).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+def _pairs(pairs):
+    d = {}
+    for k, v in pairs:
+        if k in d: _err(f"duplicate JSON key: {k!r}")
+        d[k] = v
+    return d
+
+def _pint(s):
+    if len(s.lstrip("-")) > 16: _err("unsafe integer token")
+    try: n = int(s)
+    except (ValueError, OverflowError) as e: raise EvidenceError("invalid integer token") from e
+    if abs(n) > MAX_SAFE_INT: _err("unsafe integer token")
+    return n
+
+def _no_float(_): _err("floating point JSON numbers are forbidden")
+def _no_const(_): _err("non-finite JSON numbers are forbidden")
+
+def parse_json_bytes(data: bytes) -> Any:
+    if type(data) is not bytes or len(data) > MAX_JSON_BYTES: _err("invalid JSON byte input")
+    try:
+        v = json.loads(data.decode("utf-8", "strict"), object_pairs_hook=_pairs,
+                       parse_int=_pint, parse_float=_no_float, parse_constant=_no_const)
+    except EvidenceError: raise
+    except (UnicodeError, json.JSONDecodeError, RecursionError, ValueError, OverflowError) as e:
+        raise EvidenceError("invalid JSON input") from e
+    _plain(v); return v
+
+def canonical_json_bytes(v: Any) -> bytes:
+    _plain(v)
+    try: return json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+    except (TypeError, ValueError, UnicodeError, RecursionError, OverflowError) as e:
+        raise EvidenceError("not canonicalizable JSON") from e
+
+def _digest(v: Any) -> str: return hashlib.sha256(canonical_json_bytes(v)).hexdigest()
+
+def _observed(v, label, root_t, now, max_age):
+    t = _time(v, label)
+    if t > root_t: _err(f"{label}: later than snapshot")
+    if (t - now).total_seconds() > MAX_CLOCK_SKEW_SECONDS: _err(f"{label}: future observation")
+    if (now - t).total_seconds() > max_age: _err(f"{label}: stale observation")
+
+def _paths(v, label, known):
+    rows, out = _arr(v, label, 1024), []
+    if not known and rows: _err(f"{label}: must be empty when unknown")
+    seen = set()
+    for i, raw in enumerate(rows):
+        row = _obj(raw, f"{label}[{i}]", PATHROW); p = _text(row["path"], f"{label}[{i}].path", 1024)
+        if p.startswith("/") or p.endswith("/") or "//" in p or "\\" in p or any(x in {"", ".", ".."} for x in p.split("/")):
+            _err(f"{label}[{i}].path: malformed relative path")
+        _sha(row["blob_sha"], f"{label}[{i}].blob_sha", True)
+        if p in seen: _err(f"{label}: duplicate path")
+        seen.add(p); out.append(p)
+    if out != sorted(out): _err(f"{label}: paths not sorted")
+    return out
+
+def _snapshot(s: Any, now: datetime):
+    r = _obj(s, "snapshot", ROOT)
+    # Reject schema-level oversized containers before touching any child.
+    _arr(r["check_policy"], "check_policy", 128)
+    _arr(r["checks"], "checks", 128)
+    _arr(r["reviews"], "reviews", 64)
+    _topology_preflight = _obj(r["topology"], "topology", TOPO)
+    _arr(_topology_preflight["candidate_paths"], "topology.candidate_paths", 1024)
+    _arr(_topology_preflight["base_delta_paths"], "topology.base_delta_paths", 1024)
+    _int(r["schema_version"], "schema_version", 1, 1)
+    repo = _text(r["repository"], "repository", 201)
+    if not REPO.fullmatch(repo): _err("repository: malformed owner/name")
+    branch = _text(r["base_branch"], "base_branch", 255)
+    if not BRANCH.fullmatch(branch) or ".." in branch or branch.startswith("/") or branch.endswith("/"): _err("base_branch: malformed")
+    expected, head = _sha(r["expected_pr_head"], "expected_pr_head"), _sha(r["current_pr_head"], "current_pr_head")
+    parent, base = _sha(r["construction_parent"], "construction_parent"), _sha(r["current_base_head"], "current_base_head")
+    max_age = _int(r["max_age_seconds"], "max_age_seconds", 1, 2_592_000)
+    complete = _bool(r["snapshot_complete"], "snapshot_complete")
+    refs = _obj(r["refs"], "refs", REFS)
+    if not _bool(refs["pr_ref_exists"], "refs.pr_ref_exists") or not _bool(refs["base_ref_exists"], "refs.base_ref_exists"):
+        _err("refs: dangling or missing ref")
+    now = now.astimezone(timezone.utc).replace(microsecond=0); root_t = _time(r["observed_at"], "observed_at")
+    if (root_t - now).total_seconds() > MAX_CLOCK_SKEW_SECONDS: _err("observed_at: future snapshot")
+    if (now - root_t).total_seconds() > max_age: _err("observed_at: stale snapshot")
+
+    t = _obj(r["topology"], "topology", TOPO)
+    cand_known = _bool(t["candidate_paths_known"], "topology.candidate_paths_known")
+    base_known = _bool(t["base_delta_paths_known"], "topology.base_delta_paths_known")
+    cand = _paths(t["candidate_paths"], "topology.candidate_paths", cand_known)
+    delta = _paths(t["base_delta_paths"], "topology.base_delta_paths", base_known)
+    evaluated = _sha(t["evaluated_base_sha"], "topology.evaluated_base_sha", True)
+    rejoined = _bool(t["rejoin_proven"], "topology.rejoin_proven")
+    rejoin_head = _sha(t["rejoin_head_sha"], "topology.rejoin_head_sha", True)
+    if rejoined and (evaluated is None or rejoin_head is None): _err("topology: incomplete rejoin binding")
+    if not rejoined and rejoin_head is not None: _err("topology: dangling rejoin head")
+
+    policy, pnames, required = {}, set(), []
+    for i, raw in enumerate(_arr(r["check_policy"], "check_policy", 128)):
+        row = _obj(raw, f"check_policy[{i}]", CPOL); n = _name(row["name"], f"check_policy[{i}].name")
+        if n in pnames: _err("check_policy: duplicate name")
+        pnames.add(n); req = _bool(row["required"], f"check_policy[{i}].required"); skip = _bool(row["allow_skipped"], f"check_policy[{i}].allow_skipped")
+        policy[n] = (req, skip)
+        if req: required.append((n, skip))
+
+    checks, runs = {}, set()
+    for i, raw in enumerate(_arr(r["checks"], "checks", 128)):
+        row = _obj(raw, f"checks[{i}]", CHECK); n = _name(row["name"], f"checks[{i}].name"); run = _name(row["run_id"], f"checks[{i}].run_id")
+        if n not in policy: _err("checks: observation without policy")
+        if n in checks or run in runs: _err("checks: conflicting workflow identity")
+        runs.add(run)
+        if _sha(row["head_sha"], f"checks[{i}].head_sha") != head: _err("checks: cross-head evidence transplant")
+        status, conc = _text(row["status"], f"checks[{i}].status", 32), _text(row["conclusion"], f"checks[{i}].conclusion", 32)
+        if status not in CHECK_STATUS or conc not in CHECK_CONCLUSION: _err("checks: unsupported state")
+        if (status == "COMPLETED") == (conc == "NONE"): _err("checks: impossible state/conclusion")
+        _observed(row["observed_at"], f"checks[{i}].observed_at", root_t, now, max_age); checks[n] = (status, conc)
+
+    rp = _obj(r["review_policy"], "review_policy", RPOL); review_req = _bool(rp["required"], "review_policy.required")
+    min_pass = _int(rp["min_passes"], "review_policy.min_passes", 0, 16)
+    if (review_req and min_pass < 1) or (not review_req and min_pass != 0): _err("review_policy: inconsistent")
+    review_ids, passes, stops, stale = set(), 0, 0, 0
+    for i, raw in enumerate(_arr(r["reviews"], "reviews", 64)):
+        row = _obj(raw, f"reviews[{i}]", REVIEW); rid = _name(row["review_id"], f"reviews[{i}].review_id"); _name(row["reviewer"], f"reviews[{i}].reviewer")
+        if rid in review_ids: _err("reviews: duplicate id")
+        review_ids.add(rid); rh = _sha(row["head_sha"], f"reviews[{i}].head_sha"); verdict = _text(row["verdict"], f"reviews[{i}].verdict", 16)
+        if verdict not in {"PASS", "STOP"}: _err("reviews: unsupported verdict")
+        _observed(row["observed_at"], f"reviews[{i}].observed_at", root_t, now, max_age)
+        if rh != head: stale += 1
+        elif verdict == "PASS": passes += 1
+        else: stops += 1
+    return locals()
+
+def _class(n):
+    if not n["complete"]: return "HOLD_INCOMPLETE_EVIDENCE", "REFRESH_EVIDENCE", ["SNAPSHOT_DECLARED_INCOMPLETE"]
+    if n["expected"] != n["head"]: return "HOLD_HEAD_MOVED", "REFRESH_EVIDENCE", ["EXPECTED_HEAD_DIFFERS_FROM_CURRENT_HEAD"]
+    moved = n["parent"] != n["base"]
+    if not n["cand_known"] or n["evaluated"] is None: return "HOLD_TOPOLOGY_UNKNOWN", "REFRESH_TOPOLOGY", ["CANDIDATE_TOPOLOGY_UNKNOWN"]
+    if moved and not n["base_known"]: return "HOLD_TOPOLOGY_UNKNOWN", "REFRESH_TOPOLOGY", ["BASE_DELTA_TOPOLOGY_UNKNOWN"]
+    if moved:
+        why = []
+        if set(n["cand"]) & set(n["delta"]): why.append("CANDIDATE_PATHS_OVERLAP_MOVED_BASE")
+        if not n["rejoined"]: why.append("CURRENT_BASE_REJOIN_NOT_PROVEN")
+        if n["evaluated"] != n["base"]: why.append("EVALUATED_BASE_IS_NOT_CURRENT_BASE")
+        if n["rejoined"] and n["rejoin_head"] != n["head"]: why.append("REJOIN_HEAD_IS_NOT_CURRENT_PR_HEAD")
+        if why: return "HOLD_BASE_MOVED", "REJOIN_CURRENT_MAIN", why
+    elif n["evaluated"] != n["base"]: return "HOLD_TOPOLOGY_UNKNOWN", "REFRESH_TOPOLOGY", ["EVALUATED_BASE_MISMATCH"]
+    if n["stops"]: return "HOLD_REVIEW_STALE", "REREVIEW_EXACT_HEAD", ["EXACT_HEAD_REVIEW_STOP"]
+    red, unknown = False, set()
+    for name, allow_skip in n["required"]:
+        obs = n["checks"].get(name)
+        if obs is None: unknown.add("REQUIRED_CHECK_MISSING"); continue
+        status, conc = obs
+        if status != "COMPLETED": unknown.add("REQUIRED_CHECK_NONTERMINAL")
+        elif conc == "SUCCESS" or (conc == "SKIPPED" and allow_skip): pass
+        elif conc in {"FAILURE", "TIMED_OUT", "ACTION_REQUIRED"}: red = True
+        else: unknown.add("REQUIRED_CHECK_NOT_GREEN")
+    if red: return "HOLD_CI_RED", "REPAIR_CI", ["REQUIRED_CHECK_RED"]
+    if unknown: return "HOLD_CI_UNKNOWN", "WAIT_FOR_CI", sorted(unknown)
+    if n["review_req"] and n["passes"] < n["min_pass"]:
+        why = ["NO_SUFFICIENT_EXACT_HEAD_PASS_REVIEW"] + (["STALE_HEAD_REVIEW_PRESENT"] if n["stale"] else [])
+        return "HOLD_REVIEW_STALE", "REREVIEW_EXACT_HEAD", why
+    return "READY_TO_MERGE_EVIDENCE", "MERGE_AFTER_LIVE_RECENSUS", ["RETAINED_PACKET_SATISFIES_V1_EVIDENCE_POLICY"]
+
+def _build(snapshot: Any, now: datetime) -> dict:
+    n = _snapshot(snapshot, now); verdict, action, reasons = _class(n)
+    report = {
+        "schema_version": 1, "tool": TOOL_ID, "evaluated_at": _fmt(now), "snapshot_sha256": _digest(snapshot),
+        "verdict": verdict, "next_action": action, "reason_codes": reasons,
+        "summary": {"repository": n["repo"], "base_branch": n["branch"], "current_pr_head": n["head"], "current_base_head": n["base"],
+                    "base_moved": n["parent"] != n["base"], "candidate_path_count": len(n["cand"]), "base_delta_path_count": len(n["delta"]),
+                    "required_check_count": len(n["required"]), "current_review_pass_count": n["passes"], "current_review_stop_count": n["stops"]},
+        "authority": dict(AUTHORITY),
+    }
+    report["receipt_sha256"] = _digest(report); return report
+
+def compile_current(snapshot: Any, _clock: Callable[[], datetime] = _CURRENT_CLOCK) -> dict: return _build(snapshot, _clock())
+
+def _validate_report(r: Any) -> None:
+    q = _obj(r, "report", REPORT); _int(q["schema_version"], "report.schema_version", 1, 1)
+    if _text(q["tool"], "report.tool", 64) != TOOL_ID: _err("report.tool: unsupported")
+    _time(q["evaluated_at"], "report.evaluated_at")
+    for k in ("snapshot_sha256", "receipt_sha256"):
+        if not re.fullmatch(r"[0-9a-f]{64}", _text(q[k], f"report.{k}", 64)): _err(f"report.{k}: malformed")
+    if _text(q["verdict"], "report.verdict", 64) not in VERDICTS or _text(q["next_action"], "report.next_action", 64) not in NEXT_ACTIONS: _err("report: unsupported verdict/action")
+    reasons = _arr(q["reason_codes"], "report.reason_codes", 32)
+    if not reasons: _err("report.reason_codes: empty")
+    for i, x in enumerate(reasons): _name(x, f"report.reason_codes[{i}]")
+    s = _obj(q["summary"], "report.summary", SUMMARY)
+    if not REPO.fullmatch(_text(s["repository"], "report.summary.repository", 201)): _err("report.summary.repository: malformed")
+    if not BRANCH.fullmatch(_text(s["base_branch"], "report.summary.base_branch", 255)): _err("report.summary.base_branch: malformed")
+    _sha(s["current_pr_head"], "report.summary.current_pr_head"); _sha(s["current_base_head"], "report.summary.current_base_head"); _bool(s["base_moved"], "report.summary.base_moved")
+    for k in SUMMARY - {"repository", "base_branch", "current_pr_head", "current_base_head", "base_moved"}: _int(s[k], f"report.summary.{k}", 0, 1_000_000)
+    if _obj(q["authority"], "report.authority", set(AUTHORITY)) != AUTHORITY: _err("report.authority: widened")
+
+def _without_receipt(r: Mapping[str, Any]) -> dict: return {k: v for k, v in r.items() if k != "receipt_sha256"}
+def _projection(r): return {k: r[k] for k in ("schema_version", "tool", "snapshot_sha256", "verdict", "next_action", "reason_codes", "summary", "authority")}
+
+def verify_current(report: Any, snapshot: Any, _clock: Callable[[], datetime] = _CURRENT_CLOCK) -> bool:
+    try:
+        _validate_report(report)
+        if _digest(_without_receipt(report)) != report["receipt_sha256"]: return False
+        if _build(snapshot, _time(report["evaluated_at"], "report.evaluated_at")) != report: return False
+        return _projection(_build(snapshot, _clock())) == _projection(report)
+    except EvidenceError: return False
+
+def render_markdown(report: Any) -> str:
+    _validate_report(report); s = report["summary"]
+    reasons = "\n".join(f"- `{x}`" for x in report["reason_codes"]); auth = "\n".join(f"- `{k}=false`" for k in sorted(AUTHORITY))
+    return ("# Exact-head ship fence\n\n" f"- Verdict: **{report['verdict']}**\n- Next action: `{report['next_action']}`\n"
+            f"- Repository: `{s['repository']}`\n- Base branch: `{s['base_branch']}`\n- PR head: `{s['current_pr_head']}`\n- Base head: `{s['current_base_head']}`\n"
+            f"- Evaluated: `{report['evaluated_at']}`\n- Snapshot SHA-256: `{report['snapshot_sha256']}`\n- Receipt SHA-256: `{report['receipt_sha256']}`\n\n"
+            f"## Reasons\n\n{reasons}\n\n## Evidence summary\n\n- base moved: `{str(s['base_moved']).lower()}`\n- candidate paths: `{s['candidate_path_count']}`\n"
+            f"- base-delta paths: `{s['base_delta_path_count']}`\n- required checks: `{s['required_check_count']}`\n- current PASS reviews: `{s['current_review_pass_count']}`\n"
+            f"- current STOP reviews: `{s['current_review_stop_count']}`\n\n## Authority ceiling\n\n{auth}\n\n"
+            "`READY_TO_MERGE_EVIDENCE` is retained evidence only. It never authorizes a merge.\n")
+
+__all__ = ["AUTHORITY", "EvidenceError", "SCHEMA_VERSION", "TOOL_ID", "canonical_json_bytes", "compile_current", "parse_json_bytes", "render_markdown", "verify_current"]

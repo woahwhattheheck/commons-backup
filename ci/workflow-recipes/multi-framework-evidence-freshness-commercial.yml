@@ -1,0 +1,40 @@
+name: Multi-Framework Evidence Freshness Commercial Packet
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/multi_framework_evidence_freshness/commercial/**'
+      - 'tests/test_multi_framework_evidence_freshness_commercial.py'
+      - '.github/workflows/multi-framework-evidence-freshness-commercial.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/multi_framework_evidence_freshness/commercial/**'
+      - 'tests/test_multi_framework_evidence_freshness_commercial.py'
+      - '.github/workflows/multi-framework-evidence-freshness-commercial.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-commercial-packet:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: python -m py_compile revenue/multi_framework_evidence_freshness/commercial/verify_commercial.py tests/test_multi_framework_evidence_freshness_commercial.py
+      - name: Tests
+        run: python -m unittest -v tests.test_multi_framework_evidence_freshness_commercial
+      - name: Optimized tests
+        run: python -O -m unittest -v tests.test_multi_framework_evidence_freshness_commercial
+      - name: Verify canonical packet
+        run: |
+          python revenue/multi_framework_evidence_freshness/commercial/verify_commercial.py \
+            revenue/multi_framework_evidence_freshness/commercial/offer.json \
+            revenue/multi_framework_evidence_freshness/commercial/sample_report.json

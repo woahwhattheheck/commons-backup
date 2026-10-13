@@ -1,0 +1,63 @@
+{
+  "acceptance_criteria": [
+    {
+      "criterion_id": "accuracy",
+      "statement": "Agreed synthetic truth set reaches the documented accuracy threshold."
+    },
+    {
+      "criterion_id": "handoff",
+      "statement": "Buyer receives the deterministic closeout artifacts named in the pilot scope."
+    }
+  ],
+  "buyer_ref": "demo-buyer-001",
+  "commercial_gate": {
+    "evidence_ref": "demo-payment-receipt-001",
+    "evidence_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "pilot_payment_state": "PAID_EXTERNAL_EVIDENCE"
+  },
+  "currency": "USD",
+  "excluded_scope": [
+    {
+      "scope_id": "production-adapter",
+      "title": "Production provider adapter"
+    },
+    {
+      "scope_id": "live-mutation",
+      "title": "Live provider mutation"
+    }
+  ],
+  "included_scope": [
+    {
+      "scope_id": "metadata-diagnostic",
+      "title": "Bounded metadata diagnostic"
+    },
+    {
+      "scope_id": "closeout-summary",
+      "title": "Deterministic closeout summary"
+    }
+  ],
+  "phase2_template": {
+    "acceptance_criteria": [
+      {
+        "criterion_id": "adapter-fixture",
+        "statement": "The production adapter passes the agreed sanitized fixture set."
+      },
+      {
+        "criterion_id": "rollback-drill",
+        "statement": "A rollback drill completes without duplicate downstream effects."
+      }
+    ],
+    "dependencies": [
+      "Named buyer-side technical owner",
+      "Buyer-provided sanitized integration fixture"
+    ],
+    "proposed_duration_days": 14,
+    "proposed_price_cents": 750000,
+    "title": "Production integration rollout"
+  },
+  "pilot_id": "demo-pilot-001",
+  "pilot_price_cents": 250000,
+  "schema_version": "paid-pilot-rollout/v1",
+  "scope_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "scope_version": "pilot-scope-v1"
+}

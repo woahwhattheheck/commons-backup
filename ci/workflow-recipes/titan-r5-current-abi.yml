@@ -1,0 +1,41 @@
+name: TITAN V4 R5 current-ABI closure
+
+on:
+  pull_request:
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/r5-bakery-yarn-route/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r04_full_router.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r01_tapes.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/next-panel/vendor/arlene.py'
+      - '.github/workflows/titan-r5-current-abi.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/r5-bakery-yarn-route/**'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r04_full_router.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v4/donor/overlay/r01_tapes.py'
+      - 'revenue/kaggriculture/cloud-execution-lab/reference/next-panel/vendor/arlene.py'
+      - '.github/workflows/titan-r5-current-abi.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  current-abi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prove current route identity boundary
+        run: >-
+          python -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/r5-bakery-yarn-route/current_abi_audit.py
+          --expect nonportable_no_current_authoritative_target --json
+      - name: Run focused closure regressions
+        run: >-
+          python -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/r5-bakery-yarn-route/test_current_abi.py
+      - name: Re-run focused closure regressions under optimized Python
+        run: >-
+          python -O -B revenue/kaggriculture/cloud-execution-lab/candidates/v4/repairs/gameplay/r5-bakery-yarn-route/test_current_abi.py

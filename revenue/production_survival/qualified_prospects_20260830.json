@@ -1,0 +1,226 @@
+[
+  {
+    "prospect_id": "dijalma-porto-n8n-36886",
+    "name_or_handle": "Dijalma Porto (@Dijalma-Porto)",
+    "organization": "UNVERIFIED (self-hosted n8n on Oracle Cloud/Coolify plus a Hetzner Swarm replica; production webhook is WhatsApp Business Cloud API-shaped)",
+    "pain_phrase": "A specific production workflow (89 nodes, mixed node types including `@n8n/n8n-nodes-langchain.agent`) intermittently gets stuck forever in status: \"running\" when triggered via a production webhook, with zero error, zero timeout, and runData never populated — not even the trigger node's output is recorded. The only recovery is manually restarting the n8n process/container; the execution never resolves on its own, even after 5+ minutes (well past the default N8N_RUNNERS_TASK_TIMEOUT=300).",
+    "pain_source_url": "https://github.com/n8n-io/n8n/issues/36886",
+    "pain_date": "2026-08-23",
+    "fit_rationale": "Binary test PASSES. Live production AI-agent workflow hangs with no error and no timeout; author already built a watchdog that restarts the container after 60s stuck executions and says that recovers the system but not the customer message. A same-day stop path, rollback path, and durable receipt is exactly the gap they described.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/n8n-io/n8n/issues/36886",
+      "where_found_url": "https://github.com/n8n-io/n8n/issues/36886"
+    },
+    "disqualifiers": "",
+    "confidence": "HIGH"
+  },
+  {
+    "prospect_id": "mario-napoli-langgraph-7417",
+    "name_or_handle": "Mario Alessandro Napoli (@MarioAlessandroNapoli)",
+    "organization": "Expleo (GitHub profile company field @Expleo; Palermo, Sicily)",
+    "pain_phrase": "When a tool call takes longer than ~3 minutes on LangGraph Cloud, it gets silently re-dispatched from the last checkpoint while the original is still running. Both the original and the duplicate complete successfully, resulting in 2-3x redundant work and cost.",
+    "pain_source_url": "https://github.com/langchain-ai/langgraph/issues/7417",
+    "pain_date": "2026-04-05",
+    "fit_rationale": "Binary test PASSES. They run deepagents SubAgentMiddleware on LangGraph Cloud Plus (EU); 3–10 minute sub-agents are silently replayed at ~180s with identical args and no preceding model node. That is duplicate side-effects plus cost, and they asked for the recommended pattern for long tool calls. Stop + idempotent receipt is the product.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/langchain-ai/langgraph/issues/7417",
+      "where_found_url": "https://github.com/langchain-ai/langgraph/issues/7417"
+    },
+    "disqualifiers": "Vendor-adjacent: GitHub also lists public repo 'aegra' described as an open-source alternative to LangGraph Platform. Confirm they would buy as an Expleo/LangGraph Cloud operator, not as a competing runtime vendor.",
+    "confidence": "HIGH"
+  },
+  {
+    "prospect_id": "lucas-santos-rivio-pydanticai-3913",
+    "name_or_handle": "Lucas Santos (@LucasSantos27); teammate Pedro Orii Antonacio (@antonacio) on the same thread",
+    "organization": "Rivio (stated on https://lucas-santos.dev/ and GitHub company field)",
+    "pain_phrase": "We're also experiencing this exact issue in production — running PydanticAI on Google Cloud Platform (GKE), inside pods with multiple parallel workers. We consistently hit the RuntimeError: <asyncio.locks.Event object> is bound to a different event loop when the cached HTTP client gets reused across different event loops. ... This is currently a blocker for us in production.",
+    "pain_source_url": "https://github.com/pydantic/pydantic-ai/issues/3913",
+    "pain_date": "2026-02-23",
+    "fit_rationale": "Binary test PASSES with a caveat: the failure is a production hang/crash of agent workers, not a spend loop. Lucas later described RabbitMQ threads each with their own event loop. A visible stop path and durable receipt for a wedged worker would still be valuable; they already run document-processing agents in production at Rivio.",
+    "contact_route": {
+      "kind": "email",
+      "value_or_url": "devlucassantoss@gmail.com",
+      "where_found_url": "https://lucas-santos.dev/"
+    },
+    "disqualifiers": "They commented on a maintainer issue rather than opening their own; teammate @antonacio has no public email on the GitHub profile fetched. Pitch should go to Lucas's published mailto, not guessed Rivio inboxes.",
+    "confidence": "HIGH"
+  },
+  {
+    "prospect_id": "henrym12-hn-47224740",
+    "name_or_handle": "HenryM12 (Hacker News)",
+    "organization": "UNVERIFIED",
+    "pain_phrase": "We've been pushing LLM backed workflows into production and are starting to run into reliability edges that observability alone doesn't solve. Things like: - loops that don't terminate cleanly - retries cascading across tool calls - cost creeping up inside a single workflow - agents making technically \"allowed\" but undesirable calls Monitoring here is fine. We can see what's happening. The harder part is deciding where the enforcement boundary actually lives. Right now, most of our shutdown paths still feel manual, things like feature flags, revoking keys, rate limiting upstream, etc.",
+    "pain_source_url": "https://news.ycombinator.com/item?id=47224740",
+    "pain_date": "2026-03-02",
+    "fit_rationale": "Binary test PASSES. They state production LLM workflows, name loops/retry cascades/cost creep, and explicitly ask whether others have automated kill conditions versus manual shutdown. That is the offer's buying question, asked in public.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://news.ycombinator.com/item?id=47224740",
+      "where_found_url": "https://news.ycombinator.com/item?id=47224740"
+    },
+    "disqualifiers": "HN profile about-field is empty; no email on https://news.ycombinator.com/user?id=HenryM12. Thread had 1 point and 1 comment when fetched — a helpful reply is in-bounds, a hard sell is spam-adjacent.",
+    "confidence": "HIGH"
+  },
+  {
+    "prospect_id": "jacobreesmontgomery-langgraph-6731",
+    "name_or_handle": "reesmonty / @jacobreesmontgomery",
+    "organization": "UNVERIFIED (issue logs show AzureChatOpenAI + Databricks SQL + a chat_route; GitHub profile lists no company)",
+    "pain_phrase": "The Text-to-SQL LangGraph agent I have created, using version 1.0.6 of langgraph, is looping indefinitely until hitting the error mentioned above (recursion limit error). This is happening despite clear evidence that the agent should be stopping based on the prompt I've given it. ... No matter what I did, it would infinite loop.",
+    "pain_source_url": "https://github.com/langchain-ai/langgraph/issues/6731",
+    "pain_date": "2026-01-30",
+    "fit_rationale": "Binary test PASSES. Agent retries slight variations of the same broken Databricks SQL until recursion_limit=20. Stop/loop-detection would have halted before the recursion wall. UNVERIFIED whether the looping run is customer-facing production versus an internal agent; system info is Darwin, logs look like an app route.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/langchain-ai/langgraph/issues/6731",
+      "where_found_url": "https://github.com/langchain-ai/langgraph/issues/6731"
+    },
+    "disqualifiers": "GitHub profile https://github.com/jacobreesmontgomery has no email and no website. No company listed.",
+    "confidence": "HIGH"
+  },
+  {
+    "prospect_id": "nv1776-n8n-26352",
+    "name_or_handle": "Nikita Vaikus (@nv1776)",
+    "organization": "UNVERIFIED (self-hosted n8n Docker on Rocky Linux 9.7; on-prem)",
+    "pain_phrase": "When using the n8n AI Agent node with Anthropic (Claude) models, the LLM occasionally returns a response that contains both a text content block and a tool_use content block in the same message. When this happens, n8n does not execute the tool call and does not produce any output — the agent turn is silently dropped. Visually it looks like a sequence of calls to LLM without result (aka wasted tokens)",
+    "pain_source_url": "https://github.com/n8n-io/n8n/issues/26352",
+    "pain_date": "2026-02-27",
+    "fit_rationale": "Binary test PASSES. Silent drop of an agent turn with wasted tokens and no error is a missing stop/surface path. Issue later marked fixed in n8n@2.35.0 — confirm they are still on a vulnerable version before pitching.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/n8n-io/n8n/issues/26352",
+      "where_found_url": "https://github.com/n8n-io/n8n/issues/26352"
+    },
+    "disqualifiers": "GitHub profile https://github.com/nv1776 has 0 public repos and no website/email. n8n-assistant later said a fix shipped in n8n@2.35.0 (comment dated 2026-08-11) — pain may already be patched for this reporter.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "squidward1012-langchain-36919",
+    "name_or_handle": "@Squidward1012",
+    "organization": "UNVERIFIED",
+    "pain_phrase": "兄弟，agent默认递归次数是9_999？文档里也从未交代，一下午浪费我800元，你要坑死我？",
+    "pain_source_url": "https://github.com/langchain-ai/langchain/issues/36919",
+    "pain_date": "2026-04-21",
+    "fit_rationale": "Binary test PASSES on cost: author says an undocumented 9_999 recursion default burned 800 yuan in one afternoon. A hard stop/budget receipt would have capped it. Issue body itself is thin (LangSmith link + rant); UNVERIFIED that this is a live customer workflow versus a local agent.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/langchain-ai/langchain/issues/36919",
+      "where_found_url": "https://github.com/langchain-ai/langchain/issues/36919"
+    },
+    "disqualifiers": "No email or website on https://github.com/Squidward1012. Thread is in Chinese; several comments pitch competing budget products (AgentShield, agentbrake) — those commenters are vendors, not this prospect.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "jpr5-darkridge-crewai-5510",
+    "name_or_handle": "Jordan Ritter (@jpr5)",
+    "organization": "Darkridge, Inc. (GitHub company field; Seattle)",
+    "pain_phrase": "ANY LLM provider hiccup during container startup causes the Python process to crash before the HTTP server is listening: ... In orchestrated environments (Railway, Kubernetes, AWS ECS, Fly.io) the platform's readiness/health check fails because no process ever binds the port. ... We hit this on our Railway-hosted CopilotKit showcase when our LLM mock (aimock) returned a transient schema error.",
+    "pain_source_url": "https://github.com/crewAIInc/crewAI/issues/5510",
+    "pain_date": "2026-04-16",
+    "fit_rationale": "Binary test PARTIAL/PASS. Production-shaped deploy: CrewAI behind FastAPI/AG-UI, container dies on LLM hiccup with no timeout/fallback. A stop/fallback proof at init is valuable. This is crash-on-start more than a runaway loop.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/crewAIInc/crewAI/issues/5510",
+      "where_found_url": "https://github.com/crewAIInc/crewAI/issues/5510"
+    },
+    "disqualifiers": "Consultancy (Darkridge). Issue is about a CopilotKit showcase; they also filed CopilotKit PR 3974. Not selling a competing survival-proof product on the pages fetched. https://www.darkridge.com/ shows 'Get in touch' but the HTML fetched on 2026-08-30 had no mailto and no form action — do not invent an inquiry address.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "johnpaulcurada-flowise-5620",
+    "name_or_handle": "@johnpaulcurada",
+    "organization": "UNVERIFIED",
+    "pain_phrase": "When using the Multi-Agent / Supervisor node setup, sending a simple \"Hello\" results in the Supervisor calling the agents repeatedly in a loop (hitting the Max Iterations limit, e.g., 5 times). Even though the first response is sufficient, the Flowise worker continues to execute, consuming excessive API credits.",
+    "pain_source_url": "https://github.com/FlowiseAI/Flowise/issues/5620",
+    "pain_date": "2026-01-08",
+    "fit_rationale": "Binary test PASSES. Supervisor/worker greeting loop burns API credits until max iterations. Stop-on-no-progress would have ended the run after the first sufficient reply. Issue was later closed completed (2026-02-27) — confirm they still see the loop.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/FlowiseAI/Flowise/issues/5620",
+      "where_found_url": "https://github.com/FlowiseAI/Flowise/issues/5620"
+    },
+    "disqualifiers": "GitHub account created 2025-10-01, 1 public repo, no website/email. Thin public identity. Closed as completed by Flowise maintainer.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "elio1fiore-flowise-5603",
+    "name_or_handle": "Elio Fiore (@elio1fiore)",
+    "organization": "UNVERIFIED (Flowise Cloud user; also publishes github.com/elio1fiore/flowise-whatsapp-bot — UNVERIFIED whether that bot is the same project)",
+    "pain_phrase": "Even after abandoning the Parallel architecture and simplifying the flow, the issue persists within the same project: some nodes are still executed twice during a single flow execution. ... Once this issue occurs, duplicating the project is not enough to resolve it. The only way to get out of this state is to create a completely new project and manually rebuild the entire flow.",
+    "pain_source_url": "https://github.com/FlowiseAI/Flowise/issues/5603",
+    "pain_date": "2025-12-19",
+    "fit_rationale": "Binary test PASSES on rollback. AgentFlow V2 state corruption causes duplicate node execution; author says the only recovery is rebuilding the project from scratch. A rollback path plus a receipt that a node ran once would be the proof. Recency is ~8 months (Dec 2025).",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/FlowiseAI/Flowise/issues/5603",
+      "where_found_url": "https://github.com/FlowiseAI/Flowise/issues/5603"
+    },
+    "disqualifiers": "No email/website on https://github.com/elio1fiore. Location Italy. Recency slightly older than the ~6 month hunt window.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "kshitizhelix-openai-agents-2838",
+    "name_or_handle": "Kshitiz Parashar (@KshitizHelix)",
+    "organization": "UNVERIFIED (repro ran from Oracle Cloud SJC; no company on GitHub profile)",
+    "pain_phrase": "The /v1/responses endpoint silently drops 10–28% of requests under moderate concurrent load (5 simultaneous calls). Affected requests receive no HTTP error, no timeout, and no retry from the SDK — the TCP connection simply hangs indefinitely until the caller kills it.",
+    "pain_source_url": "https://github.com/openai/openai-agents-python/issues/2838",
+    "pain_date": "2026-04-03",
+    "fit_rationale": "Binary test PARTIAL. Hang-until-the-caller-kills-it is a missing stop path. The write-up is a 50-call load test (\"reproducible across multiple hours of testing\"), UNVERIFIED as a live customer workflow. Still a person operating Agents SDK who had to invent their own timeout.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/openai/openai-agents-python/issues/2838",
+      "where_found_url": "https://github.com/openai/openai-agents-python/issues/2838"
+    },
+    "disqualifiers": "0 public repos, no website/email on https://github.com/KshitizHelix. Issue closed stale by github-actions, not confirmed fixed.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "pronto-sage-openai-agents-2487",
+    "name_or_handle": "@Pronto-Sage",
+    "organization": "UNVERIFIED",
+    "pain_phrase": "When using agent.as_tool() with needs_approval=True on a tool inside the nested agent, resuming after HITL approval starts a fresh inner run instead of continuing — causing an infinite pause/approve/resume cycle.",
+    "pain_source_url": "https://github.com/openai/openai-agents-python/issues/2487",
+    "pain_date": "2026-02-14",
+    "fit_rationale": "Binary test PASSES on the failure class (infinite HITL loop / lost nested state). A durable receipt of the inner run would have prevented replay. UNVERIFIED whether they hit this in production or via an MRE; they also opened fix PRs.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://github.com/openai/openai-agents-python/issues/2487",
+      "where_found_url": "https://github.com/openai/openai-agents-python/issues/2487"
+    },
+    "disqualifiers": "GitHub profile https://github.com/Pronto-Sage has 1 repo and no website/email. Looks like a framework-bug reporter more than a named production team. Issue closed after SDK fix PRs — pain may already be patched.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "twu29-n8n-rag-177258",
+    "name_or_handle": "Alley (@twu29 on n8n Community)",
+    "organization": "UNVERIFIED (agentic RAG over a Supabase corpus of emails, meeting transcripts, and documents)",
+    "pain_phrase": "However, the agent is not stopping as expected. Even after the Supabase and reranker nodes successfully returns data with a high relevance score, the agent continues iterating until it hits the maximum iteration limit (10). At that point, it responds with: \"Agent stopped due to max iterations.\" ... This is fairly urgent, so any advice would be greatly appreciated.",
+    "pain_source_url": "https://community.n8n.io/t/agentic-rag-agent-stuck-on-iterations/177258",
+    "pain_date": "2025-08-28",
+    "fit_rationale": "Binary test PASSES. RAG agent keeps iterating after successful retrieval/rerank and only stops on max iterations. They called it urgent. Recency is ~12 months (outside the ~6 month hunt window but still a named operator of a live agentic RAG workflow).",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://community.n8n.io/t/agentic-rag-agent-stuck-on-iterations/177258",
+      "where_found_url": "https://community.n8n.io/t/agentic-rag-agent-stuck-on-iterations/177258"
+    },
+    "disqualifiers": "Older than ~6 months. n8n Community profile page for twu29 timed out when fetched; contact is the public thread they authored. No email found.",
+    "confidence": "MEDIUM"
+  },
+  {
+    "prospect_id": "josue-hernandez-n8n-174472",
+    "name_or_handle": "Josue_Hernandez (n8n Community)",
+    "organization": "UNVERIFIED (HubSpot CRM update via n8n AI Agent + sub-agent)",
+    "pain_phrase": "Whenever I provide the last required detail, the sub-agent successfully calls the HubSpot tool and gets an \"ok\" response. At that point, I'd expect the agent to stop and return the confirmation message back to me in the chat. Instead, it enters an infinite loop: It keeps calling the same tool over and over, even though the first attempt already succeeded. Eventually, it crashes with \"agent stopped due to max iterations\".",
+    "pain_source_url": "https://community.n8n.io/t/agent-goes-into-infinite-tool-call-loop/174472",
+    "pain_date": "2025-08-24",
+    "fit_rationale": "Binary test PASSES on the original incident: successful HubSpot write then infinite re-calls (duplicate CRM writes + cost). Author later commented that a clearer prompt stopped it — they may no longer be in pain. Recency ~12 months.",
+    "contact_route": {
+      "kind": "public_thread",
+      "value_or_url": "https://community.n8n.io/t/agent-goes-into-infinite-tool-call-loop/174472",
+      "where_found_url": "https://community.n8n.io/t/agent-goes-into-infinite-tool-call-loop/174472"
+    },
+    "disqualifiers": "Author later said a prompt rewrite fixed it (comment 2025-08-25 on the same thread). Older than ~6 months. Do not pitch as if the loop is still live without asking.",
+    "confidence": "LOW"
+  }
+]

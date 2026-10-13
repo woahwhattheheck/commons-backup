@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "operation": "ASTRA-REFORGE-RECOVERY",
+  "status": "PASS",
+  "predecessor_boundary": {
+    "dead_session_exact_nine_files_recovered": false,
+    "claim": "fresh successor rebuilt from the same immutable authorities; not a byte-identical claim about the lost local bundle"
+  },
+  "input_artifacts": {
+    "sourcepack": {
+      "artifact_id": 10030763484,
+      "zip_sha256": "68f78694fa56976fa1476ffd1d1fb6b3bfd4935392dfd0023a170c7efcd35e62"
+    },
+    "intake": {
+      "artifact_id": 10032525998,
+      "zip_sha256": "6601d709ffa3cd17d994228869ba770a7189bb9b69467cca07ff40e8e6023da5"
+    },
+    "engine": {
+      "artifact_id": 10005621438,
+      "zip_sha256": "06e526df0a87d1d94e60dd0f2ea380aa099a4f0edd40a604a7c5bd274bd189cc"
+    }
+  },
+  "authorities": {
+    "public_bank_bank_py_git_blob": "063b87dca064a8c673a6dd8839e6714abe46c4d4",
+    "public_bank_intake_py_git_blob": "ee8a90bb8f8ba135ef4d5e8056289ae32eed1c48",
+    "cok_v10_source_sha256": "56831f3c43c9727d90016b7a7a8d4eb51d1a4c08c1120d58f061d9176e8bc109",
+    "lonespear_v18_source_sha256": "eb5b5f59a8ec2d40b77cc99d4ffe3b932136fdcf9f6b6e168726b7f07ab47cb0"
+  },
+  "materialization": {
+    "status": "PASS",
+    "entries": [
+      "cok-v10",
+      "lonespear-v18-greedy",
+      "lonespear-v18-scipy"
+    ],
+    "families": {
+      "cok-v10": ["cok-v10"],
+      "lonespear-v18": ["lonespear-v18-greedy", "lonespear-v18-scipy"]
+    },
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "bank_json_sha256": "0338cc2ffefbe9877cb999d31ad31524c76b72034821156bb122dc17d52f0ce7",
+    "reforge_manifest_sha256": "d1d9839d80187538b0e8c89a4ccc6ad5a66020a535f534558b8616cc825f5303",
+    "runtime_files": 22
+  },
+  "tests": {
+    "normal": {"passed": 13, "failed": 0},
+    "python_optimized": {"passed": 13, "failed": 0},
+    "py_compile": "PASS",
+    "poison_controls": [
+      "zip traversal",
+      "zip symlink",
+      "tar link",
+      "caller-frozen manifest mismatch",
+      "runtime file tamper",
+      "family relabel",
+      "noncanonical archive path"
+    ]
+  },
+  "engine_smoke": {
+    "seed": 9771001,
+    "held_out": false,
+    "games": 6,
+    "completed": 6,
+    "candidate_failures": 0,
+    "rechecked_first_games": 3,
+    "rechecked_identical_trace_and_scores": 3,
+    "cok_v10": {"wins": 2, "losses": 0, "mean_margin": 175318.0},
+    "lonespear_v18_greedy": {"wins": 2, "losses": 0, "mean_margin": 75416.0},
+    "lonespear_v18_scipy": {"wins": 2, "losses": 0, "mean_margin": 110248.0},
+    "claim": "spent-development compatibility only; not strength or leaderboard evidence"
+  },
+  "side_effects": {
+    "policy_source_changed": false,
+    "new_evaluator": false,
+    "gameplay_changed": false,
+    "defaults_changed": false,
+    "kaggle_submission": false
+  }
+}

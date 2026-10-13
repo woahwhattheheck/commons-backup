@@ -1,0 +1,24 @@
+{
+  "schema": "titan-v4-repair-preservation-v1",
+  "status": "NARROWING_REPAIR_DONOR_ONLY",
+  "target": {
+    "path": "repairs/gameplay/m1-two-seat/r04_m1_wheat_trade.py",
+    "expected_git_blob": "d4d068d62ffc8fcd25842193bc7031f764630262"
+  },
+  "repair_transformer": {
+    "path": "repair_m1_complete_day.py",
+    "git_blob": "1014d235909bcf694dad1c620195e11981adb07f"
+  },
+  "focused_regression": {
+    "path": "test_v4_m1_complete_day.py",
+    "git_blob": "db0cc52f70be6908816f5dc52c1eed5e0eae691d"
+  },
+  "defect": "A truncated frozen tape used EOF as day_end, allowing a pickup to certify current cash spend without proving omitted same-day steps contain no later HIRE/BUY cash owner.",
+  "repair": "Require tape coverage through literal same-day end before certifying the M1 pickup/funding theorem; preserve complete-day inert suffix behavior and late-purchase veto.",
+  "nonclaims": [
+    "no new gameplay mechanism",
+    "no key/default/routing/production activation",
+    "no old V4 ref movement",
+    "no legacy materializer execution"
+  ]
+}

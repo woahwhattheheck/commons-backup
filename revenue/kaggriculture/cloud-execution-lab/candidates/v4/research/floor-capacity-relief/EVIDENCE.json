@@ -1,0 +1,90 @@
+{
+  "claim": "ASTRA-FLOORDRAIN",
+  "engine_blob_sha": "3c202c7ee921da239356789e266b694635103fc4",
+  "engine_invariants_used": [
+    "EOD actor inventory drops into shed in deterministic order up to shedCapacity; excess is discarded",
+    "successful SELL at quote $1 pays $1 and does not increment market inventory",
+    "SELL consumes shed cargo before EOD inventory drop"
+  ],
+  "negative_controls": {
+    "above_floor": {
+      "baseline_discarded_sequence": [
+        "MELON",
+        "MELON"
+      ],
+      "claim": "ASTRA-FLOORDRAIN",
+      "declared_value_gain": 0.0,
+      "drained_units": {},
+      "engine_blob_sha": "3c202c7ee921da239356789e266b694635103fc4",
+      "floor_cash": 0,
+      "market_inventory_delta": 0,
+      "orders": [],
+      "preserved_sequence": [],
+      "projected_discarded_sequence": [
+        "MELON",
+        "MELON"
+      ],
+      "reason": "no_unprotected_floor_cargo"
+    },
+    "no_overflow": {
+      "baseline_discarded_sequence": [],
+      "claim": "ASTRA-FLOORDRAIN",
+      "declared_value_gain": 0.0,
+      "drained_units": {},
+      "engine_blob_sha": "3c202c7ee921da239356789e266b694635103fc4",
+      "floor_cash": 0,
+      "market_inventory_delta": 0,
+      "orders": [],
+      "preserved_sequence": [],
+      "projected_discarded_sequence": [],
+      "reason": "no_projected_overflow"
+    },
+    "nonpositive_declared_value": {
+      "baseline_discarded_sequence": [
+        "MELON",
+        "MELON"
+      ],
+      "claim": "ASTRA-FLOORDRAIN",
+      "declared_value_gain": 0.0,
+      "drained_units": {},
+      "engine_blob_sha": "3c202c7ee921da239356789e266b694635103fc4",
+      "floor_cash": 0,
+      "market_inventory_delta": 0,
+      "orders": [],
+      "preserved_sequence": [],
+      "projected_discarded_sequence": [
+        "MELON",
+        "MELON"
+      ],
+      "reason": "nonpositive_declared_value"
+    }
+  },
+  "positive_witness": {
+    "baseline_discarded_sequence": [
+      "MELON",
+      "MELON"
+    ],
+    "claim": "ASTRA-FLOORDRAIN",
+    "declared_value_gain": 494.0,
+    "drained_units": {
+      "MILK": 2
+    },
+    "engine_blob_sha": "3c202c7ee921da239356789e266b694635103fc4",
+    "floor_cash": 2,
+    "market_inventory_delta": 0,
+    "orders": [
+      [
+        "SELL",
+        "MILK",
+        2
+      ]
+    ],
+    "preserved_sequence": [
+      "MELON",
+      "MELON"
+    ],
+    "projected_discarded_sequence": [],
+    "reason": "positive_floor_capacity_relief"
+  },
+  "status": "research_only_default_off"
+}

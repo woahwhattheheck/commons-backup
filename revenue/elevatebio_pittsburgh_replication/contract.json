@@ -1,0 +1,41 @@
+{
+  "id": "elevatebio-pittsburgh-replication-lims-01",
+  "version": 1,
+  "buyer": "ElevateBio BaseCamp Pittsburgh / Katie Shannon",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788149833.800009"
+  },
+  "workflow": [
+    "port signed Waltham master data and interface contracts into a Pittsburgh tenant",
+    "QC and MSAT method calculation and routing",
+    "namespace isolation of Pittsburgh identifiers",
+    "two-site governance and exact role matrix",
+    "MES/EBR/LIMS/monitoring/QMS simulated read-only adapters",
+    "seeded method/version and permission holds",
+    "named-human batch disposition"
+  ],
+  "acceptance": [
+    "400 synthetic two-site samples through signed Waltham/Pittsburgh fixtures",
+    "200 Waltham + 200 Pittsburgh",
+    "exactly 384 valid samples; approved methods produce identical calculations/routing",
+    "exactly 16 seeded method/version and permission holds",
+    "Pittsburgh identifiers remain isolated",
+    "cross-site access denied by exact role matrix",
+    "every mock interface payload matches canonical hash",
+    "replay changes zero records",
+    "disposition requires named human signature; autonomous denied"
+  ],
+  "exclusions": [
+    "no autonomous certification or disposition",
+    "no production tenant change",
+    "no validation claim until buyer-approved golden round trip",
+    "no PHI, outreach, cash, or Stripe"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic two-site replication and human-disposition receipts only; never live MES/EBR/LIMS/monitoring/QMS I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

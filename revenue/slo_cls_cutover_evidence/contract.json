@@ -1,0 +1,44 @@
+{
+  "id": "slo-cls-cutover-evidence-lims-01",
+  "version": 1,
+  "buyer": "Glen M. Miller / San Luis Obispo County Public Health Laboratory",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "note": "BUILD DEMAND slo-cls-cutover-evidence-lims-01"
+  },
+  "workflow": [
+    "requisition and portal accession",
+    "Panther Fusion method plus version catalog check",
+    "result / report / source hash verify",
+    "deterministic incumbent-to-CLS mapping",
+    "replay creates nothing",
+    "rollback restores exact baseline",
+    "named human approval before result or report release"
+  ],
+  "acceptance": [
+    "1000 synthetic legacy bundles",
+    "exactly 850 READY",
+    "exactly 150 predetermined HOLD",
+    "50 DUPLICATE_ID",
+    "40 BROKEN_SAMPLE_TEST_REF",
+    "30 METHOD_VERSION_CONFLICT",
+    "30 HASH_MISMATCH",
+    "every valid object maps once",
+    "zero orphans and zero duplicates",
+    "replay creates nothing",
+    "rollback restores the exact baseline",
+    "no result or report release without named approval"
+  ],
+  "exclusions": [
+    "no public-health interpretation",
+    "no live incumbent or CliniSys writes",
+    "no autonomous release",
+    "no outreach"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic cutover evidence, mapping, rollback, and named-approval receipts only; never diagnosis, public-health call, or live LIMS I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "operation_id": "RIDGWAY-ZEROGRAD-PRESSURE-TRACE-COUNTEREXAMPLE-ZSOL-20260917",
+  "sources": [
+    {
+      "kind": "primary_problem_preprint",
+      "citation": "I. G. Gjerde and L. R. Scott, Verification and validation of cylinder drag: Pressure and stress approximations on curved boundaries, arXiv:2306.12362v1 (2023)",
+      "url": "https://arxiv.org/abs/2306.12362",
+      "facts_used": [
+        "Eq. (5) displays the Stokes integration-by-parts identity with full traction (nu D(u)-p I)n",
+        "Eq. (27) displays the Nitsche velocity boundary form using partial_n u, its adjoint term, and a penalty but no explicit pressure-normal boundary flux",
+        "Eq. (28) couples that velocity Nitsche form to the volume pressure-divergence form",
+        "the manufactured Scott-Vogelius example immediately preceding the Nitsche experiment uses constant pressure"
+      ],
+      "page_images_checked": [
+        "printed page 5 / integration-by-parts Eq. (5)",
+        "printed page 13 / manufactured solution and constant pressure",
+        "printed page 17 / Nitsche Eqs. (27)-(28)"
+      ]
+    },
+    {
+      "kind": "independent_weak_normal_pressure_robustness_reference",
+      "citation": "M. Neilan, M. A. Olshanskii, and H. von Wahl, An unfitted divergence-free higher order finite element method for the Stokes problem, arXiv:2512.12050v2 (2026)",
+      "url": "https://arxiv.org/abs/2512.12050",
+      "facts_used": [
+        "the abstract identifies loss of pressure robustness associated with weak enforcement of normal velocity",
+        "the method introduces a higher-order Lagrange multiplier on the weak boundary",
+        "the discrete formulation contains c_h(mu_h,v_h)=integral_Gamma_h mu_h n_h dot v_h",
+        "a no-flow experiment with nonconstant pressure is used to probe pressure decoupling"
+      ],
+      "page_images_checked": [
+        "printed page 1 / abstract and pressure-robustness statement",
+        "method section around the boundary multiplier formulation"
+      ],
+      "scope_note": "Different unfitted divergence-free Stokes method; used only as independent corroboration of the weak-normal pressure-trace mechanism, not as a proof of the Ridgway prize theorem."
+    }
+  ],
+  "authority": {
+    "full_prize_theorem_proved": false,
+    "quartic_mixed_boundary_lower_bound_proved": false,
+    "published_proof": false,
+    "sponsor_contact_authorized": false,
+    "prize_claim_authorized": false,
+    "prize_earned": false,
+    "receivable": false,
+    "cash_received": false
+  }
+}

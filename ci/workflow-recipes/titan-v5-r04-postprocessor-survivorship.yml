@@ -1,0 +1,86 @@
+name: TITAN V5 R04 postprocessor survivorship
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/r04-postprocessor-survivorship/**"
+      - ".github/workflows/titan-v5-r04-postprocessor-survivorship.yml"
+  push:
+    branches:
+      - "astra/v5-r04-postprocessor-survivorship-20260912"
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/r04-postprocessor-survivorship/**"
+      - ".github/workflows/titan-v5-r04-postprocessor-survivorship.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  source-and-materialization:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+      - name: Assert exact checked-out head
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED="${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/r04-postprocessor-survivorship
+        run: |
+          python -m py_compile materialize_r04_bypass.py test_materialize_r04_bypass.py
+          python -B -m unittest -v test_materialize_r04_bypass.py
+          python -O -B -m unittest -v test_materialize_r04_bypass.py
+      - name: Materialize exact public production baseline twice
+        shell: bash
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/r04-postprocessor-survivorship
+        run: |
+          set -euo pipefail
+          URL="https://github.com/woahwhattheheck/commons/releases/download/titan-kaggriculture-gauntlet-20260912/titan-v5-production-recovery-v2.tar.gz"
+          curl --fail --location --silent --show-error "$URL" --output baseline.tar.gz
+          echo "0aded66a2c393cc60f4f45d10f11c384a7e788182bf5430863829a02b66daf02  baseline.tar.gz" | sha256sum --check -
+          python -B materialize_r04_bypass.py --baseline baseline.tar.gz --out bypass-a.tar.gz --receipt bypass-a.json
+          python -B materialize_r04_bypass.py --baseline baseline.tar.gz --out bypass-b.tar.gz --receipt bypass-b.json
+          cmp bypass-a.tar.gz bypass-b.tar.gz
+          cmp bypass-a.json bypass-b.json
+          mkdir treatment
+          tar -xzf bypass-a.tar.gz -C treatment
+          python -m compileall -q treatment
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          receipt = json.loads(Path("bypass-a.json").read_text())
+          cfg_raw = Path("treatment/TITAN-CONFIG.json").read_bytes()
+          cfg = json.loads(cfg_raw)
+          assert hashlib.sha256(cfg_raw).hexdigest() == "f32890231e5ea0b082ffdb6e2e9dbf65450172488e023f51314fc1aff059ff2f"
+          expected = {
+              "consumer": "parent",
+              "seed": False,
+              "funding": False,
+              "redundant_hire": False,
+              "market_pressure": False,
+              "operating_stock": False,
+              "idle_fertilizer": False,
+              "crop_release": False,
+              "early_capital": False,
+              "town_procurement": False,
+          }
+          for key, value in expected.items():
+              assert cfg[key] == value, (key, cfg[key], value)
+          assert receipt["changed_members"] == ["TITAN-CONFIG.json"]
+          assert receipt["member_count"] == 92
+          assert receipt["native_economics_status"] == "PENDING_BASE_PRODUCTION_PANEL"
+          assert receipt["kaggle_submission_hold"] is True
+          print(json.dumps({
+              "treatment_archive_sha256": receipt["treatment"]["archive_sha256"],
+              "treatment_config_sha256": receipt["treatment"]["config_sha256"],
+              "member_count": receipt["member_count"],
+          }, sort_keys=True))
+          PY

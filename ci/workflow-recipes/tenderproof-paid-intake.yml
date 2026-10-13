@@ -1,0 +1,45 @@
+name: TenderProof paid intake contract
+
+on:
+  pull_request:
+    paths:
+      - "revenue/tenderproof-rfp-evidence-sprint/**"
+      - ".github/workflows/tenderproof-paid-intake.yml"
+  push:
+    branches: [main]
+    paths:
+      - "revenue/tenderproof-rfp-evidence-sprint/**"
+      - ".github/workflows/tenderproof-paid-intake.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        working-directory: revenue/tenderproof-rfp-evidence-sprint
+        run: python -m py_compile intake_gate.py cli.py
+      - name: Hostile tests
+        working-directory: revenue/tenderproof-rfp-evidence-sprint
+        run: PYTHONPATH=. python -B -m unittest discover -s tests -v
+      - name: Optimized hostile tests
+        working-directory: revenue/tenderproof-rfp-evidence-sprint
+        run: PYTHONPATH=. python -O -B -m unittest discover -s tests -v
+      - name: Funded synthetic intake admits delivery
+        working-directory: revenue/tenderproof-rfp-evidence-sprint
+        run: PYTHONPATH=. python cli.py sample/synthetic_ready_intake.json | grep '^READY_FOR_DELIVERY '
+      - name: Unfunded synthetic intake is rejected
+        working-directory: revenue/tenderproof-rfp-evidence-sprint
+        run: |
+          set +e
+          PYTHONPATH=. python cli.py sample/synthetic_unfunded_intake.json > /tmp/hold.txt
+          rc=$?
+          set -e
+          test "$rc" -eq 2
+          grep '^HOLD_UNFUNDED ' /tmp/hold.txt

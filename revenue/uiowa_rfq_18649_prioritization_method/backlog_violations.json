@@ -1,0 +1,81 @@
+{
+  "backlog_id": "UIOWA-029-SYNTHETIC-BACKLOG-VIOLATIONS-001",
+  "synthetic": true,
+  "authority": "FICTIONAL_REHEARSAL_ONLY",
+  "content_warning": "FICTIONAL and deliberately broken. Exists only to show each rule going red.",
+  "parameters": {"quick_win_max_effort_days": 10, "high_effort_min_effort_days": 60},
+  "recommendations": [
+    {
+      "recommendation_id": "REC-BAD-001",
+      "title": "Declared before its own prerequisite",
+      "effects": {"quality": 3}, "complexity": 2,
+      "effort_days_low": 5, "effort_days_high": 9,
+      "prerequisites": ["REC-BAD-002"],
+      "declared_horizon": "0-90"
+    },
+    {
+      "recommendation_id": "REC-BAD-002",
+      "title": "The prerequisite, scheduled later than the thing that needs it",
+      "effects": {"quality": 2}, "complexity": 3,
+      "effort_days_low": 12, "effort_days_high": 20,
+      "prerequisites": [],
+      "declared_horizon": "180+"
+    },
+    {
+      "recommendation_id": "REC-BAD-003",
+      "title": "Points at a recommendation that is not in this backlog",
+      "effects": {"security": 4}, "complexity": 2,
+      "effort_days_low": 4, "effort_days_high": 7,
+      "prerequisites": ["REC-BAD-404"],
+      "declared_horizon": "0-90"
+    },
+    {
+      "recommendation_id": "REC-BAD-003",
+      "title": "Reuses an id already taken",
+      "effects": {"delivery": 1}, "complexity": 1,
+      "effort_days_low": 2, "effort_days_high": 3,
+      "prerequisites": [],
+      "declared_horizon": "0-90"
+    },
+    {
+      "recommendation_id": "REC-BAD-005",
+      "title": "Horizon outside the vocabulary and a reversed effort range",
+      "effects": {"quality": 2}, "complexity": 2,
+      "effort_days_low": 30, "effort_days_high": 10,
+      "prerequisites": [],
+      "declared_horizon": "next quarter"
+    },
+    {
+      "recommendation_id": "REC-BAD-006",
+      "title": "High effort pulled early with no stated reason",
+      "effects": {"delivery": 5}, "complexity": 5,
+      "effort_days_low": 90, "effort_days_high": 140,
+      "prerequisites": [],
+      "declared_horizon": "0-90"
+    },
+    {
+      "recommendation_id": "REC-BAD-007",
+      "title": "Unsized work declared into the first horizon",
+      "effects": {"quality": null}, "complexity": null,
+      "effort_days_low": null, "effort_days_high": null,
+      "prerequisites": [],
+      "declared_horizon": "0-90"
+    },
+    {
+      "recommendation_id": "REC-BAD-008",
+      "title": "First half of a prerequisite cycle",
+      "effects": {"quality": 1}, "complexity": 2,
+      "effort_days_low": 5, "effort_days_high": 9,
+      "prerequisites": ["REC-BAD-009"],
+      "declared_horizon": "90-180"
+    },
+    {
+      "recommendation_id": "REC-BAD-009",
+      "title": "Second half of a prerequisite cycle",
+      "effects": {"quality": 1}, "complexity": 2,
+      "effort_days_low": 5, "effort_days_high": 9,
+      "prerequisites": ["REC-BAD-008"],
+      "declared_horizon": "90-180"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+name: Procurement award price intelligence
+on:
+  pull_request:
+    paths: ['revenue/procurement_award_price_intelligence/**','.github/workflows/procurement-award-price-intelligence.yml']
+  push:
+    branches: [main]
+    paths: ['revenue/procurement_award_price_intelligence/**','.github/workflows/procurement-award-price-intelligence.yml']
+concurrency:
+  group: procurement-price-intel-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: python -m py_compile revenue/procurement_award_price_intelligence/engine.py revenue/procurement_award_price_intelligence/test_engine.py revenue/procurement_award_price_intelligence/adapters.py revenue/procurement_award_price_intelligence/test_adapters.py
+      - run: python -m unittest -v revenue.procurement_award_price_intelligence.test_engine revenue.procurement_award_price_intelligence.test_adapters
+      - run: python -O -m unittest -v revenue.procurement_award_price_intelligence.test_engine revenue.procurement_award_price_intelligence.test_adapters

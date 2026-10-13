@@ -1,0 +1,42 @@
+name: enveda-casmi-2026
+
+on:
+  pull_request:
+    paths:
+      - "competitions/enveda_casmi_2026/**"
+      - "tests/test_enveda_casmi_2026.py"
+      - ".github/workflows/enveda-casmi-2026.yml"
+  push:
+    branches: [main]
+    paths:
+      - "competitions/enveda_casmi_2026/**"
+      - "tests/test_enveda_casmi_2026.py"
+      - ".github/workflows/enveda-casmi-2026.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enveda-casmi-2026-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  workbench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Compile
+        run: python -m py_compile competitions/enveda_casmi_2026/workbench.py tests/test_enveda_casmi_2026.py
+      - name: Hostile suite
+        run: python -m unittest -v tests.test_enveda_casmi_2026
+      - name: Optimized hostile suite
+        run: python -O -m unittest -v tests.test_enveda_casmi_2026
+      - name: Runnable compile and verify
+        run: |
+          out="$(mktemp -u)"
+          python competitions/enveda_casmi_2026/workbench.py compile competitions/enveda_casmi_2026/competition_sources.json competitions/enveda_casmi_2026/synthetic_fixture.json "$out"
+          python competitions/enveda_casmi_2026/workbench.py verify "$out"
+          rm -f "$out"

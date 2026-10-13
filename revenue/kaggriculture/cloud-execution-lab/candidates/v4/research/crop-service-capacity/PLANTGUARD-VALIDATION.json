@@ -1,0 +1,97 @@
+{
+  "schema": "titan-v4-plantguard-validation/v1",
+  "status": "source_derived_research_no_activation",
+  "engine_git_blob": "3c202c7ee921da239356789e266b694635103fc4",
+  "configuration_git_blob": "b354d06b742fe48402513792253f1a5c29366b20",
+  "gemini_seam": "PLANTGUARD / last-hour planting guard",
+  "theorem": [
+    "new PLANT starts consecutive_unwatered=1 and watered_today=false",
+    "same-EOD survival therefore requires WATER after the PLANT unit action and before EOD",
+    "current actor order matters: WATER before PLANT on the same callback does not discharge the new plant",
+    "earlier same-site BUILD_COOP or BUILD_PASTURE can occupy an initially empty tile before a later PLANT, so unresolved build success fails closed rather than minting a false executable-PLANT certificate",
+    "movement changes later WATER location and is tracked across the complete authored suffix",
+    "observation hour must equal step modulo turnsPerDay under strict integer custody",
+    "same-EOD rejection requires that the current day's hour-23 callback is itself executable at or before episodeSteps-2; authored rows beyond the terminal horizon cannot satisfy suffix custody",
+    "terminal semantics are pinned by the official engine blob and standard episodeSteps/turnsPerDay defaults are pinned by the official configuration blob; returned evidence names both sources",
+    "explicit custom configuration is proof-critical: any caller-supplied configuration map is rejected unless configuration_authenticated is literally True; omitted configuration uses the pinned official defaults",
+    "a same-site DIG after an executable current PLANT removes that plant; removed candidates cannot support a same-EOD weed-doom certificate, while a DIG before a later PLANT on an initially empty tile is a no-op",
+    "future HIRE before the last callback creates actor-path ambiguity and therefore prevents one-sided rejection"
+  ],
+  "result_contract": {
+    "reject_only": "DOOMED_AUTHORED_SUFFIX",
+    "otherwise": "NOT_CERTIFIED",
+    "safe_verdict_exists": false,
+    "decision_authority": false
+  },
+  "executed": {
+    "normal_tests": {
+      "count": 37,
+      "status": "pass"
+    },
+    "optimized_tests": {
+      "count": 37,
+      "status": "pass"
+    },
+    "py_compile": {
+      "status": "pass"
+    },
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "files": {
+    "plant_guard.py": {
+      "bytes": 16735,
+      "sha256": "1b467501284b38a26b97ccfc6d65d891a658cec21b62ee1a4f87e3daf89b1118"
+    },
+    "test_plant_guard.py": {
+      "bytes": 15974,
+      "sha256": "f0dacfa0d78945eb78c735eab144f8e81b1e3c9bd06ae6239877c6e4d2f779a2"
+    }
+  },
+  "covered_edges": [
+    "last-hour single-actor doom",
+    "same-callback later-actor WATER rescue",
+    "same-callback WATER-before-PLANT non-rescue",
+    "later-callback same-actor WATER",
+    "movement away from target",
+    "another actor move-then-WATER rescue",
+    "out-of-bounds move no-op",
+    "incomplete suffix fail-closed",
+    "current/future HIRE actor ambiguity",
+    "final-hour HIRE irrelevance",
+    "market-cap-inert HIRE",
+    "same-crop seed overshoot",
+    "colocated duplicate PLANT order",
+    "nonempty target",
+    "suffix authentication requirement",
+    "actor-cardinality drift",
+    "mixed rescued/doomed plants",
+    "same-site BUILD_COOP before PLANT fail-closed",
+    "same-site BUILD_PASTURE before PLANT fail-closed",
+    "different-site BUILD does not hide an executable PLANT",
+    "hour/step mismatch fail-closed",
+    "step type-poison fail-closed",
+    "standard step718/hour22 plus unused authored step719 cannot certify same-EOD doom",
+    "last real standard EOD at step695/hour23 remains certifiable",
+    "post-terminal step719 fails closed",
+    "custom episodeSteps controls EOD reachability",
+    "episodeSteps type-poison fails closed",
+    "same-callback PLANT then DIG removes the candidate instead of falsely certifying weed-doom",
+    "same-callback DIG before PLANT on an empty tile remains a no-op and preserves the later PLANT candidate",
+    "later-callback same-site DIG removes the candidate",
+    "unrelated later DIG does not hide a doomed candidate",
+    "mixed removed and surviving unwatered candidates doom only the surviving plant",
+    "returned evidence pins engine and configuration Git blobs",
+    "explicit custom configuration without configuration_authenticated fails closed before proof evaluation",
+    "authenticated custom configuration can use exact custom horizon values",
+    "input immutability"
+  ],
+  "limits": [
+    "authored suffix custody must be established by the caller",
+    "omitted configuration uses pinned official defaults; any explicit custom configuration is accepted only with literal configuration_authenticated=True after caller custody binding",
+    "earlier clearing actions on initially occupied tiles remain conservative and do not create a certified PLANT candidate",
+    "NOT_CERTIFIED is not SAFE or profitable",
+    "no controller/scheduler/runtime/default/config/COMPOSITION/evaluator/archive/Kaggle mutation",
+    "current-native engagement and both-seat economics are required before any action suppression is promoted"
+  ]
+}

@@ -1,0 +1,42 @@
+name: GOSIM Agentic Cosmos foundation CI
+on:
+  pull_request:
+    paths:
+      - 'competitions/gosim-agentic-cosmos-2026/**'
+      - '.github/workflows/gosim-agentic-cosmos-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'competitions/gosim-agentic-cosmos-2026/**'
+      - '.github/workflows/gosim-agentic-cosmos-ci.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.13']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        working-directory: competitions/gosim-agentic-cosmos-2026
+        run: python -m py_compile observer.py replay.py demo.py package.py test_observer.py
+      - name: Hostile tests
+        working-directory: competitions/gosim-agentic-cosmos-2026
+        run: |
+          python -m unittest -v test_observer.py
+          python -O -m unittest -v test_observer.py
+      - name: Standalone demo
+        working-directory: competitions/gosim-agentic-cosmos-2026
+        run: python demo.py
+      - name: Deterministic package
+        working-directory: competitions/gosim-agentic-cosmos-2026
+        run: |
+          python package.py /tmp/cosmos-a
+          python package.py /tmp/cosmos-b
+          cmp /tmp/cosmos-a/agentic-cosmos-foundation.zip /tmp/cosmos-b/agentic-cosmos-foundation.zip
+          cmp /tmp/cosmos-a/agentic-cosmos-sbom.json /tmp/cosmos-b/agentic-cosmos-sbom.json

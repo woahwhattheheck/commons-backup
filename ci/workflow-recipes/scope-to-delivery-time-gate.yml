@@ -1,0 +1,74 @@
+name: Scope-to-delivery trusted-time gate
+
+on:
+  pull_request:
+    paths:
+      - 'host/scope_to_delivery_time_gate.py'
+      - 'test_scope_to_delivery_time_gate.py'
+      - 'revenue/scope_to_delivery/TRUSTED_TIME_GATE.md'
+      - 'revenue/scope_to_delivery/README.md'
+      - 'ground/SCOPE_TO_DELIVERY.md'
+      - '.github/workflows/scope-to-delivery-time-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'host/scope_to_delivery_time_gate.py'
+      - 'test_scope_to_delivery_time_gate.py'
+      - 'revenue/scope_to_delivery/TRUSTED_TIME_GATE.md'
+      - 'revenue/scope_to_delivery/README.md'
+      - 'ground/SCOPE_TO_DELIVERY.md'
+      - '.github/workflows/scope-to-delivery-time-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  temporal-authority:
+    name: Python ${{ matrix.python-version }} temporal authority
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact PR head
+        if: github.event_name == 'pull_request'
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m py_compile host/scope_to_delivery_time_gate.py test_scope_to_delivery_time_gate.py
+      - name: Hostile regressions
+        run: python -B -m unittest -v test_scope_to_delivery_time_gate.py
+      - name: Hostile regressions under optimized Python
+        run: python -O -B -m unittest -v test_scope_to_delivery_time_gate.py
+      - name: Historical public fixture must hold new work
+        shell: bash
+        run: |
+          set +e
+          python host/scope_to_delivery_time_gate.py \
+            --agreement revenue/scope_to_delivery/fixtures/accepted_agreement.json \
+            --observations revenue/scope_to_delivery/fixtures/accepted_observations.json \
+            > temporal-receipt.json
+          rc=$?
+          set -e
+          test "$rc" -eq 3
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path('temporal-receipt.json').read_text(encoding='utf-8'))
+          assert receipt['state'] == 'HOLD_WINDOW_EXPIRED', receipt
+          assert receipt['current_work_authorized'] is False, receipt
+          assert receipt['historical_evidence_temporally_admissible'] is True, receipt
+          assert receipt['canonical_scope_validation_still_required'] is True, receipt
+          assert receipt['external_action_authorized'] is False, receipt
+          assert receipt['payment_authorized'] is False, receipt
+          assert receipt['delivery_claim_authorized'] is False, receipt
+          assert receipt['revenue_authorized'] is False, receipt
+          PY

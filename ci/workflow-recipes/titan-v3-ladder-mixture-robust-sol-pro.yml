@@ -1,0 +1,189 @@
+name: TITAN V3 ladder-mixture robustness — SOL-PRO
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/titan-v3-ladder-mixture-robust-sol-pro.yml"
+      - "revenue/kaggriculture/cloud-ladder-mixture-robustness/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-ladder-mixture-robust-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+
+jobs:
+  exact-mixture-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      CASE: revenue/kaggriculture/cloud-ladder-mixture-robustness
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      EVENT_BASE: ${{ github.event.pull_request.base.sha }}
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONHASHSEED: "0"
+
+    steps:
+      - name: Checkout immutable pull-request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Bind exact head, base, and additive scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$EVENT_BASE" = "${EVENT_BASE,,}"
+          test "${#EVENT_BASE}" -eq 40
+          git cat-file -e "$EVENT_BASE^{commit}"
+          BASE="$(git merge-base "$EVENT_BASE" HEAD)"
+          test "$BASE" = "$EVENT_BASE"
+          commit_count="$(git rev-list --count "$BASE"..HEAD)"
+          test "$commit_count"" -ge 1
+          test "$commit_count" -le 30
+          test -z "$(git diff --diff-filter=D --name-only "$BASE"...HEAD)"
+          unexpected="$(
+            git diff --name-only "$BASE"...HEAD |
+            grep -Ev '^(\.github/workflows/titan-v3-ladder-mixture-robust-sol-pro\.yml|revenue/kaggriculture/cloud-ladder-mixture-robustness/.*)$' || true
+          )"
+          test -z "$unexpected" || {
+            printf 'Unexpected changed paths:\n%s\n' "$unexpected"
+            exit 1
+          }
+          git diff --check "$BASE"...HEAD
+          test -z "$(git status --short)"
+          printf '%s\n' "$EXPECTED_HEAD" > "$RUNNER_TEMP/EXACT_HEAD"
+          printf '%s\n' "$BASE" > "$RUNNER_TEMP/EXACT_BASE"
+          git diff --name-status "$BASE"...HEAD > "$RUNNER_TEMP/CHANGED_PATHS"
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile and execute all adversarial contracts
+        working-directory: ${{ env.CASE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m py_compile \
+            mixture_common.py mixture_parse.py mixture_optimize.py mixture_evaluate.py mixture_gate.py \
+            test_support.py test_contracts_a.py test_contracts_b.py test_contracts_c.py
+          python -B -m unittest -v \
+            test_contracts_a.py test_contracts_b.py test_contracts_c.py \
+            2>&1 | tee "$RUNNER_TEMP/TEST.log"
+          test "$(grep -c '^test_.* \.\.\. ok$' "$RUNNER_TEMP/TEST.log")" -eq 35
+          grep -E '^Ran 35 tests in [0-9.]+s$' "$RUNNER_TEMP/TEST.log"
+          grep -Fx 'OK' "$RUNNER_TEMP/TEST.log"
+          ! grep -E 'FAILED|skipped=' "$RUNNER_TEMP/TEST.log"
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          test -z "$(git status --short)"
+
+      - name: Reproduce positive-pool to adverse-mixture inversion
+        working-directory: ${{ env.CASE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - "$RUNNER_TEMP/EXAMPLE_INPUT.json" <<'PY'
+          import json, sys
+          from test_support import build_document
+          row = build_document(
+              {
+                  "arlene": [(20, 0)] * 5,
+                  "apex": [(2, 0)] * 5,
+                  "v1": [(-30, 0)] * 5,
+              },
+              counts={"arlene": 80, "apex": 15, "v1": 5},
+              bounds={
+                  "arlene": ("1/2", "4/5"),
+                  "apex": ("1/10", "1/5"),
+                  "v1": ("1/20", "7/20"),
+              },
+              radius="3/10",
+              own_floor=-100,
+              margin_floor=-100,
+          )
+          open(sys.argv[1], "w", encoding="utf-8").write(json.dumps(row, sort_keys=True))
+          PY
+          python -B mixture_gate.py \
+            --input "$RUNNER_TEMP/EXAMPLE_INPUT.json" \
+            --output "$RUNNER_TEMP/EXAMPLE_RECEIPT.json" \
+            | tee "$RUNNER_TEMP/EXAMPLE_STDOUT.log"
+          python - "$RUNNER_TEMP/EXAMPLE_RECEIPT.json" <<'PY'
+          import json, sys
+          row = json.load(open(sys.argv[1], encoding="utf-8"))
+          assert row["verdict"] == "ROBUST_HOLD", row["verdict"]
+          own = row["mixture_robustness"]["own_cash"]
+          assert own["nominal_value"]["fraction"] == "74/5", own
+          assert own["worst_case_value"]["fraction"] == "-1/5", own
+          assert own["witness_weights"]["arlene"]["fraction"] == "1/2", own
+          assert own["witness_weights"]["apex"]["fraction"] == "3/20", own
+          assert own["witness_weights"]["v1"]["fraction"] == "7/20", own
+          assert row["authority"] == {
+              "consumer": "T08 one-tree integration / release authority",
+              "game_execution": False,
+              "kaggle_mutation": False,
+              "policy_mutation": False,
+              "promotion_authority": False,
+              "provider_mutation": False,
+          }, row["authority"]
+          print(row["receipt_sha256"])
+          PY
+          test -z "$(git status --short)"
+
+      - name: Emit immutable evidence receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - "$EXPECTED_HEAD" "$EVENT_BASE" "$RUNNER_TEMP" "$CASE" <<'PY'
+          import hashlib, json, pathlib, sys
+          head, base, temp, case = sys.argv[1:]
+          temp = pathlib.Path(temp)
+          case = pathlib.Path(case)
+          files = [
+              pathlib.Path('.github/workflows/titan-v3-ladder-mixture-robust-sol-pro.yml'),
+              *sorted(case.iterdir()),
+          ]
+          files = [path for path in files if path.is_file() and path.name != 'MANIFEST.json']
+          hashes = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
+          receipt = {
+              "schema": "titan-v3-ladder-mixture-ci-receipt/v1",
+              "exact_head": head,
+              "exact_base": base,
+              "tests": 35,
+              "peer_assist_contracts": 3,
+              "example_verdict": "ROBUST_HOLD",
+              "policy_mutation": False,
+              "game_execution": False,
+              "provider_mutation": False,
+              "kaggle_mutation": False,
+              "promotion_authority": False,
+              "files": hashes,
+          }
+          payload = json.dumps(receipt, sort_keys=True, separators=(',', ':')).encode()
+          receipt["receipt_sha256"] = hashlib.sha256(payload).hexdigest()
+          (temp / 'CI_RECEIPT.json').write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          (temp / 'SHA256SUMS').write_text(''.join(f'{digest}  {path}\n' for path, digest in sorted(hashes.items())))
+          PY
+          sha256sum -c "$RUNNER_TEMP/SHA256SUMS"
+
+      - name: Upload exact-head evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-ladder-mixture-robust-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/EXACT_HEAD
+            ${{ runner.temp }}/EXACT_BASE
+            ${{ runner.temp }}/CHANGED_PATHS
+            ${{ runner.temp }}/TEST.log
+            ${{ runner.temp }}/EXAMPLE_STDOUT.log
+            ${{ runner.temp }}/EXAMPLE_INPUT.json
+            ${{ runner.temp }}/EXAMPLE_RECEIPT.json
+            ${{ runner.temp }}/CI_RECEIPT.json
+            ${{ runner.temp }}/SHA256SUMS

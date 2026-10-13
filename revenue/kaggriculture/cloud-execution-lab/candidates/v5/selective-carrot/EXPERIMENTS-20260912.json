@@ -1,0 +1,1689 @@
+{
+  "schema": "titan-v5-production-route-research/v1",
+  "date": "2026-09-12",
+  "baseline_archive_sha256": "20f201161b14af7755146b08207593f9fa5df641d2f31e680792ea62c0e24239",
+  "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+  "opponent": {
+    "name": "Arlene_v14",
+    "kind": "responsive public Python policy",
+    "source_sha256": "1dc166ae2bf0c56a44fac4482f469b8812968c4cb32459cb9860f5077897a7d4"
+  },
+  "execution": {
+    "seat": 0,
+    "step": "explicit",
+    "timer_guard": "off",
+    "unique_games": 35,
+    "completed_decisions_per_game": 719,
+    "native_timing_evidence": false,
+    "hosted_rating_evidence": false
+  },
+  "input_summaries_sha256": {
+    "screen.json": "6c1d9e32d7001b7fedd83f5c831c8e3d20cd760171a3fce115e60ee43910846c",
+    "value-screen.json": "7293a02a85578edf8442383a61f38fd6a245903c378d4421654952b22ad7573b",
+    "selection-screen.json": "b10e534fd66b4ab760294d45623fcd29c3dca1c387cda3506d0786fdb3bb633d",
+    "margin-screen.json": "7397e56a34da332c81bf61f14eb250acbbc803b41770c905304a3a5315a161e1",
+    "route-holdout.json": "5e62b3286412be200f282f0c46ab6100ef660b0027e7d79031dbd700c6d98fb0",
+    "cash-attribution.json": "4c592175425849f3900cee54e74afa1608d7b1d217eeac721fbf7647abc10007"
+  },
+  "variants": {
+    "base": {
+      "changed_members": {},
+      "retained_member_count": 92,
+      "materialized_tree_sha256": "b893afd539dc3a0b44295c3d5a9e618d3f813b83805ef94e0990d05fbf67bae9",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "route": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "930ebf425d379d583cb836be2f51ffe8a5b7a024211d3523efe225ed5a62efd2",
+          "diff": "--- baseline/selective_carrot.py\n+++ route/selective_carrot.py\n@@ -296,7 +296,7 @@\n             if lot is None or lot['sale_step'] > 718:\n                 continue\n             # A not-yet-resolved branch can change the crop's service schedule.\n-            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in (226, 360, 433)):\n+            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in ((144, 648) if str(route_id).startswith('R04-') else (226, 360, 433))):\n                 continue\n             receipt = self.value(obs, cfg, lot, sum(x['quantity'] for x in lots))\n             if receipt['edge'] >= self.margin:\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "74db4877f4daaaab2c93353ac9c1e2d4495a10c99600bd9b445521de4b5bb803",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "early": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "601017838ee131e7ebf46f6a94e89e5a9a5599a279c4c4ad4ff49a3df798ff59",
+          "diff": "--- baseline/selective_carrot.py\n+++ early/selective_carrot.py\n@@ -272,7 +272,7 @@\n         self.previous = {'step': now, 'extra_sale': self.report['extra_sales'],\n                          'post_shed_carrot': post['private']['shed'].get('CARROT', 0),\n                          'sale_slot': len(out.get('market', []))-1 if self.report['extra_sales'] else None}\n-        if (self.pending or len(self.lots) >= self.max_active or now < 240 or now >= 648\n+        if (self.pending or len(self.lots) >= self.max_active or now < (144 if str(route_id).startswith('R04-') else 240) or now >= 648\n                 or now % 24 == 23 or len(out.get('market', [])) >= 10):\n             return out\n         # Keep the known singleton crop_release site's preparation separate.\n@@ -296,7 +296,7 @@\n             if lot is None or lot['sale_step'] > 718:\n                 continue\n             # A not-yet-resolved branch can change the crop's service schedule.\n-            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in (226, 360, 433)):\n+            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in ((144, 648) if str(route_id).startswith('R04-') else (226, 360, 433))):\n                 continue\n             receipt = self.value(obs, cfg, lot, sum(x['quantity'] for x in lots))\n             if receipt['edge'] >= self.margin:\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "e66e0d5ebebb958c74f18b291a0824ad4461bc22be9120dc68d75fba0abd2260",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "age2": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "3164b1dddeff94e49c4bd89def0b0d191b9e2abeeb4346c44ff59c502b16afc1",
+          "diff": "--- baseline/selective_carrot.py\n+++ age2/selective_carrot.py\n@@ -102,7 +102,7 @@\n                         if 2 <= day-planted_day <= (4 if crop == 'WHEAT' else 3):\n                             p['yield'] = min(6 if crop == 'WHEAT' else 4, p['yield']+1)\n             if op == 'HARVEST':\n-                if day-planted_day != 3 or plants['CARROT']['yield'] != plants['WHEAT']['yield']:\n+                if day-planted_day not in (2, 3) or plants['CARROT']['yield'] != plants['WHEAT']['yield']:\n                     return None\n                 # Some wheat is fed directly from the harvesting hand. A shed\n                 # purchase cannot replace that carried input without extra\n@@ -296,7 +296,7 @@\n             if lot is None or lot['sale_step'] > 718:\n                 continue\n             # A not-yet-resolved branch can change the crop's service schedule.\n-            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in (226, 360, 433)):\n+            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in ((144, 648) if str(route_id).startswith('R04-') else (226, 360, 433))):\n                 continue\n             receipt = self.value(obs, cfg, lot, sum(x['quantity'] for x in lots))\n             if receipt['edge'] >= self.margin:\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "e9db7ae69d63ee016e2fb3bfa306795443bb9ce40954e658a5381fe237de75f6",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "value95": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "b245a0d153a6bfab5e066e5844f0c1a18382edf4c5374e0670bba7804723d2da",
+          "diff": "--- baseline/selective_carrot.py\n+++ value95/selective_carrot.py\n@@ -137,7 +137,7 @@\n \n \n class CropChoice:\n-    def __init__(self, quote, *, max_active=4, margin=12, receipt_discount=0.8):\n+    def __init__(self, quote, *, max_active=4, margin=12, receipt_discount=0.95):\n         self.quote = quote\n         self.max_active, self.margin, self.discount = max_active, margin, receipt_discount\n         self.pending = None\n@@ -296,7 +296,7 @@\n             if lot is None or lot['sale_step'] > 718:\n                 continue\n             # A not-yet-resolved branch can change the crop's service schedule.\n-            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in (226, 360, 433)):\n+            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in ((144, 648) if str(route_id).startswith('R04-') else (226, 360, 433))):\n                 continue\n             receipt = self.value(obs, cfg, lot, sum(x['quantity'] for x in lots))\n             if receipt['edge'] >= self.margin:\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "a84db2ff694f9fb630a880f0fdd277af76f4ce48b1530acc0d0a328d5ff42a9f",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "value100": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "96c43aff29e02c3dd2282d3d09acf51048b024220c1273bfff70ff1ac93e055a",
+          "diff": "--- baseline/selective_carrot.py\n+++ value100/selective_carrot.py\n@@ -137,7 +137,7 @@\n \n \n class CropChoice:\n-    def __init__(self, quote, *, max_active=4, margin=12, receipt_discount=0.8):\n+    def __init__(self, quote, *, max_active=4, margin=12, receipt_discount=1.0):\n         self.quote = quote\n         self.max_active, self.margin, self.discount = max_active, margin, receipt_discount\n         self.pending = None\n@@ -296,7 +296,7 @@\n             if lot is None or lot['sale_step'] > 718:\n                 continue\n             # A not-yet-resolved branch can change the crop's service schedule.\n-            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in (226, 360, 433)):\n+            if any(now < checkpoint <= lot['harvest_step'] for checkpoint in ((144, 648) if str(route_id).startswith('R04-') else (226, 360, 433))):\n                 continue\n             receipt = self.value(obs, cfg, lot, sum(x['quantity'] for x in lots))\n             if receipt['edge'] >= self.margin:\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "502262e22ce7556694123a8e64f505f6f6548f86d1c3639e9749254a5434fbbb",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "nochoice": {
+      "changed_members": {
+        "main.py": {
+          "base_sha256": "b98aec64f83ea9a216def7ab1fef320a6498ae37816f506af1f891c934027035",
+          "postimage_sha256": "84dcf235d82c36e4171ddfaa3c306b22912c31adc5254b284769ba2225397c7d",
+          "diff": "--- baseline/main.py\n+++ nochoice/main.py\n@@ -15,7 +15,7 @@\n     from scheduler import post_units\n     instance = _FACTORY(root, features)\n     if _CHOICE is None:\n-        _CHOICE = DeliveryChoice(market_price, max_active=12)\n+        _CHOICE = DeliveryChoice(market_price, max_active=0)\n     selected_transform = instance.transform_selected\n     final_market = instance._early_capital_selected\n \n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "0f27e874e20c77d72807e9f1df9d0bdd5d5088522189c53c6dbffbdb297a44d3",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "latechoice": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "e18aff7ae6d731fc82679eeaca73b92d4edd26ab1fa402da5291e148392cd396",
+          "diff": "--- baseline/selective_carrot.py\n+++ latechoice/selective_carrot.py\n@@ -272,7 +272,7 @@\n         self.previous = {'step': now, 'extra_sale': self.report['extra_sales'],\n                          'post_shed_carrot': post['private']['shed'].get('CARROT', 0),\n                          'sale_slot': len(out.get('market', []))-1 if self.report['extra_sales'] else None}\n-        if (self.pending or len(self.lots) >= self.max_active or now < 240 or now >= 648\n+        if (self.pending or len(self.lots) >= self.max_active or now < 528 or now >= 648\n                 or now % 24 == 23 or len(out.get('market', [])) >= 10):\n             return out\n         # Keep the known singleton crop_release site's preparation separate.\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "051f4e8dde658c8f5cc022a43282f3701a5b96c537df2ca5ceca8c7368aeeb91",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "margin24": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "1616f8f07fe093587f1e53c1463fd55fc53664d963737ef95b473552062bf6a4",
+          "diff": "--- baseline/selective_carrot.py\n+++ margin24/selective_carrot.py\n@@ -137,7 +137,7 @@\n \n \n class CropChoice:\n-    def __init__(self, quote, *, max_active=4, margin=12, receipt_discount=0.8):\n+    def __init__(self, quote, *, max_active=4, margin=24, receipt_discount=0.8):\n         self.quote = quote\n         self.max_active, self.margin, self.discount = max_active, margin, receipt_discount\n         self.pending = None\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "526cc992cf3aef6cb55019fe9a063f896be4aacec4819feef6a84fbaeb61d0a6",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "margin32": {
+      "changed_members": {
+        "selective_carrot.py": {
+          "base_sha256": "18e67191e5b2919da5ef386fc9f251c6452aeaa042045c0dc9487d731b2fe347",
+          "postimage_sha256": "28d6663283a8e89568d3ebd83bd416b3a2f2765ae53ab03df1a88464e4e160d5",
+          "diff": "--- baseline/selective_carrot.py\n+++ margin32/selective_carrot.py\n@@ -137,7 +137,7 @@\n \n \n class CropChoice:\n-    def __init__(self, quote, *, max_active=4, margin=12, receipt_discount=0.8):\n+    def __init__(self, quote, *, max_active=4, margin=32, receipt_discount=0.8):\n         self.quote = quote\n         self.max_active, self.margin, self.discount = max_active, margin, receipt_discount\n         self.pending = None\n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "96335dade31533b35210d42749d5eac3d5660dea6690c8249c5b2bbf6fd56b1d",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "plan00": {
+      "changed_members": {
+        "r04_full_router.py": {
+          "base_sha256": "41ea55c5f20c43cd58c5099fbadb212de62ec95a95dfc2e6e1e19c3d4d55b39a",
+          "postimage_sha256": "821cfedccf29cdfbda69b5f5d56ecd2617b0e3cb1d743c677fb53375b3f1b863",
+          "diff": "--- baseline/r04_full_router.py\n+++ plan00/r04_full_router.py\n@@ -250,7 +250,7 @@\n \n         if step == ROUTE_STEP:\n             shops = observation[\"town\"][\"unlocked_shops\"]\n-            state.plan = SHOP_PLANS.get(tuple(shops[:2]), 0)\n+            state.plan = 0\n         if step == FINAL_PLAN_STEP:\n             state.plan = 2\n \n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "3de84478c8a395168a189681018e55e4e258b05bf5b99bd7fba2b68a8c40daca",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "plan01": {
+      "changed_members": {
+        "r04_full_router.py": {
+          "base_sha256": "41ea55c5f20c43cd58c5099fbadb212de62ec95a95dfc2e6e1e19c3d4d55b39a",
+          "postimage_sha256": "aa395e0d61d7b4bb74e266f60608a76155f1fdd21efeacbc9dedc5417db44b84",
+          "diff": "--- baseline/r04_full_router.py\n+++ plan01/r04_full_router.py\n@@ -250,7 +250,7 @@\n \n         if step == ROUTE_STEP:\n             shops = observation[\"town\"][\"unlocked_shops\"]\n-            state.plan = SHOP_PLANS.get(tuple(shops[:2]), 0)\n+            state.plan = 1\n         if step == FINAL_PLAN_STEP:\n             state.plan = 2\n \n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "2e71af4046e66502414c293057aad28068058d85ebdc5648ea07f32ff1145b43",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "plan09": {
+      "changed_members": {
+        "r04_full_router.py": {
+          "base_sha256": "41ea55c5f20c43cd58c5099fbadb212de62ec95a95dfc2e6e1e19c3d4d55b39a",
+          "postimage_sha256": "be3cb3576e37c06858aafab9cb405128c6ae583e73686de12a04057937a74fa2",
+          "diff": "--- baseline/r04_full_router.py\n+++ plan09/r04_full_router.py\n@@ -250,7 +250,7 @@\n \n         if step == ROUTE_STEP:\n             shops = observation[\"town\"][\"unlocked_shops\"]\n-            state.plan = SHOP_PLANS.get(tuple(shops[:2]), 0)\n+            state.plan = 9\n         if step == FINAL_PLAN_STEP:\n             state.plan = 2\n \n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "fa1950f067f3015bb4909eb4000cc791c06b90c9210d0e99a7a7bbca4ddb288f",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    },
+    "plan12": {
+      "changed_members": {
+        "r04_full_router.py": {
+          "base_sha256": "41ea55c5f20c43cd58c5099fbadb212de62ec95a95dfc2e6e1e19c3d4d55b39a",
+          "postimage_sha256": "06d6a90aacb9a61f7386cdd6620cefca140e873e2504f250f5a2465581fd97c5",
+          "diff": "--- baseline/r04_full_router.py\n+++ plan12/r04_full_router.py\n@@ -250,7 +250,7 @@\n \n         if step == ROUTE_STEP:\n             shops = observation[\"town\"][\"unlocked_shops\"]\n-            state.plan = SHOP_PLANS.get(tuple(shops[:2]), 0)\n+            state.plan = 12\n         if step == FINAL_PLAN_STEP:\n             state.plan = 2\n \n"
+        }
+      },
+      "retained_member_count": 91,
+      "materialized_tree_sha256": "588568164f800a8ae65fb146af8c2cc2135a269da19efa01d2065002eace84bb",
+      "source_capture": "Materialized source at research packaging; transformation scripts asserted these postimages when running."
+    }
+  },
+  "rows": [
+    {
+      "variant": "base",
+      "seed": 1209125501,
+      "seat": 0,
+      "cash": [
+        91251.0,
+        86148.0
+      ],
+      "margin": 5103.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "0d0cc2d647d86f98027b53639ebdcd04c866f3876517e0238b6e994a28957c86",
+      "crop_totals": {
+        "prepared": 13,
+        "planted": 13,
+        "harvested": 45,
+        "extra_sales": 45,
+        "replacement_wheat": 39
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "7de4b2e0e715cf7cb7419752722bfb042892fb7f6fefccf68074d2697c3238f5",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "route",
+      "seed": 1209125501,
+      "seat": 0,
+      "cash": [
+        91251.0,
+        86148.0
+      ],
+      "margin": 5103.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "0d0cc2d647d86f98027b53639ebdcd04c866f3876517e0238b6e994a28957c86",
+      "crop_totals": {
+        "prepared": 13,
+        "planted": 13,
+        "harvested": 45,
+        "extra_sales": 45,
+        "replacement_wheat": 39
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "85191d9db617c04494826362b6b499b01f6488f633380371251f2547571ef1d5",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "early",
+      "seed": 1209125501,
+      "seat": 0,
+      "cash": [
+        91251.0,
+        86148.0
+      ],
+      "margin": 5103.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "0d0cc2d647d86f98027b53639ebdcd04c866f3876517e0238b6e994a28957c86",
+      "crop_totals": {
+        "prepared": 13,
+        "planted": 13,
+        "harvested": 45,
+        "extra_sales": 45,
+        "replacement_wheat": 39
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "41a1d5e60392f7f9250fe9ffd0e3f0b9fe66d8fd06301329830e3672205c9d3b",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "age2",
+      "seed": 1209125501,
+      "seat": 0,
+      "cash": [
+        91251.0,
+        86148.0
+      ],
+      "margin": 5103.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "0d0cc2d647d86f98027b53639ebdcd04c866f3876517e0238b6e994a28957c86",
+      "crop_totals": {
+        "prepared": 13,
+        "planted": 13,
+        "harvested": 45,
+        "extra_sales": 45,
+        "replacement_wheat": 39
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "07846ce01eb883461c133852a183284c0acec533ce9c81cc6ebfb14682053bf9",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "base",
+      "seed": 1209125503,
+      "seat": 0,
+      "cash": [
+        84562.0,
+        63343.0
+      ],
+      "margin": 21219.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "4c1862a07673d615a46f85c2d6fd560da62c0c3173d9f3aa4b2294771306ef5d",
+      "crop_totals": {
+        "prepared": 12,
+        "planted": 12,
+        "harvested": 39,
+        "extra_sales": 39,
+        "replacement_wheat": 36
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "b1e5793f94c1915cb29bbca0f8243fd7d28eca5555c9a9e2a148d92ada585d56",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "route",
+      "seed": 1209125503,
+      "seat": 0,
+      "cash": [
+        84562.0,
+        63343.0
+      ],
+      "margin": 21219.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "4c1862a07673d615a46f85c2d6fd560da62c0c3173d9f3aa4b2294771306ef5d",
+      "crop_totals": {
+        "prepared": 12,
+        "planted": 12,
+        "harvested": 39,
+        "extra_sales": 39,
+        "replacement_wheat": 36
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "54016f4cb82a9f170777f85c5ccfdcceb2282745bf22293cec65f00126096f66",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "early",
+      "seed": 1209125503,
+      "seat": 0,
+      "cash": [
+        84562.0,
+        63343.0
+      ],
+      "margin": 21219.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "4c1862a07673d615a46f85c2d6fd560da62c0c3173d9f3aa4b2294771306ef5d",
+      "crop_totals": {
+        "prepared": 12,
+        "planted": 12,
+        "harvested": 39,
+        "extra_sales": 39,
+        "replacement_wheat": 36
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "08dc3fda390997cf23a01ee21a80bb23c4a24ebfff1cf4d052bf511aea92b135",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "age2",
+      "seed": 1209125503,
+      "seat": 0,
+      "cash": [
+        84562.0,
+        63343.0
+      ],
+      "margin": 21219.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "4c1862a07673d615a46f85c2d6fd560da62c0c3173d9f3aa4b2294771306ef5d",
+      "crop_totals": {
+        "prepared": 12,
+        "planted": 12,
+        "harvested": 39,
+        "extra_sales": 39,
+        "replacement_wheat": 36
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "e4029db07dc9ccbd6092d429e1b4bfea422eaad66c5692808c3d5558a58bd284",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "base",
+      "seed": 1209129901,
+      "seat": 0,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "margin": 5820.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "crop_totals": {
+        "prepared": 0,
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "6aac4737e3730afcb5965e2f76541e32b816ec9cbcd7d3aefe77e7551674f2d2",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "route",
+      "seed": 1209129901,
+      "seat": 0,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "margin": 5820.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "crop_totals": {
+        "prepared": 0,
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "fa365d6a876056334174000a71f1a0e089d5d8f68043826b3f9670a30f330a9a",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "early",
+      "seed": 1209129901,
+      "seat": 0,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "margin": 5820.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "crop_totals": {
+        "prepared": 0,
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "59cc9e65aa33ef1e4a767c2e91b874549bcaa6ebb20ae1fb19232d4e3391ffe3",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "age2",
+      "seed": 1209129901,
+      "seat": 0,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "margin": 5820.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "crop_totals": {
+        "prepared": 0,
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "delta_vs_base": 0.0,
+      "input_summary": "screen.json",
+      "raw_report_sha256": "9268f80acb9424e29eaeaaf4be08342402da9af7f42911d0aabdd4cdd8cfb6b7",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "value95",
+      "seed": 1209125501,
+      "seat": 0,
+      "source_sha256": "b245a0d153a6bfab5e066e5844f0c1a18382edf4c5374e0670bba7804723d2da",
+      "margin": 4832.0,
+      "cash": [
+        90718.0,
+        85886.0
+      ],
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "af4cff65fabc1f7fe701e40ef83365d565f86073d6e87887b5f9c1de21a06cd0",
+      "delta_vs_base": -271.0,
+      "crop_totals": {
+        "prepared": 23,
+        "planted": 23,
+        "harvested": 75,
+        "extra_sales": 75,
+        "replacement_wheat": 69
+      },
+      "input_summary": "value-screen.json",
+      "raw_report_sha256": "23bcf9fef5ba83df182bab25032335934944b039829d748e3d47e2a9e97f3f8b",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -533.0,
+      "rival_delta_vs_base": -262.0
+    },
+    {
+      "variant": "value100",
+      "seed": 1209125501,
+      "seat": 0,
+      "source_sha256": "96c43aff29e02c3dd2282d3d09acf51048b024220c1273bfff70ff1ac93e055a",
+      "margin": 4604.0,
+      "cash": [
+        90424.0,
+        85820.0
+      ],
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "e31d3ecb64b3f6c6146645b153b89bc9d3c2c95ac5559149f899977e4bddcae8",
+      "delta_vs_base": -499.0,
+      "crop_totals": {
+        "prepared": 28,
+        "planted": 28,
+        "harvested": 90,
+        "extra_sales": 90,
+        "replacement_wheat": 84
+      },
+      "input_summary": "value-screen.json",
+      "raw_report_sha256": "4e248336c2730ea64cc91929673842acca231f743a1918ae1d6ae10794eb29ee",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -827.0,
+      "rival_delta_vs_base": -328.0
+    },
+    {
+      "variant": "value95",
+      "seed": 1209125503,
+      "seat": 0,
+      "source_sha256": "b245a0d153a6bfab5e066e5844f0c1a18382edf4c5374e0670bba7804723d2da",
+      "margin": 21178.0,
+      "cash": [
+        84482.0,
+        63304.0
+      ],
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23394bb016a1d8376da128d167e35a4cf472aed15ac166a5755f8f3768504ffe",
+      "delta_vs_base": -41.0,
+      "crop_totals": {
+        "prepared": 16,
+        "planted": 16,
+        "harvested": 50,
+        "extra_sales": 50,
+        "replacement_wheat": 48
+      },
+      "input_summary": "value-screen.json",
+      "raw_report_sha256": "742088d288cfd5f22f452f80b39cc282f3b17d97a02fa8627f4ca18a75181339",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -80.0,
+      "rival_delta_vs_base": -39.0
+    },
+    {
+      "variant": "value100",
+      "seed": 1209125503,
+      "seat": 0,
+      "source_sha256": "96c43aff29e02c3dd2282d3d09acf51048b024220c1273bfff70ff1ac93e055a",
+      "margin": 21142.0,
+      "cash": [
+        84427.0,
+        63285.0
+      ],
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "b456fb75b02c190dc92df5ff06c4a5ec3ee1edd790315061643deb468344d205",
+      "delta_vs_base": -77.0,
+      "crop_totals": {
+        "prepared": 19,
+        "planted": 19,
+        "harvested": 59,
+        "extra_sales": 59,
+        "replacement_wheat": 57
+      },
+      "input_summary": "value-screen.json",
+      "raw_report_sha256": "b0343b3987ab7c62e1ea4b5182ee8286c48304d46304c5097279b8d48c642b7a",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -135.0,
+      "rival_delta_vs_base": -58.0
+    },
+    {
+      "variant": "value95",
+      "seed": 1209129901,
+      "seat": 0,
+      "source_sha256": "b245a0d153a6bfab5e066e5844f0c1a18382edf4c5374e0670bba7804723d2da",
+      "margin": 5820.0,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "delta_vs_base": 0.0,
+      "crop_totals": {
+        "prepared": 0,
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "input_summary": "value-screen.json",
+      "raw_report_sha256": "320824c81d4c3c868889c5ebdde60613ed583cba3a61ce94cf3b07fa4d12c45e",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "value100",
+      "seed": 1209129901,
+      "seat": 0,
+      "source_sha256": "96c43aff29e02c3dd2282d3d09acf51048b024220c1273bfff70ff1ac93e055a",
+      "margin": 5820.0,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "delta_vs_base": 0.0,
+      "crop_totals": {
+        "prepared": 0,
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "input_summary": "value-screen.json",
+      "raw_report_sha256": "22d0bed96a44ab3ffa3d54ce17f6a3fdef9595f8dbb48ac0396ce160a29daa17",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "nochoice",
+      "seed": 1209125501,
+      "cash": [
+        91265.0,
+        87009.0
+      ],
+      "margin": 4256.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "338f8111c24ec281668bc53be0376e363728ddcba727149b2cf2ce54714aaca2",
+      "delta_vs_base": -847.0,
+      "crop_totals": {
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "seat": 0,
+      "input_summary": "selection-screen.json",
+      "raw_report_sha256": "66c1e97eab64b6c314904fece2bc5cb283e33c11d690a2d9be251b94a4001a2d",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 14.0,
+      "rival_delta_vs_base": 861.0
+    },
+    {
+      "variant": "latechoice",
+      "seed": 1209125501,
+      "cash": [
+        91623.0,
+        86219.0
+      ],
+      "margin": 5404.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "488a68c7dded7450626f98e44d36b093c949f7e55f43617b809395b3f3edc00f",
+      "delta_vs_base": 301.0,
+      "crop_totals": {
+        "planted": 11,
+        "harvested": 38,
+        "extra_sales": 38,
+        "replacement_wheat": 33
+      },
+      "seat": 0,
+      "input_summary": "selection-screen.json",
+      "raw_report_sha256": "592da7f5fef4261bdcc54d833e70f1289505e11f2bf21e80cbd0109320a6aaf9",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 372.0,
+      "rival_delta_vs_base": 71.0
+    },
+    {
+      "variant": "nochoice",
+      "seed": 1209125503,
+      "cash": [
+        84330.0,
+        63669.0
+      ],
+      "margin": 20661.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "5f3fb78f0eb38f7f2e60aeca2045552e14a13078d322c962a7e8140dda9563f1",
+      "delta_vs_base": -558.0,
+      "crop_totals": {
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "seat": 0,
+      "input_summary": "selection-screen.json",
+      "raw_report_sha256": "6e3bb33143520017070e320eeb76d1c14c9abac9f452d986ac37439cc506872d",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -232.0,
+      "rival_delta_vs_base": 326.0
+    },
+    {
+      "variant": "latechoice",
+      "seed": 1209125503,
+      "cash": [
+        84576.0,
+        63365.0
+      ],
+      "margin": 21211.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "ae5506b4a9f2e862ff5d18da516082cdb4976b22eb9848e1be44eaff031b68d0",
+      "delta_vs_base": -8.0,
+      "crop_totals": {
+        "planted": 11,
+        "harvested": 36,
+        "extra_sales": 36,
+        "replacement_wheat": 33
+      },
+      "seat": 0,
+      "input_summary": "selection-screen.json",
+      "raw_report_sha256": "af4b9e6e3547cf2db6a9112a6d1eb624c795af4e5588c6e36d9eb0e7a6d7c2d3",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 14.0,
+      "rival_delta_vs_base": 22.0
+    },
+    {
+      "variant": "nochoice",
+      "seed": 1209129901,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "margin": 5820.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "delta_vs_base": 0.0,
+      "crop_totals": {
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "seat": 0,
+      "input_summary": "selection-screen.json",
+      "raw_report_sha256": "8d575c1a5c11465c52f800c22fc07532f64136ae77b32c19a0571c423a5af5c3",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "latechoice",
+      "seed": 1209129901,
+      "cash": [
+        74592.0,
+        68772.0
+      ],
+      "margin": 5820.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "23dfb422976e2f2075babd4670b777b428605a8d7f18cb2e12bf0bc285a10a44",
+      "delta_vs_base": 0.0,
+      "crop_totals": {
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "seat": 0,
+      "input_summary": "selection-screen.json",
+      "raw_report_sha256": "47697e0132f25c35a786a44e53ccb10a8d2276e11659cb4313b2f97a77276c63",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "margin24",
+      "seed": 1209125501,
+      "cash": [
+        91597.0,
+        86172.0
+      ],
+      "margin": 5425.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "3bfd68e87a93dad3c2e00aca5a0ac3468776464088aec79ab883a307f18da207",
+      "delta_vs_base": 322.0,
+      "crop_totals": {
+        "planted": 12,
+        "harvested": 41,
+        "extra_sales": 41,
+        "replacement_wheat": 36
+      },
+      "seat": 0,
+      "input_summary": "margin-screen.json",
+      "raw_report_sha256": "e825b0194a594d8ec6d7403c5f912d050cdacb04d250ddfe82b3e21f8425fedc",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 346.0,
+      "rival_delta_vs_base": 24.0
+    },
+    {
+      "variant": "margin32",
+      "seed": 1209125501,
+      "cash": [
+        91577.0,
+        86353.0
+      ],
+      "margin": 5224.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "0c6d13206f1661de5f91b2456779464ba12ac9ae4e8a8844515b5dfad31882ed",
+      "delta_vs_base": 121.0,
+      "crop_totals": {
+        "planted": 8,
+        "harvested": 31,
+        "extra_sales": 31,
+        "replacement_wheat": 24
+      },
+      "seat": 0,
+      "input_summary": "margin-screen.json",
+      "raw_report_sha256": "11a69983cc55734f888e92da422de24e53fa1ea832b13880414446fde64d6c5d",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 326.0,
+      "rival_delta_vs_base": 205.0
+    },
+    {
+      "variant": "margin24",
+      "seed": 1209125503,
+      "cash": [
+        84495.0,
+        63482.0
+      ],
+      "margin": 21013.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "dc11bcd51143268d82fe4211c3ee6db03fad967bec85df4ef67a084ee34d5d19",
+      "delta_vs_base": -206.0,
+      "crop_totals": {
+        "planted": 6,
+        "harvested": 20,
+        "extra_sales": 20,
+        "replacement_wheat": 18
+      },
+      "seat": 0,
+      "input_summary": "margin-screen.json",
+      "raw_report_sha256": "dfd25fd36f7305405aa4e4d03de0d300a991556c43c4ff0330822ccc00efce13",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -67.0,
+      "rival_delta_vs_base": 139.0
+    },
+    {
+      "variant": "margin32",
+      "seed": 1209125503,
+      "cash": [
+        84402.0,
+        63601.0
+      ],
+      "margin": 20801.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "938dbfea137b647cee4f62e036f3f5350bdd2fda727a9e8092a69454cce3f527",
+      "delta_vs_base": -418.0,
+      "crop_totals": {
+        "planted": 2,
+        "harvested": 6,
+        "extra_sales": 6,
+        "replacement_wheat": 6
+      },
+      "seat": 0,
+      "input_summary": "margin-screen.json",
+      "raw_report_sha256": "160e1eb41c503e262482187fdd0a87d7b229275b30e95210aac64e1ddf68d3c8",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -160.0,
+      "rival_delta_vs_base": 258.0
+    },
+    {
+      "variant": "margin24",
+      "seed": 1209132201,
+      "cash": [
+        69875.0,
+        55556.0
+      ],
+      "margin": 14319.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "de48b5c616ca747c0d67df5a60dc2edf13549bc79529cdefdd99f29b63bcaf49",
+      "delta_vs_base": 0.0,
+      "crop_totals": {
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "seat": 0,
+      "input_summary": "margin-screen.json",
+      "raw_report_sha256": "24788c6b4b4fa9c844bff62e2e1473920621762ece7392e359983318981989a5",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "margin32",
+      "seed": 1209132201,
+      "cash": [
+        69875.0,
+        55556.0
+      ],
+      "margin": 14319.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "de48b5c616ca747c0d67df5a60dc2edf13549bc79529cdefdd99f29b63bcaf49",
+      "delta_vs_base": 0.0,
+      "crop_totals": {
+        "planted": 0,
+        "harvested": 0,
+        "extra_sales": 0,
+        "replacement_wheat": 0
+      },
+      "seat": 0,
+      "input_summary": "margin-screen.json",
+      "raw_report_sha256": "5c1fcffcd5216d9a41f3e60afb695d566083fd27d988085d7f2439200613169e",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "base",
+      "seed": 1209132201,
+      "seat": 0,
+      "cash": [
+        69875.0,
+        55556.0
+      ],
+      "margin": 14319.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "de48b5c616ca747c0d67df5a60dc2edf13549bc79529cdefdd99f29b63bcaf49",
+      "shops144": [
+        "PET_CAFE",
+        "BAKERY"
+      ],
+      "route144": "R04-0",
+      "route648": "R04-2",
+      "delta_vs_base": 0.0,
+      "input_summary": "route-holdout.json",
+      "raw_report_sha256": "f80a4e2d9d61812bfd573794eb4a5decd371a1941cd9a9140145b92d92f58560",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "plan00",
+      "seed": 1209132201,
+      "seat": 0,
+      "cash": [
+        69875.0,
+        55556.0
+      ],
+      "margin": 14319.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "de48b5c616ca747c0d67df5a60dc2edf13549bc79529cdefdd99f29b63bcaf49",
+      "shops144": [
+        "PET_CAFE",
+        "BAKERY"
+      ],
+      "route144": "R04-0",
+      "route648": "R04-2",
+      "delta_vs_base": 0.0,
+      "input_summary": "route-holdout.json",
+      "raw_report_sha256": "1caa150012c8756e916ef11926ac4d2f7bd172c6287ac0457917b872cf55e156",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": 0.0,
+      "rival_delta_vs_base": 0.0
+    },
+    {
+      "variant": "plan01",
+      "seed": 1209132201,
+      "seat": 0,
+      "cash": [
+        62475.0,
+        66330.0
+      ],
+      "margin": -3855.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "75a54dede605570a24a5b4f6c40aae6af33dc3215834478854acf6b0665a620b",
+      "shops144": [
+        "PET_CAFE",
+        "BAKERY"
+      ],
+      "route144": "R04-1",
+      "route648": "R04-2",
+      "delta_vs_base": -18174.0,
+      "input_summary": "route-holdout.json",
+      "raw_report_sha256": "ac3170166762337b0d4cff417d08d2cd7c546ffa9d87c1bea9ddf7e23d119c1b",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -7400.0,
+      "rival_delta_vs_base": 10774.0
+    },
+    {
+      "variant": "plan09",
+      "seed": 1209132201,
+      "seat": 0,
+      "cash": [
+        57407.0,
+        63315.0
+      ],
+      "margin": -5908.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "2f586ee448f212bbbb2f48c2899ecb99ddac66791389dd05d237c49dbbe8418c",
+      "shops144": [
+        "PET_CAFE",
+        "BAKERY"
+      ],
+      "route144": "R04-9",
+      "route648": "R04-2",
+      "delta_vs_base": -20227.0,
+      "input_summary": "route-holdout.json",
+      "raw_report_sha256": "64f61766a4ade2a4947cd0d3714080f5393d9664423b7ffcb9311efc6da208f5",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -12468.0,
+      "rival_delta_vs_base": 7759.0
+    },
+    {
+      "variant": "plan12",
+      "seed": 1209132201,
+      "seat": 0,
+      "cash": [
+        53101.0,
+        47983.0
+      ],
+      "margin": 5118.0,
+      "terminal": true,
+      "statuses": {
+        "completed": 719
+      },
+      "actions_sha256": "cb31360422f01deeeae8d6b52db9b7519c611d3ed861f224f5806ea8ca55afa5",
+      "shops144": [
+        "PET_CAFE",
+        "BAKERY"
+      ],
+      "route144": "R04-12",
+      "route648": "R04-2",
+      "delta_vs_base": -9201.0,
+      "input_summary": "route-holdout.json",
+      "raw_report_sha256": "d25473078488b6ce8409c8a8105ce5fa4a722b95e6db7f445973c819d3bf0ffe",
+      "completed_decisions": 719,
+      "fallback_stages": {},
+      "own_delta_vs_base": -16774.0,
+      "rival_delta_vs_base": -7573.0
+    }
+  ],
+  "cash_attribution": {
+    "rows": [
+      {
+        "variant": "base",
+        "seed": 1209125501,
+        "cash": [
+          91251.0,
+          86148.0
+        ],
+        "checkpoints": 30,
+        "all_match": true,
+        "market": [
+          {
+            "BUY_PRODUCT:WHEAT": {
+              "quantity": 194,
+              "cash": -6951.0
+            },
+            "SELL:WHEAT": {
+              "quantity": 307,
+              "cash": 12016.0
+            },
+            "BUY_ANIMAL:COW": {
+              "quantity": 8,
+              "cash": -3200.0
+            },
+            "BUY_ANIMAL:SHEEP": {
+              "quantity": 6,
+              "cash": -3000.0
+            },
+            "BUY_SEED:MELON": {
+              "quantity": 12,
+              "cash": -960.0
+            },
+            "BUY_SEED:WHEAT": {
+              "quantity": 150,
+              "cash": -1500.0
+            },
+            "SELL:FERTILIZER": {
+              "quantity": 342,
+              "cash": 15198.0
+            },
+            "BUY_SEED:STRAWBERRY": {
+              "quantity": 33,
+              "cash": -3300.0
+            },
+            "SELL:WOOL": {
+              "quantity": 161,
+              "cash": 10386.0
+            },
+            "BUY_PRODUCT:FERTILIZER": {
+              "quantity": 64,
+              "cash": -2027.0
+            },
+            "SELL:MILK": {
+              "quantity": 245,
+              "cash": 4484.0
+            },
+            "BUY_ANIMAL:GOOSE": {
+              "quantity": 3,
+              "cash": -900.0
+            },
+            "SELL:MELON": {
+              "quantity": 72,
+              "cash": 14267.0
+            },
+            "SELL:EGG": {
+              "quantity": 82,
+              "cash": 4326.0
+            },
+            "SELL:STRAWBERRY": {
+              "quantity": 249,
+              "cash": 44989.0
+            },
+            "BUY_SEED:CARROT": {
+              "quantity": 44,
+              "cash": -880.0
+            },
+            "SELL:CARROT": {
+              "quantity": 144,
+              "cash": 12433.0
+            }
+          },
+          {
+            "BUY_PRODUCT:WHEAT": {
+              "quantity": 135,
+              "cash": -4659.0
+            },
+            "SELL:WHEAT": {
+              "quantity": 357,
+              "cash": 14128.0
+            },
+            "BUY_SEED:WHEAT": {
+              "quantity": 188,
+              "cash": -1880.0
+            },
+            "BUY_SEED:MELON": {
+              "quantity": 12,
+              "cash": -960.0
+            },
+            "BUY_ANIMAL:COW": {
+              "quantity": 9,
+              "cash": -3600.0
+            },
+            "BUY_ANIMAL:SHEEP": {
+              "quantity": 5,
+              "cash": -2500.0
+            },
+            "SELL:FERTILIZER": {
+              "quantity": 306,
+              "cash": 13860.0
+            },
+            "BUY_SEED:CARROT": {
+              "quantity": 31,
+              "cash": -620.0
+            },
+            "BUY_SEED:STRAWBERRY": {
+              "quantity": 33,
+              "cash": -3300.0
+            },
+            "SELL:WOOL": {
+              "quantity": 122,
+              "cash": 7151.0
+            },
+            "BUY_PRODUCT:FERTILIZER": {
+              "quantity": 76,
+              "cash": -1973.0
+            },
+            "SELL:MILK": {
+              "quantity": 186,
+              "cash": 4587.0
+            },
+            "BUY_ANIMAL:GOOSE": {
+              "quantity": 3,
+              "cash": -900.0
+            },
+            "SELL:MELON": {
+              "quantity": 72,
+              "cash": 14267.0
+            },
+            "SELL:EGG": {
+              "quantity": 79,
+              "cash": 4153.0
+            },
+            "SELL:STRAWBERRY": {
+              "quantity": 262,
+              "cash": 46501.0
+            },
+            "SELL:CARROT": {
+              "quantity": 93,
+              "cash": 7382.0
+            }
+          }
+        ],
+        "harvests": [
+          {
+            "WHEAT": 480,
+            "WOOL": 161,
+            "MILK": 245,
+            "MELON": 72,
+            "EGG": 82,
+            "STRAWBERRY": 249,
+            "CARROT": 144
+          },
+          {
+            "WHEAT": 522,
+            "WOOL": 122,
+            "MILK": 186,
+            "MELON": 72,
+            "EGG": 79,
+            "STRAWBERRY": 262,
+            "CARROT": 93
+          }
+        ]
+      },
+      {
+        "variant": "value95",
+        "seed": 1209125501,
+        "cash": [
+          90718.0,
+          85886.0
+        ],
+        "checkpoints": 30,
+        "all_match": true,
+        "market": [
+          {
+            "BUY_PRODUCT:WHEAT": {
+              "quantity": 224,
+              "cash": -8237.0
+            },
+            "SELL:WHEAT": {
+              "quantity": 307,
+              "cash": 12197.0
+            },
+            "BUY_ANIMAL:COW": {
+              "quantity": 8,
+              "cash": -3200.0
+            },
+            "BUY_ANIMAL:SHEEP": {
+              "quantity": 6,
+              "cash": -3000.0
+            },
+            "BUY_SEED:MELON": {
+              "quantity": 12,
+              "cash": -960.0
+            },
+            "BUY_SEED:WHEAT": {
+              "quantity": 141,
+              "cash": -1410.0
+            },
+            "SELL:FERTILIZER": {
+              "quantity": 342,
+              "cash": 15198.0
+            },
+            "BUY_SEED:STRAWBERRY": {
+              "quantity": 33,
+              "cash": -3300.0
+            },
+            "SELL:WOOL": {
+              "quantity": 161,
+              "cash": 10386.0
+            },
+            "BUY_PRODUCT:FERTILIZER": {
+              "quantity": 64,
+              "cash": -2027.0
+            },
+            "SELL:MILK": {
+              "quantity": 245,
+              "cash": 4484.0
+            },
+            "BUY_ANIMAL:GOOSE": {
+              "quantity": 3,
+              "cash": -900.0
+            },
+            "SELL:MELON": {
+              "quantity": 72,
+              "cash": 14267.0
+            },
+            "BUY_SEED:CARROT": {
+              "quantity": 54,
+              "cash": -1080.0
+            },
+            "SELL:EGG": {
+              "quantity": 82,
+              "cash": 4326.0
+            },
+            "SELL:STRAWBERRY": {
+              "quantity": 249,
+              "cash": 44989.0
+            },
+            "SELL:CARROT": {
+              "quantity": 174,
+              "cash": 13115.0
+            }
+          },
+          {
+            "BUY_PRODUCT:WHEAT": {
+              "quantity": 135,
+              "cash": -4659.0
+            },
+            "SELL:WHEAT": {
+              "quantity": 357,
+              "cash": 14371.0
+            },
+            "BUY_SEED:WHEAT": {
+              "quantity": 188,
+              "cash": -1880.0
+            },
+            "BUY_SEED:MELON": {
+              "quantity": 12,
+              "cash": -960.0
+            },
+            "BUY_ANIMAL:COW": {
+              "quantity": 9,
+              "cash": -3600.0
+            },
+            "BUY_ANIMAL:SHEEP": {
+              "quantity": 5,
+              "cash": -2500.0
+            },
+            "SELL:FERTILIZER": {
+              "quantity": 306,
+              "cash": 13860.0
+            },
+            "BUY_SEED:CARROT": {
+              "quantity": 31,
+              "cash": -620.0
+            },
+            "BUY_SEED:STRAWBERRY": {
+              "quantity": 33,
+              "cash": -3300.0
+            },
+            "SELL:WOOL": {
+              "quantity": 122,
+              "cash": 7151.0
+            },
+            "BUY_PRODUCT:FERTILIZER": {
+              "quantity": 76,
+              "cash": -1973.0
+            },
+            "SELL:MILK": {
+              "quantity": 186,
+              "cash": 4587.0
+            },
+            "BUY_ANIMAL:GOOSE": {
+              "quantity": 3,
+              "cash": -900.0
+            },
+            "SELL:MELON": {
+              "quantity": 72,
+              "cash": 14267.0
+            },
+            "SELL:EGG": {
+              "quantity": 79,
+              "cash": 4153.0
+            },
+            "SELL:STRAWBERRY": {
+              "quantity": 262,
+              "cash": 46501.0
+            },
+            "SELL:CARROT": {
+              "quantity": 93,
+              "cash": 6877.0
+            }
+          }
+        ],
+        "harvests": [
+          {
+            "WHEAT": 450,
+            "WOOL": 161,
+            "MILK": 245,
+            "MELON": 72,
+            "EGG": 82,
+            "STRAWBERRY": 249,
+            "CARROT": 174
+          },
+          {
+            "WHEAT": 522,
+            "WOOL": 122,
+            "MILK": 186,
+            "MELON": 72,
+            "EGG": 79,
+            "STRAWBERRY": 262,
+            "CARROT": 93
+          }
+        ]
+      }
+    ],
+    "deltas": [
+      {
+        "SELL:MILK": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_ANIMAL:GOOSE": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:EGG": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_ANIMAL:COW": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:MELON": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:CARROT": {
+          "quantity": 30,
+          "cash": 682.0
+        },
+        "SELL:WOOL": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:FERTILIZER": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:STRAWBERRY": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_PRODUCT:WHEAT": {
+          "quantity": 30,
+          "cash": -1286.0
+        },
+        "BUY_SEED:STRAWBERRY": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_ANIMAL:SHEEP": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_SEED:WHEAT": {
+          "quantity": -9,
+          "cash": 90.0
+        },
+        "BUY_SEED:MELON": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_PRODUCT:FERTILIZER": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_SEED:CARROT": {
+          "quantity": 10,
+          "cash": -200.0
+        },
+        "SELL:WHEAT": {
+          "quantity": 0,
+          "cash": 181.0
+        }
+      },
+      {
+        "SELL:MILK": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_ANIMAL:GOOSE": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:EGG": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_ANIMAL:COW": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:MELON": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:CARROT": {
+          "quantity": 0,
+          "cash": -505.0
+        },
+        "SELL:WOOL": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:FERTILIZER": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:STRAWBERRY": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_PRODUCT:WHEAT": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_SEED:STRAWBERRY": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_ANIMAL:SHEEP": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_SEED:WHEAT": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_SEED:MELON": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_SEED:CARROT": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "BUY_PRODUCT:FERTILIZER": {
+          "quantity": 0,
+          "cash": 0.0
+        },
+        "SELL:WHEAT": {
+          "quantity": 0,
+          "cash": 243.0
+        }
+      }
+    ]
+  },
+  "status": "Optional research; no promotion or default activation; Kaggle submission held."
+}

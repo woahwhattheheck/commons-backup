@@ -1,0 +1,27 @@
+{
+  "repair": "legacy_apply_v4_optimized_guard_hardening",
+  "canonical_workspace": "revenue/kaggriculture/cloud-execution-lab/candidates/v4",
+  "status": "preserved_verified_materializer_repair",
+  "scope": "legacy materializer tooling only",
+  "source_witness_blob": "a6e2f1f087164cfe542d082c9ff66ae83b25f5bd",
+  "transformer_blob": "be425fd26a12011bc57993c43037df3569a1a6fc",
+  "validation": {
+    "py_compile": "PASS",
+    "normal_self_test": "PASS",
+    "optimized_self_test": "PASS"
+  },
+  "defects_closed": [
+    "replace-exactly-once used Python assert and therefore failed open under python -O",
+    "pre-existing config-key rejection used Python assert and therefore failed open under python -O",
+    "multi-match replacement was not explicitly capped at one replacement"
+  ],
+  "contract": [
+    "replace operational asserts with explicit runtime fail-closed checks",
+    "zero-match and multi-match source poison must reject",
+    "pre-existing config keys must reject instead of being overwritten false",
+    "preserve gameplay and router bytes outside the exact guard anchors",
+    "do not execute the legacy r04 materializer against the current production runtime",
+    "no production activation, feature-key/default, workflow, branch, or gameplay behavior change"
+  ],
+  "production_activation": false
+}

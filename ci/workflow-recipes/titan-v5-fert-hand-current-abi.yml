@@ -1,0 +1,53 @@
+name: TITAN V5 fertilizer-hand current ABI
+
+on:
+  pull_request:
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/fert-hand-current-abi/**"
+      - ".github/workflows/titan-v5-fert-hand-current-abi.yml"
+  push:
+    branches:
+      - "astra/v5-v31-fert-hand-current-abi"
+    paths:
+      - "revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/fert-hand-current-abi/**"
+      - ".github/workflows/titan-v5-fert-hand-current-abi.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact event head
+        shell: bash
+        run: |
+          expected="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse HEAD)" = "$expected"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile current-ABI recovery
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/fert-hand-current-abi
+        run: >-
+          python -B -m py_compile
+          fert_hand_current.py fert_hand_current_safe.py
+          test_fert_hand_current.py test_fert_hand_retry_safe.py
+      - name: Focused contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/fert-hand-current-abi
+        run: >-
+          python -B -m unittest -v
+          test_fert_hand_current.py test_fert_hand_retry_safe.py
+      - name: Optimized focused contracts
+        working-directory: revenue/kaggriculture/cloud-execution-lab/candidates/v5/research/fert-hand-current-abi
+        run: >-
+          python -O -B -m unittest -v
+          test_fert_hand_current.py test_fert_hand_retry_safe.py

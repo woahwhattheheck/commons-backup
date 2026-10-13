@@ -1,0 +1,20 @@
+// Cloud-only correction for the observed play-services-base generated JARs.
+// Use with --no-configuration-cache and --no-build-cache.
+def sanitizer = System.getProperty('commons.rsyncJarSanitizer')
+if (!sanitizer) {
+    throw new GradleException('Set -Dcommons.rsyncJarSanitizer to the absolute path of host/remove_rsync_jar_duplicates.py')
+}
+gradle.beforeProject { project ->
+    if (project.path == ':play-services-base') {
+        project.tasks.configureEach { task ->
+            if (task.name in ['bundleLibRuntimeToJarDebug', 'bundleLibCompileToJarDebug']) {
+                task.doLast('removeIdenticalCloudSyncDuplicates') { current ->
+                    project.exec {
+                        commandLine 'python3', sanitizer,
+                            current.output.get().asFile.absolutePath
+                    }
+                }
+            }
+        }
+    }
+}

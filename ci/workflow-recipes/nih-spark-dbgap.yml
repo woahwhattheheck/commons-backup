@@ -1,0 +1,52 @@
+name: NIH SPARK dbGaP baseline
+
+on:
+  pull_request:
+    paths:
+      - 'research/nih_spark_dbgap_2026/**'
+      - '.github/workflows/nih-spark-dbgap.yml'
+  push:
+    paths:
+      - 'research/nih_spark_dbgap_2026/**'
+      - '.github/workflows/nih-spark-dbgap.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Syntax
+        run: python -m py_compile research/nih_spark_dbgap_2026/*.py
+      - name: Tests
+        run: python -m unittest research.nih_spark_dbgap_2026.test_baseline -v
+      - name: Optimized tests
+        run: python -O -m unittest research.nih_spark_dbgap_2026.test_baseline -v
+      - name: Track 1 CLI smoke
+        run: |
+          python -m research.nih_spark_dbgap_2026.cli \
+            --track 1 \
+            --corpus research/nih_spark_dbgap_2026/fixtures/synthetic_corpus.json \
+            --resources research/nih_spark_dbgap_2026/fixtures/synthetic_resources.json \
+            --input research/nih_spark_dbgap_2026/fixtures/track1_input.json \
+            --output /tmp/dbgap-track1-output.json \
+            --receipt /tmp/dbgap-track1-receipt.json \
+            --source-version ci-v1 --top-k 4 --abstain-coverage-bp 5000
+      - name: Track 2 CLI smoke
+        run: |
+          python -m research.nih_spark_dbgap_2026.cli \
+            --track 2 \
+            --corpus research/nih_spark_dbgap_2026/fixtures/synthetic_corpus.json \
+            --resources research/nih_spark_dbgap_2026/fixtures/synthetic_resources.json \
+            --input research/nih_spark_dbgap_2026/fixtures/track2_input.json \
+            --output /tmp/dbgap-track2-output.json \
+            --receipt /tmp/dbgap-track2-receipt.json \
+            --source-version ci-v1 --top-k 4

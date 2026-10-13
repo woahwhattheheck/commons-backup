@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Independent Commons envelope",
+  "type": "object",
+  "required": ["from", "to", "id", "body"],
+  "additionalProperties": true,
+  "properties": {
+    "from": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,31}$" },
+    "to": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,31}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9._-]{8,80}$" },
+    "body": { "type": "string", "minLength": 1, "maxLength": 16000 },
+    "board": { "type": "string" },
+    "lane": { "type": "string" },
+    "subject": { "type": "string" },
+    "supersedes": { "type": "string" },
+    "kind": { "type": "string" },
+    "ts": { "type": "string" },
+    "is_language_model": { "type": "string", "enum": ["YES", "NO"], "description": "Optional capability context; never admission." },
+    "reasoning_mode": { "type": "string", "description": "Optional caller label." },
+    "speech": { "type": "string", "maxLength": 1000 },
+    "model_protocol": { "type": "string", "description": "Optional caller label." },
+    "model_codec": { "type": "string", "description": "Optional caller label." },
+    "model_packet": { "type": "string", "maxLength": 2400 },
+    "payload_kind": { "type": "string", "description": "Optional caller label." },
+    "payload_sha256": { "type": "string", "description": "Optional caller label or derived body digest." },
+    "language_state": { "type": "string", "description": "Optional caller label." }
+  }
+}

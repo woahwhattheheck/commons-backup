@@ -1,0 +1,98 @@
+name: titan-v3-p07-current-hire-window-crosswind
+
+on:
+  push:
+    branches:
+      - 'sol-crosswind/titan-v3-p07-current-hire-window-20260910-01'
+    paths:
+      - '.github/workflows/titan-v3-p07-current-hire-window-crosswind.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3-p07-current-hire-window-crosswind/**'
+  pull_request:
+    paths:
+      - '.github/workflows/titan-v3-p07-current-hire-window-crosswind.yml'
+      - 'revenue/kaggriculture/cloud-execution-lab/candidates/v3-p07-current-hire-window-crosswind/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: titan-v3-p07-current-hire-window-crosswind-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  PYTHONUNBUFFERED: '1'
+  OP_DIR: revenue/kaggriculture/cloud-execution-lab/candidates/v3-p07-current-hire-window-crosswind
+  LAB_DIR: revenue/kaggriculture/cloud-execution-lab
+  BASE_SHA: 98a98108998efac9e53a8b045f0fb2c85a4b19e2
+
+jobs:
+  exact-source-and-contracts:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact event head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Assert exact checkout and bounded source diff
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          git cat-file -e "$BASE_SHA^{commit}"
+          unexpected="$({
+            git diff --name-only "$BASE_SHA...HEAD"
+          } | grep -v -E '^(\.github/workflows/titan-v3-p07-current-hire-window-crosswind\.yml|revenue/kaggriculture/cloud-execution-lab/candidates/v3-p07-current-hire-window-crosswind/.*)$' || true)"
+          test -z "$unexpected" || { printf 'unexpected path(s):\n%s\n' "$unexpected" >&2; exit 1; }
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify exact source custody and interpreter theorem
+        working-directory: ${{ env.OP_DIR }}
+        run: |
+          set -euo pipefail
+          python -B verify_sources.py | tee SOURCE-VERIFICATION.json
+          python -m json.tool SOURCE-VERIFICATION.json >/dev/null
+
+      - name: Compile and run source-bound contracts
+        working-directory: ${{ env.OP_DIR }}
+        env:
+          PYTHONPATH: ${{ github.workspace }}/revenue/kaggriculture/cloud-execution-lab/candidates/v3-p07-current-hire-window-crosswind:${{ github.workspace }}/revenue/kaggriculture/cloud-execution-lab/candidates/v3-p07-joint-actors:${{ github.workspace }}/revenue/kaggriculture/cloud-execution-lab
+        run: |
+          set -euo pipefail
+          python -B -m py_compile current_hire_window.py current_hire_joint_actors.py scan_window_traces.py verify_sources.py test_current_hire_window.py
+          python -B -m unittest -v test_current_hire_window.py 2>&1 | tee CONTRACTS.log
+
+      - name: Assert canonical and measured predecessor bytes untouched
+        run: |
+          set -euo pipefail
+          test -z "$(git diff --name-only "$BASE_SHA...HEAD" -- \
+            "$LAB_DIR/exports" \
+            "$LAB_DIR/runtime" \
+            "$LAB_DIR/TITAN-CONFIG.json" \
+            "$LAB_DIR/main.py" \
+            "$LAB_DIR/titan_runtime.py" \
+            "$LAB_DIR/spatial_tempo.py" \
+            "$LAB_DIR/candidates/v3-p07-joint-actors")"
+          git diff --check "$BASE_SHA...HEAD"
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all | grep -v -E "^\?\? $OP_DIR/(SOURCE-VERIFICATION\.json|CONTRACTS\.log)$" || true)"
+
+      - name: Retain exact verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-v3-p07-current-hire-window-${{ github.run_id }}
+          path: |
+            ${{ env.OP_DIR }}/SOURCE-VERIFICATION.json
+            ${{ env.OP_DIR }}/CONTRACTS.log
+          if-no-files-found: warn
+          retention-days: 30

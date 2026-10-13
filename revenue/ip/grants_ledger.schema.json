@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woahwhattheheck.github.io/commons/revenue/ip/grants_ledger.schema.json",
+  "title": "Commons Grants Ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "generated_at",
+    "generated_from_main",
+    "scope",
+    "nonclaims",
+    "legal_scope",
+    "omitted_private_fields",
+    "programs"
+  ],
+  "properties": {
+    "schema_version": {"const": "commons-grants-ledger/v1"},
+    "kind": {"const": "GRANTS_LEDGER"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "generated_from_main": {"$ref": "#/$defs/git_sha"},
+    "scope": {"type": "string", "minLength": 1},
+    "nonclaims": {"$ref": "#/$defs/nonempty_strings"},
+    "legal_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicant_eligibility_adjudicated",
+        "submission_readiness_claimed",
+        "award_claimed",
+        "funding_success_claimed",
+        "cash_received_claimed"
+      ],
+      "properties": {
+        "applicant_eligibility_adjudicated": {"type": "boolean", "const": false},
+        "submission_readiness_claimed": {"type": "boolean", "const": false},
+        "award_claimed": {"type": "boolean", "const": false},
+        "funding_success_claimed": {"type": "boolean", "const": false},
+        "cash_received_claimed": {"type": "boolean", "const": false}
+      }
+    },
+    "omitted_private_fields": {
+      "type": "array",
+      "minItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "application_draft",
+          "bank_details",
+          "collaboration_letter_files",
+          "contact_email",
+          "contact_phone",
+          "entity_identifier",
+          "payout_details",
+          "research_portal_identity",
+          "tax_identifier"
+        ]
+      }
+    },
+    "programs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/program"}
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "https_url": {
+      "type": "string",
+      "pattern": "^https://(?![^/?#]*@)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))+(?:[/?#]\\S*)?$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "enum": ["2026-09-01", "2026-09-03", "2026-11-03", "2026-11-04"]
+    },
+    "nonempty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "urls": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/https_url"}
+    },
+    "deadline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["date", "time", "timezone_basis"],
+      "properties": {
+        "date": {"$ref": "#/$defs/date"},
+        "time": {"type": "string", "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"},
+        "timezone_basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "program": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "funder",
+        "program",
+        "official_urls",
+        "evidence_urls",
+        "checked_at",
+        "application_state",
+        "application_state_basis",
+        "opens_date",
+        "deadline",
+        "program_eligibility_text",
+        "program_eligibility_evidence_state",
+        "applicant_eligibility_state",
+        "applicant_eligibility_public_evidence_url",
+        "funding_text",
+        "funding_evidence_state",
+        "matching_state",
+        "matching_basis",
+        "ip_terms",
+        "ip_evidence_state",
+        "deliverables",
+        "fit_note",
+        "public_next_action",
+        "owner",
+        "private_blockers",
+        "nonclaims",
+        "submission_status",
+        "award_status",
+        "cash_received_usd"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{7,79}$"},
+        "funder": {"type": "string", "minLength": 1},
+        "program": {"type": "string", "minLength": 1},
+        "official_urls": {"$ref": "#/$defs/urls"},
+        "evidence_urls": {"$ref": "#/$defs/urls"},
+        "checked_at": {"type": "string", "format": "date-time"},
+        "application_state": {"enum": ["OPEN", "UPCOMING", "ROLLING", "CLOSED", "UNKNOWN"]},
+        "application_state_basis": {"type": "string", "minLength": 1},
+        "opens_date": {
+          "oneOf": [
+            {"const": "UNKNOWN"},
+            {"$ref": "#/$defs/date"}
+          ]
+        },
+        "deadline": {
+          "oneOf": [
+            {"const": "UNKNOWN"},
+            {"$ref": "#/$defs/deadline"}
+          ]
+        },
+        "program_eligibility_text": {"type": "string"},
+        "program_eligibility_evidence_state": {"enum": ["VERIFIED", "PARTIAL", "CONFLICT", "UNKNOWN"]},
+        "applicant_eligibility_state": {"const": "UNKNOWN"},
+        "applicant_eligibility_public_evidence_url": {"const": "UNKNOWN"},
+        "funding_text": {"type": "string", "minLength": 1},
+        "funding_evidence_state": {"enum": ["VERIFIED", "PARTIAL", "CONFLICT", "UNKNOWN"]},
+        "matching_state": {"enum": ["REQUIRED", "NOT_REQUIRED", "UNKNOWN"]},
+        "matching_basis": {"type": "string", "minLength": 1},
+        "ip_terms": {"type": "string", "minLength": 1},
+        "ip_evidence_state": {"enum": ["VERIFIED", "PARTIAL", "CONFLICT", "UNKNOWN"]},
+        "deliverables": {"$ref": "#/$defs/nonempty_strings"},
+        "fit_note": {"type": "string", "pattern": "^ANALYSIS:[ \\t]*\\S.*$"},
+        "public_next_action": {"type": "string", "minLength": 1},
+        "owner": {"type": "string", "pattern": "^COMMONS_ANY_[A-Z0-9_]+$"},
+        "private_blockers": {"$ref": "#/$defs/nonempty_strings"},
+        "nonclaims": {"$ref": "#/$defs/nonempty_strings"},
+        "submission_status": {"const": "NOT_SUBMITTED"},
+        "award_status": {"const": "NOT_AWARDED"},
+        "cash_received_usd": {"const": 0}
+      }
+    }
+  }
+}

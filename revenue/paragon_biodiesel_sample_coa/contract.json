@@ -1,0 +1,58 @@
+{
+  "id": "paragon-biodiesel-sample-coa-lims-01",
+  "version": 1,
+  "buyer": "Paragon Laboratories / Rich McKenzie",
+  "lead": {
+    "channel": "C0BTRNE6Y58",
+    "ts": "1788150667.260479"
+  },
+  "workflow": [
+    "pickup and chain-of-custody intake",
+    "SDS completeness gate",
+    "unique accession for B6-B20 blends",
+    "ASTM D7467 method assignment",
+    "simulated results with units and qualifiers",
+    "QA review and staged CoA",
+    "named-human CoA release only"
+  ],
+  "panel": {
+    "lane": "B6-B20",
+    "spec_id": "ASTM D7467",
+    "spec_revision": "D7467-23",
+    "methods": [
+      "ASTM D7371 fame % vol 6-20",
+      "ASTM D93 flash point deg_C min 52",
+      "ASTM D445 viscosity 40C mm2_s 1.9-4.1",
+      "ASTM D5453 sulfur mg_kg max 15",
+      "ASTM D664 acid number mg_KOH_g max 0.3",
+      "ASTM D2709 water and sediment % vol max 0.05",
+      "EN 15751 oxidation stability h min 6"
+    ]
+  },
+  "hold_codes": [
+    "HOLD_INCOMPLETE_COC",
+    "HOLD_INCOMPLETE_SDS",
+    "HOLD_DUPLICATE_ID",
+    "HOLD_OOS"
+  ],
+  "acceptance": [
+    "120 frozen synthetic submissions",
+    "exactly 100 valid cases accession once",
+    "exactly 20 exceptions receive expected HOLD codes: 5 INCOMPLETE_COC, 5 INCOMPLETE_SDS, 5 DUPLICATE_ID, 5 OOS",
+    "zero duplicate accessions",
+    "values, units, qualifiers, report fields, and source hashes match the signed golden set",
+    "replay is idempotent",
+    "release always requires named human approval"
+  ],
+  "exclusions": [
+    "no autonomous certification or release",
+    "no production write, outreach, or prospect-facing demo",
+    "adapters simulated or read-only until buyer/vendor golden round trip"
+  ],
+  "truth_gate": "HOLD / BUILD-AND-VERIFY",
+  "decision_boundary": "synthetic sample-to-CoA receipts only; never live instrument, customer, or CoA I/O",
+  "open_door": true,
+  "requires_login": false,
+  "pre_sale_transport": "NONE",
+  "cash_usd": 0
+}
